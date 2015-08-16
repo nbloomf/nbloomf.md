@@ -1,8 +1,10 @@
 site: FORCE
 	ghc --make -threaded site.hs
+	./site clean
 	./site build
 
 build: FORCE
+	./site clean
 	./site build
 
 watch: FORCE

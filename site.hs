@@ -21,7 +21,7 @@ main = hakyll $ do
     route   idRoute
     compile copyFileCompiler
 
-  match "pdf/*" $ do
+  match "pdf/**" $ do
     route   idRoute
     compile copyFileCompiler
 
