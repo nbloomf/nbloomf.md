@@ -2,6 +2,6 @@
 title: College Geometry
 ---
 
-This is where college geometry stuff will go.
+### Boring Stuff
 
 * [Syllabus](/pdf/classes/geom/syllabus.pdf)
