@@ -6,3 +6,7 @@ title: College Algebra
 
 * [Syllabus (9:00)](/pdf/classes/ca/syllabus09.pdf)
 * [Syllabus (10:00)](/pdf/classes/ca/syllabus10.pdf)
+
+### Review
+
+* [Prereq](/pdf/classes/ca/r0-prereq.pdf)
