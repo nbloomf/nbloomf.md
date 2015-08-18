@@ -9,4 +9,6 @@ title: Abstract Algebra
 
 ### Slides
 
-* [Day 1: The $\mathbb{Z}$ Axioms](/pdf/classes/aa/slides/zz-axioms.pdf)
+* Day 1: The $\mathbb{Z}$ Axioms
+  ([Screen](/pdf/classes/aa/slides/zz-axioms-screen.pdf))
+  ([Print](/pdf/classes/aa/slides/zz-axioms-print.pdf))
