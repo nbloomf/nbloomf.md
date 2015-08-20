@@ -1,5 +1,5 @@
 site: FORCE
-	ghc --make -threaded site.hs
+	ghc --make -threaded site.lhs
 	./site clean
 	./site build
 

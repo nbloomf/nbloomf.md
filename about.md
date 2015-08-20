@@ -7,3 +7,5 @@ I am Nathan Bloomfield, studio mathematician and teacher in residence at NSU of 
 Someday this space will also contain lucid prose about my research interests and other projects.
 
 Today is not that day.
+
+This site is generated using Hakyll; the compiler source code is available (as per tradition) [here](/site.html).
