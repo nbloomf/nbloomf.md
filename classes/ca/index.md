@@ -10,3 +10,7 @@ title: College Algebra
 ### Review
 
 * [Prereq](/pdf/classes/ca/r0-prereq.pdf)
+
+### Suggested Practice Problems (Not Graded!)
+
+* P.1, 67--82
