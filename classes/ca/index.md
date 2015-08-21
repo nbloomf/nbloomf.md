@@ -14,3 +14,4 @@ title: College Algebra
 ### Suggested Practice Problems (Not Graded!)
 
 * P.1, 67--82
+* P.1, 65,66,83,84 and P.2, 5--22
