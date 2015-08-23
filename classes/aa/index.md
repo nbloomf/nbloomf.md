@@ -15,6 +15,8 @@ title: Abstract Algebra
 
 ### Notes
 
+Just Enough Number Theory
+
 * 1: [Induction and the Well-Ordering Property](/pdf/classes/aa/notes/01-induction-and-wop.pdf)
 * 2: [The Division Algorithm](/pdf/classes/aa/notes/02-division-algorithm.pdf)
 * 3: [Divisibility and GCD](/pdf/classes/aa/notes/03-divisibility-and-gcd.pdf)
