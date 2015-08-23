@@ -9,9 +9,15 @@ title: College Algebra
 
 ### Review
 
-* [Prereq](/pdf/classes/ca/r0-prereq.pdf)
+* [Prereq](/pdf/classes/ca/review/r0-prereq.pdf)
+
+### Homework
+
+1. [Linear Equations](/pdf/classes/ca/homework/h01-linear-equations.pdf)
 
 ### Suggested Practice Problems (Not Graded!)
+
+Review
 
 * P.1, 67--82
 * P.1, 65,66,83,84 and P.2, 5--22
