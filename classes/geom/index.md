@@ -10,3 +10,4 @@ title: College Geometry
 
 * [Incidence Structures](/pdf/classes/geom/notes/01-incidence-structures.pdf)
 * [Incidence Geometries](/pdf/classes/geom/notes/02-incidence-geometries.pdf)
+* [Parallel Lines](/pdf/classes/geom/notes/03-parallel-lines.pdf)
