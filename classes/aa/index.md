@@ -15,13 +15,11 @@ title: Abstract Algebra
 
 ### Notes
 
-Just Enough Number Theory
-
-* The Integers
-    * 1: [Induction and the Well-Ordering Property](/pdf/classes/aa/notes/01-induction-and-wop.pdf)
-    * 2: [The Division Algorithm](/pdf/classes/aa/notes/02-division-algorithm.pdf)
-    * 3: [Divisibility and GCD](/pdf/classes/aa/notes/03-divisibility-and-gcd.pdf)
-    * 4: [Bezout's Identity](/pdf/classes/aa/notes/04-bezouts-identity.pdf)
-    * 5: [Primes and Factorization](/pdf/classes/aa/notes/05-primes-and-factorization.pdf)
-
-* 6: [Equivalence Relations](/pdf/classes/aa/notes/06-equivalence-relations.pdf)
+* Just Enough Number Theory
+    * The Integers
+        * 1: [Induction and the Well-Ordering Property](/pdf/classes/aa/notes/01-induction-and-wop.pdf)
+        * 2: [The Division Algorithm](/pdf/classes/aa/notes/02-division-algorithm.pdf)
+        * 3: [Divisibility and GCD](/pdf/classes/aa/notes/03-divisibility-and-gcd.pdf)
+        * 4: [Bezout's Identity](/pdf/classes/aa/notes/04-bezouts-identity.pdf)
+        * 5: [Primes and Factorization](/pdf/classes/aa/notes/05-primes-and-factorization.pdf)
+    * 6: [Equivalence Relations](/pdf/classes/aa/notes/06-equivalence-relations.pdf)
