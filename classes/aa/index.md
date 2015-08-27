@@ -22,4 +22,6 @@ title: Abstract Algebra
         * 3: [Divisibility and GCD](/pdf/classes/aa/notes/03-divisibility-and-gcd.pdf)
         * 4: [Bezout's Identity](/pdf/classes/aa/notes/04-bezouts-identity.pdf)
         * 5: [Primes and Factorization](/pdf/classes/aa/notes/05-primes-and-factorization.pdf)
-    * 6: [Equivalence Relations](/pdf/classes/aa/notes/06-equivalence-relations.pdf)
+    * Set Theory Review
+        * 6: [Relations and Functions](/pdf/classes/aa/notes/06-relations-and-functions.pdf)
+        * 7: [Equivalence Relations](/pdf/classes/aa/notes/07-equivalence-relations.pdf)
