@@ -25,3 +25,9 @@ title: Abstract Algebra
     * Set Theory Review
         * 6: [Relations and Functions](/pdf/classes/aa/notes/06-relations-and-functions.pdf)
         * 7: [Equivalence Relations](/pdf/classes/aa/notes/07-equivalence-relations.pdf)
+    * The Modular Integers
+        * 8: [Modular Arithmetic](/pdf/classes/aa/notes/08-modular-arithmetic.pdf)
+        * 9: [Congruences](/pdf/classes/aa/notes/09-congruences.pdf)
+        * 10: [The Euler Totient](/pdf/classes/aa/notes/10-the-euler-totient.pdf)
+* Rings: The Basics
+    * 11: [Rings](/pdf/classes/aa/notes/11-rings.pdf)

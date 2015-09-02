@@ -14,6 +14,7 @@ title: College Algebra
 ### Homework
 
 1. [Linear Equations](/pdf/classes/ca/homework/h01-linear-equations.pdf)
+2. [Quadratic Equations](/pdf/classes/ca/homework/h02-quadratic-equations.pdf)
 
 ### Suggested Practice Problems (Not Graded!)
 
