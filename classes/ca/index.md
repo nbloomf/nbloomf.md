@@ -2,6 +2,8 @@
 title: College Algebra
 ---
 
+## TEST 1: Friday, Sept. 11
+
 ### Boring Stuff
 
 * [Syllabus (9:00)](/pdf/classes/ca/syllabus09.pdf)
@@ -10,6 +12,7 @@ title: College Algebra
 ### Review
 
 * [Prereq](/pdf/classes/ca/review/r0-prereq.pdf)
+* [Test 1](/pdf/classes/ca/review/r1-equations.pdf)
 
 ### Homework
 
@@ -24,3 +27,4 @@ title: College Algebra
     * 1.1, 13--26, 37--48 (solve only), 63--80
     * 1.5, 5--60
     * 1.6, 1--26, 35--64 
+    * 1.7, 15--26, 45--76
