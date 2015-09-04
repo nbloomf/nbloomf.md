@@ -18,10 +18,9 @@ title: College Algebra
 
 ### Suggested Practice Problems (Not Graded!)
 
-Review
-
-* P.1, 67--82
-* P.1, 65,66,83,84 and P.2, 5--22
-* 1.1, 13--26, 37--48 (solve only), 63--80
-* 1.5, 5--60
-* 1.6, 1--26, 35--64 
+* Test 1
+    * P.1, 67--82
+    * P.1, 65,66,83,84 and P.2, 5--22
+    * 1.1, 13--26, 37--48 (solve only), 63--80
+    * 1.5, 5--60
+    * 1.6, 1--26, 35--64 

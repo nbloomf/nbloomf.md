@@ -29,5 +29,11 @@ title: Abstract Algebra
         * 8: [Modular Arithmetic](/pdf/classes/aa/notes/08-modular-arithmetic.pdf)
         * 9: [Congruences](/pdf/classes/aa/notes/09-congruences.pdf)
         * 10: [The Euler Totient](/pdf/classes/aa/notes/10-the-euler-totient.pdf)
+    * The Rational Numbers
+    * Diophantine Equations
+        * 10a: [Pythagorean Triples](/pdf/classes/aa/notes/10a-pythagorean-triples.pdf)
+        * 10b: Fermat's Equation
+        * 10c: $p = a^2 + b^2$
 * Rings: The Basics
     * 11: [Rings](/pdf/classes/aa/notes/11-rings.pdf)
+    * 12: [Homomorphisms](/pdf/classes/aa/notes/12-homomorphisms.pdf)
