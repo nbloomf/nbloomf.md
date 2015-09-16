@@ -37,3 +37,5 @@ title: Abstract Algebra
 * Rings: The Basics
     * 11: [Rings](/pdf/classes/aa/notes/11-rings.pdf)
     * 12: [Homomorphisms](/pdf/classes/aa/notes/12-homomorphisms.pdf)
+    * 13: [Direct Sums](/pdf/classes/aa/notes/13-direct-sums.pdf)
+    * 14: [Subrings](/pdf/classes/aa/notes/14-subrings.pdf)
