@@ -18,6 +18,7 @@ title: College Algebra
 
 1. [Linear Equations](/pdf/classes/ca/homework/h01-linear-equations.pdf)
 2. [Quadratic Equations](/pdf/classes/ca/homework/h02-quadratic-equations.pdf)
+3. [Lines and Circles](/pdf/classes/ca/homework/h03-lines-and-circles.pdf)
 
 ### Suggested Practice Problems (Not Graded!)
 
@@ -28,3 +29,7 @@ title: College Algebra
     * 1.5, 5--60
     * 1.6, 1--26, 35--64 
     * 1.7, 15--26, 45--76
+* Test 2
+    * 7.2, 43--68
+    * 1.4, 9--42
+    * 5.1, 23--50 (solve only)
