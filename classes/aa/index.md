@@ -40,3 +40,6 @@ title: Abstract Algebra
     * 13: [Direct Sums](/pdf/classes/aa/notes/13-direct-sums.pdf)
     * 14: [Subrings](/pdf/classes/aa/notes/14-subrings.pdf)
     * 15: [Domains and Fields](/pdf/classes/aa/notes/15-domains-and-fields.pdf)
+* The Domain Hierarchy
+    * 16: [Divisibility](/pdf/classes/aa/notes/16-divisibility.pdf)
+    * 17: [GCD Domains](/pdf/classes/aa/notes/17-gcd-domains.pdf)
