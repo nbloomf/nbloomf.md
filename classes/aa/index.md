@@ -43,3 +43,7 @@ title: Abstract Algebra
 * The Domain Hierarchy
     * 16: [Divisibility](/pdf/classes/aa/notes/16-divisibility.pdf)
     * 17: [GCD Domains](/pdf/classes/aa/notes/17-gcd-domains.pdf)
+    * 18: [Factorization](/pdf/classes/aa/notes/18-factorization.pdf)
+    * 19: [Division with Remainder](/pdf/classes/aa/notes/19-division-with-remainder.pdf)
+    * 20: [Localization](/pdf/classes/aa/notes/20-localization.pdf)
+* Polynomials

@@ -20,6 +20,10 @@ title: College Algebra
 2. [Quadratic Equations](/pdf/classes/ca/homework/h02-quadratic-equations.pdf)
 3. [Lines and Circles](/pdf/classes/ca/homework/h03-lines-and-circles.pdf)
 
+### Activities
+
+1. [Lines and Circles](/pdf/classes/ca/activities/a1-lines-and-circles.pdf)
+
 ### Suggested Practice Problems (Not Graded!)
 
 * Test 1
