@@ -2,8 +2,6 @@
 title: College Algebra
 ---
 
-## TEST 1: Friday, Sept. 11
-
 ### Boring Stuff
 
 * [Syllabus (9:00)](/pdf/classes/ca/syllabus09.pdf)
