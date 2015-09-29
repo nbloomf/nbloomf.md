@@ -35,3 +35,8 @@ title: College Algebra
     * 7.2, 43--68
     * 1.4, 9--42
     * 5.1, 23--50 (solve only)
+
+### Examples
+
+* [Transformations (shifting and stretching)](/classes/ca/transformations.html)
+

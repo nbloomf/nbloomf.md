@@ -54,7 +54,7 @@ As usual we begin with some pragmas and imports. The OverloadedStrings pragma al
 >
 >   match "classes/**" $ do
 >     route $ setExtension "html"
->     compile $ pandocCompiler
+>     compile $ pandocMathCompiler
 >       >>= loadAndApplyTemplate "templates/default.html" postCtx
 >       >>= relativizeUrls
 >
