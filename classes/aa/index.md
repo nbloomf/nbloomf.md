@@ -51,4 +51,7 @@ title: Abstract Algebra
     * 18: [Factorization](/pdf/classes/aa/notes/18-factorization.pdf)
     * 19: [Division with Remainder](/pdf/classes/aa/notes/19-division-with-remainder.pdf)
     * 20: [Localization](/pdf/classes/aa/notes/20-localization.pdf)
-* Polynomials
+* Polynomial Rings
+    * 21: [Polynomials](/pdf/classes/aa/notes/21-polynomials.pdf)
+    * 22: Long Division and Roots
+    * 23: Polynomials over a GCD Domain
