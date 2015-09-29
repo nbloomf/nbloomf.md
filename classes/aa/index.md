@@ -7,6 +7,11 @@ title: Abstract Algebra
 * [Syllabus](/pdf/classes/aa/syllabus.pdf)
 * [Textbook](http://abstract.pugetsound.edu)
 
+### Homework
+
+1. Chapter 2, problems 1, 5, 15a, 15c, and 29
+2. [Homework 2](/pdf/classes/aa/homework/hw2.pdf)
+
 ### Slides
 
 * Day 1: The $\mathbb{Z}$ Axioms
