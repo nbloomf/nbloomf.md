@@ -20,7 +20,7 @@ title: College Algebra
 
 ### Activities
 
-1. [Lines and Circles](/pdf/classes/ca/activities/a1-lines-and-circles.pdf)
+1. [Lines and Circles](/pdf/classes/ca/activity/a1-lines-and-circles.pdf)
 
 ### Suggested Practice Problems (Not Graded!)
 
