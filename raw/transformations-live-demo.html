@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<title>canvas1</title>
+<style type="text/css">
+  canvas {
+    border: 1px solid black;
+  }
+
+  div#widget {
+    text-align: center;
+  }
+
+  div#widget table {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  span.view {
+    float: right;
+    width: 40px;
+  }
+</style>
+
+<script type="text/javascript">
+  var xSemiDim = 160;
+  var ySemiDim = 120;
+
+  /* From hacks.mozilla.org */
+  function plotEquation(fun) {
+    var canvas = document.getElementById('win');
+    var xDim = canvas.width;
+    var yDim = canvas.height;
+    var ctx = canvas.getContext('2d');
+    var imageData = ctx.getImageData(0, 0, xDim, yDim);
+    var data = imageData.data;
+
+    var xSemiDim = xDim / 2;
+    var ySemiDim = yDim / 2;
+
+    for (var y = 0; y < yDim; y++) {
+      for (var x = 0; x < xDim; x++) {
+        if (fun(x - xSemiDim, -y + ySemiDim)) {
+          var index = (y * xDim + x) * 4;
+          data[index]   = 0;   // red
+          data[++index] = 0;   // green
+          data[++index] = 0;   // blue
+          data[++index] = 255; // alpha
+        }
+      }
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+  };
+
+  function draw() {
+    var canvas = document.getElementById('win');
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    var a = document.getElementById('aSlider').value;
+    var b = document.getElementById('bSlider').value;
+    var h = document.getElementById('hSlider').value;
+    var k = document.getElementById('kSlider').value;
+
+    document.getElementById('aView').innerHTML = a;
+    document.getElementById('bView').innerHTML = b;
+    document.getElementById('hView').innerHTML = h;
+    document.getElementById('kView').innerHTML = k;
+
+    var eps = document.getElementById('epsilon').value / 10;
+
+    var circ = function(x,y) {
+      return Math.sqrt(Math.abs(Math.pow(a*(x-h), 2) + Math.pow(b*(y-k),2) - 1000)) < 10*eps;
+    }
+
+    var line = function(x,y) {
+      return Math.sqrt(Math.abs(b*(y-k) - a*(x-h) - 1)) < 0.75*eps;
+    }
+
+    var elli = function(x,y) {
+      return Math.abs(Math.pow(b*(y-k),2) - Math.pow(a*(x-h),3) + a*(x-h)) < 5*eps;
+    }
+
+    var quad = function(x,y) {
+      return Math.abs(b*(y-k) - Math.pow(a*(x-h), 2)) < 2*eps;
+    }
+
+    var cube = function(x,y) {
+      return Math.abs(b*(y-k) - Math.pow(a*(x-h), 3) - a*(x-h)) < 2*eps;
+    }
+
+    var selection = document.getElementById('equation-type').value;
+
+    switch (selection) {
+      case 'circle':
+        plotEquation(circ);
+        break;
+      case 'line':
+        plotEquation(line);
+        break;
+      case 'elliptic':
+        plotEquation(elli);
+        break;
+      case 'quadratic':
+        plotEquation(quad);
+        break;
+      case 'cubic':
+        plotEquation(cube);
+        break;
+    }
+  };
+</script>
+</head>
+
+
+
+<body onload="draw();">
+<div id="widget">
+<canvas id="win" width="320" height="240"></canvas>
+
+<table>
+<tr><td>a = <span id="aView" class="view"></span></td>
+  <td><input id="aSlider" type="range" max="3" min="-1" step="0.02" oninput="draw();" /></td>
+</tr>
+
+<tr><td>b = <span id="bView" class="view"></span></td>
+  <td><input id="bSlider" type="range" max="3" min="-1" step="0.02" oninput="draw();" /></td>
+</tr>
+
+<tr><td>h = <span id="hView" class="view"></span></td>
+  <td><input id="hSlider" type="range" max="160" min="-160" step="1" oninput="draw();" /></td>
+</tr>
+
+<tr><td>k = <span id="kView" class="view"></span></td>
+  <td><input id="kSlider" type="range" max="120" min="-120" step="1" oninput="draw();" /></td>
+</tr>
+</table>
+
+<div>
+Epsilon: <input id="epsilon" type="number" value="10" onclick="draw();">
+</div>
+
+<div>
+Equation Type: <select id="equation-type" onclick="draw();">
+  <option value="circle">Circle</option>
+  <option value="line">Line</option>
+  <option value="elliptic">Elliptic</option>
+  <option value="quadratic">Quadratic</option>
+  <option value="cubic">Cubic</option>
+</select>
+</div>
+
+<div id="equation-view"></div>
+</div>
+</body>
+</html>

@@ -34,6 +34,10 @@ As usual we begin with some pragmas and imports. The OverloadedStrings pragma al
 >     route   idRoute
 >     compile copyFileCompiler
 >
+>   match "raw/**" $ do
+>     route   idRoute
+>     compile copyFileCompiler
+>
 >   match "images/*" $ do
 >     route   idRoute
 >     compile copyFileCompiler
