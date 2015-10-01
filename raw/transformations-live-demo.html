@@ -7,6 +7,8 @@
 <style type="text/css">
   canvas {
     border: 1px solid black;
+    width:  240px;
+    height: 240px;
   }
 
   div#widget {
@@ -25,10 +27,15 @@
 </style>
 
 <script type="text/javascript">
-  var xSemiDim = 160;
-  var ySemiDim = 120;
+  function findCrossing (foo, i, j) {
+    var a1 = foo(i-1, j-1);
+    var a2 = foo(i+1, j-1);
+    var a3 = foo(i-1, j+1);
+    var a4 = foo(i+1, j+1);
+    return (a1*a2 < 0) || (a1*a3 < 0) || (a1*a4 < 0);
+  }
 
-  /* From hacks.mozilla.org */
+  /* Cribbed from hacks.mozilla.org */
   function plotEquation(fun) {
     var canvas = document.getElementById('win');
     var xDim = canvas.width;
@@ -42,7 +49,7 @@
 
     for (var y = 0; y < yDim; y++) {
       for (var x = 0; x < xDim; x++) {
-        if (fun(x - xSemiDim, -y + ySemiDim)) {
+        if (findCrossing(fun, x - xSemiDim, ySemiDim - y)) {
           var index = (y * xDim + x) * 4;
           data[index]   = 0;   // red
           data[++index] = 0;   // green
@@ -53,6 +60,15 @@
     }
 
     ctx.putImageData(imageData, 0, 0);
+  };
+
+  function reset() {
+    document.getElementById('aSlider').value = 1;
+    document.getElementById('bSlider').value = 1;
+    document.getElementById('hSlider').value = 0;
+    document.getElementById('kSlider').value = 0;
+    draw();
+    return;
   };
 
   function draw() {
@@ -70,26 +86,43 @@
     document.getElementById('hView').innerHTML = h;
     document.getElementById('kView').innerHTML = k;
 
-    var eps = document.getElementById('epsilon').value / 10;
+    var primLine = function (x,y) { return y - x; };
+    var primCirc = function (x,y) { return x*x + y*y - 1; };
+    var primElli = function (x,y) { return y*y - x*x*x + 2*x; };
+    var primQuad = function (x,y) { return y - x*x; };
+    var primCube = function (x,y) { return y - x*x*x + x; };
+    var primEll2 = function (x,y) { return y*y - x*x*x + 2*x - 2; };
+
+    var primAmpr = function (x,y) {
+      return (y*y - x*x)*(x-1)*(2*x-3) - 4*(x*x + y*y - 2*x)*(x*x + y*y - 2*x);
+    };
 
     var circ = function(x,y) {
-      return Math.sqrt(Math.abs(Math.pow(a*(x-h), 2) + Math.pow(b*(y-k),2) - 1000)) < 10*eps;
+      return primCirc((x-h)/(a*15), (y-k)/(b*15));
     }
 
     var line = function(x,y) {
-      return Math.sqrt(Math.abs(b*(y-k) - a*(x-h) - 1)) < 0.75*eps;
+      return primLine((x-h)/(a*15), (y-k)/(b*15));
     }
 
     var elli = function(x,y) {
-      return Math.abs(Math.pow(b*(y-k),2) - Math.pow(a*(x-h),3) + a*(x-h)) < 5*eps;
+      return primElli((x-h)/(a*15), (y-k)/(b*15));
     }
 
     var quad = function(x,y) {
-      return Math.abs(b*(y-k) - Math.pow(a*(x-h), 2)) < 2*eps;
+      return primQuad((x-h)/(a*15), (y-k)/(b*15));
     }
 
     var cube = function(x,y) {
-      return Math.abs(b*(y-k) - Math.pow(a*(x-h), 3) - a*(x-h)) < 2*eps;
+      return primCube((x-h)/(a*15), (y-k)/(b*15));
+    }
+
+    var ell2 = function(x,y) {
+      return primEll2((x-h)/(a*15), (y-k)/(b*15));
+    }
+
+    var ampr = function(x,y) {
+      return primAmpr((x-h)/(a*15), (y-k)/(b*15));
     }
 
     var selection = document.getElementById('equation-type').value;
@@ -110,6 +143,12 @@
       case 'cubic':
         plotEquation(cube);
         break;
+      case 'elliptic2':
+        plotEquation(ell2);
+        break;
+      case 'ampersand':
+        plotEquation(ampr);
+        break;
     }
   };
 </script>
@@ -119,7 +158,7 @@
 
 <body onload="draw();">
 <div id="widget">
-<canvas id="win" width="320" height="240"></canvas>
+<canvas id="win" width="180" height="180"></canvas>
 
 <table>
 <tr><td>a = <span id="aView" class="view"></span></td>
@@ -140,20 +179,20 @@
 </table>
 
 <div>
-Epsilon: <input id="epsilon" type="number" value="10" onclick="draw();">
-</div>
-
-<div>
 Equation Type: <select id="equation-type" onclick="draw();">
   <option value="circle">Circle</option>
   <option value="line">Line</option>
-  <option value="elliptic">Elliptic</option>
   <option value="quadratic">Quadratic</option>
   <option value="cubic">Cubic</option>
+  <option value="elliptic">Elliptic</option>
+  <option value="elliptic2">Elliptic 2</option>
+  <option value="ampersand">Ampersand</option>
 </select>
 </div>
 
-<div id="equation-view"></div>
+<div>
+<button type="button" onclick="reset();">Reset</button>
+</div>
 </div>
 </body>
 </html>
