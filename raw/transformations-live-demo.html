@@ -27,12 +27,33 @@
 </style>
 
 <script type="text/javascript">
+  /* Primitive Equations */
+  var circle     = function (x,y) { return x*x + y*y - 1; };
+  var line       = function (x,y) { return y - x; };
+  var quadratic  = function (x,y) { return y - x*x; };
+  var cubic      = function (x,y) { return y - x*x*x + x; };
+  var elliptic1  = function (x,y) { return y*y - x*x*x + 2*x; };
+  var elliptic2  = function (x,y) { return y*y - x*x*x + 2*x - 2; };
+  var ampersand  = function (x,y) {
+    return (y*y - x*x)*(x-1)*(2*x-3) - 4*Math.pow(x*x + y*y - 2*x, 2);
+  };
+  var lemniscate = function (x,y) {
+    return (x*x + y*y)*(x*x + y*y) - 2*(x*x - y*y);
+  };
+  var devil      = function (x,y) {
+    return y*y*(y*y - 16/25) - x*x*(x*x - 1);
+  };
+
+  // foo should be a "continuous" function of two real numbers.
+  // (Scare quotes because damn you floating point.)
+  // Looks at signs of foo at corners of a box about (i,j) to
+  // estimate whether foo is equal to 0 somewhere inside the box.
   function findCrossing (foo, i, j) {
-    var a1 = foo(i-1, j-1);
-    var a2 = foo(i+1, j-1);
-    var a3 = foo(i-1, j+1);
+    var a1 = foo(i-0, j-0);
+    var a2 = foo(i+1, j-0);
+    var a3 = foo(i-0, j+1);
     var a4 = foo(i+1, j+1);
-    return (a1*a2 < 0) || (a1*a3 < 0) || (a1*a4 < 0);
+    return (a1*a2 <= 0) || (a1*a3 <= 0) || (a1*a4 <= 0);
   }
 
   /* Cribbed from hacks.mozilla.org */
@@ -62,6 +83,7 @@
     ctx.putImageData(imageData, 0, 0);
   };
 
+  /* Set constants back to defaults. */
   function reset() {
     document.getElementById('aSlider').value = 1;
     document.getElementById('bSlider').value = 1;
@@ -71,10 +93,44 @@
     return;
   };
 
+  function drawAxes(ctx, xSemiDim, ySemiDim) {
+    ctx.beginPath();
+    ctx.moveTo(0,ySemiDim);
+    ctx.lineTo(2*xSemiDim,ySemiDim);
+    ctx.moveTo(xSemiDim,0);
+    ctx.lineTo(xSemiDim,2*ySemiDim);
+    ctx.strokeStyle='gray';
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.strokeStyle="gray";
+    for (var i = 1; i < xSemiDim/15; i++) {
+      ctx.moveTo( i*15 + xSemiDim,  3 + ySemiDim);
+      ctx.lineTo( i*15 + xSemiDim, -3 + ySemiDim);
+      ctx.moveTo(-i*15 + xSemiDim,  3 + ySemiDim);
+      ctx.lineTo(-i*15 + xSemiDim, -3 + ySemiDim);
+    }
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.strokeStyle="gray";
+    for (var i = 1; i < ySemiDim/15; i++) {
+      ctx.moveTo( 3 + xSemiDim,  i*15 + ySemiDim);
+      ctx.lineTo(-3 + xSemiDim,  i*15 + ySemiDim);
+      ctx.moveTo( 3 + xSemiDim, -i*15 + ySemiDim);
+      ctx.lineTo(-3 + xSemiDim, -i*15 + ySemiDim);
+    }
+    ctx.stroke();
+
+    return;
+  };
+
   function draw() {
     var canvas = document.getElementById('win');
     var ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    drawAxes(ctx, canvas.width/2, canvas.height/2);
 
     var a = document.getElementById('aSlider').value;
     var b = document.getElementById('bSlider').value;
@@ -83,73 +139,46 @@
 
     document.getElementById('aView').innerHTML = a;
     document.getElementById('bView').innerHTML = b;
-    document.getElementById('hView').innerHTML = h;
-    document.getElementById('kView').innerHTML = k;
+    document.getElementById('hView').innerHTML = Math.floor(100*h/15)/100;
+    document.getElementById('kView').innerHTML = Math.floor(100*k/15)/100;
 
-    var primLine = function (x,y) { return y - x; };
-    var primCirc = function (x,y) { return x*x + y*y - 1; };
-    var primElli = function (x,y) { return y*y - x*x*x + 2*x; };
-    var primQuad = function (x,y) { return y - x*x; };
-    var primCube = function (x,y) { return y - x*x*x + x; };
-    var primEll2 = function (x,y) { return y*y - x*x*x + 2*x - 2; };
-
-    var primAmpr = function (x,y) {
-      return (y*y - x*x)*(x-1)*(2*x-3) - 4*(x*x + y*y - 2*x)*(x*x + y*y - 2*x);
+    var transform = function(foo) {
+      return function(x,y) { return foo((x-h)/(a*15), (y-k)/(b*15)); }
     };
-
-    var circ = function(x,y) {
-      return primCirc((x-h)/(a*15), (y-k)/(b*15));
-    }
-
-    var line = function(x,y) {
-      return primLine((x-h)/(a*15), (y-k)/(b*15));
-    }
-
-    var elli = function(x,y) {
-      return primElli((x-h)/(a*15), (y-k)/(b*15));
-    }
-
-    var quad = function(x,y) {
-      return primQuad((x-h)/(a*15), (y-k)/(b*15));
-    }
-
-    var cube = function(x,y) {
-      return primCube((x-h)/(a*15), (y-k)/(b*15));
-    }
-
-    var ell2 = function(x,y) {
-      return primEll2((x-h)/(a*15), (y-k)/(b*15));
-    }
-
-    var ampr = function(x,y) {
-      return primAmpr((x-h)/(a*15), (y-k)/(b*15));
-    }
 
     var selection = document.getElementById('equation-type').value;
 
     switch (selection) {
       case 'circle':
-        plotEquation(circ);
+        plotEquation(transform(circle));
         break;
       case 'line':
-        plotEquation(line);
+        plotEquation(transform(line));
         break;
       case 'elliptic':
-        plotEquation(elli);
+        plotEquation(transform(elliptic1));
         break;
       case 'quadratic':
-        plotEquation(quad);
+        plotEquation(transform(quadratic));
         break;
       case 'cubic':
-        plotEquation(cube);
+        plotEquation(transform(cubic));
         break;
       case 'elliptic2':
-        plotEquation(ell2);
+        plotEquation(transform(elliptic2));
         break;
       case 'ampersand':
-        plotEquation(ampr);
+        plotEquation(transform(ampersand));
+        break;
+      case 'lemniscate':
+        plotEquation(transform(lemniscate));
+        break;
+      case 'devil':
+        plotEquation(transform(devil));
         break;
     }
+
+    return;
   };
 </script>
 </head>
@@ -184,9 +213,11 @@ Equation Type: <select id="equation-type" onclick="draw();">
   <option value="line">Line</option>
   <option value="quadratic">Quadratic</option>
   <option value="cubic">Cubic</option>
-  <option value="elliptic">Elliptic</option>
+  <option value="elliptic">Elliptic 1</option>
   <option value="elliptic2">Elliptic 2</option>
   <option value="ampersand">Ampersand</option>
+  <option value="lemniscate">Lemniscate</option>
+  <option value="devil">Devil's Curve</option>
 </select>
 </div>
 
