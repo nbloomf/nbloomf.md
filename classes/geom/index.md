@@ -6,6 +6,10 @@ title: College Geometry
 
 * [Syllabus](/pdf/classes/geom/syllabus.pdf)
 
+### Homework
+
+1. [Basic Constructions](/pdf/classes/geom/activity/a1-basic-constructions.pdf)
+
 ### Notes
 
 * Incidence, Betweenness, and Congruence

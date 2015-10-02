@@ -43,6 +43,12 @@
   var devil      = function (x,y) {
     return y*y*(y*y - 16/25) - x*x*(x*x - 1);
   };
+  var cubic2     = function (x,y) {
+    return x*x*x + x*y*y - 2*x*x + 4*x*y + y*y - 3*x - 4*y + 4;
+  };
+  var cubic3     = function (x,y) {
+    return x*y*y - x*x - y*y - 4*x - 4*y - 4;
+  };
 
   // foo should be a "continuous" function of two real numbers.
   // (Scare quotes because damn you floating point.)
@@ -89,6 +95,7 @@
     document.getElementById('bSlider').value = 1;
     document.getElementById('hSlider').value = 0;
     document.getElementById('kSlider').value = 0;
+    document.getElementById('tSlider').value = 0;
     draw();
     return;
   };
@@ -136,45 +143,59 @@
     var b = document.getElementById('bSlider').value;
     var h = document.getElementById('hSlider').value;
     var k = document.getElementById('kSlider').value;
+    var t = document.getElementById('tSlider').value;
 
     document.getElementById('aView').innerHTML = a;
     document.getElementById('bView').innerHTML = b;
     document.getElementById('hView').innerHTML = Math.floor(100*h/15)/100;
     document.getElementById('kView').innerHTML = Math.floor(100*k/15)/100;
+    document.getElementById('tView').innerHTML = t + '&deg;';
 
     var transform = function(foo) {
       return function(x,y) { return foo((x-h)/(a*15), (y-k)/(b*15)); }
+    };
+    var rotate = function(foo) {
+      return function(x,y) {
+        var cosT = Math.cos(t*3.1415926/180);
+        var sinT = Math.sin(t*3.1415926/180);
+        return foo(x*cosT - y*sinT, x*sinT + y*cosT); }
     };
 
     var selection = document.getElementById('equation-type').value;
 
     switch (selection) {
       case 'circle':
-        plotEquation(transform(circle));
+        plotEquation(rotate(transform(circle)));
         break;
       case 'line':
-        plotEquation(transform(line));
+        plotEquation(rotate(transform(line)));
         break;
       case 'elliptic':
-        plotEquation(transform(elliptic1));
+        plotEquation(rotate(transform(elliptic1)));
         break;
       case 'quadratic':
-        plotEquation(transform(quadratic));
+        plotEquation(rotate(transform(quadratic)));
         break;
       case 'cubic':
-        plotEquation(transform(cubic));
+        plotEquation(rotate(transform(cubic)));
         break;
       case 'elliptic2':
-        plotEquation(transform(elliptic2));
+        plotEquation(rotate(transform(elliptic2)));
         break;
       case 'ampersand':
-        plotEquation(transform(ampersand));
+        plotEquation(rotate(transform(ampersand)));
         break;
       case 'lemniscate':
-        plotEquation(transform(lemniscate));
+        plotEquation(rotate(transform(lemniscate)));
         break;
       case 'devil':
-        plotEquation(transform(devil));
+        plotEquation(rotate(transform(devil)));
+        break;
+      case 'cubic2':
+        plotEquation(rotate(transform(cubic2)));
+        break;
+      case 'cubic3':
+        plotEquation(rotate(transform(cubic3)));
         break;
     }
 
@@ -205,6 +226,10 @@
 <tr><td>k = <span id="kView" class="view"></span></td>
   <td><input id="kSlider" type="range" max="120" min="-120" step="1" oninput="draw();" /></td>
 </tr>
+
+<tr><td>t = <span id="tView" class="view"></span></td>
+  <td><input id="tSlider" type="range" max="180" min="-180" step="1" oninput="draw();" /></td>
+</tr>
 </table>
 
 <div>
@@ -212,7 +237,9 @@ Equation Type: <select id="equation-type" onclick="draw();">
   <option value="circle">Circle</option>
   <option value="line">Line</option>
   <option value="quadratic">Quadratic</option>
-  <option value="cubic">Cubic</option>
+  <option value="cubic">Cubic 1</option>
+  <option value="cubic2">Cubic 2</option>
+  <option value="cubic3">Cubic 3</option>
   <option value="elliptic">Elliptic 1</option>
   <option value="elliptic2">Elliptic 2</option>
   <option value="ampersand">Ampersand</option>
