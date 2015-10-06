@@ -63,7 +63,7 @@
   }
 
   /* Cribbed from hacks.mozilla.org */
-  function plotEquation(fun) {
+  function plotEquation(fun1, fun2) {
     var canvas = document.getElementById('win');
     var xDim = canvas.width;
     var yDim = canvas.height;
@@ -76,9 +76,15 @@
 
     for (var y = 0; y < yDim; y++) {
       for (var x = 0; x < xDim; x++) {
-        if (findCrossing(fun, x - xSemiDim, ySemiDim - y)) {
-          var index = (y * xDim + x) * 4;
+        var index = (y * xDim + x) * 4;
+        if (findCrossing(fun1, x - xSemiDim, ySemiDim - y)) {
           data[index]   = 0;   // red
+          data[++index] = 0;   // green
+          data[++index] = 0;   // blue
+          data[++index] = 255; // alpha
+        }
+        if (findCrossing(fun2, x - xSemiDim, ySemiDim - y)) {
+          data[index]   = 255; // red
           data[++index] = 0;   // green
           data[++index] = 0;   // blue
           data[++index] = 255; // alpha
@@ -141,20 +147,18 @@
 
     var a = document.getElementById('aSlider').value;
     var b = document.getElementById('bSlider').value;
-    var h = document.getElementById('hSlider').value / 15;
-    var k = document.getElementById('kSlider').value / 15;
+    var h = document.getElementById('hSlider').value;
+    var k = document.getElementById('kSlider').value;
     var t = document.getElementById('tSlider').value;
-
-    var isInverted = document.getElementById('invertBox').checked;
 
     document.getElementById('aView').innerHTML = a;
     document.getElementById('bView').innerHTML = b;
-    document.getElementById('hView').innerHTML = Math.floor(100*h)/100;
-    document.getElementById('kView').innerHTML = Math.floor(100*k)/100;
+    document.getElementById('hView').innerHTML = Math.floor(100*h/15)/100;
+    document.getElementById('kView').innerHTML = Math.floor(100*k/15)/100;
     document.getElementById('tView').innerHTML = t + '&deg;';
 
     var transform = function(foo) {
-      return function(x,y) { return foo((x-h)/a, (y-k)/b); }
+      return function(x,y) { return foo((x-h)/(a*15), (y-k)/(b*15)); }
     };
     var rotate = function(foo) {
       return function(x,y) {
@@ -162,25 +166,16 @@
         var sinT = Math.sin(t*3.1415926/180);
         return foo(x*cosT - y*sinT, x*sinT + y*cosT); }
     };
-    var invert = function(foo) {
-      return function(x,y) { return foo(5*x/(x*x + y*y), 5*y/(x*x + y*y)); };
-    };
-    var shrink = function(foo) {
-      return function(x,y) { return foo(x*15, y*15); }
-    };
     var expand = function(foo) {
-      return function(x,y) { return foo(x/15, y/15); }
-    };
-
-    var drawPlot = function(foo) {
-      if ( isInverted === true ) {
-        plotEquation(invert(rotate(shrink(transform(foo)))));
-      } else {
-        plotEquation(rotate(expand(transform(foo))));
-      }
+      return function(x,y) { return foo(x/15, y/15) }
     };
 
     var selection = document.getElementById('equation-type').value;
+
+    var drawPlot = function(foo) {
+      plotEquation(rotate(transform(foo)), expand(foo));
+      return;
+    }
 
     switch (selection) {
       case 'circle':
@@ -239,11 +234,11 @@
 </tr>
 
 <tr><td>h = <span id="hView" class="view"></span></td>
-  <td><input id="hSlider" type="range" max="90" min="-90" step="0.5" oninput="draw();" /></td>
+  <td><input id="hSlider" type="range" max="160" min="-160" step="1" oninput="draw();" /></td>
 </tr>
 
 <tr><td>k = <span id="kView" class="view"></span></td>
-  <td><input id="kSlider" type="range" max="90" min="-90" step="0.5" oninput="draw();" /></td>
+  <td><input id="kSlider" type="range" max="120" min="-120" step="1" oninput="draw();" /></td>
 </tr>
 
 <tr><td>t = <span id="tView" class="view"></span></td>
@@ -265,10 +260,6 @@ Equation Type: <select id="equation-type" onclick="draw();">
   <option value="lemniscate">Lemniscate</option>
   <option value="devil">Devil's Curve</option>
 </select>
-</div>
-
-<div>
-Invert: <input id="invertBox" type="checkbox" onchange="draw();">
 </div>
 
 <div>

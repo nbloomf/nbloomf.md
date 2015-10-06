@@ -9,7 +9,7 @@ The widget below is a live demonstration of these transformations. The graph of 
 Note that there is no cheating going on: the graph is drawn by checking, for each pixel, whether the equation has a solution nearby, and coloring that pixel black if so.
 
 <div style="text-align:center;">
-<iframe src="../../raw/transformations-live-demo.html" width="560" height="480" style="border:none;"></iframe>
+<iframe src="../../raw/transformations-live-demo.html" width="560" height="510" style="border:none;"></iframe>
 </div>
 
 ## Normal Equations

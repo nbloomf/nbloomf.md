@@ -40,4 +40,5 @@ title: College Algebra
 
 * [Transformations (shifting and stretching)](/classes/ca/transformations.html)
 * [Transformations (live demo)](/classes/ca/transformations-live-demo.html)
+* [Symmetry (live demo)](/classes/ca/symmetry-live-demo.html)
 
