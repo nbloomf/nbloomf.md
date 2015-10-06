@@ -21,6 +21,7 @@ title: College Algebra
 ### Activities
 
 1. [Lines and Circles](/pdf/classes/ca/activity/a1-lines-and-circles.pdf)
+2. [Transformations](/pdf/classes/ca/activity/a2-transformations.pdf)
 
 ### Suggested Practice Problems (Not Graded!)
 
