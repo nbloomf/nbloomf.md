@@ -25,6 +25,7 @@ title: College Geometry
 * Neutral Plane Geometry
     * [Plane Geometries](/pdf/classes/geom/notes/09-plane-geometries.pdf)
     * [Transversals](/pdf/classes/geom/notes/10-transversals.pdf)
+    * [Perpendiculars and Tangents](/pdf/classes/geom/notes/11-perpendiculars-and-tangents.pdf)
 
 ### Constructions
 
