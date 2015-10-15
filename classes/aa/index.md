@@ -54,4 +54,6 @@ title: Abstract Algebra
 * Polynomial Rings
     * 21: [Polynomials](/pdf/classes/aa/notes/21-polynomials.pdf)
     * 22: Long Division and Roots
-    * 23: Polynomials over a GCD Domain
+    * 23: Over a GCD Domain
+    * 24: Over a UFD
+* Quotient Rings and Ideals
