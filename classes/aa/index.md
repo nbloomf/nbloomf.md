@@ -53,7 +53,8 @@ title: Abstract Algebra
     * 20: [Localization](/pdf/classes/aa/notes/20-localization.pdf)
 * Polynomial Rings
     * 21: [Polynomials](/pdf/classes/aa/notes/21-polynomials.pdf)
-    * 22: Long Division and Roots
-    * 23: Over a GCD Domain
-    * 24: Over a UFD
+    * 22: [Long Division and Roots](/pdf/classes/aa/notes/22-long-division-and-roots.pdf)
+    * 23: [Over a GCD Domain (Part I)](/pdf/classes/aa/notes/23-over-a-gcd-domain-part-i.pdf)
+    * 24: [Over a GCD Domain (Part II)](/pdf/classes/aa/notes/24-over-a-gcd-domain-part-ii.pdf)
+    * 25: [Over a UFD](/pdf/classes/aa/notes/25-over-a-ufd.pdf)
 * Quotient Rings and Ideals
