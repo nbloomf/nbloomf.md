@@ -27,6 +27,10 @@ title: College Geometry
     * [Transversals](/pdf/classes/geom/notes/10-transversals.pdf)
     * [Perpendiculars and Tangents](/pdf/classes/geom/notes/11-perpendiculars-and-tangents.pdf)
     * [Incircles and Excircles](/pdf/classes/geom/notes/12-incircles-and-excircles.pdf)
+    * [Quadrilaterals](/pdf/classes/geom/notes/13-quadrilaterals.pdf)
+
+* Euclidean Plane Geometry
+    * [Euclidean Planes](/pdf/classes/geom/notes/14-euclidean-planes.pdf)
 
 ### Constructions
 
