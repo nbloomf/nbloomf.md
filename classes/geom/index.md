@@ -9,6 +9,7 @@ title: College Geometry
 ### Homework
 
 1. [Basic Constructions](/pdf/classes/geom/activity/a1-basic-constructions.pdf)
+2. [Hyperbolic Constructions](/pdf/classes/geom/activity/a2-hyperbolic-constructions.pdf)
 
 ### Notes
 
