@@ -24,6 +24,7 @@ title: College Algebra
 1. [Lines and Circles](/pdf/classes/ca/activity/a1-lines-and-circles.pdf)
 2. [Transformations](/pdf/classes/ca/activity/a2-transformations.pdf)
 3. [Polynomials 1](/pdf/classes/ca/activity/a3-polynomials-1.pdf)
+4. [Polynomials 2](/pdf/classes/ca/activity/a4-polynomials-2.pdf)
 
 ### Suggested Practice Problems (Not Graded!)
 
