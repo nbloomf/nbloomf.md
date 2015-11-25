@@ -26,6 +26,7 @@ title: College Algebra
 3. [Polynomials 1](/pdf/classes/ca/activity/a3-polynomials-1.pdf)
 4. [Polynomials 2](/pdf/classes/ca/activity/a4-polynomials-2.pdf)
 5. [Polynomials 3](/pdf/classes/ca/activity/a5-polynomials-3.pdf)
+6. [Rational Functions](/pdf/classes/ca/activity/a6-rational-functions.pdf)
 
 ### Suggested Practice Problems (Not Graded!)
 
