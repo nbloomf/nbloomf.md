@@ -10,6 +10,7 @@ title: College Geometry
 
 1. [Basic Constructions](/pdf/classes/geom/activity/a1-basic-constructions.pdf)
 2. [Hyperbolic Constructions](/pdf/classes/geom/activity/a2-hyperbolic-constructions.pdf)
+3. [Symmetries of the Square](/pdf/classes/geom/activity/a3-symmetries-of-the-square.pdf)
 
 ### Notes
 

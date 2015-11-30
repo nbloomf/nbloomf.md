@@ -7,6 +7,10 @@ title: Abstract Algebra
 * [Syllabus](/pdf/classes/aa/syllabus.pdf)
 * [Textbook](http://abstract.pugetsound.edu)
 
+### Final Exam
+
+[Final](/pdf/classes/aa/homework/final.pdf)
+
 ### Homework
 
 1. Chapter 2, problems 1, 5, 15a, 15c, and 29
