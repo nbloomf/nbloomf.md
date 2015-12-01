@@ -12,6 +12,7 @@ title: College Algebra
 * [Prereq](/pdf/classes/ca/review/r0-prereq.pdf)
 * [Test 1](/pdf/classes/ca/review/r1-equations.pdf)
 * [Test 2](/pdf/classes/ca/review/r2-graphs-and-functions.pdf)
+* [Test 3](/pdf/classes/ca/review/r3-polynomials-and-conics.pdf)
 
 ### Homework
 
