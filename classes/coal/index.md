@@ -4,9 +4,9 @@ title: College Algebra
 
 ### Boring Stuff
 
-* [Syllabus (9:00)](/pdf/classes/ca/syllabus09.pdf)
-* [Syllabus (10:00)](/pdf/classes/ca/syllabus10.pdf)
+* [Syllabus](/pdf/classes/coal/coal-syllabus.pdf)
 
+<!--
 ### Review
 
 * [Prereq](/pdf/classes/ca/review/r0-prereq.pdf)
@@ -28,24 +28,11 @@ title: College Algebra
 4. [Polynomials 2](/pdf/classes/ca/activity/a4-polynomials-2.pdf)
 5. [Polynomials 3](/pdf/classes/ca/activity/a5-polynomials-3.pdf)
 6. [Rational Functions](/pdf/classes/ca/activity/a6-rational-functions.pdf)
+-->
 
-### Suggested Practice Problems (Not Graded!)
+### Toys
 
-* Test 1
-    * P.1, 67--82
-    * P.1, 65,66,83,84 and P.2, 5--22
-    * 1.1, 13--26, 37--48 (solve only), 63--80
-    * 1.5, 5--60
-    * 1.6, 1--26, 35--64 
-    * 1.7, 15--26, 45--76
-* Test 2
-    * 7.2, 43--68
-    * 1.4, 9--42
-    * 5.1, 23--50 (solve only)
-
-### Examples
-
-* [Transformations (shifting and stretching)](/classes/ca/transformations.html)
-* [Transformations (live demo)](/classes/ca/transformations-live-demo.html)
-* [Symmetry (live demo)](/classes/ca/symmetry-live-demo.html)
+* [Transformations (shifting and stretching)](/classes/coal/transformations.html)
+* [Transformations (live demo)](/classes/coal/transformations-live-demo.html)
+* [Symmetry (live demo)](/classes/coal/symmetry-live-demo.html)
 
