@@ -6,6 +6,12 @@ title: College Algebra
 
 * [Syllabus](/pdf/classes/coal/coal-syllabus.pdf)
 
+
+### Practice Problems
+
+* Test 1
+    * 1.1 #13--26, 37--48 (solve only), 63--80
+
 <!--
 ### Review
 
@@ -28,11 +34,10 @@ title: College Algebra
 4. [Polynomials 2](/pdf/classes/ca/activity/a4-polynomials-2.pdf)
 5. [Polynomials 3](/pdf/classes/ca/activity/a5-polynomials-3.pdf)
 6. [Rational Functions](/pdf/classes/ca/activity/a6-rational-functions.pdf)
--->
 
 ### Toys
 
 * [Transformations (shifting and stretching)](/classes/coal/transformations.html)
 * [Transformations (live demo)](/classes/coal/transformations-live-demo.html)
 * [Symmetry (live demo)](/classes/coal/symmetry-live-demo.html)
-
+-->
