@@ -6,6 +6,10 @@ title: Calculus I
 
 * [Syllabus](/pdf/classes/calc/calc-syllabus.pdf)
 
+## Practice Problems (Not Graded!)
 
+* Test 1
+    * 2.4 #1abcdjkl, 2adegjk
+    * 2.2 #1,2,11--42
 
 Fun fact: "calculus" is a scary word that simply means "a system of rules for manipulating symbols"; there are lots of different calculuses (calculi?).

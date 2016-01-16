@@ -12,6 +12,11 @@ title: College Algebra
 * Test 1
     * 1.1 #13--26, 37--48 (solve only), 63--80
 
+
+### Activities
+
+* [Linear-ish Equations](/pdf/classes/coal-a01-linear-ish-equations.pdf) [(solutions)](/pdf/classes/coal-soln-a01-linear-ish-equations.pdf)
+
 <!--
 ### Review
 
