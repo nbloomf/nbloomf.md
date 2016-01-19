@@ -9,7 +9,7 @@ title: Calculus I
 
 ### Activities
 
-1. [Limits](/pdf/classes/calc/calc-a01-limits.pdf) ([solutions](/pdf/classes/coal/coal-soln-a01-limits.pdf))
+1. [Limits](/pdf/classes/calc/calc-a01-limits.pdf) ([solutions](/pdf/classes/calc/calc-soln-a01-limits.pdf))
 
 
 ## Practice Problems (Not Graded!)
