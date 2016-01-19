@@ -6,6 +6,12 @@ title: Calculus I
 
 * [Syllabus](/pdf/classes/calc/calc-syllabus.pdf)
 
+
+### Activities
+
+1. [Limits](/pdf/classes/calc/calc-a01-limits.pdf) ([solutions](/pdf/classes/coal/coal-soln-a01-limits.pdf))
+
+
 ## Practice Problems (Not Graded!)
 
 * Test 1
