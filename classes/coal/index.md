@@ -11,6 +11,7 @@ title: College Algebra
 
 * Test 1
     * 1.1 #13--26, 37--48 (solve only), 63--80
+    * 1.3 #19--24, 33--36, 41--46
 
 
 ### Activities
