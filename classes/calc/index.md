@@ -10,6 +10,7 @@ title: Calculus I
 ### Activities
 
 1. [Limits](/pdf/classes/calc/calc-a01-limits.pdf) ([solutions](/pdf/classes/calc/calc-soln-a01-limits.pdf))
+2. [Continuity](/pdf/classes/calc/calc-a02-continuity.pdf) ([solutions](/pdf/classes/calc/calc-soln-a02-continuity.pdf))
 
 
 ## Practice Problems (Not Graded!)

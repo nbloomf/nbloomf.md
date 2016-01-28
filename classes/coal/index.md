@@ -17,6 +17,7 @@ title: College Algebra
 ### Activities
 
 1. [Linear-ish Equations](/pdf/classes/coal/coal-a01-linear-ish-equations.pdf) ([solutions](/pdf/classes/coal/coal-soln-a01-linear-ish-equations.pdf))
+2. [Some Geometry](/pdf/classes/coal/coal-a02-some-geometry.pdf) ([solutions](/pdf/classes/coal/coal-soln-a02-some-geometry.pdf))
 
 <!--
 
