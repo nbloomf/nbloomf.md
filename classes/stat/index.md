@@ -14,6 +14,11 @@ title: Statistical Methods
     * 2.3 #9, 10, 19
 
 
+## Activities
+
+1. [Basic Parameters](/pdf/classes/stat/stat-a01-basic-parameters.pdf) [(solutions)](/pdf/classes/stat/stat-soln-a01-basic-parameters.pdf)
+
+
 ## Slides
 
 * Misleading Graphs [(screen)](/pdf/classes/stat/stat-screen-slides-misleading-graphs.pdf) [(print)](/pdf/classes/stat/stat-print-slides-misleading-graphs.pdf)
