@@ -19,5 +19,6 @@ title: Calculus I
     * 2.4 #1abcdjkl, 2adegjk
     * 2.2 #1,2,11--42
     * 2.5 #13--18, 39, 40, 43, 44
+    * 3.1 #5--22, 25--28
 
 Fun fact: "calculus" is a scary word that simply means "a system of rules for manipulating symbols"; there are lots of different calculuses (calculi?).
