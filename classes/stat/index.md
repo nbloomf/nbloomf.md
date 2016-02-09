@@ -16,8 +16,13 @@ title: Statistical Methods
 
 ## Activities
 
-1. [Basic Parameters](/pdf/classes/stat/stat-a01-basic-parameters.pdf) [(solutions)](/pdf/classes/stat/stat-soln-a01-basic-parameters.pdf)
-1. [Probability](/pdf/classes/stat/stat-a02-probability.pdf) [(solutions)](/pdf/classes/stat/stat-soln-a02-probability.pdf)
+1. [Basic Parameters](/pdf/classes/stat/stat-a01-basic-parameters.pdf) ([solutions](/pdf/classes/stat/stat-soln-a01-basic-parameters.pdf))
+1. [Probability](/pdf/classes/stat/stat-a02-probability.pdf) ([solutions](/pdf/classes/stat/stat-soln-a02-probability.pdf))
+
+
+## Test Review
+
+1. [Test 1](/pdf/classes/stat/stat-r1-parameters-and-probability.pdf) ([solutions](/pdf/classes/stat/stat-soln-r1-parameters-and-probability.pdf))
 
 
 ## Slides
