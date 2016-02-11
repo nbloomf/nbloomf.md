@@ -30,7 +30,7 @@ It is straightforward to show that Carathéodory's characterization is equivalen
 
 <div class="result">
 <div class="proof">
-(Chain Rule.) Let $f$ and $g$ be real functions and $a$ a real number such that $g$ is differentiable at $a$ and $f$ differentiable at $g(a)$. By Carathéodory's characterization, there is a function $\varphi$ such that $$g(x) - g(a) = \varphi(x)(x-a)$$ for all $x$ and a function $\psi$ such that $$f(y) - f(g(a)) = \psi(y)(y - g(a))$$ for all $y$; in particular for $y = g(x)$. Now substituting yields $$f(g(x)) - f(g(a)) = \psi(g(x))\varphi(x)(x-a).$$ Since $g$ is differentiable at $a$, it is continuous at $a$, and so $\psi(g(x))$ is continuous at $a$, and thus $\psi(g(x))\varphi(x)$ is continuous at $a$. Again by Carathéodory, $f \circ g$ is differentiable at $a$, and $$(f \circ g)^\prime(a) = \psi(g(a))\varphi(a) = f^\prime(g(a))g^\prime(a).$$
+(Chain Rule.) Let $f$ and $g$ be real functions and $a$ a real number such that $g$ is differentiable at $a$ and $f$ differentiable at $g(a)$. By Carathéodory's characterization, there is a function $\varphi$ such that $$g(x) - g(a) = \varphi(x)(x-a)$$ for all $x$ and a function $\psi$ such that $$f(y) - f(g(a)) = \psi(y)(y - g(a))$$ for all $y$; in particular for $y = g(x)$. Now substituting yields $$f(g(x)) - f(g(a)) = \psi(g(x))\varphi(x)(x-a).$$ Since $g$ is differentiable at $a$, it is continuous at $a$, and so $\psi(g(x))$ is continuous at $a$, and thus $\psi(g(x))\varphi(x)$ is continuous at $a$. Again by Carathéodory, $f \circ g$ is differentiable at $a$, and $$(f \circ g)^\prime(a) = \psi(g(a))\varphi(a) = f^\prime(g(a)) \cdot g^\prime(a).$$
 </div>
 </div>
 

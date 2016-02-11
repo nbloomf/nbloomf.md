@@ -20,6 +20,7 @@ title: College Algebra
 
 1. [Linear-ish Equations](/pdf/classes/coal/coal-a01-linear-ish-equations.pdf) ([solutions](/pdf/classes/coal/coal-soln-a01-linear-ish-equations.pdf))
 2. [Some Geometry](/pdf/classes/coal/coal-a02-some-geometry.pdf) ([solutions](/pdf/classes/coal/coal-soln-a02-some-geometry.pdf))
+3. [Compound Equations](/pdf/classes/coal/coal-a03-compound-equations.pdf) ([solutions](/pdf/classes/coal/coal-soln-a03-compound-equations.pdf))
 
 
 ### Test Reviews

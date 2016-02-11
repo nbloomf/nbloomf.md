@@ -96,7 +96,7 @@ As usual we begin with some pragmas and imports. The OverloadedStrings pragma al
 
 > postCtx :: Context String
 > postCtx =
->   dateField "date" "%B %e, %Y" `mappend`
+>   dateField "date" "%Y-%m-%d" `mappend`
 >   defaultContext
 >
 > pandocMathCompiler :: Compiler (Item String)

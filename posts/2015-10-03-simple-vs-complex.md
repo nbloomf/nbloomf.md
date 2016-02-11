@@ -1,12 +1,8 @@
 ---
-title: Quotations
+title: Simple vs. Complex
 author: nbloomf
 date: 2015-10-03
 ---
-
-(These are not mine.)
-
-* * *
 
 >Some years ago I spent a week giving an in-house program design course at a manufacturing company in the mid-west of the United States. On the Friday afternoon it was all over. The DP Manager, who had arranged the course and was paying for it out of his budget, asked me into his office.
 > 
