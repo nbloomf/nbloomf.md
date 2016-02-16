@@ -41,7 +41,7 @@ using ``catchIOError``, which takes an action to be attempted and an error handl
 
 ## ``charcount``: count characters on stdin
 
-The ``charcount`` program counts the characters on stdin until EOF is reached. 
+The ``charcount`` program counts the characters on stdin until EOF is reached. For simplicity's sake I will ignore any issues with unicode normalization, like combining diacritics. So for instance O̰ (capital O, with combining tilde below) counts as two characters. Character encodings were much simpler and less useful when *Software Tools* was written. 🙂
 
 ```haskell
 module Main where

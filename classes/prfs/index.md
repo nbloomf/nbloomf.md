@@ -15,3 +15,4 @@ title: Intro to Proof
 ## Homework
 
 1. [Statements and Quantifiers](/pdf/classes/prfs/prfs-h01-statements-and-quantifiers.pdf)
+2. [Union and Intersection](/pdf/classes/prfs/prfs-h02-union-and-intersection.pdf)

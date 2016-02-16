@@ -14,11 +14,11 @@ Because I enjoy pain, all of this will be done publicly, with code hosted at [Gi
 ## Ground Rules
 
 > Okay, let's party. But first, let's go over the rules, because what is fun without the rules?
-> <cite>Gru in "Despicable Me"</cite>
+> <cite>Gru in *Despicable Me 2*</cite>
 
 The purpose of this project is to learn, and so there are some self-imposed rules.
 
-1. Reproduce the behavior of the original tools as closely as possible. (Possibly with extensions.)
+1. Reproduce the behavior of the original tools as closely as possible. (Maybe with extensions.)
 2. Write code which is idiomatic Haskell, but follows the spirit of the originals and doesn't try to be too clever.
 3. Produce executable programs which interact with my own working environment.
 4. Follow established conventions regarding things like command-line arguments and return codes.
