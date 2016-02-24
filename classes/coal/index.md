@@ -28,12 +28,14 @@ title: College Algebra
 
 1. [Test 1](/pdf/classes/coal/coal-r1-equations-and-geometry.pdf) ([solutions](/pdf/classes/coal/coal-soln-r1-equations-and-geometry.pdf))
 
-<!--
-
 
 ### Toys
 
+* [Transformations (live demo)](/classes/coal/transformations-live-demo.html) Play with transformations of equations.
+
+<!--
+
 * [Transformations (shifting and stretching)](/classes/coal/transformations.html)
-* [Transformations (live demo)](/classes/coal/transformations-live-demo.html)
+
 * [Symmetry (live demo)](/classes/coal/symmetry-live-demo.html)
 -->

@@ -24,7 +24,8 @@ import System.IO.Error (isEOFError, catchIOError)
 import System.Exit (exitSuccess, exitFailure)
 
 main :: IO ()
-main = catchIOError getChar handler >>= putChar >> main
+main = catchIOError getChar handler
+  >>= putChar >> main
 
 handler :: IOError -> IO a
 handler err
@@ -49,7 +50,8 @@ module Main where
 import Data.Foldable (foldl')
 
 main :: IO ()
-main = getContents >>= (putStrLn . show . count)
+main = getContents >>=
+  (putStrLn . show . count)
 
 count :: [a] -> Integer
 count = foldl' inc 0
@@ -75,24 +77,29 @@ should have three lines, not two. On the other hand, if there are *no* character
 * The empty sequence consists of zero lines.
 * Given a nonempty sequence of characters, let $k$ denote the number of times ``\n`` appears. Then the number of lines in this sequence is $k$ if the last character is ``\n``, and is $k+1$ otherwise.
 
-This logic is captured by the ``getNewlines`` function, which extracts the ``\n``s from a sequence of characters (adding one at the end if necessary). We reuse the ``count`` function from ``charcount``.
+This logic is captured by the ``getLines`` function, which splits a string into lines at ``\n`` (taking care of any ``\n``s at the end as necessary). We reuse the ``count`` function from ``charcount``.
 
 ```haskell
+-- sth-linecount: count lines on stdin
+
 module Main where
 
+import Data.List (break, unfoldr)
 import Data.Foldable (foldl')
 import Control.Arrow ((>>>))
 
 main :: IO ()
 main = getContents >>=
-        (getNewlines >>> count >>> show >>> putStrLn)
+  (getLines >>> count >>> show >>> putStrLn)
 
-getNewlines :: [Char] -> [Char]
-getNewlines []     = []
-getNewlines [_]    = ['\n']
-getNewlines (x:xs)
-  | x == '\n' = '\n' : getNewlines xs
-  | otherwise = getNewlines xs
+getLines :: String -> [String]
+getLines = unfoldr firstLine
+  where
+    firstLine :: String -> Maybe (String, String)
+    firstLine xs = case break (== '\n') xs of
+      ("","")   -> Nothing
+      (as,"")   -> Just (as,"")
+      (as,b:bs) -> Just (as,bs)
 
 count :: [a] -> Integer
 count = foldl' inc 0
