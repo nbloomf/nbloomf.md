@@ -22,23 +22,26 @@ The purpose of this project is to learn, and so there are some self-imposed rule
 2. Write code which is idiomatic Haskell, but follows the spirit of the originals and doesn't try to be too clever.
 3. Produce executable programs which interact with my own working environment.
 4. Follow established conventions regarding things like command-line arguments and return codes.
-5. Include tests.
+5. Use standard library functions where possible, unless doing so makes the program a one-liner, thus removing all the fun.
+6. Don't hesitate to move common code to a library, especially if doing so makes the main program logic more clear. But library functions should be appropriately general to justify this.
+7. Include tests.
 
-I will prefix the names of these ports with ``sth-``, to avoid clashing with existing real programs.
+I will prefix the names of these ports with ``sth-``, to avoid clashing with existing real programs. And of course all should be considered works-in-progress.
 
 
 ## The Posts (Chrono Order)
 
 * [``copy``, ``charcount``, ``linecount``](/posts/2016-02-11-software-tools-in-haskell-copy-charcount-linecount.html)
-* [``wordcount``, ``sentcount``](/posts/2016-02-22-software-tools-in-haskell-wordcount-sentcount.html)
+* [``glyphcount``, ``wordcount``, ``sentcount``](/posts/2016-02-22-software-tools-in-haskell-glyphcount-wordcount-sentcount.html)
 
 ## The Tools (Alpha Order)
 
 * [``charcount``](/posts/2016-02-11-software-tools-in-haskell-copy-charcount-linecount.html#charcount): count characters on stdin
 * [``copy``](/posts/2016-02-11-software-tools-in-haskell-copy-charcount-linecount.html#copy): copy characters from stdin to stdout
+* [``glyphcount``](/posts/2016-02-22-software-tools-in-haskell-glyphcount-wordcount-sentcount.html#glyphcount): count glyphs on stdin
 * [``linecount``](/posts/2016-02-11-software-tools-in-haskell-copy-charcount-linecount.html#linecount): count lines on stdin
-* [``sentcount``](/posts/2016-02-22-software-tools-in-haskell-wordcount-sentcount.html#sentcount): count sentences on stdin
-* [``wordcount``](/posts/2016-02-22-software-tools-in-haskell-wordcount-sentcount.html#wordcount): count words on stdin
+* [``sentcount``](/posts/2016-02-22-software-tools-in-haskell-glyphcount-wordcount-sentcount.html#sentcount): count sentences on stdin
+* [``wordcount``](/posts/2016-02-22-software-tools-in-haskell-glyphcount-wordcount-sentcount.html#wordcount): count words on stdin
 
 
 ## Why Haskell?

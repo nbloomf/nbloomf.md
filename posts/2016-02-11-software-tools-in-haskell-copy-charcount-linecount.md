@@ -20,45 +20,56 @@ This program copies characters from stdin to stdout until EOF is encountered, wh
 module Main where
 
 import System.IO (getChar, putChar)
-import System.IO.Error (isEOFError, catchIOError)
-import System.Exit (exitSuccess, exitFailure)
+import SoftwareTools.FunctionLibrary (catchEOF)
 
 main :: IO ()
-main = catchIOError getChar handler
-  >>= putChar >> main
-
-handler :: IOError -> IO a
-handler err
-  | isEOFError err = exitSuccess
-  | otherwise      = exitFailure
+main = catchEOF getChar >>= putChar >> main
 ```
 
 
 IO actions can throw IO errors, which (unlike other error handling strategies in Haskell) can be silently, and thus accidentally, ignored. These errors are caught
-using ``catchIOError``, which takes an action to be attempted and an error handler. Here, the IO action ``getChar`` may fail. In fact it will fail once the recursion reaches the end of the input.
+using ``catchIOError``, which takes an action to be attempted and an error handler. Here, the IO action ``getChar`` may fail. In fact it will fail once the recursion reaches the end of the input. We will detect IO errors, and exit accordingly, using the ``catchEOF`` helper function. We'll stash this in the library for future use.
+
+
+```haskell
+catchEOF :: IO a -> IO a
+catchEOF x = catchIOError x handler
+  where
+    handler err
+      | isEOFError err = exitSuccess
+      | otherwise      = exitFailure
+```
 
 
 <a name="charcount" />
 
 ## ``charcount``: count characters on stdin
 
-The ``charcount`` program counts the characters on stdin until EOF is reached. For simplicity's sake I will ignore any issues with unicode normalization, like combining diacritics. So for instance O̰ (capital O, with combining tilde below) counts as two characters. Character encodings were much simpler and less useful when *Software Tools* was written. 🙂
+The ``charcount`` program counts the characters on stdin until EOF is reached. Almost right off the bat we have a problem: with Unicode it is not obvious what a "character" is. For simplicity's sake I will split this program in two: ``charcount``, which ignores any issues with unicode normalization, like combining diacritics, and ``glyphcount``, which takes these issues into account. So for instance O̰ (capital O, with combining tilde below) counts as two characters but one glyph. Character encodings were much simpler and less useful when *Software Tools* was written. 🙂
+
 
 ```haskell
 module Main where
 
-import Data.Foldable (foldl')
+import SoftwareTools.FunctionLibrary (count)
 
 main :: IO ()
-main = getContents >>=
-  (putStrLn . show . count)
+main = getContents
+  >>= (putStrLn . show . count)
+```
 
+
+The ``getContents`` function reads stdin lazily, meaning that characters are only read as needed, and also handles EOF for us.
+
+
+```haskell
 count :: [a] -> Integer
 count = foldl' inc 0
   where inc n _ = n+1
 ```
 
-The ``getContents`` function reads stdin lazily, meaning that characters are only read as needed, and also handles EOF for us. Here we've written ``count`` as a ``foldl'`` to force strictness and avoid blowing out the stack. The ``foldl`` function is lazy by default, meaning that it would generate a stack of unevaluated additions to be carried out only once EOF is reached.
+
+The ``count`` function is a helper that (you guessed it!) counts the items in a list. We use ``foldl'`` to force strictness and avoid a memory leak. The ``foldl`` function is lazy by default, meaning that it would generate a stack of unevaluated additions to be carried out only once EOF is reached.
 
 
 
@@ -79,19 +90,8 @@ should have three lines, not two. On the other hand, if there are *no* character
 
 This logic is captured by the ``getLines`` function, which splits a string into lines at ``\n`` (taking care of any ``\n``s at the end as necessary). We reuse the ``count`` function from ``charcount``.
 
+
 ```haskell
--- sth-linecount: count lines on stdin
-
-module Main where
-
-import Data.List (break, unfoldr)
-import Data.Foldable (foldl')
-import Control.Arrow ((>>>))
-
-main :: IO ()
-main = getContents >>=
-  (getLines >>> count >>> show >>> putStrLn)
-
 getLines :: String -> [String]
 getLines = unfoldr firstLine
   where
@@ -100,10 +100,19 @@ getLines = unfoldr firstLine
       ("","")   -> Nothing
       (as,"")   -> Just (as,"")
       (as,b:bs) -> Just (as,bs)
-
-count :: [a] -> Integer
-count = foldl' inc 0
-  where inc n _ = n+1
 ```
 
+
 One more change from ``charcount`` is that we've used the ``>>>`` operator from ``Control.Arrow``. This is a standard library operator which (used here) is simply reversed function composition; it allows us to read the definition of ``main`` as if data flows from left to right, following the arrows. Compare this notation to the ``main`` function in ``charcount``, where we used ordinary function composition.
+
+
+```haskell
+module Main where
+
+import Control.Arrow ((>>>))
+import SoftwareTools.FunctionLibrary (getLines, count)
+
+main :: IO ()
+main = getContents >>=
+  (getLines >>> count >>> show >>> putStrLn)
+```
