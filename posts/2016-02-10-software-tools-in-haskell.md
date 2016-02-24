@@ -30,6 +30,7 @@ I will prefix the names of these ports with ``sth-``, to avoid clashing with exi
 ## The Posts (Chrono Order)
 
 * [``copy``, ``charcount``, ``linecount``](/posts/2016-02-11-software-tools-in-haskell-copy-charcount-linecount.html)
+* [``wordcount``, ``sentcount``](/posts/2016-02-22-software-tools-in-haskell-wordcount-sentcount.html)
 
 ## The Tools (Alpha Order)
 
