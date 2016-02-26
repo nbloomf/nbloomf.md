@@ -194,3 +194,113 @@ padToByAfter k z xs
 The helper function ``splitTabStop`` takes a single tab stop width ``k`` and a string ``xs``, and peels of the first ``k`` characters of ``xs`` unless one of them is a ``\t``. It then returns a pair consisting of the peeled of characters and the remainder of the string. (If the ``k`` parameter is negative, we have a problem, so we return ``Nothing`` in this case. **This is why we have to handle the second error condition in the main function.** If Haskell had a convenient positive integer type, this could be dealt with differently.) Then ``convertTabStops`` simply marches down an entire line with a list of tab stop widths, peeling of tab stops as it goes. This is done using an accumulating parameter function, ``accum``. Once the string is empty, ``accum`` reverses the accumulating parameter and returns it (concatenated), otherwise it takes the next tab stop width and repeats.
 
 ``spanAtMostWhile`` is a combination of the standard library functions ``span`` and ``take``. It peels off up to ``k`` elements of a list provided they all satisfy predicate ``p`` and returns both the peeled off elements and the remainder of the list. ``padToByAfter`` pads lists to a given length with a given character, throwing an error if the given length is already too long. Both of these are general enough to factor out; they also both use the accumulating parameter style to avoid space leaks.
+
+
+
+<a name="charcombine" />
+
+## ``charcombine``: replace combining unicode characters with precomposed characters
+
+One of the fundamental problems with our ``detab`` program is that it assumes plain text characters can be displayed on a rectangular array of character cells in a one-to-one way, with each character taking one cell and each cell having at most one character. This was a reasonable expectation at the time *Software Tools* was written, when character encodings were simpler. But Unicode makes this assumption wrong for several reasons. The first, which we will address now, is that *diacritics* like acute accents or carons can be expressed using *combining characters*. These are special unicode code points that are not displayed independently but rather modify the character which they succeed. You can read more about these on the [wiki](https://en.wikipedia.org/wiki/Combining_character). This is a problem for us because ``detab`` counts tab stop widths in terms of characters.
+
+There is something we can do to fix this. Unicode also includes a large number of *precomposed* characters; single code points that are semantically equivalent to characters with combining diacritics. For example, code point ``U+0041`` (latin capital A) followed by ``U+0301`` (combining acute accent above) is canonically equivalent to the single code point ``U+00C1`` (latin capital A with acute accent above). There is a helpful [wiki page](https://en.wikipedia.org/wiki/List_of_precomposed_Latin_characters_in_Unicode) with a list of these precombined characters.
+
+We could make ``detab`` aware of this equivalence. This is a bad idea, though, for a few reasons. First, it would make ``detab`` more complicated with only marginal benefit. Most of the text that I work with is plain ASCII, and making ``detab`` fiddle with unicode issues on such files will slow it down for no reason. We could give ``detab`` a command line flag to explicitly enable this feature, but it is important not to clutter up the interface of a program without a good reason. Second, ``detab`` is surely not the only program that might need to deal with this unicode issue. If each one solves the problem in its own way there will be lots of duplicated code, and duplicated code (while sometimes justifiable) is a breeding ground for bugs. Moreover the Unicode standard changes every few years, possibly requiring a time consuming edit of all the programs that work with unicode-encoded text. **A far better solution is to make a separate program, ``charcombine``, to handle this problem.** Because our programs are designed to communicate via stdin and stdout, then we can send text through ``charcombine`` before giving it to ``detab``. This way ``detab`` can stay simple, and ``charcombine`` can be a small, general-purpose tool for replacing combining characters with precomposed characters.
+
+Since we already have a function, ``getGlyphs``, which splits a stream of characters into noncombining+combining substrings, the main function of ``charcombine`` is quite succinct.
+
+
+```haskell
+module Main where
+
+import Control.Arrow ((>>>))
+import SoftwareTools.FunctionLibrary (getGlyphs, composeGlyph)
+
+main :: IO ()
+main = getContents >>=
+  (getGlyphs >>> map composeGlyph >>> concat >>> putStr)
+```
+
+
+All that remains is to write a function, ``composeGlyph``, that takes a string of characters and replaces it by an equivalent precomposed character.
+
+
+```haskell
+composeGlyph :: String -> String
+composeGlyph ""  = ""
+composeGlyph [c] = [c]
+composeGlyph [x, '\x0301'] = case lookup x acute of
+  Just y  -> y
+  Nothing -> [x, '\x0301']
+  where
+    acute =
+      [ ('A',"Á"), ('Æ',"Ǽ"), ('C',"Ć"), ('E',"É"), ('G',"Ǵ")
+      , ('I',"Í"), ('K',"Ḱ"), ('L',"Ĺ"), ('M',"Ḿ"), ('N',"Ń")
+      , ('O',"Ó"), ('Ø',"Ǿ"), ('P',"Ṕ"), ('R',"Ŕ"), ('S',"Ś")
+      , ('U',"Ú"), ('W',"Ẃ"), ('Y',"Ý"), ('Z',"Ź")
+      , ('a',"á"), ('æ',"ǽ"), ('c',"ć"), ('e',"é"), ('g',"ǵ")
+      , ('i',"í"), ('k',"ḱ"), ('l',"ĺ"), ('m',"ḿ"), ('n',"ń")
+      , ('o',"ó"), ('ø',"ǿ"), ('p',"ṕ"), ('r',"ŕ"), ('s',"ś")
+      , ('u',"ú"), ('w',"ẃ"), ('y',"ý"), ('z',"ź")
+      ]
+composeGlyph x = x
+```
+
+
+And OH MY GOSH THIS IS SO BORING. There are dozens more precomposed characters, and it's pretty clear how to extend this function to those. I will leave finishing this to another day.
+
+
+
+<a name="charfullwidth" />
+
+## ``charfullwidth``: replace characters with fullwidth equivalents
+
+Replacing "normal" characters with fullwidth forms is much simpler. We reuse the structure of ``copy``, with a filter to map characters.
+
+
+```haskell
+module Main where
+
+import System.IO (getChar, putChar)
+import Control.Arrow ((>>>))
+import SoftwareTools.FunctionLibrary (catchEOF, toFullwidth)
+
+main :: IO ()
+main = catchEOF getChar
+  >>= (toFullwidth >>> putChar) >> main
+```
+
+
+And the map:
+
+
+```haskell
+toFullwidth :: Char -> Char
+toFullwidth x = case lookup x full of
+  Just y  -> y
+  Nothing -> x
+  where
+    full =
+      [ ('!','！'), ('"','＂'),  ('#','＃'), ('$','＄'), ('%','％')
+      , ('&','＆'), ('\'','＇'), ('(','（'), (')','）'), ('*','＊')
+      , ('+','＋'), (',','，'),  ('-','－'), ('.','．'), ('/','／')
+      , ('0','０'), ('1','１'),  ('2','２'), ('3','３'), ('4','４')
+      , ('5','５'), ('6','６'),  ('7','７'), ('8','８'), ('9','９')
+      , (':','：'), (';','；'),  ('<','＜'), ('=','＝'), ('>','＞')
+      , ('?','？'), ('@','＠'),  ('A','Ａ'), ('B','Ｂ'), ('C','Ｃ')
+      , ('D','Ｄ'), ('E','Ｅ'),  ('F','Ｆ'), ('G','Ｇ'), ('H','Ｈ')
+      , ('I','Ｉ'), ('J','Ｊ'),  ('K','Ｋ'), ('L','Ｌ'), ('M','Ｍ')
+      , ('N','Ｎ'), ('O','Ｏ'),  ('P','Ｐ'), ('Q','Ｑ'), ('R','Ｒ')
+      , ('S','Ｓ'), ('T','Ｔ'),  ('U','Ｕ'), ('V','Ｖ'), ('W','Ｗ')
+      , ('X','Ｘ'), ('Y','Ｙ'),  ('Z','Ｚ'), ('[','［'), ('\\','＼')
+      , (']','］'), ('^','＾'),  ('_','＿'), ('`','｀'), ('a','ａ')
+      , ('b','ｂ'), ('c','ｃ'),  ('d','ｄ'), ('e','ｅ'), ('f','ｆ')
+      , ('g','ｇ'), ('h','ｈ'),  ('i','ｉ'), ('j','ｊ'), ('k','ｋ')
+      , ('l','ｌ'), ('m','ｍ'),  ('n','ｎ'), ('o','ｏ'), ('p','ｐ')
+      , ('q','ｑ'), ('r','ｒ'),  ('s','ｓ'), ('t','ｔ'), ('u','ｕ')
+      , ('v','ｖ'), ('w','ｗ'),  ('x','ｘ'), ('y','ｙ'), ('z','ｚ')
+      , ('{','｛'), ('|','｜'),  ('}','｝'), ('~','～')
+      ]
+```
+
+This probably looks terrible in your browser because unicode coverage.

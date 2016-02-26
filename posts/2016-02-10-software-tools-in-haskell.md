@@ -33,13 +33,15 @@ I will prefix the names of these ports with ``sth-``, to avoid clashing with exi
 
 * [``copy``, ``charcount``, ``linecount``](/posts/2016-02-11-software-tools-in-haskell-copy-charcount-linecount.html)
 * [``glyphcount``, ``wordcount``, ``sentcount``](/posts/2016-02-22-software-tools-in-haskell-glyphcount-wordcount-sentcount.html)
-* [``detab``](/posts/2016-02-25-software-tools-in-haskell-detab.html)
+* [``detab``, ``charcombine``, ``charfullwidth``](/posts/2016-02-25-software-tools-in-haskell-detab-charcombine-charfullwidth.html)
 
 ## The Tools (Alpha Order)
 
+* [``charcombine``](/posts/2016-02-25-software-tools-in-haskell-detab-charcombine-charfullwidth.html#charcombine): replace combining unicode characters with precomposed characters
 * [``charcount``](/posts/2016-02-11-software-tools-in-haskell-copy-charcount-linecount.html#charcount): count characters on stdin
+* [``charfullwidth``](/posts/2016-02-25-software-tools-in-haskell-detab-charcombine-charfullwidth.html#charfullwidth): replace characters with fullwidth equivalents
 * [``copy``](/posts/2016-02-11-software-tools-in-haskell-copy-charcount-linecount.html#copy): copy characters from stdin to stdout
-* [``detab``](/posts/2016-02-25-software-tools-in-haskell-detab.html#detab): replace tabs on stdin with spaces
+* [``detab``](/posts/2016-02-25-software-tools-in-haskell-detab-charcombine-charfullwidth.html#detab): replace tabs on stdin with spaces
 * [``glyphcount``](/posts/2016-02-22-software-tools-in-haskell-glyphcount-wordcount-sentcount.html#glyphcount): count glyphs on stdin
 * [``linecount``](/posts/2016-02-11-software-tools-in-haskell-copy-charcount-linecount.html#linecount): count lines on stdin
 * [``sentcount``](/posts/2016-02-22-software-tools-in-haskell-glyphcount-wordcount-sentcount.html#sentcount): count sentences on stdin
