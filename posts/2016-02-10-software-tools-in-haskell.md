@@ -18,7 +18,7 @@ Because I enjoy pain, all of this will be done publicly, with code hosted at [Gi
 
 The purpose of this project is to learn, and so there are some self-imposed rules.
 
-1. Reproduce the behavior of the original tools. (Maybe with extensions.)
+1. Reproduce the behavior of the original tools. (Maybe with extensions.) (Note: it turns out that this is more complicated than I thought thanks to unicode.)
 2. Write code which is idiomatic Haskell, but follows the spirit of the originals and doesn't try to be too clever.
 3. Produce executable programs which interact with my own working environment.
 4. Follow established conventions regarding things like command-line arguments and return codes.
@@ -33,11 +33,13 @@ I will prefix the names of these ports with ``sth-``, to avoid clashing with exi
 
 * [``copy``, ``charcount``, ``linecount``](/posts/2016-02-11-software-tools-in-haskell-copy-charcount-linecount.html)
 * [``glyphcount``, ``wordcount``, ``sentcount``](/posts/2016-02-22-software-tools-in-haskell-glyphcount-wordcount-sentcount.html)
+* [``detab``](/posts/2016-02-25-software-tools-in-haskell-detab.html)
 
 ## The Tools (Alpha Order)
 
 * [``charcount``](/posts/2016-02-11-software-tools-in-haskell-copy-charcount-linecount.html#charcount): count characters on stdin
 * [``copy``](/posts/2016-02-11-software-tools-in-haskell-copy-charcount-linecount.html#copy): copy characters from stdin to stdout
+* [``detab``](/posts/2016-02-25-software-tools-in-haskell-detab.html#detab): replace tabs on stdin with spaces
 * [``glyphcount``](/posts/2016-02-22-software-tools-in-haskell-glyphcount-wordcount-sentcount.html#glyphcount): count glyphs on stdin
 * [``linecount``](/posts/2016-02-11-software-tools-in-haskell-copy-charcount-linecount.html#linecount): count lines on stdin
 * [``sentcount``](/posts/2016-02-22-software-tools-in-haskell-glyphcount-wordcount-sentcount.html#sentcount): count sentences on stdin
