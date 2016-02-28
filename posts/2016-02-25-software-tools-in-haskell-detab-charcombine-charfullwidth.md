@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: detab
+title: Software Tools in Haskell: detab, charcombine, charfullwidth
 author: nbloomf
 date: 2016-02-25
 ---
@@ -43,7 +43,7 @@ As usual we need to make some assumptions. Also as usual, unicode makes things m
     6. If the user provides any tab stop widths as arguments, we treat the *last* one as if it repeats indefinitely. E.g., ``detab 4 6 8`` formats with tab stops of width 4, 6, 8, 8, 8, 8, and so on. **This seems like the Right Thing To Do**. It gives the user total control, requires no special cases for the interface, and also elegantly handles the situation where the user wants all tab stops to have the same width. If we want tab stops of width 10, for instance, we invoke ``detab 10``.
 * We also need to decide what to do if a given "column" of input text contains no tabs. Or, equivalently, if a given "tab cell" has too many characters. For example, if we interpret the input line ``helloworld\t`` using the default tab stop width of 8, in which tab-column is the ``\t``, the first or the second? Here we take inspiration from the typewriter heritage of tab: pressing tab advances to the *next* tab stop, wherever the carriage happens to be. It is not by default a "cell separator". So, for instance, invoking ``detab 4 10 8`` on ``hello\tworld`` puts 9 spaces between ``hello`` and ``world``.
 
-This program is quite a bit more complicated than the ones we've written so far because it needs to take command line arguments from the user. That means parsing structured input (here, base 10 natural numbers) and the possibility of input errors. My version of this program is pretty long compared to the *Software Tools* example, but it does have extra functionality; namely custom tab stop widths.
+This program is quite a bit more complicated than the ones we've written so far because it needs to take command line arguments from the user. That means parsing structured input (here, base 10 natural numbers) and the possibility of input errors. My version of this program is pretty long compared to the *Software Tools* example, but it does have extra functionality; namely custom tab stop widths. (NB: reading further in the text, adding this functionality to ``detab`` is Exercise 2-4 in the book. Oops!)
 
 First, here is the main program.
 
@@ -160,11 +160,15 @@ convertTabStops ks xs = accum [] ks xs
       | k <= 0    = Nothing
       | otherwise = do
           (as,bs) <- spanAtMostWhile k (/= '\t') xs
-          cs      <- padToByAfter k ' ' as
-          case bs of
-            ""      -> return (cs,"")
-            '\t':ds -> return (cs,ds)
-            ds      -> return (cs,ds)
+          if bs == ""
+            then do
+              let cs = reverse $ dropWhile (==' ') $ reverse as
+              return (cs,"")
+            else do
+              cs <- padToByAfter k ' ' as
+              case bs of
+                '\t':ds -> return (cs,ds)
+                ds      -> return (cs,ds)
 
 
 spanAtMostWhile :: Int -> (a -> Bool) -> [a] -> Maybe ([a],[a])
@@ -191,7 +195,7 @@ padToByAfter k z xs
 ```
 
 
-The helper function ``splitTabStop`` takes a single tab stop width ``k`` and a string ``xs``, and peels of the first ``k`` characters of ``xs`` unless one of them is a ``\t``. It then returns a pair consisting of the peeled of characters and the remainder of the string. (If the ``k`` parameter is negative, we have a problem, so we return ``Nothing`` in this case. **This is why we have to handle the second error condition in the main function.** If Haskell had a convenient positive integer type, this could be dealt with differently.) Then ``convertTabStops`` simply marches down an entire line with a list of tab stop widths, peeling of tab stops as it goes. This is done using an accumulating parameter function, ``accum``. Once the string is empty, ``accum`` reverses the accumulating parameter and returns it (concatenated), otherwise it takes the next tab stop width and repeats.
+The helper function ``splitTabStop`` takes a single tab stop width ``k`` and a string ``xs``, and peels of the first ``k`` characters of ``xs`` unless one of them is a ``\t``. It then returns a pair consisting of the peeled off characters and the remainder of the string. (If the ``k`` parameter is negative, we have a problem, so we return ``Nothing`` in this case. **This is why we have to handle the second error condition in the main function.** If Haskell had a convenient positive integer type, this could be dealt with differently.) Then ``convertTabStops`` simply marches down an entire line with a list of tab stop widths, peeling off tab stops as it goes. This is done using an accumulating parameter function, ``accum``. Once the string is empty, ``accum`` reverses the accumulating parameter and returns it (concatenated), otherwise it takes the next tab stop width and repeats.
 
 ``spanAtMostWhile`` is a combination of the standard library functions ``span`` and ``take``. It peels off up to ``k`` elements of a list provided they all satisfy predicate ``p`` and returns both the peeled off elements and the remainder of the list. ``padToByAfter`` pads lists to a given length with a given character, throwing an error if the given length is already too long. Both of these are general enough to factor out; they also both use the accumulating parameter style to avoid space leaks.
 
