@@ -13,6 +13,7 @@ title: Calculus I
 2. [Continuity](/pdf/classes/calc/calc-a02-continuity.pdf) ([solutions](/pdf/classes/calc/calc-soln-a02-continuity.pdf))
 3. [Differentiation I](/pdf/classes/calc/calc-a03-differentiation-1.pdf) ([solutions](/pdf/classes/calc/calc-soln-a03-differentiation-1.pdf))
 4. [Differentiation II](/pdf/classes/calc/calc-a04-differentiation-2.pdf) ([solutions](/pdf/classes/calc/calc-soln-a04-differentiation-2.pdf))
+5. [Differentiation III](/pdf/classes/calc/calc-a05-differentiation-3.pdf)
 
 
 ## Practice Problems (Not Graded!)
@@ -22,8 +23,13 @@ title: Calculus I
     * 2.2 #1,2,11--42
     * 2.5 #13--18, 39, 40, 43, 44
     * 3.1 #5--22, 25--28
+* Test 2
     * 3.2 #1--18
     * 3.3 #1--32
+    * 3.5 #1--18
+    * 3.6 #19--58
+    * 3.7 #1--18
+
 
 ## Test Review
 

@@ -31,7 +31,7 @@ should produce the output
 
 As usual we need to make some assumptions. Also as usual, unicode makes things more complicated.
 
-* The input consists of lines, separated by ``\n``s, each of which has several fields, separated by ``\t``s. The final output line will be terminated by a newline, even if the final input line was not.
+* The input consists of lines, separated by ``\n``s, each of which has several fields, separated by ``\t``s. The final output line will be terminated by a newline, even if the final input line was not. (So ``detab`` is a line-oriented filter.)
 * Tab stop widths are always positive. If none are provided, all tab stop widths default to 8.
 * We will assume that each character (other than tabs and newlines) takes one "character cell". **This assumption is wrong.** Unicode includes zero-width characters like combining diacritics as well as characters that are typically rendered as double-width, like many CJK characters. Taking this into account would be complicated, so we won't. (This isn't *so* bad. We can write filter programs later that replace combining diacritics with precomposed versions, and which replace halfwidth characters with fullwidth equivalents. Because "most" text files include only characters within one language, these three tools together should be able to handle "most" real text.)
 * By default, all tab stops will be eight character cells wide. To avoid making our program unnecessarily opinionated, the user can specify a sequence of tab stop widths at the command line. We then have to decide what to do if a line of input text has more tabs than the user provided tab stop widths. For example, if the user invokes ``detab 8 10 12`` on an input line with 5 ``\t``s, what should be the widths of tab stops 4 and 5? I see a few possible ways to resolve this.
@@ -49,14 +49,18 @@ First, here is the main program.
 
 
 ```haskell
+-- sth-detab: convert tabs to spaces
+--   line-oriented
+
 module Main where
 
-import System.Environment (getArgs, getProgName)
-import System.Exit (exitFailure, exitSuccess)
-import System.IO (hPutStrLn, stderr)
-import Control.Arrow ((>>>))
-import SoftwareTools.FunctionLibrary
-  (getLines, convertTabStops, readPosIntList)
+import SoftwareTools.Lib
+  ((>>>), exitSuccess, exitFailure, getArgs)
+import SoftwareTools.Lib.IO    (lineFilter)
+import SoftwareTools.Lib.Read  (readPosIntList)
+import SoftwareTools.Lib.Text  (getLines)
+import SoftwareTools.Lib.List  (spanAtMostWhile, padToByAfter)
+import SoftwareTools.Lib.Error (reportErrorMsgs)
 
 
 main :: IO ()
@@ -68,42 +72,30 @@ main = do
   ts <- case readPosIntList args of
     Just [] -> return [8]
     Just ks -> return ks
-    Nothing -> errorParsingArgs
-
-  -- Detab a single line ln with tabstops ts.
-  let detab ln = case convertTabStops ts ln of
-                   Nothing -> errorDeTabbing ts ln
-                   Just cs -> putStrLn cs
+    Nothing -> reportErrorMsgs
+                 ["tab widths must be positive integers."
+                 ] >> exitFailure
 
   -- Do it!
-  getContents
-    >>= (getLines >>> map detab >>> sequence_)
-    >> exitSuccess
+  lineFilter (convertTabStops ts)
+  exitSuccess
 ```
 
 
 In order, we (1) get the user-supplied tab stop widths as strings (``getArgs``), then (2) parse these as positive integers (``readPosIntList``), which may fail. We have a custom library function (``convertTabStops``) that does the real work, and here (3) define a throwaway function ``detab`` that wraps ``convertTabStops`` and handles its error condition (more on that later). Finally, we (4) read from stdin lazily, split the input into lines, and apply ``detab`` to each one.
 
-There are two error conditions: first, the user may provide bad command line arguments. In this case we gently remind the user how to use this program. The second error is more insidious: the ``convertTabStops`` function lives in the ``Maybe`` monad (more on that later). This usage "should" never return ``Nothing``, and if it does, there is a bug in the program. So we report the line and the tab stop sequence that caused a problem to aid in debugging. In both cases we follow the standard unix practice of writing errors to stderr rather than stdout.
+This program has an error condition: the user may provide bad command line arguments. In this case we gently remind the user how to use this program. We follow the standard unix practice of writing errors to stderr rather than stdout. Since we'll be reporting errors more in the future, we'll write two library functions two write messages to stderr.
 
 
 ```haskell
-errorParsingArgs :: IO a
-errorParsingArgs = do
-  name <- getProgName
-  hPutStrLn stderr $
-    name ++ " error: tab widths must be positive natural numbers in base 10."
-  exitFailure
+putStrLnErr :: String -> IO ()
+putStrLnErr = hPutStrLn stderr
 
 
--- This should not happen.
-errorDeTabbing :: [Int] -> String -> IO a
-errorDeTabbing ts ln = do
+reportErrorMsgs :: [String] -> IO ()
+reportErrorMsgs errs = do
   name <- getProgName
-  hPutStrLn stderr $ name ++ " error"
-  hPutStrLn stderr $ "LINE: " ++ ln
-  hPutStrLn stderr $ "TABS: " ++ show ts
-  exitFailure
+  sequence_ $ map putStrLnErr $ ((name ++ " error"):errs)
 ```
 
 
@@ -128,8 +120,8 @@ readDecimalNat xs = do
       ]
 
 
-guardMaybe :: (a -> Bool) -> Maybe a -> Maybe a
-guardMaybe p x = do
+filterMaybe :: (a -> Bool) -> Maybe a -> Maybe a
+filterMaybe p x = do
   y <- x
   case p y of
     True  -> Just y
@@ -143,38 +135,36 @@ Next we show ``convertTabStops``.
 
 
 ```haskell
-convertTabStops :: [Int] -> String -> Maybe String
-convertTabStops [] _  = Nothing
+convertTabStops :: [Int] -> String -> String
+convertTabStops [] xs = xs
 convertTabStops ks xs = accum [] ks xs
   where
-    accum zs _   "" = Just $ concat $ reverse zs
-    accum zs [t] ys = do
-      (as,bs) <- splitTabStop t ys
+    accum zs _   "" = concat $ reverse zs
+    accum zs [t] ys =
+      let (as,bs) = splitTabStop t ys in
       accum (as:zs) [t] bs
-    accum zs (t:ts) ys = do
-      (as,bs) <- splitTabStop t ys
+    accum zs (t:ts) ys =
+      let (as,bs) = splitTabStop t ys in
       accum (as:zs) ts bs
 
-    splitTabStop :: Int -> String -> Maybe (String, String)
+    splitTabStop :: Int -> String -> (String, String)
     splitTabStop k xs
-      | k <= 0    = Nothing
-      | otherwise = do
-          (as,bs) <- spanAtMostWhile k (/= '\t') xs
-          if bs == ""
-            then do
-              let cs = reverse $ dropWhile (==' ') $ reverse as
-              return (cs,"")
-            else do
-              cs <- padToByAfter k ' ' as
+      | k <= 0    = (xs,"")
+      | otherwise = 
+          case spanAtMostWhile k (/= '\t') xs of
+            (as,"") -> (stripTrailingSpaces as, "")
+            (as,bs) -> let cs = padToByAfter k ' ' as in
               case bs of
-                '\t':ds -> return (cs,ds)
-                ds      -> return (cs,ds)
+                '\t':ds -> (cs,ds)
+                ds      -> (cs,ds)
+      where
+        stripTrailingSpaces = reverse . dropWhile (==' ') . reverse
 
 
-spanAtMostWhile :: Int -> (a -> Bool) -> [a] -> Maybe ([a],[a])
+spanAtMostWhile :: Int -> (a -> Bool) -> [a] -> ([a],[a])
 spanAtMostWhile k p xs
-  | k < 0     = Nothing
-  | otherwise = Just $ acc k [] xs
+  | k < 0     = ([],xs)
+  | otherwise = acc k [] xs
   where
     acc 0 as bs = (reverse as, bs)
     acc _ as [] = (reverse as, [])
@@ -183,15 +173,8 @@ spanAtMostWhile k p xs
       else (reverse as, b:bs)
 
 
-padToByAfter :: Int -> a -> [a] -> Maybe [a]
-padToByAfter k z xs
-  | k < 0     = Nothing
-  | otherwise = acc k [] xs
-  where
-    acc 0 as [] = Just $ reverse as
-    acc 0 _  _  = Nothing
-    acc t as [] = Just $ reverse as ++ replicate t z
-    acc t as (b:bs) = acc (t-1) (b:as) bs
+padToByAfter :: Int -> a -> [a] -> [a]
+padToByAfter k z xs = take k (xs ++ repeat z)
 ```
 
 
@@ -215,14 +198,19 @@ Since we already have a function, ``getGlyphs``, which splits a stream of charac
 
 
 ```haskell
+-- sth-charcombine: replace combining unicode chars with precomposed chars
+--   character-oriented
+
 module Main where
 
-import Control.Arrow ((>>>))
-import SoftwareTools.FunctionLibrary (getGlyphs, composeGlyph)
+import SoftwareTools.Lib (exitSuccess)
+import SoftwareTools.Lib.IO   (charFilter)
+import SoftwareTools.Lib.Text (getGlyphs)
 
 main :: IO ()
-main = getContents >>=
-  (getGlyphs >>> map composeGlyph >>> concat >>> putStr)
+main = do
+  charFilter (concatMap toPrecomposed . getGlyphs)
+  exitSuccess
 ```
 
 
@@ -230,10 +218,10 @@ All that remains is to write a function, ``composeGlyph``, that takes a string o
 
 
 ```haskell
-composeGlyph :: String -> String
-composeGlyph ""  = ""
-composeGlyph [c] = [c]
-composeGlyph [x, '\x0301'] = case lookup x acute of
+toPrecomposed :: String -> String
+toPrecomposed ""  = ""
+toPrecomposed [c] = [c]
+toPrecomposed [x, '\x0301'] = case lookup x acute of
   Just y  -> y
   Nothing -> [x, '\x0301']
   where
@@ -247,7 +235,7 @@ composeGlyph [x, '\x0301'] = case lookup x acute of
       , ('o',"ó"), ('ø',"ǿ"), ('p',"ṕ"), ('r',"ŕ"), ('s',"ś")
       , ('u',"ú"), ('w',"ẃ"), ('y',"ý"), ('z',"ź")
       ]
-composeGlyph x = x
+toPrecomposed x = x
 ```
 
 
@@ -263,15 +251,20 @@ Replacing "normal" characters with fullwidth forms is much simpler. We reuse the
 
 
 ```haskell
+-- sth-charfullwidth: replace characters with fullwidth equivalents
+--   character-oriented
+
 module Main where
 
-import System.IO (getChar, putChar)
-import Control.Arrow ((>>>))
-import SoftwareTools.FunctionLibrary (catchEOF, toFullwidth)
+import SoftwareTools.Lib (exitSuccess)
+import SoftwareTools.Lib.IO   (charFilter)
+import SoftwareTools.Lib.List (applyListMap)
+
 
 main :: IO ()
-main = catchEOF getChar
-  >>= (toFullwidth >>> putChar) >> main
+main = do
+  charFilter (map toFullwidth)
+  exitSuccess
 ```
 
 

@@ -36,14 +36,18 @@ Now the main function is much like ``linecount``.
 
 
 ```haskell
+-- sth-glyphcount: count glyphs on stdin
+
 module Main where
 
-import Control.Arrow ((>>>))
-import SoftwareTools.FunctionLibrary (count, getGlyphs)
+import SoftwareTools.Lib.IO (charFilter, putNewLine)
+import SoftwareTools.Lib.List (count)
+import SoftwareTools.Lib.Text (getGlyphs)
 
 main :: IO ()
-main = getContents >>=
-  (getGlyphs >>> count >>> show >>> putStrLn)
+main = do
+  charFilter (show . count . getGlyphs)
+  putNewLine
 ```
 
 
@@ -70,14 +74,17 @@ For this function we used ``getContents`` and reused ``count``. The ``getWords``
 
 
 ```haskell
+-- sth-wordcount: count words on stdin
+
 module Main where
 
-import Control.Arrow ((>>>))
-import SoftwareTools.FunctionLibrary (count, getWords)
+import SoftwareTools.Lib.List (count)
+import SoftwareTools.Lib.Text (getWords)
 
 main :: IO ()
-main = getContents >>=
-  (getWords >>> count >>> show >>> putStrLn)
+main = do
+  charFilter (show . count . getWords)
+  putNewLine
 ```
 
 
@@ -163,14 +170,22 @@ The ``break2`` function is an extension of the standard library function ``break
 
 
 ```haskell
+-- sth-sentcount: count sentences on stdin
+
 module Main where
 
-import Control.Arrow ((>>>))
-import SoftwareTools.FunctionLibrary (count, getSentences)
+import SoftwareTools.Lib
+  ((>>>), unfoldr, intercalate,
+   isPrefixOf, isSuffixOf, isUpper)
+import SoftwareTools.Lib.IO (charFilter, putNewLine)
+import SoftwareTools.Lib.List (count, break2)
+import SoftwareTools.Lib.Text (getWords)
+
 
 main :: IO ()
-main = getContents >>=
-  (getSentences >>> count >>> show >>> putStrLn)
+main = do
+  charFilter (show . count . getSentences)
+  putNewLine
 ```
 
 

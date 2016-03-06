@@ -14,6 +14,11 @@ title: College Algebra
     * 1.3 #19--24, 33--36, 41--46
     * 1.5 #5--60
     * 1.5 #1--26, 35--64
+* Test 2
+    * 1.7 #15--26, 45--68, 59--76
+    * 2.1 #19--24, 67--78
+    * 2.2 #7--46, 61--72
+    * 2.3 #35--44, 61--80
 
 
 ### Activities
@@ -22,6 +27,7 @@ title: College Algebra
 2. [Some Geometry](/pdf/classes/coal/coal-a02-some-geometry.pdf) ([solutions](/pdf/classes/coal/coal-soln-a02-some-geometry.pdf))
 3. [Compound Equations](/pdf/classes/coal/coal-a03-compound-equations.pdf) ([solutions](/pdf/classes/coal/coal-soln-a03-compound-equations.pdf))
 4. [Functions](/pdf/classes/coal/coal-a04-functions.pdf) ([solutions](/pdf/classes/coal/coal-soln-a04-functions.pdf))
+5. [Transformations](/pdf/classes/coal/coal-a05-transformations.pdf)
 
 
 ### Test Reviews
@@ -31,11 +37,5 @@ title: College Algebra
 
 ### Toys
 
-* [Transformations (live demo)](/classes/coal/transformations-live-demo.html) Play with transformations of equations.
-
-<!--
-
-* [Transformations (shifting and stretching)](/classes/coal/transformations.html)
-
-* [Symmetry (live demo)](/classes/coal/symmetry-live-demo.html)
--->
+* [Transformations (live demo)](/classes/coal/transformations-live-demo.html): Play with transformations of equations.
+* [Symmetry (live demo)](/classes/coal/symmetry-live-demo.html): Look for symmetries.

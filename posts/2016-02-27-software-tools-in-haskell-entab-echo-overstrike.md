@@ -17,14 +17,18 @@ The basic structure of this program is nearly identical to that of ``detab`` (wh
 
 
 ```haskell
+-- sth-entab: replace spaces on stdin with tabs
+--   line-oriented
+
 module Main where
 
-import System.Environment (getArgs, getProgName)
-import System.Exit (exitFailure, exitSuccess)
-import System.IO (hPutStrLn, stderr)
-import Control.Arrow ((>>>))
-import SoftwareTools.FunctionLibrary
-  (getLines, insertTabStops, readPosIntList)
+import SoftwareTools.Lib
+  ((>>>), exitSuccess, exitFailure, getArgs)
+import SoftwareTools.Lib.IO    (lineFilter)
+import SoftwareTools.Lib.Read  (readPosIntList)
+import SoftwareTools.Lib.Text  (getLines)
+import SoftwareTools.Lib.List  (spanAtMostWhile, padToByAfter)
+import SoftwareTools.Lib.Error (reportErrorMsgs)
 
 
 main :: IO ()
@@ -36,17 +40,13 @@ main = do
   ts <- case readPosIntList args of
     Just [] -> return [8]
     Just ks -> return ks
-    Nothing -> errorParsingArgs
-
-  -- Entab a single line ln with tabstops ts.
-  let entab ln = case insertTabStops ts ln of
-                   Nothing -> errorDeTabbing ts ln
-                   Just cs -> putStrLn cs
+    Nothing -> reportErrorMsgs
+                 ["tab widths must be positive integers."
+                 ] >> exitFailure
 
   -- Do it!
-  getContents
-    >>= (getLines >>> map entab >>> sequence_)
-    >> exitSuccess
+  lineFilter (insertTabStops ts)
+  exitSuccess
 ```
 
 
@@ -54,33 +54,33 @@ We reuse the functions for reading lists of nonnegative integers that we wrote f
 
 
 ```haskell
-insertTabStops :: [Int] -> String -> Maybe String
-insertTabStops [] xs = Just xs
+insertTabStops :: [Int] -> String -> String
+insertTabStops [] xs = xs
 insertTabStops ks xs = accum [] ks xs
   where
-    accum zs _ "" = Just $ concat $ reverse zs
-    accum zs [t] ys = do
-      (as,bs) <- splitColumn t ys
+    accum zs _ "" = concat $ reverse zs
+    accum zs [t] ys =
+      let (as,bs) = splitColumn t ys in
       accum (as:zs) [t] bs
-    accum zs (t:ts) ys = do
-      (as,bs) <- splitColumn t ys
+    accum zs (t:ts) ys =
+      let (as,bs) = splitColumn t ys in
       accum (as:zs) ts bs
 
-    splitColumn :: Int -> String -> Maybe (String, String)
+    splitColumn :: Int -> String -> (String, String)
     splitColumn k xs
-      | k  <= 0   = Nothing
-      | xs == ""  = Nothing
-      | otherwise = do
-          let (as,bs) = splitAt k xs
-          let munch = dropWhile (== ' ')
-          let cs = reverse as
-          let ds = if bs == ""
+      | k  <= 0   = (xs,"")
+      | xs == ""  = ("","")
+      | otherwise = (ds,bs)
+          where
+            (as,bs) = splitAt k xs
+            munch = dropWhile (== ' ')
+            cs = reverse as
+            ds = if bs == ""
                      then let es = reverse $ munch cs in
                        if es == "" then "\t" else es
                      else case cs of
                        ' ':_ -> reverse ('\t':(munch cs))
                        otherwise -> as
-          Just (ds,bs)
 ```
 
 
@@ -101,18 +101,19 @@ If we ignore tabs altogether, then at best this is the Right Thing and at worst 
 
 All the programs we've written so far are strictly *filters*: they read data from stdin and write data to stdout. The metaphor here is that small programs are chained together in a larger "pipeline", and data flows from one end to the other; along the way, each filter changes the data in some way. By reading and writing from stdin and stdout, individual programs do not need to worry about where their data comes from and goes.
 
-``echo`` is the first program we've written that *produces* data without needing to take any from stdin; it is a *source*. (The converse, a program which consumes data without producing any, is a *sink*). ``echo`` simply takes a list of arguments at the command line and writes them to stdout.
+``echo`` is the first program we've written that *produces* data without needing to take any from stdin; it is a *source*. (The converse, a program which consumes data without producing any, is a *sink*). ``echo`` simply takes a list of arguments at the command line and writes them to stdout. Unlike the standard echo, we write the arguments one per line.
 
 
 ```haskell
+-- sth-echo: write arguments to stdout, one per line
+
 module Main where
 
-import System.Environment (getArgs)
-import Data.List (unwords)
-import Control.Arrow ((>>>))
+import SoftwareTools.Lib (getArgs, exitSuccess)
+import SoftwareTools.Lib.IO (putStrLns)
 
 main :: IO ()
-main = getArgs >>= (unwords >>> putStrLn)
+main = getArgs >>= putStrLns >> exitSuccess
 ```
 
 
@@ -178,6 +179,11 @@ To identify a coloring of the char-int graph, we (1) drop all the blanks, (2) so
 
 
 ```haskell
+overstrike :: String -> String
+overstrike = overstrikeLines
+  >>> zipWith (:) (' ' : (repeat '+'))
+  >>> intercalate "\n"
+
 overstrikeLines :: String -> [String]
 overstrikeLines =
   columnIndices
@@ -228,18 +234,23 @@ After all that, the main program is pretty straightforward.
 
 
 ```haskell
+-- sth-overstrike: interpret backspaces using line printer control codes
+--   line-oriented
+
 module Main where
 
-import Control.Arrow ((>>>))
-import SoftwareTools.FunctionLibrary (getLines, overstrikeLines)
+import SoftwareTools.Lib
+  ((>>>), exitSuccess, sortBy, intercalate)
+import SoftwareTools.Lib.IO
+  (lineFilter)
+import SoftwareTools.Lib.List
+  (maxMonoSubseqsBy, fromSparseList)
+import SoftwareTools.Lib.Text
+  (getLines)
+
 
 main :: IO ()
 main = do
-  let overstrike = overstrikeLines
-                     >>> zipWith (:) (' ' : (repeat '+'))
-                     >>> map putStrLn
-                     >>> sequence_
-
-  getContents
-    >>= (getLines >>> map overstrike >>> sequence_)
+  lineFilter overstrike
+  exitSuccess
 ```
