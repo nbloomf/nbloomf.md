@@ -53,10 +53,26 @@ As usual we begin with some pragmas and imports. The OverloadedStrings pragma al
 >   match (fromList ["about.md", "contact.md"]) $ do
 >     route   $ setExtension "html"
 >     compile $ pandocCompiler
->       >>= loadAndApplyTemplate "templates/default.html" defaultContext
+>       >>= loadAndApplyTemplate
+>             "templates/default.html" defaultContext
 >       >>= relativizeUrls
 >
 >   match "classes/**" $ do
+>     route $ setExtension "html"
+>     compile $ pandocMathCompiler
+>       >>= loadAndApplyTemplate "templates/default.html" postCtx
+>       >>= relativizeUrls
+>
+>   match "pages/sth/tool/*" $ do
+>     route $ setExtension "html"
+>     compile $ pandocMathCompiler
+>       >>= loadAndApplyTemplate
+>             "templates/sth-tools.html" defaultContext
+>       >>= loadAndApplyTemplate
+>             "templates/default.html"   defaultContext
+>       >>= relativizeUrls
+>
+>   match "pages/sth/index.md" $ do
 >     route $ setExtension "html"
 >     compile $ pandocMathCompiler
 >       >>= loadAndApplyTemplate "templates/default.html" postCtx

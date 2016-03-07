@@ -14,6 +14,7 @@ title: Calculus I
 3. [Differentiation I](/pdf/classes/calc/calc-a03-differentiation-1.pdf) ([solutions](/pdf/classes/calc/calc-soln-a03-differentiation-1.pdf))
 4. [Differentiation II](/pdf/classes/calc/calc-a04-differentiation-2.pdf) ([solutions](/pdf/classes/calc/calc-soln-a04-differentiation-2.pdf))
 5. [Differentiation III](/pdf/classes/calc/calc-a05-differentiation-3.pdf)
+6. [Monotonicity and Concavity](/pdf/classes/calc/calc-a06-monotonicity-and-concavity.pdf)
 
 
 ## Practice Problems (Not Graded!)
@@ -33,6 +34,7 @@ title: Calculus I
 
 ## Test Review
 
-1. [Test 1](/pdf/classes/calc/calc-r1-limits-and-derivatives.pdf) ([solutions](/pdf/classes/calc/calc-soln-r1-limits-and-derivatives.pdf))
+* [Test 1](/pdf/classes/calc/calc-r1-limits-and-derivatives.pdf) ([solutions](/pdf/classes/calc/calc-soln-r1-limits-and-derivatives.pdf))
+* [Test 2](/pdf/classes/calc/calc-r2-differentiation.pdf)
 
 Fun fact: "calculus" is a scary word that simply means "a system of rules for manipulating symbols"; there are lots of different calculuses (calculi?).

@@ -1,7 +1,6 @@
 ---
 title: Software Tools in Haskell
 author: nbloomf
-date: 2016-02-10
 ---
 
 *Software Tools* is a little book about tool building by Brian Kernighan and P. J. Plauger. It's a classic, and people far more qualified than me have written very positive reviews of it. The book includes several example programs which are designed individually to solve simple problems and collectively to work together readily to solve larger problems.
@@ -44,41 +43,36 @@ The purpose of this project is to learn, and so there are some self-imposed rule
 I will prefix the names of these ports with ``sth-``, to avoid clashing with existing real programs. And of course all should be considered works-in-progress.
 
 
-## The Posts (Chrono Order)
+## The Tools (Book Order)
 
-* [``copy``, ``count``](/posts/2016-02-11-sth-copy-count.html)
-* [``glyphcount``, ``wordcount``, ``sentcount``](/posts/2016-02-22-sth-glyphcount-wordcount-sentcount.html)
-* [``detab``, ``charcombine``, ``charfullwidth``](/posts/2016-02-25-software-tools-in-haskell-detab-charcombine-charfullwidth.html)
-* [``entab``, ``echo``, ``overstrike``](/posts/2016-02-27-software-tools-in-haskell-entab-echo-overstrike.html)
-* [``unescape``, ``escape``](/posts/2016-02-29-software-tools-in-haskell-unescape-escape.html)
-* [``compress``, ``expand``, ``crypt``](/posts/2016-03-02-software-tools-in-haskell-compress-expand-crypt.html)
-* [``translit``, ``charreplace``, ``tail``](/posts/2016-03-03-software-tools-in-haskell-translit-charreplace-tail.html)
+Chapter 1: Basic Filters
 
+* [``copy``](/pages/sth/tool/copy.html): copy characters from ``stdin`` to ``stdout``
+* [``count``](/pages/sth/tool/count.html): count lines or chars on ``stdin``
+* [``wordcount``](/pages/sth/tool/wordcount.html): count words on ``stdin``
+* [``sentcount``](/pages/sth/tool/sentcount.html): count sentences on ``stdin``
+* [``glyphcount``](/pages/sth/tool/glyphcount.html): count glyphs on ``stdin``
+* [``detab``](/pages/sth/tool/detab.html): replace tabs on ``stdin`` with spaces
+* [``charcombine``](/pages/sth/tool/charcombine.html): replace chars on ``stdin`` with precomposed equivalents
+* [``charfullwidth``](/pages/sth/tool/charfullwidth.html): replace chars on ``stdin`` with fullwidth equivalents
+* [``entab``](/pages/sth/tool/entab.html): replace spaces on ``stdin`` with tabs
+* [``echo``](/pages/sth/tool/echo.html): write arguments to ``stdout``
+* [``overstrike``](/pages/sth/tool/overstrike.html): interpret backspaces on ``stdin``
+* [``unescape``](/pages/sth/tool/unescape): interpret escape codes on ``stdin``
+* [``escape``](/pages/sth/tool/escape.html): replace strange chars on ``stdin`` with escape sequences
+* [``compress``](/pages/sth/tool/compress.html): compress text on ``stdin`` (run length encoding)
+* [``expand``](/pages/sth/tool/expand.html): uncompress text on ``stdin`` (run length encoding)
+* [``crypt``](/pages/sth/tool/crypt.html): xor text on ``stdin`` with a list of keys
+* [``translit``](/pages/sth/tool/translit.html): transliterate or remove chars on ``stdin``
+* [``charreplace``](/pages/sth/tool/charreplace.html): replace chars by strings on ``stdin``
 
-## The Tools (Alpha Order)
+Chapter 2: Files
 
-* [``charcombine``](/posts/2016-02-25-software-tools-in-haskell-detab-charcombine-charfullwidth.html#charcombine): replace combining unicode chars with precomposed chars
-* [``charfullwidth``](/posts/2016-02-25-software-tools-in-haskell-detab-charcombine-charfullwidth.html#charfullwidth): replace characters with fullwidth equivalents
-* [``charreplace``](/posts/2016-03-03-software-tools-in-haskell-translit-charreplace-tail#charreplace.html): replace chars by strings on ``stdin`` (char filter)
-* [``compress``](/posts/2016-03-02-software-tools-in-haskell-compress-expand-crypt.html#compress): compress ``stdin`` (run length encoding)
-* [``copy``](/posts/2016-02-11-sth-copy-count.html#copy): copy characters from ``stdin`` to ``stdout``
-* [``count``](/posts/2016-02-11-sth-copy-count.html#count): count lines or chars on ``stdin``
-* [``crypt``](/posts/2016-03-02-software-tools-in-haskell-compress-expand-crypt.html#crypt): xor stdin with a list of keys
-* [``detab``](/posts/2016-02-25-software-tools-in-haskell-detab-charcombine-charfullwidth.html#detab): replace tabs on stdin with spaces (line filter)
-* [``echo``](/posts/2016-02-27-software-tools-in-haskell-entab-echo-overstrike.html#echo): write arguments to stdout (line source)
-* [``entab``](/posts/2016-02-27-software-tools-in-haskell-entab-echo-overstrike.html#entab): replace spaces on stdin with tabs (line filter)
-* [``escape``](/posts/2016-02-29-software-tools-in-haskell-unescape-escape.html#escape): replace non-printable, non-ascii chars on stdin with c escape sequences (char filter)
-* [``expand``](/posts/2016-03-02-software-tools-in-haskell-compress-expand-crypt.html#expand): uncompress stdin (run length encoding) (char filter)
-* [``glyphcount``](/posts/2016-02-22-sth-glyphcount-wordcount-sentcount.html#glyphcount): count glyphs on stdin (char to line)
-* [``overstrike``](/posts/2016-02-27-software-tools-in-haskell-entab-echo-overstrike.html#overstrike): interpret backspaces using line printer control codes (line filter)
-* [``sentcount``](/posts/2016-02-22-sth-glyphcount-wordcount-sentcount.html#sentcount): count sentences on ``stdin``
-* [``translit``](/posts/2016-03-03-software-tools-in-haskell-translit-charreplace-tail.html#translit): transliterate or remove chars on ``stdin``
-* [``unescape``](/posts/2016-02-29-software-tools-in-haskell-unescape-esca[e.html#unescape): interpret C and ASCII backslash escape codes on ``stdin``
-* [``wordcount``](/posts/2016-02-22-sth-glyphcount-wordcount-sentcount.html#wordcount): count words on stdin (char to line)
+* [``compare``](/pages/sth/tool/compare.html): find the first position where two text streams differ
 
 
 ## Why Haskell?
 
 The programs in *Software Tools* are written in [Ratfor](https://en.wikipedia.org/wiki/Ratfor), a purpose-built extension of Fortran with control-flow statements. (At the time, control flow in Fortran was done by hand with GOTO.) Kernighan and Plauger explain that this was a pragmatic choice, as no language at the time had the right mix of ubiquity and expressiveness. With 40 years(!) of hindsight, though, I'd say that this was an inspired choice. Books written in real languages quickly become hopelessly outdated. But books written in toy languages can focus on timeless principles. *TAOCP* by Knuth (which I've never read) and *Functional Programming: Practice and Theory* by MacLennan (which I have) are positive examples of this, and I have a shelf full of nameless algebra books written in APL and Pascal to serve as negative examples.
 
-So why Haskell. I am not a software developer. I work in academia -- in math, not in CS -- and writing programs is something I do for myself. That means I can use whatever tools and languages I want to. Well, I've been using Haskell for several years as a "[tool of thought](www.jsoftware.com/papers/tot.htm)", to paraphrase Ken Iverson, mostly for one-off experiments. Haskell is good for that, and I find that it fits my problem-solving style very well. (Programs are arrows in a category? Of course!) But I want to improve my ability to write "real" programs in the language. So here we are.
+So why Haskell. I've been using Haskell for several years as a "[tool of thought](www.jsoftware.com/papers/tot.htm)", to paraphrase Ken Iverson, mostly for one-off experiments. Haskell is good for that, and I find that it fits my problem-solving style very well. (Programs are arrows in a category? Of course!) But I want to improve my ability to write "real" programs in the language. So here we are.

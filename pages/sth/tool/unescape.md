@@ -1,19 +1,10 @@
 ---
-title: Software Tools in Haskell: unescape, escape
+title: Software Tools in Haskell: unescape
+subtitle: interpret C and ASCII escape codes on stdin
 author: nbloomf
-date: 2016-02-29
 ---
 
-This post is part of the [Software Tools in Haskell](/posts/2016-02-10-software-tools-in-haskell.html) series.
-
-Today I feel like going off script. (These are not in *Software Tools*.)
-
-
-<a name="unescape" />
-
-## ``unescape``: interpret C and ASCII backslash escape codes on stdin
-
-While testing the ``overstrike`` program, I ran into an inconvenient problem: I couldn't find an easy and consistent way to type control characters (namely backspace, but others have the same problem) that works both in my terminal and in my golden test suite. It seems like every program - the terminal, the shell, the test runner - wants to interpret these characters in its own way. This problem is a good candidate for a filter-style program. ``unescape`` reads lines from stdin and interprets any C-style escape sequences or ASCII abbreviations it finds. (There is a nice wiki page on [C-style escape sequences](https://en.wikipedia.org/wiki/Escape_sequences_in_C), and the page on [ASCII](https://en.wikipedia.org/wiki/ASCII#ASCII_control_code_chart) includes a table of abbreviations.)
+While testing the [``overstrike``](/pages/sth/tool/overstrike.html) program, I ran into an inconvenient problem: I couldn't find an easy and consistent way to type control characters (namely backspace, but others have the same problem) that works both in my terminal and in my golden test suite. It seems like every program - the terminal, the shell, the test runner - wants to interpret these characters in its own way. This problem is a good candidate for a filter-style program. ``unescape`` reads lines from stdin and interprets any C-style escape sequences or ASCII abbreviations it finds. (There is a nice wiki page on [C-style escape sequences](https://en.wikipedia.org/wiki/Escape_sequences_in_C), and the page on [ASCII](https://en.wikipedia.org/wiki/ASCII#ASCII_control_code_chart) includes a table of abbreviations.)
 
 The main program is simple enough, as it simply munches through the lines on stdin looking for escape codes.
 
@@ -157,88 +148,4 @@ backslashUnEscape = concat . unfoldr firstChar
             []        -> Just ('\\':digs, ds)
             ((x,_):_) -> Just ([x],ds)
           False -> Just ('\\':digs, ds)
-```
-
-
-
-<a name="escape" />
-
-## ``escape``: replace non-printable, non-ascii chars on stdin with c escape sequences
-
-The ``escape`` program is the companion of ``unescape``; it replaces any non-printing, non-ASCII characters with C-style escape sequences using only visible ASCII.
-
-
-```haskell
--- sth-escape: replace non-printable, non-ascii chars on stdin with c escape sequences
---   character-oriented
-
-module Main where
-
-import System.Exit (exitSuccess)
-import STH.Lib (charFilter, bsEsc)
-
-
-main :: IO ()
-main = do
-  charFilter bsEsc
-  exitSuccess
-```
-
-
-The work is done by ``bsEsc``:
-
-```haskell
-bsEsc :: String -> String
-bsEsc = concatMap esc
-
-esc :: Char -> String
-esc x
-  | 32 <= k && k <= 126 = [x]
-  | k == 7    = "\\a"
-  | k == 8    = "\\b"
-  | k == 9    = "\\t"
-  | k == 10   = "\\n"
-  | k == 11   = "\\v"
-  | k == 12   = "\\f"
-  | k == 13   = "\\r"
-  | k == 27   = "\\e"
-  | k < 256   = "\\x" ++ show2Hex k
-  | k < 65536 = "\\u" ++ show4Hex k
-  | otherwise = "\\U" ++ show8Hex k
-  where
-    k = ord x
-
-    show2Hex t = reverse $ take 2 (reverse (showHex t) ++ (repeat '0'))
-    show4Hex t = reverse $ take 4 (reverse (showHex t) ++ (repeat '0'))
-    show8Hex t = reverse $ take 8 (reverse (showHex t) ++ (repeat '0'))
-```
-
-
-``showHex`` is a library function that returns the hexadecimal expansion of a natural number.
-
-
-```haskell
-showHex :: (Integral n) => n -> String
-showHex n
-  | n < 0  = '-' : showHex (-n)
-  | n == 0 = "0"
-  | otherwise = map toHexDigit (digitsToBase 16 n)
-      where
-        toHexDigit k
-          | k == 0    = '0'
-          | k == 1    = '1'
-          | k == 2    = '2'
-          | k == 3    = '3'
-          | k == 4    = '4'
-          | k == 5    = '5'
-          | k == 6    = '6'
-          | k == 7    = '7'
-          | k == 8    = '8'
-          | k == 9    = '9'
-          | k == 10   = 'a'
-          | k == 11   = 'b'
-          | k == 12   = 'c'
-          | k == 13   = 'd'
-          | k == 14   = 'e'
-          | otherwise = 'f'
 ```
