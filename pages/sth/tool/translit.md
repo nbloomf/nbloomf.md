@@ -37,13 +37,13 @@ data CharSeq
   | Range  Char Char
   deriving (Show)
 
-interpArg :: String -> Maybe String
-interpArg = fmap charSeqsToList . readCharSeqs . backslashUnEscape
+readCharSeq :: String -> Maybe String
+readCharSeq = fmap charSeqsToList . readCharSeqs . bsUnEsc
 
 charSeqsToList :: [CharSeq] -> String
 charSeqsToList = concatMap charSeqToList
   where
-    charSeqToList (Single x) = [x]
+    charSeqToList (Single x)  = [x]
     charSeqToList (Range x y) = enumFromTo x y
 
 readCharSeqs :: String -> Maybe [CharSeq]
@@ -65,7 +65,6 @@ Now the main program just has to interpret its arguments and call some library f
 
 ```haskell
 -- sth-translit: transliterate characters on stdin
---   character-oriented
 
 module Main where
 
@@ -73,14 +72,14 @@ import System.Environment (getArgs)
 import System.Exit (exitSuccess, exitFailure)
 import STH.Lib
   (charFilter, applyListMap, padLast,
-   readCharRange, reportErrorMsgs)
+   readCharSeq, reportErrorMsgs, bsUnEsc)
 
 
 main :: IO ()
 main = do
   args <- getArgs
 
-  (from,to) <- case map readCharRange args of
+  (from,to) <- case map (readCharSeq . bsUnEsc) args of
     [Just as]          -> return (as, "")
     [Just as, Just bs] -> return (as, bs)
     otherwise          -> argError
@@ -121,4 +120,3 @@ Now the pipeline
     cat unicode-test.txt | translit "xyz" "001" | unescape
 
 replaces the ``x``, ``y``, and ``z`` with ``0``, ``0``, and ``1`` and interprets the ``\uXXXX`` as escape codes. This lets us see what several unicode code points look like at one time. With a larger "template" file we could see more characters at a time.
-

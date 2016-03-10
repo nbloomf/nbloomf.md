@@ -12,42 +12,49 @@ We will implement these operations bare-handed.
 
 
 ```haskell
+class XOR t where
+  xor :: t -> t -> t
+
+  xors :: [t] -> [t] -> [t]
+  xors [] ys = ys
+  xors xs [] = xs
+  xors (x:xs) (y:ys) = (xor x y) : xors xs ys
+
+
 data Bit
   = Zero | One
   deriving (Eq, Show)
 
-intToBits :: (Integral n) => n -> [Bit]
-intToBits k = case getBits k of
-  [] -> [Zero]
-  bs -> bs
-  where
-    getBits t
-      | t <= 0    = []
-      | otherwise = case even t of
-          True  -> Zero : (getBits $ t`quot`2)
-          False -> One  : (getBits $ (t-1)`quot`2)
+instance XOR Bit where
+  xor Zero Zero = Zero
+  xor Zero One  = One
+  xor One  Zero = One
+  xor One  One  = Zero
 
-bitToInt :: (Integral n) => Bit -> n
-bitToInt Zero = 0
-bitToInt One  = 1
 
-bitsToInt :: (Integral n) => [Bit] -> n
-bitsToInt = sum . zipWith (*) [2^t | t <- [0..]] . map bitToInt
+instance XOR Int where
+  xor a b = bitsToInt $ xors (intToBits a) (intToBits b)
+    where
+      intToBits :: (Integral n) => n -> [Bit]
+      intToBits k = case getBits k of
+        [] -> [Zero]
+        bs -> bs
+        where
+          getBits t
+            | t <= 0    = []
+            | otherwise = case even t of
+                True  -> Zero : (getBits $ t`quot`2)
+                False -> One  : (getBits $ (t-1)`quot`2)
 
-bitXOR :: Bit -> Bit -> Bit
-bitXOR Zero Zero = Zero
-bitXOR Zero One  = One
-bitXOR One  Zero = One
-bitXOR One  One  = Zero
+      bitsToInt :: (Integral n) => [Bit] -> n
+      bitsToInt = sum . zipWith (*) [2^t | t <- [0..]] . map bitToInt
+        where
+          bitToInt Zero = 0
+          bitToInt One  = 1
 
-bitsXOR :: [Bit] -> [Bit] -> [Bit]
-bitsXOR [] ys = ys
-bitsXOR xs [] = xs
-bitsXOR (x:xs) (y:ys)
-  = (bitXOR x y) : bitsXOR xs ys
 
-intXOR :: (Integral n) => n -> n -> n
-intXOR a b = bitsToInt $ bitsXOR (intToBits a) (intToBits b)
+instance XOR Char where
+  xor x y = chr $ xor (ord x) (ord y)
 ```
 
 
@@ -68,39 +75,30 @@ Here's the main program.
 
 
 ```haskell
--- sth-crypt: xor stdin with a list of keys
---   character-oriented
+-- sth-crypt: xor chars on stdin with a list of keys
 
 module Main where
 
-import SoftwareTools.Lib (getArgs, exitSuccess)
-import SoftwareTools.Lib.IO (charFilter)
-import SoftwareTools.Lib.Text
-  (toCodePoint, fromCodePoint, backslashUnEscape)
-import SoftwareTools.Lib.Bit (intXOR)
+import System.Environment (getArgs)
+import System.Exit (exitSuccess)
+import STH.Lib (charFilter, bsUnEsc, xor)
+
 
 main :: IO ()
 main = do
-  keys <- getArgs
-  charFilter (cryptKeys (map backslashUnEscape keys))
+  keys <- fmap (map bsUnEsc) getArgs
+  charFilter (cryptWith keys)
   exitSuccess
 
 
-cryptKeys :: [String] -> String -> String
-cryptKeys []     str = str
-cryptKeys (k:ks) str = cryptKeys ks (crypt k str)
-
-crypt :: String -> String -> String
-crypt ""  str  = str
-crypt key str = zipWith xorChar str (concat $ repeat key)
+cryptWith :: [String] -> String -> String
+cryptWith ks str = foldr crypt str ks
   where
-    xorChar :: Char -> Char -> Char
-    xorChar x y
-      = fromCodePoint $ intXOR (toCodePoint x) (toCodePoint y)
+    crypt :: String -> String -> String
+    crypt ""  str = str
+    crypt key str = zipWith xor str (concat $ repeat key)
 ```
 
-
-Some notes: ``toCodePoint`` and ``fromCodePoint`` are synonyms for standard library functions which (surprise!) convert characters to and from their unicode code points.
 
 We definitely want the user to specify an encryption key from the command line. But generally, the user can specify many (or no!) command line arguments. What should we do if that happens?
 

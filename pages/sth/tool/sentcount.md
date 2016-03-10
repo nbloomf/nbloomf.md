@@ -28,19 +28,25 @@ consists of two words (by our reckoning), and we will say it is likely to be a s
 
     casserole! (Gumbo
 
-Again, any small set of heuristics is probably going to have both false positives and false negatives. But we're not aiming for perfection here, just reasonable first approximations. We start with some helper functions: ``break2`` and ``getSentences``.
+Again, any small set of heuristics is probably going to have both false positives and false negatives. But we're not aiming for perfection here, just reasonable first approximations. We start with a helper function. ``break2`` is an extension of the standard library function ``break`` that focuses on the spaces between list elements rather than list elements themselves. (Note that ``break p === break2 (\x _ -> p x)``.)
 
 
 ```haskell
 break2 :: (a -> a -> Bool) -> [a] -> ([a],[a])
-break2 p xs = foo [] xs
+break2 p xs = accum [] xs
   where
-    foo acc []  = (reverse acc, [])
-    foo acc [y] = (reverse (y:acc), [])
-    foo acc (y1:y2:ys) = if p y1 y2
-      then (reverse (y1:acc), y2:ys)
-      else foo (y1:acc) (y2:ys)
+    accum zs []  = (reverse zs, [])
+    accum zs [y] = (reverse (y:zs), [])
+    accum zs (y1:y2:ys) = if p y1 y2
+      then (reverse (y1:zs), y2:ys)
+      else accum (y1:zs) (y2:ys)
+```
 
+
+``getSentences`` does the heavy lifting, splitting a string into sentences using heuristics. The heuristics for detecting sentence boundaries are in ``isSentenceBoundary``. This function is ugly, but reasonably easy to modify as new special cases arise.
+
+
+```haskell
 getSentences :: String -> [String]
 getSentences = map (intercalate " ") . unfoldr firstSentence . getWords
   where
@@ -74,7 +80,7 @@ getSentences = map (intercalate " ") . unfoldr firstSentence . getWords
 ```
 
 
-The ``break2`` function is an extension of the standard library function ``break`` that focuses on the spaces between list elements rather than list elements themselves. (Note that ``break p === break2 (\x _ -> p x)``.) ``getSentences`` does the heavy lifting, splitting a string into sentences using heuristics. The heuristics for detecting sentence boundaries are in ``isSentenceBoundary``. This function is ugly, but reasonably easy to modify as new special cases arise.
+The main program is then similar to ``wordcount``.
 
 
 ```haskell
@@ -82,21 +88,18 @@ The ``break2`` function is an extension of the standard library function ``break
 
 module Main where
 
-import SoftwareTools.Lib
-  ((>>>), unfoldr, intercalate,
-   isPrefixOf, isSuffixOf, isUpper)
-import SoftwareTools.Lib.IO (charFilter, putNewLine)
-import SoftwareTools.Lib.List (count, break2)
-import SoftwareTools.Lib.Text (getWords)
+import System.Exit (exitSuccess)
+import STH.Lib
+  (charFilter, putNewLine, count,
+   getSentences)
 
 
 main :: IO ()
 main = do
   charFilter (show . count . getSentences)
   putNewLine
+  exitSuccess
 ```
 
 
 We [test](https://raw.githubusercontent.com/nbloomf/st-haskell/master/test/sentcount/alice.test) this program on a particularly messy excerpt from *Alice in Wonderland*, courtesy of [Project Gutenberg](http://www.gutenberg.org). (Even counting by hand I'm not sure how many sentences this example should have!)
-
-The main functions of ``linecount``, ``glyphcount``, ``wordcount``, and ``sentcount`` are essentially the same; each one splits the ``stdin`` into appropriate chunks and then counts.

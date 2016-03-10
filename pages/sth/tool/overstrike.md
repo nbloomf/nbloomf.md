@@ -44,7 +44,7 @@ But there is a problem here: while correct, having only one printed character pe
      abcde
     +  fg
 
-In fact this is a *most* efficient set of overstrike lines, since 2 is the minimal number of lines required. It isn't too hard to see that if a given line has at most $k$ characters with the same column index, then $k$ is the minimum number of overstrike lines required to render that line (and there is always a set of $k$ overstrike lines that works). Why? We can think of this as a graph coloring problem. The char-int pairs are vertices (ignoring those where the character is a blank), and two vertices are adjacent if they have the same column index. Colorings of this graph correspond to valid sets of overstrike lines. But this graph is a disjoint union of complete graphs, with one component for each column index. The minimum number of colors required is the size of the largest component.
+In fact this is a *most* efficient set of overstrike lines for this example, since 2 is the minimal number of lines required. It isn't too hard to see that if a given line has at most $k$ characters with the same column index, then $k$ is the minimum number of overstrike lines required to render that line (and there is always a set of $k$ overstrike lines that works). Why? We can think of this as a graph coloring problem. The char-int pairs are vertices (ignoring those where the character is a blank), and two vertices are adjacent if they have the same column index. Colorings of this graph correspond to valid sets of overstrike lines. But this graph is a disjoint union of complete graphs, with one component for each column index. The minimum number of colors required is the size of the largest component.
 
 To identify a coloring of the char-int graph, we (1) drop all the blanks, (2) sort the list by column index, and (3) split the list into maximal subsequences by column index. (What?) Finally, (4) thinking of these char-int pairs as sparse lists, convert to real actual lists, using space characters for any missing indices.
 
@@ -54,6 +54,7 @@ overstrike :: String -> String
 overstrike = overstrikeLines
   >>> zipWith (:) (' ' : (repeat '+'))
   >>> intercalate "\n"
+
 
 overstrikeLines :: String -> [String]
 overstrikeLines =
@@ -75,6 +76,7 @@ overstrikeLines =
           '\b'      -> accum zs (max 1 (k-1)) cs
           otherwise -> accum ((c,k):zs) (k+1) cs
 
+
 maxMonoSubseqsBy :: (a -> a -> Bool) -> [a] -> [[a]]
 maxMonoSubseqsBy p = unfoldr maxMonoSubseq
   where
@@ -86,6 +88,7 @@ maxMonoSubseqsBy p = unfoldr maxMonoSubseq
     accum (a:as) bs (z:zs) = if p a z
       then accum (z:a:as) bs zs
       else accum (a:as) (z:bs) zs
+
 
 fromSparseList :: a -> [(a,Int)] -> [a]
 fromSparseList x [] = []
@@ -106,18 +109,11 @@ After all that, the main program is pretty straightforward.
 
 ```haskell
 -- sth-overstrike: interpret backspaces using line printer control codes
---   line-oriented
 
 module Main where
 
-import SoftwareTools.Lib
-  ((>>>), exitSuccess, sortBy, intercalate)
-import SoftwareTools.Lib.IO
-  (lineFilter)
-import SoftwareTools.Lib.List
-  (maxMonoSubseqsBy, fromSparseList)
-import SoftwareTools.Lib.Text
-  (getLines)
+import System.Exit (exitSuccess)
+import STH.Lib (lineFilter, overstrike)
 
 
 main :: IO ()

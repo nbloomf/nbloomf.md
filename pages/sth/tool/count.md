@@ -15,7 +15,7 @@ Let's write a generic list-length counter:
 
 
 ```haskell
-count :: [a] -> Integer
+count :: (Num t) => [a] -> t
 count = foldl' inc 0
   where inc n _ = n+1
 ```
@@ -75,12 +75,13 @@ main = do
   case args of
     ["--char"] -> do
       charFilter (show . count)
-    _ -> do
+      putNewLine
+    otherwise -> do
       charFilter (getLines >>> count >>> show)
+      putNewLine
 
-  putNewLine
   exitSuccess
 ```
 
 
-``putNewLine`` is a semantic synonym for ``putStrLn ""``. Note also that we've demonstrated the ``>>>`` operator from ``Control.Arrow`` in contrast with composition. This is a standard library operator which (used here) is simply reversed function composition; it allows us to read the definition of ``main`` as if data flows from left to right, following the arrows.
+``putNewLine`` is a semantic synonym for ``putStrLn ""``. Note also that we've demonstrated the ``>>>`` operator from ``Control.Arrow`` in contrast with composition. This is a standard library operator which (used here) is simply reversed function composition; it allows us to read chains of functions as if data flows from left to right, following the arrows.

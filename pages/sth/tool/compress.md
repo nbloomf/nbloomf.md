@@ -51,9 +51,8 @@ The main program is basic; ``compress`` is a character-oriented filter.
 
 module Main where
 
-import SoftwareTools.Lib (exitSuccess)
-import SoftwareTools.Lib.IO (charFilter)
-import SoftwareTools.Lib.Text (rlEncode)
+import System.Exit (exitSuccess)
+import STH.Lib (charFilter, rlEncode)
 
 main :: IO ()
 main = do
@@ -118,6 +117,7 @@ getRuns = unfoldr firstRun
     firstRun (x:xs) = let (as,bs) = span (== x) xs in
       Just ((x, 1 + count as), bs)
 
+
 fromRuns :: [(a, Int)] -> [a]
 fromRuns = concatMap (\(x,k) -> replicate k x)
 ```
@@ -127,16 +127,6 @@ Repeat counts are encoded in base 86 for space efficiency. (Counts up to 85 need
 
 
 ```haskell
-digitsToBase :: Int -> Int -> [Int]
-digitsToBase b k
-  | b <= 1 || k < 0 = []
-  | otherwise = reverse $ foo k
-      where
-        foo t
-          | t < b = [t]
-          | otherwise = (t`rem`b) : (foo (t`quot`b))
-
-
 showBase86Nat :: Int -> String
 showBase86Nat k
   | k < 0     = ""

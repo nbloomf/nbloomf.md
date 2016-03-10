@@ -1,6 +1,6 @@
 ---
 title: Software Tools in Haskell: expand
-subtitle: uncompress text on ``stdin`` (run length encoding)
+subtitle: uncompress text on stdin (run length encoding)
 author: nbloomf
 date: 2016-03-02
 ---
@@ -9,15 +9,11 @@ The companion to [``compress``](/pages/sth/tool/compress.html) is ``expand``. It
 
 ```haskell
 -- sth-expand: uncompress stdin (run length encoding)
---   character-oriented
 
 module Main where
 
-import SoftwareTools.Lib
-  (exitSuccess, exitFailure)
-import SoftwareTools.Lib.IO (charFilter)
-import SoftwareTools.Lib.Text (rlDecode)
-import SoftwareTools.Lib.Error (reportErrorMsgs)
+import System.Exit (exitSuccess, exitFailure)
+import STH.Lib (charFilter, rlDecode, reportErrorMsgs)
 
 main :: IO ()
 main = do

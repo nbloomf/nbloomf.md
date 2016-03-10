@@ -33,12 +33,13 @@ Now the main function is much like that of ``count``.
 
 module Main where
 
-import SoftwareTools.Lib.IO (charFilter, putNewLine)
-import SoftwareTools.Lib.List (count)
-import SoftwareTools.Lib.Text (getGlyphs)
+import System.Exit (exitSuccess)
+import STH.Lib
+  (charFilter, putNewLine, count, getGlyphs)
 
 main :: IO ()
 main = do
   charFilter (show . count . getGlyphs)
   putNewLine
+  exitSuccess
 ```

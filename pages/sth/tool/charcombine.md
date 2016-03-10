@@ -15,17 +15,16 @@ Since we already have a function, ``getGlyphs``, which splits a stream of charac
 
 ```haskell
 -- sth-charcombine: replace combining unicode chars with precomposed chars
---   character-oriented
 
 module Main where
 
-import SoftwareTools.Lib (exitSuccess)
-import SoftwareTools.Lib.IO   (charFilter)
-import SoftwareTools.Lib.Text (getGlyphs)
+import System.Exit (exitSuccess)
+import STH.Lib
+  (charFilter, composeGlyphs)
 
 main :: IO ()
 main = do
-  charFilter (concatMap toPrecomposed . getGlyphs)
+  charFilter composeGlyphs
   exitSuccess
 ```
 
@@ -34,10 +33,14 @@ All that remains is to write a function, ``composeGlyph``, that takes a string o
 
 
 ```haskell
-toPrecomposed :: String -> String
-toPrecomposed ""  = ""
-toPrecomposed [c] = [c]
-toPrecomposed [x, '\x0301'] = case lookup x acute of
+composeGlyphs :: String -> String
+composeGlyphs = concatMap composeGlyph . getGlyphs
+
+
+composeGlyph :: String -> String
+composeGlyph ""  = ""
+composeGlyph [c] = [c]
+composeGlyph [x, '\x0301'] = case lookup x acute of
   Just y  -> y
   Nothing -> [x, '\x0301']
   where

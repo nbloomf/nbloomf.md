@@ -50,7 +50,7 @@ As usual we begin with some pragmas and imports. The OverloadedStrings pragma al
 >     route   idRoute
 >     compile compressCssCompiler
 >
->   match (fromList ["about.md", "contact.md"]) $ do
+>   match (fromList ["about.md", "contact.md", "projects.md"]) $ do
 >     route   $ setExtension "html"
 >     compile $ pandocCompiler
 >       >>= loadAndApplyTemplate

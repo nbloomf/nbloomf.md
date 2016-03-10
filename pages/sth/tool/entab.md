@@ -11,17 +11,14 @@ The basic structure of this program is nearly identical to that of ``detab`` (wh
 
 ```haskell
 -- sth-entab: replace spaces on stdin with tabs
---   line-oriented
 
 module Main where
 
-import SoftwareTools.Lib
-  ((>>>), exitSuccess, exitFailure, getArgs)
-import SoftwareTools.Lib.IO    (lineFilter)
-import SoftwareTools.Lib.Read  (readPosIntList)
-import SoftwareTools.Lib.Text  (getLines)
-import SoftwareTools.Lib.List  (spanAtMostWhile, padToByAfter)
-import SoftwareTools.Lib.Error (reportErrorMsgs)
+import System.Exit (exitSuccess, exitFailure)
+import System.Environment (getArgs)
+import STH.Lib
+  (lineFilter, readPosIntList,
+   insertTabStops, reportErrorMsgs)
 
 
 main :: IO ()

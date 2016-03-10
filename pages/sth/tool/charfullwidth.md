@@ -4,18 +4,16 @@ subtitle: replace chars with fullwidth equivalents
 author: nbloomf
 ---
 
-Replacing "normal" characters with fullwidth forms is much simpler. We reuse the structure of ``copy``, with a filter to map characters.
+Replacing "normal" characters with fullwidth forms is much simpler. We reuse the structure of ``copy --char``, with a filter to map characters.
 
 
 ```haskell
 -- sth-charfullwidth: replace characters with fullwidth equivalents
---   character-oriented
 
 module Main where
 
-import SoftwareTools.Lib (exitSuccess)
-import SoftwareTools.Lib.IO   (charFilter)
-import SoftwareTools.Lib.List (applyListMap)
+import System.Exit (exitSuccess)
+import STH.Lib (charFilter, toFullwidth)
 
 
 main :: IO ()
@@ -30,9 +28,7 @@ And the map:
 
 ```haskell
 toFullwidth :: Char -> Char
-toFullwidth x = case lookup x full of
-  Just y  -> y
-  Nothing -> x
+toFullwidth = applyListMap full
   where
     full =
       [ ('!','！'), ('"','＂'),  ('#','＃'), ('$','＄'), ('%','％')
@@ -53,8 +49,17 @@ toFullwidth x = case lookup x full of
       , ('l','ｌ'), ('m','ｍ'),  ('n','ｎ'), ('o','ｏ'), ('p','ｐ')
       , ('q','ｑ'), ('r','ｒ'),  ('s','ｓ'), ('t','ｔ'), ('u','ｕ')
       , ('v','ｖ'), ('w','ｗ'),  ('x','ｘ'), ('y','ｙ'), ('z','ｚ')
-      , ('{','｛'), ('|','｜'),  ('}','｝'), ('~','～')
+      , ('{','｛'), ('|','｜'),  ('}','｝'), ('~','～'), (' ','　')
       ]
 ```
 
-This probably looks terrible in your browser because unicode coverage.
+
+This probably looks terrible in your browser because unicode coverage. The ``applyListMap`` function treats a list of pairs like a mapping.
+
+
+```haskell
+applyListMap :: (Eq a) => [(a,a)] -> a -> a
+applyListMap zs x = case lookup x zs of
+  Nothing -> x
+  Just y  -> y
+```

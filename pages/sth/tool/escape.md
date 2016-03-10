@@ -4,22 +4,28 @@ subtitle: replace strange chars on stdin with escape sequences
 author: nbloomf
 ---
 
-The ``escape`` program is the companion of [``unescape``](/pages/sth/tool/unescape.html); it replaces any non-printing, non-ASCII characters with C-style escape sequences using only visible ASCII.
+The ``escape`` program is the companion of [``unescape``](/pages/sth/tool/unescape.html); it replaces any non-printing, non-ASCII characters with C-style escape sequences using only visible ASCII. We need to be careful about exactly which characters to escape; lined text is delimited by ``\n``s, and converting these to escaped form would destroy the format. Keeping with the convention that line text is the most common, by default we leave newlines alone. The ``--char`` flag instructs ``escape`` to escape all characters.
 
 
 ```haskell
 -- sth-escape: replace non-printable, non-ascii chars on stdin with c escape sequences
---   character-oriented
 
 module Main where
 
 import System.Exit (exitSuccess)
-import STH.Lib (charFilter, bsEsc)
+import System.Environment (getArgs)
+import STH.Lib
+  (charFilter, lineFilter, bsEsc)
 
 
 main :: IO ()
 main = do
-  charFilter bsEsc
+  args <- getArgs
+
+  case args of
+    ["--char"] -> charFilter bsEsc
+    otherwise  -> lineFilter bsEsc
+
   exitSuccess
 ```
 
@@ -29,6 +35,7 @@ The work is done by ``bsEsc``:
 ```haskell
 bsEsc :: String -> String
 bsEsc = concatMap esc
+
 
 esc :: Char -> String
 esc x
