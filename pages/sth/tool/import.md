@@ -35,4 +35,89 @@ takeBetween (u,v) = concat . unfoldr (firstCut (u,v))
 ```
 
 
-Bugs: the import command, filename, and open and close lines must not include any space characters. Not even escaped spaces!
+We use a custom data type, ``Import``, to represent the two kinds of import commands. The ``readCommand`` function tries to interpret a line of text as an import command, and the ``splice`` function processes a single line of text (from reading a command to splicing in text from an external file). Now the main program behaves very much like a line filter, which we recall takes a mapping ``String -> String`` and applies it to all lines on ``stdin``. Because ``splice`` reads files and writes to ``stdout``, it must take place in the ``IO`` monad; its signature is ``String -> IO ()``. We write a variant of ``lineFilter`` to handle programs of this type.
+
+
+```haskell
+lineFilterIO :: (String -> IO ()) -> IO ()
+lineFilterIO f = do
+  xs <- fmap getLines getContents
+  sequence_ $ map f xs
+```
+
+
+The program is then not terribly complicated:
+
+
+```haskell
+-- import: splice contents of a file into stdin
+
+module Main where
+
+import System.Exit (exitSuccess, exitFailure)
+import System.Environment (getArgs)
+import Data.List (unfoldr)
+import STH.Lib
+  (lineFilterIO, getWords, getLines,
+   putStrLns, takeBetween, reportErrorMsgs)
+
+
+-- We accept two kinds of import commands:
+data Import
+  = Whole   String
+  | Between String String String
+
+
+main :: IO ()
+main = do
+  args <- getArgs
+
+  keyword <- case args of
+    []             -> return "import"
+    ["--with",str] -> return str
+    otherwise      -> argErr >> exitFailure
+
+  let
+    -- see if a line is an import command
+    readCommand :: String -> Maybe Import
+    readCommand str = case getWords str of
+      [x,file] -> if x == key
+        then Just $ Whole file
+        else Nothing
+      [x,file,"between",open,"and",close] -> if x == keyword
+        then Just $ Between file open close
+        else Nothing
+      otherwise -> Nothing
+
+    -- process a single line
+    splice :: String -> IO ()
+    splice line = case readCommand line of
+      Nothing -> do
+        putStrLn line
+      Just (Whole name) -> do
+        input <- fmap getLines $ readFile name
+        putStrLns input
+      Just (Between name open close) -> do
+        input <- fmap getLines $ readFile name
+        putStrLns $ takeBetween (open,close) input
+
+  lineFilterIO splice
+  exitSuccess
+
+argErr :: IO ()
+argErr = reportErrorMsgs
+  [ "usage"
+  , "  import            : expand any 'import' lines on stdin"
+  , "  import --with STR : same, using custom import keyword STR"
+  , "this program recognizes two kinds of import commands:"
+  , "  import FILENAME"
+  , "    insert contents of FILENAME in place of this line"
+  , "  import FILENAME from START to END"
+  , "    same, but cut out all lines except those between START and END lines."
+  ]
+```
+
+
+``import`` is used to help produce this documentation. These pages contain lots of code snippets, which are taken from the actual program source code using import commands. This way we don't have to worry about keeping (at least part of) the documentation and the code in sync by hand as the code changes (as it does, frequently).
+
+This tool could be improved in a few ways. First, the import command, filename, and open and close lines must not include any spaces. This may prove to be too restrictive; we could allow for quoted arguments or escaped arguments. Second, we could do something a litte more informative when ``readFile`` fails because a file does not exist; this version of ``import`` knows nothing about where a given import command came from. In a large pipeline, or a small pipeline operating on lots of data, this may be a problem.
