@@ -28,7 +28,4 @@ gather: FORCE
 	cp -r $(CLASSDIR)/stat/pdf/. pdf/classes/stat
 	cp -r $(CLASSDIR)/prfs/pdf/. pdf/classes/prfs
 
-	# Get sth documentation
-	cp -r $(STHDIR)/gen/doc/. pages/sth
-
 FORCE:
