@@ -56,6 +56,9 @@ data CCLine
   = CCLine [String]
   deriving (Show)
 
+fromCCLine :: CCLine -> [String]
+fromCCLine (CCLine xs) = xs
+
 renderCCLine :: CCLine -> String
 renderCCLine (CCLine xs)
   = intercalate "\n" $ zipWith (:) (' ' : (repeat '+')) xs
