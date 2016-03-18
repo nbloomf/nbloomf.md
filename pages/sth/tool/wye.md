@@ -43,3 +43,12 @@ main = do
 
   exitSuccess
 ```
+
+
+``wye`` is useful for inspecting data as it flows through a pipeline, maybe for debugging purposes. For instance, if the final output of a pipeline like
+
+    foo | bar | baz | qux
+
+is not what we expect, we can inspect the intermediate data with
+
+    foo | wye a.txt | bar | wye b.txt | baz | wye c.txt | qux

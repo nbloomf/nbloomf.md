@@ -96,19 +96,19 @@ defaultGeom = Geom
 
 
 data LPState = LPState
-  { pageSettings :: Geom
-  , currentLine  :: Int
-  , currentPage  :: Int
-  , pageIsDirty  :: Bool
+  { pageSettings  :: Geom
+  , currentLine   :: Int
+  , currentPage   :: Int
+  , pageInProcess :: Bool
   }
 
 
 makeLPState :: Geom -> LPState
-makeLPState geom = LPState
-  { pageSettings = geom
-  , currentLine  = 1
-  , currentPage  = 1
-  , pageIsDirty  = False
+makeLPState geom  = LPState
+  { pageSettings  = geom
+  , currentLine   = 1
+  , currentPage   = 1
+  , pageInProcess = False
   }
 ```
 
@@ -165,18 +165,14 @@ Now the printer interface we expose is a small number of monadic functions. For 
 
 ```haskell
 lpPutStr :: String -> LinePrinter ()
-lpPutStr str = LP write
+lpPutStr ""  = return ()
+lpPutStr str = lpStartPage >> LP write
   where
     write st = do
-      case pageIsDirty st of
-        True  -> return ()
-        False -> do
-          let pg = currentPage st
-          putStrLn $ "%%Page: " ++ show pg
       let (x,y) = lineStartPos (pageSettings st) (currentLine st)
       putStrLn $ show x ++ " " ++ show y ++ " moveto"
       putStr $ unicodeToPS str
-      return ((), st {pageIsDirty = True})
+      return ((), st)
 ```
 
 
@@ -185,7 +181,7 @@ lpPutStr str = LP write
 
 ```haskell
 lpLineFeed :: LinePrinter ()
-lpLineFeed = LP lf
+lpLineFeed = lpStartPage >> LP lf
   where
     lf st = do
       let
@@ -195,7 +191,7 @@ lpLineFeed = LP lf
       if kOld + 1 > lpp
         then do
           putStrLn "showpage\n"
-          return ((), st {currentLine = 1, currentPage = mOld+1})
+          return ((), st {currentLine = 1, currentPage = mOld+1, pageInProcess = False})
         else do
           return ((), st {currentLine = kOld+1, currentPage = mOld})
 

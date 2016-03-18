@@ -70,13 +70,14 @@ Now ``toCCLine`` reads a ``CCLine`` from a string.
 
 ```haskell
 toCCLine :: String -> CCLine
-toCCLine =
-  columnIndices
+toCCLine "" = CCLine [""]
+toCCLine xs =
+  (columnIndices
     >>> filter (\(c,_) -> c /= ' ')          -- try omitting
     >>> sortBy (\(_,a) (_,b) -> compare a b) -- these lines
     >>> maxMonoSubseqsBy p
     >>> map (fromSparseList ' ')
-    >>> CCLine
+    >>> CCLine) xs
   where
     p u v = if snd u < snd v
               then True else False
