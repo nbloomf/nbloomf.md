@@ -26,6 +26,7 @@ title: Statistical Methods
 2. [Probability](/pdf/classes/stat/stat-a02-probability.pdf) ([solutions](/pdf/classes/stat/stat-soln-a02-probability.pdf))
 3. [Counting](/pdf/classes/stat/stat-a03-counting.pdf)
 4. [Discrete Random Variables](/pdf/classes/stat/stat-a04-discrete-random-variables.pdf)
+4. [Discrete Random Variables II](/pdf/classes/stat/stat-a05-discrete-random-variables-ii.pdf)
 
 
 ## Test Review

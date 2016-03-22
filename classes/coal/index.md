@@ -28,6 +28,7 @@ title: College Algebra
 3. [Compound Equations](/pdf/classes/coal/coal-a03-compound-equations.pdf) ([solutions](/pdf/classes/coal/coal-soln-a03-compound-equations.pdf))
 4. [Functions](/pdf/classes/coal/coal-a04-functions.pdf) ([solutions](/pdf/classes/coal/coal-soln-a04-functions.pdf))
 5. [Transformations](/pdf/classes/coal/coal-a05-transformations.pdf)
+5. [Polynomials](/pdf/classes/coal/coal-a06-polynomials.pdf)
 
 
 ### Test Reviews

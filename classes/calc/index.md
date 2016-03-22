@@ -15,6 +15,7 @@ title: Calculus I
 4. [Differentiation II](/pdf/classes/calc/calc-a04-differentiation-2.pdf) ([solutions](/pdf/classes/calc/calc-soln-a04-differentiation-2.pdf))
 5. [Differentiation III](/pdf/classes/calc/calc-a05-differentiation-3.pdf)
 6. [Monotonicity and Concavity](/pdf/classes/calc/calc-a06-monotonicity-and-concavity.pdf)
+7. [Extrema](/pdf/classes/calc/calc-a07-extrema.pdf)
 
 
 ## Practice Problems (Not Graded!)

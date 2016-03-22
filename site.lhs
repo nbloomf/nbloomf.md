@@ -72,7 +72,19 @@ As usual we begin with some pragmas and imports. The OverloadedStrings pragma al
 >             "templates/default.html"   defaultContext
 >       >>= relativizeUrls
 >
->   match (fromList ["pages/sth/index.md", "pages/sth/formats.md"]) $ do
+>   match "pages/amd/sec/*" $ do
+>     route $ setExtension "html"
+>     compile $ pandocMathCompiler
+>       >>= loadAndApplyTemplate
+>             "templates/amd-sec.html" defaultContext
+>       >>= loadAndApplyTemplate
+>             "templates/default.html" defaultContext
+>       >>= relativizeUrls
+>
+>   match (fromList [ "pages/sth/index.md"
+>                   , "pages/sth/formats.md"
+>                   , "pages/amd/index.md"
+>                   ]) $ do
 >     route $ setExtension "html"
 >     compile $ pandocMathCompiler
 >       >>= loadAndApplyTemplate "templates/default.html" postCtx
@@ -81,7 +93,6 @@ As usual we begin with some pragmas and imports. The OverloadedStrings pragma al
 >   match "posts/*" $ do
 >     route $ setExtension "html"
 >     compile $ pandocMathCompiler
->       >>= loadAndApplyTemplate "templates/macros.html"  postCtx
 >       >>= loadAndApplyTemplate "templates/post.html"    postCtx
 >       >>= loadAndApplyTemplate "templates/default.html" postCtx
 >       >>= relativizeUrls
