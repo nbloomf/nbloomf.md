@@ -4,7 +4,7 @@ subtitle: interactively view a file
 author: nbloomf
 ---
 
-This is not one of the examples in *Software Tools*, but is a program I've found myself wishing I had in the past. It's a simple interactive file viewer. ``examine`` takes a file and presents it to the user a little bit at a time, and accepts some simple commands: pressing ``n`` advances to the next chunk of the file, ``v`` the previous chunk, ``x`` exits the program, and ``w`` writes the current chunk to ``stdout``. That last command, ``w``, can be used to make ``examine`` act like a human-powered filter. To avoid cluttering up ``stdout``, the interaction happens on ``stderr``. (This is a minor abuse of ``stderr``.)
+This is not one of the examples in *Software Tools*, but is a program I've found myself wishing I had in the past. It's a simple interactive file viewer. ``examine`` takes a file and presents it to the user a little bit at a time, and accepts some simple commands: pressing ``n`` advances to the next chunk of the file, ``v`` the previous chunk, ``x`` exits the program, and ``w`` writes the current chunk to ``stdout``. That last command, ``w``, can be used to make ``examine`` act like a human-powered filter. To avoid cluttering up ``stdout``, the interaction happens on ``stderr``. (This is a minor abuse of ``stderr``.) I'd prefer to use the arrow keys for navigation, but doing this in a platform-independent way is not so simple.
 
 
 ```haskell

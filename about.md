@@ -4,8 +4,6 @@ title: About
 
 I am Nathan Bloomfield, studio mathematician and teacher-in-residence at NSU of OK. This is where I put documents for my students.
 
-Someday this space will also contain lucid prose about my research interests and other projects.
+I like to think about the (strange|beautiful) interaction between universal algebra and programming. Sometimes I write about that too.
 
-Today is not that day.
-
-This site is generated using Hakyll; the compiler source code is available (as per tradition) [here](/site.html).
+This site is generated using Hakyll; you can see the compiler [source code](/site.html) if that's your bag.

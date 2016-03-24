@@ -11,7 +11,7 @@ Typically, the natural numbers are developed using the *Peano axioms*: these axi
 2. If $S(n) = S(m)$, then $n = m$.
 3. If $B$ is a set such that $0 \in B$ and whenever $n \in B$ we also have $S(n) \in B$, then in fact $N \subseteq B$.
 
-We will take a slightly different approach, which I think helps prepare our minds for some very cool ideas.
+There is another approach we can take, which as far as I know was introduced by William Lawvere. This approach characterizes the natural numbers explicitly as an initial object in an appropriate category. It turns out that thinking in this abstractly nonsensical fashion can be given a very concrete interpretation, essentially allowing us to derive executable **programs** and prove things about them.
 
 
 ## Iterative Sets
@@ -43,7 +43,7 @@ As an axiom, we define the natural numbers to be a special iterative set.
 
 <div class="result">
 <div class="axiom">
-<p>There is a special inductive set $(\nats,\zero,\next)$ which has the following *universal property*: if $(A,e,\varphi)$ is an inductive set, then there is a unique iterative homomorphism $\Theta : \nats \rightarrow A$. This unique function $\Theta$ will be denoted $\natrec{e}{\varphi}$.</p>
+<p>There is a special inductive set $(\nats,\zero,\next)$ which has the following *universal property*: if $(A,e,\varphi)$ is an iterative set, then there is a unique iterative homomorphism $\Theta : \nats \rightarrow A$. This unique function $\Theta$ will be denoted $\natrec{e}{\varphi}$.</p>
 </div>
 </div>
 
@@ -51,40 +51,9 @@ At first this may seem like a strange definition. By repeatedly applying the $\n
 
 Applying this function to the sequence of elements above, we see that $\natrec{e}{\varphi}(\zero) = e$ (of course), and then $$\natrec{e}{\varphi}(\next(\zero)) = \varphi(\natrec{e}{\varphi}(\zero)) = \varphi(e),$$ $$\natrec{e}{\varphi}(\next(\next(\zero))) = \varphi(\natrec{e}{\varphi}(\next(\zero))) = \varphi(\varphi(e)),$$ $$\natrec{e}{\varphi}(\next(\next(\next(\zero)))) = \varphi(\natrec{e}{\varphi}(\next(\next(\zero)))) = \varphi(\varphi(\varphi(e))),$$ and so on.
 
-The $\natrec{\ast}{\ast}$ function encapsulates the basic pattern of *recursion* on the natural numbers, as we will see. Importantly, it does so in a well-behaved way; reasoning about recursive functions defined using $\natrec{\ast}{\ast}$ can be very easy.
+The $\natrec{\ast}{\ast}$ function captures the basic pattern of *recursion* on the natural numbers, as we will see. Importantly, it does so in a well-behaved way; reasoning about recursive functions defined using $\natrec{\ast}{\ast}$ can be very easy.
 
 
-## The Peano Properties
+## But Why?
 
-As an example, lets show that our natural numbers satisfy the more traditional Peano axioms. (We establish two here; the third will be saved for later, when we have more machinery.)
-
-First, zero is not the successor of any natural number:
-
-<div class="result">
-<div class="lemma">
-<p>There is not a natural number $m$ such that $\zero = \next(m)$.</p>
-</div>
-
-<div class="proof">
-Suppose to the contrary that $\next(m) = \zero$. Let $\const(\bfalse)$ be the constant false map on $\bool$, and note that $(\bool, \btrue, \const(\bfalse))$ is an iterative set. Let $\Theta$ denote the unique iterative homomorphism $\natrec{\btrue}{\const(\bfalse)} : \nats \rightarrow \bool$.
-
-We thus have $$\btrue = \Theta(\zero) = \Theta(\next(m)) = (\const(\bfalse))(\Theta(m)) = \bfalse,$$ which is absurd.
-</div>
-</div>
-
-
-And the induction principle:
-
-<div class="result">
-<div class="lemma">
-Suppose $f : \nats \rightarrow A$ is a map and that $B \subseteq A$ is a subset such that $f(\zero) \in B$ and whenever $f(n) \in B$, we also have $f(\next(n)) \in B$. Then in fact $f(n) \in B$ for all natural numbers $n$.
-</div>
-
-<div class="proof">
-Define a subset $T \subseteq \nats$ by $$T = \{n \in \nats \mid f(n) \in B \}.$$ By hypothesis, we have $\zero \in T$. Also, if $n \in T$, then $\next(n) \in T$; in particular, the restriction of $\next$ to $T$ is in fact a function $T \rightarrow T$. That is, $(T,\zero,\next)$ is an iterative set. Let $\Theta = \natrec{\zero}{\next}$ be the unique homomorphism $\nats \rightarrow T$.
-
-Now let $\iota : T \rightarrow \nats$ denote the inclusion map; in fact $\iota$ is an iterative homomorphism, since we have $\iota(\zero) = \zero$ and $$\iota(\next(n)) = \next(n) = \next(\iota(n))$$ for all $n \in T$.
-
-The composite map $\iota \circ \Theta : \nats \rightarrow \nats$ is again an iterative homomorphism, and by uniqueness, in fact we have $\iota \circ \Theta = \id$. If $n$ is a natural number, we have $$n = \id(n) = \iota(\Theta(n)) = \Theta(n),$$ and in particular, $n \in T$. That is, if $n$ is any natural number, we have $f(n) \in B$.
-</div>
-</div>
+As we'll see, the function $\natrec{\ast}{\ast}$ essentially characterizes the natural numbers just like the Peano axioms do, albeit in a slightly goofy and hard-to-get-used-to way. So if $\natrec{\ast}{\ast}$ and Peano are equivalent, why bother with the added abstraction? Well, if we define our arithmetic purely in terms of $\natrec{\ast}{\ast}$, and then find a concrete representation of $\natrec{\ast}{\ast}$ in software, then suddenly all of our proofs become executable. And by wrapping up recursion behind a small number of "recursion patterns", those proofs can be easier to find and reason about.
