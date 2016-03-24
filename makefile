@@ -5,7 +5,7 @@ STHDIR   = $(HOME)/code/st-haskell
 all: gather build move
 	echo "Successfully built nbloomf.github.io" | doppler lightgreen
 
-site: site.lhs
+site: FORCE
 	ghc --make -threaded site.lhs
 
 build: site
