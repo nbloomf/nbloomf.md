@@ -53,6 +53,24 @@ Applying this function to the sequence of elements above, we see that $\natrec{e
 
 The $\natrec{\ast}{\ast}$ function captures the basic pattern of *recursion* on the natural numbers, as we will see. Importantly, it does so in a well-behaved way; reasoning about recursive functions defined using $\natrec{\ast}{\ast}$ can be very easy.
 
+We will eventually show that these natural numbers satisfy the more traditional Peano axioms, but we need a little more machinery first. In the meantime the following version of induction will come in handy.
+
+<div class="result">
+<div class="thm">
+(Induction Principle.) Suppose $f : \nats \rightarrow A$ is a map and that $B \subseteq A$ is a subset such that $f(\zero) \in B$ and whenever $f(n) \in B$, we also have $f(\next(n)) \in B$. Then in fact $f(n) \in B$ for all natural numbers $n$.
+</div>
+
+<div class="proof">
+Define a subset $T \subseteq \nats$ by $$T = \{n \in \nats \mid f(n) \in B \}.$$ By hypothesis, we have $\zero \in T$. Also, if $n \in T$, then $\next(n) \in T$; in particular, the restriction of $\next$ to $T$ is in fact a function $T \rightarrow T$. That is, $(T,\zero,\next)$ is an iterative set. Let $\Theta = \natrec{\zero}{\next}$ be the unique homomorphism $\nats \rightarrow T$.
+
+Now let $\iota : T \rightarrow \nats$ denote the inclusion map; in fact $\iota$ is an iterative homomorphism, since we have $\iota(\zero) = \zero$ and $$\iota(\next(n)) = \next(n) = \next(\iota(n))$$ for all $n \in T$.
+
+The composite map $\iota \circ \Theta : \nats \rightarrow \nats$ is again an iterative homomorphism, and by uniqueness, in fact we have $\iota \circ \Theta = \id$. If $n$ is a natural number, we have $$n = \id(n) = \iota(\Theta(n)) = \Theta(n),$$ and in particular, $n \in T$. That is, if $n$ is any natural number, we have $f(n) \in B$.
+</div>
+</div>
+
+The traditional induction principle follows as a corollary where $A = \nats$ and $\varphi$ is the inclusion map.
+
 
 ## But Why?
 

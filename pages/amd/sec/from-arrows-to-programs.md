@@ -53,7 +53,7 @@ dF = N dE
 ```
 
 
-So calling ``d7`` in GHCI, for instance, prints
+So calling ``d7`` in ``ghci``, for instance, prints
 
     NNNNNNNZ
 
@@ -61,15 +61,15 @@ And we can also give a straightforward implementation of $\natrec{\ast}{\ast}$.
 
 
 ```haskell
-natRec :: a -> (a -> a) -> Nat -> a
-natRec e _  Z    = e
-natRec e f (N n) = f (natRec e f n)
+natRec' :: a -> (a -> a) -> Nat -> a
+natRec' e _    Z    = e
+natRec' e phi (N n) = phi (natRec' e phi n)
 ```
 
 
-For instance, the mapping we used to show that $\zero = \next(m)$ has no solution in $\nats$ is
+For example:
 
-    let theta = natRec True not
+    let theta = natRec' True not
 
 and we can test out this map by evaluating it on several natural numbers:
 
@@ -79,3 +79,82 @@ and we can test out this map by evaluating it on several natural numbers:
     True
 
 Now this ``theta`` is pretty silly (though not *that* silly, it detects the parity of a natural number, which we haven't defined yet). But in the next section we'll define a more interesting recursive function.
+
+
+## But...
+
+There is a practical problem with this implementation of ``natRec'``. If we evaluate on a natural number like ``NNNZ``, the "stack" of function calls expands to something like this:
+
+       natRec' e phi (N $ N $ N Z)
+    == phi $ natRec' e phi (N $ N Z)
+    == phi $ phi $ natRec' e phi (N Z)
+    == phi $ phi $ phi $ natRec' e phi Z
+    == phi $ phi $ phi $ e
+    == phi $ phi $ e'
+    == phi $ e''
+    == e'''
+
+So we generate a tower of unevaluated calls to ``phi``, $n$ tall, before collapsing it down again. In the meantime all those unevaluated ``phi``s are sitting in memory. It is not difficult to see that if we evaluate ``natRec'`` on a "larger" number (whatever that means) we will quickly run out of actual memory. To help with this, we can try rewriting ``natRec`` in so-called "tail call" recursive form like so.
+
+
+```haskell
+natRec :: a -> (a -> a) -> Nat -> a
+natRec e phi n =
+  let
+    tau !x k = case k of
+      Z   -> x
+      N m -> tau (phi $! x) m
+  in tau e n
+```
+
+
+Now ``natRec`` does not leave a bunch of unevaluated functions in memory. It is effectively a loop, iterating "up" from 0 (again with the scare quotes because we don't have an order on $\nats$ yet but of course you know what it means) rather than "down" from $n$. So this version expands to something like this:
+
+       natRec e phi (N $ N $ N Z)
+    == tau e (N $ N $ N Z)
+    == tau e' (N $ N Z)
+    == tau e'' (N Z)
+    == tau e''' Z
+    == e'''
+
+It deconstructs its natural number argument and evaluates ``phi`` strictly at each step. (That is what the bang pattern and ``$!`` are for.) At least I think that's what it does; my simple testing shows that ``natRec'`` easily falls down while ``natRec`` does not. But profiling Haskell seems like a bit of dark art to me still. I am open to being wrong here.
+
+We can see that ``natRec`` has better performance than ``natRec'``, but there is a hitch. ``natRec'`` is obviously an implementation of $\natrec{\ast}{\ast}$. But it is **not** obvious that ``natRec`` and ``natRec'`` are the same function! This is where the universal property of natural recursion comes in: if we can show that both functions satisfy the universal property, then *they must be the same*. And we can do this using induction.
+
+First, we claim that for all ``n :: Nat``,
+
+    natRec' (phi e) phi n == phi $ natRec' e phi n
+
+Using induction, it suffices to note that
+
+       natRec' (phi e) phi Z
+    == phi e
+    == phi $ natRec' e phi Z
+
+and that if the equation holds for ``n``, then
+
+       natRec' (phi e) phi (N n)
+    == phi $ natRec' (phi e) phi n
+    == phi $ phi $ natRec' e phi n
+    == phi $ natRec' e phi (N n)
+
+Now, again using induction, we have
+
+       natRec e phi Z
+    == tau e Z
+    == e
+    == natRec' e phi Z
+
+and if ``natRec e phi n == natRec' e phi n``, then
+
+       natRec e phi (N n)
+    == tau e (N n)
+    == tau (phi e) n
+    == natRec (phi e) phi n
+    == natRec' (phi e) phi n
+    == phi $ natRec' e phi n
+    == natRec' e phi (N n)
+
+Since ``natRec e phi`` and ``natRec' e phi`` are both functions with signature ``Nat -> a`` which satisfy the universal property of $\nats$, they must be the same function: equal on all inputs.
+
+This is a powerful idea. We've effectively written a slow but obviously correct program, and then proven it is equivalent to a more efficient one. We'll be doing more of this later.
