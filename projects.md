@@ -8,4 +8,4 @@ title: Projects
 
 * [**Arithmetic Made Difficult**](/pages/amd/index.html)
 
-    Wherein we develop number theory in excruciating detail from a category-ish perspective. With proofs and programs.
+    Wherein we develop some elementary number theory in excruciating detail from a category-ish perspective. With proofs and programs.

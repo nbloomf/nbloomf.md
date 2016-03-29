@@ -103,7 +103,7 @@ natRec e phi n =
   let
     tau !x k = case k of
       Z   -> x
-      N m -> tau (phi $! x) m
+      N m -> tau (phi x) m
   in tau e n
 ```
 
