@@ -126,21 +126,84 @@ primRec phi mu n a =
 ```
 
 
-Some simple testing again shows that the tail recursive form is more efficient -- both of the other forms run out of space on medium-sized numbers. All we need to do is verify that the efficient ``primRec`` is equivalent to the inefficient, but obviously correct, ``primRec''``.
+Some simple testing again shows that the tail recursive form is more efficient -- both of the other forms run out of space on medium-sized numbers. All we need to do is verify that the efficient ``primRec`` is equivalent to the inefficient, but obviously correct, ``primRec''``. We will (eventually) do this by induction.
 
-First we claim that
+First, though, we need a lemma about ``tau``. Note that in the definition of ``tau`` there are two implicit parameters, ``mu`` and ``a``. With ``mu`` and ``phi`` fixed, we define supplementary functions ``mu'`` and ``phi'`` as follows:
 
-       primRec'' (\x -> mu k x (phi x)) mu k a
-    == mu k a $ primRec'' phi mu k a
+    mu' k a b = mu (N k) a b
+    phi' a = mu Z a (phi a)
 
-for all ``k :: Nat`` and all ``a :: a``. Using induction, note that
+We will denote by ``tau'`` the version of ``tau`` where ``mu'`` is in scope, and by ``tau`` the version with ``mu`` in scope. We claim that
 
-       primRec'' (\x -> mu Z x (phi x)) mu Z a
-    == (\x -> mu Z x (phi x)) a
+    tau' x h k == tau x (N h) k
+
+for all ``x``, ``h``, and ``k``, and prove it by induction on ``k``. For the base case, note that
+
+       tau' x h Z
+    == x
+    == tau x (N h) Z
+
+For the inductive step, suppose the equation holds for ``k``. Then we have
+
+       tau' x h (N k)
+    == tau' (mu' h a x) (N h) k
+    == tau (mu' h a x) (N $ N h) k
+    == tau (mu (N h) a x) (N $ N h) k
+    == tau x (N h) (N k)
+
+as needed.
+
+Next we claim that
+
+    primRec phi' mu' k a == primRec phi mu (N k) a
+
+for all ``phi``, ``mu``, ``k``, and ``a``. To see this, note that
+
+       primRec phi mu (N k) a
+    == tau (phi a) Z (N k)
+    == tau (mu Z a (phi a)) (N Z) k
+    == tau' (mu Z a (phi a)) Z k
+    == tau' (phi' a) Z k
+    == primRec phi' mu' k a
+
+as needed. Also, ``primRec''`` satisfies this equation, which we show by induction on ``k``. For the base case, note that
+
+       primRec'' phi' mu' Z a
+    == phi' a
     == mu Z a (phi a)
     == mu Z a $ primRec'' phi mu Z a
+    == primRec'' phi mu (N Z) a
 
-and if the equation holds for ``k :: Nat``, then
+And if the equation holds for ``k``, then we have
 
-       primRec'' (\x -> mu (N k) x (phi x)) mu (N k) a
-    == mu k a $ primRec'' (\x -> mu (N k) x (phi x)) mu k a
+       primRec'' phi' mu' (N k) a
+    == mu' k a $ primRec'' phi' mu' k a
+    == mu' k a $ primRec'' phi mu (N k) a
+    == mu (N k) a $ primRec'' phi mu (N k) a
+    == primRec'' phi mu (N $ N k) a
+
+so that
+
+    primRec'' phi' mu' k a == primRec'' phi mu (N k) a
+
+for all ``phi``, ``mu``, ``k``, and ``a`` as claimed.
+
+Finally we are prepared to show that ``primRec == primRec''``, by induction on ``k``. For the base case, we have
+
+       primRec'' phi mu Z a
+    == phi a
+    == tau (phi a) Z Z
+    == primRec phi mu Z a
+
+And if the result holds for ``k``, we have
+
+       primRec'' phi mu (N k) a
+    == primRec'' phi' mu' k a
+    == primRec phi' mu' k a
+    == primRec phi mu (N k) a
+
+So our efficient ``primRec`` is equivalent to ``primRec''``. (We will leave the equivalence of ``primRec'`` and ``primRec`` as an exercise.)
+
+## What it does
+
+This page is already long enough, so I'll save examples of primitive recursion for another day. Just note what $\primrec{\ast}{\ast}$ does: given some data $\varphi$ and $\mu$, it produces a recursive function with signature $\nats \times A \rightarrow B$. So whenever we encounter (or want to construct) a function with this signature, it may be worthwhile to look for a definition in terms of $\primrec{\ast}{\ast}$. The uniqueness of primitive recursion makes such functions very nice to reason about.

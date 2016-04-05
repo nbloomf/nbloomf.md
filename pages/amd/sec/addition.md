@@ -3,40 +3,38 @@ title: Addition
 author: nbloomf
 ---
 
-So far we've characterized the natural numbers via a unique mapping $\natrec{\ast}{\ast} : \nats \rightarrow A$, and we defined another parameterized mapping $\primrec{\ast}{\ast} : \nats \times A \rightarrow B$. From now on, when we want to define a mapping with one of these signatures, these recursive maps may come in handy.
+So far we've characterized the natural numbers via a unique mapping $$\natrec{\ast}{\ast} : \nats \rightarrow A,$$ and we defined another parameterized mapping $$\primrec{\ast}{\ast} : \nats \times A \rightarrow B.$$ From now on, when we want to define a mapping with one of these signatures, these prepackaged recursive maps may come in handy. What's more, we can use the universal properties of these maps to define them in terms of *desired behavior*.
 
-For example natural number addition has signature $\nats \times \nats \rightarrow \nats$, so we might hope to define addition in terms of $\primrec{\ast}{\ast}$ -- and in fact we can.
-
-**Addition**
-
-We'd like to define a function \\(\\nplus : \\nats \\times \\nats \\rightarrow \\nats\\) that behaves a certain way. But at the moment we only know of one way to define a function on \\(\\nats\\), using \\(\\natrec{\\ast}{\\ast}\\). How can we use this to define a function on \\(\\nats \\times \\nats\\)? We will use a neat trick called *currying*. Essentially, rather than constructing a function which takes two arguments \\(a\\) and \\(b\\) and returns \\(a+b\\), we construct a function which takes a single argument \\(a\\) and returns another function of a single argument \\(b\\) which returns \\(a+b\\). We need to come up with suitable \\(e\\) and \\(\\varphi\\) so that \\[\\natrec{e}{\\varphi} : \\nats \\rightarrow (\\nats \\rightarrow \\nats)\\] behaves like \\(\\nplus\\). But how does \\(\\nplus\\) behave? We certainly should have \\(0 + a = a\\) for all \\(a\\). That is, \\[a = \\natrec{e}{\\varphi}(\\zero)(a) = e(a)\\] for all \\(a\\); thus \\(e = \\id\\). Similarly we must have \\((1+n)+a = 1+(n+a)\\) for all \\(n\\) and \\(a\\), so that \\[\\next(\\natrec{e}{\\varphi}(n)(a)) = \\natrec{e}{\\varphi}(\\next(n))(a) = \\varphi(\\natrec{e}{\\varphi}(n))(a).\\] Thus \\(\\varphi(f)(m) = \\next(f(m))\\).
+Natural number addition has signature $\nats \times \nats \rightarrow \nats$, so we might hope to define addition in terms of $\primrec{\ast}{\ast}$. To do this, we need to find mappings $\varphi : \nats \rightarrow \nats$ and $\mu : \nats \times \nats \times \nats \rightarrow \nats$ that make $\primrec{\varphi}{\mu}$ act like addition. For example, we want $\next$ to act like $+1$, and $$n = \zero + n = \primrec{\varphi}{\mu}(\zero,n) = \varphi(n),$$ and $$\begin{eqnarray*} (m+n)+1 & = & (m+1)+n = \primrec{\varphi}{\mu}(\next(m),n) \\ & = & \mu(m,n,\primrec{\varphi}{\mu}(m,n)) = \mu(m,n,m+n).\end{eqnarray*}$$ With this in mind, we define a binary operation $\nplus$ on $\nats$ as follows.
 
 <div class="result">
-<div class="defn">
-<p>Let \\(\\varphi : (\\nats \\rightarrow \\nats) \\rightarrow (\\nats \\rightarrow \\nats)\\) be the mapping given by \\(\\varphi(f)(m) = \\next(f(m))\\). We define a special function \\(\\nplus : \\nats \\times \\nats \\rightarrow \\nats\\) by \\[\\nplus(a,b) = \\natrec{\\id}{\\varphi}(a)(b).\\]</p>
+<div class="defn"><p>
+Let $\mu : \nats \times \nats \times \nats \rightarrow \nats$ be given by $\mu(k,a,b) = \next(b)$. We then define $\nplus : \nats \times \nats \rightarrow \nats$ by $$\nplus = \primrec{\id}{\mu}.$$
+</p></div>
 </div>
-</div>
+
+Showing that $\nplus$ has the familiar properties of addition then comes down to a few applications of induction.
 
 <div class="result">
-<div class="lemma">
-The following hold for all natural numbers \\(a\\), \\(b\\), and \\(c\\).
+<div class="thm">
+The following hold for all natural numbers $a$, $b$, and $c$.
 
-1. \\(\\nplus(0, a) = a\\)
-2. \\(\\nplus(\\next(a), b) = \\next(\\nplus(a, b)) = \\nplus(a, \\next(b))\\)
-3. \\(\\nplus(a, 0) = a\\).
-4. \\(\\nplus(a, b) = \\nplus(b, a)\\).
-5. \\(\\nplus(a, \\nplus(b, c)) = \\nplus(\\nplus(a, b), c)\\).
-6. If \\(\\nplus(a, c) = \\nplus(b, c)\\) then \\(a = b\\).
+1. $\nplus(\zero,a) = a = \nplus(a,\zero)$.
+2. $\nplus(\next(a),b) = \next(\nplus(a,b)) = \nplus(a,\next(b))$.
+3. $\nplus(\nplus(a,b),c) = \nplus(a,\nplus(b,c))$.
+4. $\nplus(a,b) = \nplus(b,a)$.
+5. If $\nplus(c,a) = \nplus(c,b)$ then $a = b$.
+6. If $\nplus(a,c) = \nplus(b,c)$ then $a = b$.
 </div>
 
-<div class="proof">
-
-1. Note first that \\[\\nplus(0, a) = \\natrec{\\id}{\\varphi}(\\zero)(a) = \\id(a) = a.\\]
-2. To see the first equality, note that \\[\\begin{eqnarray\*} \\nplus(\\next(a), b) & = & \\natrec{\\id}{\\varphi}(\\next(a))(b) \\\\ & = & \\varphi(\\natrec{\\id}{\\varphi}(a))(b) \\\\ & = & \\next(\\natrec{\\id}{\\varphi}(a)(b)) \\\\ & = & \\next(\\nplus(a, b)). \\end{eqnarray\*}\\] We show the second by induction. Define \\[B = \\{n \\in \\nats \\mid \\next(\\nplus(n, m)) = \\nplus(n, \\next(m))\\ \\mathrm{for\\ all}\\ m \\in \\nats\\}.\\] We have \\(\\zero \\in B\\) since for all \\(m\\), \\[\\next(\\nplus(\\zero, m)) = \\next(m) = \\nplus(\\zero, \\next(m)).\\] Now suppose \\(n \\in B\\), and let \\(m \\in \\nats\\). Then \\[\\begin{eqnarray\*} \\next(\\nplus(\\next(n), m)) & = & \\next(\\next(\\nplus(n, m))) \\\\ & = & \\next(\\nplus(n, \\next(m))) \\\\ & = & \\nplus(\\next(n), \\next(m)). \\end{eqnarray\*}\\] The conclusion follows.
-3. We use induction. Define a set \\[B = \\{n \\in \\nats \\mid \\nplus(n, 0) = n \\}. \\] Certainly \\(\\zero \\in B\\). Now suppose \\(n \\in B\\); note that \\[\\nplus(\\next(n), \\zero) = \\next(\\nplus(n,0)) = \\next(n),\\] and thus \\(\\next(n) \\in B\\). The conclusion follows.
-4. We again use induction. Define \\[B = \\{n \\in \\nats \\mid \\nplus(n, m) = \\nplus(m, n)\\ \\mathrm{for\\ all}\\ m \\in \\nats\\}.\\] We have \\(\\zero \\in B\\) since \\[\\nplus(\\zero, m) = m = \\nplus(m, \\zero)\\] for all \\(m\\). Now suppose \\(n \\in B\\), and let \\(m \\in \\nats\\). Then \\[\\begin{eqnarray\*} \\nplus(\\next(n), m) & = & \\next(\\nplus(n,m)) \\\\ & = & \\next(\\nplus(m,n)) \\\\ & = & \\nplus(m, \\next(n)) \\end{eqnarray\*} \\] as needed.
-5. asf
-6. asd
-
+<div class="proof"><p>
+1. Note that $$\nplus(\zero,a) = \primrec{\id}{\mu}(\zero,a) = \id(a) = a.$$ We show the second equality by induction on $a$. For the base case, we have $\nplus(\zero,\zero) = \zero$ by the first equality. For the inductive step, suppose we have $\nplus(a,\zero) = a$ for some $a$. Then $$\begin{eqnarray*} \nplus(\next(a),\zero) & = & \primrec{\id}{\mu}(\next(a),\zero) \\ & = & \mu(a, \zero, \primrec{\id}{\mu}(a,\zero)) \\ & = & \mu(a, \zero, \nplus(a, \zero)) \\ & = & \mu(a,\zero,a) \\ & = & \next(a) \end{eqnarray*}$$ as needed.
+2. Note that $$\begin{eqnarray*} \nplus(\next(a),b) & = & \primrec{\id}{\mu}(\next(a),b) \\ & = & \mu(a,b,\primrec{\id}{\mu}(a,b)) \\ & = & \mu(a,b,\nplus(a,b)) \\ & = & \next(\nplus(a,b)). \end{eqnarray*}$$ We show the second equality by induction on $a$. For the base case, note that $$\begin{eqnarray*} \nplus(\zero,\next(b)) & = & \primrec{\id}{\mu}(\zero,\next(b)) \\ & = & \id(\next(b)) \\ & = & \next(b). \end{eqnarray*}$$ For the inductive step, suppose we have $\next(\nplus(a,b)) = \nplus(a,\next(b))$ for some $a$. Then $$\begin{eqnarray*} \nplus(\next(a),\next(b)) & = & \primrec{\id}{\mu}(\next(a),\next(b)) \\ & = & \mu(a, \next(b), \primrec{\id}{\mu}(a, \next(b))) \\ & = & \mu(a, \next(b), \nplus(a, \next(b))) \\ & = & \mu(a, ]next(b), \next(\nplus(a,b))) \\ & = & \next(\next(\nplus(a,b))) \\ & = & \next(\nplus(\next(a),b)) \end{eqnarray*}$$ as needed.
+3. We will show this by induction on $a$. For the base case, note that $$\nplus(\nplus(\zero,b),c) = \nplus(b,c) = \nplus(\zero,\nplus(b,c)).$$ For the inductive step, suppose the result holds for some $a$. Then $$\begin{eqnarray*} \nplus(\nplus(\next(a),b),c) & = & \nplus(\next(\nplus(a,b)),c) \\ & = & \next(\nplus(\nplus(a,b),c)) \\ & = & \next(\nplus(a, \nplus(b,c))) \\ & = & \nplus(\next(a), \nplus(b,c)) \end{eqnarray*}$$ as needed.
+4. We proceed by induction on $a$. For the base case, note that $$\nplus(\zero,b) = b = \nplus(b,\zero).$$ For the inductive step, suppose the result holds for some $a$. Then we have $$\begin{eqnarray*} \nplus(\next(a),b) & = & \next(\nplus(a,b)) \\ & = & \next(\nplus(b,a)) \\ & = & \nplus(b, \next(a))\end{eqnarray*}$$ as needed.
+5. We proceed by induction on $c$. For the base case, note that if $\nplus(\zero,a) = \nplus(\zero,b)$, then we have $$a = \nplus(\zero,a) = \nplus(\zero,b) = b.$$ For the inductive step, suppose the result holds for some $c$. Now if $$\nplus(\next(c),a)) = \nplus(\next(c),b),$$ then $$\next(\nplus(c,a)) = \next(\nplus(c,b))$$ so that $$\nplus(c,a) = \nplus(c,b)$$ and thus $a = b$ as needed.
+6. Follows from (5) and (4).
+</p></div>
 </div>
-</div>
+
+Of course we will eventually prefer to say $a + b$ instead of $\nplus(a,b)$. But we'll avoid the more familiar notation until we're convinced that $\plus$ really does act just like the familiar $+$, since familiar notation can easily lull us into using theorems we haven't proven yet.
