@@ -37,7 +37,8 @@ title: College Algebra
 ### Test Reviews
 
 1. [Test 1](/pdf/classes/coal/coal-r1-equations-and-geometry.pdf) ([solutions](/pdf/classes/coal/coal-soln-r1-equations-and-geometry.pdf))
-1. [Test 2](/pdf/classes/coal/coal-r2-functions.pdf)
+2. [Test 2](/pdf/classes/coal/coal-r2-functions.pdf)
+3. [Test 3](/pdf/classes/coal/coal-r3-polynomials.pdf)
 
 
 ### Toys
