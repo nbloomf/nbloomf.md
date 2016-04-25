@@ -32,6 +32,7 @@ title: College Algebra
 5. [Transformations](/pdf/classes/coal/coal-a05-transformations.pdf)
 6. [Polynomials](/pdf/classes/coal/coal-a06-polynomials.pdf)
 7. [Polynomials II](/pdf/classes/coal/coal-a07-polynomials-ii.pdf)
+8. [Exponentials and Logs](/pdf/classes/coal/coal-a08-exponentials-and-logs.pdf)
 
 
 ### Test Reviews

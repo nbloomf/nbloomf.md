@@ -17,6 +17,7 @@ title: Calculus I
 6. [Monotonicity and Concavity](/pdf/classes/calc/calc-a06-monotonicity-and-concavity.pdf)
 7. [Extrema](/pdf/classes/calc/calc-a07-extrema.pdf)
 8. [Applications](/pdf/classes/calc/calc-a08-applications.pdf)
+9. [Integration](/pdf/classes/calc/calc-a09-integration.pdf)
 
 
 ## Practice Problems (Not Graded!)

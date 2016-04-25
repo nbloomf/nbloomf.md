@@ -28,6 +28,7 @@ title: Statistical Methods
 4. [Discrete Random Variables](/pdf/classes/stat/stat-a04-discrete-random-variables.pdf)
 5. [Discrete Random Variables II](/pdf/classes/stat/stat-a05-discrete-random-variables-ii.pdf)
 6. [Normal Random Variables](/pdf/classes/stat/stat-a06-normal-random-variables.pdf)
+7. [Sampling Distributions](/pdf/classes/stat/stat-a07-sampling-distributions.pdf)
 
 
 ## Test Review
@@ -41,3 +42,7 @@ title: Statistical Methods
 
 * Misleading Graphs [(screen)](/pdf/classes/stat/stat-screen-slides-misleading-graphs.pdf) [(print)](/pdf/classes/stat/stat-print-slides-misleading-graphs.pdf)
 * Histogram of a Binomial Random Variable [(screen)](/pdf/classes/stat/stat-screen-slides-binomial-rv.pdf) [(print)](/pdf/classes/stat/stat-print-slides-binomial-rv.pdf)
+
+## Other Stuff
+
+* [Z-Score Table](/pdf/classes/stat/stat-z-score-table.pdf)
