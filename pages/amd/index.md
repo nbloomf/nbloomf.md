@@ -3,7 +3,7 @@ title: Arithmetic Made Difficult
 author: nbloomf
 ---
 
-I don't know exactly what this is yet.
+Under construction. I don't know exactly what this is yet.
 
 * First Steps
     * [Natural Numbers](/pages/amd/sec/natural-numbers.html)
