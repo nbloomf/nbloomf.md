@@ -3,7 +3,7 @@ CLASSDIR = $(HOME)/documents/classes
 STHDIR   = $(HOME)/code/st-haskell
 
 all: gather build move
-	echo "Successfully built nbloomf.github.io" | doppler lightgreen
+	@echo "Successfully built nbloomf.github.io" | doppler lightgreen
 
 site: FORCE
 	ghc --make -threaded site.lhs
