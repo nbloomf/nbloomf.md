@@ -63,6 +63,20 @@ As usual we begin with some pragmas and imports. The OverloadedStrings pragma al
 >       >>= loadAndApplyTemplate "templates/default.html" postCtx
 >       >>= relativizeUrls
 >
+>   match "pages/geo-notes.md" $ do
+>     route $ setExtension "html"
+>     compile $ pandocMathCompiler
+>       >>= loadAndApplyTemplate
+>             "templates/default.html" defaultContext
+>       >>= relativizeUrls
+>
+>   match "pages/alg-notes.md" $ do
+>     route $ setExtension "html"
+>     compile $ pandocMathCompiler
+>       >>= loadAndApplyTemplate
+>             "templates/default.html" defaultContext
+>       >>= relativizeUrls
+>
 >   match "pages/sth/tool/*" $ do
 >     route $ setExtension "html"
 >     compile $ pandocMathCompiler
