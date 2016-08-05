@@ -1,6 +1,12 @@
 ---
-title: Algebra Notes
+title: Algebra Party Time: Rings Edition
 author: nbloomf
 ---
 
-Here is the PDF of the notes for my Abstract Algebra class. I strongly discourage you from printing these out -- they will change often.
+Abstract students: here is a PDF version of the book we'll be using.
+
+I do not suggest printing it out as it will change from time to time.
+
+[Algebra Party Time: Rings Edition](/pdf/notes/rings.pdf)
+
+If you find an error, or if anything is unclear, please tell me!
