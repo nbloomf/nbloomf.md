@@ -28,9 +28,20 @@ gather: FORCE
 	@cp -r $(CLASSDIR)/calc/pdf/. pdf/classes/calc
 	@cp -r $(CLASSDIR)/stat/pdf/. pdf/classes/stat
 	@cp -r $(CLASSDIR)/prfs/pdf/. pdf/classes/prfs
+	@cp -r $(CLASSDIR)/ssem/pdf/. pdf/classes/ssem
 	
 	# Get latest versions of notebooks
 	@cp $(NOTEDIR)/rings.pdf pdf/notes
 	@cp $(NOTEDIR)/geo.pdf pdf/notes
+
+clean: FORCE
+	# Remove class PDFs
+	@rm pdf/classes/coal/*.pdf || true
+	@rm pdf/classes/ring/*.pdf || true
+	@rm pdf/classes/geom/*.pdf || true
+	@rm pdf/classes/calc/*.pdf || true
+	@rm pdf/classes/stat/*.pdf || true
+	@rm pdf/classes/prfs/*.pdf || true
+	@rm pdf/classes/ssem/*.pdf || true
 
 FORCE:
