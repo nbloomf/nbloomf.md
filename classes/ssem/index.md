@@ -2,4 +2,6 @@
 title: Senior Seminar
 ---
 
-Nothing here yet!
+### Boring Stuff
+
+* [Syllabus](/pdf/classes/ssem/ssem-syllabus.pdf)
