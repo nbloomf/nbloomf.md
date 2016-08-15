@@ -9,4 +9,4 @@ title: Abstract Algebra
 
 ### Slides
 
-* Day 1: The $\mathbb{Z}$ Axioms ([screen](ring-s-zz-axioms.pdf)) ([print](ring-print-s-zz-axioms.pdf))
+* Day 1: The $\mathbb{Z}$ Axioms ([screen](/pdf/classes/ring/ring-s-zz-axioms.pdf)) ([print](/pdf/classes/ring/ring-print-s-zz-axioms.pdf))
