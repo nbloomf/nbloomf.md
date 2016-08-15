@@ -5,6 +5,7 @@ title: College Geometry
 ### Boring Stuff
 
 * [Syllabus](/pdf/classes/geom/geom-syllabus.pdf)
+* ["Book"](/pdf/notes/geom.pdf)
 
 <!-- ### Constructions -->
 
