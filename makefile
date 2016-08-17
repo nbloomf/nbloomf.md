@@ -43,7 +43,7 @@ gather: FORCE
 	@cp -r $(TEXDIR)/pdf/. pdf/tex-examples
 	@cp -r $(TEXDIR)/tex/. raw/tex-examples/unix
 	@for f in $(wildcard raw/tex-examples/unix/*); do \
-	  cat $$f | tr '\n' '\r\n' > $${f/unix/win}; \
+	  cat $$f | awk '{ sub("$$", "\r"); print }' > $${f/unix/win}; \
 	done
 
 clean: FORCE
