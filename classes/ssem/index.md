@@ -10,5 +10,5 @@ title: Senior Seminar
 
 Using LaTeX on Windows:
 
-* [Download and install MikTeX](https://www.miktex.org/download)
-* [Download and install TeXMaker](https://www.xm1math.net/texmaker/download.html)
+* [Download and install MikTeX](http://www.miktex.org/download)
+* [Download and install TeXMaker](http://www.xm1math.net/texmaker/download.html)
