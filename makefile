@@ -41,7 +41,10 @@ gather: FORCE
 	
 	@echo '  tex examples' | doppler lightmagenta
 	@cp -r $(TEXDIR)/pdf/. pdf/tex-examples
-	@cp -r $(TEXDIR)/tex/. raw/tex-examples
+	@cp -r $(TEXDIR)/tex/. raw/tex-examples/unix
+	@for f in $(wildcard raw/tex-examples/unix/*); do \
+	  cat $$f | tr '\n' '\r\n' > $${f/unix/win}; \
+	done
 
 clean: FORCE
 	@echo 'delete generated files' | doppler lightgreen

@@ -15,4 +15,7 @@ title: Senior Seminar
 
 #### LaTeX Examples
 
-* A minimal latex document ([tex](/raw/tex-examples/hello.tex)) ([pdf](/pdf/tex-examples/hello.pdf))
+* **A minimal latex document** ([tex windows](/raw/tex-examples/win/hello.tex)) ([tex unix](/raw/tex-examples/unix/hello.tex)) ([pdf](/pdf/tex-examples/hello.pdf))
+
+    Not *the* simplest possible tex document, but pretty close.
+
