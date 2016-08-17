@@ -1,6 +1,7 @@
 SHELL    = /bin/bash
 CLASSDIR = $(HOME)/documents/classes
 NOTEDIR  = $(HOME)/documents/notebooks
+TEXDIR   = $(HOME)/documents/tex-examples
 STHDIR   = $(HOME)/code/st-haskell
 
 all: gather build move
@@ -37,6 +38,10 @@ gather: FORCE
 	
 	@echo '  software tools' | doppler lightmagenta
 	@cp -r $(STHDIR)/gen/doc/. pages/sth
+	
+	@echo '  tex examples' | doppler lightmagenta
+	@cp -r $(TEXDIR)/pdf/. pdf/tex-examples
+	@cp -r $(TEXDIR)/tex/. raw/tex-examples
 
 clean: FORCE
 	@echo 'delete generated files' | doppler lightgreen
