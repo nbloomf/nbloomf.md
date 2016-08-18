@@ -4,13 +4,13 @@ NOTEDIR  = $(HOME)/documents/notebooks
 TEXDIR   = $(HOME)/documents/tex-examples
 STHDIR   = $(HOME)/code/st-haskell
 
-all: gather build move
+all: move FORCE
 	@echo "built nbloomf.github.io" | doppler lightgreen
 
 site: FORCE
 	@ghc --make -threaded site.lhs
 
-build: site
+build: site gather FORCE
 	./site clean
 	./site build
 
@@ -18,7 +18,7 @@ watch: FORCE
 	@echo 'View at localhost:8000' | doppler lightcyan
 	./site watch
 
-move: FORCE
+move: build FORCE
 	@cp -r _site/. ../nbloomf.github.io/
 
 gather: FORCE
