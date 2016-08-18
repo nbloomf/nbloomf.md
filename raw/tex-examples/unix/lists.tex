@@ -1,0 +1,28 @@
+\documentclass{article}
+
+\begin{document}
+
+Some information is best presented in a list. But not all lists are the same; different kinds of lists need different formatting. Plain \LaTeX\ provides three kinds of lists, depending on the kind of information they hold.
+
+``Itemize'' is for sets of items with no particular order, like grocery lists. By default, the items in an itemize environment are printed with a bullet.
+\begin{itemize}
+\item This is a thing
+\item Here is another thing
+\item Want some more things? Have one!
+\end{itemize}
+
+``Enumerate'' is for ordered lists of items, like recipes or agendas. Take care to only use enumerate if the numeric labels make sense.
+\begin{enumerate}
+\item This is the first thing
+\item This is the second thing
+\item list all the things
+\end{enumerate}
+
+``Description'' is for lists of things that most naturally have textual labels, like glossaries. This is probably the least frequently used type of list.
+\begin{description}
+\item[foo] a meaningless term that stands for an arbitrary word
+\item[bar] like ``foo'', also meaningless; sometimes called a metasyntactic variable
+\item[baz] when you need a meaningless word, but foo and bar are already taken
+\end{description}
+
+\end{document}

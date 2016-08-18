@@ -40,6 +40,7 @@ gather: FORCE
 	@cp -r $(STHDIR)/gen/doc/. pages/sth
 	
 	@echo '  tex examples' | doppler lightmagenta
+	@cp -r $(TEXDIR)/md/.  pages/tex-examples
 	@cp -r $(TEXDIR)/pdf/. pdf/tex-examples
 	@cp -r $(TEXDIR)/tex/. raw/tex-examples/unix
 	@for f in $(wildcard raw/tex-examples/unix/*); do \
