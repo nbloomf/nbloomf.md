@@ -1,0 +1,15 @@
+\documentclass{article}
+
+\begin{document}
+
+Writing a \LaTeX\ document is very different from writing a Word document. We write in plain text, and most people prefer to write using a monospaced font. So the physical act of typing \LaTeX\ looks kind of like programming. And like programming, \LaTeX\ requires us to be very careful about how we write. If we make a mistake, \LaTeX\ will throw an error.
+
+A \LaTeX\ document is a plain text file with the extension ``tex''. Every document must begin with a documentclass line; \LaTeX\ uses this line to load a set of formatting settings that automatically handle things like page numbers and margins. The basic built-in document classes are ``article'', ``book'', ``report'', and... some others that I can't remember without looking them up. Most of the time ``article'' is good enough.
+
+Your document itself -- the text you want to show up on the page -- goes between the ``begin document'' and ``end document'' lines. The space between documentclass and begin document is called the \textbf{preamble}. We don't need to worry about what goes there for now.
+
+Notice that the documentclass, begin document, and end document lines begin with a backslash. This is a special character that \TeX\ uses to recognize \emph{commands}. Commands are the special instructions we use to mark up our document so that \LaTeX\ will typeset it properly. So do not use the backslash character in your text unless you are typing a command. If you want a literal backslash character, say \textbackslash instead.
+
+There are a few other special characters to watch out for: the dollar sign is used for writing math (more on that later) and the percent symbol is used for writing comments in your \LaTeX\ source. If you want a literal dollar sign, say \$, and if you want a literal percent symbol, say \%.
+
+\end{document}
