@@ -27,7 +27,7 @@ This is a list of example LaTeX documents which demonstrate how to do some speci
 
 * **The parts of a tex file** ([tex windows](/raw/tex-examples/win/format.tex)) ([tex unix](/raw/tex-examples/unix/format.tex)) ([pdf](/pdf/tex-examples/format.pdf))
 
-    Bold, italic, underlined text, as well as diacritics.
+    A bit about what "documentclass" and "begin document" mean.
 
 * **Writing mathematics** ([tex windows](/raw/tex-examples/win/math.tex)) ([tex unix](/raw/tex-examples/unix/math.tex)) ([pdf](/pdf/tex-examples/math.pdf))
 
