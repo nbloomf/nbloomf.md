@@ -9,7 +9,7 @@ title: College Algebra
 ### Practice Problems
 
 * Test 1
-    * 1.1 13-26, 37-48 (solve only), 63-80 ([scan](/pdf/scans/classes/coal/dugopolski/1-1-ex.pdf))
+    * 1.1 #13-26, 37-48 (solve only), 63-80 ([scan](/pdf/scans/classes/coal/dugopolski/1-1-ex.pdf))
 <!--     * 1.3 19-24, 33-36, 41-46 -->
 <!--     * 1.5 5-60 -->
 <!--     * 1.5 1-26, 35-64 -->
