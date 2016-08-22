@@ -1,0 +1,24 @@
+\documentclass{article}
+
+\begin{document}
+
+\begin{center}
+\Large Packages
+\end{center}
+
+The behavior of \LaTeX\ is controlled by \emph{commands}. Some of these commands, like \texttt{emph} and \texttt{textbf}, are built in to \LaTeX. Other commands are provided by \emph{packages}. These are smaller bits of code written by other people that define useful new commands. Here is a list of especially useful packages with short descriptions of what they do.
+
+\begin{description}
+\item[graphicx] Allows us to include external graphic files in a document.
+\item[amsmath] Defines several new math mode commands, such as for typesetting matrices.
+\item[amssymb] Defines several new math mode symbols.
+\item[amsthm] Defines several new commands for typesetting theorem-like text.
+\item[hyperref] Makes cross references into hyperlinks in a PDF, and allows us to create hyperlinks to pages on the web.
+\item[tikz] A very large and powerful package for defining graphics ``inline''.
+\end{description}
+
+To make a package's commands available in our document we have to say \texttt{usepackage} in the preamble. For instance, to use the \texttt{graphicx} package we'd put \verb|\usepackage{graphicx}| in the preamble, typically on the line right after \verb|\documentclass|.
+
+There are hundreds (thousands?) of \LaTeX\ packages that do all sorts of things. They are published online in CTAN -- the Comprehensive Tex Archive Network. If you use \TeX{}Maker, then these packages will be automatically installed for you on the fly. Some packages are more useful than others, some are superseded by others, and some cannot be used together. (Real talk: the package situation for \LaTeX\ is kind of a mess, but if you stick to the most widely used packages you'll be OK.)
+
+\end{document}

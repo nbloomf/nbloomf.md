@@ -36,3 +36,11 @@ This is a list of example LaTeX documents which demonstrate how to do some speci
 * **Lists** ([tex windows](/raw/tex-examples/win/lists.tex)) ([tex unix](/raw/tex-examples/unix/lists.tex)) ([pdf](/pdf/tex-examples/lists.pdf))
 
     For when you have a bunch of things and want to write them.
+
+* **Graphics** ([tex windows](/raw/tex-examples/win/graphics.tex)) ([tex unix](/raw/tex-examples/unix/graphics.tex)) ([pdf](/pdf/tex-examples/graphics.pdf))
+
+    Including pictures in your documents.
+
+* **Packages** ([tex windows](/raw/tex-examples/win/packages.tex)) ([tex unix](/raw/tex-examples/unix/packages.tex)) ([pdf](/pdf/tex-examples/packages.pdf))
+
+    Going beyond plain LaTeX.

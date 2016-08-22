@@ -1,0 +1,23 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{tikz}
+
+\begin{document}
+
+\begin{center}
+\Large Graphics
+\end{center}
+
+There are two basic ways to include graphics in a \LaTeX\ document: by \emph{importing} an external graphic file such as a PNG or GIF, and by giving an \emph{inline} description of your image. Each choice is appropriate for different situations.
+
+To import a graphic file we must first use the \texttt{graphicx} package. Then the \texttt{includegraphics} command will (surprise!) include a graphic file. For example, here is a png file I cribbed from Wikipedia.
+
+\begin{center}
+\includegraphics[scale=0.3]{dice.png}
+\end{center}
+
+You can import images in several different formats. The best is EPS, a vector image format that plays especially well with PDF.
+
+Importing is appropriate for complex graphics created with tools like Photoshop, GIMP, Inkscape, and so on. For line drawings -- especially common in math -- there is another option; we can define graphics inline using a special graphic description language. Several are available, but probably the most popular is called \emph{TikZ}. You will probably not need to learn much TikZ for a while; but I mention it here so you're aware that it exists.
+
+\end{document}
