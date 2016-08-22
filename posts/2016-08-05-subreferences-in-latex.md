@@ -34,7 +34,6 @@ The problem is how to implement cross references like this with LaTeX simply and
 We can label the theorem with ``thm:lorem`` and then the parts with ``thm:lorem:foo``, ``thm:lorem:bar``, and ``thm:lorem:baz``. Now ``\ref{thm:lorem}`` refers to the theorem counter, while ``\ref{thm:lorem:bar}`` refers to the enumerate counter. We can refer to a specific part with ``\ref{thm:lorem}\ref{thm:lorem:bar}``. This is redundant, but if we're disciplined with qualifying labels we can use an additional command like
 
 ```latex
-% Subreference
 \newcommand{\sref}[2]{\ref{#1}\ref{#1:#2}}
 ```
 
