@@ -1,0 +1,35 @@
+\documentclass{article}
+
+\begin{document}
+
+\begin{center}
+\Large Document Structure
+\end{center}
+
+Long documents are easier to use if they are divided into subparts like chapters and sections. \LaTeX\ provides commands for doing just this. Exactly what the subparts of a document are depends on the kind of document -- that is, the kind of document specified in the \verb|\documentclass| command. For instance, the \texttt{article} class allows for sections and sub-sections. These are typeset with the \verb|\section{}| and \verb|\subsection{}| commands; the argument to these commands (in the curly braces) is the title of the section or subsection.
+
+\section{Title of the first section}
+
+\LaTeX\ automatically handles spacing between sections. Note that the first paragraph in a section is not indented (by default). This is because the purpose of indentation is to visually denote the beginning of a new paragraph -- and this purpose is served by the section title itself.
+
+\subsection{Title of first subsection of first section}
+
+\subsection{Title of second subsection of first section}
+
+\section{Title of the second section}
+
+\subsection{Title of first subsection of second section}
+
+\subsection{Title of second subsection of second section}
+
+Other document classes may have different sectioning levels. The \texttt{book} class, for example, also has \texttt{chapter}s and \texttt{part}s.
+
+\section{Tables of Contents}
+
+We could, with not too much difficulty, make our own custom section and subsection titles. But if we structure our document using the built in sectioning commands, \LaTeX\ can build a table of contents for us, using the \verb|\tableofcontents| command. In a real document the table of contents goes at the beginning, after the title and before the actual content.
+
+\textbf{NOTE:} in order for the table of contents to be visible, we have to run \LaTeX\ \emph{twice}. This is because the table of contents needs to know what page each section starts on, but at the time the table is being built \LaTeX\ does not have this information. Instead, as the document is being processed, it saves the information about page numbers (and other things) in a \texttt{toc} file. You may notice this file in the directory where your tex file is stored. On the first pass, \LaTeX\ stores page numbers in the toc file, and on second pass uses these numbers to build the table of contents.
+
+\tableofcontents
+
+\end{document}

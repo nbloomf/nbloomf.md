@@ -1,0 +1,32 @@
+\documentclass{article}
+\usepackage{hyperref}
+
+\begin{document}
+
+\begin{center}
+\Large Counters, Labels, and Cross References
+\end{center}
+
+One of the most basic typesetting tasks that \LaTeX\ handles behind the scenes is \textbf{counting}. A document consists of lots of different kinds of logical structure -- pages, sections, list items, figures -- and each one has a \emph{counter}. These counters are used to allow \textbf{cross referencing}. When making simple documents you will not need to manipulate the counters themselves; just be aware that they are there. In practice we can make cross references using three commands: \verb|\label{}|, which defines a new ``anchor'' in the text (not unlike an anchor in HTML), \verb|\ref{}|, which refers back to the value of the \emph{counter} nearest to a label, and \verb|\pageref{}|, which refers back to the number of the \emph{page} nearest to a label.
+
+\section{Section A}\label{sec:A}
+
+Here is an example. This document has two sections, called A and B. Each section command is followed by a \texttt{label} command, which (roughly) captures the value of the nearest counter. We can refer back to a label with the \texttt{ref} command: for example, this paragraph is in Section \ref{sec:A}. Later, in Section \ref{sec:B}, we'll see some additional information. We can also see that Section \ref{sec:A} is on page \pageref{sec:A}.
+
+You may not be convinced that labels and references are worthwhile -- you can get the same effect by just putting actual numbers in your text, and that would work. But what happens if you want to rearrange your document? (It happens more often than you'd think!) If we maintained our references by hand, this would be a nightmare. But by having the computer keep track of them, it is literally an afterthought -- just bookkeeping details.
+
+\section{Section B}\label{sec:B}
+
+The argument of a label can be any string of text (not including the special characters) as long as the labels are all unique. But if we're not careful, labels can quickly become confusing. I recommend following some label discipline to keep cross references simple.
+
+\begin{itemize}
+\item Use only letters, numbers, and \verb|:-.| in your label text. Do not use spaces.
+\item Prefix your labels with the ``kind'' of thing being labeled. For instance, my section labels all begin with \verb|sec:|, my figure labels all begin with \verb|fig:|, and so on. This does two things. First, it makes it easier to remember exactly what a ref is referring to when you go back and edit your tex file months later. Second, it helps to prevent polluting the label namespace: it isn't uncommon for an important concept to require several different labels which should have the same name -- maybe my text has a section, a theorem, and a figure all about the Division Algorithm. By prefixing my labels, I can refer to these as \texttt{sec:div-alg}, \texttt{thm:div-alg}, and \texttt{fig:div-alg}.
+\item Make your labels as content-specific as possible. For instance, \texttt{main-theorem} is a bad label text. \texttt{thm:lhopitals-rule} is good. Remember that the purpose is to capture the logical structure of your document.
+\end{itemize}
+
+As with tables of contents, in order for cross references to typeset properly we have to run \LaTeX\ on our document twice. The first time, it calculates the values of any labels, and the second time it inserts the values of these labels at all the refs and pagerefs.
+
+The \texttt{hyperref} package can automatically turn all of your cross references into PDF links, which act like hyperlinks on a web page. This document uses hyperref with its default settings. (Of course these don't do anything if we print the PDF.)
+
+\end{document}

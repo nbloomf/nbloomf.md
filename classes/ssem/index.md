@@ -37,10 +37,22 @@ This is a list of example LaTeX documents which demonstrate how to do some speci
 
     For when you have a bunch of things and want to write them.
 
-* **Graphics** ([tex windows](/raw/tex-examples/win/graphics.tex)) ([tex unix](/raw/tex-examples/unix/graphics.tex)) ([pdf](/pdf/tex-examples/graphics.pdf))
+* **Graphics** ([tex windows](/raw/tex-examples/win/graphics.tex)) ([tex unix](/raw/tex-examples/unix/graphics.tex)) ([pdf](/pdf/tex-examples/graphics.pdf)) ([image](/images/tex-examples/dice.png))
 
-    Including pictures in your documents.
+    Including pictures in your documents. To compile this example, you will need to put the image file ``dice.png`` inside a folder called ``gfx`` next to your tex file.
 
 * **Packages** ([tex windows](/raw/tex-examples/win/packages.tex)) ([tex unix](/raw/tex-examples/unix/packages.tex)) ([pdf](/pdf/tex-examples/packages.pdf))
 
     Going beyond plain LaTeX.
+
+* **Document Structure** ([tex windows](/raw/tex-examples/win/structure.tex)) ([tex unix](/raw/tex-examples/unix/structure.tex)) ([pdf](/pdf/tex-examples/structure.pdf))
+
+    Breaking up a large document into subparts.
+
+* **Files** ([tex windows](/raw/tex-examples/win/files.tex)) ([tex unix](/raw/tex-examples/unix/files.tex)) ([pdf](/pdf/tex-examples/files.pdf))
+
+    The files that make up a LaTeX project.
+
+* **Counters, Labels, and Cross References** ([tex windows](/raw/tex-examples/win/counters.tex)) ([tex unix](/raw/tex-examples/unix/counters.tex)) ([pdf](/pdf/tex-examples/counters.pdf))
+
+    Linking from one part of a document to another.

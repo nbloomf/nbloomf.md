@@ -1,0 +1,13 @@
+\documentclass{article}
+
+\begin{document}
+
+\begin{center}
+\Large Files
+\end{center}
+
+It is highly recommended that each of your \LaTeX\ documents be kept in its own dedicated folder on your computer, which contains everything needed to compile the document (tex files and graphics). This is for several reasons: first, \LaTeX\ generates several extra files which keep track of (among other things) the table of contents (\texttt{toc}), cross references (\texttt{aux}), and bibliographies (\texttt{bib} and \texttt{blg}). Putting each project in its own folder helps to keep these extra files from stepping on each other. Second, it is easier to back up and share a project if it lives in its own folder.
+
+Third, large documents are typically easier to edit if they are broken up into multiple source files. This can be done using the \verb|\input{}| command. A realistic document may have a separate source file for each section, for example. Splitting up a file into logical sections like this makes it easier to quickly rearrange sections. We don't have to move entire chunks of the document around -- just move the \verb|\input{}| command. You can also keep formatting tweaks and custom commands in a separate file.
+
+\end{document}

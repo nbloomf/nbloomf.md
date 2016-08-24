@@ -7,7 +7,7 @@ STHDIR   = $(HOME)/code/st-haskell
 all: move FORCE
 	@echo "built nbloomf.github.io" | doppler lightgreen
 
-site: FORCE
+site: site.lhs
 	@ghc --make -threaded site.lhs
 
 build: site gather FORCE
@@ -42,6 +42,7 @@ gather: FORCE
 	@echo '  tex examples' | doppler lightmagenta
 	@cp -r $(TEXDIR)/md/.  pages/tex-examples
 	@cp -r $(TEXDIR)/pdf/. pdf/tex-examples
+	@cp -r $(TEXDIR)/gfx/. images/tex-examples
 	@cp -r $(TEXDIR)/tex/. raw/tex-examples/unix
 	@for f in $(wildcard raw/tex-examples/unix/*); do \
 	  cat $$f | awk '{ sub("$$", "\r"); print }' > $${f/unix/win}; \
