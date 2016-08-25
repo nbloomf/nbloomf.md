@@ -62,4 +62,7 @@ clean: FORCE
 	@echo '  software tools docs' | doppler lightmagenta
 	@(rm -r pages/sth/* || true) 2> /dev/null
 
+check: FORCE
+	@wget -r -nv --spider https://nbloomf.github.io
+
 FORCE:
