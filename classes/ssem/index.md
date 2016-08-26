@@ -56,3 +56,7 @@ This is a list of example LaTeX documents which demonstrate how to do some speci
 * **Counters, Labels, and Cross References** ([tex windows](/raw/tex-examples/win/counters.tex)) ([tex unix](/raw/tex-examples/unix/counters.tex)) ([pdf](/pdf/tex-examples/counters.pdf))
 
     Linking from one part of a document to another.
+
+* **Bibliographies** ([tex windows](/raw/tex-examples/win/citations.tex)) ([tex unix](/raw/tex-examples/unix/citations.tex)) ([pdf](/pdf/tex-examples/citations.pdf)) ([bib windows](/raw/tex-examples/win/citations.bib)) ([bib unix](/raw/tex-examples/unix/citations.bib))
+
+    Citing other works. For this example you will also need the ``bib`` file.
