@@ -13,7 +13,7 @@ title: Senior Seminar
 * [LaTeX Wikibook](https://en.wikibooks.org/wiki/LaTeX): Really great place to find quick answers.
 * [TeX StackExchange](http://tex.stackexchange.com/): I wouldn't start searching here, but if you Google search for ``latex blah`` where ``blah`` is some problem you have, typically links here have good info.
 
-#### Using LaTeX on Windows:
+#### Installing LaTeX on Windows
 
 * [Download and install MikTeX](http://www.miktex.org/download)
 * [Download and install TeXMaker](http://www.xm1math.net/texmaker/download.html)

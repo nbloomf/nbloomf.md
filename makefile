@@ -64,5 +64,6 @@ clean: FORCE
 
 check: FORCE
 	@wget -r -nv --spider https://nbloomf.github.io
+	@rm -r nbloomf.github.io
 
 FORCE:
