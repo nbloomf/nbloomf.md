@@ -1,0 +1,68 @@
+\documentclass{beamer}
+
+\usetheme{Warsaw}
+\setbeamercovered{transparent}
+
+\title[]{Slideshows with \LaTeX}
+\author[]{Nathan Bloomfield \\ \footnotesize{NSU}}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Introduction}
+
+\LaTeX\ is not just for writing papers -- it can also produce slideshows. \vspace{1cm}
+
+\pause
+
+Use documentclass \texttt{beamer} instead of \texttt{article}. \vspace{1cm}
+
+\pause
+
+Yay math! \[ ax^2 + bx + c = 0 \]
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{How to do it}
+
+\begin{itemize}
+\item Slides go inside a \texttt{frame} environment. \pause
+\item The \texttt{pause} command inserts a beat. \pause
+\item \alert{\texttt{alert}} uses color \pause
+\item \only<4-4>{\texttt{only} makes text show up only on certain slides.} \pause
+\item \uncover<5->{\texttt{uncover} makes text greyed out.}
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{How to do it}
+The \texttt{setbeamercovered transparent} command in the prelude makes ``future'' slide text greyed out. \vspace{1cm}
+
+\pause
+
+Also check out the navigation bar
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Slideshow Tips}
+\begin{itemize}
+\item Lots of whitespace \vspace{0.5cm}
+\item Not too much stuff on a slide \vspace{0.5cm}
+\item Short phrases \vspace{0.5cm}
+\item Don't read your slides
+\end{itemize}
+\end{frame}
+
+\end{document}

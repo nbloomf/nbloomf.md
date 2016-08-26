@@ -65,3 +65,7 @@ This is a list of example LaTeX documents which demonstrate how to do some speci
 * **Bibliographies** ([tex windows](/raw/tex-examples/win/citations.tex)) ([tex unix](/raw/tex-examples/unix/citations.tex)) ([pdf](/pdf/tex-examples/citations.pdf)) ([bib windows](/raw/tex-examples/win/citations.bib)) ([bib unix](/raw/tex-examples/unix/citations.bib))
 
     Citing other works. For this example you will also need the ``bib`` file.
+
+* **Slideshows** ([tex windows](/raw/tex-examples/win/slides.tex)) ([tex unix](/raw/tex-examples/unix/slides.tex)) ([pdf](/pdf/tex-examples/slides.pdf))
+
+    Slick presentations with the ``beamer`` class.
