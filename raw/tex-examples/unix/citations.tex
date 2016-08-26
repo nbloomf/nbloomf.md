@@ -2,7 +2,24 @@
 
 \begin{document}
 
-\cite{fakename03} \cite{lasname05}
+\begin{center}
+\Large Bibliographies
+\end{center}
+
+Academic writing requires many features that other types of writing typically do not, such as multilevel document structure and cross references. But the hallmark of academic writing is its reliance on \textbf{citations}, which act like one-way hyperlinks connecting books and papers together. We have a few options for including bibliographies and citations in \LaTeX, depending on how sophisticated your needs are -- everything from one-off bibliographies with just a few entries to enormous bibliographies with hundreds of entries in multi volume book series. The vast majority of documents can get away with a simple bibliography database, described here.
+
+To include a bibliography in your document, you will need to keep your cited items in a \textbf{bibliography database}. Don't worry -- this is just a plain text file with extension \verb|bib| containing information about the books you wish to cite. See the file \verb|citations.bib| for an example. Each entry in the database has the usual citation info (like the author's name, the title, the year) as well as a \emph{key}. The key is used to refer to bibliography items in the main text. You can make the key anything you want, but I recommend sticking to a scheme like \texttt{authorNN} where NN is the last two digits of the publication year. To include a citation, we use the \verb|\cite{key}| command. \cite{fakename03}
+
+Note that \LaTeX\ handles all the details of formatting both your citations and your bibliography -- no more fiddling with APA or MLA or any of that mess. I repeat: \textbf{In real life, the only people who need to worry about the details of citation style are journal and book editors.} \cite{lasname05} With \LaTeX, we just provide the raw data and the computer handles the details using a bibliography style file.
+
+Citations are much like cross references in several ways. They are automatically numbered, and the exact order of the citations may change as new sources are added to the database. For this reason, we have to run \LaTeX\ a few times to get the bibliography to typeset correctly. The \texttt{Quick Build} command in \TeX{}Maker probably(?) handles this automatically, but just in case it does not, anytime you update your bib file you will need to run \LaTeX\ commands in the following order.
+\begin{enumerate}
+\item \LaTeX
+\item Bib\TeX
+\item \LaTeX
+\item \LaTeX
+\end{enumerate}
+All four passes are required to ensure that the bibliography and all citations are labeled correctly. If not, you may see ?s in your text.
 
 \bibliographystyle{plain}
 \bibliography{tex/citations}
