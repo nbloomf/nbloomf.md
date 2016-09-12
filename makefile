@@ -35,6 +35,7 @@ gather: FORCE
 	@echo '  notebooks' | doppler lightmagenta
 	@cp $(NOTEDIR)/rings.pdf pdf/notes
 	@cp $(NOTEDIR)/geo.pdf pdf/notes
+	@cp $(NOTEDIR)/groups.pdf pdf/notes
 	
 	@echo '  software tools' | doppler lightmagenta
 	@cp -r $(STHDIR)/gen/doc/. pages/sth
