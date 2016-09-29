@@ -17,7 +17,7 @@ title: College Algebra
 * Test 2
     * 1.7 #15-26, 45-68, 59-76
     * 2.1 #19-24, 67-78
-<!--     * 2.2 7-46, 61-72 -->
+    * 2.2 #7-46, 61-72
 <!--     * 2.3 35-44, 61-80 -->
 <!-- * Test 3 -->
 <!--     * 3.2 41-80 -->
@@ -29,8 +29,8 @@ title: College Algebra
     * [Some Geometry](/pdf/classes/coal/coal-a02-some-geometry.pdf) ([solutions](/pdf/classes/coal/coal-soln-a02-some-geometry.pdf))
 * Test 2
     * [Compound Equations](/pdf/classes/coal/coal-a03-compound-equations.pdf) ([solutions](/pdf/classes/coal/coal-soln-a03-compound-equations.pdf))
+    * [Functions](/pdf/classes/coal/coal-a04-functions.pdf) ([solutions](/pdf/classes/coal/coal-soln-a04-functions.pdf))
 
-<!-- 4. [Functions](/pdf/classes/coal/coal-a04-functions.pdf) ([solutions](/pdf/classes/coal/coal-soln-a04-functions.pdf)) -->
 <!-- 5. [Transformations](/pdf/classes/coal/coal-a05-transformations.pdf) -->
 <!-- 6. [Polynomials](/pdf/classes/coal/coal-a06-polynomials.pdf) -->
 <!-- 7. [Polynomials II](/pdf/classes/coal/coal-a07-polynomials-ii.pdf) -->
