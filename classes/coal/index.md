@@ -45,7 +45,7 @@ title: College Algebra
 <!-- 4. [Test 4](/pdf/classes/coal/coal-r4-exponentials-and-logs.pdf) -->
 
 
-<!-- ### Toys -->
+### Toys
 
-<!-- * [Transformations (live demo)](/classes/coal/transformations-live-demo.html): Play with transformations of equations. -->
-<!-- * [Symmetry (live demo)](/classes/coal/symmetry-live-demo.html): Look for symmetries. -->
+   * [Transformations (live demo)](/classes/coal/transformations-live-demo.html): Play with transformations of equations.
+   * [Symmetry (live demo)](/classes/coal/symmetry-live-demo.html): Look for symmetries.
