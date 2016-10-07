@@ -10,8 +10,4 @@ title: College Geometry
 ### Homework
 
 * [Basic Constructions](/pdf/classes/geom/geom-a1-basic-constructions.pdf)
-
-<!-- ### Constructions -->
-
-<!-- * [Segment Copy](/pdf/classes/geom/sketch/segment-copy-construction.gsp) -->
-<!-- * [Angle Copy](/pdf/classes/geom/sketch/angle-copy-construction.gsp) -->
+* [Incircles and Excircles](/pdf/classes/geom/geom-a2-incircles-and-excircles.pdf)
