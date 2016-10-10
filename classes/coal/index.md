@@ -15,10 +15,12 @@ title: College Algebra
     * 1.5 #5--60
     * 1.6 #1--26, 35--64
 * Test 2
-    * 1.7 #15-26, 45-68, 59-76
-    * 2.1 #19-24, 67-78
-    * 2.2 #7-46, 61-72
-    * 2.3 35-44, 61-80
+    * 1.7 #15--26, 45--68, 59--76
+    * 2.1 #19--24, 67--78
+    * 2.2 #7--46, 61--72
+    * 2.3 #35--44, 61--80
+    * 2.4 #7--18, 41--54, 55--66 (find equation only)
+    * 2.5 #19--28, 51, 52
 <!-- * Test 3 -->
 <!--     * 3.2 41-80 -->
 
@@ -38,8 +40,8 @@ title: College Algebra
 
 ### Test Reviews
 
-1. [Test 1](/pdf/classes/coal/coal-r1-equations-and-geometry.pdf) ([solutions](/pdf/classes/coal/coal-soln-r1-equations-and-geometry.pdf))
-<!-- 2. [Test 2](/pdf/classes/coal/coal-r2-functions.pdf) -->
+* [Test 1](/pdf/classes/coal/coal-r1-equations-and-geometry.pdf) ([solutions](/pdf/classes/coal/coal-soln-r1-equations-and-geometry.pdf))
+* [Test 2](/pdf/classes/coal/coal-r2-functions.pdf)
 <!-- 3. [Test 3](/pdf/classes/coal/coal-r3-polynomials.pdf) -->
 <!-- 4. [Test 4](/pdf/classes/coal/coal-r4-exponentials-and-logs.pdf) -->
 
