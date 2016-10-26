@@ -21,7 +21,8 @@ title: College Algebra
     * 2.3 #35--44, 61--80
     * 2.4 #7--18, 41--54, 55--66 (find equation only)
     * 2.5 #19--28, 51, 52
-<!-- * Test 3 -->
+ * Test 3
+    * 3.4 #19--22, 33--46 (long term behavior only)
 <!--     * 3.2 41-80 -->
 
 ### Activities
@@ -33,7 +34,7 @@ title: College Algebra
     * [Compound Equations](/pdf/classes/coal/coal-a03-compound-equations.pdf) ([solutions](/pdf/classes/coal/coal-soln-a03-compound-equations.pdf))
     * [Functions](/pdf/classes/coal/coal-a04-functions.pdf) ([solutions](/pdf/classes/coal/coal-soln-a04-functions.pdf))
     * [Transformations](/pdf/classes/coal/coal-a05-transformations.pdf)
-<!-- 6. [Polynomials](/pdf/classes/coal/coal-a06-polynomials.pdf) -->
+    * [Polynomials](/pdf/classes/coal/coal-a06-polynomials.pdf)
 <!-- 7. [Polynomials II](/pdf/classes/coal/coal-a07-polynomials-ii.pdf) -->
 <!-- 8. [Exponentials and Logs](/pdf/classes/coal/coal-a08-exponentials-and-logs.pdf) -->
 
