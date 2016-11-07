@@ -23,7 +23,8 @@ title: College Algebra
     * 2.5 #19--28, 51, 52
  * Test 3
     * 3.4 #19--22, 33--46 (long term behavior only)
-    * 3.2 41-80 -->
+    * 3.2 #41--80
+    * 3.3 #25--44, 63--78 (find all roots)
 
 ### Activities
 
