@@ -13,3 +13,5 @@ title: College Geometry
 * [Incircles and Excircles](/pdf/classes/geom/geom-a2-incircles-and-excircles.pdf)
 * [Circumcircles and Tangents](/pdf/classes/geom/geom-a3-circumcircles-and-tangents.pdf)
 * [Orthocenter and Centroid](/pdf/classes/geom/geom-a4-orthocenter-and-centroid.pdf)
+* [Euler Line and 9-Point Circle](/pdf/classes/geom/geom-a5-euler-line-and-9-point-circle.pdf)
+
