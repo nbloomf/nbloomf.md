@@ -38,6 +38,7 @@ title: College Algebra
 * Test 3
     * [Polynomials](/pdf/classes/coal/coal-a06-polynomials.pdf)
     * [Polynomials II](/pdf/classes/coal/coal-a07-polynomials-ii.pdf)
+    * [Polynomials III](/pdf/classes/coal/coal-a08-polynomials-iii.pdf)
 <!-- 8. [Exponentials and Logs](/pdf/classes/coal/coal-a08-exponentials-and-logs.pdf) -->
 
 
