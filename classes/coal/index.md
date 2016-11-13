@@ -46,7 +46,7 @@ title: College Algebra
 
 * [Test 1](/pdf/classes/coal/coal-r1-equations-and-geometry.pdf) ([solutions](/pdf/classes/coal/coal-soln-r1-equations-and-geometry.pdf))
 * [Test 2](/pdf/classes/coal/coal-r2-functions.pdf)
-<!-- 3. [Test 3](/pdf/classes/coal/coal-r3-polynomials.pdf) -->
+* [Test 3](/pdf/classes/coal/coal-r3-polynomials.pdf)
 <!-- 4. [Test 4](/pdf/classes/coal/coal-r4-exponentials-and-logs.pdf) -->
 
 
