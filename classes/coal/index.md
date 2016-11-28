@@ -25,6 +25,10 @@ title: College Algebra
     * 3.4 #19--22, 33--46 (long term behavior only)
     * 3.2 #41--80
     * 3.3 #25--44, 63--78 (find all roots)
+ * Test 4
+    * 4.1 #9--20, 63--80
+    * 4.2 #59--78, 89--106
+    * 4.3 #53--76
 
 ### Activities
 
@@ -39,7 +43,7 @@ title: College Algebra
     * [Polynomials](/pdf/classes/coal/coal-a06-polynomials.pdf)
     * [Polynomials II](/pdf/classes/coal/coal-a07-polynomials-ii.pdf)
     * [Polynomials III](/pdf/classes/coal/coal-a08-polynomials-iii.pdf)
-<!-- 8. [Exponentials and Logs](/pdf/classes/coal/coal-a08-exponentials-and-logs.pdf) -->
+    * [Exponentials and Logs](/pdf/classes/coal/coal-a09-exponentials-and-logs.pdf)
 
 
 ### Test Reviews
