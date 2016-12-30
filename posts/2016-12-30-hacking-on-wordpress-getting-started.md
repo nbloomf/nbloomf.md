@@ -99,7 +99,7 @@ I ran the unit tests from inside a VVV virtual machine. The tool that runs the t
 vagrant@vvv:/vagrant/www/wordpress-develop/src/wp-content/plugins/jetpack
 ```
 
-*in the virtual machine* and ran the command 
+*in the virtual machine* and said
 
 ```bash
 phpunit tests/php/$PATH_TO_TEST_MODULE
@@ -115,12 +115,31 @@ The easiest way to write new unit tests is to copy and edit an existing test. Ch
 If your plugin needs to send email, you can test this without actually sending mail by using mailcatcher (comes with VVV) or [MailHog](https://github.com/Chassis/MailHog) (Chassis extension).
 
 
-## wp-cli
+## WordPress from the Command Line
 
 This is less immediately useful, but still handy: you can interact with a WP install from the command line with [wp-cli](http://wp-cli.org/). This comes with VVV. To use it, first SSH to the virtual machine and then invoke ``wp`` from within ``/srv/www/wordpress-default`` (or whatever install you're using).
 
-## FakerPress
+Most interactions with the WP interface can be scripted with ``wp-cli``.
 
-Depending on what kind of plugin you're building, you may need to have a blog that's actually populated with posts and comments. One easy way to generate a dummy blog is with the FakerPress plugin. This can be installed and used from within WP; it's pretty straightforward. But FakerPress was also super slow on my machine.
+
+## Generating a Fake Blog
+
+Depending on what kind of plugin you're building, you may need to have a blog that's actually populated with posts and comments. One easy way to generate a dummy blog is with the [FakerPress](https://wordpress.org/plugins/fakerpress/) plugin. This can be installed and used from within WP; it's pretty straightforward. But FakerPress was also super slow on my machine.
 
 Another option for getting dummy blog data is to generate a [WXR](https://devtidbits.com/2011/03/16/the-wordpress-extended-rss-wxr-exportimport-xml-document-format-decoded-and-explained/) file and import it, either through the WP interface or on the command line with ``wp-cli``. I was able to do this successfully (I even made a [little tool](https://github.com/nbloomf/prattle) for generating WXR archives) but it is less straightforward because as far as I can tell the only documentation for the WXR format is "whatever WordPress exports".
+
+
+## Measuring Performance
+
+There's a few ways to measure WordPress' performance.
+
+1. VVV comes with [several tools](https://github.com/Varying-Vagrant-Vagrants/VVV/wiki/Code-Debugging). xDebug and Cachegrind are nice; with these enabled you can append ``?XDEBUG_PROFILE`` to any query to get a nice profile log with webgrind.
+2. The [Query Monitor](https://wordpress.org/plugins/query-monitor/) plugin is nice for measuring database performance.
+3. As a last resort you can measure the end-to-end performance of a site using ``curl``. For example, here's a pipeline that gets the average time-to-first-byte of 200 requests to ``$URL``. (When editing locally this time is dominated by the site itself.)
+
+    ```bash
+    for i in {1..200}; do \
+      curl -s -w "%{time_starttransfer}\n" -o /dev/null $URL; \
+    done \
+      | awk '{ sum += $1; n++ } END { if (n > 0) print "average of " n " requests: " sum / n; }'
+    ```
