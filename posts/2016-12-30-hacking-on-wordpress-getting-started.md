@@ -86,7 +86,7 @@ Supposedly this can integrate with IDEs, but I don't know anything about that.
 
 ## Databases
 
-There's this great tool, MySQL Workbench, that we can use to browse the database of our WordPress installation in Chassis. The [documentation](https://github.com/Chassis/Chassis/wiki/Connecting-to-MySQL) is pretty straightforward. This is **really useful** if your plugin messes with the database -- you can run queries, see the results, delete tables, and probably more stuff too.
+There's this great tool, MySQL Workbench, that we can install to the local machine and use to browse the database of our WordPress installation in Chassis. The [documentation](https://github.com/Chassis/Chassis/wiki/Connecting-to-MySQL) is pretty straightforward. This is **really useful** if your plugin messes with the database -- you can run queries, see the results, delete tables, and probably more stuff too.
 
 
 ## Unit Testing
@@ -143,3 +143,8 @@ There's a few ways to measure WordPress' performance.
     done \
       | awk '{ sum += $1; n++ } END { if (n > 0) print "average of " n " requests: " sum / n; }'
     ```
+
+
+## The End
+
+That's about it! For more specific info use google and check with project-specific docs. But hopefully this post can help you know what words to start searching for. :)
