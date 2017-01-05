@@ -1,0 +1,42 @@
+\documentclass{article}
+\usepackage[margin=1cm]{geometry}
+\usepackage{tikz}
+
+\begin{document}
+
+\pagestyle{empty}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.47]
+  \pgfmathsetmacro{\h}{55}
+  \pgfmathsetmacro{\w}{40}
+  \pgfmathsetmacro{\sub}{1 / 5}
+  \pgfmathsetmacro{\sup}{5}
+
+  % Subdivisions
+  \foreach \x in {0,\sub,...,\w} {%
+    \draw [line width=0.3, color=lightgray, opacity=0.4] (\x,0) -- (\x,\h);%
+  }%
+  \foreach \y in {0,\sub,...,\h} {%
+    \draw [line width=0.3, color=lightgray, opacity=0.4] (0,\y) -- (\w,\y);%
+  }%
+
+  % Divisions
+  \foreach \x in {0,...,\w} {%
+    \draw [line width=0.6, color=lightgray, opacity=0.6] (\x,0) -- (\x,\h);%
+  }%
+  \foreach \y in {0,...,\h} {%
+    \draw [line width=0.6, color=lightgray, opacity=0.6] (0,\y) -- (\w,\y);%
+  }%
+
+  % Superdivisions
+  \foreach \x in {0,\sup,...,\w} {%
+    \draw [line width=0.9, color=lightgray, opacity=0.8] (\x,0) -- (\x,\h);%
+  }%
+  \foreach \y in {0,\sup,...,\h} {%
+    \draw [line width=0.9, color=lightgray, opacity=0.8] (0,\y) -- (\w,\y);%
+  }%
+\end{tikzpicture}
+\end{center}
+
+\end{document}

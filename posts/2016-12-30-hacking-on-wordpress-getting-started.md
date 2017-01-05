@@ -129,6 +129,16 @@ Depending on what kind of plugin you're building, you may need to have a blog th
 Another option for getting dummy blog data is to generate a [WXR](https://devtidbits.com/2011/03/16/the-wordpress-extended-rss-wxr-exportimport-xml-document-format-decoded-and-explained/) file and import it, either through the WP interface or on the command line with ``wp-cli``. I was able to do this successfully (I even made a [little tool](https://github.com/nbloomf/prattle) for generating WXR archives) but it is less straightforward because as far as I can tell the only documentation for the WXR format is "whatever WordPress exports".
 
 
+## Debugging
+
+Try:
+
+```php
+$trace = debug_backtrace();
+var_dump($trace[0]);
+```
+
+
 ## Measuring Performance
 
 There's a few ways to measure WordPress' performance.

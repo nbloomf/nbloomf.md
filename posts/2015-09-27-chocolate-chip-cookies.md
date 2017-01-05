@@ -2,7 +2,6 @@
 title: Chocolate Chip Cookies
 author: nbloomf
 date: 2015-09-27
-categories: recipes
 tags: recipes
 ---
 

@@ -2,8 +2,7 @@
 title: Isomorphisms among semidirect products by a cyclic group
 author: nbloomf
 date: 2010-06-25
-categories: D&F
-tags: cyclic-group, isomorphism, semidirect-product
+tags: cyclic-group, isomorphism, semidirect-product, d-and-f
 ---
 
 Let $K$ be a cyclic group, $H$ an arbitrary group, and $\alpha$ and $\beta$ homomorphisms $K \rightarrow \mathsf{Aut}(H)$. If $K$ is infinite, suppose further that $\alpha$ and $\beta$ are injective.

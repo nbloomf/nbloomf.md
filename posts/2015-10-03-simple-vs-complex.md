@@ -2,6 +2,7 @@
 title: Simple vs. Complex
 author: nbloomf
 date: 2015-10-03
+tags: quotes
 ---
 
 >Some years ago I spent a week giving an in-house program design course at a manufacturing company in the mid-west of the United States. On the Friday afternoon it was all over. The DP Manager, who had arranged the course and was paying for it out of his budget, asked me into his office.
@@ -16,4 +17,4 @@ date: 2015-10-03
 >
 >I saw what he meant.
 >
-> <cite>Michael Jackson in "Software Specifications and Requirements: a lexicon of practice, principles and prejudices", p. 20</cite>
+> <cite>Michael Jackson in *Software Specifications and Requirements: a lexicon of practice, principles and prejudices*, p. 20</cite>

@@ -2,6 +2,7 @@
 title: Carathéodory's characterization of the derivative
 author: nbloomf
 date: 2016-02-09
+tags: calculus, math, derivative
 ---
 
 Today I came upon a very nice idea in calculus, completely by accident, while preparing some lecture notes. Maybe this is well-known, but calculus and analysis have always been weak spots for me and I found the idea to be very enlightening.

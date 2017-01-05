@@ -2,7 +2,6 @@
 title: Tikka Masala
 author: nbloomf
 date: 2016-05-29
-categories: recipes
 tags: recipes
 ---
 

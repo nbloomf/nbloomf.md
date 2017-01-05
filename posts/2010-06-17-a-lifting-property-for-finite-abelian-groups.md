@@ -2,8 +2,7 @@
 title: A lifting property for finite abelian groups
 author: nbloomf
 date: 2010-06-17
-categories: D&F
-tags: abelian-group, finite-group, homomorphism, group-presentation, generating-set
+tags: abelian-group, finite-group, homomorphism, group-presentation, generating-set, d-and-f
 ---
 
 Let $A$ be the finite abelian group $$A = \mathbb{Z}/(n_1) \times \mathbb{Z}/(n_2) \times \cdots \times \mathbb{Z}/(n_t).$$

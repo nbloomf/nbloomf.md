@@ -2,8 +2,7 @@
 title: Classify the groups of order 1805
 author: nbloomf
 date: 2010-06-26
-categories: D&F
-tags: classification, finite-group, group-presentation, semidirect-product
+tags: classification, finite-group, group-presentation, semidirect-product, d-and-f
 ---
 
 Classify groups of order $1805 = 5 \cdot 19^2$.

@@ -2,7 +2,7 @@
 title: Shopify on the command line
 author: nbloomf
 date: 2016-12-27
-tags: shopify, unix
+tags: shopify, unix, cli
 ---
 
 This post is about how you can edit a Shopify shop from the command line. It's also a little long! I will assume you know what Shopify is and the basics of shell scripting, and that you have a unix-like environment (Linux, BSD, macOS), but otherwise have no special knowledge of the guts of Shopify or HTTP-based APIs, just like me when I started this.
