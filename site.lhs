@@ -19,6 +19,7 @@ As usual we begin with some pragmas and imports, to be used later. The ``Overloa
 > import Hakyll
 > import Data.Monoid (mconcat)
 > import Data.Set (insert)
+> import Text.Regex (subRegex, mkRegex)
 > import Text.Pandoc.Options 
 >   ( Extension(Ext_tex_math_dollars
 >     , Ext_tex_math_double_backslash
@@ -47,11 +48,14 @@ where ``Rules`` is a special monad for turning source files into web pages. Come
 >   matchRawFiles
 >   matchCssFiles
 >   matchLoneFiles
->   matchPosts
 >   matchClasses
 >   matchProjectPages
 >   matchTemplates
 >   createBlogArchive
+>
+>   tags <- buildTags "posts/*" (fromCapture "tag/*.html")
+>   matchPosts tags
+>   createTagPages tags
 
 
 **The Rules**
@@ -88,42 +92,62 @@ The ``matchLoneFiles`` rule handles standalone pages, like ``about`` and ``conta
 >       , "projects.md"
 >       , "pages/sth/index.md"
 >       , "pages/sth/formats.md"
->       , "pages/amd/index.md"
+>       , "pages/amd.md"
 >       , "pages/alg-notes.md"
 >       , "pages/geo-notes.md"
 >       ]
 
 The ``matchPosts`` rule is a little different from the others we've seen so far. It handles blog posts. But instead of listing out the source files by name, we capture them in a glob: ``"posts/*"``. These work similarly to shell globs but (as usual) have their own quirks; see the [documentation](https://jaspervdj.be/hakyll/reference/Hakyll-Core-Identifier-Pattern.html) for details.
 
-> matchPosts :: Rules ()
-> matchPosts = do
->   tags <- buildTags "posts/*" (fromCapture "tag/*.html")
->
+> matchPosts :: Tags -> Rules ()
+> matchPosts tags = do
 >   match "posts/*" $ do
 >     route $ setExtension "html"
+>
+>     let ctx = postWithTagsCtx tags
+>
 >     compile $ pandocMathCompiler
+>       >>= applyFilter youtubeFilter
 >       >>= loadAndApplyTemplate
->             "templates/post.html" (postWithTagsCtx tags)
+>             "templates/post.html" ctx
+>       >>= loadAndApplyTemplateIfTagged
+>             "arithmetic-made-difficult" "templates/amd.html" ctx
 >       >>= loadAndApplyTemplate
->             "templates/default.html" (postWithTagsCtx tags)
+>             "templates/default.html" ctx
 >       >>= relativizeUrls
+
+Here we used a custom compiler, ``loadAndApplyTemplateIfTagged``, which loads a given template only if a post has a given tag. This is a cheap way to give some and only some posts a custom header or style.
+
+> loadAndApplyTemplateIfTagged
+>   :: String -> Identifier -> Context String -> Item String -> Compiler (Item String)
+> loadAndApplyTemplateIfTagged tag template context x = do
+>   path <- getUnderlying
+>   tags <- getTags path
+>   if elem tag tags
+>     then loadAndApplyTemplate template context x
+>     else return x
+
+We also apply a custom filter for converting "shortcodes" (borrowing a WordPress term) into ``iframes``. This is shamelessly cribbed from [Jonas Hietala](http://www.jonashietala.se/blog/2014/09/01/embedding_youtube_videos_with_hakyll/) ([archive](http://web.archive.org/web/20161005181904/http://www.jonashietala.se/blog/2014/09/01/embedding_youtube_videos_with_hakyll/)).
+
+> youtubeFilter :: String -> String
+> youtubeFilter x = subRegex regex x result
+>   where
+>     regex = mkRegex
+>       "<p>\\[youtube ([A-Za-z0-9_-]+)\\]</p>"
+>     result = concat
+>       [ "<div class=\"video-wrapper\">"
+>       , "  <div class=\"video-container\">"
+>       , "    <iframe"
+>       , "      src=\"https://www.youtube.com/embed/\\1\""
+>       , "      frameborder=\"0\""
+>       , "      allowfullscreen"
+>       , "    />"
+>       , "  </div>"
+>       , "</div>"
+>       ]
 >
->   tagsRules tags $ \tag pattern -> do
->     let title = "Posts tagged \"" ++ tag ++ "\""
->     route idRoute
->     compile $ do
->       posts <- recentFirst =<< loadAll pattern
->
->       let ctx = mconcat
->             [ constField "title" title
->             , listField "posts" postCtx (return posts)
->             , defaultContext
->             ]
->
->       makeItem ""
->         >>= loadAndApplyTemplate "templates/tag.html" ctx
->         >>= loadAndApplyTemplate "templates/default.html" ctx
->         >>= relativizeUrls
+> applyFilter :: (Monad m, Functor f) => (String-> String) -> f String -> m (f String)
+> applyFilter f str = return $ (fmap $ f) str
 
 The ``matchClasses`` rule is similar to ``matchPosts``; it handles the source files for my course pages.
 
@@ -146,15 +170,6 @@ The ``matchProjectPages`` rule is also similar to ``matchPosts``; these rules ar
 >             "templates/sth-tools.html" defaultContext
 >       >>= loadAndApplyTemplate
 >             "templates/default.html"   defaultContext
->       >>= relativizeUrls
->
->   match "pages/amd/sec/*" $ do
->     route $ setExtension "html"
->     compile $ pandocMathCompiler
->       >>= loadAndApplyTemplate
->             "templates/amd-sec.html" defaultContext
->       >>= loadAndApplyTemplate
->             "templates/default.html" defaultContext
 >       >>= relativizeUrls
 
 The ``matchTemplates`` rule simply loads our HTML templates for use by Hakyll (I think).
@@ -180,6 +195,41 @@ The ``createBlogArchive`` rule is different from the others as it generates a ne
 >       >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
 >       >>= loadAndApplyTemplate "templates/default.html" archiveCtx
 >       >>= relativizeUrls
+
+The ``createTagPages`` rule generates a bunch of pages for each tag, and an index of all tags. Woo!
+
+> createTagPages :: Tags -> Rules ()
+> createTagPages tags = do
+>   tagsRules tags $ \tag pattern -> do
+>     let title = "Posts tagged \"" ++ tag ++ "\""
+>     route idRoute
+>     compile $ do
+>       posts <- recentFirst =<< loadAll pattern
+>
+>       let ctx = mconcat
+>             [ constField "title" title
+>             , listField "posts" postCtx (return posts)
+>             , defaultContext
+>             ]
+>
+>       makeItem ""
+>         >>= loadAndApplyTemplate "templates/tag.html" ctx
+>         >>= loadAndApplyTemplate "templates/default.html" ctx
+>         >>= relativizeUrls
+>
+>   create ["tags/index.html"] $ do
+>     route idRoute
+>     compile $ do
+>
+>       let ctx = mconcat
+>             [ constField "title" "Tags" 
+>             , defaultContext
+>             ]
+>
+>       renderTagList tags
+>         >>= makeItem
+>         >>= loadAndApplyTemplate "templates/default.html" ctx
+>         >>= relativizeUrls
 
 
 **Compilers**

@@ -1,5 +1,6 @@
 ---
 title: About
+author: nbloomf
 ---
 
 I am Nathan Bloomfield, studio mathematician and teacher-in-residence at NSU of OK. This is where I put documents for my students.

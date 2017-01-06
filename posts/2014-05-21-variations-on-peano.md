@@ -1,6 +1,8 @@
 ---
 title: Variations on Peano
 author: nbloomf
+date: 2014-05-21
+tags: arithmetic-made-difficult
 ---
 
 Before we get too far along, lets show that our natural numbers satisfy the remaining two traditional Peano axioms. (We established the induction principle.)

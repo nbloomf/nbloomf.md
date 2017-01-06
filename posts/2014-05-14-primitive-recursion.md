@@ -1,6 +1,8 @@
 ---
 title: Primitive Recursion
 author: nbloomf
+date: 2014-05-07
+tags: arithmetic-made-difficult, math
 ---
 
 So far we've defined the natural numbers as an iterative set with a special *universal property*, which was encapsulated in the existence of a simple recursion operator $\natrec{\ast}{\ast}$. Anything we will wish to do with the natural numbers can be done using this operator alone. However, in practice, it will be handy to define synonyms for some more complicated recursive functions; the first of these is *primitive recursion with a parameter*.

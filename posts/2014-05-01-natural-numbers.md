@@ -1,6 +1,8 @@
 ---
 title: Natural Numbers
 author: nbloomf
+date: 2014-05-01
+tags: arithmetic-made-difficult, natural-numbers
 ---
 
 We all developed an intuitive understanding of the counting numbers back in kindergarten. But what exactly are they? Mathematics depends on having precise definitions, and we need one for the natural numbers.

@@ -18,6 +18,6 @@ title: Projects
 
     A templating language for math education.
 
-* [**Arithmetic Made Difficult**](/pages/amd/index.html)
+* [**Arithmetic Made Difficult**](/pages/amd.html)
 
     Wherein we develop some elementary number theory in excruciating detail from a category-ish perspective. With proofs and programs.

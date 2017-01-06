@@ -1,6 +1,8 @@
 ---
 title: From Arrows to Programs
 author: nbloomf
+date: 2014-05-07
+tags: arithmetic-made-difficult, natural-numbers, math
 ---
 
 A nice consequence of wrapping up recursion in the $\natrec{\ast}{\ast}$ function is that it allows us to write programs, independent of any implementation, and prove things about them. We'll see lots of examples of this, but first we need to establish a structural result: every natural number is either $\zero$ or of the form $\next(m)$ for some natural number $m$.
