@@ -127,7 +127,7 @@ Here we used a custom compiler, ``loadAndApplyTemplateIfTagged``, which loads a 
 >     then loadAndApplyTemplate template context x
 >     else return x
 
-We also apply a custom filter for converting "shortcodes" (borrowing a WordPress term) into ``iframes``. This is shamelessly cribbed from [Jonas Hietala](http://www.jonashietala.se/blog/2014/09/01/embedding_youtube_videos_with_hakyll/) ([archive](http://web.archive.org/web/20161005181904/http://www.jonashietala.se/blog/2014/09/01/embedding_youtube_videos_with_hakyll/)).
+We also apply a custom filter for converting "shortcodes" (borrowing a WordPress term) into ``iframes``. This is shamelessly cribbed from [Jonas Hietala](http://www.jonashietala.se/blog/2014/09/01/embedding_youtube_videos_with_hakyll/) ([archive](http://web.archive.org/web/20161005181904/http://www.jonashietala.se/blog/2014/09/01/embedding_youtube_videos_with_hakyll/)). To use it, put ``[youtube ZZZ]`` on its own line, between two blank lines.
 
 > youtubeFilter :: String -> String
 > youtubeFilter x = subRegex regex x result
@@ -146,7 +146,7 @@ We also apply a custom filter for converting "shortcodes" (borrowing a WordPress
 >       , "</div>"
 >       ]
 >
-> applyFilter :: (Monad m, Functor f) => (String-> String) -> f String -> m (f String)
+> applyFilter :: (Monad m, Functor f) => (String -> String) -> f String -> m (f String)
 > applyFilter f str = return $ (fmap $ f) str
 
 The ``matchClasses`` rule is similar to ``matchPosts``; it handles the source files for my course pages.
