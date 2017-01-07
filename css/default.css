@@ -56,6 +56,11 @@ div.info {
   margin-bottom: 14px;
 }
 
+div.four-oh-four {
+  color: #555;
+  font-style: italic;
+}
+
 
 /* For lemmas, theorems, etc. */
 

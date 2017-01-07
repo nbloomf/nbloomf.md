@@ -31,6 +31,7 @@ gather: FORCE
 	@cp -r $(CLASSDIR)/stat/pdf/. pdf/classes/stat
 	@cp -r $(CLASSDIR)/prfs/pdf/. pdf/classes/prfs
 	@cp -r $(CLASSDIR)/ssem/pdf/. pdf/classes/ssem
+	@cp -r $(CLASSDIR)/parp/pdf/. pdf/classes/parp
 	
 	@echo '  notebooks' | doppler lightmagenta
 	@cp $(NOTEDIR)/rings.pdf pdf/notes
@@ -59,6 +60,7 @@ clean: FORCE
 	@(rm pdf/classes/stat/*.pdf || true) 2> /dev/null
 	@(rm pdf/classes/prfs/*.pdf || true) 2> /dev/null
 	@(rm pdf/classes/ssem/*.pdf || true) 2> /dev/null
+	@(rm pdf/classes/parp/*.pdf || true) 2> /dev/null
 	
 	@echo '  software tools docs' | doppler lightmagenta
 	@(rm -r pages/sth/* || true) 2> /dev/null

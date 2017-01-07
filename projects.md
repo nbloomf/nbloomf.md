@@ -8,7 +8,7 @@ title: Projects
 
 * [**Haskify**](http://github.com/nbloomf/haskify)
 
-    This is a Haskell client library for the [Shopify](http://www.shopify.com) REST API. Originally built for use in some tools supporting [Gingiber](http://www.gingiber.com).
+    This is a Haskell client library for the [Shopify](http://www.shopify.com) REST API. Originally built for use in some tools supporting [Gingiber](http://www.gingiber.com). It's kind of garbage, but I learned a lot. :)
 
 * [**Software Tools in Haskell**](/pages/sth/index.html)
 

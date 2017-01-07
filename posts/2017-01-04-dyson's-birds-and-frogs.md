@@ -2,7 +2,7 @@
 title: Dyson's Birds and Frogs
 author: nbloomf
 date: 2017-01-04
-tags: quotes, math
+tags: quotes
 ---
 
 > According to Bacon, scientists should travel over the earth collecting facts, until the accumulated facts reveal how Nature works. The scientists will then induce from the facts the laws that Nature obeys.

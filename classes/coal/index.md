@@ -5,6 +5,78 @@ title: College Algebra
 ### Boring Stuff
 
 * [Syllabus](/pdf/classes/coal/coal-syllabus.pdf)
+* [Syllabus (Lab)](/pdf/classes/coal/coal-syllabus-lab.pdf)
+
+
+### Calendar
+
+* Jan 9
+* Jan 11
+* Jan 13
+    * Activity 1 [](/pdf/classes/coal/coal-a01-linear-ish-equations.pdf) [](/pdf/classes/coal/coal-soln-a01-linear-ish-equations.pdf)
+* Jan 16 (MLK Day)
+* Jan 18
+* Jan 20
+    * Activity 2 [](/pdf/classes/coal/coal-a02-quadratic-equations.pdf) [](/pdf/classes/coal/coal-soln-a02-quadratic-equations.pdf)
+* Jan 23
+* Jan 25
+* Jan 27
+    * Activity 3 [](/pdf/classes/coal/coal-a03-compound-equations.pdf) [](/pdf/classes/coal/coal-soln-a03-compound-equations.pdf)
+* Jan 30
+* Feb 1
+    * Review for Test 1 [](/pdf/classes/coal/coal-r1-equations.pdf) [](/pdf/classes/coal/coal-soln-r1-equations.pdf)
+* Feb 3
+    * **Test 1**
+* Feb 6
+* Feb 8
+* Feb 10
+    * Activity 4 [](/pdf/classes/coal/coal-a04-some-geometry.pdf) [](/pdf/classes/coal/coal-soln-a04-some-geometry.pdf)
+* Feb 13
+* Feb 15
+* Feb 17
+    * Activity 5 [](/pdf/classes/coal/coal-a05-functions.pdf) [](/pdf/classes/coal/coal-soln-a05-functions.pdf)
+* Feb 20
+* Feb 22
+* Feb 24
+    * Activity 6 [](/pdf/classes/coal/coal-a06-domains.pdf) [](/pdf/classes/coal/coal-soln-a06-domains.pdf)
+* Feb 27
+* Mar 1
+* Mar 3
+    * Activity 7 [](/pdf/classes/coal/coal-a07-transformations.pdf) [](/pdf/classes/coal/coal-soln-a07-transformations.pdf)
+* Mar 6
+* Mar 8
+    * Review for Test 2 [](/pdf/classes/coal/coal-r2-functions-and-geometry.pdf) [](/pdf/classes/coal/coal-soln-r2-functions-and-geometry.pdf)
+* Mar 10
+    * **Test 2**
+* Mar 13--17 (Spring Break)
+* Mar 20
+* Mar 22
+* Mar 24
+    * Activity 8 [](/pdf/classes/coal/coal-a08-quadratic-ish-equations.pdf) [](/pdf/classes/coal/coal-soln-a08-quadratic-ish-equations.pdf)
+* Mar 27
+* Mar 29
+* Mar 31
+    * Activity 9 [](/pdf/classes/coal/coal-a09-polynomials.pdf) [](/pdf/classes/coal/coal-soln-a09-polynomials.pdf)
+* Apr 3
+* Apr 5
+* Apr 7
+    * Activity 10 [](/pdf/classes/coal/coal-a10-the-rational-root-theorem.pdf) [](/pdf/classes/coal/coal-soln-a10-the-rational-root-theorem.pdf)
+* Apr 10
+* Apr 12
+    * Review for Test 3 [](/pdf/classes/coal/coal-r3-polynomials.pdf) [](/pdf/classes/coal/coal-soln-r3-polynomials.pdf)
+* Apr 14
+    * **Test 3**
+* Apr 17
+* Apr 19
+* Apr 21
+    * Activity 11 [](/pdf/classes/coal/coal-a11-exponents-and-logs.pdf) [](/pdf/classes/coal/coal-soln-a11-exponents-and-logs.pdf)
+* Apr 24
+* Apr 26
+* Apr 28
+    * Review for Test 4 [](/pdf/classes/coal/coal-r4-exponents-and-logs.pdf) [](/pdf/classes/coal/coal-soln-r4-exponents-and-logs.pdf)
+* TBD
+    * **Test 4**
+
 
 ### Practice Problems
 
@@ -30,32 +102,8 @@ title: College Algebra
     * 4.2 #59--78, 89--106
     * 4.3 #53--76
 
-### Activities
-
-* Test 1
-    * [Linear-ish Equations](/pdf/classes/coal/coal-a01-linear-ish-equations.pdf) ([solutions](/pdf/classes/coal/coal-soln-a01-linear-ish-equations.pdf))
-    * [Some Geometry](/pdf/classes/coal/coal-a02-some-geometry.pdf) ([solutions](/pdf/classes/coal/coal-soln-a02-some-geometry.pdf))
-* Test 2
-    * [Compound Equations](/pdf/classes/coal/coal-a03-compound-equations.pdf) ([solutions](/pdf/classes/coal/coal-soln-a03-compound-equations.pdf))
-    * [Functions](/pdf/classes/coal/coal-a04-functions.pdf) ([solutions](/pdf/classes/coal/coal-soln-a04-functions.pdf))
-    * [Transformations](/pdf/classes/coal/coal-a05-transformations.pdf)
-* Test 3
-    * [Polynomials](/pdf/classes/coal/coal-a06-polynomials.pdf)
-    * [Polynomials II](/pdf/classes/coal/coal-a07-polynomials-ii.pdf)
-    * [Polynomials III](/pdf/classes/coal/coal-a08-polynomials-iii.pdf)
-* Test 4
-    * [Exponentials and Logs](/pdf/classes/coal/coal-a09-exponentials-and-logs.pdf)
-
-
-### Test Reviews
-
-* [Test 1](/pdf/classes/coal/coal-r1-equations-and-geometry.pdf) ([solutions](/pdf/classes/coal/coal-soln-r1-equations-and-geometry.pdf))
-* [Test 2](/pdf/classes/coal/coal-r2-functions.pdf)
-* [Test 3](/pdf/classes/coal/coal-r3-polynomials.pdf)
-* [Test 4](/pdf/classes/coal/coal-r4-exponentials-and-logs.pdf)
-
 
 ### Toys
 
-   * [Transformations (live demo)](/classes/coal/transformations-live-demo.html): Play with transformations of equations.
-   * [Symmetry (live demo)](/classes/coal/symmetry-live-demo.html): Look for symmetries.
+* [Transformations (live demo)](/classes/coal/transformations-live-demo.html): Play with transformations of equations.
+* [Symmetry (live demo)](/classes/coal/symmetry-live-demo.html): Look for symmetries.

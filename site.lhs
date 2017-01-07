@@ -52,6 +52,7 @@ where ``Rules`` is a special monad for turning source files into web pages. Come
 >   matchProjectPages
 >   matchTemplates
 >   createBlogArchive
+>   create404
 >
 >   tags <- buildTags "posts/*" (fromCapture "tag/*.html")
 >   matchPosts tags
@@ -185,15 +186,39 @@ The ``createBlogArchive`` rule is different from the others as it generates a ne
 >   compile $ do
 >     posts <- recentFirst =<< loadAll "posts/*"
 >
->     let archiveCtx = mconcat
->           [ listField "posts" postCtx (return posts)
->           , constField "title" "Archives"
->           , defaultContext
->           ]
+>     let
+>       archiveCtx = mconcat
+>         [ listField "posts" postCtx (return posts)
+>         , constField "title" "Archives"
+>         , defaultContext
+>         ]
 >
 >     makeItem ""
 >       >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
 >       >>= loadAndApplyTemplate "templates/default.html" archiveCtx
+>       >>= relativizeUrls
+
+Custom 404 page for broken links.
+
+> create404 :: Rules ()
+> create404 = create ["404.html"] $ do
+>   route idRoute
+>   compile $ do
+>     let
+>       ctx = mconcat
+>         [ constField "title" "404 - Not Found"
+>         , constField "body" $ concat
+>             [ "<div class='four-oh-four'>"
+>             , "You step in the stream,<br />"
+>             , "But the water has moved on.<br />"
+>             , "This page is not here."
+>             , "</div>"
+>             ]
+>         , defaultContext
+>         ]
+>
+>     makeItem ""
+>       >>= loadAndApplyTemplate "templates/default.html" ctx
 >       >>= relativizeUrls
 
 The ``createTagPages`` rule generates a bunch of pages for each tag, and an index of all tags. Woo!
@@ -206,11 +231,12 @@ The ``createTagPages`` rule generates a bunch of pages for each tag, and an inde
 >     compile $ do
 >       posts <- recentFirst =<< loadAll pattern
 >
->       let ctx = mconcat
->             [ constField "title" title
->             , listField "posts" postCtx (return posts)
->             , defaultContext
->             ]
+>       let
+>         ctx = mconcat
+>           [ constField "title" title
+>           , listField "posts" postCtx (return posts)
+>           , defaultContext
+>           ]
 >
 >       makeItem ""
 >         >>= loadAndApplyTemplate "templates/tag.html" ctx
@@ -221,10 +247,11 @@ The ``createTagPages`` rule generates a bunch of pages for each tag, and an inde
 >     route idRoute
 >     compile $ do
 >
->       let ctx = mconcat
->             [ constField "title" "Tags" 
->             , defaultContext
->             ]
+>       let
+>         ctx = mconcat
+>           [ constField "title" "Tags" 
+>           , defaultContext
+>           ]
 >
 >       renderTagList tags
 >         >>= makeItem

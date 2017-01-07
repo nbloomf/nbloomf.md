@@ -7,6 +7,6 @@ title: Home
 If you are in one of my classes, follow the appropriate link below.
 
 * [College Algebra](/classes/coal/)
-* [College Geometry](/classes/geom/)
-* [Modern Algebra: Rings](/classes/ring/)
-* [Senior Seminar](/classes/ssem/)
+* [Stat Methods](/classes/stat/)
+* [Intro to Proof](/classes/prfs/)
+* [Parallel Programming](/classes/parp/)
