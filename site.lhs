@@ -139,7 +139,7 @@ We also apply a custom filter for converting "shortcodes" (borrowing a WordPress
 >       [ "<div class=\"video-wrapper\">"
 >       , "  <div class=\"video-container\">"
 >       , "    <iframe"
->       , "      src=\"https://www.youtube.com/embed/\\1\""
+>       , "      src=\"https://www.youtube.com/embed/\\1?rel=0\""
 >       , "      frameborder=\"0\""
 >       , "      allowfullscreen"
 >       , "    />"
@@ -219,7 +219,6 @@ Custom 404 page for broken links.
 >
 >     makeItem ""
 >       >>= loadAndApplyTemplate "templates/default.html" ctx
->       >>= relativizeUrls
 
 The ``createTagPages`` rule generates a bunch of pages for each tag, and an index of all tags. Woo!
 
