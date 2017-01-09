@@ -6,6 +6,7 @@ title: Statistical Methods
 
 * [Syllabus](/pdf/classes/stat/stat-syllabus.pdf)
 
+<!-- 
 
 ## Practice Problems
 
@@ -46,3 +47,5 @@ title: Statistical Methods
 ## Other Stuff
 
 * [Z-Score Table](/pdf/classes/stat/stat-z-score-table.pdf)
+
+-->
