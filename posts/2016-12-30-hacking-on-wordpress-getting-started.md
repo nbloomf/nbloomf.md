@@ -22,7 +22,7 @@ No!
 
 The trouble with installing software on your computer is that it can get tricky if you want *more than one version at a time*, or if *something goes horribly wrong* (which happens a lot), or lord help you if *the software is in constant flux*.
 
-Instead we can create a *virtual machine* and install WordPress on that. This has several advantages over installing WordPress directly. Virtual machines can be created and destroyed at will, so we can tinker without fear. Virtual machines are also (more easily) reproducible, so if we trash one we can make a new one just like it. And virtual machines are (more easily) configurable, so we can use one with exactly the versions of any packages we want. And of course the biggest advantage is that I can have lots of different virtual machines, but I've only got one real machine.
+Instead we can create a *virtual machine* and install WordPress on that. This has several advantages over installing WordPress directly. Virtual machines can be created and destroyed at will, so we can tinker without fear. Virtual machines are also (more easily) reproducible, so if we trash one we can make a new one just like it. And virtual machines are (more easily) configurable, so we can use one with precise versions of any packages we want. And of course the biggest advantage is that I can have lots of different virtual machines, but I've only got one real machine.
 
 I'll use "local machine" to refer to my real, actual, physical computer, as opposed to a virtual machine or VM.
 

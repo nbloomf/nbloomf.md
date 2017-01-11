@@ -21,10 +21,7 @@ As usual we begin with some pragmas and imports, to be used later. The ``Overloa
 > import Data.Set (insert)
 > import Text.Regex (subRegex, mkRegex)
 > import Text.Pandoc.Options 
->   ( Extension(Ext_tex_math_dollars
->     , Ext_tex_math_double_backslash
->     , Ext_latex_macros
->     )
+>   ( Extension(..)
 >   , writerExtensions
 >   , writerHTMLMathMethod
 >   , HTMLMathMethod(MathJax)
@@ -279,6 +276,7 @@ The ``createTagPages`` rule generates a bunch of pages for each tag, and an inde
 >       [ Ext_tex_math_dollars
 >       , Ext_tex_math_double_backslash
 >       , Ext_latex_macros
+>       , Ext_multiline_tables
 >       ]
 >
 >     defaultExtensions = writerExtensions defaultHakyllWriterOptions

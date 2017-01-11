@@ -25,7 +25,7 @@ Then after populating a named list of filters with ``filter1 b1``, ``filter2 b2`
 
 ```haskell
 apply_filters :: a -> a
-apply_filters = filterN bN $ ... $ filter2 b2 $ filter1 b1 a
+apply_filters a = filterN bN $ ... $ filter2 b2 $ filter1 b1 a
 ```
 
 and after populating a named list of actions with ``action1 b1``, ``action2 b2``, et cetera, calling ``do_action`` does something like this:
