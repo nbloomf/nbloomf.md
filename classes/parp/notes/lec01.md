@@ -2,6 +2,8 @@
 title: Notes on Lecture 1
 ---
 
+([Go back to the course page](/classes/parp/index.html))
+
 ## Principles of Parallel Computing
 
 What makes it harder than sequential computing?

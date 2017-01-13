@@ -12,13 +12,19 @@ title: College Algebra
 
 * Jan 9
     * Practice Problems: 1.1 #13--26, 37--48 (solve only) ([scan](/pdf/scans/classes/coal/dugopolski/1-1-ex.pdf))
+    * Khan Academy: [One-variable linear equations](https://www.khanacademy.org/math/algebra/one-variable-linear-equations)
 * Jan 11
     * Practice Problems: 1.1 #63--80; 1.6 #59--64
+    * Khan Academy: [Absolute value equations](https://www.khanacademy.org/math/algebra/absolute-value-equations-functions/absolute-value-equations/v/absolute-value-equations)
 * Jan 13
-    * Activity 1 [](/pdf/classes/coal/coal-a01-linear-ish-equations.pdf) [](/pdf/classes/coal/coal-soln-a01-linear-ish-equations.pdf)
+    * [Activity 1](/pdf/classes/coal/coal-a01-linear-ish-equations.pdf) ([solutions](/pdf/classes/coal/coal-soln-a01-linear-ish-equations.pdf))
 * Jan 16 (MLK Day)
 * Jan 18
     * Practice Problems: 1.5 #5--60
+    * Khan Academy: [Solving quadratics using square root](https://www.khanacademy.org/math/algebra/quadratics/quadratics-square-root/v/simple-quadratic-equation)
+    * Khan Academy: [Solving quadratics by factoring](https://www.khanacademy.org/math/algebra/quadratics/solving-quadratic-equations-by-factoring/v/example-1-solving-a-quadratic-equation-by-factoring)
+    * Khan Academy: [Solving quadratics by completing the square](https://www.khanacademy.org/math/algebra/quadratics/solving-quadratics-by-completing-the-square/v/solving-quadratic-equations-by-completing-the-square)
+    * Khan Academy: [Solving quadratics using the quadratic formula](https://www.khanacademy.org/math/algebra/quadratics/solving-quadratics-using-the-quadratic-formula/v/using-the-quadratic-formula)
 * Jan 20
     * Activity 2 [](/pdf/classes/coal/coal-a02-quadratic-equations.pdf) [](/pdf/classes/coal/coal-soln-a02-quadratic-equations.pdf)
 * Jan 23
