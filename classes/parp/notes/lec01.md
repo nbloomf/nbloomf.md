@@ -4,6 +4,11 @@ title: Notes on Lecture 1
 
 ([Go back to the course page](/classes/parp/index.html))
 
+## Links
+
+* [Top500](https://www.top500.org/): Computer leaderboard
+
+
 ## Principles of Parallel Computing
 
 What makes it harder than sequential computing?
