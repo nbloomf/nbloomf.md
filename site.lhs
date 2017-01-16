@@ -61,9 +61,18 @@ where ``Rules`` is a special monad for turning source files into web pages. Come
 The ``matchRawFiles`` rule handles files that should be copied verbatim, with no extra processing.
 
 > matchRawFiles :: Rules ()
-> matchRawFiles = match
->   ("LICENSE" .||. "raw/**" .||. "images/**" .||. "pdf/**" .||. "icon/**.png" .||. "favicon.ico") $
->   route idRoute >> compile copyFileCompiler
+> matchRawFiles =
+>   let
+>     raw = anyPattern
+>       [ "LICENSE"
+>       , "raw/**"
+>       , "images/**"
+>       , "pdf/**"
+>       , "icon/*.png"
+>       ]
+>   in
+>     match raw $
+>       route idRoute >> compile copyFileCompiler
 
 The ``matchCssFiles`` rule is almost identical to ``matchRawFiles``; this time we use the Hakyll function ``compressCssCompiler``, which minifies CSS. It looks like this compiler just removes extra whitespace and newlines.
 
@@ -71,17 +80,11 @@ The ``matchCssFiles`` rule is almost identical to ``matchRawFiles``; this time w
 > matchCssFiles = match "css/*" $
 >   route idRoute >> compile compressCssCompiler
 
-The ``matchLoneFiles`` rule handles standalone pages, like ``about`` and ``contact``. The easiest way to add a new page (not a post) is to add it to the list of names handled by ``mathcLoneFiles``.
+The ``matchLoneFiles`` rule handles standalone pages, like ``about`` and ``contact``. The easiest way to add a new page (not a post) is to add it to the list of names handled by ``matchLoneFiles``.
 
 > matchLoneFiles :: Rules ()
-> matchLoneFiles = match names $ do
->   route $ setExtension "html"
->   compile $ pandocMathCompiler
->     >>= loadAndApplyTemplate
->           "templates/default.html" postCtx
->     >>= relativizeUrls
->
->   where
+> matchLoneFiles =
+>   let
 >     names = fromList
 >       [ "site.lhs"
 >       , "index.md"
@@ -94,6 +97,13 @@ The ``matchLoneFiles`` rule handles standalone pages, like ``about`` and ``conta
 >       , "pages/alg-notes.md"
 >       , "pages/geo-notes.md"
 >       ]
+>   in
+>     match names $ do
+>       route $ setExtension "html"
+>       compile $ pandocMathCompiler
+>         >>= loadAndApplyTemplate
+>               "templates/default.html" postCtx
+>         >>= relativizeUrls
 
 The ``matchPosts`` rule is a little different from the others we've seen so far. It handles blog posts. But instead of listing out the source files by name, we capture them in a glob: ``"posts/*"``. These work similarly to shell globs but (as usual) have their own quirks; see the [documentation](https://jaspervdj.be/hakyll/reference/Hakyll-Core-Identifier-Pattern.html) for details.
 
@@ -284,3 +294,10 @@ The ``createTagPages`` rule generates a bunch of pages for each tag, and an inde
 >
 >       , writerHTMLMathMethod = MathJax ""
 >       }
+
+
+**Helpers**
+
+> anyPattern :: [Pattern] -> Pattern
+> anyPattern = foldl1 (.||.)
+
