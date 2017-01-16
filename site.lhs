@@ -182,7 +182,7 @@ The ``matchProjectPages`` rule is also similar to ``matchPosts``; these rules ar
 
 The ``matchTemplates`` rule simply loads our HTML templates for use by Hakyll (I think).
 
-> matchTemplates = match "templates/*" $
+> matchTemplates = match "templates/**" $
 >   compile templateCompiler
 
 The ``createBlogArchive`` rule is different from the others as it generates a new file, rather than simply transforming an existing file.

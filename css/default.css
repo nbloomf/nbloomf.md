@@ -1,3 +1,7 @@
+/************/
+/* Defaults */
+/************/
+
 body {
   color: black;
   font-size: 16px;
@@ -33,20 +37,20 @@ div#header #navigation a {
 }
 
 div#footer {
-    border-top: solid 2px black;
-    color: #555;
-    font-size: 12px;
-    margin-top: 30px;
-    padding: 12px 0px 12px 0px;
-    text-align: right;
+  border-top: solid 2px black;
+  color: #555;
+  font-size: 12px;
+  margin-top: 30px;
+  padding: 12px 0px 12px 0px;
+  text-align: right;
 }
 
 h1 {
-    font-size: 24px;
+  font-size: 24px;
 }
 
 h2 {
-    font-size: 20px;
+  font-size: 20px;
 }
 
 div.info {
@@ -61,8 +65,29 @@ div.four-oh-four {
   font-style: italic;
 }
 
+.invisible {
+  display: none;
+}
 
-/* For lemmas, theorems, etc. */
+span.post-date {
+  color:      #555;
+  font-size:  12px;
+  font-style: italic;
+}
+
+table, th, td {
+  border: 1px solid black;
+}
+
+pre.literate {
+  font-size: 10pt;
+  background: #e9e9e9;
+}
+
+
+/************/
+/* Theorems */
+/************/
 
 div.result {
   border-left: solid 1px gray;
@@ -96,19 +121,10 @@ div.result div.proof p:first-child:before {
   font-style: italic;
 }
 
-/*
-div.result div.proof:last-child:after {
-  float: right;
-  content: "▨";
-}
-*/
 
-
-pre.literate {
-  font-size: 10pt;
-  background: #e9e9e9;
-}
-
+/***************/
+/* Blockquotes */
+/***************/
 
 blockquote {
   font-size: 11pt;
@@ -116,15 +132,15 @@ blockquote {
   border-left: 2px solid #ccc;
   margin: 1.5em 10px;
   padding: 0.5em 10px;
-  quotes: "\201C" "\201D" "\201C" "\201D";   /*"\2018""\2019";*/
+  quotes: "\201C" "\201D" "\201C" "\201D";
 }
 
 blockquote:before {
-  color:          #ccc;
-  content:        open-quote;
-  font-size:      4em;
-  line-height:    0.1em;
-  margin-right:   0.25em;
+  color: #ccc;
+  content: open-quote;
+  font-size: 4em;
+  line-height: 0.1em;
+  margin-right: 0.25em;
   vertical-align: -0.4em;
 }
 
@@ -140,28 +156,20 @@ blockquote cite {
   text-align: right;
 }
 
-.invisible {
-  display: none;
-}
 
-span.post-date {
-  color:      #555;
-  font-size:  12px;
-  font-style: italic;
-}
-
-
-table, th, td {
-  border: 1px solid black;
-}
-
-
-/********************/
-/* Code block style */
-/********************/
+/***************/
+/* Code Blocks */
+/***************/
 
 div.sourceCode {
   background: #e9e9e9;
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+div.sourceCode pre {
+  margin: 12px 0 12px 0;
 }
 
 table.sourceCode,
@@ -176,8 +184,18 @@ table.sourceCode pre {
   border: none;
 }
 
-td.lineNumbers { border-right: 1px solid #AAAAAA; text-align: right; color: #AAAAAA; padding-right: 5px; padding-left: 5px; }
-td.sourceCode { padding-left: 5px; }
+td.lineNumbers {
+  border-right: 1px solid #AAAAAA;
+  text-align: right;
+  color: #AAAAAA;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+td.sourceCode {
+  padding-left: 5px;
+}
+
 .sourceCode span.kw { color: #007020; font-weight: bold; }
 .sourceCode span.dt { color: #902000; }
 .sourceCode span.dv { color: #40a070; }
@@ -194,7 +212,7 @@ td.sourceCode { padding-left: 5px; }
 
 
 /******************/
-/* YouTube embeds */
+/* YouTube Embeds */
 /******************/
 
 .video-container {
