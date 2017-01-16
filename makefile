@@ -22,6 +22,10 @@ move: build FORCE
 	@cp -r _site/. ../nbloomf.github.io/
 
 gather: FORCE
+	@echo 'generating icons' | doppler lightgreen
+	@inkscape -z -e icon/favicon-152.png -w 152 -h 152 icon/info.svg
+	@inkscape -z -e icon/favicon.png -w 32 -h 32 icon/info.svg
+	
 	@echo 'gathering documents' | doppler lightgreen
 	@echo '  class pdfs' | doppler lightmagenta
 	@cp -r $(CLASSDIR)/coal/pdf/. pdf/classes/coal

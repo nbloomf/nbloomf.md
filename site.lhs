@@ -62,7 +62,7 @@ The ``matchRawFiles`` rule handles files that should be copied verbatim, with no
 
 > matchRawFiles :: Rules ()
 > matchRawFiles = match
->   ("LICENSE" .||. "raw/**" .||. "images/**" .||. "pdf/**") $
+>   ("LICENSE" .||. "raw/**" .||. "images/**" .||. "pdf/**" .||. "icon/**.png" .||. "favicon.ico") $
 >   route idRoute >> compile copyFileCompiler
 
 The ``matchCssFiles`` rule is almost identical to ``matchRawFiles``; this time we use the Hakyll function ``compressCssCompiler``, which minifies CSS. It looks like this compiler just removes extra whitespace and newlines.
