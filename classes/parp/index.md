@@ -123,3 +123,4 @@ No.  Topic                                     Start Date  Completion Date
 ## Discussion Points
 
 * [Lecture 1](/classes/parp/notes/lec01.html)
+* [Lecture 2](/classes/parp/notes/lec02.html)
