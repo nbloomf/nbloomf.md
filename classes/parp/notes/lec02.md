@@ -6,19 +6,19 @@ title: Notes on Lecture 2
 
 ## Single Processor Machines
 
-"Most programs run at <10% efficiency on a single machine" (source?) so there may well be a 10x speedup to be had by focusing on sequential code, before doing the hard stuff.
+"Most programs run at &lt;10% efficiency on a single machine" (source?) so there may well be a 10x speedup to be had by focusing on sequential code, before doing the hard stuff.
 
 Some considerations:
 
-* **Memory hierarchy**: In principle, the processor has some named memory cells (registers) and an address space, and instructions look like "load address X into register A, increment register A, write register A to address X". In practice, read/write times can be wildly different (cache) depending on **spatial and temporal locality of memory accesses**.
+* **Memory hierarchy**: In principle, the processor has some named memory cells (registers) and an address space, and instructions look like "load address X into register A, increment register A, write register A to address X". In practice, read/write times can be wildly different (cache) depending on **spatial and temporal locality of memory accesses** because physics.
 * **On-die parallelism**: A single processor may have different "functional units" that can run at the same time (improving efficiency) depending on the **order of the instructions**.
-* **Pipelining**: The laundromat example. Each instruction (regardless of order) must be decoded, have arguments fetched, etc., which can be done in parallel, like an assembly line. To maintain max efficiency instructions at different stages should not step on each other, called a [pipeline stall](https://en.wikipedia.org/wiki/Bubble_%28computing%29).
+* **Pipelining**: The laundromat example. Each instruction (regardless of order) must be decoded, have arguments fetched, etc., which can be done in stages, like an assembly line, to improve throughput. To maintain max efficiency instructions at different stages should not step on each other, watch for [pipeline stalls](https://en.wikipedia.org/wiki/Bubble_%28computing%29).
 
 Compilers should abstract these details away, but aren't completely there yet.
 
 ## Simplified memory model
 
-Suppose we run a program that accesses fast memory (cost 0) and slow memory and does arithmetic (cost >0). Let
+Suppose we run a program that accesses fast memory (cost 0) and slow memory and does arithmetic (cost &gt;0). Let
 
 * $m$ be the number of words moved between fast & slow memory
 * $t_m$ be the time per slow memory access
