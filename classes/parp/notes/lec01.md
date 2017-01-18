@@ -6,7 +6,8 @@ title: Notes on Lecture 1
 
 ## Links
 
-* [Top500](https://www.top500.org/): Computer leaderboard
+* [Top500](https://www.top500.org/) -- Computer leaderboard
+* [Parallel Programming Patterns: Mining HPC for the Desktop](http://www.drdobbs.com/go-parallel/article/print?articleId=212903308) -- Article in Dr. Dobbs on design patterns for parallel programs; mentions Berkeley's 13 "Motifs"
 
 
 ## Principles of Parallel Computing

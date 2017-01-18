@@ -13,11 +13,6 @@ title: Parallel Programming
 * [Syllabus](/pdf/classes/parp/parp-syllabus.pdf)
 
 
-## Other Links
-
-* [Parallel Programming Patterns: Mining HPC for the Desktop](http://www.drdobbs.com/go-parallel/article/print?articleId=212903308) - Article in Dr. Dobbs on design patterns for parallel programs; mentions Berkeley's 13 "Motifs"
-
-
 ## Calendar
 
 ----------------------------------------------------------------------------
