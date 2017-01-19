@@ -25,9 +25,9 @@ No.  Topic                                     Start Date  Completion Date
 
      **Homework 0**                            1/13/2017   1/23/2017
 
-3    Parallel Machines and Programming Models  ?/?/2017    ?/?/2017
+3    Parallel Machines and Programming Models  1/20/2017   1/23/2017
 
-4    Sources of Parallelism and Locality       ?/?/2017    ?/?/2017
+4    Sources of Parallelism and Locality       1/23/2017   1/25/2017
      in Simulation - Part 1
 
 5    Sources of Parallelism and Locality       ?/?/2017    ?/?/2017
@@ -36,7 +36,7 @@ No.  Topic                                     Start Date  Completion Date
 6    Shared Memory Programming: Threads and    ?/?/2017    ?/?/2017
      OpenMP, and Tricks with Trees
 
-     **Programming Homework 1**                ?/?/2017    ?/?/2017
+     **Programming Homework 1**                1/23/2017   2/3/2017
 
 7    Distributed Memory Machines               ?/?/2017    ?/?/2017
      and Programming
@@ -127,3 +127,4 @@ No.  Topic                                     Start Date  Completion Date
 * [Lecture 8](/classes/parp/notes/lec08.html)
 * [Lecture 9](/classes/parp/notes/lec09.html)
 * [Lecture 10](/classes/parp/notes/lec10.html)
+* [Lecture 11](/classes/parp/notes/lec11.html)
