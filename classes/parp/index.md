@@ -115,7 +115,11 @@ No.  Topic                                     Start Date  Completion Date
 ----------------------------------------------------------------------------
 
 
-## Discussion Points
+## Lectures (with notes)
 
 * [Lecture 1](/classes/parp/notes/lec01.html)
 * [Lecture 2](/classes/parp/notes/lec02.html)
+* [Lecture 3](/classes/parp/notes/lec03.html)
+* [Lecture 4](/classes/parp/notes/lec04.html)
+* [Lecture 5](/classes/parp/notes/lec05.html)
+* [Lecture 6](/classes/parp/notes/lec06.html)

@@ -4,10 +4,13 @@ title: Notes on Lecture 1
 
 ([Go back to the course page](/classes/parp/index.html))
 
+[youtube uJHgKrpuSZ0]
+
 ## Links
 
+* [Slides](https://people.eecs.berkeley.edu/~demmel/cs267_Spr16/Lectures/lecture01_intro_jwd16_4pp.pdf) ([archive](http://web.archive.org/web/20170119172347/https://people.eecs.berkeley.edu/~demmel/cs267_Spr16/Lectures/lecture01_intro_jwd16_4pp.pdf))
 * [Top500](https://www.top500.org/) -- Computer leaderboard
-* [Parallel Programming Patterns: Mining HPC for the Desktop](http://www.drdobbs.com/go-parallel/article/print?articleId=212903308) -- Article in Dr. Dobbs on design patterns for parallel programs; mentions Berkeley's 13 "Motifs"
+* [Parallel Programming Patterns: Mining HPC for the Desktop](http://www.drdobbs.com/go-parallel/article/print?articleId=212903308) ([archive](http://web.archive.org/web/20170119172500/http://www.drdobbs.com/go-parallel/article/print?articleId=212903308)) -- Article in Dr. Dobbs on design patterns for parallel programs; mentions Berkeley's 13 "Motifs"
 
 
 ## Principles of Parallel Computing
@@ -28,7 +31,7 @@ No silver bullets -- but then that's what makes the problem hard.
 
 ## The 13 Dwarfs
 
-Common underlying parallel strategies
+Common underlying parallel strategies.
 
 * Finite State Machines
 * Combinatorial logic
@@ -36,9 +39,9 @@ Common underlying parallel strategies
 * Structured grid
 * Dense linear algebra
 * Sparse linear algebra
-* FFT
+* [FFT](https://en.wikipedia.org/wiki/Fast_Fourier_transform)
 * Dynamic programming
-* N-body
+* [N-body](https://en.wikipedia.org/wiki/N-body_simulation) (and maybe [Navier-Stokes?](https://en.wikipedia.org/wiki/Navier%E2%80%93Stokes_equations))
 * MapReduce
 * Backtrack, Branch & Bound
 * Graphical models

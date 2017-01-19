@@ -163,6 +163,7 @@ The ``matchClasses`` rule is similar to ``matchPosts``; it handles the source fi
 > matchClasses = match "classes/**" $ do
 >   route $ setExtension "html"
 >   compile $ pandocMathCompiler
+>     >>= applyFilter youtubeFilter
 >     >>= loadAndApplyTemplate
 >           "templates/default.html" postCtx
 >     >>= relativizeUrls
