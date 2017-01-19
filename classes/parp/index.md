@@ -123,3 +123,7 @@ No.  Topic                                     Start Date  Completion Date
 * [Lecture 4](/classes/parp/notes/lec04.html)
 * [Lecture 5](/classes/parp/notes/lec05.html)
 * [Lecture 6](/classes/parp/notes/lec06.html)
+* [Lecture 7](/classes/parp/notes/lec07.html)
+* [Lecture 8](/classes/parp/notes/lec08.html)
+* [Lecture 9](/classes/parp/notes/lec09.html)
+* [Lecture 10](/classes/parp/notes/lec10.html)
