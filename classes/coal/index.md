@@ -26,7 +26,7 @@ title: College Algebra
     * Khan Academy: [Solving quadratics by completing the square](https://www.khanacademy.org/math/algebra/quadratics/solving-quadratics-by-completing-the-square/v/solving-quadratic-equations-by-completing-the-square)
     * Khan Academy: [Solving quadratics using the quadratic formula](https://www.khanacademy.org/math/algebra/quadratics/solving-quadratics-using-the-quadratic-formula/v/using-the-quadratic-formula)
 * Jan 20
-    * Activity 2 [](/pdf/classes/coal/coal-a02-quadratic-equations.pdf) [](/pdf/classes/coal/coal-soln-a02-quadratic-equations.pdf)
+    * [Activity 2](/pdf/classes/coal/coal-a02-quadratic-equations.pdf) ([solutions](/pdf/classes/coal/coal-soln-a02-quadratic-equations.pdf))
 * Jan 23
 * Jan 25
     * Practice Problems: 1.7 #15--26, 45--68
