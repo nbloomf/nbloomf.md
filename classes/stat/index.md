@@ -8,7 +8,7 @@ title: Statistical Methods
 
 ## Slides
 
-* Misleading Graphs [(screen)](/pdf/classes/stat/stat-screen-slides-misleading-graphs.pdf) [(print)](/pdf/classes/stat/stat-print-slides-misleading-graphs.pdf)
+* Misleading Graphs ([screen](/pdf/classes/stat/stat-screen-slides-misleading-graphs.pdf)) ([print](/pdf/classes/stat/stat-print-slides-misleading-graphs.pdf))
 
 <!-- 
 
