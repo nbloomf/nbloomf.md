@@ -6,6 +6,10 @@ title: Statistical Methods
 
 * [Syllabus](/pdf/classes/stat/stat-syllabus.pdf)
 
+## Slides
+
+* Misleading Graphs [(screen)](/pdf/classes/stat/stat-screen-slides-misleading-graphs.pdf) [(print)](/pdf/classes/stat/stat-print-slides-misleading-graphs.pdf)
+
 <!-- 
 
 ## Practice Problems
@@ -39,9 +43,7 @@ title: Statistical Methods
 * [Test 3](/pdf/classes/stat/stat-r3-continuous-rvs.pdf)
 
 
-## Slides
 
-* Misleading Graphs [(screen)](/pdf/classes/stat/stat-screen-slides-misleading-graphs.pdf) [(print)](/pdf/classes/stat/stat-print-slides-misleading-graphs.pdf)
 * Histogram of a Binomial Random Variable [(screen)](/pdf/classes/stat/stat-screen-slides-binomial-rv.pdf) [(print)](/pdf/classes/stat/stat-print-slides-binomial-rv.pdf)
 
 ## Other Stuff
