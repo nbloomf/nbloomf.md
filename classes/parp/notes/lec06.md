@@ -4,7 +4,7 @@ title: Notes on Lecture 6
 
 ([Go back to the course page](/classes/parp/index.html))
 
-[youtube JCJ_J2OA68o]
+[youtube id='JCJ_J2OA68o' show-related='no' class='video-container']
 
 ## Links
 

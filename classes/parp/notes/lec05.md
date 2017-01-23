@@ -4,7 +4,7 @@ title: Notes on Lecture 5
 
 ([Go back to the course page](/classes/parp/index.html))
 
-[youtube xfWIhmfiaRk]
+[youtube id='xfWIhmfiaRk' show-related='no' class='video-container']
 
 ## Links
 

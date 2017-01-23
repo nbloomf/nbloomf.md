@@ -17,6 +17,7 @@ As usual we begin with some pragmas and imports, to be used later. The ``Overloa
 > module Main where
 >
 > import Hakyll
+> import Hakyll.Shortcode
 > import Data.Monoid (mconcat)
 > import qualified Data.Set as S (fromList, union)
 > import Text.Regex (subRegex, mkRegex)
@@ -115,7 +116,7 @@ The ``matchPosts`` rule is a little different from the others we've seen so far.
 >     let ctx = postWithTagsCtx tags
 >
 >     compile $ pandocMathCompiler
->       >>= applyFilter youtubeFilter
+>       >>= applyFilter expandAllShortcodes
 >       >>= loadAndApplyTemplate
 >             "templates/post.html" ctx
 >       >>= loadAndApplyTemplateIfTagged
@@ -135,25 +136,8 @@ Here we used a custom compiler, ``loadAndApplyTemplateIfTagged``, which loads a 
 >     then loadAndApplyTemplate template context x
 >     else return x
 
-We also apply a custom filter for converting "shortcodes" (borrowing a WordPress term) into ``iframes``. This is shamelessly cribbed from [Jonas Hietala](http://www.jonashietala.se/blog/2014/09/01/embedding_youtube_videos_with_hakyll/) ([archive](http://web.archive.org/web/20161005181904/http://www.jonashietala.se/blog/2014/09/01/embedding_youtube_videos_with_hakyll/)). To use it, put ``[youtube ZZZ]`` on its own line, between two blank lines.
+We also apply a custom filter for converting "shortcodes" (borrowing a WordPress term) into ``iframes``. This is inspired by code shamelessly cribbed from [Jonas Hietala](http://www.jonashietala.se/blog/2014/09/01/embedding_youtube_videos_with_hakyll/) ([archive](http://web.archive.org/web/20161005181904/http://www.jonashietala.se/blog/2014/09/01/embedding_youtube_videos_with_hakyll/)), but the guts are in a separate library, [``hakyll-shortcode``](https://github.com/nbloomf/hakyll-shortcode).
 
-> youtubeFilter :: String -> String
-> youtubeFilter x = subRegex regex x result
->   where
->     regex = mkRegex
->       "<p>\\[youtube ([A-Za-z0-9_-]+)\\]</p>"
->     result = concat
->       [ "<div class=\"video-wrapper\">"
->       , "  <div class=\"video-container\">"
->       , "    <iframe"
->       , "      src=\"https://www.youtube.com/embed/\\1?rel=0\""
->       , "      frameborder=\"0\""
->       , "      allowfullscreen"
->       , "    />"
->       , "  </div>"
->       , "</div>"
->       ]
->
 > applyFilter :: (Monad m, Functor f) => (String -> String) -> f String -> m (f String)
 > applyFilter f str = return $ (fmap $ f) str
 
@@ -163,7 +147,7 @@ The ``matchClasses`` rule is similar to ``matchPosts``; it handles the source fi
 > matchClasses = match "classes/**" $ do
 >   route $ setExtension "html"
 >   compile $ pandocMathCompiler
->     >>= applyFilter youtubeFilter
+>     >>= applyFilter expandAllShortcodes
 >     >>= loadAndApplyTemplate
 >           "templates/default.html" postCtx
 >     >>= relativizeUrls

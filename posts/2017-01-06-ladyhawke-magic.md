@@ -5,8 +5,8 @@ date: 2017-01-06
 tags: music
 ---
 
-[youtube 3ccbj0A6NJI]
+[youtube id='3ccbj0A6NJI' show-related='no' class='video-container']
 
 Related:
 
-[youtube okcSbKYPgMA]
+[youtube id='okcSbKYPgMA' show-related='no' class='video-container']

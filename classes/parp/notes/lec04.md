@@ -4,7 +4,7 @@ title: Notes on Lecture 4
 
 ([Go back to the course page](/classes/parp/index.html))
 
-[youtube JS52IuQ-UEg]
+[youtube id='JS52IuQ-UEg' show-related='no' class='video-container']
 
 ## Links
 
