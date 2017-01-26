@@ -4,7 +4,7 @@ title: Notes on Lecture 9
 
 ([Go back to the course page](/classes/parp/index.html))
 
-[youtube id='1IFVS3vS96g' show-related='no' class='video-container']
+[youtube id='1IFVS3vS96g' show-related='no']
 
 ## Links
 

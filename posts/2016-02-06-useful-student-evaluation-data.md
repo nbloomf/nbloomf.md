@@ -5,7 +5,8 @@ date: 2016-02-06
 tags: unix, cli, awk, latex
 ---
 
-[Updated](#cleanup) (2016-09-18): Add ``cleanup.awk`` to build LaTeX tables.
+* Updated (2017-01-24): Still working with no changes. :)
+* [Updated](#cleanup) (2016-09-18): Add ``cleanup.awk`` to build LaTeX tables.
 
 * * *
 

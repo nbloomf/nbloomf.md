@@ -27,16 +27,16 @@ No.  Topic                                     Start Date  Completion Date
 
 3    Parallel Machines and Programming Models  1/20/2017   1/23/2017
 
-4    Sources of Parallelism and Locality       1/23/2017   1/25/2017
+4    Sources of Parallelism and Locality       1/23/2017   1/30/2017
      in Simulation - Part 1
 
-5    Sources of Parallelism and Locality       1/25/2017   1/30/2017
+5    Sources of Parallelism and Locality       1/28/2017   2/3/2017
      in Simulation - Part 2
 
-6    Shared Memory Programming: Threads and    1/30/2017   2/6/2017
+6    Shared Memory Programming: Threads and    2/3/2017    2/6/2017
      OpenMP, and Tricks with Trees
 
-     **Programming Homework 1**                1/23/2017   2/3/2017
+     **Programming Homework 1**                1/23/2017   2/10/2017
 
 7    Distributed Memory Machines               ?/?/2017    ?/?/2017
      and Programming

@@ -28,8 +28,11 @@ title: College Algebra
 * Jan 20
     * [Activity 2](/pdf/classes/coal/coal-a02-quadratic-equations.pdf) ([solutions](/pdf/classes/coal/coal-soln-a02-quadratic-equations.pdf))
 * Jan 23
+    * Khan Academy: [Multi-step inequalities](https://www.khanacademy.org/math/algebra-home/alg-basic-eq-ineq/alg-multi-step-inequalities/v/multi-step-inequalities-3)
+    * Khan Academy: [Compound inequalities with AND and OR](https://www.khanacademy.org/math/algebra-home/alg-basic-eq-ineq/alg-compound-inequalities/v/compund-inequalities)
 * Jan 25
     * Practice Problems: 1.7 #15--26, 45--68
+    * Khan Academy: [Absolute value inequalities](https://www.khanacademy.org/math/algebra-home/alg-absolute-value/alg-absolute-value-inequalities/v/absolute-value-inequalities)
 * Jan 27
     * Activity 3 [](/pdf/classes/coal/coal-a03-compound-equations.pdf) [](/pdf/classes/coal/coal-soln-a03-compound-equations.pdf)
 * Jan 30

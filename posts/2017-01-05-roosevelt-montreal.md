@@ -5,4 +5,4 @@ date: 2017-01-05
 tags: music
 ---
 
-[youtube id='UBS6MM05KdY' show-related='no' class='video-container']
+[youtube id='UBS6MM05KdY' show-related='no']
