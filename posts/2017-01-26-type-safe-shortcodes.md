@@ -46,7 +46,7 @@ But does it have to be this way? It would be nice if it were so easy to write sa
 
 In my day job as a teacher I have a new course this year that makes heavy use of YouTube videos. And rather than putting links to said videos on a web page, I decided I'd rather embed them.
 
-The only issue with this idea was that this site (and all my course pages) are served statically from GitHub Pages rather than with WordPress. This site exists as a bunch of markdown-formatted files on my computer (and on [GitHub](https://github.com/nbloomf/nbloomf.md)) which gets "compiled" into proper HTML by a static site generator -- in this case, [Hakyll](https://jaspervdj.be/hakyll/). And yadda yadda yadda, no shortcodes.
+The only issue with this idea was that this site (and all my course pages) are served statically from GitHub Pages rather than with WordPress. This site exists as a bunch of markdown-formatted files on my computer (and on [GitHub](https://github.com/nbloomf/nbloomf.md)) which gets "compiled" into proper HTML by a static site generator -- in this case, [Hakyll](https://jaspervdj.be/hakyll/). And yadda yadda yadda, no shortcodes. I can type out literal ``iframes`` like a hunter-gatherer, but that's no fun.
 
 So why use a static site? As much as I love WordPress (and I do -- I have a reasonably trafficked WP blog floating around, which I tend not to emphasize my authorship of) I also like using the right tool for the job -- and for this particular site, the simplicity and extra security of static files outweighed the benefits of a dynamic site.
 
