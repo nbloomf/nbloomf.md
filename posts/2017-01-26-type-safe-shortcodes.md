@@ -70,9 +70,9 @@ I like to think of types in programming languages as colors. Every chunk of data
 
 Every language has a type model; some of them just don't do anything useful.
 
-Just like a Phillips head screwdriver won't fit a slotted screw and a North American electrical cord won't plug into a European outlet, in a strictly typed programming language, trying to evaluate a function with inputs of the wrong color is an error. If your language is strictly typed enough, that error can be detected just by looking at the program's source and without having to run it. And if your language is *really* strictly typed, the compiler or interpreter can figure this out without you having to tell it the types of things all the time.
+Just like a Phillips head screwdriver won't fit a slotted screw and a North American electrical cord won't plug into a European outlet, in a type safe programming language, trying to evaluate a function with inputs of the wrong color is an error. If your language is type safe enough, that error can be detected just by looking at the program's source and without having to run it. And if your language is *really* type safe, the compiler or interpreter can figure this out without you having to tell it the types of things all the time.
 
-Haskell is *really* strictly typed.
+Haskell is *really* type safe.
 
 What does this have to do with shortcodes and XSS attacks?
 
