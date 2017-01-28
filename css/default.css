@@ -219,7 +219,7 @@ td.sourceCode {
 /* YouTube Embeds */
 /******************/
 
-.youtube-container {
+.youtube-container, .geogebra-container {
   position: relative;
   padding-bottom: 56.25%;
   padding-top: 30px;
@@ -229,7 +229,7 @@ td.sourceCode {
   max-width: 100%;
 }
 
-.youtube-container iframe {
+.youtube-container iframe, .geogebra-container iframe {
   position: absolute;
   top: 0;
   left: 0;
