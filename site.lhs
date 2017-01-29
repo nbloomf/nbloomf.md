@@ -116,7 +116,7 @@ The ``matchPosts`` rule is a little different from the others we've seen so far.
 >     let ctx = postWithTagsCtx tags
 >
 >     compile $ pandocMathCompiler
->       >>= applyFilter expandAllShortcodes
+>       >>= applyShortcodes allServices
 >       >>= loadAndApplyTemplate
 >             "templates/post.html" ctx
 >       >>= loadAndApplyTemplateIfTagged
@@ -138,16 +138,13 @@ Here we used a custom compiler, ``loadAndApplyTemplateIfTagged``, which loads a 
 
 We also apply a custom filter for converting "shortcodes" (borrowing a WordPress term) into ``iframes``. This is inspired by code shamelessly cribbed from [Jonas Hietala](http://www.jonashietala.se/blog/2014/09/01/embedding_youtube_videos_with_hakyll/) ([archive](http://web.archive.org/web/20161005181904/http://www.jonashietala.se/blog/2014/09/01/embedding_youtube_videos_with_hakyll/)), but the guts are in a separate library, [``hakyll-shortcode``](https://github.com/nbloomf/hakyll-shortcode).
 
-> applyFilter :: (Monad m, Functor f) => (String -> String) -> f String -> m (f String)
-> applyFilter f str = return $ (fmap $ f) str
-
 The ``matchClasses`` rule is similar to ``matchPosts``; it handles the source files for my course pages.
 
 > matchClasses :: Rules ()
 > matchClasses = match "classes/**" $ do
 >   route $ setExtension "html"
 >   compile $ pandocMathCompiler
->     >>= applyFilter expandAllShortcodes
+>     >>= applyShortcodes allServices
 >     >>= loadAndApplyTemplate
 >           "templates/default.html" postCtx
 >     >>= relativizeUrls
