@@ -2,6 +2,10 @@
 title: Projects
 ---
 
+* [**hakyll-shortcode**](https://github.com/nbloomf/hakyll-shortcode)
+
+    WordPress-style shortcodes for [Hakyll](https://jaspervdj.be/hakyll/). (Side note: why are so many of my projects in Haskell? I should branch out...)
+
 * [**Yentl**](http://github.com/nbloomf/yentl)
 
     A synthetic geometry DSL in Haskell.
