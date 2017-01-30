@@ -30,17 +30,19 @@ title: College Algebra
 * Jan 23
     * Khan Academy: [Multi-step inequalities](https://www.khanacademy.org/math/algebra-home/alg-basic-eq-ineq/alg-multi-step-inequalities/v/multi-step-inequalities-3)
     * Khan Academy: [Compound inequalities with AND and OR](https://www.khanacademy.org/math/algebra-home/alg-basic-eq-ineq/alg-compound-inequalities/v/compund-inequalities)
-* Jan 25
+* Jan 30
     * Practice Problems: 1.7 #15--26, 45--68
     * Khan Academy: [Absolute value inequalities](https://www.khanacademy.org/math/algebra-home/alg-absolute-value/alg-absolute-value-inequalities/v/absolute-value-inequalities)
-* Jan 27
-    * Activity 3 [](/pdf/classes/coal/coal-a03-compound-equations.pdf) [](/pdf/classes/coal/coal-soln-a03-compound-equations.pdf)
-* Jan 30
-    * Practice Problems: 1.7 #59--76
 * Feb 1
-    * Review for Test 1 [](/pdf/classes/coal/coal-r1-equations.pdf) [](/pdf/classes/coal/coal-soln-r1-equations.pdf)
+    * [Activity 3](/pdf/classes/coal/coal-a03-compound-equations.pdf) [](/pdf/classes/coal/coal-soln-a03-compound-equations.pdf)
+    * Practice Problems: 1.7 #59--76
 * Feb 3
+    * [Review for Test 1](/pdf/classes/coal/coal-r1-equations.pdf) [](/pdf/classes/coal/coal-soln-r1-equations.pdf)
+* Feb 6
     * **Test 1**
+
+(Dates below will be updated.)
+
 * Feb 6
     * Practice Problems: 1.3 #19--24, 33--36, 41--46 ([scan](/pdf/scans/classes/coal/dugopolski/1-3-ex.pdf))
 * Feb 8
