@@ -128,3 +128,8 @@ No.  Topic                                     Start Date  Completion Date
 * [Lecture 9](/classes/parp/notes/lec09.html)
 * [Lecture 10](/classes/parp/notes/lec10.html)
 * [Lecture 11](/classes/parp/notes/lec11.html)
+
+
+## Homework
+
+* [Homework 1](/classes/parp/notes/hw1.html)
