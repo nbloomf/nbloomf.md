@@ -11,6 +11,8 @@ title: Intro to Proof
 Problem numbers are from the 2nd edition.
 
 * Section 1.2: 1.2.3, 1.2.4, 1.2.11, 1.2.13
+* Section 1.3: 1.3.1, 1.3.2, 1.3.4, 1.3.5
+* Section 1.5: 1.5.1, 1.5.2
 
 ## Papers
 
