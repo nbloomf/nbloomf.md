@@ -6,6 +6,10 @@ title: Statistical Methods
 
 * [Syllabus](/pdf/classes/stat/stat-syllabus.pdf)
 
+## Activities
+
+* [Basic Parameters](/pdf/classes/stat/stat-a01-basic-parameters.pdf) ([solutions](/pdf/classes/stat/stat-soln-a01-basic-parameters.pdf))
+
 ## Slides
 
 * Misleading Graphs ([screen](/pdf/classes/stat/stat-s-misleading-graphs.pdf)) ([print](/pdf/classes/stat/stat-print-s-misleading-graphs.pdf))
@@ -27,7 +31,7 @@ title: Statistical Methods
 
 ## Activities
 
-1. [Basic Parameters](/pdf/classes/stat/stat-a01-basic-parameters.pdf) ([solutions](/pdf/classes/stat/stat-soln-a01-basic-parameters.pdf))
+1.
 2. [Probability](/pdf/classes/stat/stat-a02-probability.pdf) ([solutions](/pdf/classes/stat/stat-soln-a02-probability.pdf))
 3. [Counting](/pdf/classes/stat/stat-a03-counting.pdf)
 4. [Discrete Random Variables](/pdf/classes/stat/stat-a04-discrete-random-variables.pdf)
