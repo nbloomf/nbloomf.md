@@ -34,10 +34,10 @@ title: College Algebra
     * Practice Problems: 1.7 #15--26, 45--68
     * Khan Academy: [Absolute value inequalities](https://www.khanacademy.org/math/algebra-home/alg-absolute-value/alg-absolute-value-inequalities/v/absolute-value-inequalities)
 * Feb 1
-    * [Activity 3](/pdf/classes/coal/coal-a03-compound-equations.pdf) [](/pdf/classes/coal/coal-soln-a03-compound-equations.pdf)
+    * [Activity 3](/pdf/classes/coal/coal-a03-compound-equations.pdf) ([solutions](/pdf/classes/coal/coal-soln-a03-compound-equations.pdf))
     * Practice Problems: 1.7 #59--76
 * Feb 3
-    * [Review for Test 1](/pdf/classes/coal/coal-r1-equations.pdf) [](/pdf/classes/coal/coal-soln-r1-equations.pdf)
+    * [Review for Test 1](/pdf/classes/coal/coal-r1-equations.pdf) ([solutions](/pdf/classes/coal/coal-soln-r1-equations.pdf))
 * Feb 6
     * **Test 1**
 
