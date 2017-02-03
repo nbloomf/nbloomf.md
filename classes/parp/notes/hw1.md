@@ -107,3 +107,63 @@ Handy tip: you can configure the job scripts to send you an email when your job 
 #SBATCH --mail-user={your email}
 #SBATCH --mail-type=all
 ```
+
+## The Assignment
+
+The file you turn in will be named ``dgemm.c`` and must include two functions with precise signatures. We will get started by copying one of the examples.
+
+```bash
+$> cp dgemm-blocked.c dgemm.c
+$> cp job-blocked job
+```
+
+Now we need to edit the ``Makefile`` to compile our hand-tuned program. Change the lines
+
+```
+targets = benchmark-naive benchmark-blocked benchmark-blas
+objects = benchmark.o dgemm-naive.o dgemm-blocked.o dgemm-blas.o
+```
+
+to this:
+
+```
+targets = benchmark-naive benchmark-blocked benchmark-blas benchmark-hw1
+objects = benchmark.o dgemm-naive.o dgemm-blocked.o dgemm-blas.o dgemm.o
+```
+
+And add this:
+
+```
+benchmark-hw1 : benchmark.o dgemm.o
+        $(CC) -o $@ $^ $(LDLIBS)
+```
+
+to the end of the list of rules.
+
+You should now be able to compile your copied code; try it with ``make``.
+
+Last but not least, we need to edit the job script to run our program ``benchmark-hw1``. To do this, open ``job`` and change this:
+
+```
+#SBATCH -o MyBlockedOutputFile.%j.out
+#SBATCH -e MyBlockedErrorFile.%j.err
+
+./benchmark-blocked
+```
+
+to this:
+
+```
+#SBATCH -o HW1_OutputFile.%j.out
+#SBATCH -e HW1_ErrorFile.%j.err
+
+./benchmark-hw1
+```
+
+Test it out with
+
+```bash
+sbatch job
+```
+
+If all this went well, you can now play with the source file ``dgemm.c``. This is the file we will eventually submit for grading.
