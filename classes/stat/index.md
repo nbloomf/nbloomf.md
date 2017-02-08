@@ -8,7 +8,8 @@ title: Statistical Methods
 
 ## Activities
 
-* [Basic Parameters](/pdf/classes/stat/stat-a01-basic-parameters.pdf) ([solutions](/pdf/classes/stat/stat-soln-a01-basic-parameters.pdf))
+1 [Basic Parameters](/pdf/classes/stat/stat-a01-basic-parameters.pdf) ([solutions](/pdf/classes/stat/stat-soln-a01-basic-parameters.pdf))
+2. [Probability](/pdf/classes/stat/stat-a02-probability.pdf) ([solutions](/pdf/classes/stat/stat-soln-a02-probability.pdf))
 
 ## Slides
 
@@ -31,8 +32,6 @@ title: Statistical Methods
 
 ## Activities
 
-1.
-2. [Probability](/pdf/classes/stat/stat-a02-probability.pdf) ([solutions](/pdf/classes/stat/stat-soln-a02-probability.pdf))
 3. [Counting](/pdf/classes/stat/stat-a03-counting.pdf)
 4. [Discrete Random Variables](/pdf/classes/stat/stat-a04-discrete-random-variables.pdf)
 5. [Discrete Random Variables II](/pdf/classes/stat/stat-a05-discrete-random-variables-ii.pdf)
