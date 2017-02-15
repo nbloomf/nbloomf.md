@@ -12,9 +12,15 @@ title: Statistical Methods
 2. [Probability](/pdf/classes/stat/stat-a02-probability.pdf) ([solutions](/pdf/classes/stat/stat-soln-a02-probability.pdf))
 3. [Probability 2](/pdf/classes/stat/stat-a03-probability-2.pdf)
 
+
 ## Slides
 
 * Misleading Graphs ([screen](/pdf/classes/stat/stat-s-misleading-graphs.pdf)) ([print](/pdf/classes/stat/stat-print-s-misleading-graphs.pdf))
+
+
+## Test Review
+
+1. [Test 1](/pdf/classes/stat/stat-r1-parameters-and-probability.pdf) ([solutions](/pdf/classes/stat/stat-soln-r1-parameters-and-probability.pdf))
 
 <!-- 
 
@@ -40,9 +46,6 @@ title: Statistical Methods
 7. [Sampling Distributions](/pdf/classes/stat/stat-a07-sampling-distributions.pdf)
 
 
-## Test Review
-
-* [Test 1](/pdf/classes/stat/stat-r1-parameters-and-probability.pdf) ([solutions](/pdf/classes/stat/stat-soln-r1-parameters-and-probability.pdf))
 * [Test 2](/pdf/classes/stat/stat-r2-counting-and-drvs.pdf)
 * [Test 3](/pdf/classes/stat/stat-r3-continuous-rvs.pdf)
 
