@@ -48,7 +48,7 @@ title: College Algebra
 * Feb 8
     * Practice Problems: 1.4 #9--56
 * Feb 10
-    * Activity 4 [](/pdf/classes/coal/coal-a04-some-geometry.pdf) [](/pdf/classes/coal/coal-soln-a04-some-geometry.pdf)
+    * [Activity 4](/pdf/classes/coal/coal-a04-some-geometry.pdf) ([solutions](/pdf/classes/coal/coal-soln-a04-some-geometry.pdf))
 * Feb 13
     * Practice Problems: 2.1 #19--24, 67--78; 2.4 #41--54, 55--66 (find equation only)
 * Feb 15
