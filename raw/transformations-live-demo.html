@@ -50,6 +50,9 @@
   var cubic3     = function (x,y) {
     return x*y*y - x*x - y*y - 4*x - 4*y - 4;
   };
+  var hyperelliptic1 = function (x,y) {
+    return y*y - x*(x-1)*(x-2)*(x+1)*(x+2);
+  };
 
   // foo should be a "continuous" function of two real numbers.
   // (Scare quotes because damn you floating point.)
@@ -220,6 +223,9 @@
       case 'cubic3':
         drawPlot(cubic3);
         break;
+      case 'hyperelliptic1':
+        drawPlot(hyperelliptic1);
+        break;
     }
 
     return;
@@ -269,6 +275,7 @@ Equation Type: <select id="equation-type" onclick="draw();">
   <option value="ampersand">Ampersand</option>
   <option value="lemniscate">Lemniscate</option>
   <option value="devil">Devil's Curve</option>
+  <option value="hyperelliptic1">Hyperelliptic 1</option>
 </select>
 </div>
 
