@@ -30,6 +30,7 @@
   /* Primitive Equations */
   var circle     = function (x,y) { return x*x + y*y - 1; };
   var line       = function (x,y) { return y - x; };
+  var absval     = function (x,y) { return y - Math.abs(x); };
   var quadratic  = function (x,y) { return y - x*x; };
   var cubic      = function (x,y) { return y - x*x*x + x; };
   var elliptic1  = function (x,y) { return y*y - x*x*x + 2*x; };
@@ -189,6 +190,9 @@
       case 'line':
         drawPlot(line);
         break;
+      case 'absval':
+        drawPlot(absval);
+        break;
       case 'elliptic':
         drawPlot(elliptic1);
         break;
@@ -255,6 +259,7 @@
 Equation Type: <select id="equation-type" onclick="draw();">
   <option value="circle">Circle</option>
   <option value="line">Line</option>
+  <option value="absval">Absolute Value</option>
   <option value="quadratic">Quadratic</option>
   <option value="cubic">Cubic 1</option>
   <option value="cubic2">Cubic 2</option>

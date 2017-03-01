@@ -10,10 +10,10 @@ title: Intro to Proof
 
 Problem numbers are from the 2nd edition.
 
-* Section 1.2: 1.2.3, 1.2.4, 1.2.11, 1.2.13
-* Section 1.3: 1.3.1, 1.3.2, 1.3.4, 1.3.5
-* Section 1.5: 1.5.1, 1.5.2
-* Section 3.3: 3.3.2, 3.3.9, 3.3.11
+* Section 1.2: 1.2.3, 1.2.4, 1.2.11, 1.2.13 ([scan](/pdf/scans/classes/prfs/bloch/1.2-ex.pdf))
+* Section 1.3: 1.3.1, 1.3.2, 1.3.4, 1.3.5 ([scan](/pdf/scans/classes/prfs/bloch/1.3-ex.pdf))
+* Section 1.5: 1.5.1, 1.5.2 ([scan](/pdf/scans/classes/prfs/bloch/1.5-ex.pdf))
+* Section 3.3: 3.3.2, 3.3.9, 3.3.11 ([scan](/pdf/scans/classes/prfs/bloch/3.3-ex.pdf))
 
 ## Papers
 
