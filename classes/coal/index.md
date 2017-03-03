@@ -40,25 +40,23 @@ title: College Algebra
     * [Review for Test 1](/pdf/classes/coal/coal-r1-equations.pdf) ([solutions](/pdf/classes/coal/coal-soln-r1-equations.pdf))
 * Feb 6
     * **Test 1**
+* Feb 8
+    * Practice Problems: 1.3 #19--24, 33--36, 41--46 ([scan](/pdf/scans/classes/coal/dugopolski/1-3-ex.pdf))
+    * Practice Problems: 1.4 #9--56
+* Feb 13
+    * [Activity 4](/pdf/classes/coal/coal-a04-some-geometry.pdf) ([solutions](/pdf/classes/coal/coal-soln-a04-some-geometry.pdf))
+* Feb 17
+    * Practice Problems: 2.1 #19--24, 67--78; 2.4 #41--54, 55--66 (find equation only)
+* Feb 24
+    * Practice Problems: 2.2 #39--48 (draw only)
+* Feb 27
+    * [Activity 5](/pdf/classes/coal/coal-a05-functions.pdf) ([solutions](/pdf/classes/coal/coal-soln-a05-functions.pdf))11
+* Mar 1
+    * Practice Problems: 2.3 #11--26, 35--44
+    * [Transformations demo](/classes/coal/transformations-live-demo.html): Play with transformations of equations.
 
 (Dates below will be updated.)
 
-* Feb 6
-    * Practice Problems: 1.3 #19--24, 33--36, 41--46 ([scan](/pdf/scans/classes/coal/dugopolski/1-3-ex.pdf))
-* Feb 8
-    * Practice Problems: 1.4 #9--56
-* Feb 10
-    * [Activity 4](/pdf/classes/coal/coal-a04-some-geometry.pdf) ([solutions](/pdf/classes/coal/coal-soln-a04-some-geometry.pdf))
-* Feb 13
-    * Practice Problems: 2.1 #19--24, 67--78; 2.4 #41--54, 55--66 (find equation only)
-* Feb 15
-    * Practice Problems: 2.2 #39--48 (draw only)
-* Feb 17
-    * Activity 5 [](/pdf/classes/coal/coal-a05-functions.pdf) [](/pdf/classes/coal/coal-soln-a05-functions.pdf)
-* Feb 20
-* Feb 22
-    * Practice Problems: 2.3 #11--26, 35--44
-    * [Transformations demo](/classes/coal/transformations-live-demo.html): Play with transformations of equations.
 * Feb 24
     * Activity 6 [](/pdf/classes/coal/coal-a06-domains.pdf) [](/pdf/classes/coal/coal-soln-a06-domains.pdf)
 * Feb 27
