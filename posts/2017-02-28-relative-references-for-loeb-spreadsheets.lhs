@@ -164,7 +164,7 @@ Useful spreadsheets include cell references, both absolute (get the value in cel
 
 Making the "address" type an instance of monoid makes this code more polymorphic. An instance for ``Int`` will be handy:
 
-```
+```haskell
 
 > instance Monoid Int where
 >   mappend = (+)
