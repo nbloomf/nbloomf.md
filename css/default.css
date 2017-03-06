@@ -90,7 +90,7 @@ pre.literate {
 /* Theorems */
 /************/
 
-div.result {
+div.result, div.problem {
   border-left: solid 1px gray;
   padding-left: 12px;
   padding-right: 12px;
