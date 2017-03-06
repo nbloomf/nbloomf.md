@@ -5,7 +5,7 @@ date: 2017-02-28
 tags: haskell
 ---
 
-This post is literate Haskell; you can copy and paste the contents to a module or just download the [source file](https://github.com/nbloomf/nbloomf.md/posts/2017-02-28-relative-references-for-loeb-spreadsheets.lhs) directly, load it in GHCi, and play with it on your own machine. As usual, we need to start with some pragmas and imports.
+This post is literate Haskell; you can copy and paste the contents to a module or just download the [source file](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2017-02-28-relative-references-for-loeb-spreadsheets.lhs) directly, load it in GHCi, and play with it on your own machine. As usual, we need to start with some pragmas and imports.
 
 ```haskell
 
