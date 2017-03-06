@@ -1,11 +1,11 @@
 ---
-title: Project Euler No. 1: Multiples of 3 and 5
+title: Project Euler Solution #1: Multiples of 3 and 5
 author: nbloomf
 date: 2017-03-05
 tags: project-euler
 ---
 
-This post is literate Haskell; you can load [the source](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2017-03-05-project-euler-problem-1.lhs) into GHCi and play along.
+This post is literate Haskell; you can load [the source](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2017-03-05-project-euler-solution-1.lhs) into GHCi and play along.
 
 [Problem 1](https://projecteuler.net/problem=1) from Project Euler:
 
