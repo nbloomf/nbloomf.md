@@ -54,25 +54,22 @@ title: College Algebra
 * Mar 1
     * Practice Problems: 2.3 #11--26, 35--44
     * [Transformations demo](/classes/coal/transformations-live-demo.html): Play with transformations of equations.
-
-(Dates below will be updated.)
-
-* Feb 24
-    * Activity 6 [](/pdf/classes/coal/coal-a06-domains.pdf) [](/pdf/classes/coal/coal-soln-a06-domains.pdf)
-* Feb 27
+* Mar 3
+    * [Activity 6](/pdf/classes/coal/coal-a06-domains.pdf) ([solutions](/pdf/classes/coal/coal-soln-a06-domains.pdf))
     * Practice Problems: 2.3 #45--60
-* Mar 1
+* Mar 8
     * Practice Problems: 2.3 #61--80
     * [Symmetry demo](/classes/coal/symmetry-live-demo.html): Look for symmetries.
-* Mar 3
-    * Activity 7 [](/pdf/classes/coal/coal-a07-transformations.pdf) [](/pdf/classes/coal/coal-soln-a07-transformations.pdf)
-* Mar 6
-    * Practice Problems: 2.5 #19--28, 51, 52
-* Mar 8
-    * Review for Test 2 [](/pdf/classes/coal/coal-r2-functions-and-geometry.pdf) [](/pdf/classes/coal/coal-soln-r2-functions-and-geometry.pdf)
 * Mar 10
-    * **Test 2**
+    * Practice Problems: 2.5 #19--28, 51, 52
+    * Activity 7 [](/pdf/classes/coal/coal-a07-transformations.pdf) [](/pdf/classes/coal/coal-soln-a07-transformations.pdf)
 * Mar 13--17 (Spring Break)
+* Mar 20
+    * Review for Test 2 [](/pdf/classes/coal/coal-r2-functions-and-geometry.pdf) [](/pdf/classes/coal/coal-soln-r2-functions-and-geometry.pdf)
+* Mar 22
+    * **Test 2**
+
+
 * Mar 20
     * Practice Problems: 3.2 #41--80; 3.4 #33--46 (long term behavior only)
 * Mar 22

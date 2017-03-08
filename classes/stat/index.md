@@ -11,6 +11,7 @@ title: Statistical Methods
 1. [Basic Parameters](/pdf/classes/stat/stat-a01-basic-parameters.pdf) ([solutions](/pdf/classes/stat/stat-soln-a01-basic-parameters.pdf))
 2. [Probability](/pdf/classes/stat/stat-a02-probability.pdf) ([solutions](/pdf/classes/stat/stat-soln-a02-probability.pdf))
 3. [Probability 2](/pdf/classes/stat/stat-a03-probability-2.pdf)
+4. [Counting](/pdf/classes/stat/stat-a04-counting.pdf)
 
 
 ## Slides
