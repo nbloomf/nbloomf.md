@@ -69,6 +69,7 @@ title: College Algebra
 * Mar 22
     * **Test 2**
 
+(Dates below will be updated)
 
 * Mar 20
     * Practice Problems: 3.2 #41--80; 3.4 #33--46 (long term behavior only)

@@ -92,15 +92,29 @@ Here's a quick and dirty way to find the largest index of a Fibonacci number bel
 
 But this doesn't really improve on our naive implementation of ``pe2'``, since it still requires generating all the Fibonacci numbers up to $n$. Here's a better idea. $F$ is a monotone increasing function on the natural numbers, and we wish to find the largest $m$ such that $F(m) < N$. We can find this $m$ using a binary search.
 
-First, we find integers $a$ and $b$ such that $F(a) \leq N < F(b)$; this can be done by looking at $m = 2^i$ for increasing $i$.
+First, we find integers $a$ and $b$ such that $F(a) < N \leq F(b)$; this can be done by looking at $m = 2^i$ for increasing $i$.
 
-Then, once such $a$ and $b$ are found, we tighten the interval $(a,b)$ bounding a root of $F(x) - n$ by bisection. The ``binarysearch`` function does this, taking a function $G$ as a parameter.
+Then, once such $a$ and $b$ are found, we tighten the interval $(a,b)$ bounding a root of $F(x) - N$ by bisection. The ``binarysearch`` function does this, taking a function $G$ as a parameter.
 
 ```haskell
 
+> -- g is nondecreasing on positive integers
+> -- g(1) < n
+> -- returns the largest t such that g(t) < n
 > binarysearch :: (Integer -> Integer) -> Integer -> Integer
 > binarysearch g n = refine init
 >   where
+>     -- find powers of 2 that bound a root of g(x) - n
+>     k =
+>       fst $
+>       head $
+>       dropWhile ((< n) . snd) $
+>       map (\k -> (k, g $ 2^k)) [1..]
+> 
+>     -- this interval contains a root of g(x) - n
+>     init = (2^(k-1), 2^k)
+> 
+>     -- bisect a root-containing interval
 >     refine (a,b)
 >       | b-a <= 1 = a
 >       | otherwise = let m = (a+b)`quot`2 in
@@ -108,14 +122,6 @@ Then, once such $a$ and $b$ are found, we tighten the interval $(a,b)$ bounding 
 >             EQ -> m-1
 >             LT -> refine (m,b)
 >             GT -> refine (a,m)
-> 
->     init = (2^(k-1), 2^k)
-> 
->     k =
->       fst $
->       head $
->       dropWhile ((< n) . snd) $
->       map (\k -> (k, g $ 2^k)) [1..]
 
 ```
 
@@ -150,12 +156,6 @@ With an implementation of Binet's formula, we'd be nearly there. But in order to
 >     Root5 (negate a) (negate b)
 > 
 >   abs = undefined; signum = undefined
-> 
-> instance Ord Root5 where
->   (Root5 a b) < (Root5 c d)
->     | b == d = a < c
->     | (a-c)/(d-b) <= 1 = True
->     | otherwise = ((a-c)/(d-b))^2 < 5
 > 
 > instance Fractional Root5 where
 >   fromRational q = Root5 q 0
