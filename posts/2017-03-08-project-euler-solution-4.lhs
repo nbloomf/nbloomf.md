@@ -17,7 +17,6 @@ This post is literate Haskell; you can load [the source](https://raw.githubuserc
 [Problem 4](https://projecteuler.net/problem=4) from Project Euler:
 
 <div class="problem">
-
 A palindromic number reads the same both ways. The largest palindrome made from the product of two 2-digit numbers is 9009 = 91 × 99.
 
 Find the largest palindrome made from the product of two 3-digit numbers.
