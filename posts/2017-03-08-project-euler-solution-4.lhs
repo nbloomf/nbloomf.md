@@ -5,7 +5,7 @@ date: 2017-03-08
 tags: project-euler
 ---
 
-This post is literate Haskell; you can load [the source](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2017-03-07-project-euler-solution-4.lhs) into GHCi and play along.
+This post is literate Haskell; you can load [the source](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2017-03-08-project-euler-solution-4.lhs) into GHCi and play along.
 
 ```haskell
 
@@ -305,7 +305,7 @@ Along with the observation that $993 \cdot 913 = 906609$ and $11011 \cdot 91091 
 
 <div class="result">
 <div class="thm">
-Let $k \geq 2$. Then among the $k$-digits numbers, there exists a pair $A$ and $B$ such that $AB$ is a $2k$-digit palindrome.
+Let $k \geq 2$. Then among the $k$-digit numbers, there exists a pair $A$ and $B$ such that $AB$ is a $2k$-digit palindrome.
 
 In particular, the largest such palindrome has $2k$ digits.
 </div>
