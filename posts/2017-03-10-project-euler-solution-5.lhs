@@ -1,5 +1,5 @@
 ---
-title: Project Euler Solution #5: Smallest Multiple
+title: Project Euler #5: Smallest Multiple
 author: nbloomf
 date: 2017-03-10
 tags: project-euler
@@ -42,6 +42,8 @@ What makes the Euclidean Algorithm so nice is that, combined with the Well-Order
 > a \/ b = b \/ (a`rem`b)
 > 
 > a /\ b = (a*b)`div`(a \/ b)
+
+```
 
 The second property above says that if we want to find the LCM of a bunch of integers, we can do so pairwise, and it doesn't matter what order we do this in. For instance, using ``foldr1``:
 

@@ -1,5 +1,5 @@
 ---
-title: Project Euler Solution #3: Largest Prime Factor
+title: Project Euler #3: Largest Prime Factor
 author: nbloomf
 date: 2017-03-07
 tags: project-euler

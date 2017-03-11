@@ -1,5 +1,5 @@
 ---
-title: Project Euler Solution #4: Largest Palindrome Product
+title: Project Euler #4: Largest Palindrome Product
 author: nbloomf
 date: 2017-03-08
 tags: project-euler
