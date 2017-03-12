@@ -65,7 +65,7 @@ title: College Algebra
     * Activity 7 [](/pdf/classes/coal/coal-a07-transformations.pdf) [](/pdf/classes/coal/coal-soln-a07-transformations.pdf)
 * Mar 13--17 (Spring Break)
 * Mar 20
-    * Review for Test 2 [](/pdf/classes/coal/coal-r2-functions-and-geometry.pdf) [](/pdf/classes/coal/coal-soln-r2-functions-and-geometry.pdf)
+    * [Review for Test 2](/pdf/classes/coal/coal-r2-functions-and-geometry.pdf) ([solutions](/pdf/classes/coal/coal-soln-r2-functions-and-geometry.pdf))
 * Mar 22
     * **Test 2**
 
