@@ -26,12 +26,12 @@ I will prefix the names of these ports with ``sth-``, to avoid clashing with exi
 
 ## The Tools (Book Order)
 
-* [``noop``](/pages/sth/tool/noop.html): exit successfully
+* [``noop``](/posts/2016-02-08-software-tools-in-haskell-noop.html): exit successfully
 
 ### Chapter 1: Getting Started
 
-* [``copy``](/pages/sth/tool/copy.html): copy characters from ``stdin`` to ``stdout``
-* [``count``](/pages/sth/tool/count.html): count lines or chars on ``stdin``
+* [``copy``](/posts/2016-02-10-software-tools-in-haskell-copy.html): copy characters from ``stdin`` to ``stdout``
+* [``count``](/posts/2016-02-11-software-tools-in-haskell-count.html): count lines or chars on ``stdin``
 * [``wordcount``](/pages/sth/tool/wordcount.html): count words on ``stdin``
 * [``sentcount``](/pages/sth/tool/sentcount.html): count sentences on ``stdin``
 * [``glyphcount``](/pages/sth/tool/glyphcount.html): count glyphs on ``stdin``

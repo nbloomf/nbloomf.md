@@ -3,20 +3,24 @@ title: Software Tools in Haskell: noop
 subtitle: exit successfully
 author: nbloomf
 date: 2016-02-08
-tags: software-tools, haskell
+tags: software-tools-in-haskell
 ---
 
-One of the most important things a program can do is exit successfully when it is finished. This is what (all, really) that ``noop`` does.
-
+This post is literate Haskell; you can load [the source](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2016-02-08-software-tools-in-haskell-noop.lhs) into GHCi and play along. As usual, we start with some imports.
 
 ```haskell
 
 > -- sth-noop: exit successfully
-> 
 > module Main where
 > 
 > import System.Exit (exitSuccess)
-> 
+
+```
+
+One of the most important things a program can do is exit successfully when it is finished. This is what (all, really) that ``noop`` does.
+
+```haskell
+
 > main :: IO ()
 > main = do
 >   -- real tools do stuff here

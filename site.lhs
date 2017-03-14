@@ -122,6 +122,8 @@ The ``matchPosts`` rule is a little different from the others we've seen so far.
 >       >>= loadAndApplyTemplateIfTagged
 >             "arithmetic-made-difficult" "templates/amd.html" ctx
 >       >>= loadAndApplyTemplateIfTagged
+>             "software-tools-in-haskell" "templates/sth-tools.html" ctx
+>       >>= loadAndApplyTemplateIfTagged
 >             "project-euler" "templates/project-euler-solutions.html" ctx
 >       >>= loadAndApplyTemplate
 >             "templates/default.html" ctx

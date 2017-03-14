@@ -68,21 +68,24 @@ clean: FORCE
 	@echo '  software tools docs' | doppler lightmagenta
 	@(rm -r pages/sth/* || true) 2> /dev/null
 
+
 check: FORCE
 	@wget -r -nv --spider https://nbloomf.github.io
 	@rm -r nbloomf.github.io
 
+
 tools:
-	$(call haskell_exe,2016-02-08-software-tools-in-haskell-noop)
+	$(call haskell_exe,2016-02-08-software-tools-in-haskell-noop,sth-noop)
+	$(call haskell_exe,2016-02-10-software-tools-in-haskell-copy,sth-copy)
+	$(call haskell_exe,2016-02-11-software-tools-in-haskell-count,sth-count)
 
-FORCE:
-
-
+# compile a literate haskell post
 define haskell_exe
   @echo "building $(1)" | doppler lightblue
-
   @ghc --make posts/$(1).lhs
-
   @rm posts/$(1).hi posts/$(1).o
-  @mv posts/$(1) _bin
+  @mv posts/$(1) _bin/$(2)
 endef
+
+
+FORCE:

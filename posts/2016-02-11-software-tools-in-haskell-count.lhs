@@ -1,13 +1,31 @@
 ---
-title: Software Tools in Haskel: count
+title: Software Tools in Haskell: count
 subtitle: count lines or chars on stdin
 author: nbloomf
+date: 2016-02-11
+tags: software-tools-in-haskell
 ---
+
+This post is literate Haskell; you can load [the source](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2016-02-11-software-tools-in-haskell-count.lhs) into GHCi and play along. As usual, we start with some imports.
+
+```haskell
+
+> -- sth-count: count lines or chars on stdin
+> module Main where
+> 
+> import System.Exit (exitSuccess)
+> import System.Environment (getArgs)
+> import Control.Arrow ((>>>))
+> import Data.List (unfoldr)
+> import Data.Foldable (foldl')
+
+```
 
 *Software Tools* includes two programs -- ``charcount`` and ``linecount`` -- which count chars and lines on ``stdin``, respectively. Because these functions are so similar, and we anticipate that counting lines will be more useful in practice than counting characters, we'll combine these into one program and trigger character counting with an optional command line argument. ``count`` is a filter, taking either char or line text and producing a line.
 
 
-### Counting Chars
+Counting Chars
+--------------
 
 We want ``count --char`` to count the characters on stdin until EOF is reached. Almost right off the bat we have a problem: with Unicode it is not obvious what a "character" is. For simplicity's sake I will split this problem in two: ``count --char``, which ignores any issues with unicode normalization like combining diacritics, and ``glyphcount``, which takes these issues into account. So for instance O̰ (capital O, with combining tilde below) counts as two characters but one glyph. Character encodings were much simpler and less useful when *Software Tools* was written. 🙂
 
@@ -15,16 +33,18 @@ Let's write a generic list-length counter:
 
 
 ```haskell
-count :: (Num t) => [a] -> t
-count = foldl' inc 0
-  where inc n _ = n+1
-```
 
+> count :: (Num t) => [a] -> t
+> count = foldl' inc 0
+>   where inc n _ = n+1
+
+```
 
 We use ``foldl'`` to force strictness and avoid a memory leak. The ``foldl`` function is lazy by default, meaning that it would generate a stack of unevaluated additions to be carried out only once EOF is reached.
 
 
-### Counting Lines
+Counting Lines
+--------------
 
 By default, ``count`` counts lines on ``stdin`` until EOF is reached. Now while the definition of "character" is reasonably clear (unicode notwithstanding), we have to think more carefully about what a "line" is.
 
@@ -41,47 +61,57 @@ This logic is captured by the ``getLines`` function, which splits a string into 
 
 
 ```haskell
-getLines :: String -> [String]
-getLines = unfoldr firstLine
-  where
-    firstLine :: String -> Maybe (String, String)
-    firstLine xs = case break (== '\n') xs of
-      ("","")   -> Nothing
-      (as,"")   -> Just (as,"")
-      (as,b:bs) -> Just (as,bs)
+
+> getLines :: String -> [String]
+> getLines = unfoldr firstLine
+>   where
+>     firstLine :: String -> Maybe (String, String)
+>     firstLine xs = case break (== '\n') xs of
+>       ("","")   -> Nothing
+>       (as,"")   -> Just (as,"")
+>       (as,b:bs) -> Just (as,bs)
+
 ```
 
 
-### The Program
+The Program
+-----------
 
 Our main program is a little more complicated than Kernighan and Plauger's because we've chosen to deal with command line arguments.
 
 
 ```haskell
--- sth-count: count lines or chars on stdin
 
-module Main where
+> main :: IO ()
+> main = do
+>   args <- getArgs
+> 
+>   case args of
+>     ["--char"] -> do
+>       charFilter (show . count)
+>       putNewLine
+>     otherwise -> do
+>       charFilter (getLines >>> count >>> show)
+>       putNewLine
+> 
+>   exitSuccess
 
-import System.Exit (exitSuccess)
-import System.Environment (getArgs)
-import Control.Arrow ((>>>))
-import STH.Lib
-  (count, getLines, putNewLine, charFilter)
-
-main :: IO ()
-main = do
-  args <- getArgs
-
-  case args of
-    ["--char"] -> do
-      charFilter (show . count)
-      putNewLine
-    otherwise -> do
-      charFilter (getLines >>> count >>> show)
-      putNewLine
-
-  exitSuccess
 ```
 
+``putNewLine`` is a semantic synonym for ``putStrLn ""``.
 
-``putNewLine`` is a semantic synonym for ``putStrLn ""``. Note also that we've demonstrated the ``>>>`` operator from ``Control.Arrow`` in contrast with composition. This is a standard library operator which (used here) is simply reversed function composition; it allows us to read chains of functions as if data flows from left to right, following the arrows.
+```haskell
+
+> -- print a line break
+> putNewLine :: IO ()
+> putNewLine = putStrLn ""
+> 
+> -- apply a map to stdin
+> charFilter :: (String -> String) -> IO ()
+> charFilter f = do
+>   xs <- getContents
+>   putStr $ f xs
+
+```
+
+Note also that we've demonstrated the ``>>>`` operator from ``Control.Arrow`` in contrast with composition. This is a standard library operator which (used here) is simply reversed function composition; it allows us to read chains of functions as if data flows from left to right, following the arrows.
