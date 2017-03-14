@@ -44,9 +44,6 @@ gather: FORCE
 	@cp $(NOTEDIR)/geo.pdf pdf/notes
 	@cp $(NOTEDIR)/groups.pdf pdf/notes
 	
-	@echo '  software tools' | doppler lightmagenta
-	@cp -r $(STHDIR)/gen/doc/. pages/sth
-	
 	@echo '  tex examples' | doppler lightmagenta
 	@cp -r $(TEXDIR)/md/.  pages/tex-examples
 	@cp -r $(TEXDIR)/pdf/. pdf/tex-examples
@@ -75,4 +72,17 @@ check: FORCE
 	@wget -r -nv --spider https://nbloomf.github.io
 	@rm -r nbloomf.github.io
 
+tools:
+	$(call haskell_exe,2016-02-08-software-tools-in-haskell-noop)
+
 FORCE:
+
+
+define haskell_exe
+  @echo "building $(1)" | doppler lightblue
+
+  @ghc --make posts/$(1).lhs
+
+  @rm posts/$(1).hi posts/$(1).o
+  @mv posts/$(1) _bin
+endef

@@ -39,7 +39,7 @@ main = hakyll rules
 rules :: Rules ()
 rules = undefined
 ```
-where ``Rules`` is a special monad for turning source files into web pages. Come to think of it, Hakyll feels a lot like ``make``. The Hakyll docs typically define an element of ``Rules`` using one giant ``do`` block, maybe with smaller ``do`` blocks nested in it. I'm not a big fan of this style. Personally I prefer smaller functions with good names and explicit type signatures, so instead I will break up the rules into separate functions. Here's my ``main``:
+where ``Rules`` is a special monad for turning source files into web pages. Come to think of it, Hakyll feels a lot like ``make``. The examples in the Hakyll docs typically define an element of ``Rules`` using one giant ``do`` block, maybe with smaller ``do`` blocks nested in it. I'm not a big fan of this style. Personally I prefer smaller functions with good names and explicit type signatures, so instead I will break up the rules into separate functions. Here's my ``main``:
 
 > main :: IO ()
 > main = hakyll $ do
@@ -127,7 +127,7 @@ The ``matchPosts`` rule is a little different from the others we've seen so far.
 >             "templates/default.html" ctx
 >       >>= relativizeUrls
 
-Here we used a custom compiler, ``loadAndApplyTemplateIfTagged``, which loads a given template only if a post has a given tag. This is a cheap way to give some and only some posts a custom header or style.
+Here we also used a custom compiler, ``loadAndApplyTemplateIfTagged``, which loads a given template only if a post has a given tag. This is a cheap way to give some and only some posts a custom header or style.
 
 > loadAndApplyTemplateIfTagged
 >   :: String -> Identifier -> Context String -> Item String -> Compiler (Item String)

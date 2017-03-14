@@ -10,7 +10,9 @@ This post is literate Haskell; you can load [the source](https://raw.githubuserc
 [Problem 7](https://projecteuler.net/problem=7) from Project Euler:
 
 <div class="problem">
+By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.
 
+What is the 10001st prime number?
 </div>
 
 We already wrote a utility to list the primes for [Problem 3](/posts/2017-03-07-project-euler-solution-3.html):
