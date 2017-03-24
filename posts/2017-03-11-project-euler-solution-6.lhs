@@ -21,8 +21,6 @@ Find the difference between the sum of the squares of the first one hundred natu
 
 We'll start with the obvious thing:
 
-```haskell
-
 > sum_squares' :: Integer -> Integer
 > sum_squares' n = sum $ map (^2) [1..n]
 > 
@@ -31,8 +29,6 @@ We'll start with the obvious thing:
 >
 > pe6' :: Integer -> Integer
 > pe6' n = (square_sum' n) - (sum_squares' n)
-
-```
 
 Sanity check:
 
@@ -115,15 +111,11 @@ as needed. Which means that $$T(n) + S(n) = \frac{n(n+1)(n-1)(3n+2)}{12}.$$
 
 Let's try it.
 
-```haskell
-
 > pe6'' :: Integer -> Integer
 > pe6'' n = n*(n+1)*(n-1)*(3*n+2) `quot` 12
 >
 > test_sum_square :: Integer -> Bool
 > test_sum_square n = (pe6' n) == (pe6'' n)
-
-```
 
 Check:
 
@@ -156,9 +148,5 @@ Some timing info to compare:
 
 So the answer is:
 
-```haskell
-
 > pe6 :: Integer
 > pe6 = pe6'' 100
-
-```

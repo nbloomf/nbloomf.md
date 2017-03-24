@@ -8,8 +8,6 @@ tags: software-tools-in-haskell
 
 This post is literate Haskell; you can load [the source](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2016-02-11-software-tools-in-haskell-count.lhs) into GHCi and play along. As usual, we start with some imports.
 
-```haskell
-
 > -- sth-count: count lines or chars on stdin
 > module Main where
 > 
@@ -18,8 +16,6 @@ This post is literate Haskell; you can load [the source](https://raw.githubuserc
 > import Control.Arrow ((>>>))
 > import Data.List (unfoldr)
 > import Data.Foldable (foldl')
-
-```
 
 *Software Tools* includes two programs -- ``charcount`` and ``linecount`` -- which count chars and lines on ``stdin``, respectively. Because these functions are so similar, and we anticipate that counting lines will be more useful in practice than counting characters, we'll combine these into one program and trigger character counting with an optional command line argument. ``count`` is a filter, taking either char or line text and producing a line.
 
@@ -31,14 +27,9 @@ We want ``count --char`` to count the characters on stdin until EOF is reached. 
 
 Let's write a generic list-length counter:
 
-
-```haskell
-
 > count :: (Num t) => [a] -> t
 > count = foldl' inc 0
 >   where inc n _ = n+1
-
-```
 
 We use ``foldl'`` to force strictness and avoid a memory leak. The ``foldl`` function is lazy by default, meaning that it would generate a stack of unevaluated additions to be carried out only once EOF is reached.
 
@@ -59,9 +50,6 @@ should have three lines, not two. On the other hand, if there are *no* character
 
 This logic is captured by the ``getLines`` function, which splits a string into lines at ``\n`` (taking care of any ``\n``s at the end as necessary).
 
-
-```haskell
-
 > getLines :: String -> [String]
 > getLines = unfoldr firstLine
 >   where
@@ -71,16 +59,11 @@ This logic is captured by the ``getLines`` function, which splits a string into 
 >       (as,"")   -> Just (as,"")
 >       (as,b:bs) -> Just (as,bs)
 
-```
-
 
 The Program
 -----------
 
 Our main program is a little more complicated than Kernighan and Plauger's because we've chosen to deal with command line arguments.
-
-
-```haskell
 
 > main :: IO ()
 > main = do
@@ -96,11 +79,7 @@ Our main program is a little more complicated than Kernighan and Plauger's becau
 > 
 >   exitSuccess
 
-```
-
 ``putNewLine`` is a semantic synonym for ``putStrLn ""``.
-
-```haskell
 
 > -- print a line break
 > putNewLine :: IO ()
@@ -111,7 +90,5 @@ Our main program is a little more complicated than Kernighan and Plauger's becau
 > charFilter f = do
 >   xs <- getContents
 >   putStr $ f xs
-
-```
 
 Note also that we've demonstrated the ``>>>`` operator from ``Control.Arrow`` in contrast with composition. This is a standard library operator which (used here) is simply reversed function composition; it allows us to read chains of functions as if data flows from left to right, following the arrows.

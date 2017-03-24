@@ -34,8 +34,6 @@ Let $a$ and $b$ be natural numbers, and let $q$ and $r$ be natural numbers such 
 
 What makes the Euclidean Algorithm so nice is that, combined with the Well-Ordering Property of the natural numbers, it gives us a recursive algorithm for computing GCDs.
 
-```haskell
-
 > (\/), (/\) :: Integer -> Integer -> Integer
 > 
 > a \/ 0 = a
@@ -43,16 +41,10 @@ What makes the Euclidean Algorithm so nice is that, combined with the Well-Order
 > 
 > a /\ b = (a*b)`div`(a \/ b)
 
-```
-
 The second property above says that if we want to find the LCM of a bunch of integers, we can do so pairwise, and it doesn't matter what order we do this in. For instance, using ``foldr1``:
-
-```haskell
 
 > lcms :: [Integer] -> Integer
 > lcms = foldr1 (/\)
-
-```
 
 Now ``lcms`` will take a nonempty list of positive integers and compute their least common multiple.
 
@@ -87,9 +79,5 @@ The Euclidean Algorithm is pretty snappy. Just for fun, here are some timings.
 
 Anyway, the final answer is:
 
-```haskell
-
 > pe5 :: Integer
 > pe5 = lcms [1..20]
-
-```

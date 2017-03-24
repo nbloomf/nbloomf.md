@@ -1,8 +1,20 @@
 ---
 title: Software Tools in Haskell: sentcount
 subtitle: count sentences on stdin
+date: 2016-02-13
 author: nbloomf
+tags: software-tools-in-haskell
 ---
+
+This post is literate Haskell; you can load [the source](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2016-02-13-software-tools-in-haskell-sentcount.lhs) into GHCi and play along. As usual, we start with some imports.
+
+> -- sth-sentcount: count sentences on stdin
+
+> module Main where
+> 
+> import System.Exit (exitSuccess)
+> import Data.Char (isUpper, isSpace)
+> import Data.List
 
 This program is an exercise in *Software Tools*, rather than a main example.
 
@@ -30,76 +42,79 @@ consists of two words (by our reckoning), and we will say it is likely to be a s
 
 Again, any small set of heuristics is probably going to have both false positives and false negatives. But we're not aiming for perfection here, just reasonable first approximations. We start with a helper function. ``break2`` is an extension of the standard library function ``break`` that focuses on the spaces between list elements rather than list elements themselves. (Note that ``break p === break2 (\x _ -> p x)``.)
 
-
-```haskell
-break2 :: (a -> a -> Bool) -> [a] -> ([a],[a])
-break2 p xs = accum [] xs
-  where
-    accum zs []  = (reverse zs, [])
-    accum zs [y] = (reverse (y:zs), [])
-    accum zs (y1:y2:ys) = if p y1 y2
-      then (reverse (y1:zs), y2:ys)
-      else accum (y1:zs) (y2:ys)
-```
-
+> break2 :: (a -> a -> Bool) -> [a] -> ([a],[a])
+> break2 p xs = accum [] xs
+>   where
+>     accum zs []  = (reverse zs, [])
+>     accum zs [y] = (reverse (y:zs), [])
+>     accum zs (y1:y2:ys) = if p y1 y2
+>       then (reverse (y1:zs), y2:ys)
+>       else accum (y1:zs) (y2:ys)
 
 ``getSentences`` does the heavy lifting, splitting a string into sentences using heuristics. The heuristics for detecting sentence boundaries are in ``isSentenceBoundary``. This function is ugly, but reasonably easy to modify as new special cases arise.
 
-
-```haskell
-getSentences :: String -> [String]
-getSentences = map (intercalate " ") . unfoldr firstSentence . getWords
-  where
-    firstSentence :: [String] -> Maybe ([String],[String])
-    firstSentence [] = Nothing
-    firstSentence xs = Just $ break2 isSentenceBoundary xs
-
-    isSentenceBoundary :: String -> String -> Bool
-    isSentenceBoundary xs ys
-      | finalEllipsis xs && not (isSentenceStart ys) = False
-      | isSentenceEnd xs && isSentenceStart ys = True
-      | otherwise = False
-      where
-        isCapitalized ""    = False
-        isCapitalized (x:_) = isUpper x
-
-        finalEllipsis :: String -> Bool
-        finalEllipsis xs = or $ map (`isSuffixOf` xs)
-          ["...", "...\"", "...)"]
-
-        isSentenceEnd :: String -> Bool
-        isSentenceEnd xs = or $ map (`isSuffixOf` xs)
-          [ ".", ".\"", ".'", ".)"
-          , "!", "!\"", "!'", "!)"
-          , "?", "?\"", "?'", "?)"
-          ]
-
-        isSentenceStart :: String -> Bool
-        isSentenceStart ys = (isCapitalized ys)
-          || (or $ map (`isPrefixOf` ys) ["\"", "'", "("])
-```
-
+> -- split a string into sentences
+> getSentences :: String -> [String]
+> getSentences = map (intercalate " ") . unfoldr firstSentence . getWords
+>   where
+>     firstSentence :: [String] -> Maybe ([String],[String])
+>     firstSentence [] = Nothing
+>     firstSentence xs = Just $ break2 isSentenceBoundary xs
+> 
+>     isSentenceBoundary :: String -> String -> Bool
+>     isSentenceBoundary xs ys
+>       | finalEllipsis xs && not (isSentenceStart ys) = False
+>       | isSentenceEnd xs && isSentenceStart ys = True
+>       | otherwise = False
+>       where
+>         isCapitalized ""    = False
+>         isCapitalized (x:_) = isUpper x
+> 
+>         finalEllipsis :: String -> Bool
+>         finalEllipsis xs = or $ map (`isSuffixOf` xs)
+>           ["...", "...\"", "...)"]
+> 
+>         isSentenceEnd :: String -> Bool
+>         isSentenceEnd xs = or $ map (`isSuffixOf` xs)
+>           [ ".", ".\"", ".'", ".)"
+>           , "!", "!\"", "!'", "!)"
+>           , "?", "?\"", "?'", "?)"
+>           ]
+> 
+>         isSentenceStart :: String -> Bool
+>         isSentenceStart ys = (isCapitalized ys)
+>           || (or $ map (`isPrefixOf` ys) ["\"", "'", "("])
+>
+> -- split a string into words
+> getWords :: String -> [String]
+> getWords = unfoldr firstWord
+>   where
+>     firstWord :: String -> Maybe (String, String)
+>     firstWord xs = case dropWhile isSpace xs of
+>       "" -> Nothing
+>       ys -> Just $ break isSpace ys
+> 
+> -- generic length
+> count :: (Num t) => [a] -> t
+> count = foldl' inc 0
+>   where inc n _ = n+1
+>
+> -- print a line break
+> putNewLine :: IO ()
+> putNewLine = putStrLn ""
+> 
+> -- apply a map to stdin
+> charFilter :: (String -> String) -> IO ()
+> charFilter f = do
+>   xs <- getContents
+>   putStr $ f xs
 
 The main program is then similar to ``wordcount``.
 
-
-```haskell
--- sth-sentcount: count sentences on stdin
-
-module Main where
-
-import System.Exit (exitSuccess)
-import STH.Lib
-  (charFilter, putNewLine, count,
-   getSentences)
-
-
-main :: IO ()
-main = do
-  charFilter (show . count . getSentences)
-  putNewLine
-  exitSuccess
-```
-
+> main :: IO ()
+> main = do
+>   charFilter (show . count . getSentences)
+>   putNewLine
+>   exitSuccess
 
 We [test](https://raw.githubusercontent.com/nbloomf/st-haskell/master/test/sentcount/alice.test) this program on a particularly messy excerpt from *Alice in Wonderland*, courtesy of [Project Gutenberg](http://www.gutenberg.org). (Even counting by hand I'm not sure how many sentences this example should have!)

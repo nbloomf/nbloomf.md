@@ -50,7 +50,7 @@ title: College Algebra
 * Feb 24
     * Practice Problems: 2.2 #39--48 (draw only)
 * Feb 27
-    * [Activity 5](/pdf/classes/coal/coal-a05-functions.pdf) ([solutions](/pdf/classes/coal/coal-soln-a05-functions.pdf))11
+    * [Activity 5](/pdf/classes/coal/coal-a05-functions.pdf) ([solutions](/pdf/classes/coal/coal-soln-a05-functions.pdf))
 * Mar 1
     * Practice Problems: 2.3 #11--26, 35--44
     * [Transformations demo](/classes/coal/transformations-live-demo.html): Play with transformations of equations.
@@ -62,7 +62,7 @@ title: College Algebra
     * [Symmetry demo](/classes/coal/symmetry-live-demo.html): Look for symmetries.
 * Mar 10
     * Practice Problems: 2.5 #19--28, 51, 52
-    * Activity 7 [](/pdf/classes/coal/coal-a07-transformations.pdf) [](/pdf/classes/coal/coal-soln-a07-transformations.pdf)
+    * [Activity 7](/pdf/classes/coal/coal-a07-transformations.pdf) ([solutions](/pdf/classes/coal/coal-soln-a07-transformations.pdf))
 * Mar 13--17 (Spring Break)
 * Mar 20
     * [Review for Test 2](/pdf/classes/coal/coal-r2-functions-and-geometry.pdf) ([solutions](/pdf/classes/coal/coal-soln-r2-functions-and-geometry.pdf))

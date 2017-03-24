@@ -8,16 +8,12 @@ tags: software-tools-in-haskell
 
 This post is literate Haskell; you can load [the source](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2016-02-10-software-tools-in-haskell-copy.lhs) into GHCi and play along. As usual, we start with some imports.
 
-```haskell
-
 > -- sth-copy: copy characters from stdin to stdout
 > module Main where
 > 
 > import Data.List (break, unfoldr)
 > import System.Exit (exitSuccess)
 > import System.Environment (getArgs)
-
-```
 
 Many simple tools are designed to act as *filters*: programs which take a stream of data, manipulate it in some way, and send it along. The ``copy`` program is the simplest possible example of a filter -- the identity filter. This is even simpler than ``cat``, which at least reads and concatenates files.
 
@@ -29,19 +25,13 @@ The way we get command line arguments in Haskell is with the ``getArgs`` functio
 
 Depending on the mode, ``copy`` does one of two things: read each character from ``stdin`` and write it to ``stdout``, or read each line from ``stdin`` and write it to ``stdout``. We can think of these actions as specific instances of a more general pattern: read a character from ``stdin``, *apply a mapping to it*, and write the result to ``stdout``, or read a line from ``stdin``, *apply a mapping to it*, and write the result to ``stdout``. As we will see, many programs are of this form. So we will write general-purpose character and line filter programs, parameterized on the mapping used to transform the input. ``charFilter`` simply reads everything it can from ``stdin``, applies a function to it, and writes out the result. Note that the standard library function ``getContents`` reads from stdin lazily, so despite appearances this function does not read all of ``stdin`` at once before getting to work.
 
-```haskell
-
 > -- apply a map to stdin
 > charFilter :: (String -> String) -> IO ()
 > charFilter f = do
 >   xs <- getContents
 >   putStr $ f xs
 
-```
-
 ``lineFilter`` does the same, only it extracts the (logical) lines from ``stdin`` first. (The function ``getLines`` extracts the logical lines from a string; we will see this function in detail when we discuss [``count``](/pages/sth/tool/count.html).)
-
-```haskell
 
 > -- apply a map to each line of stdin.
 > lineFilter :: (String -> String) -> IO ()
@@ -62,11 +52,7 @@ Depending on the mode, ``copy`` does one of two things: read each character from
 >       (as,"")   -> Just (as,"")
 >       (as,b:bs) -> Just (as,bs)
 
-```
-
 By wrapping the basic behavior of filters behind a higher order function like this, we can write at a higher level. The ``copy`` program then just needs to determine whether to process characters or lines and filter with the identity.
-
-```haskell
 
 > data Mode = Chars | Lines
 > 
@@ -83,7 +69,5 @@ By wrapping the basic behavior of filters behind a higher order function like th
 >     Lines -> lineFilter id
 > 
 >   exitSuccess
-
-```
 
 I have to confess that I don't see what the practical use of ``copy`` is. However, it is valuable to see that our environment for compiling, running, and testing programs is working properly.
