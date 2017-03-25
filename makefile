@@ -4,6 +4,8 @@ NOTEDIR  = $(HOME)/documents/notebooks
 TEXDIR   = $(HOME)/documents/tex-examples
 STHDIR   = $(HOME)/code/st-haskell
 
+export PATH := _bin:$(PATH)
+
 all: move FORCE
 	@echo "built nbloomf.github.io" | doppler lightgreen
 
@@ -82,6 +84,8 @@ tools:
 	$(call haskell_exe,2016-02-13-software-tools-in-haskell-sentcount,sth-sentcount)
 	$(call haskell_exe,2016-02-14-software-tools-in-haskell-glyphcount,sth-glyphcount)
 	$(call haskell_exe,2016-02-15-software-tools-in-haskell-detab,sth-detab)
+	@echo 'testing...' | doppler lightgreen
+	shelltest --color --execdir test/ -- --threads=16 --hide-successes
 
 # compile a literate haskell post
 define haskell_exe
