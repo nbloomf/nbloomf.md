@@ -34,8 +34,8 @@ I will prefix the names of these ports with ``sth-``, to avoid clashing with exi
 * [``count``](/posts/2016-02-11-software-tools-in-haskell-count.html): count lines or chars on ``stdin``
 * [``wordcount``](/posts/2016-02-12-software-tools-in-haskell-wordcount.html): count words on ``stdin``
 * [``sentcount``](/posts/2016-02-13-software-tools-in-haskell-sentcount.html): count sentences on ``stdin``
-* [``glyphcount``](/pages/sth/tool/glyphcount.html): count glyphs on ``stdin``
-* [``detab``](/pages/sth/tool/detab.html): replace tabs on ``stdin`` with spaces
+* [``glyphcount``](/posts/2016-02-14-software-tools-in-haskell-glyphcount.html): count glyphs on ``stdin``
+* [``detab``](/posts/2016-02-15-software-tools-in-haskell-detab.html): replace tabs on ``stdin`` with spaces
 * [``charcombine``](/pages/sth/tool/charcombine.html): replace chars on ``stdin`` with precomposed equivalents
 * [``charfullwidth``](/pages/sth/tool/charfullwidth.html): replace chars on ``stdin`` with fullwidth equivalents
 

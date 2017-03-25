@@ -7,12 +7,8 @@ tags: project-euler
 
 This post is literate Haskell; you can load [the source](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2017-03-08-project-euler-solution-4.lhs) into GHCi and play along.
 
-```haskell
-
 > import Data.List
 > import Data.Maybe
-
-```
 
 [Problem 4](https://projecteuler.net/problem=4) from Project Euler:
 
@@ -34,8 +30,6 @@ Suppose $A = \sum_{k=0}^{t-1} a_k 10^k$ is a $t$-digit number base 10 (that is, 
 
 The first thing I'll do is write helper functions to convert a number to its base 10 digits and back.
 
-```haskell
-
 > -- base 10 digits of n in 'little endian' order
 > -- (least significant digits first)
 > toDigits :: Integer -> [Integer]
@@ -49,18 +43,16 @@ The first thing I'll do is write helper functions to convert a number to its bas
 > numDigits :: Integer -> Integer
 > numDigits n = sum $ map (const 1) $ toDigits n
 
-```
-
 Sanity check:
-
-```haskell
 
 > test_digits :: Integer -> Bool
 > test_digits n = n == (fromDigits $ toDigits n)
 
+And a test:
+
+```haskell
 $> all test_digits [1..1000000]
 True
-
 ```
 
 Note that our lists of digits come out "backward"; that is, least significant first.
@@ -72,17 +64,11 @@ $> toDigits 12345
 
 Then we can detect whether a given number is a palindrome in base 10.
 
-```haskell
-
 > is_palindrome_10 :: Integer -> Bool
 > is_palindrome_10 n = let ds = toDigits n in
 >   ds == (reverse ds)
 
-```
-
 Now we're not just looking for the largest palindrome of a given length; that would be easy -- the string of all 9s is the largest palindrome with a given number of digits. Instead, we want the largest palindrome that is the product of two 3-digit numbers. The most obvious solution is to list all the products of two 3-digit numbers, filter for the palindromes, and find the max.
-
-```haskell
 
 > -- the triple (a,b,a*b) which yields the largest
 > -- palindrome product a*b among the pairs of
@@ -97,8 +83,6 @@ Now we're not just looking for the largest palindrome of a given length; that wo
 >     maximumBy (\x y -> compare (thd x) (thd y)) $
 >     filter (is_palindrome_10 . thd) $ 
 >     [(a,b,a*b) | a <- [min..max], b <- [a..max]]
-
-```
 
 This ``pe4'`` works well enough:
 
@@ -190,8 +174,6 @@ Expanding $H_vK_v$, we have $$H_vK_v = AB + 10^{2t+v}(2AB) + 10^{2t+2t+2v}AB.$$ 
 
 Let's make $H_v$ and $K_v$ executable.
 
-```haskell
-
 > h_ :: Integer -> Integer -> Integer
 > h_ v a = a * (1 + 10^(2*t+v))
 >   where t = numDigits a
@@ -199,8 +181,6 @@ Let's make $H_v$ and $K_v$ executable.
 > k_ :: Integer -> Integer -> Integer
 > k_ v b = b * (1 + 10^(2*t+v))
 >   where t = numDigits b
-
-```
 
 And the next result gives us a concrete family of palindrome products with factors of even digit length.
 
@@ -220,8 +200,6 @@ To see the digit counts, note that $Q_{t,m}$ has $(tm-m+1)$ digits. Note also th
 
 Let's make $Q_{t,m}$, $A_{t,m}$, and $B_{t,m}$ executable.
 
-```haskell
-
 > q_ :: Integer -> Integer -> Integer
 > q_ t m = sum $ map (\k -> 10^(m*k)) [0..(t-1)]
 > 
@@ -234,11 +212,7 @@ Let's make $Q_{t,m}$, $A_{t,m}$, and $B_{t,m}$ executable.
 > c_ :: Integer -> Integer -> Integer
 > c_ t m = (q_ t m)*(1 + 10^(3*t*m))
 
-```
-
 Sanity check:
-
-```haskell
 
 > test_abc :: Integer -> Integer -> Bool
 > test_abc t m =
@@ -253,15 +227,11 @@ Sanity check:
 >     , is_palindrome_10 (2*c)
 >     ]
 
-```
-
 And a test:
 
 ```haskell
-
 $> and [test_abc t m | t <- [1..10], m <- [1..10]]
 True
-
 ```
 
 This gives an infinite family of palindrome products. Note that if $m = 1$, then both factors have the same number of digits -- $2t$ -- and the product has $4t$ digits.
@@ -319,8 +289,6 @@ Our alternate strategy for this problem was to search among the palindromes for 
 
 So the new strategy is to generate the $2k$-digit palindromes in reverse order and look for the first one that factors are a product of two $k$-digit numbers.
 
-```haskell
-
 > -- the 2k-digit palindromes
 > palindromes :: Integer -> [Integer]
 > palindromes k = map (fromDigits . make) (digits k)
@@ -337,13 +305,9 @@ So the new strategy is to generate the $2k$-digit palindromes in reverse order a
 >           ds <- foo (k-1) [0]
 >           return (d:ds)
 
-```
-
 Now given a $2k$-digit palindrome, we want to know whether it factors as a product of two $k$-digit numbers. Note that if $N = AB$, then without loss of generality $A \leq \sqrt{N}$ and $\sqrt{N} \leq B$. So it is enough to search for a factorization of $N$ where $10^{t-1} \leq A \leq \lfloor \sqrt{N} \rfloor$.
 
 Here's a utility function to find $\lfloor \sqrt{N} \rfloor$ by bisection.
-
-```haskell
 
 > -- find t such that t^2 <= n < (t+1)^2
 > floor_sqrt :: Integer -> Integer
@@ -360,17 +324,11 @@ Here's a utility function to find $\lfloor \sqrt{N} \rfloor$ by bisection.
 >       then error "floor_sqrt: negative argument"
 >       else bisect (1,n)
 
-```
-
 Sanity check:
-
-```haskell
 
 > test_floor_sqrt :: Integer -> Bool
 > test_floor_sqrt n = let q = floor_sqrt n in
 >   (q^2 <= n) && (n < (q+1)^2)
-
-```
 
 And a test:
 
@@ -380,8 +338,6 @@ True
 ```
 
 Also, if we wish to factor a $2k$-digit number as a product of $k$ digit numbers, we should search "down" from $\lfloor \sqrt{N} \rfloor$ to $10^{t-1}$ rather than the reverse. This is because smaller factors are likely to give quotients with too many digits.
-
-```haskell
 
 > -- search for a factorization of n into t-digit factors
 > does_factor :: Integer -> Integer -> Maybe (Integer, Integer)
@@ -404,8 +360,6 @@ Also, if we wish to factor a $2k$-digit number as a product of $k$ digit numbers
 >     (a,b) = head $ catMaybes $ map (does_factor k) (palindromes k)
 >   in (a,b,a*b)
 
-```
-
 This ``pe4''`` is still slow, as we still check an exponential number of cases. But we can squeeze out a couple more values.
 
 ```haskell
@@ -423,9 +377,5 @@ Interesting! It looks like the form of the largest palindrome product depends on
 
 Anyway, the final answer is:
 
-```haskell
-
 > pe4 :: Integer
 > pe4 = let (_,_,x) = pe4'' 3 in x
-
-```

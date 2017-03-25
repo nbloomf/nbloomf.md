@@ -80,6 +80,8 @@ tools:
 	$(call haskell_exe,2016-02-11-software-tools-in-haskell-count,sth-count)
 	$(call haskell_exe,2016-02-12-software-tools-in-haskell-wordcount,sth-wordcount)
 	$(call haskell_exe,2016-02-13-software-tools-in-haskell-sentcount,sth-sentcount)
+	$(call haskell_exe,2016-02-14-software-tools-in-haskell-glyphcount,sth-glyphcount)
+	$(call haskell_exe,2016-02-15-software-tools-in-haskell-detab,sth-detab)
 
 # compile a literate haskell post
 define haskell_exe

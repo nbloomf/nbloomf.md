@@ -17,14 +17,10 @@ Find the sum of all the multiples of 3 or 5 below 1000.
 
 First, let's do the most obvious thing: list the integers below 1000, filter out the ones divisible by either 3 or 5, and sum. For reasons I'll get to later I will parameterize this function on $n$, the upper bound for our numbers.
 
-```haskell
-
 > pe1' :: Integer -> Integer
 > pe1' n = sum $ filter div3or5 [1..(n-1)]
 >   where
 >     div3or5 k = (k`mod`3 == 0) || (k`mod`5 == 0)
-
-```
 
 We can verify that ``pe1' 10 == 23`` as claimed. Now we can compute the answer to the given problem like so:
 
@@ -71,13 +67,9 @@ The sum of the first $k$ multiples of 3 is $$3 + 6 + 9 + \cdots + 3k = 3(1 + 2 +
 
 But there's nothing magic about 3 in that analysis; we might as well replace 3 with any other positive integer, say $t$. Then we can sum the multiples of $t$ below $n$ like so.
 
-```haskell
-
 > sumMultsOfBelow :: Integer -> Integer -> Integer
 > sumMultsOfBelow t n = t * q * (q+1) `quot` 2
 >   where q = (n-1) `quot` t
-
-```
 
 What is the complexity of ``sumMultsOfBelow``? It's harder to say exactly, because I don't know how ``quot`` is implemented. But the schoolbook algorithm for integer division is bounded above by $O(\log(n)^2)$; this is much cheaper than $O(n)$.
 
@@ -97,25 +89,17 @@ $> (sumMultsOfBelow 3 1000) + (sumMultsOfBelow 5 1000) - (sumMultsOfBelow 15 100
 
 Let's wrap this in a definition.
 
-```haskell
-
 > pe1'' :: Integer -> Integer
 > pe1'' n = (sumMultsOfBelow 3 n)
 >             + (sumMultsOfBelow 5 n)
 >             - (sumMultsOfBelow 15 n)
 
-```
-
 At this point, I was planning to include another table of timings to show how much faster ``pe1''`` is, but I had to go to $n = 10^{85}$ before it took longer than 0.01 seconds (the smallest unit of time reported by GHCi). For reference, ``pe1'' (10^100000)`` took 2.03 seconds on my machine. An $O(n)$ algorithm has no hope on inputs that big. And by the way that digit pattern, a 2, followed by 3s, then 1, then 6s, then 8, holds.
 
 Before we get too excited, let's verify that ``pe1'`` and ``pe1''`` agree, at least on small inputs.
 
-```haskell
-
 > test_pe1 :: Integer -> Bool
 > test_pe1 n = pe1' n == pe1'' n
-
-```
 
 And then:
 
@@ -126,9 +110,5 @@ True
 
 So it is with confidence we say that ``pe1'`` and ``pe1''`` are the same function. Then the answer to problem 1 is:
 
-```haskell
-
 > pe1 :: Integer
 > pe1 = pe1'' 1000
-
-```

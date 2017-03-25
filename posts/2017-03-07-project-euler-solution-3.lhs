@@ -19,16 +19,12 @@ Let's start by writing two helper functions: ``isprime``, which detects whether 
 
 That sounds circular (the primes are those integers not divisible by any smaller primes) but thanks to the well-ordering property of the natural numbers, it's kosher. Even better, this definition translates directly to code.
 
-```haskell
-
 > isprime :: Integer -> Bool
 > isprime n = all (\p -> n`rem`p /= 0) $
 >   takeWhile (\p -> p^2 <= n) primes
 > 
 > primes :: [Integer]
 > primes = 2 : filter isprime [3,5..]
-
-```
 
 Now we have a list of all the primes in order.
 
@@ -40,8 +36,6 @@ $> take 10 primes
 This is absolutely not the most efficient way to construct the primes, but it has the advantage of being both simple and clearly correct. Building a blazing fast prime sieve is beyond the scope of my itch scratching for the moment, so I'll leave it there.
 
 So this problem is asking for the largest prime factor of an integer. I happen to know that this is a Hard Problem; so hard, in fact, that cryptographic schemes are built on the premise that finding the largest prime factor of an arbitrary (large) integer is infeasible. All that is to say -- I won't bother trying to be clever, and just do the obvious thing: given $n$, find all of its prime factors, and just return the largest one.
-
-```haskell
 
 > -- find the smallest prime p with n = pm
 > -- return (p,m)
@@ -58,16 +52,10 @@ So this problem is asking for the largest prime factor of an integer. I happen t
 > factor n = let (p,m) = first_factor n in
 >   if m == 1 then [p] else p : factor m
 
-```
-
 This implementation of ``factor`` does a lot of unnecessary work; each time we call ``smallest_factor``, it tests a bunch of prime divisors that we know in advance won't work. But it does the job.
-
-```haskell
 
 > pe3' :: Integer -> Integer
 > pe3' n = last $ factor n
-
-```
 
 Testing:
 
@@ -82,9 +70,5 @@ $> pe3' 600851475143
 
 So the final answer is:
 
-```haskell
-
 > pe3 :: Integer
 > pe3 = pe3' 600851475143
-
-```

@@ -1,8 +1,21 @@
 ---
 title: Software Tools in Haskell: detab
 subtitle: replace tabs on stdin with spaces
+date: 2016-02-15
 author: nbloomf
+tags: software-tools-in-haskell
 ---
+
+This post is literate Haskell; you can load [the source](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2016-02-15-software-tools-in-haskell-detab.lhs) into GHCi and play along. As usual, we start with some imports.
+
+> -- sth-detab: convert tabs to spaces
+> module Main where
+> 
+> import System.Exit (exitSuccess, exitFailure)
+> import System.Environment (getArgs, getProgName)
+> import System.IO (hPutStrLn, stderr)
+> import Control.Arrow ((>>>))
+> import Data.List (unfoldr)
 
 The tab key on modern computer keyboards is a holdover from mechanical typewriters where it allows the typist to advance the carriage to the next of several fixed columns, called *tab stops*, with a single key press. On many mechanical (and electric!) typewriters the positions of these tab stops are adjustable, which is useful for typing strictly formatted documents like letters and forms. The semantics of tab as a kind of "advance" command have turned out to be useful in other contexts like web browsers (where tab may cycle through the links on a page) and graphical user interfaces (where tab may cycle through manipulable widgets in a gui).
 
@@ -40,37 +53,22 @@ This program is quite a bit more complicated than the ones we've written so far 
 
 First, here is the main program.
 
-
-```haskell
--- sth-detab: convert tabs to spaces
-
-module Main where
-
-import System.Exit (exitSuccess, exitFailure)
-import System.Environment (getArgs)
-import STH.Lib
-  (lineFilter, readPosIntList, getLines,
-   spanAtMostWhile, padToByAfter, reportErrorMsgs,
-   convertTabStops)
-
-main :: IO ()
-main = do
-  args <- getArgs
-
-  -- Read positive integer tabstop arguments.
-  -- Default is [8].
-  ts <- case readPosIntList args of
-    Just [] -> return [8]
-    Just ks -> return ks
-    Nothing -> reportErrorMsgs
-                 ["tab widths must be positive integers."
-                 ] >> exitFailure
-
-  -- Do it!
-  lineFilter (convertTabStops ts)
-  exitSuccess
-```
-
+> main :: IO ()
+> main = do
+>   args <- getArgs
+> 
+>   -- Read positive integer tabstop arguments.
+>   -- Default is [8].
+>   ts <- case readPosIntList args of
+>     Just [] -> return [8]
+>     Just ks -> return ks
+>     Nothing -> reportErrorMsgs
+>                  ["tab widths must be positive integers."
+>                  ] >> exitFailure
+> 
+>   -- Do it!
+>   lineFilter (convertTabStops ts)
+>   exitSuccess
 
 In order, we (1) get the user-supplied tab stop widths as strings (``getArgs``), then (2) parse these as positive integers (``readPosIntList``), which may fail. We have a custom library function (``convertTabStops``) that does the real work, and here (3) define a throwaway function ``detab`` that wraps ``convertTabStops`` and handles its error condition (more on that later). Finally, we (4) read from stdin lazily, split the input into lines, and apply ``detab`` to each one.
 
@@ -78,83 +76,102 @@ This program has an error condition: the user may provide bad command line argum
 
 The real work happens in two functions, ``readPosIntList`` and ``convertTabStops``. First, ``readPosIntList`` parses a list of strings to a list of positive integers. This problem is general enough to go in the library.
 
-
-```haskell
-readPosIntList :: [String] -> Maybe [Int]
-readPosIntList = map readDecimalNat
-  >>> map (filterMaybe (>0))
-  >>> sequence
-
-
-readDecimalNat :: String -> Maybe Int
-readDecimalNat xs = do
-  ys <- sequence $ map decToInt $ reverse xs
-  return $ sum $ zipWith (*) ys [10^t | t <- [0..]]
-  where
-    decToInt :: Char -> Maybe Int
-    decToInt x = lookup x
-      [ ('0',0), ('1',1), ('2',2), ('3',3), ('4',4)
-      , ('5',5), ('6',6), ('7',7), ('8',8), ('9',9)
-      ]
-
-
-filterMaybe :: (a -> Bool) -> Maybe a -> Maybe a
-filterMaybe p x = do
-  y <- x
-  case p y of
-    True  -> Just y
-    False -> Nothing
-```
-
+> -- parse a list of positive integers base 10
+> readPosIntList :: [String] -> Maybe [Int]
+> readPosIntList = map readDecimalNat
+>   >>> map (filterMaybe (>0))
+>   >>> sequence
+> 
+> 
+> -- parse a natural number base 10
+> readDecimalNat :: String -> Maybe Int
+> readDecimalNat xs = do
+>   ys <- sequence $ map decToInt $ reverse xs
+>   return $ sum $ zipWith (*) ys [10^t | t <- [0..]]
+>   where
+>     decToInt :: Char -> Maybe Int
+>     decToInt x = lookup x
+>       [ ('0',0), ('1',1), ('2',2), ('3',3), ('4',4)
+>       , ('5',5), ('6',6), ('7',7), ('8',8), ('9',9)
+>       ]
+> 
+> 
+> filterMaybe :: (a -> Bool) -> Maybe a -> Maybe a
+> filterMaybe p x = do
+>   y <- x
+>   case p y of
+>     True  -> Just y
+>     False -> Nothing
+> 
+> 
+> -- apply a map to all lines on stdin
+> lineFilter :: (String -> String) -> IO ()
+> lineFilter f = do
+>   xs <- fmap getLines getContents
+>   sequence_ $ map (putStrLn . f) xs
+> 
+> 
+> -- split on \n
+> getLines :: String -> [String]
+> getLines = unfoldr firstLine
+>   where
+>     firstLine :: String -> Maybe (String, String)
+>     firstLine xs = case break (== '\n') xs of
+>       ("","")   -> Nothing
+>       (as,"")   -> Just (as,"")
+>       (as,b:bs) -> Just (as,bs)
+> 
+> 
+> -- write list of messages to stderr
+> reportErrorMsgs :: [String] -> IO ()
+> reportErrorMsgs errs = do
+>   name <- getProgName
+>   sequence_ $ map (hPutStrLn stderr) $ ((name ++ " error"):errs)
 
 ``readDecimalNat`` takes a string of decimal digits and converts it to a natural number (negatives are not handled). Or, rather, converts to a ``Maybe Int``. Conversion will fail if the input string does not consist of only characters 0 through 9; in this case the function returns ``Nothing``. (We don't see an explicit ``Nothing`` in the code because it is implicitly returned by the standard library function ``lookup``.) Then ``readPosIntList`` simply applies ``readDecimalNat`` to a list of strings, and makes sure the numbers returned are all positive. This is where ``guardMaybe`` comes in.
 
 Next we show ``convertTabStops``.
 
-
-```haskell
-convertTabStops :: [Int] -> String -> String
-convertTabStops [] xs = xs
-convertTabStops ks xs = accum [] ks xs
-  where
-    accum zs _   "" = concat $ reverse zs
-    accum zs [t] ys =
-      let (as,bs) = splitTabStop t ys in
-      accum (as:zs) [t] bs
-    accum zs (t:ts) ys =
-      let (as,bs) = splitTabStop t ys in
-      accum (as:zs) ts bs
-
-    splitTabStop :: Int -> String -> (String, String)
-    splitTabStop k xs
-      | k <= 0    = (xs,"")
-      | otherwise = 
-          case spanAtMostWhile k (/= '\t') xs of
-            (as,"") -> (stripTrailingSpaces as, "")
-            (as,bs) -> let cs = padToByAfter k ' ' as in
-              case bs of
-                '\t':ds -> (cs,ds)
-                ds      -> (cs,ds)
-      where
-        stripTrailingSpaces = reverse . dropWhile (==' ') . reverse
-
-
-spanAtMostWhile :: Int -> (a -> Bool) -> [a] -> ([a],[a])
-spanAtMostWhile k p xs
-  | k < 0     = ([],xs)
-  | otherwise = acc k [] xs
-  where
-    acc 0 as bs = (reverse as, bs)
-    acc _ as [] = (reverse as, [])
-    acc t as (b:bs) = if p b
-      then acc (t-1) (b:as) bs
-      else (reverse as, b:bs)
-
-
-padToByAfter :: Int -> a -> [a] -> [a]
-padToByAfter k z xs = take k (xs ++ repeat z)
-```
-
+> convertTabStops :: [Int] -> String -> String
+> convertTabStops [] xs = xs
+> convertTabStops ks xs = accum [] ks xs
+>   where
+>     accum zs _   "" = concat $ reverse zs
+>     accum zs [t] ys =
+>       let (as,bs) = splitTabStop t ys in
+>       accum (as:zs) [t] bs
+>     accum zs (t:ts) ys =
+>       let (as,bs) = splitTabStop t ys in
+>       accum (as:zs) ts bs
+> 
+>     splitTabStop :: Int -> String -> (String, String)
+>     splitTabStop k xs
+>       | k <= 0    = (xs,"")
+>       | otherwise = 
+>           case spanAtMostWhile k (/= '\t') xs of
+>             (as,"") -> (stripTrailingSpaces as, "")
+>             (as,bs) -> let cs = padToByAfter k ' ' as in
+>               case bs of
+>                 '\t':ds -> (cs,ds)
+>                 ds      -> (cs,ds)
+>       where
+>         stripTrailingSpaces = reverse . dropWhile (==' ') . reverse
+> 
+> 
+> spanAtMostWhile :: Int -> (a -> Bool) -> [a] -> ([a],[a])
+> spanAtMostWhile k p xs
+>   | k < 0     = ([],xs)
+>   | otherwise = acc k [] xs
+>   where
+>     acc 0 as bs = (reverse as, bs)
+>     acc _ as [] = (reverse as, [])
+>     acc t as (b:bs) = if p b
+>       then acc (t-1) (b:as) bs
+>       else (reverse as, b:bs)
+> 
+> 
+> padToByAfter :: Int -> a -> [a] -> [a]
+> padToByAfter k z xs = take k (xs ++ repeat z)
 
 The helper function ``splitTabStop`` takes a single tab stop width ``k`` and a string ``xs``, and peels of the first ``k`` characters of ``xs`` unless one of them is a ``\t``. It then returns a pair consisting of the peeled off characters and the remainder of the string. (If the ``k`` parameter is negative or zero, we peel off the empty string. Then ``convertTabStops`` simply marches down an entire line with a list of tab stop widths, peeling off tab stops as it goes. This is done using an accumulating parameter function, ``accum``. Once the string is empty, ``accum`` reverses the accumulating parameter and returns it (concatenated), otherwise it takes the next tab stop width and repeats.
 

@@ -7,11 +7,7 @@ tags: project-euler
 
 This post is literate Haskell; you can load [the source](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2017-03-06-project-euler-solution-2.lhs) into GHCi and play along.
 
-```haskell
-
 > import Data.Ratio
-
-```
 
 [Problem 2](https://projecteuler.net/problem=2) from Project Euler:
 
@@ -23,8 +19,6 @@ By considering the terms in the Fibonacci sequence whose values do not exceed fo
 
 Let's start with the obvious thing: take the Fibonacci numbers under four million, filter for the evens, and sum. We'll use the definition of the sequence from the problem statement, indexed from 1 like so: $$F(1) = 1, F(2) = 1, F(n+2) = F(n) + F(n+1).$$ We'll translate this to an unfold like so.
 
-```haskell
-
 > fibs :: [Integer]
 > fibs = 1 : 1 : fibs' 1 1
 >   where
@@ -32,8 +26,6 @@ Let's start with the obvious thing: take the Fibonacci numbers under four millio
 >
 > pe2' :: Integer -> Integer
 > pe2' n = sum $ filter even $ takeWhile (< n) fibs
-
-```
 
 Note that strictness annotation (``$!``) in the definition of ``fibs``; it's needed to force the evaluation of each successive number, so we don't end up with a bunch of unevaluated additions.
 
@@ -52,14 +44,10 @@ I think it will be pretty hard to squeeze much more performance out of ``pe2'``.
 
 Let's look at the first several $F(n)$ again, this time highlighting the even terms: $$1, 1, \fbox{2}, 3, 5, \fbox{8}, 13, 21, \fbox{34}, 55, 89, \fbox{134}, \ldots$$ And what's this then -- there's a pattern! It appears that every third $F(n)$ is even, and no others. But does this pattern always hold? Indeed it does; to see why, unpack the recursive definition of $F$ on $F(n+3)$. This gives the congruence $$F(n+3) = F(n) + 2F(n+1) \equiv F(n) \pmod{2}.$$ So the parity pattern of $F(n)$ repeats every third term, and because $F(1)$ and $F(2)$ are odd while $F(3)$ is even, this explains the pattern. That means we don't really need to check the parity of our Fibonacci numbers; it's enough to simply throw out all but every third term.
 
-```haskell
-
 > pe2'' :: Integer -> Integer
 > pe2'' n = sum $ takeWhile (< n) $ take3rd fibs
 >   where
 >     take3rd (_:_:a:as) = a : take3rd as
-
-```
 
 But the observation that $F(n)$ is even precisely when $n = 3k$ leads to another idea; what we really want is $$\sum_{k=1}^t F(3k)$$ where $t$ is the *index* of the largest Fibonacci number less than $N = 4,000,000$. This is interesting because there is a closed form formula for $F(n)$ known as [Binet's formula](https://en.wikipedia.org/wiki/Fibonacci_number#Closed-form_expression): $$F(n) = \frac{1}{\sqrt{5}}(\varphi^n - \overline{\varphi}^n),$$ where $\varphi = (1+\sqrt{5})/2$ is the largest real solution of $x^2 - x - 1 = 0$ and $\overline{\varphi} = (1-\sqrt{5})/2$ is its quadratic conjugate.
 
@@ -79,8 +67,6 @@ That is, the sum of the first $t$ even Fibonacci numbers is essentially the $(3t
 
 Here's a quick and dirty way to find the largest index of a Fibonacci number below $N$.
 
-```haskell
-
 > maxfibidx' :: Integer -> Integer
 > maxfibidx' n =
 >   fst $
@@ -88,15 +74,11 @@ Here's a quick and dirty way to find the largest index of a Fibonacci number bel
 >   dropWhile (\(_,m) -> m < n ) $
 >   zip [1..] (tail fibs)
 
-```
-
 But this doesn't really improve on our naive implementation of ``pe2'``, since it still requires generating all the Fibonacci numbers up to $n$. Here's a better idea. $F$ is a monotone increasing function on the natural numbers, and we wish to find the largest $m$ such that $F(m) < N$. We can find this $m$ using a binary search.
 
 First, we find integers $a$ and $b$ such that $F(a) < N \leq F(b)$; this can be done by looking at $m = 2^i$ for increasing $i$.
 
 Then, once such $a$ and $b$ are found, we tighten the interval $(a,b)$ bounding a root of $F(x) - N$ by bisection. The ``binarysearch`` function does this, taking a function $G$ as a parameter.
-
-```haskell
 
 > -- g is nondecreasing on positive integers
 > -- g(1) < n
@@ -123,11 +105,7 @@ Then, once such $a$ and $b$ are found, we tighten the interval $(a,b)$ bounding 
 >             LT -> refine (m,b)
 >             GT -> refine (a,m)
 
-```
-
 With an implementation of Binet's formula, we'd be nearly there. But in order to do exact arithmetic on quadratic numbers of the form $p + q\sqrt{5}$ -- as required by Binet -- we need the following type and instances.
-
-```haskell
 
 > data Root5 = Root5 Rational Rational
 >   deriving (Eq, Show)
@@ -164,11 +142,7 @@ With an implementation of Binet's formula, we'd be nearly there. But in order to
 >   recip (Root5 a b) = Root5 (a/d) (-b/d)
 >     where d = a*a - 5*b*b
 
-```
-
 Then, first of all, we can implement and test Binet's formula.
-
-```haskell
 
 > -- directly compute F(n)
 > binet :: Integer -> Integer
@@ -179,27 +153,17 @@ Then, first of all, we can implement and test Binet's formula.
 > test_binet :: Integer -> Bool
 > test_binet n = and $ zipWith (==) fibs $ map binet [1..n]
 
-```
-
 We can now implement ``maxfibidx`` using binary search.
-
-```haskell
 
 > maxfibidx :: Integer -> Integer
 > maxfibidx n = binarysearch binet n
 
-```
-
 And finally, an alternative implementation of ``pe2'``.
-
-```haskell
 
 > pe2''' :: Integer -> Integer
 > pe2''' n = ((binet $ 3*t+2) - 1) `quot` 2
 >   where
 >     t = (maxfibidx n) `quot` 3
-
-```
 
 As a sanity check:
 
@@ -214,11 +178,12 @@ $> pe2''' 4000000
 
 And more generally:
 
-```haskell
-
 > test :: Integer -> Bool
 > test n = (pe2' n == pe2'' n) && (pe2' n == pe2''' n)
 
+With a check:
+
+```haskell
 $> all test [1..1000]
 True
 ```
@@ -251,9 +216,5 @@ Just for fun, the sum of all even Fibonacci numbers less than $10^{1000000}$ is 
 
 So the final answer is:
 
-```haskell
-
 > pe2 :: Integer
 > pe2 = pe2''' 4000000
-
-```
