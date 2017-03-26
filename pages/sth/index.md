@@ -46,7 +46,7 @@ I will prefix the names of these ports with ``sth-``, to avoid clashing with exi
 * [``overstrike``](/posts/2016-02-20-software-tools-in-haskell-overstrike.html): interpret backspaces on ``stdin``
 * [``unescape``](/posts/2016-02-21-software-tools-in-haskell-unescape.html): interpret escape codes on ``stdin``
 * [``escape``](/posts/2016-02-22-software-tools-in-haskell-escape.html): replace strange chars on ``stdin`` with escape sequences
-* [``compress``](/pages/sth/tool/compress.html): compress text on ``stdin`` (run length encoding)
+* [``compress``](/posts/2016-02-23-software-tools-in-haskell-compress.html): compress text on ``stdin`` (run length encoding)
 * [``expand``](/pages/sth/tool/expand.html): uncompress text on ``stdin`` (run length encoding)
 * [``crypt``](/pages/sth/tool/crypt.html): xor text on ``stdin`` with a list of keys
 * [``translit``](/pages/sth/tool/translit.html): transliterate or remove chars on ``stdin``

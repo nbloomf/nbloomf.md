@@ -90,6 +90,7 @@ tools:
 	$(call haskell_exe,2016-02-20-software-tools-in-haskell-overstrike,sth-overstrike)
 	$(call haskell_exe,2016-02-21-software-tools-in-haskell-unescape,sth-unescape)
 	$(call haskell_exe,2016-02-22-software-tools-in-haskell-escape,sth-escape)
+	$(call haskell_exe,2016-02-23-software-tools-in-haskell-compress,sth-compress)
 	@echo 'testing...' | doppler lightgreen
 	(cd _bin/; shelltest --color --execdir ../test/ -- --threads=16 --hide-successes)
 
@@ -97,7 +98,7 @@ tools:
 define haskell_exe
   @echo "building $(1)" | doppler lightblue
   @cp posts/$(1).lhs _temp/$(2).lhs
-  @ghc --make _temp/$(2).lhs
+  @ghc -O2 --make _temp/$(2).lhs
   @rm _temp/$(2).hi _temp/$(2).o _temp/$(2).lhs
   @mv _temp/$(2) _bin/$(2)
 endef
