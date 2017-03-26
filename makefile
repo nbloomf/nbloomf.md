@@ -91,6 +91,7 @@ tools:
 	$(call haskell_exe,2016-02-21-software-tools-in-haskell-unescape,sth-unescape)
 	$(call haskell_exe,2016-02-22-software-tools-in-haskell-escape,sth-escape)
 	$(call haskell_exe,2016-02-23-software-tools-in-haskell-compress,sth-compress)
+	$(call haskell_exe,2016-02-24-software-tools-in-haskell-expand,sth-expand)
 	@echo 'testing...' | doppler lightgreen
 	(cd _bin/; shelltest --color --execdir ../test/ -- --threads=16 --hide-successes)
 
