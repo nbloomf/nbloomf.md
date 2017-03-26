@@ -37,11 +37,11 @@ I will prefix the names of these ports with ``sth-``, to avoid clashing with exi
 * [``glyphcount``](/posts/2016-02-14-software-tools-in-haskell-glyphcount.html): count glyphs on ``stdin``
 * [``detab``](/posts/2016-02-15-software-tools-in-haskell-detab.html): replace tabs on ``stdin`` with spaces
 * [``charcombine``](/posts/2016-02-16-software-tools-in-haskell-charcombine.html): replace chars on ``stdin`` with precomposed equivalents
-* [``charfullwidth``](/pages/sth/tool/charfullwidth.html): replace chars on ``stdin`` with fullwidth equivalents
+* [``charfullwidth``](/posts/2016-02-17-software-tools-in-haskell-charfullwidth.html): replace chars on ``stdin`` with fullwidth equivalents
 
 ### Chapter 2: Filters
 
-* [``entab``](/pages/sth/tool/entab.html): replace spaces on ``stdin`` with tabs
+* [``entab``](/posts/2016-02-18-software-tools-in-haskell-charfullwidth.html): replace spaces on ``stdin`` with tabs
 * [``echo``](/pages/sth/tool/echo.html): write arguments to ``stdout``
 * [``overstrike``](/pages/sth/tool/overstrike.html): interpret backspaces on ``stdin``
 * [``unescape``](/pages/sth/tool/unescape.html): interpret escape codes on ``stdin``
