@@ -86,6 +86,7 @@ tools:
 	$(call haskell_exe,2016-02-16-software-tools-in-haskell-charcombine,sth-charcombine)
 	$(call haskell_exe,2016-02-17-software-tools-in-haskell-charfullwidth,sth-charfullwidth)
 	$(call haskell_exe,2016-02-18-software-tools-in-haskell-entab,sth-entab)
+	$(call haskell_exe,2016-02-19-software-tools-in-haskell-echo,sth-echo)
 	@echo 'testing...' | doppler lightgreen
 	(cd _bin/; shelltest --color --execdir ../test/ -- --threads=16 --hide-successes)
 
