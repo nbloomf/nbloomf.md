@@ -7,8 +7,6 @@ tags: haskell
 
 This post is literate Haskell; you can copy and paste the contents to a module or just download the [source file](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2017-02-28-relative-references-for-loeb-spreadsheets.lhs) directly, load it in GHCi, and play with it on your own machine. As usual, we need to start with some pragmas and imports.
 
-```haskell
-
 > {-# LANGUAGE MultiParamTypeClasses #-}
 > {-# LANGUAGE FunctionalDependencies #-}
 > {-# LANGUAGE FlexibleInstances #-}
@@ -17,8 +15,6 @@ This post is literate Haskell; you can copy and paste the contents to a module o
 > 
 > import Data.Monoid
 > import Control.Applicative
-
-```
 
 Some years ago I read a [blog post](http://blog.sigfpe.com/2006/11/from-l-theorem-to-spreadsheet.html) by Dan Piponi which includes the following statement:
 
@@ -48,8 +44,6 @@ Kenny Foner addressed this by replacing the ``Functor`` constraint on ``f`` with
 
 Today I'm interested in a different approach to relative references. The fundamental barrier to using relative references with ``loeb`` is that each cell needs to know something about it's "address" within the spreadsheet. For example, in a list, each entry has a position of type ``Int``; in a matrix, each entry has a position of type ``(Int, Int)``, and so on. The important thing about this position is that (1) every entry has one and (2) they are all distinct. Normally I'd refer to a position like this as an *index*, but unfortunately the term "Indexed Functor" already means something. And wouldn't you know it, the concept of a functor with index information already lives in the Lens library, where it goes by the name [FunctorWithIndex](http://hackage.haskell.org/package/lens-4.15.1/docs/Control-Lens-Indexed.html#t:FunctorWithIndex). To avoid pulling in too many dependencies I'll roll my own simplified version of this class, called an *Addressable*. For convenience, I'll make it depend on ``Applicative``.
 
-```haskell
-
 > -- t is the "container type"
 > -- n is the "address type"
 > class (Applicative t) => Addressable t n | t -> n where
@@ -61,22 +55,14 @@ Today I'm interested in a different approach to relative references. The fundame
 >   -- replace each entry by its address
 >   addresses :: t a -> t n
 
-```
-
 And we need an address-aware version of ``fmap``.
-
-```haskell
 
 > -- address-aware mapping
 > amap :: (Applicative t, Addressable t n)
 >   => (n -> a -> b) -> t a -> t b
 > amap f xs = f <$> (addresses xs) <*> xs
 
-```
-
 For example, here's an implementation for [``ZipLists``](https://hackage.haskell.org/package/base-4.9.1.0/docs/Control-Applicative.html#t:ZipList). (We need to use ``ZipList``s to get the right ``Applicative`` implementation.) Note that I prefer to think of lists as 1 indexed. :)
-
-```haskell
 
 > instance Addressable ZipList Int where
 >   (ZipList as) `at` n = as !! (n-1)
@@ -88,11 +74,7 @@ For example, here's an implementation for [``ZipLists``](https://hackage.haskell
 > instance (Show a) => Show (ZipList a) where
 >   show = show . getZipList
 
-```
-
 And finally, the ``loeb`` function with appropriate changes. I've renamed it to ``eval``, because (1) that name is suggestive of what the function does and (2) the type isn't Löb's Theorem anymore! The ``eval'`` version is tweaked from Piponi's ``loeb``, and ``eval`` is cribbed from Foner's fixpoint-based version of ``loeb``.
-
-```haskell
 
 > -- slow
 > eval' :: (Addressable t n) => t (n -> t x -> x) -> t x
@@ -105,13 +87,9 @@ And finally, the ``loeb`` function with appropriate changes. I've renamed it to 
 > fix :: (a -> a) -> a
 > fix f = let x = f x in x
 
-```
-
 The type of ``eval`` looks like the statement $$\square(Q \rightarrow (\square P \rightarrow P)) \rightarrow \square P,$$ and I have no idea if that means anything in the context of modal logic (I doubt it!).
 
 Now to use ``eval``, our "spreadsheet" will consist of functions that take both an address and a spreadsheet. This ``Num`` instance for functions will be handy:
-
-```haskell
 
 > instance Show (x -> a)
 > instance Eq (x -> a)
@@ -124,27 +102,17 @@ Now to use ``eval``, our "spreadsheet" will consist of functions that take both 
 >   abs = (abs .)
 >   signum = (signum .)
 
-```
-
 And a type synonym for convenience:
-
-```haskell
 
 > -- t is the "container" type
 > -- n is the "address" type
 > -- x is the "value" type
 > type Sheet t n x = t (n -> t x -> x)
 
-```
-
 Now we can define boring spreadsheet-like lists like so:
-
-```haskell
 
 > test1 :: Sheet ZipList Int Int
 > test1 = ZipList [ 1, 3, 6 + 5 ]
-
-```
 
 Try evaluating this with ``eval test1``. Woo!
 
@@ -152,29 +120,19 @@ Note that the literal integers ``1``, ``3``, et cetera are not of type ``Int``, 
 
 Useful spreadsheets include cell references, both absolute (get the value in cell 2) and relative (get the value in the cell 3 slots to the right). We'll introduce some helper functions to make this simpler.
 
-```haskell
-
 > refAbs, refRel :: (Addressable t n, Monoid n)
 >   => n -> n -> t x -> x
 > 
 > refAbs k _ xs = xs `at`            k
 > refRel k i xs = xs `at` (mappend i k)
 
-```
-
 Making the "address" type an instance of monoid makes this code more polymorphic. An instance for ``Int`` will be handy:
-
-```haskell
 
 > instance Monoid Int where
 >   mappend = (+)
 >   mempty  = 0
 
-```
-
 Now we can write cells that refer to each other, both absolutely and relatively, like so. (Try these out with ``eval`` too.)
-
-```haskell
 
 > test2 :: Sheet ZipList Int Int
 > test2 = ZipList
@@ -185,25 +143,17 @@ Now we can write cells that refer to each other, both absolutely and relatively,
 >   , const (length . getZipList)
 >   ]
 
-```
-
 Here's another: this "spreadsheet" constructs the [Fibonacci sequence](https://en.wikipedia.org/wiki/Fibonacci_number).
-
-```haskell
 
 > test3 :: Sheet ZipList Int Integer
 > test3 = ZipList $ [0,1] ++
 >   repeat (refRel (-1) + refRel (-2))
-
-```
 
 
 Again, with Trees
 -----------------
 
 Of course the whole point of polymorphism is that the same code can apply to different data. So let's try again, this time with a binary tree shaped spreadsheet. First we roll a quick type:
-
-```haskell
 
 > data Tree x
 >   = E                     -- empty
@@ -220,11 +170,7 @@ Of course the whole point of polymorphism is that the same code can apply to dif
 >   (B f l1 r1) <*> (B x l2 r2) =
 >     B (f x) (l1 <*> l2) (r1 <*> r2)
 
-```
-
 And a couple of utilities for working with trees:
-
-```haskell
 
 > -- "take" for trees
 > prune :: Int -> Tree x -> Tree x
@@ -239,11 +185,7 @@ And a couple of utilities for working with trees:
 > inord  E        = []
 > inord (B x a b) = (inord a) ++ [x] ++ (inord b)
 
-```
-
 Now how can we "address" the nodes in a binary tree? With lists a single integer sufficed, and making the integer signed allowed both absolute and relative references. There's probably a clever way to encode the position of a tree node as an integer, but I'm feeling lazy -- I'll just say that from any node we can travel to the left branch, to the right branch, or up to the parent.
-
-```haskell
 
 > -- L -> go left, R -> go right, U -> go up
 > data Dir = L | R | U deriving (Eq, Show)
@@ -272,11 +214,7 @@ Now how can we "address" the nodes in a binary tree? With lists a single integer
 >       f (B _ l r) ds
 >         = B (reverse ds) (f l (L:ds)) (f r (R:ds))
 
-```
-
 Now ``[Dir]`` is a monoid for free, and we can do things like this:
-
-```haskell
 
 > test4 :: Sheet Tree [Dir] Int
 > test4 =
@@ -288,11 +226,7 @@ Now ``[Dir]`` is a monoid for free, and we can do things like this:
 >      (B 4 E E)
 >      (B 5 E E))
 
-```
-
 Working with tree shaped "spreadsheets" is a little less natural than lists or matrices, but I suspect that is because they are less familiar. Here's another example:
-
-```haskell
 
 > mediant :: (Num a) => ((a,a),(a,a)) -> (a,a)
 > mediant ((x1,y1),(x2,y2)) = (x1+x2, y1+y2)
@@ -305,8 +239,6 @@ Working with tree shaped "spreadsheets" is a little less natural than lists or m
 > 
 >     fL = \f h k -> let (x,y) = f h k in (x, mediant (x,y))
 >     fR = \f h k -> let (x,y) = f h k in (mediant (x,y), y)
-
-```
 
 This one is awkward -- there are likely to be several helper functions we could factor out here. But what does it do? Try this:
 
@@ -324,19 +256,13 @@ One Step Further
 
 If we have an applicative functor and it makes sense to assign the contents "addresses", we have a kind of spreadsheet, and can use both absolute and relative references. Just out of curiosity, we can also have references that depend on a computed value like so.
 
-```haskell
-
 > crefAbs, crefRel :: (Addressable t n, Monoid n)
 >   => (n -> t n -> n) -> n -> t n -> n
 > 
 > crefAbs f i xs = xs `at`            (f i xs)
 > crefRel f i xs = xs `at` (mappend i (f i xs))
 
-```
-
 Note that ``crefAbs`` and ``crefRel`` look a lot like ``refAbs`` and ``refRel``, except that they apply a context function. These act like the ``Indirect`` or ``Index`` functions in Excel -- they let us compute a cell reference (absolute or relative) on the fly.
-
-```haskell
 
 > test6 :: Sheet ZipList Int Int
 > test6 = ZipList
@@ -344,8 +270,6 @@ Note that ``crefAbs`` and ``crefRel`` look a lot like ``refAbs`` and ``refRel``,
 >   , 1 + crefAbs (2 + refRel (-1))
 >   , 5
 >   ]
-
-```
 
 I don't quite have the motivation to turn this into an actual GUI-driven spreadsheet, so I'll leave that part as an exercise. :)
 

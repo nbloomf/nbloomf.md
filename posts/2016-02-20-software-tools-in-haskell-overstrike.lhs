@@ -1,8 +1,19 @@
 ---
 title: Software Tools in Haskell: overstrike
 subtitle: interpret backspaces on stdin
+date: 2016-02-20
 author: nbloomf
+tags: software-tools-in-haskell
 ---
+
+This post is literate Haskell; you can load [the source](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2016-02-20-software-tools-in-haskell-count.lhs) into GHCi and play along. As usual, we start with some imports.
+
+> -- sth-overstrike: interpret backspaces using line printer control codes
+> module Main where
+> 
+> import System.Exit (exitSuccess)
+> import Control.Arrow ((>>>))
+> import Data.List (unfoldr, intercalate, sortBy)
 
 At first I was going to skip this program, because I cannot imagine myself having a use for it. But I started thinking about the problem and before I knew it the program was written, so I might as well write about it. :)
 
@@ -50,89 +61,89 @@ To identify a coloring of the char-int graph, we (1) drop all the blanks, (2) so
 
 We will use an internal representation, ``CCLine``, for lines formatted using a simplified version of the ASA carriage control scheme; a ``CCLine`` is a list of overstrike lines. Rendering a ``CCLine`` gives its unicode representation. (Note that the constructors of ``CCLine`` are internal to a single library module; programs can only create and manipulate ``CCLine``s via the functions provided by this module. This provides a very basic kind of future-proofing.)
 
-
-```haskell
-data CCLine
-  = CCLine [String]
-  deriving (Show)
-
-fromCCLine :: CCLine -> [String]
-fromCCLine (CCLine xs) = xs
-
-renderCCLine :: CCLine -> String
-renderCCLine (CCLine xs)
-  = intercalate "\n" $ zipWith (:) (' ' : (repeat '+')) xs
-```
-
+> data CCLine
+>   = CCLine [String]
+>   deriving (Show)
+> 
+> fromCCLine :: CCLine -> [String]
+> fromCCLine (CCLine xs) = xs
+> 
+> renderCCLine :: CCLine -> String
+> renderCCLine (CCLine xs)
+>   = intercalate "\n" $ zipWith (:) (' ' : (repeat '+')) xs
 
 Now ``toCCLine`` reads a ``CCLine`` from a string.
 
-
-```haskell
-toCCLine :: String -> CCLine
-toCCLine "" = CCLine [""]
-toCCLine xs =
-  (columnIndices
-    >>> filter (\(c,_) -> c /= ' ')          -- try omitting
-    >>> sortBy (\(_,a) (_,b) -> compare a b) -- these lines
-    >>> maxMonoSubseqsBy p
-    >>> map (fromSparseList ' ')
-    >>> CCLine) xs
-  where
-    p u v = if snd u < snd v
-              then True else False
-
-    -- Assign a column index 
-    columnIndices :: String -> [(Char,Int)]
-    columnIndices = accum [] 1
-      where
-        accum zs _ ""     = reverse zs
-        accum zs k (c:cs) = case c of
-          '\b'      -> accum zs (max 1 (k-1)) cs
-          otherwise -> accum ((c,k):zs) (k+1) cs
-
-
-maxMonoSubseqsBy :: (a -> a -> Bool) -> [a] -> [[a]]
-maxMonoSubseqsBy p = unfoldr maxMonoSubseq
-  where
-    maxMonoSubseq [] = Nothing
-    maxMonoSubseq xs = accum [] [] xs
-
-    accum as bs [] = Just (reverse as, reverse bs)
-    accum [] bs (z:zs) = accum [z] bs zs
-    accum (a:as) bs (z:zs) = if p a z
-      then accum (z:a:as) bs zs
-      else accum (a:as) (z:bs) zs
-
-
-fromSparseList :: a -> [(a,Int)] -> [a]
-fromSparseList x [] = []
-fromSparseList x ys = accum 1 [] ys
-  where
-    accum _ as [] = reverse as
-    accum t as ((z,h):zs) = case compare t h of
-      EQ -> accum (t+1) (z:as) zs
-      LT -> accum (t+1) (x:as) ((z,h):zs)
-      GT -> accum (t+1) as zs
-```
-
+> toCCLine :: String -> CCLine
+> toCCLine "" = CCLine [""]
+> toCCLine xs =
+>   (columnIndices
+>     >>> filter (\(c,_) -> c /= ' ')          -- try omitting
+>     >>> sortBy (\(_,a) (_,b) -> compare a b) -- these lines
+>     >>> maxMonoSubseqsBy p
+>     >>> map (fromSparseList ' ')
+>     >>> CCLine) xs
+>   where
+>     p u v = if snd u < snd v
+>               then True else False
+> 
+>     -- Assign a column index 
+>     columnIndices :: String -> [(Char,Int)]
+>     columnIndices = accum [] 1
+>       where
+>         accum zs _ ""     = reverse zs
+>         accum zs k (c:cs) = case c of
+>           '\b'      -> accum zs (max 1 (k-1)) cs
+>           otherwise -> accum ((c,k):zs) (k+1) cs
+> 
+> 
+> maxMonoSubseqsBy :: (a -> a -> Bool) -> [a] -> [[a]]
+> maxMonoSubseqsBy p = unfoldr maxMonoSubseq
+>   where
+>     maxMonoSubseq [] = Nothing
+>     maxMonoSubseq xs = accum [] [] xs
+> 
+>     accum as bs [] = Just (reverse as, reverse bs)
+>     accum [] bs (z:zs) = accum [z] bs zs
+>     accum (a:as) bs (z:zs) = if p a z
+>       then accum (z:a:as) bs zs
+>       else accum (a:as) (z:bs) zs
+> 
+> 
+> fromSparseList :: a -> [(a,Int)] -> [a]
+> fromSparseList x [] = []
+> fromSparseList x ys = accum 1 [] ys
+>   where
+>     accum _ as [] = reverse as
+>     accum t as ((z,h):zs) = case compare t h of
+>       EQ -> accum (t+1) (z:as) zs
+>       LT -> accum (t+1) (x:as) ((z,h):zs)
+>       GT -> accum (t+1) as zs
 
 As an aside: I pulled out ``maxMonoSubseqsBy`` and ``fromSparseList`` as abstractly as possible. When writing Haskell (this is probably true in other languages as well) writing code with the most general possible type usually makes it **easier** to write. Working with a less specific type means there are fewer meaningful things to say, and when there are fewer paths to choose from the correct one is easier to find. This code, for instance, was nearly written in one pass with no substantial editing needed. Not because I am particularly good but because **there's essentially only one way to do it**. Pick a type signature and a recursion pattern (here, either ``unfoldr`` or accumulating parameter) and the rest practically writes itself.
 
 After all that, the main program is pretty straightforward.
 
+> main :: IO ()
+> main = do
+>   lineFilter (renderCCLine . toCCLine)
+>   exitSuccess
 
-```haskell
--- sth-overstrike: interpret backspaces using line printer control codes
+Old stuff:
 
-module Main where
-
-import System.Exit (exitSuccess)
-import STH.Lib (lineFilter, toCCLine, renderCCLine)
-
-
-main :: IO ()
-main = do
-  lineFilter (renderCCLine . toCCLine)
-  exitSuccess
-```
+> -- apply a map to all lines on stdin
+> lineFilter :: (String -> String) -> IO ()
+> lineFilter f = do
+>   xs <- fmap getLines getContents
+>   sequence_ $ map (putStrLn . f) xs
+> 
+> 
+> -- split on \n
+> getLines :: String -> [String]
+> getLines = unfoldr firstLine
+>   where
+>     firstLine :: String -> Maybe (String, String)
+>     firstLine xs = case break (== '\n') xs of
+>       ("","")   -> Nothing
+>       (as,"")   -> Just (as,"")
+>       (as,b:bs) -> Just (as,bs)

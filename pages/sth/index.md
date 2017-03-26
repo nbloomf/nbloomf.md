@@ -42,10 +42,10 @@ I will prefix the names of these ports with ``sth-``, to avoid clashing with exi
 ### Chapter 2: Filters
 
 * [``entab``](/posts/2016-02-18-software-tools-in-haskell-charfullwidth.html): replace spaces on ``stdin`` with tabs
-* [``echo``](/pages/sth/tool/echo.html): write arguments to ``stdout``
-* [``overstrike``](/pages/sth/tool/overstrike.html): interpret backspaces on ``stdin``
-* [``unescape``](/pages/sth/tool/unescape.html): interpret escape codes on ``stdin``
-* [``escape``](/pages/sth/tool/escape.html): replace strange chars on ``stdin`` with escape sequences
+* [``echo``](/posts/2016-02-19-software-tools-in-haskell-echo.html): write arguments to ``stdout``
+* [``overstrike``](/posts/2016-02-20-software-tools-in-haskell-overstrike.html): interpret backspaces on ``stdin``
+* [``unescape``](/posts/2016-02-21-software-tools-in-haskell-unescape.html): interpret escape codes on ``stdin``
+* [``escape``](/posts/2016-02-22-software-tools-in-haskell-escape.html): replace strange chars on ``stdin`` with escape sequences
 * [``compress``](/pages/sth/tool/compress.html): compress text on ``stdin`` (run length encoding)
 * [``expand``](/pages/sth/tool/expand.html): uncompress text on ``stdin`` (run length encoding)
 * [``crypt``](/pages/sth/tool/crypt.html): xor text on ``stdin`` with a list of keys

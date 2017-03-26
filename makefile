@@ -87,6 +87,9 @@ tools:
 	$(call haskell_exe,2016-02-17-software-tools-in-haskell-charfullwidth,sth-charfullwidth)
 	$(call haskell_exe,2016-02-18-software-tools-in-haskell-entab,sth-entab)
 	$(call haskell_exe,2016-02-19-software-tools-in-haskell-echo,sth-echo)
+	$(call haskell_exe,2016-02-20-software-tools-in-haskell-overstrike,sth-overstrike)
+	$(call haskell_exe,2016-02-21-software-tools-in-haskell-unescape,sth-unescape)
+	$(call haskell_exe,2016-02-22-software-tools-in-haskell-escape,sth-escape)
 	@echo 'testing...' | doppler lightgreen
 	(cd _bin/; shelltest --color --execdir ../test/ -- --threads=16 --hide-successes)
 
