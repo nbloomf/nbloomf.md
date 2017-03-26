@@ -84,6 +84,7 @@ tools:
 	$(call haskell_exe,2016-02-14-software-tools-in-haskell-glyphcount,sth-glyphcount)
 	$(call haskell_exe,2016-02-15-software-tools-in-haskell-detab,sth-detab)
 	$(call haskell_exe,2016-02-16-software-tools-in-haskell-charcombine,sth-charcombine)
+	$(call haskell_exe,2016-02-17-software-tools-in-haskell-charfullwidth,sth-charfullwidth)
 	@echo 'testing...' | doppler lightgreen
 	(cd _bin/; shelltest --color --execdir ../test/ -- --threads=16 --hide-successes)
 
