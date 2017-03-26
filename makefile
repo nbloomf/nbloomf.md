@@ -2,9 +2,8 @@ SHELL    = /bin/bash
 CLASSDIR = $(HOME)/documents/classes
 NOTEDIR  = $(HOME)/documents/notebooks
 TEXDIR   = $(HOME)/documents/tex-examples
-STHDIR   = $(HOME)/code/st-haskell
 
-export PATH := _bin:$(PATH)
+PATH := $(shell pwd)/_bin:$(PATH)
 
 all: move FORCE
 	@echo "built nbloomf.github.io" | doppler lightgreen
@@ -84,15 +83,17 @@ tools:
 	$(call haskell_exe,2016-02-13-software-tools-in-haskell-sentcount,sth-sentcount)
 	$(call haskell_exe,2016-02-14-software-tools-in-haskell-glyphcount,sth-glyphcount)
 	$(call haskell_exe,2016-02-15-software-tools-in-haskell-detab,sth-detab)
+	$(call haskell_exe,2016-02-16-software-tools-in-haskell-charcombine,sth-charcombine)
 	@echo 'testing...' | doppler lightgreen
-	shelltest --color --execdir test/ -- --threads=16 --hide-successes
+	(cd _bin/; shelltest --color --execdir ../test/ -- --threads=16 --hide-successes)
 
 # compile a literate haskell post
 define haskell_exe
   @echo "building $(1)" | doppler lightblue
-  @ghc --make posts/$(1).lhs
-  @rm posts/$(1).hi posts/$(1).o
-  @mv posts/$(1) _bin/$(2)
+  @cp posts/$(1).lhs _temp/$(2).lhs
+  @ghc --make _temp/$(2).lhs
+  @rm _temp/$(2).hi _temp/$(2).o _temp/$(2).lhs
+  @mv _temp/$(2) _bin/$(2)
 endef
 
 

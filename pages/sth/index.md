@@ -36,7 +36,7 @@ I will prefix the names of these ports with ``sth-``, to avoid clashing with exi
 * [``sentcount``](/posts/2016-02-13-software-tools-in-haskell-sentcount.html): count sentences on ``stdin``
 * [``glyphcount``](/posts/2016-02-14-software-tools-in-haskell-glyphcount.html): count glyphs on ``stdin``
 * [``detab``](/posts/2016-02-15-software-tools-in-haskell-detab.html): replace tabs on ``stdin`` with spaces
-* [``charcombine``](/pages/sth/tool/charcombine.html): replace chars on ``stdin`` with precomposed equivalents
+* [``charcombine``](/posts/2016-02-16-software-tools-in-haskell-charcombine.html): replace chars on ``stdin`` with precomposed equivalents
 * [``charfullwidth``](/pages/sth/tool/charfullwidth.html): replace chars on ``stdin`` with fullwidth equivalents
 
 ### Chapter 2: Filters
