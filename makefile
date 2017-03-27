@@ -97,8 +97,13 @@ tools:
 	$(call haskell_exe,2016-02-27-software-tools-in-haskell-charreplace,sth-charreplace)
 	$(call haskell_exe,2016-02-28-software-tools-in-haskell-tail,sth-tail)
 	$(call haskell_exe,2016-02-29-software-tools-in-haskell-getlines,sth-getlines)
+	$(call haskell_exe,2016-03-01-software-tools-in-haskell-compare,sth-compare)
+	$(call haskell_exe,2016-03-02-software-tools-in-haskell-import,sth-import)
+	$(call haskell_exe,2016-03-03-software-tools-in-haskell-concat,sth-concat)
+	$(call haskell_exe,2016-03-04-software-tools-in-haskell-wye,sth-wye)
+	$(call haskell_exe,2016-03-05-software-tools-in-haskell-pslineprint,sth-pslineprint)
 	@echo 'testing...' | doppler lightgreen
-	(cd _bin/; shelltest --color --execdir ../test/ -- --threads=16 --hide-successes)
+	@(cd _bin/; shelltest --color --execdir ../test/ -- --threads=16 --hide-successes)
 
 # compile a literate haskell post
 define haskell_exe

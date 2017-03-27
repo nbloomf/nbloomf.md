@@ -56,11 +56,11 @@ I will prefix the names of these ports with ``sth-``, to avoid clashing with exi
 
 ### Chapter 3: Files
 
-* [``compare``](/pages/sth/tool/compare.html): find the first position where two text streams differ
-* [``import``](/pages/sth/tool/import.html): splice contents of a file into ``stdin``
-* [``concat``](/pages/sth/tool/concat.html): concatenate files
-* [``wye``](/pages/sth/tool/wye.html): write ``stdin`` to files and ``stdout``
-* [``pslineprint``](/pages/sth/tool/pslineprint.html): print ``stdin`` to postscript
+* [``compare``](/posts/2016-03-01-software-tools-in-haskell-compare.html): find the first position where two text streams differ
+* [``import``](/posts/2016-03-02-software-tools-in-haskell-import.html): splice contents of a file into ``stdin``
+* [``concat``](/posts/2016-03-03-software-tools-in-haskell-concat.html): concatenate files
+* [``wye``](/posts/2016-03-04-software-tools-in-haskell-wye.html): write ``stdin`` to files and ``stdout``
+* [``pslineprint``](/posts/2016-03-05-software-tools-in-haskell-pslineprint.html): print ``stdin`` to postscript
 * [``paginate``](/pages/sth/tool/paginate.html): format lines with page numbers and headers
 * [``examine``](/pages/sth/tool/examine.html): interactively view a file
 * [``archive``](/pages/sth/tool/archive.html): bundle text files

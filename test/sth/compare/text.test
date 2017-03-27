@@ -1,0 +1,6 @@
+sth-compare --to hello world
+<<<
+hello
+world
+>>>
+>>>= 0
