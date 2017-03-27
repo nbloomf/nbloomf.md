@@ -50,8 +50,8 @@ I will prefix the names of these ports with ``sth-``, to avoid clashing with exi
 * [``expand``](/posts/2016-02-24-software-tools-in-haskell-expand.html): uncompress text on ``stdin`` (run length encoding)
 * [``crypt``](/posts/2016-02-25-software-tools-in-haskell-crypt.html): xor text on ``stdin`` with a list of keys
 * [``translit``](/posts/2016-02-26-software-tools-in-haskell-translit.html): transliterate or remove chars on ``stdin``
-* [``charreplace``](/pages/sth/tool/charreplace.html): replace chars by strings on ``stdin``
-* [``tail``](/pages/sth/tool/tail.html): get the last k lines or chars from ``stdin``
+* [``charreplace``](/posts/2016-02-27-software-tools-in-haskell-charreplace.html): replace chars by strings on ``stdin``
+* [``tail``](/posts/2016-02-28-software-tools-in-haskell-tail.html): get the last k lines or chars from ``stdin``
 * [``getlines``](/pages/sth/tool/getlines.html): extract lines from ``stdin`` by index
 
 ### Chapter 3: Files
