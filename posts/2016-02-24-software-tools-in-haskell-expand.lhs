@@ -2,7 +2,7 @@
 title: Software Tools in Haskell: expand
 subtitle: uncompress text on stdin (run length encoding)
 author: nbloomf
-date: 2016-03-02
+date: 2016-02-24
 tags: software-tools-in-haskell
 ---
 
