@@ -129,7 +129,9 @@ After all that, the main program is pretty straightforward.
 >   lineFilter (renderCCLine . toCCLine)
 >   exitSuccess
 
-Old stuff:
+
+Old stuff
+---------
 
 > -- apply a map to all lines on stdin
 > lineFilter :: (String -> String) -> IO ()

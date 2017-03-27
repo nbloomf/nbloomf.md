@@ -1,33 +1,134 @@
 ---
-title: Software Tools in Haskell: unescape
-subtitle: interpret C and ASCII escape codes on stdin
-date: 2016-02-21
+title: Software Tools in Haskell: charreplace
+subtitle: replace chars by strings on stdin
+date: 2016-02-27
 author: nbloomf
 tags: software-tools-in-haskell
 ---
 
-This post is literate Haskell; you can load [the source](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2016-02-21-software-tools-in-haskell-unescape.lhs) into GHCi and play along. As usual, we start with some imports.
+This post is literate Haskell; you can load [the source](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2016-02-27-software-tools-in-haskell-charreplace.lhs) into GHCi and play along. As usual, we start with some imports.
 
-> -- sth-unescape: interpret C and ASCII backslash escape codes on stdin
+> -- sth-charreplace: replace chars with strings on stdin
 > module Main where
 > 
-> import System.Exit (exitSuccess)
-> import Data.Char (ord, readLitChar)
+> import System.Environment (getArgs, getProgName)
+> import System.Exit (exitSuccess, exitFailure)
 > import Data.List (unfoldr)
+> import Data.Char (readLitChar)
+> import System.IO (hPutStrLn, stderr)
 
-While testing the [``overstrike``](/posts/2016-02-20-software-tools-in-haskell-overstrike.html) program I ran into an inconvenient problem: I couldn't find an easy and consistent way to type control characters (namely backspace, but others have the same problem) that works both in my terminal and in my golden test suite. It seems like every program -- the terminal, the shell, the test runner -- wants to interpret these characters slightly differently. This problem is a good candidate for a filter-style program. ``unescape`` reads lines from stdin and interprets any C-style escape sequences or ASCII abbreviations it finds. (There is a nice wiki page on [C-style escape sequences](https://en.wikipedia.org/wiki/Escape_sequences_in_C), and the page on [ASCII](https://en.wikipedia.org/wiki/ASCII#ASCII_control_code_chart) includes a table of abbreviations.)
-
-The main program is simple enough, as it simply munches through the lines on stdin looking for escape codes.
+The program ``charreplace`` is a companion to [``translit``](/pages/sth/tool/translit.html) and requires no new machinery.
 
 > main :: IO ()
 > main = do
->   charFilter bsUnEsc
+>   args <- getArgs
+> 
+>   (notflag,from,to) <- do
+>     let
+>       (flag,rest) = case args of
+>         ("--not":xs) -> (True,xs)
+>         xs           -> (False,xs)
+> 
+>     (from,to) <- case rest of
+>       [as] -> case readCharSeq (bsUnEsc as) of
+>         Just xs -> return (xs, "")
+>         Nothing -> argError
+>       [as,bs] -> case readCharSeq (bsUnEsc as) of
+>         Just xs -> return (xs, bsUnEsc bs)
+>         Nothing -> argError
+>       otherwise -> argError
+> 
+>     return (flag,from,to)
+> 
+>   let
+>     remove = case notflag of
+>       False -> filter (not . (`elem` from))
+>       True  -> filter (`elem` from)
+> 
+>   let
+>     replace = case notflag of
+>       False -> concatMap
+>                  (\x -> if x`elem`from then to else [x])
+>       True  -> concatMap
+>                  (\x -> if x`elem`from then [x] else to)
+> 
+>   case to of
+>     ""        -> charFilter remove
+>     otherwise -> charFilter replace
+> 
 >   exitSuccess
+> 
+> 
+> argError :: IO a
+> argError = reportErrorMsgs
+>   [ "usage:"
+>   , "  charreplace [SOURCE] [TARGET] -- replace each char in SOURCE with TARGET string"
+>   , "  charreplace [REMOVE]          -- remove each char in REMOVE string"
+>   , "option:"
+>   , "  --not  : invert selection (e.g. replace all *except* SOURCE)"
+>   ] >> exitFailure
 
-The real work is done by the library function ``bsUnEsc``. There's no nice way to do this, so we pattern match on the prefix of a string looking for escape codes. One gotcha: the ASCII abbreviations are not prefix free; for instance the meaning of the string ``\SOHello`` is ambiguous; is it ``\SO`` (Shift Out) followed by ``Hello`` or ``\SOH`` (Start Of Heading) followed by ``ello``? To make sure these are detected correctly, we pattern match ``\SOH`` first (since otherwise that string would always match as ``\SO`` followed by ``H``) and add one more escape code, ``\&`` (taken from Haskell), for those occasions when you *really* want ``\SO`` followed by ``H`` not interpreted as ``\SOH``. ``\&`` represents the empty string, so we can do this with ``\SO\&H``. So, you know, for all those times you need carefully formatted ASCII control codes.
+It may seem like overkill to split the functionality from ``translit`` and ``charreplace`` just to make the interface more consistent. But note that ``charreplace`` naturally does something we couldn't have done if the two were rolled together, at least not without making the interface even *more* inconsistent: ``charreplace`` naturally replaces characters by **strings**, not just characters. This is not a trivial distinction; for example, if we have a text file which uses unix-style line endings (``\n``) and want to convert them to Windows-style line endings (``\r\n``) we can do this with
 
-``bsUnEsc`` will probably be useful later for parsing command line arguments.
+    charreplace "\n" "\r\n"
 
+I can't think of a way to do this with ``translit`` alone.
+
+
+Old Stuff
+---------
+
+> -- apply a map to stdin
+> charFilter :: (String -> String) -> IO ()
+> charFilter f = do
+>   xs <- getContents
+>   putStr $ f xs
+> 
+> 
+> -- write list of messages to stderr
+> reportErrorMsgs :: [String] -> IO ()
+> reportErrorMsgs errs = do
+>   name <- getProgName
+>   sequence_ $ map (hPutStrLn stderr) $ ((name ++ " error"):errs)
+> 
+> 
+> unfoldrMaybe :: (b -> Maybe (Maybe (a,b))) -> b -> Maybe [a]
+> unfoldrMaybe f x = case f x of
+>   Nothing -> Nothing
+>   Just Nothing -> Just []
+>   Just (Just (a,b)) -> do
+>     as <- unfoldrMaybe f b
+>     Just (a:as)
+> 
+> 
+> data CharSeq
+>   = Single Char
+>   | Range  Char Char
+>   deriving (Show)
+> 
+> readCharSeq :: String -> Maybe String
+> readCharSeq = fmap charSeqsToList . readCharSeqs . bsUnEsc
+>   where
+>     charSeqsToList :: [CharSeq] -> String
+>     charSeqsToList = concatMap charSeqToList
+>       where
+>         charSeqToList (Single x)  = [x]
+>         charSeqToList (Range x y) = enumFromTo x y
+>     
+>     readCharSeqs :: String -> Maybe [CharSeq]
+>     readCharSeqs = unfoldrMaybe firstCharSeq
+>       where
+>         firstCharSeq :: String -> Maybe (Maybe (CharSeq, String))
+>         firstCharSeq ""      = Just Nothing
+>         firstCharSeq [x]     = Just (Just (Single x, ""))
+>         firstCharSeq ('-':_) = Nothing
+>         firstCharSeq [x,y]   = Just (Just (Single x, [y]))
+>         firstCharSeq (x:y:z:xs) = case y of
+>           '-' -> Just (Just (Range x z, xs))
+>           otherwise -> Just (Just (Single x, y:z:xs))
+> 
+> 
+> -- expand C and ASCII style escape codes
 > bsUnEsc :: String -> String
 > bsUnEsc = concat . unfoldr firstChar
 >   where
@@ -140,13 +241,3 @@ The real work is done by the library function ``bsUnEsc``. There's no nice way t
 >             []        -> Just ('\\':digs, ds)
 >             ((x,_):_) -> Just ([x],ds)
 >           False -> Just ('\\':digs, ds)
-
-
-Old stuff
----------
-
-> -- apply a map to stdin
-> charFilter :: (String -> String) -> IO ()
-> charFilter f = do
->   xs <- getContents
->   putStr $ f xs

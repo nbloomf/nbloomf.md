@@ -147,7 +147,9 @@ Repeat counts are encoded in base 86 for space efficiency. (Counts up to 85 need
 
 It will be difficult to test ``compress`` until we've also written its companion, [``expand``](/posts/2016-02-24-software-tools-in-haskell-expand.html).
 
-Old stuff:
+
+Old stuff
+---------
 
 > -- apply a map to stdin
 > charFilter :: (String -> String) -> IO ()

@@ -53,6 +53,10 @@ All that remains is to write a function, ``composeGlyph``, that takes a string o
 
 And OH MY GOSH THIS IS SO BORING. There are dozens more precomposed characters, and it's pretty clear how to extend this function to those. I will leave finishing this to another day.
 
+
+Old Stuff
+---------
+
 > -- apply a map to stdin
 > charFilter :: (String -> String) -> IO ()
 > charFilter f = do

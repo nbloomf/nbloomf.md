@@ -91,7 +91,9 @@ The work is done by ``bsEsc``:
 >           | t < b = [t]
 >           | otherwise = (t`rem`b) : (foo (t`quot`b))
 
-Old stuff:
+
+Old stuff
+---------
 
 > -- apply a map to stdin
 > charFilter :: (String -> String) -> IO ()
