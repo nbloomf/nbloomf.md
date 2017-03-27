@@ -6,6 +6,8 @@ author: nbloomf
 tags: software-tools-in-haskell
 ---
 
+This post is literate Haskell; you can load [the source](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2016-02-28-software-tools-in-haskell-tail.lhs) into GHCi and play along. As usual, we start with some imports.
+
 > -- tail: get the last k lines or chars from stdin
 > module Main where
 > 

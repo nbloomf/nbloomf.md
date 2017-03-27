@@ -96,6 +96,7 @@ tools:
 	$(call haskell_exe,2016-02-26-software-tools-in-haskell-translit,sth-translit)
 	$(call haskell_exe,2016-02-27-software-tools-in-haskell-charreplace,sth-charreplace)
 	$(call haskell_exe,2016-02-28-software-tools-in-haskell-tail,sth-tail)
+	$(call haskell_exe,2016-02-29-software-tools-in-haskell-getlines,sth-getlines)
 	@echo 'testing...' | doppler lightgreen
 	(cd _bin/; shelltest --color --execdir ../test/ -- --threads=16 --hide-successes)
 

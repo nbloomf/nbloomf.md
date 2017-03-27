@@ -78,6 +78,11 @@ I can't think of a way to do this with ``translit`` alone.
 Old Stuff
 ---------
 
+> data CCLine
+>   = CCLine [String]
+>   deriving (Show)
+> 
+> 
 > -- apply a map to stdin
 > charFilter :: (String -> String) -> IO ()
 > charFilter f = do

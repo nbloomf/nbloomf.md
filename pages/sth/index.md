@@ -52,7 +52,7 @@ I will prefix the names of these ports with ``sth-``, to avoid clashing with exi
 * [``translit``](/posts/2016-02-26-software-tools-in-haskell-translit.html): transliterate or remove chars on ``stdin``
 * [``charreplace``](/posts/2016-02-27-software-tools-in-haskell-charreplace.html): replace chars by strings on ``stdin``
 * [``tail``](/posts/2016-02-28-software-tools-in-haskell-tail.html): get the last k lines or chars from ``stdin``
-* [``getlines``](/pages/sth/tool/getlines.html): extract lines from ``stdin`` by index
+* [``getlines``](/posts/2016-02-29-software-tools-in-haskell-getlines.html): extract lines from ``stdin`` by index
 
 ### Chapter 3: Files
 
