@@ -8,7 +8,9 @@ This post is literate Haskell; code lines start with a ``>``, and all other line
 
 This file is not static and was not written all at once. Over time new bits get added and old bits get changed as my needs evolve.
 
-**Frontmatter**
+
+Frontmatter
+-----------
 
 As usual we begin with some pragmas and imports, to be used later. The ``OverloadedStrings`` pragma allows us to define globs and filenames as ordinary strings; otherwise we'd be saying ``fromGlob`` everywhere.
 
@@ -29,7 +31,8 @@ As usual we begin with some pragmas and imports, to be used later. The ``Overloa
 >   )
 
 
-**The Main Function**
+The Main Function
+-----------------
 
 Hakyll is a declarative DSL for building static websites. A typical Hakyll program is of the following form:
 ```haskell
@@ -57,7 +60,8 @@ where ``Rules`` is a special monad for turning source files into web pages. Come
 >   createTagPages tags
 
 
-**The Rules**
+The Rules
+---------
 
 The ``matchRawFiles`` rule handles files that should be copied verbatim, with no extra processing.
 
@@ -110,19 +114,21 @@ The ``matchPosts`` rule is a little different from the others we've seen so far.
 
 > matchPosts :: Tags -> Rules ()
 > matchPosts tags = do
->   match "posts/*" $ do
+>   match "posts/**" $ do
 >     route $ setExtension "html"
 >
 >     let ctx = postWithTagsCtx tags
 >
 >     compile $ pandocMathCompiler
 >       >>= applyShortcodes allServices
+>       >>= loadAndApplyTemplateIfTagged
+>             "literate-haskell" "templates/literate-haskell.html" ctx
+>       >>= loadAndApplyTemplateIfTagged
+>             "software-tools-in-haskell" "templates/sth-tools.html" ctx
 >       >>= loadAndApplyTemplate
 >             "templates/post.html" ctx
 >       >>= loadAndApplyTemplateIfTagged
 >             "arithmetic-made-difficult" "templates/amd.html" ctx
->       >>= loadAndApplyTemplateIfTagged
->             "software-tools-in-haskell" "templates/sth-tools.html" ctx
 >       >>= loadAndApplyTemplateIfTagged
 >             "project-euler" "templates/project-euler-solutions.html" ctx
 >       >>= loadAndApplyTemplate
@@ -177,7 +183,7 @@ The ``createBlogArchive`` rule is different from the others as it generates a ne
 > createBlogArchive = create ["archive.html"] $ do
 >   route idRoute
 >   compile $ do
->     posts <- recentFirst =<< loadAll "posts/*"
+>     posts <- recentFirst =<< loadAll "posts/**"
 >
 >     let
 >       archiveCtx = mconcat
@@ -251,7 +257,8 @@ The ``createTagPages`` rule generates a bunch of pages for each tag, and an inde
 >         >>= relativizeUrls
 
 
-**Compilers**
+Compilers
+---------
 
 > postCtx :: Context String
 > postCtx = mconcat
@@ -282,7 +289,8 @@ The ``createTagPages`` rule generates a bunch of pages for each tag, and an inde
 >       }
 
 
-**Helpers**
+Helpers
+-------
 
 > anyPattern :: [Pattern] -> Pattern
 > anyPattern = foldl1 (.||.)

@@ -65,9 +65,6 @@ clean: FORCE
 	@(rm pdf/classes/prfs/*.pdf || true) 2> /dev/null
 	@(rm pdf/classes/ssem/*.pdf || true) 2> /dev/null
 	@(rm pdf/classes/parp/*.pdf || true) 2> /dev/null
-	
-	@echo '  software tools docs' | doppler lightmagenta
-	@(rm -r pages/sth/* || true) 2> /dev/null
 
 
 check: FORCE
@@ -76,42 +73,54 @@ check: FORCE
 
 
 tools:
-	$(call haskell_exe,2016-02-08-software-tools-in-haskell-noop,sth-noop)
-	$(call haskell_exe,2016-02-10-software-tools-in-haskell-copy,sth-copy)
-	$(call haskell_exe,2016-02-11-software-tools-in-haskell-count,sth-count)
-	$(call haskell_exe,2016-02-12-software-tools-in-haskell-wordcount,sth-wordcount)
-	$(call haskell_exe,2016-02-13-software-tools-in-haskell-sentcount,sth-sentcount)
-	$(call haskell_exe,2016-02-14-software-tools-in-haskell-glyphcount,sth-glyphcount)
-	$(call haskell_exe,2016-02-15-software-tools-in-haskell-detab,sth-detab)
-	$(call haskell_exe,2016-02-16-software-tools-in-haskell-charcombine,sth-charcombine)
-	$(call haskell_exe,2016-02-17-software-tools-in-haskell-charfullwidth,sth-charfullwidth)
-	$(call haskell_exe,2016-02-18-software-tools-in-haskell-entab,sth-entab)
-	$(call haskell_exe,2016-02-19-software-tools-in-haskell-echo,sth-echo)
-	$(call haskell_exe,2016-02-20-software-tools-in-haskell-overstrike,sth-overstrike)
-	$(call haskell_exe,2016-02-21-software-tools-in-haskell-unescape,sth-unescape)
-	$(call haskell_exe,2016-02-22-software-tools-in-haskell-escape,sth-escape)
-	$(call haskell_exe,2016-02-23-software-tools-in-haskell-compress,sth-compress)
-	$(call haskell_exe,2016-02-24-software-tools-in-haskell-expand,sth-expand)
-	$(call haskell_exe,2016-02-25-software-tools-in-haskell-crypt,sth-crypt)
-	$(call haskell_exe,2016-02-26-software-tools-in-haskell-translit,sth-translit)
-	$(call haskell_exe,2016-02-27-software-tools-in-haskell-charreplace,sth-charreplace)
-	$(call haskell_exe,2016-02-28-software-tools-in-haskell-tail,sth-tail)
-	$(call haskell_exe,2016-02-29-software-tools-in-haskell-getlines,sth-getlines)
-	$(call haskell_exe,2016-03-01-software-tools-in-haskell-compare,sth-compare)
-	$(call haskell_exe,2016-03-02-software-tools-in-haskell-import,sth-import)
-	$(call haskell_exe,2016-03-03-software-tools-in-haskell-concat,sth-concat)
-	$(call haskell_exe,2016-03-04-software-tools-in-haskell-wye,sth-wye)
-	$(call haskell_exe,2016-03-05-software-tools-in-haskell-pslineprint,sth-pslineprint)
+	$(call software_tools_exe,noop)
+	$(call software_tools_exe,copy)
+	$(call software_tools_exe,count)
+	$(call software_tools_exe,wordcount)
+	$(call software_tools_exe,sentcount)
+	$(call software_tools_exe,glyphcount)
+	$(call software_tools_exe,detab)
+	$(call software_tools_exe,charcombine)
+	$(call software_tools_exe,charfullwidth)
+	$(call software_tools_exe,entab)
+	$(call software_tools_exe,echo)
+	$(call software_tools_exe,overstrike)
+	$(call software_tools_exe,unescape)
+	$(call software_tools_exe,escape)
+	$(call software_tools_exe,compress)
+	$(call software_tools_exe,expand)
+	$(call software_tools_exe,crypt)
+	$(call software_tools_exe,translit)
+	$(call software_tools_exe,charreplace)
+	$(call software_tools_exe,tail)
+	$(call software_tools_exe,getlines)
+	$(call software_tools_exe,compare)
+	$(call software_tools_exe,import)
+	$(call software_tools_exe,concat)
+	$(call software_tools_exe,wye)
+	$(call software_tools_exe,pslineprint)
+	$(call software_tools_exe,paginate)
+	$(call software_tools_exe,examine)
+	$(call software_tools_exe,archive)
+	$(call software_tools_exe,linenumber)
+	$(call software_tools_exe,bubble)
 	@echo 'testing...' | doppler lightgreen
 	@(cd _bin/; shelltest --color --execdir ../test/ -- --threads=16 --hide-successes)
 
 # compile a literate haskell post
+# $(1) is the file path sans extension
+# $(2) is the desired executable name
 define haskell_exe
   @echo "building $(1)" | doppler lightblue
   @cp posts/$(1).lhs _temp/$(2).lhs
   @ghc -O2 --make _temp/$(2).lhs
   @rm _temp/$(2).hi _temp/$(2).o _temp/$(2).lhs
   @mv _temp/$(2) _bin/$(2)
+endef
+
+# compile a software tools post
+define software_tools_exe
+  $(call haskell_exe,software-tools-in-haskell/$(1),sth-$(1))
 endef
 
 
