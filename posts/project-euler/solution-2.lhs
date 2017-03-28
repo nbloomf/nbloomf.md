@@ -2,10 +2,10 @@
 title: Project Euler #2: Even Fibonacci Numbers
 author: nbloomf
 date: 2017-03-06
-tags: project-euler
+tags: project-euler, literate-haskell
 ---
 
-This post is literate Haskell; you can load [the source](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2017-03-06-project-euler-solution-2.lhs) into GHCi and play along.
+First, some imports.
 
 > import Data.Ratio
 

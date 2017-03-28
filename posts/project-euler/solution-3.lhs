@@ -2,10 +2,8 @@
 title: Project Euler #3: Largest Prime Factor
 author: nbloomf
 date: 2017-03-07
-tags: project-euler
+tags: project-euler, literate-haskell
 ---
-
-This post is literate Haskell; you can load [the source](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2017-03-07-project-euler-solution-3.lhs) into GHCi and play along.
 
 [Problem 3](https://projecteuler.net/problem=3) from Project Euler:
 

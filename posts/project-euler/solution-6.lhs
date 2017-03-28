@@ -2,10 +2,8 @@
 title: Project Euler #6: Sum Square Difference
 author: nbloomf
 date: 2017-03-11
-tags: project-euler
+tags: project-euler, literate-haskell
 ---
-
-This post is literate Haskell; you can load [the source](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2017-03-10-project-euler-solution-6.lhs) into GHCi and play along.
 
 [Problem 6](https://projecteuler.net/problem=6) from Project Euler:
 

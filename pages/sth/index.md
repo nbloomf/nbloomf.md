@@ -26,49 +26,49 @@ I will prefix the names of these ports with ``sth-``, to avoid clashing with exi
 
 ## The Tools (Book Order)
 
-* [``noop``](/pages/sth/tool/noop.html): exit successfully
+* [``noop``](/posts/software-tools-in-haskell/noop.html): exit successfully
 
 ### Chapter 1: Getting Started
 
-* [``copy``](/pages/sth/tool/copy.html): copy characters from ``stdin`` to ``stdout``
-* [``count``](/pages/sth/tool/count.html): count lines or chars on ``stdin``
-* [``wordcount``](/pages/sth/tool/wordcount.html): count words on ``stdin``
-* [``sentcount``](/pages/sth/tool/sentcount.html): count sentences on ``stdin``
-* [``glyphcount``](/pages/sth/tool/glyphcount.html): count glyphs on ``stdin``
-* [``detab``](/pages/sth/tool/detab.html): replace tabs on ``stdin`` with spaces
-* [``charcombine``](/pages/sth/tool/charcombine.html): replace chars on ``stdin`` with precomposed equivalents
-* [``charfullwidth``](/pages/sth/tool/charfullwidth.html): replace chars on ``stdin`` with fullwidth equivalents
+* [``copy``](/posts/software-tools-in-haskell/copy.html): copy characters from ``stdin`` to ``stdout``
+* [``count``](/posts/software-tools-in-haskell/count.html): count lines or chars on ``stdin``
+* [``wordcount``](/posts/software-tools-in-haskell/wordcount.html): count words on ``stdin``
+* [``sentcount``](/posts/software-tools-in-haskell/sentcount.html): count sentences on ``stdin``
+* [``glyphcount``](/posts/software-tools-in-haskell/glyphcount.html): count glyphs on ``stdin``
+* [``detab``](/posts/software-tools-in-haskell/detab.html): replace tabs on ``stdin`` with spaces
+* [``charcombine``](/posts/software-tools-in-haskell/charcombine.html): replace chars on ``stdin`` with precomposed equivalents
+* [``charfullwidth``](/posts/software-tools-in-haskell/charfullwidth.html): replace chars on ``stdin`` with fullwidth equivalents
 
 ### Chapter 2: Filters
 
-* [``entab``](/pages/sth/tool/entab.html): replace spaces on ``stdin`` with tabs
-* [``echo``](/pages/sth/tool/echo.html): write arguments to ``stdout``
-* [``overstrike``](/pages/sth/tool/overstrike.html): interpret backspaces on ``stdin``
-* [``unescape``](/pages/sth/tool/unescape.html): interpret escape codes on ``stdin``
-* [``escape``](/pages/sth/tool/escape.html): replace strange chars on ``stdin`` with escape sequences
-* [``compress``](/pages/sth/tool/compress.html): compress text on ``stdin`` (run length encoding)
-* [``expand``](/pages/sth/tool/expand.html): uncompress text on ``stdin`` (run length encoding)
-* [``crypt``](/pages/sth/tool/crypt.html): xor text on ``stdin`` with a list of keys
-* [``translit``](/pages/sth/tool/translit.html): transliterate or remove chars on ``stdin``
-* [``charreplace``](/pages/sth/tool/charreplace.html): replace chars by strings on ``stdin``
-* [``tail``](/pages/sth/tool/tail.html): get the last k lines or chars from ``stdin``
-* [``getlines``](/pages/sth/tool/getlines.html): extract lines from ``stdin`` by index
+* [``entab``](/posts/software-tools-in-haskell/entab.html): replace spaces on ``stdin`` with tabs
+* [``echo``](/posts/software-tools-in-haskell/echo.html): write arguments to ``stdout``
+* [``overstrike``](/posts/software-tools-in-haskell/overstrike.html): interpret backspaces on ``stdin``
+* [``unescape``](/posts/software-tools-in-haskell/unescape.html): interpret escape codes on ``stdin``
+* [``escape``](/posts/software-tools-in-haskell/escape.html): replace strange chars on ``stdin`` with escape sequences
+* [``compress``](/posts/software-tools-in-haskell/compress.html): compress text on ``stdin`` (run length encoding)
+* [``expand``](/posts/software-tools-in-haskell/expand.html): uncompress text on ``stdin`` (run length encoding)
+* [``crypt``](/posts/software-tools-in-haskell/crypt.html): xor text on ``stdin`` with a list of keys
+* [``translit``](/posts/software-tools-in-haskell/translit.html): transliterate or remove chars on ``stdin``
+* [``charreplace``](/posts/software-tools-in-haskell/charreplace.html): replace chars by strings on ``stdin``
+* [``tail``](/posts/software-tools-in-haskell/tail.html): get the last k lines or chars from ``stdin``
+* [``getlines``](/posts/software-tools-in-haskell/getlines.html): extract lines from ``stdin`` by index
 
 ### Chapter 3: Files
 
-* [``compare``](/pages/sth/tool/compare.html): find the first position where two text streams differ
-* [``import``](/pages/sth/tool/import.html): splice contents of a file into ``stdin``
-* [``concat``](/pages/sth/tool/concat.html): concatenate files
-* [``wye``](/pages/sth/tool/wye.html): write ``stdin`` to files and ``stdout``
-* [``pslineprint``](/pages/sth/tool/pslineprint.html): print ``stdin`` to postscript
-* [``paginate``](/pages/sth/tool/paginate.html): format lines with page numbers and headers
-* [``examine``](/pages/sth/tool/examine.html): interactively view a file
-* [``archive``](/pages/sth/tool/archive.html): bundle text files
-* [``linenumber``](/pages/sth/tool/linenumber.html): number lines on ``stdin``
+* [``compare``](/posts/software-tools-in-haskell/compare.html): find the first position where two text streams differ
+* [``import``](/posts/software-tools-in-haskell/import.html): splice contents of a file into ``stdin``
+* [``concat``](/posts/software-tools-in-haskell/concat.html): concatenate files
+* [``wye``](/posts/software-tools-in-haskell/wye.html): write ``stdin`` to files and ``stdout``
+* [``pslineprint``](/posts/software-tools-in-haskell/pslineprint.html): print ``stdin`` to postscript
+* [``paginate``](/posts/software-tools-in-haskell/paginate.html): format lines with page numbers and headers
+* [``examine``](/posts/software-tools-in-haskell/examine.html): interactively view a file
+* [``archive``](/posts/software-tools-in-haskell/archive.html): bundle text files
+* [``linenumber``](/posts/software-tools-in-haskell/linenumber.html): number lines on ``stdin``
 
 ### Chapter 4: Sorting
 
-* [``bubble``](/pages/sth/tool/bubble.html): (bubble)sort lines on stdin
+* [``bubble``](/posts/software-tools-in-haskell/bubble.html): (bubble)sort lines on stdin
 
 
 ## Why Haskell?

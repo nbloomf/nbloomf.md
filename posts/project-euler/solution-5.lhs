@@ -2,10 +2,8 @@
 title: Project Euler #5: Smallest Multiple
 author: nbloomf
 date: 2017-03-10
-tags: project-euler
+tags: project-euler, literate-haskell
 ---
-
-This post is literate Haskell; you can load [the source](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2017-03-10-project-euler-solution-5.lhs) into GHCi and play along.
 
 [Problem 5](https://projecteuler.net/problem=5) from Project Euler:
 

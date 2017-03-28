@@ -55,7 +55,7 @@ where ``Rules`` is a special monad for turning source files into web pages. Come
 >   createBlogArchive
 >   create404
 >
->   tags <- buildTags "posts/*" (fromCapture "tag/*.html")
+>   tags <- buildTags "posts/**" (fromCapture "tag/*.html")
 >   matchPosts tags
 >   createTagPages tags
 

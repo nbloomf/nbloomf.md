@@ -2,10 +2,8 @@
 title: Project Euler #1: Multiples of 3 and 5
 author: nbloomf
 date: 2017-03-05
-tags: project-euler
+tags: project-euler, literate-haskell
 ---
-
-This post is literate Haskell; you can load [the source](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2017-03-05-project-euler-solution-1.lhs) into GHCi and play along.
 
 [Problem 1](https://projecteuler.net/problem=1) from Project Euler:
 

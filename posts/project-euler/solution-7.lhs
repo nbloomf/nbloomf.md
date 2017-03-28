@@ -2,10 +2,8 @@
 title: Project Euler #7: 10001st Prime
 author: nbloomf
 date: 2017-03-12
-tags: project-euler
+tags: project-euler, literate-haskell
 ---
-
-This post is literate Haskell; you can load [the source](https://raw.githubusercontent.com/nbloomf/nbloomf.md/master/posts/2017-03-12-project-euler-solution-7.lhs) into GHCi and play along.
 
 [Problem 7](https://projecteuler.net/problem=7) from Project Euler:
 
