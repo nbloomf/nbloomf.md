@@ -2,7 +2,7 @@
 title: Natural Numbers
 author: nbloomf
 date: 2014-05-01
-tags: arithmetic-made-difficult, natural-numbers
+tags: arithmetic-made-difficult
 ---
 
 We all developed an intuitive understanding of the counting numbers back in kindergarten. But what exactly are they? Mathematics depends on having precise definitions, and we need one for the natural numbers.
@@ -16,7 +16,8 @@ Typically, the natural numbers are developed using the *Peano axioms*: these axi
 There is another approach we can take, which as far as I know was introduced by William Lawvere. This approach characterizes the natural numbers explicitly as an initial object in an appropriate category. It turns out that thinking in this abstractly nonsensical fashion can be given a very concrete interpretation, essentially allowing us to derive executable **programs** and prove things about them.
 
 
-## Iterative Sets
+Iterative Sets
+--------------
 
 The basic setup of the Peano axioms -- the element 0 and the function $S$ -- form a kind of structure on $N$, which we give a name.
 
@@ -39,7 +40,8 @@ As a kind of algebra, the iterative sets come with a corresponding class of stru
 It is straightforward to show that the identity function $\id$ is always an iterative homomorphism and that the composite of two homomorphisms is a homomorphism. So the iterative sets form a category (if you're into that).
 
 
-## Natural Numbers
+Natural Numbers
+---------------
 
 As an axiom, we define the natural numbers to be a special iterative set.
 
@@ -74,6 +76,7 @@ The composite map $\iota \circ \Theta : \nats \rightarrow \nats$ is again an ite
 The traditional induction principle follows as a corollary where $A = \nats$ and $\varphi$ is the inclusion map.
 
 
-## But Why?
+But Why?
+--------
 
 As we'll see, the function $\natrec{\ast}{\ast}$ essentially characterizes the natural numbers just like the Peano axioms do, albeit in a slightly goofy and hard-to-get-used-to way. So if $\natrec{\ast}{\ast}$ and Peano are equivalent, why bother with the added abstraction? Well, if we define our arithmetic purely in terms of $\natrec{\ast}{\ast}$, and then find a concrete representation of $\natrec{\ast}{\ast}$ in software, then suddenly all of our proofs become executable. And by wrapping up recursion behind a small number of "recursion patterns", those proofs can be easier to find and reason about.

@@ -55,7 +55,7 @@ If we had a closed form for the second sum, the sum of the first $n$ squares, we
 
 I vaguely remember that there is indeed a closed form formula for $\sum k^2$. But I can never remember exactly what it is! And I don't feel like looking it up. So let's see if we can find it bare-handed.
 
-The expression $$\sum k^2$$ looks very similar to $$\int x^2 = \frac{1}{3}x^3 + C.$$ It seems reasonable to hope that $\sum k^2$ would be a degree 3 polynomial of $n$, so let's assume that it is.
+The expression $$\sum k^2$$ reminds me of the left hand side of $$\int x^2 = \frac{1}{3}x^3 + C.$$ It seems reasonable to hope that $\sum k^2$ would be a degree 3 polynomial of $n$, so let's assume that it is.
 
 More precisely, suppose $$\sum_{k=0}^n k^2 = S(n) = an^3 + bn^2 + cn + d$$ for some rational numbers $a$, $b$, $c$, and $d$.
 

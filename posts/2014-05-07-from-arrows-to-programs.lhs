@@ -2,8 +2,10 @@
 title: From Arrows to Programs
 author: nbloomf
 date: 2014-05-07
-tags: arithmetic-made-difficult, natural-numbers, math
+tags: arithmetic-made-difficult, literate-haskell
 ---
+
+> module Main where
 
 A nice consequence of wrapping up recursion in the $\natrec{\ast}{\ast}$ function is that it allows us to write programs, independent of any implementation, and prove things about them. We'll see lots of examples of this, but first we need to establish a structural result: every natural number is either $\zero$ or of the form $\next(m)$ for some natural number $m$.
 
@@ -21,39 +23,31 @@ Now we define another mapping $\Psi : \nats \rightarrow \bool$ as follows: $$\Ps
 
 Establishing that every natural number is either $\zero$ or of the form $\next(m)$ for some $m$ justifies our use of the following Haskell type to model the natural numbers.
 
-
-```haskell
-data Nat
-  = Z | N Nat
-
-instance Show Nat where
-  show  Z    = "Z"
-  show (N k) = 'N' : show k
-```
-
+> data Nat
+>   = Z | N Nat
+> 
+> instance Show Nat where
+>   show  Z    = "Z"
+>   show (N k) = 'N' : show k
 
 (That ``show`` instance is so we can display elements of ``Nat`` without too many parentheses.) We also define a few synonyms for "small" natural numbers as follows.
 
-
-```haskell
-d0 = Z
-d1 = N d0
-d2 = N d1
-d3 = N d2
-d4 = N d3
-d5 = N d4
-d6 = N d5
-d7 = N d6
-d8 = N d7
-d9 = N d8
-dA = N d9
-dB = N dA
-dC = N dB
-dD = N dC
-dE = N dD
-dF = N dE
-```
-
+> d0 = Z
+> d1 = N d0
+> d2 = N d1
+> d3 = N d2
+> d4 = N d3
+> d5 = N d4
+> d6 = N d5
+> d7 = N d6
+> d8 = N d7
+> d9 = N d8
+> dA = N d9
+> dB = N dA
+> dC = N dB
+> dD = N dC
+> dE = N dD
+> dF = N dE
 
 So calling ``d7`` in ``ghci``, for instance, prints
 
@@ -61,13 +55,9 @@ So calling ``d7`` in ``ghci``, for instance, prints
 
 And we can also give a straightforward implementation of $\natrec{\ast}{\ast}$.
 
-
-```haskell
-natRec' :: a -> (a -> a) -> Nat -> a
-natRec' e _    Z    = e
-natRec' e phi (N n) = phi (natRec' e phi n)
-```
-
+> natRec' :: a -> (a -> a) -> Nat -> a
+> natRec' e _    Z    = e
+> natRec' e phi (N n) = phi (natRec' e phi n)
 
 For example:
 
@@ -83,7 +73,8 @@ and we can test out this map by evaluating it on several natural numbers:
 Now this ``theta`` is pretty silly (though not *that* silly, it detects the parity of a natural number, which we haven't defined yet). But in the next section we'll define a more interesting recursive function.
 
 
-## But...
+But...
+------
 
 There is a practical problem with this implementation of ``natRec'``. If we evaluate on a natural number like ``NNNZ``, the "stack" of function calls expands to something like this:
 
@@ -98,17 +89,13 @@ There is a practical problem with this implementation of ``natRec'``. If we eval
 
 So we generate a tower of unevaluated calls to ``phi``, $n$ tall, before collapsing it down again. In the meantime all those unevaluated ``phi``s are sitting in memory. It is not difficult to see that if we evaluate ``natRec'`` on a "larger" number (whatever that means) we will quickly run out of actual memory. To help with this, we can try rewriting ``natRec`` in so-called "tail call" recursive form like so.
 
-
-```haskell
-natRec :: a -> (a -> a) -> Nat -> a
-natRec e phi n =
-  let
-    tau !x k = case k of
-      Z   -> x
-      N m -> tau (phi x) m
-  in tau e n
-```
-
+> natRec :: a -> (a -> a) -> Nat -> a
+> natRec e phi n =
+>   let
+>     tau !x k = case k of
+>       Z   -> x
+>       N m -> tau (phi x) m
+>   in tau e n
 
 Now ``natRec`` does not leave a bunch of unevaluated functions in memory. It is effectively a loop, iterating "up" from 0 (again with the scare quotes because we don't have an order on $\nats$ yet but of course you know what it means) rather than "down" from $n$. So this version expands to something like this:
 
