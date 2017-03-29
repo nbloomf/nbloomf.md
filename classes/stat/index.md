@@ -18,6 +18,7 @@ title: Statistical Methods
 ## Slides
 
 * Misleading Graphs ([screen](/pdf/classes/stat/stat-s-misleading-graphs.pdf)) ([print](/pdf/classes/stat/stat-print-s-misleading-graphs.pdf))
+* Histogram of a Binomial Random Variable [(screen)](/pdf/classes/stat/stat-screen-slides-binomial-rv.pdf) [(print)](/pdf/classes/stat/stat-print-slides-binomial-rv.pdf)
 
 
 ## Test Review
@@ -52,9 +53,6 @@ title: Statistical Methods
 * [Test 2](/pdf/classes/stat/stat-r2-counting-and-drvs.pdf)
 * [Test 3](/pdf/classes/stat/stat-r3-continuous-rvs.pdf)
 
-
-
-* Histogram of a Binomial Random Variable [(screen)](/pdf/classes/stat/stat-screen-slides-binomial-rv.pdf) [(print)](/pdf/classes/stat/stat-print-slides-binomial-rv.pdf)
 
 ## Other Stuff
 
