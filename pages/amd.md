@@ -6,9 +6,12 @@ author: nbloomf
 Under construction. I don't know exactly what this is yet.
 
 * First Steps
-    * [Natural Numbers](/posts/2014-05-01-natural-numbers.html)
-    * [From Arrows to Programs](/posts/2014-05-07-from-arrows-to-programs.html)
-    * [Primitive Recursion](/posts/2014-05-14-primitive-recursion.html)
-    * [Variations on Peano](/posts/2014-05-21-variations-on-peano.html)
+    * [Natural Numbers](/posts/arithmetic-made-difficult/natural-numbers.html)
+    * [From Arrows to Programs](/posts/arithmetic-made-difficult/Nat.html)
+    * [Primitive Recursion](/posts/arithmetic-made-difficult/PrimitiveRecursion.html)
+    * [Variations on Peano](/posts/arithmetic-made-difficult/variations-on-peano.html)
+    * [The Universal Property of $\nats$](/posts/arithmetic-made-difficult/NaturalNumbers.html)
 * Basic Arithmetic
-    * [Addition](/posts/2014-06-01-addition.html)
+    * [Addition](/posts/arithmetic-made-difficult/Plus.html)
+    * [Multiplication](/posts/arithmetic-made-difficult/Times.html)
+    * [Really Simple Equations](/posts/arithmetic-made-difficult/really-simple-equations.html)

@@ -9,8 +9,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( plus, _test_plus
 >   ) where
 >
-> import Nat
-> import PrimitiveRecursion
+> import NaturalNumbers
 > 
 > import Test.QuickCheck
 
@@ -66,48 +65,48 @@ Implementation and Testing
 
 Here's ``plus``:
 
-> plus :: Nat -> Nat -> Nat
-> plus = primRec id mu
->   where mu _ _ b = N b
+> plus :: (Natural t) => t -> t -> t
+> plus = primitiveRec id mu
+>   where mu _ _ b = next b
 
-We've proved a bunch of properties for ``plus``, but it's still a good idea to verify them. We can do this with ``QuickCheck``. First we express each property to be tested as a boolean function.
+We've proved a bunch of properties for ``plus``, but it's still a good idea to verify them. We can do this with ``QuickCheck``. First we express each property to be tested as a boolean function. Note that each one takes an "extra" argument; this is just to fix the type of the function being tested. (There may be a better way to do this.)
 
 > -- a == plus(a,0) and a == plus(0,a)
-> _test_plus_zero :: Nat -> Bool
-> _test_plus_zero a = and
->   [ a == plus a Z
->   , a == plus Z a
+> _test_plus_zero :: (Natural t) => t -> t -> Bool
+> _test_plus_zero _ a = and
+>   [ a == plus a zero
+>   , a == plus zero a
 >   ]
 > 
 > 
 > -- next(plus(a,b)) == plus(next(a),b)
 > -- next(plus(a,b)) == plus(a,next(b))
-> _test_plus_next :: Nat -> Nat -> Bool
-> _test_plus_next a b = and
->   [ (N $ plus a b) == (plus (N a) b)
->   , (N $ plus a b) == (plus a (N b))
+> _test_plus_next :: (Natural t) => t -> t -> t -> Bool
+> _test_plus_next _ a b = and
+>   [ (next $ plus a b) == (plus (next a) b)
+>   , (next $ plus a b) == (plus a (next b))
 >   ]
 > 
 > 
 > -- plus(plus(a,b),c) == plus(a,plus(b,c))
-> _test_plus_associative :: Nat -> Nat -> Nat -> Bool
-> _test_plus_associative a b c =
+> _test_plus_associative :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_plus_associative _ a b c =
 >   (plus (plus a b) c) == (plus a (plus b c))
 > 
 > 
 > -- plus(a,b) == plus(b,a)
-> _test_plus_commutative :: Nat -> Nat -> Bool
-> _test_plus_commutative a b =
+> _test_plus_commutative :: (Natural t) => t -> t -> t -> Bool
+> _test_plus_commutative _ a b =
 >   (plus a b) == (plus b a)
 
 We'll wrap all these tests behind a single function, ``_test_plus``, which takes the number of cases to check as an argument.
 
-> _test_plus :: Int -> IO ()
-> _test_plus numCases = sequence_
->   [ quickCheckWith args _test_plus_zero
->   , quickCheckWith args _test_plus_next
->   , quickCheckWith args _test_plus_associative
->   , quickCheckWith args _test_plus_commutative
+> _test_plus :: (Natural t, Arbitrary t, Show t) => t -> Int -> IO ()
+> _test_plus t numCases = sequence_
+>   [ quickCheckWith args (_test_plus_zero t)
+>   , quickCheckWith args (_test_plus_next t)
+>   , quickCheckWith args (_test_plus_associative t)
+>   , quickCheckWith args (_test_plus_commutative t)
 >   ]
 >   where
 >     args = stdArgs {maxSuccess = numCases}
@@ -115,7 +114,7 @@ We'll wrap all these tests behind a single function, ``_test_plus``, which takes
 Sanity check:
 
 ```haskell
-$> _test_plus 1000
+$> _test_plus (zero :: Nat) 1000
 +++ OK, passed 1000 tests.
 +++ OK, passed 1000 tests.
 +++ OK, passed 1000 tests.

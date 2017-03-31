@@ -7,7 +7,7 @@ tags: arithmetic-made-difficult, literate-haskell
 
 > {-# LANGUAGE BangPatterns #-}
 > module Nat
->   ( Nat(Z,N), mkNat, natRec
+>   ( Nat(Z,N), mkNat
 >   ) where
 > 
 > import Test.QuickCheck
