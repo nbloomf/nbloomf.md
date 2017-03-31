@@ -5,7 +5,12 @@ date: 2014-05-07
 tags: arithmetic-made-difficult, literate-haskell
 ---
 
-> module Main where
+> {-# LANGUAGE BangPatterns #-}
+> module Nat
+>   ( Nat(Z,N), mkNat, natRec
+>   ) where
+> 
+> import Test.QuickCheck
 
 A nice consequence of wrapping up recursion in the $\natrec{\ast}{\ast}$ function is that it allows us to write programs, independent of any implementation, and prove things about them. We'll see lots of examples of this, but first we need to establish a structural result: every natural number is either $\zero$ or of the form $\next(m)$ for some natural number $m$.
 
@@ -25,31 +30,20 @@ Establishing that every natural number is either $\zero$ or of the form $\next(m
 
 > data Nat
 >   = Z | N Nat
+>   deriving Eq
 > 
 > instance Show Nat where
 >   show  Z    = "Z"
 >   show (N k) = 'N' : show k
 
-(That ``show`` instance is so we can display elements of ``Nat`` without too many parentheses.) We also define a few synonyms for "small" natural numbers as follows.
+(That ``show`` instance is so we can display elements of ``Nat`` without too many parentheses.) We also define a helper function to convert integers into ``Nat``s as follows.
 
-> d0 = Z
-> d1 = N d0
-> d2 = N d1
-> d3 = N d2
-> d4 = N d3
-> d5 = N d4
-> d6 = N d5
-> d7 = N d6
-> d8 = N d7
-> d9 = N d8
-> dA = N d9
-> dB = N dA
-> dC = N dB
-> dD = N dC
-> dE = N dD
-> dF = N dE
+> mkNat :: Integer -> Nat
+> mkNat k = if k <= 0
+>   then Z
+>   else N $ mkNat (k-1)
 
-So calling ``d7`` in ``ghci``, for instance, prints
+So calling ``mkNat 7`` in ``ghci``, for instance, prints
 
     NNNNNNNZ
 
@@ -61,16 +55,16 @@ And we can also give a straightforward implementation of $\natrec{\ast}{\ast}$.
 
 For example:
 
-    let theta = natRec' True not
+    let theta' = natRec' True not
 
 and we can test out this map by evaluating it on several natural numbers:
 
-    > theta d3
-    False
-    > theta d6
+    > theta' $ mkNat 10
     True
+    > theta' $ mkNat 11
+    False
 
-Now this ``theta`` is pretty silly (though not *that* silly, it detects the parity of a natural number, which we haven't defined yet). But in the next section we'll define a more interesting recursive function.
+Now this ``theta'`` is pretty silly (though not *that* silly, it detects the parity of a natural number, which we haven't defined yet). But in the next section we'll define a more interesting recursive function.
 
 
 But...
@@ -147,3 +141,23 @@ and if ``natRec e phi n == natRec' e phi n``, then
 Since ``natRec e phi`` and ``natRec' e phi`` are both functions with signature ``Nat -> a`` which satisfy the universal property of $\nats$, they must be the same function: equal on all inputs.
 
 This is a powerful idea. We've effectively written a slow but obviously correct program, and then proven it is equivalent to a more efficient one. We'll be doing more of this later.
+
+
+Testing
+-------
+
+Along the way we'll be writing some proofs involving ``Nat``s, but it is also useful to do some automated testing. I'll toss in an ``Arbitrary`` instance here.
+
+> instance Arbitrary Nat where
+>   arbitrary = do
+>     NonNegative k <- arbitrary
+>     return $ mkNat k
+>
+>   shrink Z     = []
+>   shrink (N k) = [k]
+
+We can try out this instance with the following command.
+
+```haskell
+$> generate (arbitrary :: Gen Nat)
+```

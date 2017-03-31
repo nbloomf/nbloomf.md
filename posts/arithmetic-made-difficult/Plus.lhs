@@ -2,12 +2,31 @@
 title: Addition
 author: nbloomf
 date: 2014-06-01
-tags: arithmetic-made-difficult, math
+tags: arithmetic-made-difficult, literate-haskell
 ---
+
+> module Plus
+>   ( plus, _test_plus
+>   ) where
+>
+> import Nat
+> import PrimitiveRecursion
+> 
+> import Test.QuickCheck
 
 So far we've characterized the natural numbers via a unique mapping $$\natrec{\ast}{\ast} : \nats \rightarrow A,$$ and we defined another parameterized mapping $$\primrec{\ast}{\ast} : \nats \times A \rightarrow B.$$ From now on, when we want to define a mapping with one of these signatures, these prepackaged recursive maps may come in handy. What's more, we can use the universal properties of these maps to define them in terms of *desired behavior*.
 
-Natural number addition has signature $\nats \times \nats \rightarrow \nats$, so we might hope to define addition in terms of $\primrec{\ast}{\ast}$. To do this, we need to find mappings $\varphi : \nats \rightarrow \nats$ and $\mu : \nats \times \nats \times \nats \rightarrow \nats$ that make $\primrec{\varphi}{\mu}$ act like addition. For example, we want $\next$ to act like $+1$, and $$n = \zero + n = \primrec{\varphi}{\mu}(\zero,n) = \varphi(n),$$ and $$\begin{eqnarray*} (m+n)+1 & = & (m+1)+n = \primrec{\varphi}{\mu}(\next(m),n) \\ & = & \mu(m,n,\primrec{\varphi}{\mu}(m,n)) = \mu(m,n,m+n).\end{eqnarray*}$$ With this in mind, we define a binary operation $\nplus$ on $\nats$ as follows.
+Natural number addition has signature $\nats \times \nats \rightarrow \nats$, so we might hope to define addition in terms of $\primrec{\ast}{\ast}$. To do this, we need to find mappings $\varphi : \nats \rightarrow \nats$ and $\mu : \nats \times \nats \times \nats \rightarrow \nats$ that make $\primrec{\varphi}{\mu}$ act like addition. For example, we want $\next$ to act like $+1$, and $$n = \zero + n = \primrec{\varphi}{\mu}(\zero,n) = \varphi(n),$$ and
+
+$$\begin{eqnarray*}
+(m+n)+1
+ & = & (m+1)+n \\
+ & = & \primrec{\varphi}{\mu}(\next(m),n) \\
+ & = & \mu(m,n,\primrec{\varphi}{\mu}(m,n)) \\
+ & = & \mu(m,n,m+n).
+\end{eqnarray*}$$
+
+With this in mind, we define a binary operation $\nplus$ on $\nats$ as follows.
 
 <div class="result">
 <div class="defn"><p>
@@ -40,3 +59,67 @@ The following hold for all natural numbers $a$, $b$, and $c$.
 </div>
 
 Of course we will eventually prefer to say $a + b$ instead of $\nplus(a,b)$. But we'll avoid the more familiar notation until we're convinced that $\nplus$ really does act just like the familiar $+$, since familiar notation can easily lull us into using theorems we haven't proven yet.
+
+
+Implementation and Testing
+--------------------------
+
+Here's ``plus``:
+
+> plus :: Nat -> Nat -> Nat
+> plus = primRec id mu
+>   where mu _ _ b = N b
+
+We've proved a bunch of properties for ``plus``, but it's still a good idea to verify them. We can do this with ``QuickCheck``. First we express each property to be tested as a boolean function.
+
+> -- a == plus(a,0) and a == plus(0,a)
+> _test_plus_zero :: Nat -> Bool
+> _test_plus_zero a = and
+>   [ a == plus a Z
+>   , a == plus Z a
+>   ]
+> 
+> 
+> -- next(plus(a,b)) == plus(next(a),b)
+> -- next(plus(a,b)) == plus(a,next(b))
+> _test_plus_next :: Nat -> Nat -> Bool
+> _test_plus_next a b = and
+>   [ (N $ plus a b) == (plus (N a) b)
+>   , (N $ plus a b) == (plus a (N b))
+>   ]
+> 
+> 
+> -- plus(plus(a,b),c) == plus(a,plus(b,c))
+> _test_plus_associative :: Nat -> Nat -> Nat -> Bool
+> _test_plus_associative a b c =
+>   (plus (plus a b) c) == (plus a (plus b c))
+> 
+> 
+> -- plus(a,b) == plus(b,a)
+> _test_plus_commutative :: Nat -> Nat -> Bool
+> _test_plus_commutative a b =
+>   (plus a b) == (plus b a)
+
+We'll wrap all these tests behind a single function, ``_test_plus``, which takes the number of cases to check as an argument.
+
+> _test_plus :: Int -> IO ()
+> _test_plus numCases = sequence_
+>   [ quickCheckWith args _test_plus_zero
+>   , quickCheckWith args _test_plus_next
+>   , quickCheckWith args _test_plus_associative
+>   , quickCheckWith args _test_plus_commutative
+>   ]
+>   where
+>     args = stdArgs {maxSuccess = numCases}
+
+Sanity check:
+
+```haskell
+$> _test_plus 1000
++++ OK, passed 1000 tests.
++++ OK, passed 1000 tests.
++++ OK, passed 1000 tests.
++++ OK, passed 1000 tests.
+```
+
+woo!

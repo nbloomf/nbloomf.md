@@ -2,8 +2,15 @@
 title: Primitive Recursion
 author: nbloomf
 date: 2014-05-07
-tags: arithmetic-made-difficult, math
+tags: arithmetic-made-difficult, literate-haskell
 ---
+
+> {-# LANGUAGE BangPatterns #-}
+> module PrimitiveRecursion
+>   ( primRec
+>   ) where
+> 
+> import Nat
 
 So far we've defined the natural numbers as an iterative set with a special *universal property*, which was encapsulated in the existence of a simple recursion operator $\natrec{\ast}{\ast}$. Anything we will wish to do with the natural numbers can be done using this operator alone. However, in practice, it will be handy to define synonyms for some more complicated recursive functions; the first of these is *primitive recursion with a parameter*.
 
@@ -89,44 +96,34 @@ for all $a \in A$. Thus $\Psi = \Theta$ as needed.
 
 That proof may look complicated, but structurally it's very simple. We defined $\Theta$ and showed it has the claimed properties with induction, then we showed it is unique by induction.
 
-## Implementation
+
+Implementation
+--------------
 
 As we did with $\natrec{\ast}{\ast}$, we'd like to implement $\primrec{\ast}{\ast}$ in software. There are a couple of ways to go about this.
 
 There's the naive way:
 
-
-```haskell
-primRec'' :: (a -> b) -> (Nat -> a -> b -> b) -> Nat -> a -> b
-primRec'' phi _   Z    a = phi a
-primRec'' phi mu (N n) a = mu n a $ primRec'' phi mu n a
-```
-
+> primRec'' :: (a -> b) -> (Nat -> a -> b -> b) -> Nat -> a -> b
+> primRec'' phi _   Z    a = phi a
+> primRec'' phi mu (N n) a = mu n a $ primRec'' phi mu n a
 
 There's the definition from the proof:
 
-
-```haskell
-primRec' :: (a -> b) -> (Nat -> a -> b -> b) -> Nat -> a -> b
-primRec' phi mu n a =
-  let t (m,h) = (N m, \x -> mu m x (h x))
-  in snd (natRec (Z,phi) t n) $ a
-```
-
+> primRec' :: (a -> b) -> (Nat -> a -> b -> b) -> Nat -> a -> b
+> primRec' phi mu n a =
+>   let t (m,h) = (N m, \x -> mu m x (h x))
+>   in snd (natRec (Z,phi) t n) $ a
 
 And the tail recursive strategy:
 
-
-```haskell
-primRec :: (a -> b) -> (Nat -> a -> b -> b) -> Nat -> a -> b
-primRec phi mu n a =
-  let
-    tau !x h m = case m of
-      Z   -> x
-      N k -> tau (mu h a x) (N h) k
-  in tau (phi a) Z n
-```
-
+> primRec :: (a -> b) -> (Nat -> a -> b -> b) -> Nat -> a -> b
+> primRec phi mu n a =
+>   let
+>     tau !x h m = case m of
+>       Z   -> x
+>       N k -> tau (mu h a x) (N h) k
+>   in tau (phi a) Z n
 
 Some simple testing again shows that the tail recursive form is more efficient -- both of the other forms run out of space on medium-sized numbers. All we need to do is verify that the efficient ``primRec`` is equivalent to the inefficient, but obviously correct, ``primRec''``. We will (eventually) do this by induction.
 
@@ -206,6 +203,8 @@ And if the result holds for ``k``, we have
 
 So our efficient ``primRec`` is equivalent to ``primRec''``. (We will leave the equivalence of ``primRec'`` and ``primRec`` as an exercise.)
 
-## What it does
+
+What it does
+------------
 
 This page is already long enough, so I'll save examples of primitive recursion for another day. Just note what $\primrec{\ast}{\ast}$ does: given some data $\varphi$ and $\mu$, it produces a recursive function with signature $\nats \times A \rightarrow B$. So whenever we encounter (or want to construct) a function with this signature, it may be worthwhile to look for a definition in terms of $\primrec{\ast}{\ast}$. The uniqueness of primitive recursion makes such functions very nice to reason about.
