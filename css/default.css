@@ -102,6 +102,11 @@ div.result div.lemma p:first-child:before {
   font-style: italic;
 }
 
+div.result div.corollary p:first-child:before {
+  content: "Corollary:\0000a0";
+  font-style: italic;
+}
+
 div.result div.defn p:first-child:before {
   content: "Definition:\0000a0";
   font-style: italic;

@@ -6,7 +6,7 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > module Minus
->   ( plus, _test_plus
+>   ( minus, _test_minus
 >   ) where
 >
 > import NaturalNumbers
@@ -89,10 +89,19 @@ Let $a,b,c \in \nats$. Then the following are equivalent.
 </div>
 
 <div class="proof"><p>
-(@@@)
+First we show that (1) implies (2) by induction on $a$. For the base cse, note that $$\nplus(\zero,\nminus(b,\zero)) = \nminus(b,\zero) = b$$ for all $b$. For the inductive step, suppose the implication holds for all $b$ and $c$ for some $a$. We induct on $b$; in the base case ($b = \zero$) note that $\nminus(\zero,\next(a)) = \ast$, so that the implication holds vacuously. For the inductive step suppose the implication holds for all $c$ for some $b$. If $c = \nminus(b,a)$, then we have $$\begin{eqnarray*} & & \nplus(\next(a),\nminus(\next(b),\next(a))) \\ & = & \nplus(\next(a),\nminus(b,a)) \\ & = & \primrec{\id}{\mu_\nplus}(\next(a),\nminus(b,a)) \\ & = & \mu_\nplus(a,\nminus(b,a),\nplus(a,\nminus(b,a))) \\ & = & \mu_\nplus(a,\nminus(b,a),b) \\ & = & \next(b) \end{eqnarray*}$$ as needed.
+
+Next we show that (2) implies (1), again by induction on $a$. For the base case $a = \zero$, note that if $b = \nplus(\zero,c) = c$, then we have $c = b = \nminus(b,\zero)$ as needed. For the inductive step, suppose the implication holds for all $b$ and $c$ for some $a$. Now we induct on $b$. For the base case $b = \zero$, note that $\zero = \nplus(\next(a),c)$ is false, so the implication holds vacuously. For the inductive step, suppose the implication holds for all $c$ for some $b$. Now suppose we have $$\nplus(\next(a),c) = \next(b);$$ then we have $\nplus(a,c) = b$, and using the induction hypothesis $$\nminus(\next(b),\next(a)) = \nminus(b,a) = c$$ as needed.
 </p></div>
 </div>
 
+This result allows us to solve some "linear" equations (whatever that means).
+
+<div class="result">
+<div class="corollary">
+Let $a,b \in \nats$. Then the equation $\nplus(a,x) = b$ has a unique solution $x = \nminus(b,a)$ if $\nleq(b,a) = \btrue$, and no solution otherwise.
+</div>
+</div>
 
 
 Implementation and Testing
@@ -110,4 +119,39 @@ Here's ``minus``:
 >         psi f = fmap next (f zero)
 >         mu x f _ = f x
 
+And some properties:
 
+> _test_minus_next :: (Natural t) => t -> t -> t -> Bool
+> _test_minus_next _ a b =
+>   (minus (next a) (next b)) == (minus a b)
+> 
+> 
+> _test_minus_zero_left :: (Natural t) => t -> t -> Bool
+> _test_minus_zero_left _ a =
+>   (minus zero (next a)) == Nothing
+> 
+> 
+> _test_minus_zero_right :: (Natural t) => t -> t -> Bool
+> _test_minus_zero_right _ a =
+>   (minus a zero) == Just a
+> 
+> 
+> _test_minus_leq :: (Natural t) => t -> t -> t -> Bool
+> _test_minus_leq _ a b =
+>   ((leq a b) == False) == ((minus b a) == Nothing)
+
+And a suite:
+
+> _test_minus :: (Natural t, Arbitrary t, Show t)
+>   => t -> Int -> Int -> IO ()
+> _test_minus t maxSize numCases = sequence_
+>   [ quickCheckWith args (_test_minus_next t)
+>   , quickCheckWith args (_test_minus_zero_left t)
+>   , quickCheckWith args (_test_minus_zero_right t)
+>   , quickCheckWith args (_test_minus_leq t)
+>   ]
+>   where
+>     args = stdArgs
+>      { maxSuccess = numCases
+>      , maxSize    = maxSize
+>      }

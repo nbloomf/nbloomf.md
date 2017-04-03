@@ -192,12 +192,16 @@ And some property tests:
 And a test wrapper:
 
 > -- run all tests for leq
-> _test_leq :: (Natural t, Arbitrary t, Show t) => t -> Int -> IO ()
-> _test_leq t numCases = sequence_
+> _test_leq :: (Natural t, Arbitrary t, Show t)
+>   => t -> Int -> Int -> IO ()
+> _test_leq t maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_leq_reflexive t)
 >   , quickCheckWith args (_test_leq_right_plus t)
 >   , quickCheckWith args (_test_leq_plus t)
 >   , quickCheckWith args (_test_leq_times t)
 >   ]
 >   where
->     args = stdArgs {maxSuccess = numCases}
+>     args = stdArgs
+>       { maxSuccess = numCases
+>       , maxSize    = maxSize
+>       }
