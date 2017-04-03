@@ -102,15 +102,19 @@ We've proved a bunch of properties for ``plus``, but it's still a good idea to v
 We'll wrap all these tests behind a single function, ``_test_plus``, which takes the number of cases to check as an argument.
 
 > -- run all tests for plus
-> _test_plus :: (Natural t, Arbitrary t, Show t) => t -> Int -> IO ()
-> _test_plus t numCases = sequence_
+> _test_plus :: (Natural t, Arbitrary t, Show t)
+>   => t -> Int -> Int -> IO ()
+> _test_plus t maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_plus_zero t)
 >   , quickCheckWith args (_test_plus_next t)
 >   , quickCheckWith args (_test_plus_associative t)
 >   , quickCheckWith args (_test_plus_commutative t)
 >   ]
 >   where
->     args = stdArgs {maxSuccess = numCases}
+>     args = stdArgs
+>       { maxSuccess = numCases
+>       , maxSize    = maxSize
+>       }
 
 Sanity check:
 

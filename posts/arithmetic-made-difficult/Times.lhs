@@ -125,8 +125,9 @@ As with ``plus``, it's a good idea to test the properties of ``times``.
 
 And one function to rule them all:
 
-> _test_times :: (Natural t, Arbitrary t, Show t) => t -> Int -> IO ()
-> _test_times t numCases = sequence_
+> _test_times :: (Natural t, Arbitrary t, Show t)
+>   => t -> Int -> Int -> IO ()
+> _test_times t maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_times_zero t)
 >   , quickCheckWith args (_test_times_one t)
 >   , quickCheckWith args (_test_times_next_left t)
@@ -137,7 +138,10 @@ And one function to rule them all:
 >   , quickCheckWith args (_test_times_associative t)
 >   ]
 >   where
->     args = stdArgs {maxSuccess = numCases}
+>     args = stdArgs
+>       { maxSuccess = numCases
+>       , maxSize    = maxSize
+>       }
 
 And a sanity check:
 
