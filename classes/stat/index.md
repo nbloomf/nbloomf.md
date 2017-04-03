@@ -13,6 +13,7 @@ title: Statistical Methods
 3. [Probability 2](/pdf/classes/stat/stat-a03-probability-2.pdf)
 4. [Counting](/pdf/classes/stat/stat-a04-counting.pdf)
 5. [Counting 2](/pdf/classes/stat/stat-a05-counting-2.pdf)
+6. [Discrete Random Variables](/pdf/classes/stat/stat-a06-discrete-random-variables.pdf)
 
 
 ## Slides
