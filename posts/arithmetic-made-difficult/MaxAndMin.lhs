@@ -40,6 +40,7 @@ Let $a,b,c \in \nats$. Then we have the following.
 5. $\nmax(\nplus(c,a),\nplus(c,b)) = \nplus(c,\nmax(a,b))$.
 6. $\nmax(\ntimes(c,a),\ntimes(c,b)) = \ntimes(c,\nmax(a,b))$.
 7. $\nmax(a,\nmax(b,c)) = \nmax(\nmax(a,b),c)$.
+8. If $\nleq(a,c)$ and $\nleq(b,c)$, then $\nleq(\nmax(a,b),c)$.
 </div>
 
 <div class="proof"><p>
@@ -50,6 +51,7 @@ Let $a,b,c \in \nats$. Then we have the following.
 5. We induct on $c$. For the base case $c = \zero$, we have $$\begin{eqnarray*} & & \nmax(\nplus(\zero,a),\nplus(\zero,b)) \\ & = & \nmax(a,b) \\ & = & \nplus(\zero,\nmax(a,b)) \end{eqnarray*}$$ as needed. For the inductive step, suppose the equation holds for some $c$. Then $$\begin{eqnarray*} & & \nmax(\nplus(\next(c),a),\nplus(\next(c),b)) \\ & = & \nmax(\next(\nplus(c,a),\next(\nplus(c,b))) \\ & = & \next(\nmax(\nplus(c,a),\nplus(c,b))) \\ & = & \next(\nplus(c,\nmax(a,b))) \\ & = & \nplus(\next(c),\nmax(a,b)) \end{eqnarray*}$$ as needed.
 6. We induct on $a$. For the base case $a = \zero$, we have $$\begin{eqnarray*} & & \nmax(\ntimes(c,a),\ntimes(c,b)) \\ & = & \nmax(\zero,\ntimes(c,b)) \\ & = & \ntimes(c,b) \\ & = & \ntimes(c,\nmax(\zero,b)) \\ & = & \ntimes(c,\nmax(a,b)) \end{eqnarray*}$$ as needed. Suppose the equality holds for some $a \in \nats$; now we induct on $b$. For the base case $b = \zero$ we have $$\begin{eqnarray*} & & \nmax(\ntimes(c,\next(a)),\ntimes(c,b)) \\ & = & \nmax(\ntimes(c,\next(a)),\zero) \\ & = & \ntimes(c,\next(a)) \\ & = & \ntimes(c,\nmax(\next(a),\zero)) \\ & = & \ntimes(c,\nmax(\next(a),b)) \end{eqnarray*}$$ as needed. For the inductive step, suppose the equality holds for some $b$. Then we have $$\begin{eqnarray*} & & \nmax(\ntimes(c,\next(a)),\ntimes(c,\next(b))) \\ & = & \nmax(\nplus(\ntimes(c,a),c),\nplus(\ntimes(c,b),c)) \\ & = & \nplus(\nmax(\ntimes(c,a),\ntimes(c,b)),c) \\ & = & \nplus(\ntimes(c,\nmax(a,b)),c) \\ & = & \ntimes(c,\next(\nmax(a,b))) \\ & = & \ntimes(c,\nmax(\next(a),\next(b))) \end{eqnarray*}$$ as needed.
 7. Brute force time! Suppose first that $\nleq(a,b) = \btrue$. If $\nleq(b,c) = \btrue$, then $\nleq(a,c) = \btrue$ by transitivity, and we have $$\begin{eqnarray*} & & \nmax(a,\nmax(b,c)) \\ & = & \nmax(a,c) \\ & = & c \\ & = & \nmax(b,c) \\ & = & \nmax(\nmax(a,b),c). \end{eqnarray*}$$ If $\nleq(b,c) = \bfalse$, then $\nleq(c,b) = \btrue$, and we have $$\begin{eqnarray*} & & \nmax(a,\nmax(b,c)) \\ & = & \nmax(a,b) \\ & = & b \\ & = & \nmax(b,c) \\ & = & \nmax(\nmax(a,b),c). \end{eqnarray*}$$ Suppose then that $\nleq(a,b) = \bfalse$, so that $\nleq(b,a) = \btrue$. If $\nleq(a,c) = \btrue$, then $\nleq(b,c) = \btrue$ by transitivity and we have $$\begin{eqnarray*} & & \nmax(\nmax(a,b),c) \\ & = & \nmax(a,c) \\ & = & \nmax(a,\nmax(b,c)). \end{eqnarray*}$$ If $\nleq(a,c) = \bfalse$, then $\nleq(c,a) = \btrue$. Suppose $\nleq(b,c) = \btrue$; then we have $$\nmax(\nmax(a,b),c) = \nmax(a,c) = \nmax(a,\nmax(b,c));$$ if $\nleq(b,c)$ is false, we have $\nleq(c,b) = \btrue$, and so $$\begin{eqnarray*} & & \nmax(\nmax(a,b),c) \\ & = & \nmax(a,c) \\ & = & a \\ & = & \nmax(a,b) \\ & = & \nmax(a,\nmax(b,c)) \end{eqnarray*}$$ as needed.
+8. If $\nleq(a,b) = \btrue$, then $\nmax(a,b) = b$, and if $\nleq(a,b) = \bfalse$, then $\nleq(b,a) = \btrue$, so that $\nmax(a,b) = a$. In either case we have $\nleq(\nmax(a,b),c)$.
 </p></div>
 </div>
 
@@ -65,6 +67,8 @@ Let $a,b,c \in \nats$. Then we have the following.
 4. $\nmin(\next(a),\next(b)) = \next(\nmin(a,b))$.
 5. $\nmin(\nplus(c,a),\nplus(c,b)) = \nplus(c,\nmin(a,b))$.
 6. $\nmin(\ntimes(c,a),\ntimes(c,b)) = \ntimes(c,\nmin(a,b))$.
+7. $\nmin(a,\nmin(b,c)) = \nmin(\nmin(a,b),c)$.
+8. If $\nleq(c,a)$ and $\nleq(c,b)$, then $\nleq(c,\nmin(a,b))$.
 </div>
 </div>
 
@@ -76,15 +80,25 @@ Let $a,b,c \in \nats$. Then we have the following.
 
 1. $\nleq(\nmin(a,b),\nmax(a,b)) = \btrue$.
 2. $\nplus(\nmin(a,b),\nmax(a,b)) = \nplus(a,b)$.
-2. $\ntimes(\nmin(a,b),\nmax(a,b)) = \ntimes(a,b)$.
+3. $\ntimes(\nmin(a,b),\nmax(a,b)) = \ntimes(a,b)$.
+4. $\nmin(a,\nmax(b,c)) = \nmax(\nmin(a,b),\nmin(a,c))$.
+5. $\nmax(a,\nmin(b,c)) = \nmin(\nmax(a,b),\nmax(a,c))$.
+6. $\nmin(\nmax(b,c),a) = \nmax(\nmin(b,a),\nmin(c,a))$.
+7. $\nmax(\nmin(b,c),a) = \nmin(\nmax(b,a),\nmax(c,a))$.
 </div>
 
 <div class="proof"><p>
-1. Suppose $\nleq(a,b)$. Now $\nmin(a,b) = a$ and $\nmax(a,b) = b$, so that $$\nleq(\nmin(a,b),\nmax(a,b)) = \nleq(a,b) = \btrue$$ as claimed.
-2. 
-3. 
+1. Suppose $\nleq(a,b)$. Now $\nmin(a,b) = a$ and $\nmax(a,b) = b$, so that $$\nleq(\nmin(a,b),\nmax(a,b)) = \nleq(a,b) = \btrue$$ as claimed. Now if $\nleq(a,b) = \bfalse$, then $\nleq(b,a) = \btrue$, and we instead have $\nmin(a,b) = a$ and $\nmax(a,b) = b$.
+2. Similar to (1).
+3. Similar to (1).
+4. Brute force time! Suppose $\nleq(a,b) = \btrue$. If $\nleq(a,c) = \btrue$, then $\nleq(a,\nmin(b,c))$, so that $\nleq(a,\nmax(b,c))$. Now we have $$\begin{eqnarray*} & & \nmax(\nmin(a,b),\nmin(a,c)) \\ & = & \nmax(a,a) \\ & = & a \\ & = & \nmin(a,\nmax(b,c)). \end{eqnarray*}$$ Suppose $\nleq(a,c) = \bfalse$; then $\nleq(c,a) = \btrue$, and by transitivity $\nleq(c,b) = \btrue$ so that $\nmax(b,c) = b$. Now $$\begin{eqnarray*} & & \nmax(\nmin(a,b),\nmin(a,c)) \\ & = & \nmax(a,c) \\ & = & a \\ & = & \nmin(a,b) \\ & = & \nmin(a,\nmax(b,c)). \end{eqnarray*}$$ Now suppose $\nleq(a,b) = \bfalse$, so that $\nleq(b,a) = \btrue$. If $\nleq(a,c)$, then $\nleq(b,c)$ by transitivity. So we have $$\begin{eqnarray*} & & \nmax(\nmin(a,b),\nmin(a,c)) \\ & = & \nmax(b,a) \\ & = & a \\ & = & \nmin(a,c) \\ & = & \nmin(a,\nmax(b,c)). \end{eqnarray*}$$ If $\nleq(a,c) = \bfalse$, then $\nleq(c,a) = \btrue$. In this case we have $\nleq(\nmax(b,c),a)$, so that $$\begin{eqnarray*} & & \nmax(\nmin(a,b),\nmin(a,c)) \\ & = & \nmax(b,c) \\ & = & \nmin(a,\nmax(b,c)). \end{eqnarray*}$$
+5. Similar to (4), which we can agree was super tedious.
+6. Follows from (4) and commutativity.
+7. Follows from (5) and commutativity.
 </p></div>
 </div>
+
+woo!
 
 
 Implementation and Testing
@@ -143,8 +157,67 @@ Property tests for ``max``:
 > _test_max_associative :: (Natural t) => t -> t -> t -> t -> Bool
 > _test_max_associative _ a b c =
 >   (max (max a b) c) == (max a (max b c))
+> 
+> 
+> -- if leq(a,c) and leq(b,c) then leq(max(a,b),c)
+> _test_max_leq :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_max_leq _ a b c =
+>   if (leq a c) && (leq b c)
+>     then leq (max a b) c
+>     else True
 
 Property tests for ``min``:
+
+> -- 0 == min(a,0) and 0 == min(0,a)
+> _test_min_zero :: (Natural t) => t -> t -> Bool
+> _test_min_zero _ a = and
+>   [ zero == min a zero
+>   , zero == min zero a
+>   ]
+> 
+> 
+> -- a == min(a,a)
+> _test_min_idempotent :: (Natural t) => t -> t -> Bool
+> _test_min_idempotent _ a =
+>   (min a a) == a
+> 
+> 
+> -- min(a,b) == min(b,a)
+> _test_min_commutative :: (Natural t) => t -> t -> t -> Bool
+> _test_min_commutative _ a b =
+>   (min a b) == (min b a)
+> 
+> 
+> -- min(next(a),next(b)) == next(min(a,b))
+> _test_min_next :: (Natural t) => t -> t -> t -> Bool
+> _test_min_next _ a b =
+>   (min (next a) (next b)) == next (min a b)
+> 
+> 
+> -- min(plus(c,a),plus(c,b)) == plus(c,min(a,b))
+> _test_min_plus :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_min_plus _ a b c =
+>   (min (plus c a) (plus c b)) == plus c (min a b)
+> 
+> 
+> -- min(times(c,a),times(c,b)) == times(c,min(a,b))
+> _test_min_times :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_min_times _ a b c =
+>   (min (times c a) (times c b)) == times c (min a b)
+> 
+> 
+> -- min(min(a,b),c) == min(a,min(b,c))
+> _test_min_associative :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_min_associative _ a b c =
+>   (min (min a b) c) == (min a (min b c))
+> 
+> 
+> -- if leq(c,a) and leq(c,b) then leq(c,min(a,b))
+> _test_min_leq :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_min_leq _ a b c =
+>   if (leq c a) && (leq c b)
+>     then leq c (min a b)
+>     else True
 
 And property tests using both:
 
@@ -164,6 +237,34 @@ And property tests using both:
 > _test_max_min_times :: (Natural t) => t -> t -> t -> Bool
 > _test_max_min_times _ a b =
 >   (times (min a b) (max a b)) == (times a b)
+> 
+> 
+> -- max(a,min(b,c)) == min(max(a,b),max(a,c))
+> _test_max_min_distributive_left :: (Natural t)
+>   => t -> t -> t -> t -> Bool
+> _test_max_min_distributive_left _ a b c =
+>   (max a (min b c)) == (min (max a b) (max a c))
+> 
+> 
+> -- max(min(b,c),a) == min(max(b,a),max(c,a))
+> _test_max_min_distributive_right :: (Natural t)
+>   => t -> t -> t -> t -> Bool
+> _test_max_min_distributive_right _ a b c =
+>   (max (min b c) a) == (min (max b a) (max c a))
+> 
+> 
+> -- min(a,max(b,c)) == max(min(a,b),min(a,c))
+> _test_min_max_distributive_left :: (Natural t)
+>   => t -> t -> t -> t -> Bool
+> _test_min_max_distributive_left _ a b c =
+>   (min a (max b c)) == (max (min a b) (min a c))
+> 
+> 
+> -- min(max(b,c),a) == max(min(b,a),min(c,a))
+> _test_min_max_distributive_right :: (Natural t)
+>   => t -> t -> t -> t -> Bool
+> _test_min_max_distributive_right _ a b c =
+>   (min (max b c) a) == (max (min b a) (min c a))
 
 And the suite for ``max`` and ``min``:
 
@@ -178,10 +279,24 @@ And the suite for ``max`` and ``min``:
 >   , quickCheckWith args (_test_max_plus t)
 >   , quickCheckWith args (_test_max_times t)
 >   , quickCheckWith args (_test_max_associative t)
+>   , quickCheckWith args (_test_max_leq t)
+> 
+>   , quickCheckWith args (_test_min_zero t)
+>   , quickCheckWith args (_test_min_idempotent t)
+>   , quickCheckWith args (_test_min_commutative t)
+>   , quickCheckWith args (_test_min_next t)
+>   , quickCheckWith args (_test_min_plus t)
+>   , quickCheckWith args (_test_min_times t)
+>   , quickCheckWith args (_test_min_associative t)
+>   , quickCheckWith args (_test_min_leq t)
 > 
 >   , quickCheckWith args (_test_max_min_leq t)
 >   , quickCheckWith args (_test_max_min_plus t)
 >   , quickCheckWith args (_test_max_min_times t)
+>   , quickCheckWith args (_test_max_min_distributive_left t)
+>   , quickCheckWith args (_test_max_min_distributive_right t)
+>   , quickCheckWith args (_test_min_max_distributive_left t)
+>   , quickCheckWith args (_test_min_max_distributive_right t)
 >   ]
 >   where
 >     args = stdArgs

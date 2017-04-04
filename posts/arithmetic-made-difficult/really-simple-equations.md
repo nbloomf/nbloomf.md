@@ -7,7 +7,7 @@ tags: arithmetic-made-difficult
 
 In this post we will take a break and solve some equations in the natural numbers. These equations will be *really* simple, but we have to start somewhere! In the more familiar notation we will solve the following equations: $$\begin{array}{rrr} a+b=0 & \quad a+b=1 & \quad a+b=2 \\ ab=0 & \quad ab=1 & \quad ab=2 \end{array}$$
 
-Our strategy is based on two of the Peano axioms. Specifically, (1) $\zero = \next(m)$ has no solution $m \in \nats$, and (2) every element of $\nats$ is either $\zero$ or of the form $\next(m)$ for some $m \in \nats$. Property (1) can be used to perform case analysis on $\nats$, like so:
+Our strategy is based on two of the Peano axioms. Specifically, (1) $\zero = \next(m)$ has no solution $m \in \nats$, and (2) every element of $\nats$ is either $\zero$ or of the form $\next(m)$ for some $m \in \nats$. Property (2) can be used to perform case analysis on $\nats$, like so:
 
 <div class="result">
 <div class="thm">
