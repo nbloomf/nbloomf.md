@@ -103,6 +103,30 @@ Let $a,b \in \nats$. Then the equation $\nplus(a,x) = b$ has a unique solution $
 </div>
 </div>
 
+Now $\nminus$ inherits several properties from $\nleq$ and $\nplus$.
+
+<div class="result">
+<div class="thm">
+Let $a,b,c \in \nats$. Then the following are equivalent.
+
+1. $\nminus(\nplus(a,b),b) = a$.
+2. If $\nminus(b,a) = \nminus(b,c) \in \nats$, then $a = c$.
+3. If $\nminus(a,b) = \nminus(c,b) \in \nats$, then $a = c$.
+4. If $\nleq(a,b)$, then $\nminus(\next(b),a) = \next(\nminus(b,a))$.
+5. If $\nleq(a,b)$, then $\nleq(\nminus(b,a),b)$.
+6. If $\nleq(c,b)$ and $\nleq(b,a)$, then $\nminus(a,\nminus(b,c)) = \nplus(\nminus(a,b),c)$.
+</div>
+
+<div class="proof"><p>
+1. Note that $\nleq(b,\nplus(a,b))$, so that $$\nminus(\nplus(a,b),b) = d \in \nats$$ for some $d$. Then we have $\nplus(b,d) = \nplus(a,b)$ and so $a = d$ as claimed.
+2. Say $$\nminus(b,a) = d = \nminus(b,c),$$ with $d \in \nats$. Now $$\nplus(a,d) = b = \nplus(c,d)$$ and thus $a = c$ as claimed.
+3. Say $$\nminus(a,b) = d = \nminus(c,b),$$ with $d \in \nats$. Now $$a = \nplus(b,d) = c$$ as claimed.
+4. Say $\nminus(b,a) = c$. Now $\nplus(a,c) = b$, so that $$\nplus(a,\next(c)) = \next(\nplus(a,c)) = \next(b).$$ Thus we have $$\nminus(\next(b),a) = \next(c) = \next(\nminus(b,a))$$ as claimed.
+5. We induct on $b$. For the base case $b = \zero$, if $\nleq(a,b)$ then we have $a = \zero$. Then $\nminus(b,a) = \zero$, so that $\nleq(\nminus(b,a),b)$ as claimed. For the inductive step, suppose we have $\nleq(a,\next(b))$. If $a = \next(b)$, then $\nminus(\next(b),a) = \zero$ and $$\nleq(\nminus(\next(b),a),b)$$ as needed. If $\nleq(a,b)$, then by the induction hypothesis we have $$\begin{eqnarray*} & & \btrue \\ \nleq(\nminus(b,a),b) \\ & = & \nleq(\next(\nminus(b,a)),\next(b)) \\ & = & \nleq(\nminus(\next(b),a),\next(b)) \end{eqnarray*}$$ as needed.
+6. Note that $\nleq(\nminus(b,c),b)$, and thus $\nleq(\nminus(b,c),a)$ by transitivity. We induct on $a$. For the base case $a = \zero$, we must have $\nminus(b,c) = \zero$, so that $\nplus(c,\zero) = b$, and thus $c = b$. But now $b = \zero$ and so $c = \zero$, and the implication holds. For the inductive step suppose the implication holds for all $b$ and $c$ for some $a$, and suppose further that $\nleq(c,b)$ and $\nleq(b,\next(a))$. If $\nminus(b,c) = \next(a)$, we have $b = \nplus(\next(a),c)$, but since $\nleq(b,\next(a))$, we also have $\next(a) = \nplus(b,d)$ for some $d$. Then $\zero = \nplus(c,d)$, so that $c = 0$ and then $b = \next(a)$. In this case we have $$\nminus(\next(a),\nminus(b,c)) = \zero = \nplus(\nminus(\next(a),b),c)$$ as needed. Suppose instead we have $\nleq(b,a)$. Then we have $$\begin{eqnarray*} & & \nminus(\next(a),\nminus(b,c)) \\ & = & \next(\nminus(a,\nminus(b,c))) \\ & = & \next(\nplus(\nminus(a,b),c)) \\ & = & \nplus(\next(\nminus(a,b)),c) \\ & = & \nplus(\nminus(\next(a),b),c) \end{eqnarray*}$$ as needed.
+</p></div>
+</div>
+
 
 Implementation and Testing
 --------------------------
@@ -119,7 +143,7 @@ Here's ``minus``:
 >         psi f = fmap next (f zero)
 >         mu x f _ = f x
 
-And some properties:
+And some properties. Some of these are less nice because ``minus`` returns a ``Maybe t``.
 
 > _test_minus_next :: (Natural t) => t -> t -> t -> Bool
 > _test_minus_next _ a b =
@@ -139,6 +163,37 @@ And some properties:
 > _test_minus_leq :: (Natural t) => t -> t -> t -> Bool
 > _test_minus_leq _ a b =
 >   ((leq a b) == False) == ((minus b a) == Nothing)
+> 
+> 
+> _test_minus_plus :: (Natural t) => t -> t -> t -> Bool
+> _test_minus_plus _ a b =
+>   (minus (plus a b) b) == Just a
+> 
+> 
+> _test_minus_next_left :: (Natural t) => t -> t -> t -> Bool
+> _test_minus_next_left _ a b =
+>   if leq a b
+>     then
+>       let Just c = minus b a in
+>       (minus (next b) a) == Just (next c)
+>     else True
+> 
+> _test_minus_leq_left :: (Natural t) => t -> t -> t -> Bool
+> _test_minus_leq_left _ a b =
+>   if leq a b
+>     then
+>       let Just c = minus b a in
+>       leq c b
+>     else True
+> 
+> _test_minus_minus :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_minus_minus _ a b c =
+>   if (leq c b) && (leq b a)
+>     then
+>       let Just h = minus b c in
+>       let Just k = minus a b in
+>       minus a h == Just (plus k c)
+>     else True
 
 And a suite:
 
@@ -149,6 +204,10 @@ And a suite:
 >   , quickCheckWith args (_test_minus_zero_left t)
 >   , quickCheckWith args (_test_minus_zero_right t)
 >   , quickCheckWith args (_test_minus_leq t)
+>   , quickCheckWith args (_test_minus_plus t)
+>   , quickCheckWith args (_test_minus_next_left t)
+>   , quickCheckWith args (_test_minus_leq_left t)
+>   , quickCheckWith args (_test_minus_minus t)
 >   ]
 >   where
 >     args = stdArgs

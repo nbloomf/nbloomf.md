@@ -134,19 +134,31 @@ The following hold for all $a,b \in \nats$.
 </p></div>
 </div>
 
-And $\ntimes$:
+And here comes $\ntimes$:
 
 <div class="result">
 <div class="thm">
 The following hold.
 
-1. Let $a,b,c \in \nats$. Then $\nleq(a,b) = \nleq(\ntimes(a,\next(c)),\nplus(b,\next(c)))$.
-2. Let $a,b,c,d \in \nats$. If $\nleq(a,b)$ and $\nleq(c,d)$, then $\nleq(\ntimes(a,c),\ntimes(b,d))$.
+1. Let $a,b,c \in \nats$. Then $$\nleq(a,b) = \nleq(\ntimes(a,\next(c)),\nplus(b,\next(c))).$$
+2. Let $a,b,c,d \in \nats$. If $\nleq(a,b)$ and $\nleq(c,d)$, then $$\nleq(\ntimes(a,c),\ntimes(b,d)).$$
 </div>
 
 <div class="proof"><p>
 1. We proceed by induction on $c$. For the base case, note that $$\nleq(\ntimes(a,\next(\zero)),\ntimes(b,\next(\zero))) = \nleq(a,b).$$ For the inductive step, suppose the result holds for some $c$. We consider three possibilities. First suppose $a = b$; in this case we have $\nleq(a,b) = \btrue$ and $$\ntimes(a,\next(\next(c))) = \ntimes(a,\next(\next(c))),$$ so the conclusion holds. Next, suppose $a \neq b$ and $\nleq(a,b) = \btrue$. By the inductive hypothesis we have $$\nleq(\ntimes(a,\next(c)),\nplus(b,\next(c))) = \btrue,$$ and so $$\begin{eqnarray*} & & \btrue \\ & = & \nleq(\nplus(\ntimes(a,\next(c)),a),\nplus(\ntimes(b,\next(c)),b)) \\ & = & \nleq(\ntimes(a,\next(\next(c))),\ntimes(b,\next(\next(c)))) \end{eqnarray*}$$ as needed. Finally, suppose $a \neq b$ and $\nleq(a,b)$ is false. Then $\nleq(b,a)$ is true, and by the prior argument we have $$\nleq(b,a) = \nleq(\ntimes(a,\next(\next(c))),\ntimes(b,\next(\next(c)))).$$ Note that $$\ntimes(a,\next(\next(c))) \neq \ntimes(b,\next(\next(c)))$$ (since $a \neq b$). So we have $$\nleq(\ntimes(a,\next(\next(c))),\nplus(b,\next(\next(c))))$$ as needed.
-2. There are two possibilities for $c$. If $c = \zero$, then we have $$\begin{eqnarray*} & & \nleq(\ntimes(a,c),\ntimes(b,d)) \\ & = & \nleq(\zero,\ntimes(b,d)) \\ & = & \btrue \end{eqnarray*}.$$ Suppose instead that $c = \next(u)$. Now there are two possibilities for $b$. If $b = \zero$, then in fact $a = \zero$, and we have $$\begin{eqnarray*} & & \nleq(\ntimes(a,c),\ntimes(b,d)) \\ & = & \nleq(\zero,\zero) \\ & = & \btrue \end{eqnarray*}$$ as needed. Suppose then that $b = \next(v)$. Now we have $$\btrue = \nleq(\ntimes(a,\next(u)),\ntimes(b,\next(u)) = \nleq(\ntimes(a,c),\ntimes(b,c))$$ and $$\btrue = \nleq(\ntimes(c,\next(v)),\ntimes(d,\next(v))) = \nleq(\ntimes(b,c),\ntimes(b,d)).$$ The conclusion holds by transitivity.
+2. There are two possibilities for $c$. If $c = \zero$, then we have $$\begin{eqnarray*} & & \nleq(\ntimes(a,c),\ntimes(b,d)) \\ & = & \nleq(\zero,\ntimes(b,d)) \\ & = & \btrue \end{eqnarray*}.$$ Suppose instead that $c = \next(u)$. Now there are two possibilities for $b$. If $b = \zero$, then in fact $a = \zero$, and we have $$\begin{eqnarray*} & & \nleq(\ntimes(a,c),\ntimes(b,d)) \\ & = & \nleq(\zero,\zero) \\ & = & \btrue \end{eqnarray*}$$ as needed. Suppose then that $b = \next(v)$. Now we have $$\begin{eqnarray*} & & \btrue \\ & = & \nleq(\ntimes(a,\next(u)),\ntimes(b,\next(u)) \\ & = & \nleq(\ntimes(a,c),\ntimes(b,c)) \end{eqnarray*}$$ and $$\begin{eqnarray*} & & \btrue \\ & = & \nleq(\ntimes(c,\next(v)),\ntimes(d,\next(v))) \\ & = & \nleq(\ntimes(b,c),\ntimes(b,d)). \end{eqnarray*}$$ The conclusion holds by transitivity.
+</p></div>
+</div>
+
+We can perform case analysis using $\nleq$:
+
+<div class="result">
+<div class="thm">
+Let $a,b \in \nats$. If $\nleq(a,\next(b))$, then either $\nleq(a,b)$ or $a = \next(b)$.
+</div>
+
+<div class="proof"><p>
+Say $\next(b) = \nplus(a,c)$. If $c = \zero$, we have $a = \next(b)$. If $c = \next(d)$, we have $$\next(b) = \nplus(a,\next(d)) = \next(\nplus(a,d))$$ so that $b = \nplus(a,d)$ and thus $\nleq(a,b)$.
 </p></div>
 </div>
 

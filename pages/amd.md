@@ -3,23 +3,28 @@ title: Arithmetic Made Difficult
 author: nbloomf
 ---
 
-> The old idea that there was no reasoning in Arithmetic is dead; the idea that the *general axioms* have no place in Arithmetic is no longer held by a progressive teacher... <cite>J.B.F. Showalter in "Arithmetic Made Easy", 1897</cite>
-
-> Beware of bugs in the above code; I have only proved it correct, not tried it. <cite>Donald Knuth in "Notes on the van Emde Boas construction of priority deques: An instructive use of recursion", 1977</cite>
-
 Under construction. I don't know exactly what this is yet. Links that don't exist are my to-do list.
 
-* First Steps
+1. First Steps
     * [Natural Numbers](/posts/arithmetic-made-difficult/natural-numbers.html)
     * [From Arrows to Programs](/posts/arithmetic-made-difficult/Nat.html)
     * [Primitive Recursion](/posts/arithmetic-made-difficult/PrimitiveRecursion.html)
     * [Variations on Peano](/posts/arithmetic-made-difficult/variations-on-peano.html)
     * [The Universal Property of the Natural Numbers](/posts/arithmetic-made-difficult/NaturalNumbers.html)
-* Basic Arithmetic
+2. Basic Arithmetic
     * [Addition](/posts/arithmetic-made-difficult/Plus.html)
     * [Multiplication](/posts/arithmetic-made-difficult/Times.html)
     * [Really Simple Equations](/posts/arithmetic-made-difficult/really-simple-equations.html)
     * [Less Than or Equal To](/posts/arithmetic-made-difficult/LessThanOrEqualTo.html)
-    * Subtraction
-    * Divides
+    * [Subtraction](/posts/arithmetic-made-difficult/Minus.html)
+    * Max and Min
     * The Division Algorithm
+    * Divides
+    * GCD and LCM
+    * Exponentiation
+3. Finite Lists
+4. Fixed Radix Numeral Systems
+
+> The old idea that there was no reasoning in Arithmetic is dead; the idea that the *general axioms* have no place in Arithmetic is no longer held by a progressive teacher... <cite>J.B.F. Showalter in "Arithmetic Made Easy", 1897</cite>
+
+> Beware of bugs in the above code; I have only proved it correct, not tried it. <cite>Donald Knuth in "Notes on the van Emde Boas construction of priority deques: An instructive use of recursion", 1977</cite>

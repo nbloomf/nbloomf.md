@@ -146,7 +146,7 @@ And one function to rule them all:
 And a sanity check:
 
 ```haskell
-$> _test_times (zero :: Nat) 10
+$> _test_times (zero :: Nat) 10 10
 +++ OK, passed 10 tests.
 +++ OK, passed 10 tests.
 +++ OK, passed 10 tests.
