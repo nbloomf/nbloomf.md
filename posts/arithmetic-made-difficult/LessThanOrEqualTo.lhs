@@ -162,6 +162,18 @@ Say $\next(b) = \nplus(a,c)$. If $c = \zero$, we have $a = \next(b)$. If $c = \n
 </p></div>
 </div>
 
+And a quick but handy corollary:
+
+<div class="result">
+<div class="corollary">
+Let $a,b \in \nats$. If $\nleq(b,a)$ and $\nleq(a,\next(b))$, then either $a = b$ or $a = \next(b)$.
+</div>
+
+<div class="proof"><p>
+Use antisymmetry.
+</p></div>
+</div>
+
 That's enough.
 
 

@@ -1,0 +1,162 @@
+---
+title: The Division Algorithm
+author: nbloomf
+date: 2017-04-08
+tags: arithmetic-made-difficult, literate-haskell
+---
+
+> module DivisionAlgorithm
+>   ( divalg, quo, rem, _test_divalg
+>   ) where
+>
+> import Prelude hiding (rem)
+>
+> import NaturalNumbers
+> import Plus
+> import Times
+> import LessThanOrEqualTo
+> 
+> import Test.QuickCheck
+
+Finally we come to the first power tool for natural numbers: the division algorithm. Remember this theorem states that given any two natural numbers $a$ and $b$, with $b \neq \zero$, there is a *unique* pair of natural numbers $(q,r)$ such that $a = qb+r$ and $r$ is not "too big", specifically, $r < b$; this $q$ is called the *quotient* of $a$ by $b$, and $r$ is the *remainder*.
+
+I like this result for several reasons. It ties together the three basic operations on $\nats$ -- $\next$, $\nplus$, and $\ntimes$ -- in a satisfying way, and it has two conclusions, one an equality and the other an inequality. It also has some really powerful applications. Notably, we'll use the division algorithm to compute greatest common divisors and to compute fixed-radix representations of numbers.
+
+The task at hand is to find a constructive, or more precisely, primitive recursive, definition for the division algorithm. This function takes a pair of natural numbers $(a,b)$ and returns a pair of natural numbers $(q,r)$, so its signature should be something like $$\nats \times \nats \rightarrow \nats \times \nats.$$ Remember that the signature of $\primrec{\varphi}{\mu}$ is $$\nats \times A \rightarrow B,$$ where $\varphi : A \rightarrow B$ and $\mu : \nats \times A \times B \rightarrow B$. Letting $A = \nats$ and $B = \nats \times \nats$, we're looking for $$\varphi : \nats \rightarrow \nats \times \nats$$ and $$\mu : \nats \times \nats \times (\nats \times \nats) \rightarrow \nats \times \nats$$ so that $\Theta = \primrec{\varphi}{\mu}$ acts like the division algorithm. But how does the division algorithm act?
+
+For starters, we have $$\Theta(\zero,b) = \varphi(b) = (q,r)$$ where $$\zero = \nplus(\ntimes(q,b),r).$$ So $r = q = \zero$; evidently then $\varphi(x) = (\zero,\zero)$ for all $x$.
+
+Suppose now that $\Theta(a,b) = (q,r)$. Can we describe $\Theta(\next(a),b)$ in terms of $q$ and $r$? (Presumably yes.) Switching to more familiar notation for a moment, we have $$a = qb+r,$$ so that $$a+1 = qb+r+1.$$ So $q$ and $r+1$ satisfy the equality constraint, but possibly not the inequality constraint. If $r+1 < b$, then $q$ and $r+1$ are quotient and remainder for $a+1$ and $b$. But what if $r+1 \geq b$? Well, this failure is too general; since $r < b$, the worst that can happen is $r+1 = b$. But in this case we can "increment" $q$ and "reset" $r$ to $\zero$; that is, $q+1$ and $\zero$ are quotient and remainder for $a+1$ and $b$. So in $$\Theta(\next(a),b) = \mu(a,b,(q,r))$$ (where $(q,r) = \Theta(a,b)$), we want $\mu(a,b,(q,r)) = (q+1,\zero)$ if $r+1 = b$ and $(q,r+1)$ otherwise.
+
+Let's try it.
+
+<div class="result">
+<div class="defn"><p>
+Define $\varphi : \nats \rightarrow \nats \times \nats$ by $\varphi(x) = (\zero,\zero)$, and define $\mu : \nats \times \nats \times (\nats \times \nats) \rightarrow \nats \times \nats$ by $$\mu(a,b,(q,r)) = \left\{ \begin{array}{ll} (\next(q),\zero) & \mathrm{if}\ b = \next(r) \\ (q,\next(r)) & \mathrm{otherwise}. \end{array} \right.$$ Then define $\ndivalg : \nats \times \nats \rightarrow \nats \times \nats$ by $$\ndivalg = \primrec{\varphi}{\mu}.$$
+</p></div>
+</div>
+
+Get ready:
+
+<div class="result">
+<div class="thm">
+Let $a,b \in \nats$ and let $(q,r) = \ndivalg(a,\next(b))$. Then we have the following.
+
+1. $a = \nplus(\ntimes(q,b),r)$.
+2. $\leq(r,b) = \btrue$.
+</div>
+
+<div class="proof"><p>
+We proceed by induction on $a$. For the base case, $a = \zero$, note that $$\ndivalg(\zero,\next(b)) = \varphi(\next(b)) = (\zero,\zero).$$ Now we have $$\nplus(\ntimes(\zero,\next(b)),\zero) = \zero = a$$ and $\nleq(\zero,\next(b))$ as needed.
+
+For the inductive step, suppose both conclusions hold for all $b$ for some $a$. Let $(q_1,r_1) = \ndivalg(a,b)$. Now we have $$\begin{eqnarray*} & & \ndivalg(\next(a),\next(b)) \\ & = & \mu(a,\next(b),\ndivalg(a,\next(b))) \\ & = & \mu(a,\next(b),(q_1,r_1)) \\ & = & Q. \end{eqnarray*}$$ We have two possibilities: either $\next(r_1) = \next(b)$ or $\next(r_1) \neq \next(b)$.
+
+Suppose first that $\next(r_1) = \next(b)$; then we have $$Q = (\next(q_1),\zero).$$ Now we have $$\begin{eqnarray*} & & \nplus(\ntimes(\next(q_1),\next(b)),\zero) \\ & = & \ntimes(\next(q_1),\next(b)) \\ & = & \nplus(\ntimes(q_1,\next(b)),\next(b)) \\ & = & \nplus(\ntimes(q_1,\next(b)),\next(r_1)) \\ & = & \next(\nplus(\ntimes(q_1,\next(b)),r_1)) \\ & = & \next(a) \end{eqnarray*}$$ as needed; moreover, we have $\nleq(\zero,b) = \btrue$.
+
+Now suppose we have $\next(r_1) \neq \next(b)$. Now we have $$Q = (q_1,\next(r_1)).$$ In this case,
+$$\begin{eqnarray*}
+ &   & \nplus(\ntimes(q_1,\next(b)),\next(r_1)) \\
+ & = & \next(\nplus(\ntimes(q_1,\next(b)),r_1)) \\
+ & = & \next(a).
+\end{eqnarray*}$$
+If $\nleq(\next(r_1),b) = \bfalse$, then $\nleq(b,\next(r_1)) = \btrue$ and $\next(r_1) \neq b$. In particular, we must have $r_1 = b$. But then $\next(r_1) = \next(b)$, a contradiction. So we must have $\nleq(\next(r_1),b) = \btrue$, and the conclusion holds for all $b$ given $\next(a)$ as needed.
+</p></div>
+</div>
+
+woo!
+
+<div class="result">
+<div class="thm">
+Let $a,b \in \nats$ and suppose we have $q,r \in \nats$ such that $$a = \nplus(\ntimes(q,\next(b)),r)$$ and $\leq(r,b) = \btrue$. Then $(q,r) = \ndivalg(a,b)$.
+</div>
+
+<div class="proof"><p>
+It suffices to show that if $(q_1,r_1)$ and $(q_2,r_2)$ both satisfy the conditions of the division algorithm, then $q_1 = q_2$ and $r_1 = r_2$. To this end, suppose we have $$\begin{eqnarray*} & & \nplus(\ntimes(q_1,\next(b)),r_1) \\ & = & a \\ & = & \nplus(\ntimes(q_2,\next(b)),r_2). \end{eqnarray*}$$ Without loss of generality, we have $\nleq(r_1,r_2)$; say $r_2 = \nplus(r_1,k)$. Now $$\begin{eqnarray*} & & \nplus(\ntimes(q_1,\next(b)),r_1) \\ & = & \nplus(\ntimes(q_2,\next(b)),r_2) \\ & = & \nplus(\ntimes(q_2,\next(b)),\nplus(r_1,k))) \\ & = & \nplus(\nplus(\ntimes(q_2,\next(b)),k),r_1), \end{eqnarray*}$$ and thus $$\ntimes(q_1,\next(b)) = \nplus(\ntimes(q_2,\next(b)),k).$$ Note that $\nleq(k,r_2)$, and thus $\nleq(k,b)$.
+
+We wish to show that $k = \zero$. To this end, let $P(q_1,q_2,b,k)$ denote the statement $$\mathrm{if}\ \ntimes(q_1,\next(b)) = \nplus(\ntimes(\ntimes(q_2,\next(b))),k)\ \mathrm{then}\ k = \zero,$$ and define a set $$M = \{ q_1 \in \nats \mid \forall q_2,b,k\ P(q_1,q_2,b,k) \}.$$ We will show that $M = \nats$ by (you guessed it!) induction.
+
+For the base case $q_1 = \zero$, suppose the hypothesis of $P(\zero,q_2,b,k)$. Then we have $$\zero = \ntimes(\zero,\next(b)) = \nplus(\ntimes(q_2,\next(b)),k),$$ so that $k = \zero$. For the inductive step, we suppose that $q_1 \in M$. Now define the set $$N(x) = \{ q_2 \in \nats \mid \forall b,k, P(x,q_2,b,k) \};$$ we have supposed that $N(q_1) = \nats$.
+
+We will show that $N(\next(q_1)) = \nats$ also by induction. For the base case $q_2 = \zero$, suppose the hypothesis of $P(\next(q_1),\zero,b,k)$. Now $$\begin{eqnarray*} & & \nplus(\ntimes(q_1,\next(b)),\next(b)) \\ & = & \ntimes(\next(q_1),\next(b)) \\ & = & \nplus(\ntimes(\zero,\next(b)),k) \\ & = & \nplus(\zero,k) \\ & = & k. \end{eqnarray*}$$ Thus $\nleq(\next(b),k)$. But now we have $\nleq(\next(b),b)$ by transitivity, a contradiction. Thus the hypothesis of $P(\next(q_1),\zero,b,k)$ is false, and we have $\zero \in N(\next(q_1))$ vacuously.
+
+For the inductive step, suppose we have $q_2 \in N(\next(q_1))$, and suppose the hypothesis of $P(\next(q_1),\next(q_2),b,k)$; that is, that $$\ntimes(\next(q_1),\next(b)) = \nplus(\ntimes(\next(q_2),\next(b)),k).$$ Now we have
+$$\begin{eqnarray*}
+ &   & \nplus(\ntimes(q_1,\next(b)),\next(b)) \\
+ & = & \ntimes(\next(q_1),\next(b)) \\
+ & = & \nplus(\ntimes(\next(q_2),\next(b)),k) \\
+ & = & \nplus(\nplus(\ntimes(q_2,\next(b)),\next(b)),k) \\
+ & = & \nplus(\nplus(\ntimes(q_2,\next(b)),k),\next(b))
+\end{eqnarray*}$$
+So we have $$\ntimes(q_1,\next(b)) = \nplus(\ntimes(q_2,\next(b)),k),$$ and since $N(q_1) = \nats$, $k = \zero$. So $\next(q_2) \in N(\next(q_1))$ as needed.
+
+So we have $k = \zero$, and thus $$\ntimes(q_1,\next(b)) = \ntimes(q_2,\next(b)).$$ Thus $q_1 = q_2$, and moreover $r_1 = r_2$ as needed.
+</p></div>
+</div>
+
+
+Implementation and Testing
+--------------------------
+
+Here's ``divalg``, ``quo``, and ``rem``:
+
+> divalg :: (Natural t) => t -> t -> (t,t)
+> divalg = primitiveRec phi mu
+>   where
+>     phi _ = (zero,zero)
+>     mu _ b (q,r) = if b == next r
+>       then (next q, zero)
+>       else (q, next r)
+> 
+> 
+> quo :: (Natural t) => t -> t -> t
+> quo a b = let (q,_) = divalg a b in q
+> 
+> 
+> rem :: (Natural t) => t -> t -> t
+> rem a b = let (_,r) = divalg a b in r
+
+Property tests:
+
+> -- a == plus(times(q,b),r) where (q,r) = divalg(a,b)
+> _test_divalg_equality :: (Natural t) => t -> t -> t -> Bool
+> _test_divalg_equality _ a b =
+>   let (q,r) = divalg a b in
+>   a == plus (times q b) r
+> 
+> 
+> -- leq(r,b) where (_,r) = divalg(a,next(b))
+> _test_divalg_inequality :: (Natural t) => t -> t -> t -> Bool
+> _test_divalg_inequality _ a b =
+>   let (_,r) = divalg a (next b) in
+>   leq r b
+> 
+> 
+> -- quo(a,b) = q where (q,_) = divalg(a,b)
+> _test_divalg_quo :: (Natural t) => t -> t -> t -> Bool
+> _test_divalg_quo _ a b =
+>   let (q,_) = divalg a b in
+>   q == quo a b
+> 
+> 
+> -- rem(a,b) = r where (_,r) = divalg(a,b)
+> _test_divalg_rem :: (Natural t) => t -> t -> t -> Bool
+> _test_divalg_rem _ a b =
+>   let (_,r) = divalg a b in
+>   r == rem a b
+
+And the suite:
+
+> -- run all tests for max
+> _test_divalg :: (Natural t, Arbitrary t, Show t)
+>   => t -> Int -> Int -> IO ()
+> _test_divalg t maxSize numCases = sequence_
+>   [ quickCheckWith args (_test_divalg_equality t)
+>   , quickCheckWith args (_test_divalg_inequality t)
+>   , quickCheckWith args (_test_divalg_quo t)
+>   , quickCheckWith args (_test_divalg_rem t)
+>   ]
+>   where
+>     args = stdArgs
+>       { maxSuccess = numCases
+>       , maxSize    = maxSize
+>       }

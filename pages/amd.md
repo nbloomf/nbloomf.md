@@ -12,12 +12,13 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Variations on Peano](/posts/arithmetic-made-difficult/variations-on-peano.html)
     * [The Universal Property of the Natural Numbers](/posts/arithmetic-made-difficult/NaturalNumbers.html)
 2. Basic Arithmetic
+    * Equality
     * [Addition](/posts/arithmetic-made-difficult/Plus.html)
     * [Multiplication](/posts/arithmetic-made-difficult/Times.html)
     * [Really Simple Equations](/posts/arithmetic-made-difficult/really-simple-equations.html)
     * [Less Than or Equal To](/posts/arithmetic-made-difficult/LessThanOrEqualTo.html)
     * [Subtraction](/posts/arithmetic-made-difficult/Minus.html)
-    * Max and Min
+    * [Max and Min](/posts/arithmetic-made-difficult/MaxAndMin.html)
     * The Division Algorithm
     * Divides
     * GCD and LCM
