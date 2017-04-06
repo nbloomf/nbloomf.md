@@ -10,8 +10,8 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [From Arrows to Programs](/posts/arithmetic-made-difficult/Nat.html)
     * [Simple Recursion](/posts/arithmetic-made-difficult/SimpleRecursion.html)
     * [Variations on Peano](/posts/arithmetic-made-difficult/variations-on-peano.html)
+    * [Bailout Recursion](/posts/arithmetic-made-difficult/BailoutRecursion.html)
     * [The Universal Property of the Natural Numbers](/posts/arithmetic-made-difficult/NaturalNumbers.html)
-    * [Primitive Recursion](/posts/arithmetic-made-difficult/PrimitiveRecursion.html)
 2. Basic Arithmetic
     * Equality
     * [Addition](/posts/arithmetic-made-difficult/Plus.html)

@@ -1,5 +1,5 @@
 ---
-title: The universal property of the natural numbers
+title: The Universal Property of the Natural Numbers
 author: nbloomf
 date: 2014-05-22
 tags: arithmetic-made-difficult, literate-haskell
@@ -7,7 +7,7 @@ tags: arithmetic-made-difficult, literate-haskell
 
 > {-# LANGUAGE BangPatterns #-}
 > module NaturalNumbers
->   ( Natural(..), naturalRec, simpleRec, Nat(), NatShape(..)
+>   ( Natural(..), naturalRec, simpleRec, bailoutRec, Nat(), NatShape(..)
 >   ) where
 > 
 > import Nat
@@ -75,5 +75,20 @@ And note that natural, simple, and primitive recursion can be written against th
 >       Zero   -> x
 >       Next k -> tau (mu h a x) (next h) k
 >   in tau (phi a) zero n
+> 
+> 
+> bailoutRec :: (Natural t) =>
+>   (a -> b) -> (t -> a -> Bool) -> (t -> a -> b) -> (t -> a -> a) -> t -> a -> b
+> bailoutRec phi beta psi omega =
+>   let
+>     theta n a = case shapeOf n of
+>       Zero -> phi a
+>
+>       Next m ->
+>         if beta m a
+>           then psi m a
+>           else theta m (omega m a)
+> 
+>   in theta
 
 From now on we'll use the ``Natural`` interface with ``naturalRec`` and ``simpleRec`` instead of ``Nat``.

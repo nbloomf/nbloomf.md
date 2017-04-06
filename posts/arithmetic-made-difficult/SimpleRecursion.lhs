@@ -29,7 +29,8 @@ Now we define $\Theta$ as follows: $$\Theta(n,a) = (\snd \circ \natrec{(\zero, \
 ($\snd$ is the map which selects the second entry of a pair.)
 
 Note that $$\begin{eqnarray*}
-\Theta(\zero,a) & = & (\snd \circ \natrec{(\zero, \varphi)}{t})(\zero)(a) \\
+ &   & \Theta(\zero,a) \\
+ & = & (\snd \circ \natrec{(\zero, \varphi)}{t})(\zero)(a) \\
  & = & (\snd(\natrec{(\zero, \varphi)}{t})(\zero))(a) \\
  & = & (\snd(\zero, \varphi))(a) \\
  & = & \varphi(a).
@@ -43,7 +44,8 @@ To show the second property of $\Theta$, we will show by induction that the foll
 For the base case, note that
 
 $$\begin{eqnarray*}
-\natrec{(\zero, \varphi)}{t}(\zero) & = & (\zero, \varphi) \\
+ &   & \natrec{(\zero, \varphi)}{t}(\zero) \\
+ & = & (\zero, \varphi) \\
  & = & (\zero, \lambda x : \varphi(x)) \\
  & = & (\zero, \lambda x : \Theta(\zero, x))
 \end{eqnarray*}$$
@@ -51,7 +53,8 @@ $$\begin{eqnarray*}
 and that for all $a \in A$,
 
 $$\begin{eqnarray*}
-\Theta(\next\ \zero, a) & = & (\snd \circ \natrec{(\zero, \varphi)}{t})(\next\ \zero)(a) \\
+ &   & \Theta(\next\ \zero, a) \\
+ & = & (\snd \circ \natrec{(\zero, \varphi)}{t})(\next\ \zero)(a) \\
  & = & (\snd (\natrec{(\zero, \varphi)}{t}(\next\ \zero)))(a) \\
  & = & (\snd (t(\natrec{(\zero, \varphi)}{t}(\zero))))(a) \\
  & = & (\snd (t(\zero, \varphi)))(a) \\
@@ -64,7 +67,8 @@ $$\begin{eqnarray*}
 Now for the inductive step, suppose the statement holds for $n \in \nats$. Then we have
 
 $$\begin{eqnarray*}
-\natrec{(\zero, \varphi)}{t}(\next\ n) & = & t(\natrec{(\zero, \varphi)}{t}(n)) \\
+ &   & \natrec{(\zero, \varphi)}{t}(\next\ n) \\
+ & = & t(\natrec{(\zero, \varphi)}{t}(n)) \\
  & = & t(n, \lambda x : \Theta(n,x)) \\
  & = & (\next\ n, \lambda y : \mu(n, y, \Theta(n,y))) \\
  & = & (\next\ n, \lambda x : \Theta(\next\ n, x).
@@ -73,7 +77,8 @@ $$\begin{eqnarray*}
 (Note that we used both parts of the induction hypothesis here.) Also note that
 
 $$\begin{eqnarray*}
-\Theta(\next(\next\ n), a) & = & (\snd \circ \natrec{(\zero, \varphi)}{t})(\next(\next\ n))(a) \\
+ &   & \Theta(\next(\next\ n), a) \\
+ & = & (\snd \circ \natrec{(\zero, \varphi)}{t})(\next(\next\ n))(a) \\
  & = & (\snd (\natrec{(\zero, \varphi)}{t}(\next(\next\ n)))(a) \\
  & = & (\snd (t (\natrec{(\zero, \varphi)}{t}(\next\ n)))(a) \\
  & = & (\snd (t (\next\ n, \lambda x : \Theta(\next\ n, x))))(a) \\
@@ -85,7 +90,8 @@ $$\begin{eqnarray*}
 So $\Theta$ has the claimed properties by induction. To see that $\Theta$ is unique, we again use induction. Suppose $\Psi : \nats \times A \rightarrow B$ is another mapping which satisfies the properties of $\Theta$. Then we have $$\Psi(\zero, a) = \varphi(a) = \Theta(\zero, a)$$ for all $a \in A$, and if $n \in \nats$ such that $\Psi(n, a) = \Theta(n, a)$ for all $a \in A$, we have
 
 $$\begin{eqnarray*}
-\Psi(\next\ n, a) & = & \mu(n, a, \Psi(n, a)) \\
+ &   & \Psi(\next\ n, a) \\
+ & = & \mu(n, a, \Psi(n, a)) \\
  & = & \mu(n, a, \Theta(n, a)) \\
  & = & \Theta(\next\ n, a)
 \end{eqnarray*}$$
