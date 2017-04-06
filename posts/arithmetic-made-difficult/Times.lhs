@@ -14,7 +14,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > 
 > import Test.QuickCheck
 
-Natural number multiplication has signature $\nats \times \nats \rightarrow \nats$, so we might hope to define it as $\Theta = \primrec{\varphi}{\mu}$ for some appropriate $\varphi$ and $\mu$. Using the universal property of primitive recursion and how we want multiplication to behave, note that on the one hand we want $\Theta(\zero,m) = \zero$ for all $m$, while on the other hand we have $\Theta(\zero,m) = \varphi(m)$. So apparently we need $\varphi(m) = \zero$ for all $m$.
+Natural number multiplication has signature $\nats \times \nats \rightarrow \nats$, so we might hope to define it as $\Theta = \simprec{\varphi}{\mu}$ for some appropriate $\varphi$ and $\mu$. Using the universal property of simple recursion and how we want multiplication to behave, note that on the one hand we want $\Theta(\zero,m) = \zero$ for all $m$, while on the other hand we have $\Theta(\zero,m) = \varphi(m)$. So apparently we need $\varphi(m) = \zero$ for all $m$.
 
 Similarly, we want $\Theta(\next(n),m) = \nplus(\Theta(n,m),m)$, but we also have $$\Theta(\next(n),m) = \mu(n,m,\Theta(n,m)).$$ So apparently we need $\mu(n,m,k) = \nplus(k,m)$.
 
@@ -22,7 +22,7 @@ With this in mind, we define a binary operation $\ntimes$ on $\nats$ as follows.
 
 <div class="result">
 <div class="defn"><p>
-Let $\varphi : \nats \rightarrow \nats$ be given by $\varphi(m) = \zero$, and let $\mu : \nats \times \nats \times \nats \rightarrow \nats$ be given by $\mu(k,a,b) = \nplus(b,a)$. We then define $\ntimes : \nats \times \nats \rightarrow \nats$ by $$\ntimes = \primrec{\varphi}{\mu}.$$
+Let $\varphi : \nats \rightarrow \nats$ be given by $\varphi(m) = \zero$, and let $\mu : \nats \times \nats \times \nats \rightarrow \nats$ be given by $\mu(k,a,b) = \nplus(b,a)$. We then define $\ntimes : \nats \times \nats \rightarrow \nats$ by $$\ntimes = \simprec{\varphi}{\mu}.$$
 </p></div>
 </div>
 
@@ -65,7 +65,7 @@ Implementation and Testing
 Here's ``times``:
 
 > times :: (Natural t) => t -> t -> t
-> times = primitiveRec phi mu
+> times = simpleRec phi mu
 >   where
 >     phi _ = zero
 >     mu _ a b = plus b a

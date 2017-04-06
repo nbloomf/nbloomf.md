@@ -7,7 +7,7 @@ tags: arithmetic-made-difficult, literate-haskell
 
 > {-# LANGUAGE BangPatterns #-}
 > module NaturalNumbers
->   ( Natural(..), naturalRec, primitiveRec, Nat(), NatShape(..)
+>   ( Natural(..), naturalRec, simpleRec, Nat(), NatShape(..)
 >   ) where
 > 
 > import Nat
@@ -56,7 +56,7 @@ Here's the ``Natural`` instance for ``Nat``:
 > 
 >   natural = mkNat
 
-And note that both natural and primitive recursion can be written against the ``Natural`` interface.
+And note that natural, simple, and primitive recursion can be written against the ``Natural`` interface.
 
 > naturalRec :: (Natural t) => a -> (a -> a) -> t -> a
 > naturalRec e phi n =
@@ -67,13 +67,13 @@ And note that both natural and primitive recursion can be written against the ``
 >   in tau e n
 > 
 > 
-> primitiveRec :: (Natural t) =>
+> simpleRec :: (Natural t) =>
 >   (a -> b) -> (t -> a -> b -> b) -> t -> a -> b
-> primitiveRec phi mu n a =
+> simpleRec phi mu n a =
 >   let
 >     tau !x h m = case shapeOf m of
 >       Zero   -> x
 >       Next k -> tau (mu h a x) (next h) k
 >   in tau (phi a) zero n
 
-From now on we'll use the ``Natural`` interface with ``naturalRec`` and ``primitiveRec`` instead of ``Nat``.
+From now on we'll use the ``Natural`` interface with ``naturalRec`` and ``simpleRec`` instead of ``Nat``.

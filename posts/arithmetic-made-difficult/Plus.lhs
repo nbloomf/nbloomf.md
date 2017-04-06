@@ -13,15 +13,15 @@ tags: arithmetic-made-difficult, literate-haskell
 > 
 > import Test.QuickCheck
 
-So far we've characterized the natural numbers via a unique mapping $$\natrec{\ast}{\ast} : \nats \rightarrow A,$$ and we defined another parameterized mapping $$\primrec{\ast}{\ast} : \nats \times A \rightarrow B.$$ From now on, when we want to define a mapping with one of these signatures, these prepackaged recursive maps may come in handy. What's more, we can use the universal properties of these maps to define them in terms of *desired behavior*.
+So far we've characterized the natural numbers via a unique mapping $$\natrec{\ast}{\ast} : \nats \rightarrow A,$$ and we defined another parameterized mapping $$\simprec{\ast}{\ast} : \nats \times A \rightarrow B.$$ From now on, when we want to define a mapping with one of these signatures, these prepackaged recursive maps may come in handy. What's more, we can use the universal properties of these maps to define them in terms of *desired behavior*.
 
-Natural number addition has signature $\nats \times \nats \rightarrow \nats$, so we might hope to define addition in terms of $\primrec{\ast}{\ast}$. To do this, we need to find mappings $\varphi : \nats \rightarrow \nats$ and $\mu : \nats \times \nats \times \nats \rightarrow \nats$ that make $\primrec{\varphi}{\mu}$ act like addition. For example, we want $\next$ to act like $+1$, and $$n = \zero + n = \primrec{\varphi}{\mu}(\zero,n) = \varphi(n),$$ and
+Natural number addition has signature $\nats \times \nats \rightarrow \nats$, so we might hope to define addition in terms of $\simprec{\ast}{\ast}$. To do this, we need to find mappings $\varphi : \nats \rightarrow \nats$ and $\mu : \nats \times \nats \times \nats \rightarrow \nats$ that make $\simprec{\varphi}{\mu}$ act like addition. For example, we want $\next$ to act like $+1$, and $$n = \zero + n = \simprec{\varphi}{\mu}(\zero,n) = \varphi(n),$$ and
 
 $$\begin{eqnarray*}
 (m+n)+1
  & = & (m+1)+n \\
- & = & \primrec{\varphi}{\mu}(\next(m),n) \\
- & = & \mu(m,n,\primrec{\varphi}{\mu}(m,n)) \\
+ & = & \simprec{\varphi}{\mu}(\next(m),n) \\
+ & = & \mu(m,n,\simprec{\varphi}{\mu}(m,n)) \\
  & = & \mu(m,n,m+n).
 \end{eqnarray*}$$
 
@@ -29,7 +29,7 @@ With this in mind, we define a binary operation $\nplus$ on $\nats$ as follows.
 
 <div class="result">
 <div class="defn"><p>
-Let $\mu : \nats \times \nats \times \nats \rightarrow \nats$ be given by $\mu(k,a,b) = \next(b)$. We then define $\nplus : \nats \times \nats \rightarrow \nats$ by $$\nplus = \primrec{\id}{\mu}.$$
+Let $\mu : \nats \times \nats \times \nats \rightarrow \nats$ be given by $\mu(k,a,b) = \next(b)$. We then define $\nplus : \nats \times \nats \rightarrow \nats$ by $$\nplus = \simprec{\id}{\mu}.$$
 </p></div>
 </div>
 
@@ -48,8 +48,8 @@ The following hold for all natural numbers $a$, $b$, and $c$.
 </div>
 
 <div class="proof"><p>
-1. Note that $$\nplus(\zero,a) = \primrec{\id}{\mu}(\zero,a) = \id(a) = a.$$ We show the second equality by induction on $a$. For the base case, we have $\nplus(\zero,\zero) = \zero$ by the first equality. For the inductive step, suppose we have $\nplus(a,\zero) = a$ for some $a$. Then $$\begin{eqnarray*}  & & \nplus(\next(a),\zero) \\ & = & \primrec{\id}{\mu}(\next(a),\zero) \\ & = & \mu(a, \zero, \primrec{\id}{\mu}(a,\zero)) \\ & = & \mu(a, \zero, \nplus(a, \zero)) \\ & = & \mu(a,\zero,a) \\ & = & \next(a) \end{eqnarray*}$$ as needed.
-2. Note that $$\begin{eqnarray*} & & \nplus(\next(a),b) \\ & = & \primrec{\id}{\mu}(\next(a),b) \\ & = & \mu(a,b,\primrec{\id}{\mu}(a,b)) \\ & = & \mu(a,b,\nplus(a,b)) \\ & = & \next(\nplus(a,b)). \end{eqnarray*}$$ We show the second equality by induction on $a$. For the base case, note that $$\begin{eqnarray*} & & \nplus(\zero,\next(b)) \\ & = & \primrec{\id}{\mu}(\zero,\next(b)) \\ & = & \id(\next(b)) \\ & = & \next(b). \end{eqnarray*}$$ For the inductive step, suppose we have $\next(\nplus(a,b)) = \nplus(a,\next(b))$ for some $a$. Then $$\begin{eqnarray*} & & \nplus(\next(a),\next(b)) \\ & = & \primrec{\id}{\mu}(\next(a),\next(b)) \\ & = & \mu(a, \next(b), \primrec{\id}{\mu}(a, \next(b))) \\ & = & \mu(a, \next(b), \nplus(a, \next(b))) \\ & = & \mu(a, \next(b), \next(\nplus(a,b))) \\ & = & \next(\next(\nplus(a,b))) \\ & = & \next(\nplus(\next(a),b)) \end{eqnarray*}$$ as needed.
+1. Note that $$\nplus(\zero,a) = \simprec{\id}{\mu}(\zero,a) = \id(a) = a.$$ We show the second equality by induction on $a$. For the base case, we have $\nplus(\zero,\zero) = \zero$ by the first equality. For the inductive step, suppose we have $\nplus(a,\zero) = a$ for some $a$. Then $$\begin{eqnarray*}  & & \nplus(\next(a),\zero) \\ & = & \simprec{\id}{\mu}(\next(a),\zero) \\ & = & \mu(a, \zero, \simprec{\id}{\mu}(a,\zero)) \\ & = & \mu(a, \zero, \nplus(a, \zero)) \\ & = & \mu(a,\zero,a) \\ & = & \next(a) \end{eqnarray*}$$ as needed.
+2. Note that $$\begin{eqnarray*} & & \nplus(\next(a),b) \\ & = & \simprec{\id}{\mu}(\next(a),b) \\ & = & \mu(a,b,\simprec{\id}{\mu}(a,b)) \\ & = & \mu(a,b,\nplus(a,b)) \\ & = & \next(\nplus(a,b)). \end{eqnarray*}$$ We show the second equality by induction on $a$. For the base case, note that $$\begin{eqnarray*} & & \nplus(\zero,\next(b)) \\ & = & \simprec{\id}{\mu}(\zero,\next(b)) \\ & = & \id(\next(b)) \\ & = & \next(b). \end{eqnarray*}$$ For the inductive step, suppose we have $\next(\nplus(a,b)) = \nplus(a,\next(b))$ for some $a$. Then $$\begin{eqnarray*} & & \nplus(\next(a),\next(b)) \\ & = & \simprec{\id}{\mu}(\next(a),\next(b)) \\ & = & \mu(a, \next(b), \simprec{\id}{\mu}(a, \next(b))) \\ & = & \mu(a, \next(b), \nplus(a, \next(b))) \\ & = & \mu(a, \next(b), \next(\nplus(a,b))) \\ & = & \next(\next(\nplus(a,b))) \\ & = & \next(\nplus(\next(a),b)) \end{eqnarray*}$$ as needed.
 3. We will show this by induction on $a$. For the base case, note that $$\nplus(\nplus(\zero,b),c) = \nplus(b,c) = \nplus(\zero,\nplus(b,c)).$$ For the inductive step, suppose the result holds for some $a$. Then $$\begin{eqnarray*} & & \nplus(\nplus(\next(a),b),c) \\ & = & \nplus(\next(\nplus(a,b)),c) \\ & = & \next(\nplus(\nplus(a,b),c)) \\ & = & \next(\nplus(a, \nplus(b,c))) \\ & = & \nplus(\next(a), \nplus(b,c)) \end{eqnarray*}$$ as needed.
 4. We proceed by induction on $a$. For the base case, note that $$\nplus(\zero,b) = b = \nplus(b,\zero).$$ For the inductive step, suppose the result holds for some $a$. Then we have $$\begin{eqnarray*} & & \nplus(\next(a),b) \\ & = & \next(\nplus(a,b)) \\ & = & \next(\nplus(b,a)) \\ & = & \nplus(b, \next(a))\end{eqnarray*}$$ as needed.
 5. We proceed by induction on $c$. For the base case, note that if $\nplus(\zero,a) = \nplus(\zero,b)$, then we have $$a = \nplus(\zero,a) = \nplus(\zero,b) = b.$$ For the inductive step, suppose the result holds for some $c$. Now if $$\nplus(\next(c),a)) = \nplus(\next(c),b),$$ then $$\next(\nplus(c,a)) = \next(\nplus(c,b))$$ so that $$\nplus(c,a) = \nplus(c,b)$$ and thus $a = b$ as needed.
@@ -66,7 +66,7 @@ Implementation and Testing
 Here's ``plus``:
 
 > plus :: (Natural t) => t -> t -> t
-> plus = primitiveRec id mu
+> plus = simpleRec id mu
 >   where mu _ _ b = next b
 
 We've proved a bunch of properties for ``plus``, but it's still a good idea to verify them. We can do this with ``QuickCheck``. First we express each property to be tested as a boolean function. Note that each one takes an "extra" argument; this is just to fix the type of the function being tested. (There may be a better way to do this.)

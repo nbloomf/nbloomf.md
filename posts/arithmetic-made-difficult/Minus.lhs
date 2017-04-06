@@ -28,7 +28,7 @@ The third option is a blend of the first two. We can attach an extra element to 
 
 <div class="result">
 <div class="defn"><p>
-Define the map $\psi : (\ast + \nats)^\nats \rightarrow \ast + \nats$ by $$\psi(f) = \left\{ \begin{array}{ll} \ast & \mathrm{if}\ f(\zero) = \ast \\ \next(c) & \mathrm{if}\ f(\zero) = c \in \nats, \end{array} \right.$$ define $\mu : \nats \times (\ast + \nats)^\nats \times (\ast + \nats) \rightarrow \ast + \nats$ by $$\mu(x,f,y) = f(x),$$ and define $\Theta : (\ast + \nats)^\nats \times \nats \rightarrow \ast + \nats$ by $$\Theta(f,x) = \primrec{\psi}{\mu}(x)(f).$$
+Define the map $\psi : (\ast + \nats)^\nats \rightarrow \ast + \nats$ by $$\psi(f) = \left\{ \begin{array}{ll} \ast & \mathrm{if}\ f(\zero) = \ast \\ \next(c) & \mathrm{if}\ f(\zero) = c \in \nats, \end{array} \right.$$ define $\mu : \nats \times (\ast + \nats)^\nats \times (\ast + \nats) \rightarrow \ast + \nats$ by $$\mu(x,f,y) = f(x),$$ and define $\Theta : (\ast + \nats)^\nats \times \nats \rightarrow \ast + \nats$ by $$\Theta(f,x) = \simprec{\psi}{\mu}(x)(f).$$
 
 Now define $\varepsilon : \nats \rightarrow \ast + \nats$ by $$\varepsilon(a) = \left\{ \begin{array}{ll} \zero & \mathrm{if}\ a = \zero \\ \ast & \mathrm{otherwise}. \end{array} \right.$$
 
@@ -36,7 +36,7 @@ We then define $\nminus : \nats \times \nats \rightarrow \ast + \nats$ by $$\nmi
 </p></div>
 </div>
 
-This definition looks complicated (primitive recursion nested inside natural recursion). Here's a useful lemma:
+This definition looks complicated (simple recursion nested inside natural recursion). Here's a useful lemma:
 
 <div class="result">
 <div class="lemma">
@@ -44,7 +44,7 @@ Let $a,b \in \nats$. Then we have $$\nminus(\next(b),\next(a)) = \nminus(b,a).$$
 </div>
 
 <div class="proof"><p>
-We have $$\begin{eqnarray*} & & \nminus(\next(b),\next(a)) \\ & = & \natrec{\varepsilon}{\Theta}(\next(b))(\next(a)) \\ & = & \Theta(\natrec{\varepsilon}{\Theta}(b))(\next(a)) \\ & = & \primrec{\psi}{\mu}(\next(a),\natrec{\varepsilon}{\Theta}(b)) \\ & = & \mu(a,\natrec{\varepsilon}{\Theta}(b),\primrec{\psi}{\mu}(a,\natrec{\varepsilon}{\Theta}(b))) \\ & = & \natrec{\varepsilon}{\Theta}(b)(a) \\ & = & \nminus(b,a) \end{eqnarray*}$$ as claimed.
+We have $$\begin{eqnarray*} & & \nminus(\next(b),\next(a)) \\ & = & \natrec{\varepsilon}{\Theta}(\next(b))(\next(a)) \\ & = & \Theta(\natrec{\varepsilon}{\Theta}(b))(\next(a)) \\ & = & \simprec{\psi}{\mu}(\next(a),\natrec{\varepsilon}{\Theta}(b)) \\ & = & \mu(a,\natrec{\varepsilon}{\Theta}(b),\simprec{\psi}{\mu}(a,\natrec{\varepsilon}{\Theta}(b))) \\ & = & \natrec{\varepsilon}{\Theta}(b)(a) \\ & = & \nminus(b,a) \end{eqnarray*}$$ as claimed.
 </p></div>
 </div>
 
@@ -56,7 +56,7 @@ Let $a \in \nats$. Then we have $$\nminus(a,\zero) = a$$ and $$\nminus(\zero,\ne
 </div>
 
 <div class="proof"><p>
-1. We proceed by induction on $a$. For the base case, note that $$\nminus(\zero,\zero) = \natrec{\varepsilon}{\Theta}(\zero)(\zero) = \varepsilon(\zero) = \zero$$ as needed. For the inductive step, suppose the results holds for some $a \in \nats$. Now $$\begin{eqnarray*} & & \nminus(\next(a),\zero) \\ & = & \natrec{\varepsilon}{\Theta}(\next(a))(\zero) \\ & = & \Theta(\natrec{\varepsilon}{\Theta}(a))(\zero) \\ & = & \primrec{\psi}{\mu}(\zero)(\natrec{\varepsilon}{\Theta}(a)) \\ & = & \psi(\natrec{\varepsilon}{\mu}(a)) \\ & = & \next(a), \end{eqnarray*}$$ where in the last step we used the induction hypothesis since $$a = \nminus(a,\zero) = \natrec{\varepsilon}{\Theta}(a)(\zero).$$
+1. We proceed by induction on $a$. For the base case, note that $$\nminus(\zero,\zero) = \natrec{\varepsilon}{\Theta}(\zero)(\zero) = \varepsilon(\zero) = \zero$$ as needed. For the inductive step, suppose the results holds for some $a \in \nats$. Now $$\begin{eqnarray*} & & \nminus(\next(a),\zero) \\ & = & \natrec{\varepsilon}{\Theta}(\next(a))(\zero) \\ & = & \Theta(\natrec{\varepsilon}{\Theta}(a))(\zero) \\ & = & \simprec{\psi}{\mu}(\zero)(\natrec{\varepsilon}{\Theta}(a)) \\ & = & \psi(\natrec{\varepsilon}{\mu}(a)) \\ & = & \next(a), \end{eqnarray*}$$ where in the last step we used the induction hypothesis since $$a = \nminus(a,\zero) = \natrec{\varepsilon}{\Theta}(a)(\zero).$$
 2. Note that $$\begin{eqnarray*} & & \nminus(\zero,\next(a)) \\ & = & \natrec{\varepsilon}{\Theta}(\zero)(\next(a)) \\ & = & \varepsilon(\next(a)) \\ & = & \ast \end{eqnarray*}$$ since $\zero \neq \next(a)$.
 </p></div>
 </div>
@@ -89,7 +89,7 @@ Let $a,b,c \in \nats$. Then the following are equivalent.
 </div>
 
 <div class="proof"><p>
-First we show that (1) implies (2) by induction on $a$. For the base cse, note that $$\nplus(\zero,\nminus(b,\zero)) = \nminus(b,\zero) = b$$ for all $b$. For the inductive step, suppose the implication holds for all $b$ and $c$ for some $a$. We induct on $b$; in the base case ($b = \zero$) note that $\nminus(\zero,\next(a)) = \ast$, so that the implication holds vacuously. For the inductive step suppose the implication holds for all $c$ for some $b$. If $c = \nminus(b,a)$, then we have $$\begin{eqnarray*} & & \nplus(\next(a),\nminus(\next(b),\next(a))) \\ & = & \nplus(\next(a),\nminus(b,a)) \\ & = & \primrec{\id}{\mu_\nplus}(\next(a),\nminus(b,a)) \\ & = & \mu_\nplus(a,\nminus(b,a),\nplus(a,\nminus(b,a))) \\ & = & \mu_\nplus(a,\nminus(b,a),b) \\ & = & \next(b) \end{eqnarray*}$$ as needed.
+First we show that (1) implies (2) by induction on $a$. For the base cse, note that $$\nplus(\zero,\nminus(b,\zero)) = \nminus(b,\zero) = b$$ for all $b$. For the inductive step, suppose the implication holds for all $b$ and $c$ for some $a$. We induct on $b$; in the base case ($b = \zero$) note that $\nminus(\zero,\next(a)) = \ast$, so that the implication holds vacuously. For the inductive step suppose the implication holds for all $c$ for some $b$. If $c = \nminus(b,a)$, then we have $$\begin{eqnarray*} & & \nplus(\next(a),\nminus(\next(b),\next(a))) \\ & = & \nplus(\next(a),\nminus(b,a)) \\ & = & \simprec{\id}{\mu_\nplus}(\next(a),\nminus(b,a)) \\ & = & \mu_\nplus(a,\nminus(b,a),\nplus(a,\nminus(b,a))) \\ & = & \mu_\nplus(a,\nminus(b,a),b) \\ & = & \next(b) \end{eqnarray*}$$ as needed.
 
 Next we show that (2) implies (1), again by induction on $a$. For the base case $a = \zero$, note that if $b = \nplus(\zero,c) = c$, then we have $c = b = \nminus(b,\zero)$ as needed. For the inductive step, suppose the implication holds for all $b$ and $c$ for some $a$. Now we induct on $b$. For the base case $b = \zero$, note that $\zero = \nplus(\next(a),c)$ is false, so the implication holds vacuously. For the inductive step, suppose the implication holds for all $c$ for some $b$. Now suppose we have $$\nplus(\next(a),c) = \next(b);$$ then we have $\nplus(a,c) = b$, and using the induction hypothesis $$\nminus(\next(b),\next(a)) = \nminus(b,a) = c$$ as needed.
 </p></div>
@@ -138,7 +138,7 @@ Here's ``minus``:
 >   where
 >     eps k = if k == zero then Just zero else Nothing
 > 
->     theta f x = (primitiveRec psi mu) x f
+>     theta f x = (simpleRec psi mu) x f
 >       where
 >         psi f = fmap next (f zero)
 >         mu x f _ = f x

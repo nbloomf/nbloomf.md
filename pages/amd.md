@@ -8,9 +8,10 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
 1. First Steps
     * [Natural Numbers](/posts/arithmetic-made-difficult/natural-numbers.html)
     * [From Arrows to Programs](/posts/arithmetic-made-difficult/Nat.html)
-    * [Primitive Recursion](/posts/arithmetic-made-difficult/PrimitiveRecursion.html)
+    * [Simple Recursion](/posts/arithmetic-made-difficult/SimpleRecursion.html)
     * [Variations on Peano](/posts/arithmetic-made-difficult/variations-on-peano.html)
     * [The Universal Property of the Natural Numbers](/posts/arithmetic-made-difficult/NaturalNumbers.html)
+    * [Primitive Recursion](/posts/arithmetic-made-difficult/PrimitiveRecursion.html)
 2. Basic Arithmetic
     * Equality
     * [Addition](/posts/arithmetic-made-difficult/Plus.html)
@@ -19,7 +20,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Less Than or Equal To](/posts/arithmetic-made-difficult/LessThanOrEqualTo.html)
     * [Subtraction](/posts/arithmetic-made-difficult/Minus.html)
     * [Max and Min](/posts/arithmetic-made-difficult/MaxAndMin.html)
-    * The Division Algorithm
+    * [The Division Algorithm](/posts/arithmetic-made-difficult/DivisionAlgorithm.html)
     * Divides
     * GCD and LCM
     * Exponentiation
