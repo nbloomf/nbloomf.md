@@ -1,7 +1,7 @@
 ---
 title: Bailout Recursion
 author: nbloomf
-date: 2014-05-23
+date: 2014-05-21
 tags: arithmetic-made-difficult, literate-haskell
 ---
 

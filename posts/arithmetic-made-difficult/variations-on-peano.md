@@ -1,7 +1,7 @@
 ---
 title: Variations on Peano
 author: nbloomf
-date: 2014-05-21
+date: 2014-05-20
 tags: arithmetic-made-difficult
 ---
 

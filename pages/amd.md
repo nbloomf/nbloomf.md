@@ -21,8 +21,9 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Subtraction](/posts/arithmetic-made-difficult/Minus.html)
     * [Max and Min](/posts/arithmetic-made-difficult/MaxAndMin.html)
     * [The Division Algorithm](/posts/arithmetic-made-difficult/DivisionAlgorithm.html)
-    * Divides
+    * [Divides](/posts/arithmetic-made-difficult/Divides.html)
     * GCD and LCM
+    * Primes
     * Exponentiation
 3. Finite Lists
 4. Fixed Radix Numeral Systems

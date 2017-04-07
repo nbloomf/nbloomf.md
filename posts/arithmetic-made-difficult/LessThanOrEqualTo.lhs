@@ -1,7 +1,7 @@
 ---
 title: Less Than or Equal To
 author: nbloomf
-date: 2017-04-02
+date: 2017-04-05
 tags: arithmetic-made-difficult, literate-haskell
 ---
 
@@ -12,18 +12,15 @@ tags: arithmetic-made-difficult, literate-haskell
 > import NaturalNumbers
 > import Plus
 > import Times
+> import Minus
 > 
 > import Test.QuickCheck
 
-Next we'd like to nail down what it means for one natural number to be less than or equal to another. Note that while $\nplus$ and $\ntimes$ have signatures $$\nats \times \nats \rightarrow \nats,$$ "less than or equal to" (which I will abbrebiate to *leq* from now on) does not. In fact $\leq$ is typically defined as a set of pairs. To make $\leq$ computable, we will instead (try to) define it as a function with signature $$\nats \times \nats \rightarrow \bool.$$ With this signature there is hope that we can define leq using simple recursion, provided we can find appropriate maps $$\varphi : \nats \rightarrow \bool$$ and $$\mu : \nats \times \nats \times \bool \rightarrow \bool.$$ But what should $\varphi$ and $\mu$ be? Let's think about it.
-
-One nice thing about $\simprec{\ast}{\ast}$ (and recursion operators in general) is that we can afford to be a little sloppy while looking for a good definition.
-
-Let $\Theta = \simprec{\varphi}{\mu}$, and suppose $\Theta$ acts like the $\leq$ we know and love. Then for all $b$ we want, for instance, $$\btrue = \Theta(\zero,b) = \varphi(b);$$ evidently then we should have $\varphi(b) = \btrue$ for all $b$. Likewise, we have $$\Theta(\next(a),b) = \mu(a,b,\Theta(a,b)).$$ That is, the truth value of $a+1 \leq b$ is some function of $a$, $b$, and the truth value of $a \leq b$. Note that if $a = b$, then $a+1 \leq b$ is *false*. If $a > b$, then $a \leq b$ and $a+1 \leq b$ are both false, and if $a < b$, then $a \leq b$ and $a+1 \leq b$ are both true. So let's try $\mu(a,b,k) = \bfalse$ if $a = b$ and $k$ otherwise.
+Next we'd like to nail down what it means for one natural number to be less than or equal to another. Note that while $\nplus$ and $\ntimes$ have signatures $$\nats \times \nats \rightarrow \nats,$$ "less than or equal to" (which I will abbrebiate to *leq* from now on) does not. In fact $\leq$ is typically defined as a set of pairs. To make $\leq$ computable, we will instead (try to) define it as a function with signature $$\nats \times \nats \rightarrow \bool.$$ In fact, we can make a reasonable attempt on $\nleq$ without using recursion at all.
 
 <div class="result">
 <div class="defn"><p>
-Let $\mu : \nats \times \nats \times \bool \rightarrow \bool$ be given by $$\mu(a,b,k) = \left\{ \begin{array}{ll} \bfalse & \mathrm{if}\ a = b \\ k & \mathrm{otherwise}, \end{array} \right.$$ and define $\varphi : \nats \rightarrow \bool$ by $\varphi(x) = \btrue$. We then define $\nleq : \nats \times \nats \rightarrow \bool$ by $$\nleq = \simprec{\varphi}{\mu}.$$
+Define $\nleq : \nats \times \nats \rightarrow \bool$ by $$\nleq(a,b) = \left\{\begin{array}{ll} \bfalse & \mathrm{if}\ \nminus(b,a) = \ast \\ \btrue & \mathrm{otherwise}. \end{array}\right.$$
 </p></div>
 </div>
 
@@ -38,8 +35,8 @@ Let $a \in \nats$. Then we have the following.
 </div>
 
 <div class="proof"><p>
-1. We induct on $a$. For the base case, note that $\nleq(\next(\zero),\zero)$ is false since $\zero = \zero$. For the inductive step, suppose we have that $\nleq(\next(a),\zero)$ is false. Now $\nleq(\next(\next(a)),\zero)$ has the same value as $\nleq(\next(a),\zero)$ (false) since $\next(a) \neq \zero$.
-2. We induct on $a$. For the base case, note that $\nleq(\next(\next(\zero)),\next(\zero)) = \bfalse$ since $\next(\zero) = \next(\zero)$. For the inductive step, suppose $$\nleq(\next(\next(a)),\next(\zero)) = \bfalse.$$ Now $$\nleq(\next(\next(\next(a)),\next(\zero))$$ has the same value as $$\nleq(\next(\next(a)),\next(\zero))$$ (false) since $\next(\next(a)) \neq \next(\zero)$.
+1. Note that $$\zero = \nplus(\next(a),x) = \next(\nplus(a,x))$$ has no solution, so that $\nminus(\zero,\next(a)) = \ast$. Thus $\nleq(\next(a),\zero) = \bfalse$.
+2. (@@@)
 </p></div>
 </div>
 

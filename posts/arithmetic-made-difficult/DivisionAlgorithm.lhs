@@ -22,7 +22,7 @@ Finally we come to the first power tool for natural numbers: the division algori
 
 I like this result for several reasons. It ties together the three basic operations on $\nats$ -- $\next$, $\nplus$, and $\ntimes$ -- in a satisfying way, and it has two conclusions, one an equality and the other an inequality. It also has some really powerful applications. Notably, we'll use the division algorithm to compute greatest common divisors and to compute fixed-radix representations of numbers.
 
-The task at hand is to find a constructive, or more precisely, simple or primitive recursive, definition for the division algorithm. This function takes a pair of natural numbers $(a,b)$ and returns a pair of natural numbers $(q,r)$, so its signature should be something like $$\nats \times \nats \rightarrow \nats \times \nats.$$ Remember that the signature of $\simprec{\varphi}{\mu}$ is $$\nats \times A \rightarrow B,$$ where $\varphi : A \rightarrow B$ and $\mu : \nats \times A \times B \rightarrow B$. Letting $A = \nats$ and $B = \nats \times \nats$, we're looking for $$\varphi : \nats \rightarrow \nats \times \nats$$ and $$\mu : \nats \times \nats \times (\nats \times \nats) \rightarrow \nats \times \nats$$ so that $\Theta = \simprec{\varphi}{\mu}$ acts like the division algorithm. But how does the division algorithm act?
+The task at hand is to find a constructive, or more precisely, simple recursive, definition for the division algorithm. This function takes a pair of natural numbers $(a,b)$ and returns a pair of natural numbers $(q,r)$, so its signature should be something like $$\nats \times \nats \rightarrow \nats \times \nats.$$ Remember that the signature of $\simprec{\varphi}{\mu}$ is $$\nats \times A \rightarrow B,$$ where $\varphi : A \rightarrow B$ and $\mu : \nats \times A \times B \rightarrow B$. Letting $A = \nats$ and $B = \nats \times \nats$, we're looking for $$\varphi : \nats \rightarrow \nats \times \nats$$ and $$\mu : \nats \times \nats \times (\nats \times \nats) \rightarrow \nats \times \nats$$ so that $\Theta = \simprec{\varphi}{\mu}$ acts like the division algorithm. But how does the division algorithm act?
 
 For starters, we have $$\Theta(\zero,b) = \varphi(b) = (q,r)$$ where $$\zero = \nplus(\ntimes(q,b),r).$$ So $r = q = \zero$; evidently then $\varphi(x) = (\zero,\zero)$ for all $x$.
 
@@ -42,8 +42,8 @@ Get ready:
 <div class="thm">
 Let $a,b \in \nats$ and let $(q,r) = \ndivalg(a,\next(b))$. Then we have the following.
 
-1. $a = \nplus(\ntimes(q,b),r)$.
-2. $\leq(r,b) = \btrue$.
+1. $a = \nplus(\ntimes(q,\next(b)),r)$.
+2. $\nleq(r,b) = \btrue$.
 </div>
 
 <div class="proof"><p>
@@ -67,7 +67,7 @@ woo!
 
 <div class="result">
 <div class="thm">
-Let $a,b \in \nats$ and suppose we have $q,r \in \nats$ such that $$a = \nplus(\ntimes(q,\next(b)),r)$$ and $\leq(r,b) = \btrue$. Then $(q,r) = \ndivalg(a,b)$.
+Let $a,b \in \nats$ and suppose we have $q,r \in \nats$ such that $$a = \nplus(\ntimes(q,\next(b)),r)$$ and $\nleq(r,b) = \btrue$. Then $(q,r) = \ndivalg(a,b)$.
 </div>
 
 <div class="proof"><p>
@@ -90,6 +90,43 @@ $$\begin{eqnarray*}
 So we have $$\ntimes(q_1,\next(b)) = \nplus(\ntimes(q_2,\next(b)),k),$$ and since $N(q_1) = \nats$, $k = \zero$. So $\next(q_2) \in N(\next(q_1))$ as needed.
 
 So we have $k = \zero$, and thus $$\ntimes(q_1,\next(b)) = \ntimes(q_2,\next(b)).$$ Thus $q_1 = q_2$, and moreover $r_1 = r_2$ as needed.
+</p></div>
+</div>
+
+The last two theorems say that the output of $\ndivalg(a,b)$ is the unique solution of a particular system of equations so long as $b$ is not $\zero$. But what if $b$ is zero? We frankly won't usually be interested in this case, but it will show up later as the base case in some induction proofs. Of course in the $b = \zero$ case the output of $\ndivalg$ is no longer a unique solution to the system of equations, and the particular solution is a quirk of our definition.
+
+<div class="result">
+<div class="thm">
+Let $a \in \nats$. Then $\ndiv(a,\zero) = (\zero,a)$.
+</div>
+
+<div class="proof"><p>
+We proceed by induction on $a$. For the base case $a = \zero$, note that
+$$\begin{eqnarray*}
+ &   & \ndivalg(\zero, \zero) \\
+ & = & \varphi(\zero) \\
+ & = & (\zero, \zero)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equation holds for some $a$. Now
+$$\begin{eqnarray*}
+ &   & \ndivalg(\next(a),\zero) \\
+ & = & \mu(a, \zero, \ndivalg(a, \zero)) \\
+ & = & \mu(a, \zero, (\zero, a)) \\
+ & = & (\zero, \next(a))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
+And while we're at it, some special cases.
+
+<div class="result">
+<div class="thm">
+Let $a \in \nats$. Then $\ndivalg(\zero,a) = (\zero, \zero)$
+</div>
+
+<div class="proof"><p>
+Note that $$\ndivalg(\zero, a) = \phi(a) = (\zero, \zero).$$
 </p></div>
 </div>
 
@@ -131,6 +168,18 @@ Property tests:
 >   leq r b
 > 
 > 
+> -- divalg(a,0) = (0,a)
+> _test_divalg_zero_right :: (Natural t) => t -> t -> Bool
+> _test_divalg_zero_right _ a =
+>   (divalg a zero) == (zero, a)
+> 
+> 
+> -- divalg(0,a) = (0,0)
+> _test_divalg_zero_left :: (Natural t) => t -> t -> Bool
+> _test_divalg_zero_left _ a =
+>   (divalg zero a) == (zero, zero)
+> 
+> 
 > -- quo(a,b) = q where (q,_) = divalg(a,b)
 > _test_divalg_quo :: (Natural t) => t -> t -> t -> Bool
 > _test_divalg_quo _ a b =
@@ -146,12 +195,14 @@ Property tests:
 
 And the suite:
 
-> -- run all tests for max
+> -- run all tests for divalg
 > _test_divalg :: (Natural t, Arbitrary t, Show t)
 >   => t -> Int -> Int -> IO ()
 > _test_divalg t maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_divalg_equality t)
 >   , quickCheckWith args (_test_divalg_inequality t)
+>   , quickCheckWith args (_test_divalg_zero_right t)
+>   , quickCheckWith args (_test_divalg_zero_left t)
 >   , quickCheckWith args (_test_divalg_quo t)
 >   , quickCheckWith args (_test_divalg_rem t)
 >   ]

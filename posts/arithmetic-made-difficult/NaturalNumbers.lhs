@@ -39,6 +39,11 @@ Now every inductive set isomorphic to $\nats$ is characterized by (1) its zero e
 >     Zero   -> Zero
 >     Next k -> Next $ fromNat k
 > 
+>   prev :: t -> t
+>   prev m = case shapeOf m of
+>     Zero   -> zero
+>     Next k -> k
+> 
 >   natural :: Integer -> t
 >   natural = fromNat . mkNat
 

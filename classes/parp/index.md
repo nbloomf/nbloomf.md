@@ -133,3 +133,4 @@ No.  Topic                                     Start Date  Completion Date
 ## Homework
 
 * [Homework 1](/classes/parp/notes/hw1.html)
+* [Homework 2](/classes/parp/notes/hw2.html)
