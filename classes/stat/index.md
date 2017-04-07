@@ -14,6 +14,7 @@ title: Statistical Methods
 4. [Counting](/pdf/classes/stat/stat-a04-counting.pdf)
 5. [Counting 2](/pdf/classes/stat/stat-a05-counting-2.pdf)
 6. [Discrete Random Variables](/pdf/classes/stat/stat-a06-discrete-random-variables.pdf)
+6. [Binomial Random Variables](/pdf/classes/stat/stat-a07-binomial-random-variables.pdf)
 
 
 ## Slides
