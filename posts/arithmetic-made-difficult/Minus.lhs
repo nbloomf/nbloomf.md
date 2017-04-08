@@ -111,7 +111,7 @@ as needed.
 </p></div>
 </div>
 
-Now $\nminus$ inherits several properties from $\nleq$ and $\nplus$.
+Now $\nminus$ inherits several properties from $\nplus$.
 
 <div class="result">
 <div class="thm">
@@ -121,8 +121,7 @@ Let $a,b,c \in \nats$. Then the following are equivalent.
 2. If $\nminus(b,a) = \nminus(b,c) \in \nats$, then $a = c$.
 3. If $\nminus(a,b) = \nminus(c,b) \in \nats$, then $a = c$.
 4. If $\nminus(b,a) \in \nats$, then $\nminus(\next(b),a) = \next(\nminus(b,a))$.
-5. If $\nminus(b,a) \in \nats$, then $\nminus(b,\nminus(b,a)) \in \nats$.
-6. If $\nleq(c,b)$ and $\nleq(b,a)$, then $\nminus(a,\nminus(b,c)) = \nplus(\nminus(a,b),c)$.
+5. If $\nminus(b,a) \in \nats$, then $\nminus(b,\nminus(b,a)) = a$.
 </div>
 
 <div class="proof"><p>
@@ -130,8 +129,21 @@ Let $a,b,c \in \nats$. Then the following are equivalent.
 2. Say $$\nminus(b,a) = d = \nminus(b,c),$$ with $d \in \nats$. Now $$\nplus(a,d) = b = \nplus(c,d)$$ and thus $a = c$ as claimed.
 3. Say $$\nminus(a,b) = d = \nminus(c,b),$$ with $d \in \nats$. Now $$a = \nplus(b,d) = c$$ as claimed.
 4. Say $\nminus(b,a) = c$. Now $\nplus(a,c) = b$, so that $$\nplus(a,\next(c)) = \next(\nplus(a,c)) = \next(b).$$ Thus we have $$\nminus(\next(b),a) = \next(c) = \next(\nminus(b,a))$$ as claimed.
-5. We induct on $b$. For the base case $b = \zero$, if $\nminus(\zero,a) \in \nats$ then we have $a = \zero$. Then $\nminus(b,a) = \zero$, so that $\nminus(b,\nminus(b,a)) = \zero \in \nats$ as claimed. For the inductive step, suppose we have $\nminus(\next(b),a) = c \in \nats$. (@@@)
-6. (@@@)
+5. Say $\nminus(b,a) = c$. Now $b = \nplus(a,c)$, so that $a = \nminus(b,\nminus(b,a))$.
+</p></div>
+</div>
+
+Finally:
+
+<div class="result">
+<div class="thm">
+Let $a,b \in \nats$. If $\nminus(a,b) = \ast$, then $\nminus(b,a) \in \nats$.
+</div>
+
+<div class="proof"><p>
+We proceed by induction on $a$. For the base case $a = \zero$, if $\nminus(\zero,b) = \ast$ we have $b \neq \zero$ and $\nminus(b,\zero) = b \in \nats$.
+
+For the inductive step, suppose the implication holds for all $b$ for some $a$. Suppose further that $\nminus(\next(a),b) = \ast$. If $b = \zero$, note that $\nminus(\next(a),\zero) = \zero$ is false, so the implication holds vacuously. If $b = \next(d)$, then we have $$\nminus(\next(a),b) = \nminus(\next(a),\next(d)) = \nminus(a,d).$$ By the induction hypothesis we have $$\nminus(d,a) = c$, so that $$\nminus(b,a) = \nminus(\next(d),\next(a)) = c.$$
 </p></div>
 </div>
 
@@ -171,11 +183,6 @@ And some properties. Some of these are less nice because ``minus`` returns a ``M
 >   (minus a zero) == Just a
 > 
 > 
-> _test_minus_leq :: (Natural t) => t -> t -> t -> Bool
-> _test_minus_leq _ a b =
->   ((leq a b) == False) == ((minus b a) == Nothing)
-> 
-> 
 > _test_minus_plus :: (Natural t) => t -> t -> t -> Bool
 > _test_minus_plus _ a b =
 >   (minus (plus a b) b) == Just a
@@ -183,28 +190,16 @@ And some properties. Some of these are less nice because ``minus`` returns a ``M
 > 
 > _test_minus_next_left :: (Natural t) => t -> t -> t -> Bool
 > _test_minus_next_left _ a b =
->   if leq a b
->     then
->       let Just c = minus b a in
->       (minus (next b) a) == Just (next c)
->     else True
+>   case minus b a of
+>     Just c  -> (minus (next b) a) == Just (next c)
+>     Nothing -> True
 > 
-> _test_minus_leq_left :: (Natural t) => t -> t -> t -> Bool
-> _test_minus_leq_left _ a b =
->   if leq a b
->     then
->       let Just c = minus b a in
->       leq c b
->     else True
 > 
-> _test_minus_minus :: (Natural t) => t -> t -> t -> t -> Bool
-> _test_minus_minus _ a b c =
->   if (leq c b) && (leq b a)
->     then
->       let Just h = minus b c in
->       let Just k = minus a b in
->       minus a h == Just (plus k c)
->     else True
+> _test_minus_swap :: (Natural t) => t -> t -> t -> Bool
+> _test_minus_swap _ a b =
+>   case minus b a of
+>     Just c  -> minus b c == Just a
+>     Nothing -> True
 
 And a suite:
 
@@ -214,11 +209,9 @@ And a suite:
 >   [ quickCheckWith args (_test_minus_next t)
 >   , quickCheckWith args (_test_minus_zero_left t)
 >   , quickCheckWith args (_test_minus_zero_right t)
->   , quickCheckWith args (_test_minus_leq t)
 >   , quickCheckWith args (_test_minus_plus t)
 >   , quickCheckWith args (_test_minus_next_left t)
->   , quickCheckWith args (_test_minus_leq_left t)
->   , quickCheckWith args (_test_minus_minus t)
+>   , quickCheckWith args (_test_minus_swap t)
 >   ]
 >   where
 >     args = stdArgs

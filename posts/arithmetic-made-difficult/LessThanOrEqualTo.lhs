@@ -24,7 +24,7 @@ Define $\nleq : \nats \times \nats \rightarrow \bool$ by $$\nleq(a,b) = \left\{\
 </p></div>
 </div>
 
-First a basic (but important!) lemma.
+First a basic (but important!) special case.
 
 <div class="result">
 <div class="lemma">
@@ -36,7 +36,7 @@ Let $a \in \nats$. Then we have the following.
 
 <div class="proof"><p>
 1. Note that $$\zero = \nplus(\next(a),x) = \next(\nplus(a,x))$$ has no solution, so that $\nminus(\zero,\next(a)) = \ast$. Thus $\nleq(\next(a),\zero) = \bfalse$.
-2. (@@@)
+2. Note that $\nminus(\next(\next(a)),\next(\zero)) = \nminus(\next(a),\zero)$; the conclusion follows from (1).
 </p></div>
 </div>
 
@@ -44,15 +44,11 @@ This lemma will also come in handy.
 
 <div class="result">
 <div class="lemma">
-For all $a,b \in \nats$, if $\nleq(\next(a),\next(b)) = \btrue$ then $\nleq(a,b) = \btrue$.
+For all $a,b \in \nats$ we have $\nleq(\next(a),\next(b)) = \nleq(a,b)$.
 </div>
 
 <div class="proof"><p>
-Let $$A = \{ a \in \nats \mid \forall b \in \nats,\ \mathrm{if}\ \nleq(\next(a),\next(b))\ \mathrm{then}\ \nleq(a,b) \}.$$ We show that $A = \nats$ by induction. For the base case, suppose we have $\nleq(\next(\zero),\next(b))$. Now $\nleq(\zero,b)$ is true by definition.
-
-For the inductive step, given $x \in \nats$ define $$B(x) = \{ b \in \nats \mid \mathrm{if}\ \nleq(\next(x),\next(b))\ \mathrm{then}\ \nleq(x,b) \}.$$ The inductive hypothesis is that $B(a) = \nats$, and we wish to show that $B(\next(a)) = \nats$; we show this by induction. For the base case, note that $\nleq(\next(\next(a)),\next(\zero))$ is false, so that $\zero \in B(\next(a))$ vacuously.
-
-For the inductive step, suppose we have $b \in B(\next(a))$ and assume that $$\nleq(\next(\next(a)),\next(\next(b))) = \btrue.$$ Now we must have $\next(a) \neq \next(\next(b))$, so that $a \neq \next(b)$. Moreover we have $\nleq(\next(a),\next(\next(b))) = \btrue$. By the inductive hypothesis we have $\nleq(a,\next(b))$. And because $a \neq \next(b)$, we have $\nleq(\next(a),\next(b))$ as needed. So $\next(b) \in B(\next(a))$, and thus $B(\next(a)) = \nats$, so that $\next(a) \in A$, and thus $A = \nats$ as claimed.
+Follows because $\nminus(\next(b),\next(a)) = \nminus(b,a)$.
 </p></div>
 </div>
 
@@ -64,19 +60,7 @@ Let $a,b \in \nats$. Then $\nleq(a,b) = \btrue$ if and only if there exists a $c
 </div>
 
 <div class="proof"><p>
-First we show that for all $a,b \in \nats$, if $\nleq(a,b)$ then we have $b = \nplus(a,c)$ for some $c \in \nats$. To this end, define $$A = \{ a \in \nats \mid \forall b \in \nats,\ \mathrm{if}\ \nleq(a,b)\ \mathrm{then}\ \exists c \in \nats. b = \nplus(a,c) \}.$$ We will show that $A = \nats$ by induction.
-
-For the base case, note that if $b \in \nats$ we have $\nleq(\zero,b)$ is true and $b = \nplus(\zero,b)$. So we have $\zero \in A$.
-
-For the inductive step, suppose we have $a \in A$. Now define (for any $x \in \nats$) the set $$B(x) = \{ b \in \nats \mid \mathrm{if}\ \nleq(x,b)\ \mathrm{then}\ \exists c \in \nats. b = \nplus(x,c) \}.$$ By the induction hypothesis we have $B(a) = \nats$, and if $B(\next(a)) = \nats$, then $\next(a) \in A$; we will show this by induction.
-
-For the base case note that $\nleq(\next(a),\zero)$ is false, so that $\zero \in B(\next(a))$ vacuously.
-
-For the inductive step, suppose $b \in B(\next(a))$ and that $\nleq(\next(a),\next(b))$ is true. In particular, unpacking the definition of $\nleq$ we have $a \neq \next(b)$ (since in this case $\nleq(\next(a),\next(b))$ is false) and $\nleq(a,\next(b))$ is true. Now $a \in A$, so we have $d \in \nats$ such that $\next(b) = \nplus(a,d)$. And because $a \neq \next(b)$, we also have $d = \next(c)$ for some $c \in \nats$. Now $$\next(b) = \nplus(a,\next(c)) = \nplus(\next(a),c).$$ Thus $\next(b) \in B(\next(a))$, and by induction $B(\next(a)) = \nats$, so that $\next(a) \in A$. By induction $A = \nats$ and this half of the theorem is proved.
-
-Next we show that if $b = \nplus(a,c)$ then $\nleq(a,b)$ is true; for this it suffices to show that $\nleq(a,\nplus(a,b))$ is true for all $a,b \in \nats$. We show this by induction; to this end let $$A = \{ a \in \nats \mid \forall b \in \nats, \nleq(a,\nplus(a,b)) = \btrue \}.$$ For the base case, note that if $b \in \nats$ we have $\nleq(\zero,\nplus(\zero,b)) = \nleq(\zero,b) = \btrue$; thus $\zero \in A$.
-
-For the inductive step, suppose we have $a \in A$. Note that $a \neq \nplus(\next(a),b)$, since otherwise we have $\zero = \next(b)$. Note also that $\nleq(a,\nplus(\next(a),b)) = \nleq(a,\nplus(a,\next(b))) = \btrue$ by the induction hypothesis. Thus $\nleq(\next(a),\nplus(\next(a),b))$ as needed.
+We have $\nleq(a,b) = \btrue$ if and only of $\nminus(b,a) = c \in \nats$, if and only if $b = \nplus(a,c)$.
 </p></div>
 </div>
 
@@ -92,7 +76,7 @@ We have the following.
 </div>
 
 <div class="proof"><p>
-1. We have $a = \nplus(a,\zero)$, so that $\nleq(a,a) = \btrue$.
+1. We have $a = \nplus(a,\zero)$, so that $\nminus(a,a) = \zero$, thus $\nleq(a,a) = \btrue$.
 2. Suppose $\nleq(a,b)$ and $\nleq(b,a)$; then there exist $u,v \in \nats$ such that $b = \nplus(a,u)$ and $a = \nplus(b,v)$. Now $$\begin{eqnarray*} & & \nplus(a,\zero) \\ & = & a \\ & = & \nplus(b,v) \\ & = & \nplus(\nplus(a,u),v) \\ & = & \nplus(a,\nplus(u,v)), \end{eqnarray*}$$ so that $\zero = \nplus(u,v)$, and thus $u = v = \zero$. So $b = \nplus(a,\zero) = a$ as claimed.
 3. Suppose $\nleq(a,b)$ and $\nleq(b,c)$; then there exist $u,v \in \nats$ such that $b = \nplus(a,u)$ and $c = \nplus(b,v)$. Now $$\begin{eqnarray*} & & c \\ & = & \nplus(b,v) \\ & = & \nplus(\nplus(a,u),v) \\ & = & \nplus(a,\nplus(u,v)) \end{eqnarray*}$$ as needed.
 </p></div>
@@ -109,9 +93,15 @@ The following hold.
 </div>
 
 <div class="proof"><p>
-1. We proceed by induction on $c$. For the base case, note that $$\nleq(\nplus(a,\zero),\nplus(b,\zero)) = \nleq(a,b)$$ as needed. For the inductive step, suppose the result holds for some $c$. Now $$\begin{eqnarray*} & & \nleq(\nplus(a,\next(c)),\nplus(b,\next(c))) \\ & = & \nleq(\nplus(\next(a),c),\nplus(\next(b),c)) \\ & = & \nleq(\next(a),\next(b)) \\ & = & \nleq(a,b) \end{eqnarray*}$$ as needed.
-
-2. We have $$\btrue = \nleq(a,b) = \nleq(\nplus(a,c),\nplus(b,c))$$ and $$\begin{eqnarray*} & & \btrue \\ & = & \nleq(c,d) \\ & = & \nleq(\nplus(c,b),\nplus(d,b)) \\ & = & \nleq(\nplus(b,c),\nplus(d,b)). \end{eqnarray*}$$ The result holds by transitivity.
+1. We proceed by induction on $c$. For the base case, note that $$\nleq(\nplus(a,\zero),\nplus(b,\zero)) = \nleq(a,b)$$ as needed. For the inductive step, suppose the result holds for some $c$. Now
+$$\begin{eqnarray*}
+ &   & \nleq(\nplus(a,\next(c)),\nplus(b,\next(c))) \\
+ & = & \nleq(\nplus(\next(a),c),\nplus(\next(b),c)) \\
+ & = & \nleq(\next(a),\next(b)) \\
+ & = & \nleq(a,b)
+\end{eqnarray*}$$
+as needed.
+2. We have $$\btrue = \nleq(a,b) = \nleq(\nplus(a,c),\nplus(b,c))$$ and $$\begin{eqnarray*} & & \btrue \\ & = & \nleq(c,d) \\ & = & \nleq(\nplus(c,b),\nplus(d,b)) \\ & = & \nleq(\nplus(b,c),\nplus(b,d)). \end{eqnarray*}$$ The result holds by transitivity.
 </p></div>
 </div>
 
@@ -123,11 +113,15 @@ The following hold for all $a,b \in \nats$.
 
 1. If $\nleq(a,b)$ is false, then $\nleq(b,a)$ is true.
 2. Precisely one of the following is true: (i) $a = b$, (ii) $a \neq b$ and $\nleq(a,b)$, and (iii) $a \neq b$ and $\nleq(b,a)$.
+3. Let $a,b \in \nats$. If $\nleq(a,\next(b))$, then either $\nleq(a,b)$ or $a = \next(b)$.
+4. Let $a,b \in \nats$. If $\nleq(b,a)$ and $\nleq(a,\next(b))$, then either $a = b$ or $a = \next(b)$.
 </div>
 
 <div class="proof"><p>
-1. We proceed by induction on $a$. In the base case, the hypothesis $\nleq(\zero,b) = \bfalse$ is not true for any $b \in \nats$, so the implication holds vacuously. For the inductive step suppose the implication holds for some $a$. Suppose further that $\nleq(\next(a),b)$ is false. There are two possibilities: if $a = b$, then $\nleq(b,a)$ is true. If $a \neq b$, then we must have that $\nleq(a,b)$ is false; by the induction hypothesis, $\nleq(b,a)$ is true. Since $\nleq(\zero,\next(\zero))$, we have $\nleq(b,\next(a))$ as needed.
+1. If $\nleq(a,b)$ is false, we have $\nminus(b,a) = \ast$. Now $\nminus(a,b) \in \nats$, so that $\nminus(b,a)$ is true.
 2. If $a \neq b$ and $\nleq(a,b)$ is false, then $\nleq(b,a)$ is true.
+3. Say $\next(b) = \nplus(a,c)$. If $c = \zero$, we have $a = \next(b)$. If $c = \next(d)$, we have $$\next(b) = \nplus(a,\next(d)) = \next(\nplus(a,d))$$ so that $b = \nplus(a,d)$ and thus $\nleq(a,b)$.
+4. Use antisymmetry.
 </p></div>
 </div>
 
@@ -142,32 +136,26 @@ The following hold.
 </div>
 
 <div class="proof"><p>
-1. We proceed by induction on $c$. For the base case, note that $$\nleq(\ntimes(a,\next(\zero)),\ntimes(b,\next(\zero))) = \nleq(a,b).$$ For the inductive step, suppose the result holds for some $c$. We consider three possibilities. First suppose $a = b$; in this case we have $\nleq(a,b) = \btrue$ and $$\ntimes(a,\next(\next(c))) = \ntimes(a,\next(\next(c))),$$ so the conclusion holds. Next, suppose $a \neq b$ and $\nleq(a,b) = \btrue$. By the inductive hypothesis we have $$\nleq(\ntimes(a,\next(c)),\nplus(b,\next(c))) = \btrue,$$ and so $$\begin{eqnarray*} & & \btrue \\ & = & \nleq(\nplus(\ntimes(a,\next(c)),a),\nplus(\ntimes(b,\next(c)),b)) \\ & = & \nleq(\ntimes(a,\next(\next(c))),\ntimes(b,\next(\next(c)))) \end{eqnarray*}$$ as needed. Finally, suppose $a \neq b$ and $\nleq(a,b)$ is false. Then $\nleq(b,a)$ is true, and by the prior argument we have $$\nleq(b,a) = \nleq(\ntimes(a,\next(\next(c))),\ntimes(b,\next(\next(c)))).$$ Note that $$\ntimes(a,\next(\next(c))) \neq \ntimes(b,\next(\next(c)))$$ (since $a \neq b$). So we have $$\nleq(\ntimes(a,\next(\next(c))),\nplus(b,\next(\next(c))))$$ as needed.
-2. There are two possibilities for $c$. If $c = \zero$, then we have $$\begin{eqnarray*} & & \nleq(\ntimes(a,c),\ntimes(b,d)) \\ & = & \nleq(\zero,\ntimes(b,d)) \\ & = & \btrue \end{eqnarray*}.$$ Suppose instead that $c = \next(u)$. Now there are two possibilities for $b$. If $b = \zero$, then in fact $a = \zero$, and we have $$\begin{eqnarray*} & & \nleq(\ntimes(a,c),\ntimes(b,d)) \\ & = & \nleq(\zero,\zero) \\ & = & \btrue \end{eqnarray*}$$ as needed. Suppose then that $b = \next(v)$. Now we have $$\begin{eqnarray*} & & \btrue \\ & = & \nleq(\ntimes(a,\next(u)),\ntimes(b,\next(u)) \\ & = & \nleq(\ntimes(a,c),\ntimes(b,c)) \end{eqnarray*}$$ and $$\begin{eqnarray*} & & \btrue \\ & = & \nleq(\ntimes(c,\next(v)),\ntimes(d,\next(v))) \\ & = & \nleq(\ntimes(b,c),\ntimes(b,d)). \end{eqnarray*}$$ The conclusion holds by transitivity.
-</p></div>
-</div>
-
-We can perform case analysis using $\nleq$:
-
-<div class="result">
-<div class="thm">
-Let $a,b \in \nats$. If $\nleq(a,\next(b))$, then either $\nleq(a,b)$ or $a = \next(b)$.
-</div>
-
-<div class="proof"><p>
-Say $\next(b) = \nplus(a,c)$. If $c = \zero$, we have $a = \next(b)$. If $c = \next(d)$, we have $$\next(b) = \nplus(a,\next(d)) = \next(\nplus(a,d))$$ so that $b = \nplus(a,d)$ and thus $\nleq(a,b)$.
-</p></div>
-</div>
-
-And a quick but handy corollary:
-
-<div class="result">
-<div class="corollary">
-Let $a,b \in \nats$. If $\nleq(b,a)$ and $\nleq(a,\next(b))$, then either $a = b$ or $a = \next(b)$.
-</div>
-
-<div class="proof"><p>
-Use antisymmetry.
+1. We proceed by induction on $c$. For the base case, note that $$\nleq(\ntimes(a,\next(\zero)),\ntimes(b,\next(\zero))) = \nleq(a,b).$$ For the inductive step, suppose the result holds for some $c$. We consider three possibilities. First suppose $a = b$; in this case we have $\nleq(a,b) = \btrue$ and $$\ntimes(a,\next(\next(c))) = \ntimes(b,\next(\next(c))),$$ so the conclusion holds. Next, suppose $a \neq b$ and $\nleq(a,b) = \btrue$. By the inductive hypothesis we have $$\nleq(\ntimes(a,\next(c)),\nplus(b,\next(c))) = \btrue,$$ and so
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \nleq(\nplus(\ntimes(a,\next(c)),a),\nplus(\ntimes(b,\next(c)),b)) \\
+ & = & \nleq(\ntimes(a,\next(\next(c))),\ntimes(b,\next(\next(c))))
+\end{eqnarray*}$$
+as needed. Finally, suppose $a \neq b$ and $\nleq(a,b)$ is false. Then $\nleq(b,a)$ is true, and by the prior argument we have $$\nleq(b,a) = \nleq(\ntimes(a,\next(\next(c))),\ntimes(b,\next(\next(c)))).$$ Note that $$\ntimes(a,\next(\next(c))) \neq \ntimes(b,\next(\next(c)))$$ (since $a \neq b$). So we have $$\nleq(\ntimes(a,\next(\next(c))),\nplus(b,\next(\next(c))))$$ as needed.
+2. There are two possibilities for $c$. If $c = \zero$, then we have $$\begin{eqnarray*} & & \nleq(\ntimes(a,c),\ntimes(b,d)) \\ & = & \nleq(\zero,\ntimes(b,d)) \\ & = & \btrue \end{eqnarray*}.$$ Suppose instead that $c = \next(u)$. Now there are two possibilities for $b$. If $b = \zero$, then in fact $a = \zero$, and we have $$\begin{eqnarray*} & & \nleq(\ntimes(a,c),\ntimes(b,d)) \\ & = & \nleq(\zero,\zero) \\ & = & \btrue \end{eqnarray*}$$ as needed. Suppose then that $b = \next(v)$. Now we have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \nleq(\ntimes(a,\next(u)),\ntimes(b,\next(u)) \\
+ & = & \nleq(\ntimes(a,c),\ntimes(b,c))
+\end{eqnarray*}$$
+and
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \nleq(\ntimes(c,\next(v)),\ntimes(d,\next(v))) \\
+ & = & \nleq(\ntimes(b,c),\ntimes(b,d)).
+\end{eqnarray*}$$
+The conclusion holds by transitivity.
 </p></div>
 </div>
 
@@ -180,10 +168,9 @@ Implementation and Testing
 Here's ``leq``:
 
 > leq :: (Natural t) => t -> t -> Bool
-> leq = simpleRec phi mu
->   where
->     phi _ = True
->     mu a b k = if a == b then False else k
+> leq a b = case minus b a of
+>   Nothing -> False
+>   Just _  -> True
 
 And some property tests:
 

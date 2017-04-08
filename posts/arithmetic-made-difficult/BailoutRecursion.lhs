@@ -173,6 +173,6 @@ Also note that simple recursion and bailout recursion were carefully chosen to h
 
 Arbitrary recursion is dangerous because in general, every time one function uses another we have to keep track of what remains to be done afterward -- if we aren't careful, it is very easy to write recursive functions which eat up lots of memory. Even simple recursion can blow up exponentially; the classic example is the Fibonacci numbers (which we'll see later).
 
-In contrast, a *tail recursive* function by definition doesn't have to keep track of what remains to be done after the recursion. Our recursion operators, $\natrec{\ast}{\ast}$, $\simprec{\ast}{\ast}$, and $\bailrec{\ast}{\ast}{\ats}{\ast}$, are carefully chosen so that they have tail recursive implementations.
+In contrast, a *tail recursive* function by definition doesn't have to keep track of what remains to be done after the recursion. Our recursion operators, $\natrec{\ast}{\ast}$, $\simprec{\ast}{\ast}$, and $\bailrec{\ast}{\ast}{\ast}{\ast}$, are carefully chosen so that they have tail recursive implementations.
 
 By the way, I think it's helpful to compare the difference between arbitrary recursion and recursion operators to the difference between arbitrary ``GOTO``s and structured loops. In both cases we have a simple but dangerous primitive operation that is hidden behind a safer and more meaningful interface. A ``for`` loop means "repeat this some number of times"; while the meaning of simple recursion is given by its universal property.

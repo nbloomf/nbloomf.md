@@ -8,7 +8,7 @@ With a few edits, it is possible to turn your simulation into a video. I found t
 
 Here is an example:
 
-<video width="640" height="480" controls>
+<video width="640" height="480" controls loop>
   <source src="/raw/parp/hw2/test-05.mp4" type="video/mp4">
 Your browser does not support the video tag.
 </video> 
