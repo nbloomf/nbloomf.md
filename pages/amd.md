@@ -19,10 +19,11 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Really Simple Equations](/posts/arithmetic-made-difficult/really-simple-equations.html)
     * [Subtraction](/posts/arithmetic-made-difficult/Minus.html)
     * [Less Than or Equal To](/posts/arithmetic-made-difficult/LessThanOrEqualTo.html)
+    * [Strong Induction](/posts/arithmetic-made-difficult/strong-induction.html)
     * [Max and Min](/posts/arithmetic-made-difficult/MaxAndMin.html)
     * [The Division Algorithm](/posts/arithmetic-made-difficult/DivisionAlgorithm.html)
     * [Divides](/posts/arithmetic-made-difficult/Divides.html)
-    * GCD and LCM
+    * [Greatest Common Divisor](/posts/arithmetic-made-difficult/GreatestCommonDivisor.html)
     * Primes
     * Exponentiation
 3. Finite Lists
