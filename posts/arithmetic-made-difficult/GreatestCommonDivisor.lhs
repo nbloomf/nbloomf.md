@@ -78,15 +78,122 @@ as needed.
 </p></div>
 </div>
 
-Next, we need a technical lemma.
+Next, we need a couple of technical lemmas. First one about remainders:
 
 <div class="result">
 <div class="lemma">
-(@@@)
+Let $a,b \in \nats$ with $\nleq(b,a)$, and suppose $b = \next(m)$. Then we have $$\nleq(\nplus(\nplus(b,\nrem(a,b))),\nplus(a,m)).$$
 </div>
 
 <div class="proof"><p>
-(@@@)
+Say $a = \nplus(b,k)$. There are two possibilities for $k$; either $k = \zero$ or $k = \next(u)$ for some $u$. Suppose first that $k = \zero$. In this case we have $\nrem(a,b) = \zero$, so that $b = \nplus(b,\nrem(a,b))$ and $\nplus(b,m) = \nplus(a,b)$. Thus $$\nleq(b,\nplus(a,m))$$ as claimed.
+
+Suppose instead that $k = \next(u)$. By the division algorithm, we have $b = \nplus(\nrem(a,b),h)$ for some $h$. Now
+$$\begin{eqnarray*}
+ &   & \nplus(a,m) \\
+ & = & \nplus(\nplus(b,k),m) \\
+ & = & \nplus(\nplus(b,\next(u)),m) \\
+ & = & \nplus(\nplus(b,u),\next(m)) \\
+ & = & \nplus(\nplus(b,u),b) \\
+ & = & \nplus(\nplus(b,u),\nplus(\nrem(a,b),h)) \\
+ & = & \nplus(\nplus(b,\nrem(a,b)),\nplus(u,h)).
+\end{eqnarray*}$$
+In particular, we have $$\nleq(\nplus(b,\nrem(a,b)),\nplus(a,m))$$ as claimed.
+</p></div>
+</div>
+
+Now a technical lemma about the guts of $\ngcd$:
+
+<div class="result">
+<div class="lemma">
+Let $a,b \in \nats$ with $\nleq(b,a)$. Then for all $c \in \nats$, we have $$\Theta(\nplus(\nplus(a,b),c),(a,b)) = \Theta(\nplus(a,b),(a,b)).$$
+</div>
+
+<div class="proof"><p>
+Let $A = \{(a,b) \in \nats \times \nats \mid \nleq(b,a)\}$, and define $B \subseteq A$ by $$B = \{(a,b) \in A \mid \forall c \in \nats, \Theta(\nplus(\nplus(a,b),c),(a,b)) = \Theta(\nplus(a,b),(a,b))\}.$$ Now define $f : A \rightarrow \nats$ by $f(a,b) = b$. We will show that $B = A$ by strong induction on $f$.
+
+For the base case, suppose we have $(a,b) \in A$ such that $\zero = f(a,b) = b$. Note first that $$\Theta(\nplus(a,b),(a,b)) = \ngcd(a,b) = a.$$ Now there are two possibilities for $\nplus(\nplus(a,b),c)$. If $\nplus(\nplus(a,b),c) = \zero$, then we have $a = c = \zero$. In this case we have $$\Theta(\nplus(\nplus(a,b),c),(a,b)) = \Theta(\zero,(a,b)) = b = \zero = a$$ as claimed. If instead we have $\nplus(\nplus(a,b),c) = \next(d)$ for some $d$, then we have
+$$\begin{eqnarray*}
+ &   & \Theta(\nplus(\nplus(a,b),c),(a,b)) \\
+ & = & \Theta(\next(d),(a,b)) \\
+ & = & \psi(d,(a,b)) \\
+ & = & a
+\end{eqnarray*}$$
+(since $b = \zero$) as claimed. In either case, we have $(a,b) \in B$.
+
+Now for the inductive step, suppose we have $n \in \nats$ such that $k \in B$ whenever $\nleq(k,n)$. Suppose now that $(a,b) \in A$ such that $b = f(a,b) = \next(n)$. We consider two cases: either $n = \zero$ or $n = \next(m)$ for some $m$.
+
+Suppose $n = \zero$; then $b = \next(\zero)$. In this case we have $\nplus(a,b) = \next(d)$ for some $d$ and $\nplus(\nplus(a,b),c) = \next(e)$ for some $e$. Now
+$$\begin{eqnarray*}
+ &   & \Theta(\nplus(a,b),(a,b)) \\
+ & = & \Theta(\next(d),(a,b)) \\
+ & = & \psi(d,(a,b)) \\
+ & = & \next(\zero) \\
+ & = & \psi(e,(a,b)) \\
+ & = & \Theta(\next(e),(a,b)) \\
+ & = & \Theta(\nplus(\nplus(a,b),c),(a,b))
+\end{eqnarray*}$$
+as claimed.
+
+Suppose instead that $n = \next(m)$. By the previous lemma, note that $$\nleq(\nplus(b,\nrem(a,b)),\nplus(a,n)),$$ and thus we have $$\nplus(a,n) = \nplus(\nplus(b,\nrem(a,b)),u)$$ for some $u$. Note also that $\nleq(\nrem(a,b),n)$ by the division algorithm; in particular, we have $(b,\nrem(a,b)) \in B$ by the induction hypothesis. Now we have
+$$\begin{eqnarray*}
+ &   & \Theta(\nplus(a,b),(a,b)) \\
+ & = & \Theta(\next(\nplus(a,n)),(a,b)) \\
+ & = & \Theta(\nplus(a,n),(b,\nrem(a,b))) \\
+ & = & \Theta(\nplus(\nplus(b,\nrem(a,b)),u),(b,\nrem(a,b)) \\
+ & = & \Theta(\nplus(b,\nrem(a,b)),(b,\nrem(a,b)) \\
+ & = & \Theta(\nplus(\nplus(b,\nrem(a,b)),\nplus(u,c)),(b,\nrem(a,b))) \\
+ & = & \Theta(\nplus(\nplus(a,n),c),(b,\nrem(a,b))) \\
+ & = & \Theta(\nplus(\nplus(a,b),c),(a,b))
+\end{eqnarray*}$$
+as claimed. Thus $(a,b) \in B$, and by strong induction we have $B = A$.
+</p></div>
+</div>
+
+And a corollary:
+
+<div class="result">
+<div class="corollary">
+Let $a,b \in \nats$. Then $\ngcd(a,b) = \ngcd(b,\nrem(a,b))$.
+</div>
+
+<div class="proof"><p>
+Suppose first that $\nleq(b,a)$. We consider three possibilities for $b$: either $b = \zero$, $b = \next(\zero)$, or $b = \next(\next(m))$ for some $m$.
+
+If $b = \zero$, then we have $\nrem(a,b) = a$. In this case $$\ngcd(a,b) = \ngcd(b,a) = \ngcd(b,\nrem(a,b))$$ as claimed.
+
+If $b = \next(\zero)$, then we have $\nrem(a,b) = \zero$ and $\nplus(a,b) = \next(d)$ for some $d$. Now
+$$\begin{eqnarray*}
+ &   & \ngcd(a,b) \\
+ & = & \Theta(\nplus(a,b),(a,b)) \\
+ & = & \Theta(\next(d),(a,b)) \\
+ & = & \psi(d,(a,b)) \\
+ & = & \next(\zero) \\
+ & = & b \\
+ & = & \ngcd(b,\zero) \\
+ & = & \ngcd(b,\nrem(a,b))
+\end{eqnarray*}$$
+as claimed.
+
+Finally, suppose $b = \next(\next(m))$. Again we have $$\nplus(a,\next(m)) = \nplus(\nplus(b,\nrem(a,b)),u)$$ for some $u$. Now
+$$\begin{eqnarray*}
+ &   & \ngcd(a,b) \\
+ & = & \Theta(\nplus(a,b),(a,b)) \\
+ & = & \Theta(\next(\nplus(a,\next(m))),(a,b)) \\
+ & = & \Theta(\nplus(a,\next(m)),(b,\nrem(a,b))) \\
+ & = & \Theta(\nplus(\nplus(b,\nrem(a,b)),u),(b,\nrem(a,b))) \\
+ & = & \Theta(\nplus(b,\nrem(a,b)),(b,\nrem(a,b))) \\
+ & = & \ngcd(b,\nrem(a,b))
+\end{eqnarray*}$$
+as claimed.
+
+Suppose instead that $\nleq(b,a)$ is false; then $\nleq(a,b)$ is true and $a \neq b$. In particular $b \neq \zero$; say $b = \next(m)$. In this case $\nrem(b,a) = a$. So we have
+$$\begin{eqnarray*}
+ &   & \ngcd(a,b) \\
+ & = & \ngcd(b,a) \\
+ & = & \ngcd(b,\nrem(a,b)) \\
+\end{eqnarray*}$$
+as claimed.
 </p></div>
 </div>
 

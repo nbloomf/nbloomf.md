@@ -97,11 +97,15 @@ The last two theorems say that the output of $\ndivalg(a,b)$ is the unique solut
 
 <div class="result">
 <div class="thm">
-Let $a \in \nats$. Then $\ndiv(a,\zero) = (\zero,a)$.
+If $a \in \nats$ we have the following.
+
+1. $\ndiv(a,\zero) = (\zero,a)$.
+2. $\ndiv(a,\next(\zero)) = (a,\zero)$.
+3. If $\nleq(a,b)$, then $\ndiv(a,\next(b)) = (\zero,a)$.
 </div>
 
 <div class="proof"><p>
-We proceed by induction on $a$. For the base case $a = \zero$, note that
+1. We proceed by induction on $a$. For the base case $a = \zero$, note that
 $$\begin{eqnarray*}
  &   & \ndivalg(\zero, \zero) \\
  & = & \varphi(\zero) \\
@@ -115,6 +119,8 @@ $$\begin{eqnarray*}
  & = & (\zero, \next(a))
 \end{eqnarray*}$$
 as needed.
+2. Note that $a = \nplus(\ntimes(a,\next(\zero)),\zero)$ and $\nleq(\zero,\zero)$. By the uniqueness of quotients and remainders for nonzero divisors, we have $\ndiv(a,\next(\zero)) = (a,\zero)$ as claimed.
+3. Note that $a = \nplus(\ntimes(\zero,\next(b)),a)$ and $\nleq(a,b)$. By the uniqueness of quotients and remainders for positive divisors we have $\ndiv(a,\next(b)) = (\zero,a)$.
 </p></div>
 </div>
 

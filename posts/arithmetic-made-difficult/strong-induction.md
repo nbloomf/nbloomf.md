@@ -34,6 +34,29 @@ Note that condition (2) in the Strong Induction theorem appears to be much stron
 
 <div class="result">
 <div class="thm">
+(Strong Induction on $f$.) Suppose we have a map $f : A \rightarrow \nats$ and a subset $B \subseteq A$ satisfying the following.
+
+1. If $f(a) = \zero$, then $a \in B$.
+2. If we have $n \in \nats$ such that if $f(a) = k$ with $\nleq(k,n)$ then $a \in B$, then if $f(a) = \next(n)$ then $a \in B$.
+
+Then we have $B = A$.
+</div>
+
+<div class="proof"><p>
+Let $B$ be such a subset. We define $T \subseteq \nats$ by $$T = \{n \in \nats \mid \forall a \in A, \mathrm{if}\ f(a) = n\ \mathrm{then}\ a \in B\}.$$ We will show that $T = \nats$ by strong induction.
+
+For the base case, suppose $f(a) = \zero$. By condition (1) we have $a \in B$. Thus $\zero \in T$.
+
+For the inductive step, suppose we have $n \in \nats$ such that $k \in T$ whenever $\nleq(k,n)$. Now suppose we have $a \in A$ such that $f(a) = \next(n)$. By condition (2) we have $a \in B$ as needed.
+
+So $T = \nats$, and thus if $a \in A$, we have $f(a) = n$ for some $n \in \nats$, and thus $a \in B$.
+</p></div>
+</div>
+
+Again, when using this principle we will say we're using "strong induction *on* $f(a)$".
+
+<div class="result">
+<div class="thm">
 (Well-Ordering Property.) Let $A$ be a nonempty set and $f : A \rightarrow \nats$. Then there exists $a \in A$ such that $\nleq(f(a),f(b))$ for all $b \in A$.
 </div>
 

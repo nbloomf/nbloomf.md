@@ -83,7 +83,12 @@ We will eventually show that these natural numbers satisfy the more traditional 
 
 <div class="result">
 <div class="thm">
-(Induction Principle.) Suppose $f : \nats \rightarrow A$ is a map and that $B \subseteq A$ is a subset such that $f(\zero) \in B$ and whenever $f(n) \in B$, we also have $f(\next(n)) \in B$. Then in fact $f(n) \in B$ for all natural numbers $n$.
+(Induction Principle.) Suppose $f : \nats \rightarrow A$ is a map and that $B \subseteq A$ is a subset satisfying the following.
+
+1. $f(\zero) \in B$
+2. Whenever $f(n) \in B$, we also have $f(\next(n)) \in B$.
+
+Then we have $f(n) \in B$ for all natural numbers $n$.
 </div>
 
 <div class="proof">
@@ -96,6 +101,29 @@ The composite map $\iota \circ \Theta : \nats \rightarrow \nats$ is again an ite
 </div>
 
 The traditional induction principle follows as a corollary where $A = \nats$ and $\varphi$ is the inclusion map.
+
+<div class="result">
+<div class="thm">
+(Induction on $f$.) Let $f : A \rightarrow \nats$ be a map. Suppose $B \subseteq A$ is a set satisfying the following.
+
+1. If $f(a) = \zero$, then $a \in B$.
+2. If we have $n \in \nats$ such that if $f(a) = n$, then $a \in B$, then if $f(a) = \next(n)$, then $a \in B$.
+
+Then we have $B = A$.
+</div>
+
+<div class="proof">
+Suppose $B \subseteq A$ satisfies these properties, and define $T \subseteq \nats$ by $$T = \{n \in \nats \mid \forall a \in A, \mathrm{if}\ f(a) = n\ \mathrm{then} a \in B \}.$$ We will show that $T = \nats$ by induction.
+
+For the base case, suppose we have $a \in A$ such that $f(a) = \zero$. By condition (1) we have $a \in B$; so $\zero \in T$ as needed.
+
+For the inductive step, suppose we have $n \in T$. That is, if $f(a) = n$, then $a \in B$. Now let $a \in A$, and suppose $f(a) = \next(n)$. By condition (2), we have $a \in B$; so we have $\next(n) \in T$.
+
+Thus by induction $T = \nats$. Now if $a \in A$, we have $f(a) = n$ for some $n \in \nats$, and thus $a \in B$.
+</div>
+</div>
+
+This result says that if we can map a set $A$ to the natural numbers, we can recover a version of the induction principle. This induction doesn't necessarily reflect any structure that may exist on $A$, but at times it can be useful anyway. When using this theorem, we will say we are inducting "on $f(a)$". The function $f$ acts like a measurement of "size" in some sense; and if all the elements of $A$ have "finite size" (whatever that means) we can induct. Whenever we see things like *finite dimension*, *finitely generated*, *finite length*, et cetera, odds are good the reason why is so we can invoke this induction principle.
 
 
 But Why?
