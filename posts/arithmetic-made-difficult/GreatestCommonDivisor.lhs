@@ -9,14 +9,13 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( gcd, lcm, _test_gcd_lcm
 >   ) where
 >
-> import Prelude hiding (max, min, div, rem, gcd, lcm)
+> import Prelude hiding (div, rem, gcd, lcm)
 >
 > import NaturalNumbers
 > import Plus
 > import Times
 > import Minus
 > import LessThanOrEqualTo
-> import MaxAndMin
 > import DivisionAlgorithm
 > import Divides
 > 
@@ -28,38 +27,24 @@ We'll do this using bailout recursion. This definition will be trickier to work 
 
 <div class="result">
 <div class="defn"><p>
-Define maps $\varphi : \nats \times \nats \rightarrow \nats$ by $$\varphi(a,b) = b,$$ then $\beta : \nats \times (\nats \times \nats) \rightarrow \bool$ by $$\beta(k,(a,b)) = \nleq(b,\next(\zero)),$$ then $\psi : \nats \times (\nats \times \nats) \rightarrow \nats$ by $$\psi(k,(a,b)) = \left\{\begin{array}{ll} a & \mathrm{if}\ b = \zero \\ \next(\zero) & \mathrm{otherwise}, \end{array}\right.$$ and $\omega : \nats \times (\nats \times \nats) \rightarrow \nats \times \nats$ by $$\omega(k,(a,b)) = (b, \nrem(a,b)).$$ We then define a map $\ngcd : \nats \times \nats \rightarrow \nats$ by $$\ngcd(a,b) = \bailrec{\varphi}{\beta}{\psi}{\omega}(\nplus(a,b))(\nmax(a,b),\nmin(a,b)).$$
+Define maps $\varphi : \nats \times \nats \rightarrow \nats$ by $$\varphi(a,b) = b,$$ then $\beta : \nats \times (\nats \times \nats) \rightarrow \bool$ by $$\beta(k,(a,b)) = \nleq(b,\next(\zero)),$$ then $\psi : \nats \times (\nats \times \nats) \rightarrow \nats$ by $$\psi(k,(a,b)) = \left\{\begin{array}{ll} a & \mathrm{if}\ b = \zero \\ \next(\zero) & \mathrm{otherwise}, \end{array}\right.$$ and $\omega : \nats \times (\nats \times \nats) \rightarrow \nats \times \nats$ by $$\omega(k,(a,b)) = (b, \nrem(a,b)).$$ We then define a map $\ngcd : \nats \times \nats \rightarrow \nats$ by $$\ngcd(a,b) = \bailrec{\varphi}{\beta}{\psi}{\omega}(\nplus(a,b))(a,b).$$
 </p></div>
 </div>
 
-For brevity's sake, we let $\Theta = \bailrec{\varphi}{\beta}{\psi}{\omega}$ for the rest of this post. Now the definition of $\ngcd$ makes commutativity immediate.
+For brevity's sake, we let $\Theta = \bailrec{\varphi}{\beta}{\psi}{\omega}$ for the rest of this post. Now for a special case.
 
 <div class="result">
 <div class="lemma">
-For all $a,b \in \nats$, we have $\ngcd(a,b) = \ngcd(b,a)$.
+For all $a \in \nats$ we have the following.
+
+1. $\ngcd(a,\zero) = a$.
+2. $\ngcd(\zero,a) = a$.
+3. $\ngcd(a,\next(\zero)) = \next(\zero)$.
+4. $\ngcd(\next(\zero),a) = \next(\zero)$.
 </div>
 
 <div class="proof"><p>
-Note that
-$$\begin{eqnarray*}
- &   & \ngcd(a,b) \\
- & = & \bailrec{\varphi}{\beta}{\psi}{\omega}(\nplus(a,b),(\nmax(a,b),\nmin(a,b)) \\
- & = & \bailrec{\varphi}{\beta}{\psi}{\omega}(\nplus(b,a),(\nmax(b,a),\nmin(b,a)) \\
- & = & \ngcd(b,a)
-\end{eqnarray*}$$
-as claimed.
-</p></div>
-</div>
-
-And now a special case.
-
-<div class="result">
-<div class="lemma">
-For all $a \in \nats$, we have $\ngcd(a,\zero) = \ngcd(\zero,a) = a$.
-</div>
-
-<div class="proof"><p>
-It suffices to show that $\ngcd(a,\zero) = a$. If $a = \zero$, note that
+1. If $a = \zero$, note that
 $$\begin{eqnarray*}
  &   & \ngcd(\zero,\zero) \\
  & = & \Theta(\zero,(\zero,\zero)) \\
@@ -75,6 +60,49 @@ $$\begin{eqnarray*}
  & = & a
 \end{eqnarray*}$$
 as needed.
+2. We consider three cases: $a = \zero$, $a = \next(\zero)$, and $a = \next(\next(m))$. If $a = \zero$ we have $$\ngcd(\zero,a) = \ngcd(\zero,\zero) = \zero = a$$ as claimed. If $a = \next(\zero)$ we have
+$$\begin{eqnarray*}
+ &   & \ngcd(\zero,a) \\
+ & = & \Theta(\nplus(\zero,a),(\zero,a)) \\
+ & = & \Theta(\next(\zero),(\zero,a)) \\
+ & = & \psi(\zero,(\zero,a)) \\
+ & = & \next(\zero) \\
+ & = & a
+\end{eqnarray*}$$
+as claimed. Finally, if $a = \next(\next(m))$ we have
+$$\begin{eqnarray*}
+ &   & \ngcd(\zero,a) \\
+ & = & \Theta(\nplus(\zero,a),(\zero,a)) \\
+ & = & \Theta(\next(\next(m)),(\zero,a)) \\
+ & = & \Theta(\next(m),\omega(\zero,a)) \\
+ & = & \Theta(\next(m),(a,\zero)) \\
+ & = & \psi(m,(a,\zero)) \\
+ & = & a
+\end{eqnarray*}$$
+as claimed.
+3. Note that
+$$\begin{eqnarray*}
+ &   & \ngcd(a,\next(\zero)) \\
+ & = & \Theta(\next(a),(a,\next(\zero)) \\
+ & = & \psi(a,(a,\next(\zero))) \\
+ & = & \next(\zero)
+\end{eqnarray*}$$
+as claimed.
+4. We consider three cases. If $a = \zero$, then $\ngcd(a,\next(\zero)) = \next(\zero) by (2). If $a = \next(\zero)$, then we have
+$$\begin{eqnarray*}
+ &   & \ngcd(\next(\zero),a) \\
+ & = & \Theta(\next(\next(\zero)),(\next(\zero),a) \\
+ & = & \psi(\next(\zero),(\next(\zero),a)) \\
+ & = & \next(\zero)
+\end{eqnarray*}$$
+as claimed. And if $a = \next(\next(b))$, then we have
+$$\begin{eqnarray*}
+ &   & \ngcd(\next(\zero),a) \\
+ & = & \Theta(\next(\next(b)),(\next(\zero),a) \\
+ & = & \Theta(\next(b),(a,\next(\zero))) \\
+ & = & \psi(b,(a,\next(\zero))) \\
+ & = & \next(\zero)
+\end{eqnarray*}$$
 </p></div>
 </div>
 
@@ -82,7 +110,7 @@ Next, we need a couple of technical lemmas. First one about remainders:
 
 <div class="result">
 <div class="lemma">
-Let $a,b \in \nats$ with $\nleq(b,a)$, and suppose $b = \next(m)$. Then we have $$\nleq(\nplus(\nplus(b,\nrem(a,b))),\nplus(a,m)).$$
+Let $a,b \in \nats$ with $\nleq(b,a)$, and suppose $b = \next(m)$. Then we have $$\nleq(\nplus(b,\nrem(a,b)),\nplus(a,m)).$$
 </div>
 
 <div class="proof"><p>
@@ -154,11 +182,11 @@ And a corollary:
 
 <div class="result">
 <div class="corollary">
-Let $a,b \in \nats$. Then $\ngcd(a,b) = \ngcd(b,\nrem(a,b))$.
+Let $a,b \in \nats$ such that $\nleq(b,a)$. Then $$\ngcd(a,b) = \ngcd(b,\nrem(a,b)).$$
 </div>
 
 <div class="proof"><p>
-Suppose first that $\nleq(b,a)$. We consider three possibilities for $b$: either $b = \zero$, $b = \next(\zero)$, or $b = \next(\next(m))$ for some $m$.
+We consider three possibilities for $b$: either $b = \zero$, $b = \next(\zero)$, or $b = \next(\next(m))$ for some $m$.
 
 If $b = \zero$, then we have $\nrem(a,b) = a$. In this case $$\ngcd(a,b) = \ngcd(b,a) = \ngcd(b,\nrem(a,b))$$ as claimed.
 
@@ -186,14 +214,154 @@ $$\begin{eqnarray*}
  & = & \ngcd(b,\nrem(a,b))
 \end{eqnarray*}$$
 as claimed.
+</p></div>
+</div>
 
-Suppose instead that $\nleq(b,a)$ is false; then $\nleq(a,b)$ is true and $a \neq b$. In particular $b \neq \zero$; say $b = \next(m)$. In this case $\nrem(b,a) = a$. So we have
+One more technical lemma.
+
+<div class="result">
+<div class="lemma">
+Let $a,b,m \in \nats$ such that $\nleq(b,a)$, $a \neq b$, and $\nplus(a,b) = \next(\next(m))$. Then we have $$\Theta(\next(m),(a,b)) = \Theta(\next(\next(m)),(a,b)).$$
+</div>
+
+<div class="proof"><p>
+We proceed by strong induction on $b$. For the base case $b = \zero$, note that
+$$\begin{eqnarray*}
+ &   & \Theta(\next(m),(a,b)) \\
+ & = & \psi(m,(a,b)) \\
+ & = & a \\
+ & = & \psi(\next(m),(a,b)) \\
+ & = & \Theta(\next(\next(m)),(a,b))
+\end{eqnarray*}$$
+as claimed.
+
+For the inductive step, suppose we have $n \in \nats$ such that the implication holds whenever $\nleq(b,n)$, and suppose further that $b = \next(n)$ and $a \in \nats$ such that $\nleq(b,a)$, $a \neq b$, and $\nplus(a,b) = \next(\next(m))$. We have two possibilities for $n$: either $n = \zero$ or $n = \next(t)$. If $n = \zero$, we have $b = \next(\zero)$. In this case, note that
+$$\begin{eqnarray*}
+ &   & \Theta(\next(m),(a,b)) \\
+ & = & \psi(m,(a,b)) \\
+ & = & \next(\zero) \\
+ & = & \psi(\next(m),(a,b)) \\
+ & = & \Theta(\next(\next(m)),(a,b))
+\end{eqnarray*}$$
+as claimed. Suppose then that $n = \next(t)$, so that $b = \next(\next(t))$.
+
+Note that $$a = \nplus(b,\next(k))$$ for some $k$, since $\nleq(a,b)$ with $a \neq b$. We also have $$b = \nplus(\nrem(a,b),\next(t))$$ for some $t$, since $\nleq(\nrem(a,b),b)$ and $\nrem(a,b) \neq b$. Now
+$$\begin{eqnarray*}
+ &   & \next(\next(m)) \\
+ & = & \nplus(a,b) \\
+ & = & \nplus(\nplus(b,\next(k)),\nplus(\nrem(a,b),\next(t))) \\
+ & = & \next(\next(\nplus(\nplus(b,k),\nplus(\nrem(a,b),t)))) \\
+ & = & \next(\next(\nplus(\nplus(b,\nrem(a,b)),\nplus(k,t)))) \\
+\end{eqnarray*}$$
+and thus $$m = \nplus(\nplus(b,\nrem(a,b)),u)$$ for some $u$ (we have $u = \nplus(k,t)$, but this is not important). Using the last technical lemma, we then have
+$$\begin{eqnarray*}
+ &   & \Theta(\next(m),(a,b)) \\
+ & = & \psi(m,(a,b)) \\
+ & = & \Theta(m,(b,\nrem(a,b)) \\
+ & = & \Theta(\nplus(b,\nrem(a,b)),(b,\nrem(a,b))) \\
+ & = & \Theta(\next(m),(b,\nrem(a,b))) \\
+ & = & \psi(\next(m),(a,b) \\
+ & = & \Theta(\next(\next(m)),(a,b))
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
+Now we are prepared to show that $\ngcd$ is commutative.
+
+<div class="result">
+<div class="corollary">
+Let $a,b \in \nats$. Then $\ngcd(a,b) = \ngcd(b,a)$.
+</div>
+
+<div class="proof"><p>
+We consider three possibilities for $\nplus(a,b)$: either $\nplus(a,b) = \zero$, or $\nplus(a,b) = \next(\zero)$, or $\nplus(a,b) = \next(\next(m))$ for some $m$.
+
+If $\nplus(a,b) = \zero$ then $a = b = \zero$. In this case we have $$\ngcd(a,b) = \zero = \ngcd(b,a)$$ as needed.
+
+Suppose $\nplus(a,b) = \next(\zero)$. Now there are two possibilities. If $a = \zero$, we have $$\ngcd(a,b) = b = \ngcd(b,a),$$ and similarly if $b = \zero$.
+
+Suppose $\nplus(a,b) = \next(\next(\zero))$. Now there are three possibilites. If $a = \zero$, we have $$\ngcd(a,b) = b = \ngcd(b,a);$$ likewise if $b = \zero$. Suppose then that $a = b = \next(\zero)$. Then we have
+$$\begin{eqnarray*}
+ &   & \ngcd(a,b) \\
+ & = & \Theta(\next(\next(\zero)),(a,b)) \\
+ & = & \psi(\next(\zero),(a,b)) \\
+ & = & \next(\zero),
+\end{eqnarray*}$$
+and similarly, $\ngcd(b,a) = \next(\zero)$ as needed.
+
+Suppose then that $\nplus(a,b) = \next(\next(\next(m)))$ for some $m$. If $a = b$, we have $\ngcd(a,b) = \ngcd(b,a)$ as claimed. Suppose then that $a \neq b$; without loss of generality, suppose that $\nleq(a,b)$ is false. Then $\nleq(b,a)$ is true. In particular we must have $a = \next(\next(t))$ for some $t$, since otherwise $\nleq(a,b)$. Note then that (using the lemma) we have
+$$\begin{eqnarray*}
+ &   & \ngcd(b,a) \\
+ & = & \Theta(\next(\next(\next(m))),(b,a)) \\
+ & = & \Theta(\next(\next(m)),(a,b)) \\
+ & = & \Theta(\next(\next(\next(m))),(a,b)) \\
+ & = & \ngcd(a,b)
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
+<div class="result">
+<div class="thm">
+Let $a,b \in \nats$. Then $\ngcd(a,b) = \ngcd(b,\nrem(a,b))$.
+</div>
+
+<div class="proof"><p>
+We've already established this in the case $\nleq(b,a) = \btrue$; so suppose instead that $\nleq(b,a) = \bfalse$. In this case we have $\nrem(a,b) = a$, so that
 $$\begin{eqnarray*}
  &   & \ngcd(a,b) \\
  & = & \ngcd(b,a) \\
- & = & \ngcd(b,\nrem(a,b)) \\
+ & = & \ngcd(b,\nrem(a,b)
 \end{eqnarray*}$$
 as claimed.
+</p></div>
+</div>
+
+Working with the definition of $\ngcd$ is tedious! As quickly as possible we'd like to characterize it in terms of some kind of "universal property" -- that's precisely what we'll do next.
+
+<div class="result">
+<div class="thm">
+Let $a,b,c \in \nats$. Then we have the following.
+
+1. $\ndiv(\ngcd(a,b),a)$ and $\ndiv(\ngcd(a,b),b)$.
+2. If $\ndiv(c,a)$ and $\ndiv(c,b)$, then $\ndiv(c,\ngcd(a,b))$.
+</div>
+
+<div class="proof"><p>
+1. Let $$A = \{ (a,b) \in \nats \times \nats \mid \ndiv(\ngcd(a,b),a)\ \mathrm{and}\ \ndiv(\ngcd(a,b),b) \}$$ and define $f : \nats \times \rightarrow \nats$ by $f(a,b) = b$. We will show that $A = \nats \times \nats$ by strong induction on $f$. For the base case, suppose we have $\zero = f(a,b) = b$. Then $\ngcd(a,b) = a$, and so $\ndiv(\ngcd(a,b),a)$ and of course $\ndiv(\ngcd(a,b),b)$ as claimed. For the inductive step, suppose we have $n \in \nats$ such that the conclusion holds whenever $\nleq(f(a,b),n)$, and suppose $b = f(a,b) = \next(n)$. Now $\ngcd(a,b) = \ngcd(b,\nrem(a,b))$. We also have $\nleq(\nrem(a,b),n) = \btrue$, so by the inductive hypothesis, $$\ndiv(\ngcd(a,b),b)\ \mathrm{and}\ \ndiv(\ngcd(a,b),\nrem(a,b)).$$ Say $$b = \ntimes(\ngcd(a,b),u)$$ and $$\nrem(a,b) = \ntimes(\ngcd(a,b),v).$$ Now we have
+$$\begin{eqnarray*}
+ &   & a \\
+ & = & \nplus(\ntimes(\nquo(a,b),b),\nrem(a,b)) \\
+ & = & \nplus(\ntimes(\nquo(a,b),\ntimes(\ngcd(a,b),u)),\ntimes(\ngcd(a,b),v)) \\
+ & = & \ntimes(\ngcd(a,b),\nplus(\ntimes(\nquo(a,b),u),v))
+\end{eqnarray*}$$
+so $\ndiv(\ngcd(a,b),a)$, and thus $(a,b) \in A$. By strong induction, $A = \nats \times \nats$ as needed.
+2. Let $$A = \{ (a,b) \in \nats \times \nats \mid \forall c \in \nats. \mathrm{if}\ \ndiv(c,a)\ \mathrm{and}\ \ndiv(c,b)\ \mathrm{then}\ \ndiv(c,\ngcd(a,b)) \}$$ and define $f : \nats \times \nats \rightarrow \nats$ by $f(a,b) = b$. We show that $A = \nats \times \nats$ by strong induction on $f$. For the base case, suppose $\zero = f(a,b) = b$. Now we have $\ngcd(a,b) = a$. If $\ndiv(c,a)$ and $\ndiv(c,b)$, then $\ndiv(c,\ngcd(a,b))$. For the inductive step, suppose we have $n \in \nats$ such that the implication holds for all $c$ when $\nleq(f(a,b),n)$, and say $b = f(a,b) = \next(n)$. We consider two cases. If $\nleq(b,a)$ is false, then by the induction hypothesis the implication holds. Suppose then that $\nleq(b,a)$ is true. Now $$\ngcd(a,b) = \ngcd(b,\nrem(a,b))$$ and $\nleq(\nrem(a,b),n)$. By the induction hypothesis, the implication holds for $\nrem(a,b)$. Suppose then that $\ndiv(c,a)$ and $\ndiv(c,b)$; we have $\ndiv(c,\nrem(a,b))$, so that $\ndiv(c,\ngcd(b,\nrem(a,b)))$, and thus $\ndiv(c,\ngcd(a,b))$ as needed.
+</p></div>
+</div>
+
+From here, more properties of $\ngcd$ are much easier to prove.
+
+<div class="result">
+<div class="corollary">
+Let $a,b,c \in \nats$. Then we have the following.
+
+1. $\ngcd(a,a) = a$.
+2. $\ngcd(\ngcd(a,b),c) = \ngcd(a,\ngcd(b,c))$.
+</div>
+
+<div class="proof"><p>
+1. Note that $\ndiv(a,a)$, so that $\ndiv(a,\ngcd(a,a))$. But we also have $\ndiv(\ngcd(a,a),a)$. By the antisymmetry of $\ndiv$, $a = \ngcd(a,a)$.
+2. (@@@)
+</p></div>
+</div>
+
+We now define the "opposite" concept, least common multiple, in terms of $\ngcd$.
+
+<div class="result">
+<div class="defn"><p>
+Define $\nlcm : \nats \times \nats \rightarrow \nats$ by $$\nlcm(a,b) = \nquo(\ntimes(a,b),\ngcd(a,b)).$$
 </p></div>
 </div>
 
@@ -204,7 +372,7 @@ Implementation and Testing
 Here's ``gcd`` and ``lcm``:
 
 > gcd :: (Natural t) => t -> t -> t
-> gcd a b = (bailoutRec phi beta psi omega) (plus a b) (max a b, min a b)
+> gcd a b = (bailoutRec phi beta psi omega) (plus a b) (a,b)
 >   where
 >     phi (_,b) = b
 >     beta _ (_,b) = leq b (next zero)
@@ -220,18 +388,24 @@ Here's ``gcd`` and ``lcm``:
 
 Property tests for ``gcd``:
 
-> -- gcd(a,b) == gcd(b,a)
-> _test_gcd_commutative :: (Natural t) => t -> t -> t -> Bool
-> _test_gcd_commutative _ a b =
->   (gcd a b) == (gcd b a)
-> 
-> 
 > -- gcd(a,0) == a and gcd(0,a) == a
 > _test_gcd_zero :: (Natural t) => t -> t -> t -> Bool
 > _test_gcd_zero _ a b = and
 >   [ a == gcd a zero
 >   , a == gcd zero a
 >   ]
+> 
+> 
+> -- gcd(a,b) == gcd(b,rem(a,b))
+> _test_gcd_rem :: (Natural t) => t -> t -> t -> Bool
+> _test_gcd_rem _ a b =
+>   (gcd a b) == (gcd b (rem a b))
+> 
+> 
+> -- gcd(a,b) == gcd(b,a)
+> _test_gcd_commutative :: (Natural t) => t -> t -> t -> Bool
+> _test_gcd_commutative _ a b =
+>   (gcd a b) == (gcd b a)
 > 
 > 
 > -- div(gcd(a,b),a) and div(gcd(a,b),b)
@@ -246,6 +420,12 @@ Property tests for ``gcd``:
 > _test_gcd_idempotent :: (Natural t) => t -> t -> Bool
 > _test_gcd_idempotent _ a =
 >   (gcd a a) == a
+> 
+> 
+> -- gcd(gcd(a,b),c) == gcd(a,gcd(b,c))
+> _test_gcd_associative :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_gcd_associative _ a b c =
+>   (gcd (gcd a b) c) == (gcd a (gcd b c))
 
 Property tests for ``lcm``:
 
@@ -268,10 +448,12 @@ And the suite:
 > _test_gcd_lcm :: (Natural t, Arbitrary t, Show t)
 >   => t -> Int -> Int -> IO ()
 > _test_gcd_lcm t maxSize numCases = sequence_
->   [ quickCheckWith args (_test_gcd_commutative t)
->   , quickCheckWith args (_test_gcd_zero t)
+>   [ quickCheckWith args (_test_gcd_zero t)
+>   , quickCheckWith args (_test_gcd_rem t)
+>   , quickCheckWith args (_test_gcd_commutative t)
 >   , quickCheckWith args (_test_gcd_div_args t)
 >   , quickCheckWith args (_test_gcd_idempotent t)
+>   , quickCheckWith args (_test_gcd_associative t)
 > 
 >   , quickCheckWith args (_test_lcm_div_args t)
 >   , quickCheckWith args (_test_lcm_idempotent t)

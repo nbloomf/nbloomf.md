@@ -69,7 +69,7 @@ $$\begin{eqnarray*}
  & = & \ntimes(\ntimes(h,k),\next(d));
 \end{eqnarray*}$$
 so we have $\ntimes(h,k) = \next(\zero)$, and thus $h = k = \next(\zero)$, so that $a = b$ as claimed.
-6. We have $h,k \in \nats$ such that $\b = \ntimes(h,a)$ and $c = \ntimes(k,b)$. now $$c = \ntimes(\ntimes(h,k),a),$$ and thus $\ndiv(a,c)$.
+6. We have $h,k \in \nats$ such that $b = \ntimes(h,a)$ and $c = \ntimes(k,b)$. now $$c = \ntimes(\ntimes(h,k),a),$$ and thus $\ndiv(a,c)$.
 </p></div>
 </div>
 
@@ -77,11 +77,12 @@ And $\ndiv$ interacts with the rest of arithmetic.
 
 <div class="result">
 <div class="thm">
-Let $a,b,c \in \nats$. We have the following.
+Let $a,b,c,d \in \nats$. We have the following.
 
 1. $\ndiv(a,\ntimes(b,a))$.
 2. If $\ndiv(c,a)$ and $\ndiv(c,b)$ then $\ndiv(c,\nplus(a,b))$.
-3. If $b \neq \zero$ and $\ndiv(a,b)$ then $\nleq(a,b)$.
+3. If $\ndiv(d,a)$ and $\ndiv(d,c)$ and $\nplus(a,b) = c$, then $\ndiv(d,b)$.
+4. If $b \neq \zero$ and $\ndiv(a,b)$ then $\nleq(a,b)$.
 </div>
 
 <div class="proof"><p>
@@ -93,7 +94,16 @@ $$\begin{eqnarray*}
  & = & \ntimes(\nplus(h,k),c)
 \end{eqnarray*}$$
 as needed.
-3. Say $b = \ntimes(k,a)$; since $b \neq \zero$, we must also have $k \neq \zero$; say $k = \next(d)$. Then
+3. We consider two cases: either $d = \zero$ or $d = \next(m)$ for some $m$. If $d = \zero$, then we have $a = c = \zero$, and thus $b = \zero$. So $\ndiv(d,b)$ as claimed. Suppose now that $d = \next(m)$. Now $a = \ntimes(d,u)$ and $c = \ntimes(d,v)$ for some $u$ and $v$. Letting $(q,r) = \ndivalg(b,d)$, we have $$b = \nplus(\ntimes(q,d),r.$$ Now
+$$\begin{eqnarray*}
+ &   & \ntimes(d,v) \\
+ & = & c \\
+ & = & \nplus(a,b) \\
+ & = & \nplus(\ntimes(d,u),\nplus(\ntimes(q,d),r)) \\
+ & = & \nplus(\ntimes(d,\nplus(u,q)),r)
+\end{eqnarray*}$$
+so that $$r = \nminus(\ntimes(d,v),\ntimes(d,\nplus(u,q))) = \ntimes(d,\nminus(v,\nplus(u,q))).$$ Now $\nleq(r,m)$, so if $\nminus(v,\nplus(u,q)) \neq \zero$ we have $\nleq(\next(m),m)$, a contradiction. So we must have $\nminus(v,\nplus(u,q)) = \zero$, and thus $r = \zero$. So $\ndiv(d,b)$ as claimed.
+4. Say $b = \ntimes(k,a)$; since $b \neq \zero$, we must also have $k \neq \zero$; say $k = \next(d)$. Then
 $$\begin{eqnarray*}
  &   & b \\
  & = & \ntimes(k,a) \\

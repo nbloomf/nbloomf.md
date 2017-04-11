@@ -122,6 +122,7 @@ Let $a,b,c \in \nats$. Then the following are equivalent.
 3. If $\nminus(a,b) = \nminus(c,b) \in \nats$, then $a = c$.
 4. If $\nminus(b,a) \in \nats$, then $\nminus(\next(b),a) = \next(\nminus(b,a))$.
 5. If $\nminus(b,a) \in \nats$, then $\nminus(b,\nminus(b,a)) = a$.
+6. If $\nminus(a,b) \in \nats$, then $\nminus(\nplus(a,c),b) = \nplus(\nminus(a,b),c)$.
 </div>
 
 <div class="proof"><p>
@@ -130,6 +131,15 @@ Let $a,b,c \in \nats$. Then the following are equivalent.
 3. Say $$\nminus(a,b) = d = \nminus(c,b),$$ with $d \in \nats$. Now $$a = \nplus(b,d) = c$$ as claimed.
 4. Say $\nminus(b,a) = c$. Now $\nplus(a,c) = b$, so that $$\nplus(a,\next(c)) = \next(\nplus(a,c)) = \next(b).$$ Thus we have $$\nminus(\next(b),a) = \next(c) = \next(\nminus(b,a))$$ as claimed.
 5. Say $\nminus(b,a) = c$. Now $b = \nplus(a,c)$, so that $a = \nminus(b,\nminus(b,a))$.
+6. We proceed by induction on $c$. For the base case, note that $$\nminus(\nplus(a,c),b) = \nminus(a,b) = \nplus(\nminus(a,b),c)$$ as needed. For the inductive step, suppose the equality holds for some $c$. Then we have
+$$\begin{eqnarray*}
+ &   & \nminus(\nplus(a,\next(c)),b) \\
+ & = & \nminus(\next(\nplus(a,c)),b) \\
+ & = & \next(\nminus(\nplus(a,c),b)) \\
+ & = & \next(\nplus(\nminus(a,b),c)) \\
+ & = & \nplus(\nminus(a,b),\next(c))
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
 
@@ -143,7 +153,30 @@ Let $a,b \in \nats$. If $\nminus(a,b) = \ast$, then $\nminus(b,a) \in \nats$.
 <div class="proof"><p>
 We proceed by induction on $a$. For the base case $a = \zero$, if $\nminus(\zero,b) = \ast$ we have $b \neq \zero$ and $\nminus(b,\zero) = b \in \nats$.
 
-For the inductive step, suppose the implication holds for all $b$ for some $a$. Suppose further that $\nminus(\next(a),b) = \ast$. If $b = \zero$, note that $\nminus(\next(a),\zero) = \zero$ is false, so the implication holds vacuously. If $b = \next(d)$, then we have $$\nminus(\next(a),b) = \nminus(\next(a),\next(d)) = \nminus(a,d).$$ By the induction hypothesis we have $$\nminus(d,a) = c$, so that $$\nminus(b,a) = \nminus(\next(d),\next(a)) = c.$$
+For the inductive step, suppose the implication holds for all $b$ for some $a$. Suppose further that $\nminus(\next(a),b) = \ast$. If $b = \zero$, note that $\nminus(\next(a),\zero) = \zero$ is false, so the implication holds vacuously. If $b = \next(d)$, then we have $$\nminus(\next(a),b) = \nminus(\next(a),\next(d)) = \nminus(a,d).$$ By the induction hypothesis we have $$\nminus(d,a) = c,$$ so that $$\nminus(b,a) = \nminus(\next(d),\next(a)) = c.$$
+</p></div>
+</div>
+
+One more.
+
+<div class="result">
+<div class="thm">
+Let $a,b,c \in \nats$. If $\nminus(a,b) \in \nats$, then $$\nminus(\ntimes(c,a),\ntimes(c,b)) = \ntimes(c,\nminus(a,b))$$ for all $c \in \nats$.
+</div>
+
+<div class="proof"><p>
+We proceed by induction on $a$. For the base case $a = \zero$, suppose we have $\nminus(a,b) \in \nats$; then $b = \zero$. Now $$\nminus(\ntimes(c,a),(\ntimes(c,b)) = \nminus(\zero,\zero) = \zero$$ and $$\ntimes(c,\nminus(a,b)) = \ntimes(c,\zero) = \zero$$ as claimed.
+
+For the inductive step, suppose the equality holds for some $a \in \nats$ and suppose that $\nminus(\next(a),b) \in \nats$. Then we have
+$$\begin{eqnarray*}
+ &   & \nminus(\ntimes(c,\next(a)),\ntimes(c,b)) \\
+ & = & \nminus(\nplus(\ntimes(c,a),c),\ntimes(c,b)) \\
+ & = & \nplus(\nminus(\ntimes(c,a),\ntimes(c,b)),c) \\
+ & = & \nplus(\ntimes(c,\nminus(a,b)),c) \\
+ & = & \ntimes(c,\next(\nminus(a,b))) \\
+ & = & \ntimes(c,\nminus(\next(a),b))
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
 

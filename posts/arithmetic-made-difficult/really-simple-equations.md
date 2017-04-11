@@ -68,6 +68,26 @@ Note that either $a = \zero$, $a = \next(\zero)$, $a = \next(\next(\zero))$, or 
 </p></div>
 </div>
 
+And another.
+
+<div class="result">
+<div class="thm">
+Let $a,b \in \nats$. If $\nplus(a,b) = \next(\next(\next(\zero)))$, then $(a,b)$ is either $(\zero,\next(\next(\next(\zero))))$ or $(\next(\zero),\next(\next(\zero)))$ or $(\next(\next(\zero)),\next(\zero))$, or $(\next(\next(\next(\zero))),\zero)$.
+</div>
+
+<div class="proof"><p>
+If $a = \zero$, then $b = \next(\next(\next(\zero)))$ as claimed.
+
+Suppose instead that $a = \next(m)$ for some $m$. Now $$\next(\nplus(m,b)) = \next(\next(\next(\zero))),$$ so that $\nplus(m,b) = \next(\next(\zero))$. There are then three possibilities.
+
+If $m = \zero$, then $a = \next(\zero)$ and $b = \next(\next(\zero))$.
+
+If $m = \next(\zero)$, then $a = \next(\next(\zero))$ and $b = \next(\zero)$.
+
+If $m = \next(\next(\zero))$, then $a = \next(\next(\next(\zero)))$ and $b = \zero$.
+</p></div>
+</div>
+
 Okay this is boring. How about some equations with $\ntimes$?
 
 <div class="result">
