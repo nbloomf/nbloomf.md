@@ -99,13 +99,15 @@ The last two theorems say that the output of $\ndivalg(a,b)$ is the unique solut
 <div class="thm">
 If $a \in \nats$ we have the following.
 
-1. $\ndiv(a,\zero) = (\zero,a)$.
-2. $\ndiv(a,\next(\zero)) = (a,\zero)$.
-3. If $\nleq(a,b)$, then $\ndiv(a,\next(b)) = (\zero,a)$.
+1. $\ndivalg(\zero,a) = (\zero, \zero)$
+2. $\ndivalg(a,\zero) = (\zero,a)$.
+3. $\ndivalg(a,\next(\zero)) = (a,\zero)$.
+4. If $\nleq(a,b)$, then $\ndivalg(a,\next(b)) = (\zero,a)$.
 </div>
 
 <div class="proof"><p>
-1. We proceed by induction on $a$. For the base case $a = \zero$, note that
+1. Note that $$\ndivalg(\zero, a) = \phi(a) = (\zero, \zero).$$
+2. We proceed by induction on $a$. For the base case $a = \zero$, note that
 $$\begin{eqnarray*}
  &   & \ndivalg(\zero, \zero) \\
  & = & \varphi(\zero) \\
@@ -119,8 +121,8 @@ $$\begin{eqnarray*}
  & = & (\zero, \next(a))
 \end{eqnarray*}$$
 as needed.
-2. Note that $a = \nplus(\ntimes(a,\next(\zero)),\zero)$ and $\nleq(\zero,\zero)$. By the uniqueness of quotients and remainders for nonzero divisors, we have $\ndiv(a,\next(\zero)) = (a,\zero)$ as claimed.
-3. Note that $a = \nplus(\ntimes(\zero,\next(b)),a)$ and $\nleq(a,b)$. By the uniqueness of quotients and remainders for positive divisors we have $\ndiv(a,\next(b)) = (\zero,a)$.
+3. Note that $a = \nplus(\ntimes(a,\next(\zero)),\zero)$ and $\nleq(\zero,\zero)$. By the uniqueness of quotients and remainders for nonzero divisors, we have $\ndiv(a,\next(\zero)) = (a,\zero)$ as claimed.
+4. Note that $a = \nplus(\ntimes(\zero,\next(b)),a)$ and $\nleq(a,b)$. By the uniqueness of quotients and remainders for positive divisors we have $\ndiv(a,\next(b)) = (\zero,a)$.
 </p></div>
 </div>
 
@@ -128,11 +130,11 @@ And while we're at it, some special cases.
 
 <div class="result">
 <div class="thm">
-Let $a \in \nats$. Then $\ndivalg(\zero,a) = (\zero, \zero)$
+Let $a,b \in \nats$. Then $\nquo(\ntimes(a,\next(b)),\next(b)) = a$.
 </div>
 
 <div class="proof"><p>
-Note that $$\ndivalg(\zero, a) = \phi(a) = (\zero, \zero).$$
+Note that $\nleq(\zero,b)$. Now $$\ntimes(a,b) = \nplus(\ntimes(a,b),\zero),$$ and by the uniqueness of quotients by nonzero divisors, we have $a = \nquo(\ntimes(a,b),b)$ as claimed.
 </p></div>
 </div>
 
@@ -174,16 +176,36 @@ Property tests:
 >   leq r b
 > 
 > 
+> -- divalg(0,a) = (0,0)
+> _test_divalg_zero_left :: (Natural t) => t -> t -> Bool
+> _test_divalg_zero_left _ a =
+>   (divalg zero a) == (zero, zero)
+> 
+> 
 > -- divalg(a,0) = (0,a)
 > _test_divalg_zero_right :: (Natural t) => t -> t -> Bool
 > _test_divalg_zero_right _ a =
 >   (divalg a zero) == (zero, a)
 > 
 > 
-> -- divalg(0,a) = (0,0)
-> _test_divalg_zero_left :: (Natural t) => t -> t -> Bool
-> _test_divalg_zero_left _ a =
->   (divalg zero a) == (zero, zero)
+> -- divalg(a,next(0)) = (a,0)
+> _test_divalg_one_right :: (Natural t) => t -> t -> Bool
+> _test_divalg_one_right _ a =
+>   (divalg a (next zero)) == (a, zero)
+> 
+> 
+> -- if leq(a,b) then divalg(a,next(b)) = (0,a)
+> _test_divalg_leq :: (Natural t) => t -> t -> t -> Bool
+> _test_divalg_leq _ a b =
+>   if leq a b
+>     then (divalg a (next b)) == (zero, a)
+>     else True
+> 
+> 
+> -- quo(times(a,next(b)),next(b)) = a
+> _test_divalg_times_left :: (Natural t) => t -> t -> t -> Bool
+> _test_divalg_times_left _ a b =
+>   (quo (times a (next b)) (next b)) == a
 > 
 > 
 > -- quo(a,b) = q where (q,_) = divalg(a,b)
@@ -207,8 +229,11 @@ And the suite:
 > _test_divalg t maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_divalg_equality t)
 >   , quickCheckWith args (_test_divalg_inequality t)
->   , quickCheckWith args (_test_divalg_zero_right t)
 >   , quickCheckWith args (_test_divalg_zero_left t)
+>   , quickCheckWith args (_test_divalg_zero_right t)
+>   , quickCheckWith args (_test_divalg_one_right t)
+>   , quickCheckWith args (_test_divalg_leq t)
+>   , quickCheckWith args (_test_divalg_times_left t)
 >   , quickCheckWith args (_test_divalg_quo t)
 >   , quickCheckWith args (_test_divalg_rem t)
 >   ]

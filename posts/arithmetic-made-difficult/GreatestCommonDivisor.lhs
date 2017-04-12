@@ -349,11 +349,30 @@ Let $a,b,c \in \nats$. Then we have the following.
 
 1. $\ngcd(a,a) = a$.
 2. $\ngcd(\ngcd(a,b),c) = \ngcd(a,\ngcd(b,c))$.
+3. $\ngcd(a,b) = a$ if and only if $\ndiv(a,b)$.
+4. $\ngcd(\ntimes(a,c),\ntimes(b,c)) = \ntimes(\ngcd(a,b),c)$.
 </div>
 
 <div class="proof"><p>
 1. Note that $\ndiv(a,a)$, so that $\ndiv(a,\ngcd(a,a))$. But we also have $\ndiv(\ngcd(a,a),a)$. By the antisymmetry of $\ndiv$, $a = \ngcd(a,a)$.
-2. (@@@)
+2. Let $h = \ngcd(\ngcd(a,b),c)$, $k = \ngcd(a,\ngcd(b,c))$, $u = \ngcd(a,b)$, and $v = \ngcd(b,c)$. First we show that $\ndiv(h,k)$. Note that $\ndiv(h,u)$, so that $\ndiv(h,a)$ and $\ndiv(h,b)$. Now $\ndiv(h,c)$, so that $\ndiv(h,v)$. Thus $\ndiv(h,k)$. The proof that $\ndiv(k,h)$ is similar; thus $h = k$ as claimed.
+3. Certainly if $\ngcd(a,b) = a$, then $\ndiv(a,b)$. Suppose conversely that $\ndiv(a,b)$. We consider two cases: either $a = \zero$ or $a = \next(t)$ for some $t$. If $a = \zero$, then $b = \zero$, and we have $$\ngcd(a,b) = \zero = a$ as claimed. Suppose now that $a = \next(t)$. Since $\ndiv(a,b)$, we have $$b = \ntimes(q,a) = \nplus(\ntimes(q,a),\zero)$$ for some $q$. Now $\nleq(\zero,t)$, and by the uniqueness of remainders by nonzero divisors, we have $\nrem(b,a) = \zero$. So we have
+$$\begin{eqnarray*}
+ &   & \ngcd(a,b) \\
+ & = & \ngcd(b,a) \\
+ & = & \ngcd(a,\nrem(b,a)) \\
+ & = & \ngcd(a,\zero) \\
+ & = & a
+\end{eqnarray*}$$
+as claimed.
+4. We consider two cases: either $c = \zero$ or $c \neq \zero$. If $c = \zero$, we have
+$$\begin{eqnarray*}
+ &   & \ntimes(\ngcd(a,b),c) \\
+ & = & \zero \\
+ & = & \ngcd(\zero,\zero) \\
+ & = & \ngcd(\ntimes(a,c),\ntimes(b,c))
+\end{eqnarray*}$$
+as claimed. Now suppose $c \neq \zero$. First note that $\ndiv(\ngcd(a,b),a)$, so that $$\ndiv(\ntimes(\ngcd(a,b),c),\ntimes(a,c)).$$ Similarly, we have $$\ndiv(\ntimes(\ngcd(a,b),c),\ntimes(b,c)).$$ Thus $$\ndiv(\ntimes(\ngcd(a,b),c), \ngcd(\ntimes(a,c),\ntimes(b,c))).$$ Now note that $\ndiv(c,\ntimes(a,c))$ and $\ndiv(c,\ntimes(b,c))$, so that $$\ndiv(c,\ngcd(\ntimes(a,c),\ntimes(b,c))).$$ Say $$\ntimes(u,c) = \ngcd(\ntimes(a,c),\ntimes(b,c)).$$ Now $\ndiv(\ntimes(u,c),\ntimes(a,c))$, so that $\ndiv(u,a)$; similarly, $\ndiv(u,b)$. Thus $\ndiv(u,\ngcd(a,b))$, and we have $$\ndiv(\ngcd(\ntimes(a,c),\ntimes(b,c)),\ntimes(\ngcd(a,b),c)).$$ By the antisymmetry of $\ndiv$, we have $$\ngcd(\ntimes(a,c),\ntimes(b,c) = \ntimes(\ngcd(a,b),c)$$ as claimed.
 </p></div>
 </div>
 
@@ -362,6 +381,72 @@ We now define the "opposite" concept, least common multiple, in terms of $\ngcd$
 <div class="result">
 <div class="defn"><p>
 Define $\nlcm : \nats \times \nats \rightarrow \nats$ by $$\nlcm(a,b) = \nquo(\ntimes(a,b),\ngcd(a,b)).$$
+</p></div>
+</div>
+
+woo special cases
+
+<div class="result">
+<div class="lemma">
+For all $a \in \nats$ we have the following.
+
+1. $\nlcm(a,\zero) = \zero$.
+2. $\nlcm(a,\next(\zero)) = a$.
+</div>
+
+<div class="proof"></p>
+1. Note that
+$$\begin{eqnarray*}
+ &   & \nlcm(a,\zero) \\
+ & = & \nquo(\ntimes(a,\zero),\ngcd(a,\zero)) \\
+ & = & \nquo(\zero,a) \\
+ & = & \zero.
+\end{eqnarray*}$$
+2. Note that
+$$\begin{eqnarray*}
+ &   & \nlcm(a,\next(\zero)) \\
+ & = & \nquo(\ntimes(a,\next(\zero)),\ngcd(a,\next(\zero))) \\
+ & = & \nquo(a,\next(\zero)) \\
+ & = & a.
+\end{eqnarray*}$$
+</p></div>
+</div>
+
+And $\nlcm$ enjoys many properties analogous to those of $\ngcd$.
+
+<div class="result">
+<div class="corollary">
+Let $a,b,c \in \nats$. Then we have the following.
+
+1. $\nlcm(a,a) = a$.
+2. $\nlcm(a,b) = \nlcm(b,a)$.
+</div>
+
+<div class="proof"><p>
+1. We consider two cases: $a = \zero$ and $a \neq \zero$. If $a = \zero$, we have
+$$\begin{eqnarray*}
+ &   & \nlcm(a,a) \\
+ & = & \nquo(\ntimes(a,a),\ngcd(a,a)) \\
+ & = & \nquo(\zero,\zero) \\
+ & = & \zero \\
+ & = & a
+\end{eqnarray*}$$
+as claimed. If $a \neq \zero$, say $a = \next(t)$, then we have
+$$\begin{eqnarray*}
+ &   & \nlcm(a,a) \\
+ & = & \nquo(\ntimes(a,a),\ngcd(a,a)) \\
+ & = & \nquo(\ntimes(a,a),a) \\
+ & = & a
+\end{eqnarray*}$$
+as claimed.
+2. Note that
+$$\begin{eqnarray*}
+ &   & \nlcm(a,b) \\
+ & = & \nquo(\ntimes(a,b),\ngcd(a,b)) \\
+ & = & \nquo(\ntimes(b,a),\ngcd(b,a)) \\
+ & = & \nlcm(b,a)
+\end{eqnarray*}$$
+as claimed.
 </p></div>
 </div>
 
@@ -389,10 +474,18 @@ Here's ``gcd`` and ``lcm``:
 Property tests for ``gcd``:
 
 > -- gcd(a,0) == a and gcd(0,a) == a
-> _test_gcd_zero :: (Natural t) => t -> t -> t -> Bool
-> _test_gcd_zero _ a b = and
+> _test_gcd_zero :: (Natural t) => t -> t -> Bool
+> _test_gcd_zero _ a = and
 >   [ a == gcd a zero
 >   , a == gcd zero a
+>   ]
+> 
+> 
+> -- gcd(a,next(0)) == next(0) and gcd(next(0),a) == next(0)
+> _test_gcd_one :: (Natural t) => t -> t -> Bool
+> _test_gcd_one _ a = and
+>   [ (next zero) == gcd a (next zero)
+>   , (next zero) == gcd (next zero) a
 >   ]
 > 
 > 
@@ -426,9 +519,31 @@ Property tests for ``gcd``:
 > _test_gcd_associative :: (Natural t) => t -> t -> t -> t -> Bool
 > _test_gcd_associative _ a b c =
 >   (gcd (gcd a b) c) == (gcd a (gcd b c))
+> 
+> 
+> -- times(gcd(a,b),c) == gcd(times(a,c),times(b,c))
+> _test_gcd_distributive_times :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_gcd_distributive_times _ a b c =
+>   (times (gcd a b) c) == (gcd (times a c) (times b c))
 
 Property tests for ``lcm``:
 
+> -- lcm(a,0) == 0 and lcm(0,a) == 0
+> _test_lcm_zero :: (Natural t) => t -> t -> Bool
+> _test_lcm_zero _ a = and
+>   [ zero == lcm a zero
+>   , zero == lcm zero a
+>   ]
+> 
+> 
+> -- lcm(a,next(0)) == a and lcm(next(0),a) == a
+> _test_lcm_one :: (Natural t) => t -> t -> Bool
+> _test_lcm_one _ a = and
+>   [ a == lcm a (next zero)
+>   , a == lcm (next zero) a
+>   ]
+> 
+> 
 > -- div(a,lcm(a,b)) and div(b,lcm(a,b))
 > _test_lcm_div_args :: (Natural t) => t -> t -> t -> Bool
 > _test_lcm_div_args _ a b = and
@@ -441,6 +556,12 @@ Property tests for ``lcm``:
 > _test_lcm_idempotent :: (Natural t) => t -> t -> Bool
 > _test_lcm_idempotent _ a =
 >   (lcm a a) == a
+> 
+> 
+> -- lcm(a,b) == lcm(b,a)
+> _test_lcm_commutative :: (Natural t) => t -> t -> t -> Bool
+> _test_lcm_commutative _ a b =
+>   (lcm a b) == (lcm b a)
 
 And the suite:
 
@@ -449,14 +570,19 @@ And the suite:
 >   => t -> Int -> Int -> IO ()
 > _test_gcd_lcm t maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_gcd_zero t)
+>   , quickCheckWith args (_test_gcd_one t)
 >   , quickCheckWith args (_test_gcd_rem t)
 >   , quickCheckWith args (_test_gcd_commutative t)
 >   , quickCheckWith args (_test_gcd_div_args t)
 >   , quickCheckWith args (_test_gcd_idempotent t)
 >   , quickCheckWith args (_test_gcd_associative t)
+>   , quickCheckWith args (_test_gcd_distributive_times t)
 > 
+>   , quickCheckWith args (_test_lcm_zero t)
+>   , quickCheckWith args (_test_lcm_one t)
 >   , quickCheckWith args (_test_lcm_div_args t)
 >   , quickCheckWith args (_test_lcm_idempotent t)
+>   , quickCheckWith args (_test_lcm_commutative t)
 >   ]
 >   where
 >     args = stdArgs
