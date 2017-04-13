@@ -26,7 +26,32 @@ Now we define another mapping $\Psi : \nats \rightarrow \bool$ as follows: $$\Ps
 </div>
 </div>
 
-Establishing that every natural number is either $\zero$ or of the form $\next(m)$ for some $m$ justifies our use of the following Haskell type to model the natural numbers.
+In fact we can define a recursive function which detects whether a natural number is zero or not.
+
+<div class="result">
+<div class="thm">
+Define $\varphi : \nats \rightarrow \bool$ by $\varphi(n) = \bfalse$, and define $\iszero : \nats \rightarrow \bool$ by $$\iszero = \natrec{\btrue}{\varphi}.$$ Then $$\iszero(n) = \left\{ \begin{array}{ll} \btrue & \mathrm{if}\ n = \zero \\ \bfalse & \mathrm{otherwise}. \end{array} \right.$$
+</div>
+
+<div class="proof">
+Certainly
+$$\begin{eqnarray*}
+ &   & \iszero(\zero) \\
+ & = & \natrec{\btrue}{\varphi}(\zero) \\
+ & = & \btrue.
+\end{eqnarray*}$$
+And if $n = \next(m)$ for some $m$, then we have
+$$\begin{eqnarray*}
+ &   & \iszero(\next(m)) \\
+ & = & \natrec{\btrue}{\varphi}(\next(m)) \\
+ & = & \varphi(\natrec{\btrue}{\varphi}(m)) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as claimed.
+</div>
+</div>
+
+Establishing that every natural number is either $\zero$ or of the form $\next(m)$ for some $m$ also justifies our use of the following Haskell type to model the natural numbers.
 
 > data Nat
 >   = Z | N Nat

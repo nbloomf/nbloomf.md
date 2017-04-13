@@ -147,7 +147,7 @@ Here's ``divalg``, ``quo``, and ``rem``:
 > divalg :: (Natural t) => t -> t -> (t,t)
 > divalg = simpleRec phi mu
 >   where
->     phi _ = (zero,zero)
+>     phi _ = (zero, zero)
 >     mu _ b (q,r) = if b == next r
 >       then (next q, zero)
 >       else (q, next r)

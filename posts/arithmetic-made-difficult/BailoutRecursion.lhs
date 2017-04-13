@@ -159,8 +159,6 @@ And there's the definition from the proof:
 > 
 >   in snd (natRec (Z, phi) t n) $ a
 
-(Sorry for the greek letters! Spelling them out takes up so much space.)
-
 Unlike simple recursion, the naive implementation of bailout recursion is already tail recursive.
 
 

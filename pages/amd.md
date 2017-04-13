@@ -13,7 +13,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Bailout Recursion](/posts/arithmetic-made-difficult/BailoutRecursion.html)
     * [The Universal Property of the Natural Numbers](/posts/arithmetic-made-difficult/NaturalNumbers.html)
 2. Basic Arithmetic
-    * Equality
+    * [Equality](/posts/arithmetic-made-difficult/EqualTo.html)
     * [Addition](/posts/arithmetic-made-difficult/Plus.html)
     * [Multiplication](/posts/arithmetic-made-difficult/Times.html)
     * [Really Simple Equations](/posts/arithmetic-made-difficult/really-simple-equations.html)
@@ -24,6 +24,8 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [The Division Algorithm](/posts/arithmetic-made-difficult/DivisionAlgorithm.html)
     * [Divides](/posts/arithmetic-made-difficult/Divides.html)
     * [Greatest Common Divisor](/posts/arithmetic-made-difficult/GreatestCommonDivisor.html)
+    * [Coprime To](/posts/arithmetic-made-difficult/CoprimeTo.html)
+    * [Least Common Multiple](/posts/arithmetic-made-difficult/LeastCommonMultiple.html)
     * Primes
     * Exponentiation
 3. Finite Lists

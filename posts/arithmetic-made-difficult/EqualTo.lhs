@@ -1,0 +1,73 @@
+---
+title: Equal To
+author: nbloomf
+date: 2014-05-24
+tags: arithmetic-made-difficult, literate-haskell
+---
+
+> module EqualTo
+>  ( eq, _test_eq
+>  ) where
+> 
+> import NaturalNumbers
+> 
+> import Test.QuickCheck
+
+We have an implicit equality among natural numbers, but in this post we'll make that relation computable. We won't say much about this function.
+
+<div class="result">
+<div class="thm"><p>
+Define $\beta : \nats \times \nats \rightarrow \bool$ by $$\beta(a,b) = \iszero(b),$$ $\psi : \nats \times \nats \rightarrow \bool$ by $$\psi(a,b) = \bfalse,$$ and $\omega : \nats \times \nats \rightarrow \nats$ by $$\omega(a,b) = \prev(b).$$ Now define $\nequal : \nats \times \nats \rightarrow \bool$ by $$\nequal = \bailrec{\iszero}{\beta}{\psi}{\omega}.$$
+
+Then $$\nequal(a,b) = \left\{ \begin{array}{ll} \btrue & \mathrm{if}\ a = b \\ \bfalse & \mathrm{otherwise}. \end{array} \right.$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by induction on $a$. For the base case, $a = \zero$, note that
+$$\begin{eqnarray*}
+ &   & \nequal(a,b) \\
+ & = & \iszero(b) \\
+ & = & \left\{ \begin{array}{ll} \btrue & \mathrm{if}\ b = a \\ \bfalse & \mathrm{otherwise} \end{array} \right.
+\end{eqnarray*}$$
+as claimed. For the inductive step, suppose the result holds for some $a$. Now if $b = \zero$, we have $\nequal(\next(a),b) = \bfalse$, and indeed $\zero \neq \next(a)$. If $b \neq \zero$, then we have 
+$$\begin{eqnarray*}
+ &   & \nequal(\next(a),b) \\
+ & = & \nequal(a,\prev(b)).
+\end{eqnarray*}$$
+And indeed, we have $$\next(a) = b$$ if and only if $$\prev(\next(a)) = \prev(b)$$ if and only if $$a = \prev(b)$$ as claimed.
+</p></div>
+</div>
+
+
+Implementation and Testing
+--------------------------
+
+Here's ``eq``:
+
+> eq :: (Natural t) => t -> t -> Bool
+> eq = bailoutRec isZero beta psi omega
+>   where
+>     beta  _ b = isZero b
+>     psi   _ _ = False
+>     omega _ b = prev b
+
+And some property tests:
+
+> -- eq(a,a) == True
+> _test_eq_reflexive :: (Natural t) => t -> t -> Bool
+> _test_eq_reflexive _ a =
+>   (eq a a) == True
+
+And a test wrapper:
+
+> -- run all tests for leq
+> _test_eq :: (Natural t, Arbitrary t, Show t)
+>   => t -> Int -> Int -> IO ()
+> _test_eq t maxSize numCases = sequence_
+>   [ quickCheckWith args (_test_eq_reflexive t)
+>   ]
+>   where
+>     args = stdArgs
+>       { maxSuccess = numCases
+>       , maxSize    = maxSize
+>       }
