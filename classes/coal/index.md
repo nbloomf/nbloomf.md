@@ -76,12 +76,12 @@ title: College Algebra
 * Mar 22
     * Practice Problems: 1.6 #1--10, 35--40; 3.4 #19--22
 * Mar 24
-    * Activity 8 [](/pdf/classes/coal/coal-a08-quadratic-ish-equations.pdf) [](/pdf/classes/coal/coal-soln-a08-quadratic-ish-equations.pdf)
+    * [Activity 8](/pdf/classes/coal/coal-a08-quadratic-ish-equations.pdf) ([solutions](/pdf/classes/coal/coal-soln-a08-quadratic-ish-equations.pdf))
 * Mar 27
     * 3.3 #25, 26, 37, 38
 * Mar 29
 * Mar 31
-    * Activity 9 [](/pdf/classes/coal/coal-a09-polynomials.pdf) [](/pdf/classes/coal/coal-soln-a09-polynomials.pdf)
+    * [Activity 9](/pdf/classes/coal/coal-a09-polynomials.pdf) ([solutions](/pdf/classes/coal/coal-soln-a09-polynomials.pdf))
 * Apr 3
     * Practice Problems: 3.2 #49--56
 * Apr 5
