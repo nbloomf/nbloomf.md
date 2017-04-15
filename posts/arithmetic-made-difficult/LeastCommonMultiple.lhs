@@ -182,7 +182,7 @@ Let $a,b,c \in \nats$. Then we have the following.
 </div>
 
 <div class="proof"><p>
-1. Note that $$\ndiv(a,\nlcm(a,\nlcm(b,c))).$$ We also have $$\ndiv(b,\nlcm(b,c))$$ so that $$\ndiv(b,\nlcm(a,\nlcm(b,c))$$ by transitivity; similarly, $$\ndiv(c,\nlcm(a,\nlcm(b,c))).$$ By the universal property of $\nlcm$, we thus have $$\ndiv(\nlcm(a,b),\nlcm(a,\nlcm(b,c)))$$, so that $$\ndiv(\nlcm(\nlcm(a,b),c),\nlcm(a,\nlcm(b,c))).$$ A similar argument shows that $$\ndiv(\nlcm(a,\nlcm(b,c)),\nlcm(\nlcm(a,b),c)).$$ By antisymmetry, we thus have $$\nlcm(a,\nlcm(b,c)) = \nlcm(\nlcm(a,b),c)$$ as claimed.
+1. Note that $\ndiv(a,\nlcm(a,\nlcm(b,c)))$. We also have $\ndiv(b,\nlcm(b,c))$, so that $$\ndiv(b,\nlcm(a,\nlcm(b,c))$$ by transitivity; similarly, $$\ndiv(c,\nlcm(a,\nlcm(b,c))).$$ By the universal property of $\nlcm$, we thus have $$\ndiv(\nlcm(a,b),\nlcm(a,\nlcm(b,c))),$$ so that $$\ndiv(\nlcm(\nlcm(a,b),c),\nlcm(a,\nlcm(b,c))).$$ A similar argument shows that $$\ndiv(\nlcm(a,\nlcm(b,c)),\nlcm(\nlcm(a,b),c)).$$ By antisymmetry, we thus have $$\nlcm(a,\nlcm(b,c)) = \nlcm(\nlcm(a,b),c)$$ as claimed.
 2. First suppose $\ndiv(b,a)$; say $a = \ntimes(b,d)$. Now $\ndiv(a,a)$ and $\ndiv(b,a)$, and if $\ndiv(c,a)$ and $\ndiv(c,b)$ then $\ndiv(c,a)$. By the universal property of $\nlcm$ we have $a = \nlcm(a,b)$. Conversely, suppose $a = \nlcm(a,b)$. We consider two cases: either $(a,b) = (\zero,\zero)$ or $(a,b) \neq (\zero,\zero)$. If $(a,b) = (\zero,\zero)$ then $\ndiv(b,a)$ as needed. Suppose then that $(a,b) \neq (\zero,\zero)$. If $a = \zero$, then $\ndiv(b,a)$ as claimed. Suppose $a \neq \zero$. Now let $d = \ngcd(a,b)$; note that $d \neq \zero$. Say $b = \ntimes(k,d)$. Now
 $$\begin{eqnarray*}
  &   & \ntimes(a,\next(\zero)) \\
@@ -319,7 +319,36 @@ $$\begin{eqnarray*}
  & = & \ngcd(\nlcm(a,b),\nlcm(a,\zero)) \\
  & = & \ngcd(\nlcm(a,b),\nlcm(a,c))
 \end{eqnarray*}$$
-as claimed. We can now assume that $a$, $b$, and $c$ are not zero; in particular, $\ngcd(a,b)\ngcd(a,c)$ and $\ngcd(a,\ngcd(b,c))$ are not zero. (@@@)
+as claimed. We can now assume that $a$, $b$, and $c$ are not zero; in particular, $\ngcd(a,b)\ngcd(a,c)$ and $\ngcd(a,\ngcd(b,c))$ are not zero; in particular, $\ngcd(a,b)\ngcd(a,c)$ and $\ngcd(a,\ngcd(b,c))$ are not zero. We begin with a sub-result. Note that
+$$\begin{eqnarray*}
+ &   & a\ngcd(a,\ngcd(b,c))\ngcd(ba,bc,ca,cb) \\
+ & = & a\ngcd(a,b,c)\ngcd(ba,bc,ca,cb) \\
+ & = & a\ngcd(a\ngcd(ba,bc,ca,cb),b\ngcd(ba,bc,ca,cb),c\ngcd(ba,bc,ca,cb)) \\
+ & = & a\ngcd(\ngcd(aba,abc,aca,acb),\ngcd(bba,bbc,bca,bcb),\ngcd(cba,cbc,cca,ccb)) \\
+ & = & a\ngcd(aba,abc,aca,acb,bba,bbc,bca,bcb,cba,cbc,cca,ccb) \\
+ & = & a\ngcd(aab,aac,acb,acc,bab,bac,bcb,bcc) \\
+ & = & a\ngcd(aa\ngcd(b,c),ac\ngcd(b,c),ba\ngcd(b,c),bc\ngcd(b,c)) \\
+ & = & a\ngcd(aa,ac,ba,bc)\ngcd(b,c) \\
+ & = & a\ngcd(a\ngcd(a,c),b\ngcd(a,c))\ngcd(b,c) \\
+ & = & a\ngcd(a,b)\ngcd(a,c)\ngcd(b,c).
+\end{eqnarray*}$$
+Note that $$\ndiv(\ngcd(a,\ngcd(b,c)),a\ngcd(b,c)),$$ so that $$\ndiv(\ngcd(a,b)\ngcd(a,c),a\ngcd(ba,bc,ca,cb)).$$ By cross-multiplication, we have
+$$\begin{eqnarray*}
+ &   & \nquo(a\ngcd(ba,bc,ca,cb),\ngcd(a,b)\ngcd(a,c)) \\
+ & = & \nquo(a\ngcd(b,c),\ngcd(a,\ngcd(b,c)).
+\end{eqnarray*}$$
+Thus we have
+$$\begin{eqnarray*}
+ &   & \ngcd(\nlcm(a,b),\nlcm(a,c)) \\
+ & = & \ngcd(\nquo(ab,\ngcd(a,b)),\nquo(ac,\ngcd(a,c))) \\
+ & = & \ngcd(\nquo(ab\ngcd(a,c),\ngcd(a,b)\ngcd(a,c)),\nquo(ac\ngcd(a,b),\ngcd(a,b)\ngcd(a,c))) \\
+ & = & \nquo(\ngcd(ab\ngcd(a,c),ac\ngcd(a,b)),\ngcd(a,b)\ngcd(a,c)) \\
+ & = & \nquo(a\ngcd(b\ngcd(a,c),c\ngcd(a,b)),\ngcd(a,b)\ngcd(a,c)) \\
+ & = & \nquo(a\ngcd(ba,bc,ca,cb),\ngcd(a,b)\ngcd(a,c)) \\
+ & = & \nquo(a\ngcd(b,c),\ngcd(a,\ngcd(b,c)) \\
+ & = & \nlcm(a,\ngcd(b,c))
+\end{eqnarray*}$$
+as claimed.
 </p></div>
 </div>
 
