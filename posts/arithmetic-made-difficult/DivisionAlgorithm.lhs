@@ -130,11 +130,11 @@ And while we're at it, some special cases.
 
 <div class="result">
 <div class="thm">
-Let $a,b \in \nats$. Then $\nquo(\ntimes(a,\next(b)),\next(b)) = a$.
+Let $a,b \in \nats$. If $b \neq \zero$, then $\nquo(\ntimes(a,b),b) = a$.
 </div>
 
 <div class="proof"><p>
-Note that $\nleq(\zero,b)$. Now $$\ntimes(a,b) = \nplus(\ntimes(a,b),\zero),$$ and by the uniqueness of quotients by nonzero divisors, we have $a = \nquo(\ntimes(a,b),b)$ as claimed.
+Say $b = \next(m)$. Note that $\nleq(\zero,m)$. Now $$\ntimes(a,b) = \nplus(\ntimes(a,b),\zero),$$ and by the uniqueness of quotients by nonzero divisors, we have $a = \nquo(\ntimes(a,b),b)$ as claimed.
 </p></div>
 </div>
 

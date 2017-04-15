@@ -125,7 +125,201 @@ $$\begin{eqnarray*}
  & = & \ntimes(a,k),
 \end{eqnarray*}$$
 so that $\ndiv(a,\nlcm(a,b))$. A similar argument shows that $\ndiv(b,\nlcm(a,b))$ as claimed.
-2. Suppose we have $\ndiv(a,c)$ and $\ndiv(b,c)$. (@@@)
+2. Suppose we have $\ndiv(a,c)$ and $\ndiv(b,c)$. We consider two cases: either $(a,b) = (\zero,\zero)$ or $(a,b) \neq (\zero,\zero)$. First suppose $(a,b) = (\zero,\zero)$. Now $c = \zero$, and we have $\ndiv(\nlcm(a,b),\zero)$ as claimed. Suppose instead that $(a,b) \neq (\zero,\zero)$. Say $c = \ntimes(a,u)$ and $c = \ntimes(b,v)$. Now let $d = \ngcd(a,b)$ (note that $d \neq \zero$) and say $a = \ntimes(d,s)$ and $b = \ntimes(d,t)$. Note that $\ncoprime(s,t)$. Now we have
+$$\begin{eqnarray*}
+c & = & c \\
+\ntimes(a,u) & = & \ntimes(b,v) \\
+\ntimes(\ntimes(d,s),u) & = & \ntimes(\ntimes(d,t),v) \\
+\ntimes(d,\ntimes(s,u)) & = & \ntimes(d,\ntimes(d,t)) \\
+\ntimes(s,u) & = & \ntimes(t,v). \\
+\end{eqnarray*}$$
+That is, $\ndiv(t,\ntimes(s,u))$. By Euclid's lemma, we have $\ndiv(t,u)$. Next, note that
+$$\begin{eqnarray*}
+ &   & \nlcm(a,b) \\
+ & = & \nquo(\ntimes(a,b),\ngcd(a,b)) \\
+ & = & \nquo(\ntimes(a,\ntimes(t,d)),d) \\
+ & = & \nquo(\ntimes(\ntimes(a,t),d),d) \\
+ & = & \ntimes(a,t).
+\end{eqnarray*}$$
+Since $c = \ntimes(a,u)$, we have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \ndiv(t,u) \\
+ & = & \ndiv(\ntimes(a,t),\ntimes(a,u)) \\
+ & = & \ndiv(\nlcm(a,b),c)
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
+And $\nlcm(a,b)$ is unique with this property.
+
+<div class="result">
+<div class="corollary">
+Let $a,b,c \in \nats$. Suppose $m \in \nats$ satisfies the following.
+
+1. $\ndiv(a,m)$ and $\ndiv(b,m)$.
+2. If $\ndiv(a,c)$ and $\ndiv(b,c)$, then $\ndiv(m,c)$.
+
+Then $m = \nlcm(a,b)$.
+</div>
+
+<div class="proof"><p>
+Since $\ndiv(a,m)$ and $\ndiv(b,m)$, we have $\ndiv(\nlcm(a,b),m)$. But likewise we have $\ndiv(m,\nlcm(a,b))$. By antisymmetry, we have $m = \nlcm(a,b)$ as claimed.
+</p></div>
+</div>
+
+More stuff:
+
+<div class="result">
+<div class="thm">
+Let $a,b,c \in \nats$. Then we have the following.
+
+1. $\nlcm(\nlcm(a,b),c) = \nlcm(a,\nlcm(b,c))$.
+2. $\nlcm(a,b) = a$ if and only if $\ndiv(b,a)$.
+3. $\nlcm(\ntimes(c,a),ntimes(c,b)) = \ntimes(c,\nlcm(a,b))$.
+4. If $\ndiv(a,b)$, then $\ndiv(\nlcm(a,c),\nlcm(b,c))$.
+</div>
+
+<div class="proof"><p>
+1. Note that $$\ndiv(a,\nlcm(a,\nlcm(b,c))).$$ We also have $$\ndiv(b,\nlcm(b,c))$$ so that $$\ndiv(b,\nlcm(a,\nlcm(b,c))$$ by transitivity; similarly, $$\ndiv(c,\nlcm(a,\nlcm(b,c))).$$ By the universal property of $\nlcm$, we thus have $$\ndiv(\nlcm(a,b),\nlcm(a,\nlcm(b,c)))$$, so that $$\ndiv(\nlcm(\nlcm(a,b),c),\nlcm(a,\nlcm(b,c))).$$ A similar argument shows that $$\ndiv(\nlcm(a,\nlcm(b,c)),\nlcm(\nlcm(a,b),c)).$$ By antisymmetry, we thus have $$\nlcm(a,\nlcm(b,c)) = \nlcm(\nlcm(a,b),c)$$ as claimed.
+2. First suppose $\ndiv(b,a)$; say $a = \ntimes(b,d)$. Now $\ndiv(a,a)$ and $\ndiv(b,a)$, and if $\ndiv(c,a)$ and $\ndiv(c,b)$ then $\ndiv(c,a)$. By the universal property of $\nlcm$ we have $a = \nlcm(a,b)$. Conversely, suppose $a = \nlcm(a,b)$. We consider two cases: either $(a,b) = (\zero,\zero)$ or $(a,b) \neq (\zero,\zero)$. If $(a,b) = (\zero,\zero)$ then $\ndiv(b,a)$ as needed. Suppose then that $(a,b) \neq (\zero,\zero)$. If $a = \zero$, then $\ndiv(b,a)$ as claimed. Suppose $a \neq \zero$. Now let $d = \ngcd(a,b)$; note that $d \neq \zero$. Say $b = \ntimes(k,d)$. Now
+$$\begin{eqnarray*}
+ &   & \ntimes(a,\next(\zero)) \\
+ & = & a \\
+ & = & \nlcm(a,b) \\
+ & = & \nquo(\ntimes(a,b),\ngcd(a,b)) \\
+ & = & \nquo(\ntimes(\ntimes(a,k),d),d) \\
+ & = & \ntimes(a,k).
+\end{eqnarray*}$$
+Since $a \neq \zero$, we have $k = \next(\zero)$, and thus $b = \ngcd(a,b)$. Hence $\ndiv(b,a)$ as claimed.
+3. We consider two cases: either $c = \zero$ or $c \neq \zero$. If $c = \zero$ we have
+$$\begin{eqnarray*}
+ &   & \nlcm(\ntimes(c,a),\ntimes(c,b)) \\
+ & = & \nlcm(\zero,\zero) \\
+ & = & \zero \\
+ & = & \ntimes(\zero,\nlcm(a,b)) \\
+ & = & \ntimes(c,\nlcm(a,b))
+\end{eqnarray*}$$
+as claimed. Suppose then that $c \neq \zero$. Now we have
+$$\begin{eqnarray*}
+ &   & \nlcm(\ntimes(c,a),\ntimes(c,b)) \\
+ & = & \nquo(\ntimes(\ntimes(c,a),\ntimes(c,b)),\ngcd(\ntimes(c,a),\ntimes(c,b)) \\
+ & = & \nquo(\ntimes(\ntimes(c,\ntimes(a,b)),c),\ngcd(\ntimes(a,b),c)) \\
+ & = & \nquo(\ntimes(c,\ntimes(a,b)),\ngcd(a,b)) \\
+ & = & \ntimes(c,\nquo(\ntimes(a,b),\ngcd(a,b))) \\
+ & = & \ntimes(c,\nlcm(a,b))
+\end{eqnarray*}$$
+as claimed.
+4. We have
+$$\begin{eqnarray*}
+ &   & \nlcm(\nlcm(a,c),\nlcm(b,c)) \\
+ & = & \nlcm(\nlcm(a,b),\nlcm(c,c)) \\
+ & = & \nlcm(b,c) \\
+\end{eqnarray*}$$
+so that $\ndiv(\nlcm(a,c),\nlcm(b,c))$ as claimed.
+</p></div>
+</div>
+
+Finally, $\ngcd$ and $\nlcm$ distribute over each other.
+
+<div class="result">
+<div class="thm">
+Let $a,b,c \in \nats$. Then we have the following.
+
+1. $\ngcd(a,\nlcm(b,c)) = \nlcm(\ngcd(a,b),\ngcd(a,c))$.
+2. $\nlcm(a,\ngcd(b,c)) = \ngcd(\nlcm(a,b),\nlcm(a,c))$.
+</div>
+
+<div class="proof"><p>
+The proofs of these two results will not be painful, but they are a little tedious, especially with the notation we're using for arithmetic. So for this proof -- and this proof only! -- I'll make two concessions to readability. Because $\ngcd$ is associative, there is no ambiguity in an expression like $$\ngcd(a,b,c).$$ Also, we will denote $\ntimes(a,b)$ by juxtaposition (like we're used to anyway, but have been avoiding).
+
+1. First suppose $a = \zero$; note that
+$$\begin{eqnarray*}
+ &   & \ngcd(a,\nlcm(b,c)) \\
+ & = & \ngcd(\zero,\nlcm(b,c)) \\
+ & = & \nlcm(b,c) \\
+ & = & \nlcm(\ngcd(\zero,b),\ngcd(\zero,c)) \\
+ & = & \nlcm(\ngcd(a,b),\ngcd(a,c))
+\end{eqnarray*}$$
+as claimed. Next suppose $b = \zero$. Now we have
+$$\begin{eqnarray*}
+ &   & \ngcd(a,\nlcm(b,c)) \\
+ & = & \ngcd(a,\nlcm(\zero,c)) \\
+ & = & \ngcd(a,\zero) \\
+ & = & a \\
+ & = & \nlcm(\ngcd(a,b),a) \\
+ & = & \nlcm(\ngcd(a,b),\ngcd(a,\zero)) \\
+ & = & \nlcm(\ngcd(a,b),\ngcd(a,c))
+\end{eqnarray*}$$
+as claimed. Similarly, if $c = \zero$ we have
+$$\begin{eqnarray*}
+ &   & \ngcd(a,\nlcm(b,c)) \\
+ & = & \ngcd(a,\nlcm(b,\zero)) \\
+ & = & \ngcd(a,\zero) \\
+ & = & a \\
+ & = & \nlcm(a,\ngcd(a,c)) \\
+ & = & \nlcm(\ngcd(a,\zero),\ngcd(b,c)) \\
+ & = & \nlcm(\ngcd(a,c),\ngcd(b,c))
+\end{eqnarray*}$$
+as claimed. We can now assume that $a$, $b$, and $c$ are not zero; in particular, $\ngcd(b,c)$ and $\ngcd(a,\ngcd(b,c))$ are not zero. We begin with a sub-result. Note that
+$$\begin{eqnarray*}
+ &   & \ngcd(a\ngcd(b,c),bc)\ngcd(a,\ngcd(b,c)) \\
+ & = & \ngcd(\ngcd(ab,ac),bc)\ngcd(a,b,c) \\
+ & = & \ngcd(ab,ac,bc)\ngcd(a,b,c) \\
+ & = & \ngcd(ab\ngcd(a,b,c),ac\ngcd(a,b,c),bc\ngcd(a,b,c)) \\
+ & = & \ngcd(aba,abb,abc,aca,acb,acc,bca,bcb,bcc) \\
+ & = & \ngcd(aab,aac,acb,acc,bab,bac,bcb,bcc) \\
+ & = & \ngcd(aa\ngcd(b,c),ac\ngcd(b,c),ba\ngcd(b,c),bc\ngcd(b,c)) \\
+ & = & \ngcd(aa,ac,ba,bc)\ngcd(b,c) \\
+ & = & \ngcd(a\ngcd(a,c),b\ngcd(a,c))\ngcd(b,c) \\
+ & = & \ngcd(a,b)\ngcd(a,c)\ngcd(b,c).
+\end{eqnarray*}$$
+Note that $$\ndiv(\ngcd(b,c),a\ngcd(b,c))$$ and $$\ndiv(\ngcd(b,c),bc),$$ so that $$\ndiv(\ngcd(b,c),\ngcd(a\ngcd(b,c),bc));$$ thus we also have $$\ndiv(\ngcd(a,\ngcd(b,c)),\ngcd(a,b)\ngcd(a,c)).$$
+By cross-multiplication, we have
+$$\begin{eqnarray*}
+ &   & \nquo(\ngcd(a\ngcd(b,c),bc),\ngcd(b,c)) \\
+ & = & \nquo(\ngcd(a,b)\ngcd(a,c)),\ngcd(a,\ngcd(b,c))).
+\end{eqnarray*}$$
+Thus we have
+$$\begin{eqnarray*}
+ &   & \ngcd(a,\nlcm(b,c)) \\
+ & = & \ngcd(a,\nquo(bc,\ngcd(b,c))) \\
+ & = & \ngcd(\nquo(a\ngcd(b,c),\ngcd(b,c)),\nquo(bc,\ngcd(b,c))) \\
+ & = & \nquo(\ngcd(a\ngcd(b,c),bc),\ngcd(b,c)) \\
+ & = & \nquo(\ngcd(a,b)\ngcd(a,c),\ngcd(a,\ngcd(b,c)) \\
+ & = & \nquo(\ngcd(a,b)\ngcd(a,c),\ngcd(\ngcd(a,b),\ngcd(a,c))) \\
+ & = & \nlcm(\ngcd(a,b),\ngcd(a,c))
+\end{eqnarray*}$$
+as claimed.
+2. First suppose $a = \zero$. Then we have
+$$\begin{eqnarray*}
+ &   & \nlcm(a,\ngcd(b,c)) \\
+ & = & \nlcm(\zero,\ngcd(b,c)) \\
+ & = & \zero \\
+ & = & \ngcd(\zero,\zero) \\
+ & = & \ngcd(\nlcm(\zero,b),\nlcm(\zero,c)) \\
+ & = & \ngcd(\nlcm(a,b),\nlcm(a,c))
+\end{eqnarray*}$$
+as claimed. Next suppose $b = \zero$. Then we have
+$$\begin{eqnarray*}
+ &   & \nlcm(a,\ngcd(b,c)) \\
+ & = & \nlcm(a,\ngcd(\zero,c)) \\
+ & = & \nlcm(a,c) \\
+ & = & \ngcd(\zero,\nlcm(a,c)) \\
+ & = & \ngcd(\nlcm(a,\zero),\nlcm(a,c)) \\
+ & = & \ngcd(\nlcm(a,b),\nlcm(a,c))
+\end{eqnarray*}$$
+as claimed. Similarly, if $c = \zero$ we have
+$$\begin{eqnarray*}
+ &   & \nlcm(a,\ngcd(b,c)) \\
+ & = & \nlcm(a,\ngcd(b,\zero)) \\
+ & = & \nlcm(a,b) \\
+ & = & \ngcd(\nlcm(a,b),\zero) \\
+ & = & \ngcd(\nlcm(a,b),\nlcm(a,\zero)) \\
+ & = & \ngcd(\nlcm(a,b),\nlcm(a,c))
+\end{eqnarray*}$$
+as claimed. We can now assume that $a$, $b$, and $c$ are not zero; in particular, $\ngcd(a,b)\ngcd(a,c)$ and $\ngcd(a,\ngcd(b,c))$ are not zero. (@@@)
 </p></div>
 </div>
 
@@ -174,6 +368,30 @@ Property tests for ``lcm``:
 > _test_lcm_commutative :: (Natural t) => t -> t -> t -> Bool
 > _test_lcm_commutative _ a b =
 >   (lcm a b) == (lcm b a)
+> 
+> 
+> -- lcm(lcm(a,b),c) == lcm(a,lcm(b,c))
+> _test_lcm_associative :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_lcm_associative _ a b c =
+>   (lcm (lcm a b) c) == (lcm a (lcm b c))
+> 
+> 
+> -- lcm(times(c,a),times(c,b)) == times(c,lcm(a,b))
+> _test_lcm_distributive_times :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_lcm_distributive_times _ a b c =
+>   (lcm (times c a) (times c b)) == (times c (lcm a b))
+> 
+> 
+> -- lcm(gcd(c,a),gcd(c,b)) == gcd(c,lcm(a,b))
+> _test_lcm_distributive_gcd :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_lcm_distributive_gcd _ a b c =
+>   (lcm (gcd c a) (gcd c b)) == (gcd c (lcm a b))
+> 
+> 
+> -- gcd(lcm(c,a),lcm(c,b)) == lcm(c,gcd(a,b))
+> _test_gcd_distributive_lcm :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_gcd_distributive_lcm _ a b c =
+>   (gcd (lcm c a) (lcm c b)) == (lcm c (gcd a b))
 
 And the suite:
 
@@ -186,6 +404,10 @@ And the suite:
 >   , quickCheckWith args (_test_lcm_div_args t)
 >   , quickCheckWith args (_test_lcm_idempotent t)
 >   , quickCheckWith args (_test_lcm_commutative t)
+>   , quickCheckWith args (_test_lcm_associative t)
+>   , quickCheckWith args (_test_lcm_distributive_times t)
+>   , quickCheckWith args (_test_lcm_distributive_gcd t)
+>   , quickCheckWith args (_test_gcd_distributive_lcm t)
 >   ]
 >   where
 >     args = stdArgs

@@ -285,6 +285,23 @@ so $\ndiv(\ngcd(a,b),a)$, and thus $(a,b) \in A$. By strong induction, $A = \nat
 </p></div>
 </div>
 
+And $\ngcd(a,b)$ is unique with this property.
+
+<div class="result">
+<div class="thm">
+Let $a,b,c \in \nats$. Suppose $m \in \nats$ satisfies the following.
+
+1. $\ndiv(m,a)$ and $\ndiv(m,b)$.
+2. If $\ndiv(c,a)$ and $\ndiv(c,b)$, then $\ndiv(c,m)$.
+
+Then $m = \ngcd(a,b)$.
+</div>
+
+<div class="proof"><p>
+Since $\ndiv(m,a)$ and $\ndiv(m,b)$, we have $\ndiv(m,\ngcd(a,b))$. But a similar argument shows that $\ndiv(\ngcd(a,b),m)$. By antisymmetry we have $m = \ngcd(a,b)$ as claimed.
+</p></div>
+</div>
+
 From here, more properties of $\ngcd$ are much easier to prove.
 
 <div class="result">
@@ -294,6 +311,9 @@ Let $a,b,c \in \nats$. Then we have the following.
 1. $\ngcd(\ngcd(a,b),c) = \ngcd(a,\ngcd(b,c))$.
 2. $\ngcd(a,b) = a$ if and only if $\ndiv(a,b)$.
 3. $\ngcd(\ntimes(a,c),\ntimes(b,c)) = \ntimes(\ngcd(a,b),c)$.
+4. If $\ngcd(a,b) = \zero$, then $a = b = \zero$.
+5. If $\ndiv(a,b)$, then $\ndiv(\ngcd(a,c),\ngcd(b,c))$.
+6. If $\ndiv(c,a)$ and $\ndiv(c,b)$, then $$\ngcd(\nquo(a,c),\nquo(b,c)) = \nquo(\ngcd(a,b),c).$$
 </div>
 
 <div class="proof"><p>
@@ -315,6 +335,28 @@ $$\begin{eqnarray*}
  & = & \ngcd(\ntimes(a,c),\ntimes(b,c))
 \end{eqnarray*}$$
 as claimed. Now suppose $c \neq \zero$. First note that $\ndiv(\ngcd(a,b),a)$, so that $$\ndiv(\ntimes(\ngcd(a,b),c),\ntimes(a,c)).$$ Similarly, we have $$\ndiv(\ntimes(\ngcd(a,b),c),\ntimes(b,c)).$$ Thus $$\ndiv(\ntimes(\ngcd(a,b),c), \ngcd(\ntimes(a,c),\ntimes(b,c))).$$ Now note that $\ndiv(c,\ntimes(a,c))$ and $\ndiv(c,\ntimes(b,c))$, so that $$\ndiv(c,\ngcd(\ntimes(a,c),\ntimes(b,c))).$$ Say $$\ntimes(u,c) = \ngcd(\ntimes(a,c),\ntimes(b,c)).$$ Now $\ndiv(\ntimes(u,c),\ntimes(a,c))$, so that $\ndiv(u,a)$; similarly, $\ndiv(u,b)$. Thus $\ndiv(u,\ngcd(a,b))$, and we have $$\ndiv(\ngcd(\ntimes(a,c),\ntimes(b,c)),\ntimes(\ngcd(a,b),c)).$$ By the antisymmetry of $\ndiv$, we have $$\ngcd(\ntimes(a,c),\ntimes(b,c) = \ntimes(\ngcd(a,b),c)$$ as claimed.
+4. We proceed by strong induction on $b$. For the base case $b = \zero$, note that $$a = \ngcd(a,\zero) = \zero$$ as claimed. Now suppose we have $n$ such that the implication holds for all $b$ with $\nleq(b,n)$, and that $b = \next(n)$. Now $$\zero = \ngcd(a,b) = \ngcd(b,\nrem(a,b)),$$ where $\nleq(\nrem(a,b),b)$. By the induction hypothesis we have $b = \zero$ and $\nrem(a,b) = \zero$, so that $$a = \nplus(\ntimes(\nquo(a,b),b),\nrem(a,b)) = \zero$$ as claimed.
+5. Note that
+$$\begin{eqnarray*}
+ &   & \ngcd(\ngcd(a,c),\ngcd(b,c)) \\
+ & = & \ngcd(\ngcd(a,b),\ngcd(c,c)) \\
+ & = & \ngcd(a,c).
+\end{eqnarray*}$$
+Thus $\ndiv(\ngcd(a,c),\ngcd(b,c))$ as claimed.
+6. We consider two cases: either $c = \zero$ or $c \neq \zero$. If $c = \zero$, then $\nquo(a,c) = \zero$ and $\nquo(b,c) = \zero$, so we have
+$$\begin{eqnarray*}
+ &   & \ngcd(\nquo(a,c),\nquo(b,c)) \\
+ & = & \ngcd(\zero,\zero) \\
+ & = & \zero \\
+ & = & \nquo(\ngcd(a,b),c)
+\end{eqnarray*}$$
+as claimed. Suppose now that $c \neq \zero$. Say $a = \ntimes(c,u)$ and $b = \ntimes(c,v)$. Note that
+$$\begin{eqnarray*}
+ &   & \ntimes(c,\ngcd(u,v)) \\
+ & = & \ngcd(\ntimes(c,u),\ntimes(c,v)) \\
+ & = & \ngcd(a,b).
+\end{eqnarray*}$$
+By the uniqueness of quotients by nonzero divisors, $$\nquo(\ngcd(a,b),c) = \ngcd(\nquo(a,c),\nquo(b,c))$$ as claimed.
 </p></div>
 </div>
 

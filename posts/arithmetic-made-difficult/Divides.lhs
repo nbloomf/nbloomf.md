@@ -114,6 +114,57 @@ so that $\nleq(a,b)$.
 </p></div>
 </div>
 
+Some more.
+
+<div class="result">
+<div class="thm">
+Let $a,b,c,d \in \nats$. Then we have the following.
+
+1. If $\ndiv(b,a)$ and $c \neq \zero$, then $$\nquo(\ntimes(a,c),\ntimes(b,c)) = \nquo(a,b).$$
+2. If $\ndiv(b,a)$, then $\nquo(\ntimes(c,a),b) = \ntimes(c,\nquo(a,b))$.
+3. If $\ndiv(c,a)$, $n \neq \zero$, and $\ntimes(a,b) = \ntimes(c,d)$, then $\ndiv(b,d)$.
+</div>
+
+<div class="proof"><p>
+1. We consider two cases: either $b = \zero$ or $b \neq \zero$. If $b = \zero$ then we have $a = \zero$, and
+$$\begin{eqnarray*}
+ &   & \nquo(a,b) \\
+ & = & \nquo(\zero,\zero) \\
+ & = & \nquo(\ntimes(\zero,c),\ntimes(\zero,c)) \\
+ & = & \nquo(\ntimes(a,c),\ntimes(b,c))
+\end{eqnarray*}$$
+as claimed. Suppose instead that $b \neq \zero$; say $b = \next(m)$. Since $\ndiv(b,a)$, we have $a = \ntimes(d,b)$ for some $d$; since $\nleq(\zero,m)$, by the uniqueness of quotients by nonzero divisors we have $d = \nquo(a,b)$. But also $$\ntimes(a,c) = \ntimes(d,\ntimes(b,c)),$$ and since $\ntimes(b,c) \neq \zero$ we again have $$d = \nquo(\ntimes(a,c),\ntimes(b,c))$$ by the uniqueness of quotients by nonzero divisors. Thus $$\nquo(a,b) = \nquo(\ntimes(a,c),\ntimes(b,c))$$ as claimed.
+2. We consider two cases: either $b = \zero$ or $b \neq \zero$. If $b = \zero$, we have $a = \zero$. Now
+$$\begin{eqnarray*}
+ &   & \nquo(\ntimes(c,a),b) \\
+ & = & \nquo(\zero,\zero) \\
+ & = & \zero \\
+ & = & \ntimes(c,\zero) \\
+ & = & \ntimes(c,\nquo(a,b))
+\end{eqnarray*}$$
+as claimed. Suppose then that $b \neq \zero$; say $b = \next(m)$. Now say $a = \ntimes(q,b)$, and by the uniqueness of quotients by a nonzero divisor, we have $q = \nquo(a,b)$. Now $\ntimes(c,a) = \ntimes(\ntimes(c,q),b)$, and again by the uniqueness of quotients by a nonzero divisor we have
+$$\begin{eqnarray*}
+ &   & \nquo(\ntimes(c,a),b) \\
+ & = & \ntimes(c,q) \\
+ & = & \ntimes(c,\nquo(a,b))
+\end{eqnarray*}$$
+as claimed.
+3. Say $a = \ntimes(c,u)$. Now $$\ntimes(c,\ntimes(u,b)) = \ntimes(c,d),$$ so that $d = \ntimes(u,b)$. Thus $\ndiv(b,d)$ as claimed.
+</p></div>
+</div>
+
+We'll call the next result the Cross Multiplication Theorem.
+
+<div class="result">
+<div class="thm">
+Let $a,b,c,d \in \nats$ such that $\ndiv(b,a)$ and $\ndiv(d,c)$ and $b, d \neq \zero$. Then $$\ntimes(a,d) = \ntimes(b,c)$$ if and only if $\nquo(a,b) = \nquo(c,d).$$
+</div>
+
+<div class="proof"><p>
+Since $b$ and $d$ are both not zero, using the uniqueness of quotients by nonzero divisors we have $$\ntimes(a,d) = \ntimes(b,c)$$ if and only if $$\nquo(\ntimes(a,d),b) = c$$ if and only if $$\ntimes(d,\nquo(a,b)) = c$$ if and only if $$\nquo(a,b) = \nquo(c,d)$$ as claimed.
+</p></div>
+</div>
+
 
 Implementation and Testing
 --------------------------
