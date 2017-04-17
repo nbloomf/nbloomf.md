@@ -121,8 +121,8 @@ $$\begin{eqnarray*}
  & = & (\zero, \next(a))
 \end{eqnarray*}$$
 as needed.
-3. Note that $a = \nplus(\ntimes(a,\next(\zero)),\zero)$ and $\nleq(\zero,\zero)$. By the uniqueness of quotients and remainders for nonzero divisors, we have $\ndiv(a,\next(\zero)) = (a,\zero)$ as claimed.
-4. Note that $a = \nplus(\ntimes(\zero,\next(b)),a)$ and $\nleq(a,b)$. By the uniqueness of quotients and remainders for positive divisors we have $\ndiv(a,\next(b)) = (\zero,a)$.
+3. Note that $a = \nplus(\ntimes(a,\next(\zero)),\zero)$ and $\nleq(\zero,\zero)$. By the uniqueness of quotients and remainders for nonzero divisors, we have $\ndivalg(a,\next(\zero)) = (a,\zero)$ as claimed.
+4. Note that $a = \nplus(\ntimes(\zero,\next(b)),a)$ and $\nleq(a,b)$. By the uniqueness of quotients and remainders for positive divisors we have $\ndivalg(a,\next(b)) = (\zero,a)$.
 </p></div>
 </div>
 

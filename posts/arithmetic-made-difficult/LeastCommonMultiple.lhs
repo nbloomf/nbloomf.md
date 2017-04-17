@@ -43,7 +43,7 @@ For all $a \in \nats$ we have the following.
 2. $\nlcm(a,\next(\zero)) = a$.
 </div>
 
-<div class="proof"></p>
+<div class="proof"><p>
 1. Note that
 $$\begin{eqnarray*}
  &   & \nlcm(a,\zero) \\
