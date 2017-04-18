@@ -26,8 +26,8 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Greatest Common Divisor](/posts/arithmetic-made-difficult/GreatestCommonDivisor.html)
     * [Coprime To](/posts/arithmetic-made-difficult/CoprimeTo.html)
     * [Least Common Multiple](/posts/arithmetic-made-difficult/LeastCommonMultiple.html)
-    * Primes
-    * Exponentiation
+    * [Primes](/posts/arithmetic-made-difficult/IsPrime.html)
+    * [Exponentiation](/posts/arithmetic-made-difficult/Exponentiation.html)
 3. Finite Lists
 4. Fixed Radix Numeral Systems
 

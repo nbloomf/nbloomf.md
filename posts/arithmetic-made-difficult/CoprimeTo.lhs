@@ -53,7 +53,7 @@ The second result doesn't have a name as far as I know, but is still handy. The 
 
 <div class="result">
 <div class="thm"><p>
-Let $a,b,u,v \in \nats$ such that $a,b \neq \zero$, $$a = \ntimes(u,\ngcd(a,b))$ and $v = \ntimes(v,\ngcd(a,b)).$$ Then $\ncoprime(u,v)$.
+Let $a,b,u,v \in \nats$ such that $a,b \neq \zero$, $$a = \ntimes(u,\ngcd(a,b))$$ and $$b = \ntimes(v,\ngcd(a,b)).$$ Then $\ncoprime(u,v)$.
 </p></div>
 
 <div class="proof"><p>

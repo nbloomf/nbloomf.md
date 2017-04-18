@@ -6,7 +6,7 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > module IsPrime
->   ( isPrime, _test_isPrime
+>   ( mindiv, prime, _test_prime
 >   ) where
 >
 > import Prelude hiding (div, rem, gcd, lcm)
@@ -104,20 +104,55 @@ as claimed.
 </p></div>
 </div>
 
+Now we define a boolean function $\nisprime$ as follows.
 
+<div class="result">
+<div class="defn"><p>
+Define $\nisprime : \nats \rightarrow \bool$ by $$\nisprime(a) = \left\{ \begin{array}{ll} \bfalse & \mathrm{if} a = \zero\ \mathrm{or}\ a = \next(\zero) \\ \nequal(a,\nmindiv(a)) & \mathrm{otherwise}. \end{array} \right.$$
+</p></div>
+</div>
+
+It is straightforward to show that $\nisprime$ is equivalent to the usual definition.
 
 <div class="result">
 <div class="thm">
 Let $a \in \nats$. Then the following are equivalent.
 
 1. $\nisprime(a) = \btrue$.
-2. $a \neq \zero$ and $a \neq \next(\zero)$, and there exists $b \in \nats$ such that $b \neq a$ and $b \neq \next(\zero)$ and $\ndiv(b,a)$.
-3. $a \neq \zero$ and $a \neq \next(\zero)$, and if $u,v \in \nats$ such that $a = \ntimes(u,v)$, then $(u,v)$ is either $(\next(\zero),a)$ or $(a,\next(\zero))$.
-4. $a \neq \zero$ and $a \neq \next(\zero)$, and if $u,v \in \nats$ such that $\ndiv(a,\ntimes(u,v))$, then either $\ndiv(a,u)$ or $\ndiv(a,v)$.
+2. $a \neq \zero$ and $a \neq \next(\zero)$, and if $u,v \in \nats$ such that $a = \ntimes(u,v)$, then $(u,v)$ is either $(\next(\zero),a)$ or $(a,\next(\zero))$.
+3. $a \neq \zero$ and $a \neq \next(\zero)$, and if $u,v \in \nats$ such that $\ndiv(a,\ntimes(u,v))$, then either $\ndiv(a,u)$ or $\ndiv(a,v)$.
 </div>
 
 <div class="proof"><p>
-(@@@)
+$(1)$ implies $(2)$: Suppose $\nisprime(a) = \btrue$. Certainly $a \neq \zero$ and $a \neq \next(\zero)$ (by definition), and we have $a = \nmindiv(a)$. Suppose now that $a = \ntimes(u,v)$; we consider three cases for $u$. If $u = \zero$ we have $a = \zero$, a contradiction. If $u = \next(\zero)$, then $v = a$. If $a \neq \zero$ and $a \neq \next(\zero)$, we have $\ndiv(u,a)$, so that $\nleq(\nmindiv(a),u)$; thus $\nleq(a,u)$. But also $\nleq(u,a)$, so that $u = a$, and thus $v = \next(\zero)$ as claimed.
+
+$(2)$ implies $(3)$: Of course $a \neq \zero$ and $a \neq \next(\zero)$. Say $\ndiv(a,\ntimes(u,v))$, and consider $\ngcd(a,u)$. In particular, we have $a = \ntimes(k,\ngcd(a,u))$ for some $k$. There are two possibilities: if $\ngcd(a,u) = a$, then $\ndiv(a,u)$, and if $\ngcd(a,u) = \next(\zero)$, then $\ndiv(a,v)$ by Euclid's lemma.
+
+$(3)$ implies $(1)$: It suffices to show that if $a \neq \zero$ and $a \neq \next(\zero)$ then $\nmindiv(a) = a$. To this end, let $d = \nmindiv(a)$ and write $a = \ntimes(\nmindiv(a),k)$. Suppose $\ndiv(a,k)$, with $k = \ntimes(a,w)$. Since $a \neq \zero$, by cancellation we have $\next(\zero) = \ntimes(\nmindiv(a),w)$, so that $\nmindiv(a) = \next(\zero)$, a contradiction. Thus $\ndiv(a,\nmindiv(a))$, so we have $a = \nmindiv(a)$ as needed.
+</p></div>
+</div>
+
+Minimal divisors are prime.
+
+<div class="result">
+<div class="thm">
+Let $a \in \nats$ with $a \neq \zero$ and $a \neq \next(\zero)$. Then $$\nisprime(\nmindiv(a)) = \btrue.$$
+</div>
+
+<div class="proof"><p>
+Let $a \in \nats$ with $a \neq \zero$ and $a \neq \next(\zero)$, and let $d = \nmindiv(a)$. Suppose now that $d = \ntimes(u,v)$. Since $d \neq \zero$, we have $u \neq \zero$. If $u = \next(\zero)$, we have $v = d$. If $u \neq \next(\zero)$, we have $\ndiv(u,a)$ and thus $\nleq(d,u)$; but $\nleq(u,d)$, so that $d = u$ by antisymmetry and thus $v = \next(\zero)$. Thus $\nisprime(\nmindiv(a))$ as claimed.
+</p></div>
+</div>
+
+Primes interact with $\ngcd$ as expected.
+
+<div class="result">
+<div class="thm">
+Let $p,a \in \nats$ with $\nisprime(p)$. Then $$\ngcd(a,p) = \left\{ \begin{array}{ll} p & \mathrm{if}\ \ndiv(p,a) \\ \next(\zero) & \mathrm{otherwise}. \end{array} \right.$$
+</div>
+
+<div class="proof"><p>
+Let $d = \ngcd(a,p)$. Now $\ndiv(d,p)$, so that either $d = \next(\zero)$ or $d = p$. If $\ndiv(p,a) = \bfalse$, we thus have $d = \next(\zero)$.
 </p></div>
 </div>
 
@@ -143,11 +178,20 @@ Here's ``mindiv`` and ``prime``:
 >   | leq a (next zero) = False
 >   | otherwise         = a == mindiv a
 
-Property tests for ``isPrime``:
+Property tests:
 
-> -- prime(next(next(zero))) == true
-> --_test_prime_case :: (Natural t) => t -> Bool
-> --_test_prime_case a = isPrime a == True
+> -- div(mindiv(a),a) == true
+> _test_mindiv_div :: (Natural t) => t -> t -> Bool
+> _test_mindiv_div _ a =
+>   (div (mindiv a) a) == True
+> 
+> 
+> -- prime(mindiv(a)) == true
+> _test_prime_mindiv :: (Natural t) => t -> t -> Bool
+> _test_prime_mindiv _ a =
+>   if a /= zero && a /= next zero
+>     then (prime (mindiv a)) == True
+>     else True
 
 And the suite:
 
@@ -155,7 +199,8 @@ And the suite:
 > _test_prime :: (Natural t, Arbitrary t, Show t)
 >   => t -> Int -> Int -> IO ()
 > _test_prime t maxSize numCases = sequence_
->   [ --quickCheckWith args (_test_lcm_zero t)
+>   [ quickCheckWith args (_test_mindiv_div t)
+>   , quickCheckWith args (_test_prime_mindiv t)
 >   ]
 >   where
 >     args = stdArgs
