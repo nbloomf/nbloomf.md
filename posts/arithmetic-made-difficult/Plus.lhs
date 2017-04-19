@@ -6,7 +6,7 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > module Plus
->   ( plus, _test_plus
+>   ( plus, _test_plus, main_plus
 >   ) where
 >
 > import NaturalNumbers
@@ -48,8 +48,25 @@ The following hold for all natural numbers $a$, $b$, and $c$.
 </div>
 
 <div class="proof"><p>
-1. Note that $$\nplus(\zero,a) = \simprec{\id}{\mu}(\zero,a) = \id(a) = a.$$ We show the second equality by induction on $a$. For the base case, we have $\nplus(\zero,\zero) = \zero$ by the first equality. For the inductive step, suppose we have $\nplus(a,\zero) = a$ for some $a$. Then $$\begin{eqnarray*}  & & \nplus(\next(a),\zero) \\ & = & \simprec{\id}{\mu}(\next(a),\zero) \\ & = & \mu(a, \zero, \simprec{\id}{\mu}(a,\zero)) \\ & = & \mu(a, \zero, \nplus(a, \zero)) \\ & = & \mu(a,\zero,a) \\ & = & \next(a) \end{eqnarray*}$$ as needed.
-2. Note that $$\begin{eqnarray*} & & \nplus(\next(a),b) \\ & = & \simprec{\id}{\mu}(\next(a),b) \\ & = & \mu(a,b,\simprec{\id}{\mu}(a,b)) \\ & = & \mu(a,b,\nplus(a,b)) \\ & = & \next(\nplus(a,b)). \end{eqnarray*}$$ We show the second equality by induction on $a$. For the base case, note that $$\begin{eqnarray*} & & \nplus(\zero,\next(b)) \\ & = & \simprec{\id}{\mu}(\zero,\next(b)) \\ & = & \id(\next(b)) \\ & = & \next(b). \end{eqnarray*}$$ For the inductive step, suppose we have $\next(\nplus(a,b)) = \nplus(a,\next(b))$ for some $a$. Then $$\begin{eqnarray*} & & \nplus(\next(a),\next(b)) \\ & = & \simprec{\id}{\mu}(\next(a),\next(b)) \\ & = & \mu(a, \next(b), \simprec{\id}{\mu}(a, \next(b))) \\ & = & \mu(a, \next(b), \nplus(a, \next(b))) \\ & = & \mu(a, \next(b), \next(\nplus(a,b))) \\ & = & \next(\next(\nplus(a,b))) \\ & = & \next(\nplus(\next(a),b)) \end{eqnarray*}$$ as needed.
+1. Note that $$\nplus(\zero,a) = \simprec{\id}{\mu}(\zero,a) = \id(a) = a.$$ We show the second equality by induction on $a$. For the base case, we have $\nplus(\zero,\zero) = \zero$ by the first equality. For the inductive step, suppose we have $\nplus(a,\zero) = a$ for some $a$. Then
+$$\begin{eqnarray*}
+ &   & \nplus(\next(a),\zero) \\
+ & = & \simprec{\id}{\mu}(\next(a),\zero) \\
+ & = & \mu(a, \zero, \simprec{\id}{\mu}(a,\zero)) \\
+ & = & \mu(a, \zero, \nplus(a, \zero)) \\
+ & = & \mu(a,\zero,a) \\
+ & = & \next(a)
+\end{eqnarray*}$$
+as needed.
+2. Note that
+$$\begin{eqnarray*}
+ &   & \nplus(\next(a),b) \\
+ & = & \simprec{\id}{\mu}(\next(a),b) \\
+ & = & \mu(a,b,\simprec{\id}{\mu}(a,b)) \\
+ & = & \mu(a,b,\nplus(a,b)) \\
+ & = & \next(\nplus(a,b)).
+\end{eqnarray*}$$
+We show the second equality by induction on $a$. For the base case, note that $$\begin{eqnarray*} & & \nplus(\zero,\next(b)) \\ & = & \simprec{\id}{\mu}(\zero,\next(b)) \\ & = & \id(\next(b)) \\ & = & \next(b). \end{eqnarray*}$$ For the inductive step, suppose we have $\next(\nplus(a,b)) = \nplus(a,\next(b))$ for some $a$. Then $$\begin{eqnarray*} & & \nplus(\next(a),\next(b)) \\ & = & \simprec{\id}{\mu}(\next(a),\next(b)) \\ & = & \mu(a, \next(b), \simprec{\id}{\mu}(a, \next(b))) \\ & = & \mu(a, \next(b), \nplus(a, \next(b))) \\ & = & \mu(a, \next(b), \next(\nplus(a,b))) \\ & = & \next(\next(\nplus(a,b))) \\ & = & \next(\nplus(\next(a),b)) \end{eqnarray*}$$ as needed.
 3. We will show this by induction on $a$. For the base case, note that $$\nplus(\nplus(\zero,b),c) = \nplus(b,c) = \nplus(\zero,\nplus(b,c)).$$ For the inductive step, suppose the result holds for some $a$. Then $$\begin{eqnarray*} & & \nplus(\nplus(\next(a),b),c) \\ & = & \nplus(\next(\nplus(a,b)),c) \\ & = & \next(\nplus(\nplus(a,b),c)) \\ & = & \next(\nplus(a, \nplus(b,c))) \\ & = & \nplus(\next(a), \nplus(b,c)) \end{eqnarray*}$$ as needed.
 4. We proceed by induction on $a$. For the base case, note that $$\nplus(\zero,b) = b = \nplus(b,\zero).$$ For the inductive step, suppose the result holds for some $a$. Then we have $$\begin{eqnarray*} & & \nplus(\next(a),b) \\ & = & \next(\nplus(a,b)) \\ & = & \next(\nplus(b,a)) \\ & = & \nplus(b, \next(a))\end{eqnarray*}$$ as needed.
 5. We proceed by induction on $c$. For the base case, note that if $\nplus(\zero,a) = \nplus(\zero,b)$, then we have $$a = \nplus(\zero,a) = \nplus(\zero,b) = b.$$ For the inductive step, suppose the result holds for some $c$. Now if $$\nplus(\next(c),a)) = \nplus(\next(c),b),$$ then $$\next(\nplus(c,a)) = \next(\nplus(c,b))$$ so that $$\nplus(c,a) = \nplus(c,b)$$ and thus $a = b$ as needed.
@@ -127,3 +144,6 @@ $> _test_plus (zero :: Nat) 100 1000
 ```
 
 woo!
+
+> main_plus :: IO ()
+> main_plus = _test_plus (zero :: Nat) 100 100

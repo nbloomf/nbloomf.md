@@ -1,7 +1,7 @@
-name:               nbloomf-md
-version:            0.1.0.0
-build-type:         Simple
-cabal-version:      >= 1.10
+name:          nbloomf-md
+version:       0.1.0.0
+build-type:    Simple
+cabal-version: >= 1.10
 
 executable site
   main-is:

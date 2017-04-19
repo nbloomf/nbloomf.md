@@ -114,7 +114,7 @@ The ``matchPosts`` rule is a little different from the others we've seen so far.
 
 > matchPosts :: Tags -> Rules ()
 > matchPosts tags = do
->   match "posts/**" $ do
+>   match (anyPattern ["posts/**.md", "posts/**.lhs"]) $ do
 >     route $ setExtension "html"
 >
 >     let ctx = postWithTagsCtx tags

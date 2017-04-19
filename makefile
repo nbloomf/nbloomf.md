@@ -3,7 +3,7 @@ CLASSDIR = $(HOME)/documents/classes
 NOTEDIR  = $(HOME)/documents/notebooks
 TEXDIR   = $(HOME)/documents/tex-examples
 
-PATH := $(shell pwd)/_bin:$(PATH)
+PATH := $(shell pwd)/_bin/sth:$(shell pwd)/_bin/amd:$(PATH)
 
 all: move FORCE
 	@echo "built nbloomf.github.io" | doppler lightgreen
@@ -72,7 +72,12 @@ check: FORCE
 	@rm -r nbloomf.github.io
 
 
-tools:
+
+#---------------------------#
+# software tools in haskell #
+#---------------------------#
+
+sth:
 	$(call software_tools_exe,noop)
 	$(call software_tools_exe,copy)
 	$(call software_tools_exe,count)
@@ -105,25 +110,48 @@ tools:
 	$(call software_tools_exe,linenumber)
 	$(call software_tools_exe,bubble)
 	@echo 'testing...' | doppler lightgreen
-	@(cd _bin/; shelltest --color --execdir ../test/ -- --threads=16 --hide-successes)
+	@(shelltest --color --execdir test/sth -- --threads=16 --hide-successes)
 
 # compile a literate haskell post
 # $(1) is the source file path sans name
 # $(2) is the source file name sans extension
 # $(3) is the desired executable name
+# $(4) is the target path inside _bin
 define haskell_exe
   @echo "building $(1)/$(2)" | doppler lightblue
   @cp posts/$(1)/$(2).lhs _temp/$(3).lhs
   @cp -R posts/$(1)/Lib _temp/Lib
   @(cd _temp/; ghc -O2 --make $(3).lhs)
   @rm -r _temp/$(3).hi _temp/$(3).o _temp/$(3).lhs _temp/Lib
-  @mv _temp/$(3) _bin/$(3)
+  @mv _temp/$(3) _bin/$(4)/$(3)
 endef
 
 # compile a software tools post
 define software_tools_exe
-  $(call haskell_exe,software-tools-in-haskell,$(1),sth-$(1))
+  $(call haskell_exe,software-tools-in-haskell,$(1),sth-$(1),sth)
+endef
+
+
+
+#---------------------------#
+# arithmetic made difficult #
+#---------------------------#
+
+amd: FORCE
+	@(cd posts/arithmetic-made-difficult; cabal install)
+	$(call amd_move,plus)
+	$(call amd_move,times)
+	$(call amd_move,minus)
+	@rm -rf posts/arithmetic-made-difficult/dist
+	@(shelltest --color --execdir test/amd -- --threads=16 --hide-successes)
+
+# move an arithmetic made difficult exe
+define amd_move
+  @echo "moving $(1)" | doppler lightblue
+  @mv posts/arithmetic-made-difficult/dist/build/amd-$(1)/amd-$(1) _bin/amd
 endef
 
 
 FORCE:
+
+.PHONY: amd

@@ -6,7 +6,7 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > module Minus
->   ( minus, _test_minus
+>   ( minus, _test_minus, main_minus
 >   ) where
 >
 > import NaturalNumbers
@@ -251,3 +251,6 @@ And a suite:
 >      { maxSuccess = numCases
 >      , maxSize    = maxSize
 >      }
+
+> main_minus :: IO ()
+> main_minus = _test_minus (zero :: Nat) 100 100

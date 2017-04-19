@@ -6,7 +6,7 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > module Times
->  ( times, _test_times
+>  ( times, _test_times, main_times
 >  ) where
 > 
 > import NaturalNumbers
@@ -160,3 +160,6 @@ $> _test_times (zero :: Nat) 10 10
 I used a much smaller number of test cases this time, because these run much more slowly than the tests for ``plus``. The culprit is ``_test_times_associative``. What's happening is that multiplication of ``Nat``s is inherently slow; it's implemented as iterated addition, which itself is iterated ``N``.
 
 The problem lies in our *representation* of the natural numbers. A better representation might make a more efficient ``times`` possible.
+
+> main_times :: IO ()
+> main_times = _test_times (zero :: Nat) 20 100
