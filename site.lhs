@@ -20,6 +20,7 @@ As usual we begin with some pragmas and imports, to be used later. The ``Overloa
 >
 > import Hakyll
 > import Hakyll.Shortcode
+> import Control.Monad
 > import Data.Monoid (mconcat)
 > import qualified Data.Set as S (fromList, union)
 > import Text.Regex (subRegex, mkRegex)
@@ -121,14 +122,12 @@ The ``matchPosts`` rule is a little different from the others we've seen so far.
 >
 >     compile $ pandocMathCompiler
 >       >>= applyShortcodes allServices
->       >>= loadAndApplyTemplateIfTagged
->             "literate-haskell" "templates/literate-haskell.html" ctx
->       >>= loadAndApplyTemplateIfTagged
->             "software-tools-in-haskell" "templates/sth-tools.html" ctx
->       >>= loadAndApplyTemplateIfTagged
->             "arithmetic-made-difficult" "templates/amd.html" ctx
->       >>= loadAndApplyTemplateIfTagged
->             "project-euler" "templates/project-euler-solutions.html" ctx
+>       >>= applyTagTemplates ctx
+>             [ ("literate-haskell",          "templates/literate-haskell.html")
+>             , ("software-tools-in-haskell", "templates/sth-tools.html")
+>             , ("arithmetic-made-difficult", "templates/amd.html")
+>             , ("project-euler",             "templates/project-euler-solutions.html")
+>             ]
 >       >>= loadAndApplyTemplate
 >             "templates/post.html" ctx
 >       >>= loadAndApplyTemplate
@@ -137,9 +136,24 @@ The ``matchPosts`` rule is a little different from the others we've seen so far.
 
 Here we also used a custom compiler, ``loadAndApplyTemplateIfTagged``, which loads a given template only if a post has a given tag. This is a cheap way to give some and only some posts a custom header or style.
 
-> loadAndApplyTemplateIfTagged
->   :: String -> Identifier -> Context String -> Item String -> Compiler (Item String)
-> loadAndApplyTemplateIfTagged tag template context x = do
+> applyTagTemplates
+>   :: Context String
+>   -> [(String,Identifier)]
+>   -> Item String
+>   -> Compiler (Item String)
+> applyTagTemplates ctx ts x =
+>   let
+>     foo z (tag,temp) = applyTemplateIfTagged tag temp ctx z
+>   in foldM foo x ts
+> 
+> 
+> applyTemplateIfTagged
+>   :: String
+>   -> Identifier
+>   -> Context String
+>   -> Item String
+>   -> Compiler (Item String)
+> applyTemplateIfTagged tag template context x = do
 >   path <- getUnderlying
 >   tags <- getTags path
 >   if elem tag tags
