@@ -6,7 +6,7 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > module DivisionAlgorithm
->   ( divalg, quo, rem, _test_divalg
+>   ( divalg, quo, rem, _test_divalg, main_divalg
 >   ) where
 >
 > import Prelude hiding (rem)
@@ -242,3 +242,6 @@ And the suite:
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+
+> main_divalg :: IO ()
+> main_divalg = _test_divalg (zero :: Nat) 20 100

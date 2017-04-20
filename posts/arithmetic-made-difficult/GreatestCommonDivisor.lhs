@@ -6,7 +6,7 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > module GreatestCommonDivisor
->   ( gcd, _test_gcd
+>   ( gcd, _test_gcd, main_gcd
 >   ) where
 >
 > import Prelude hiding (div, rem, gcd)
@@ -449,3 +449,6 @@ And the suite:
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+
+> main_gcd :: IO ()
+> main_gcd = _test_gcd (zero :: Nat) 20 100

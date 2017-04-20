@@ -6,7 +6,7 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > module CoprimeTo
->   ( coprime, _test_coprime
+>   ( coprime, _test_coprime, main_coprime
 >   ) where
 >
 > import Prelude hiding (div, rem, gcd, lcm)
@@ -106,3 +106,6 @@ And the suite:
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+
+> main_coprime :: IO ()
+> main_coprime = _test_coprime (zero :: Nat) 20 100

@@ -6,7 +6,7 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > module MaxAndMin
->   ( max, min, _test_max_min
+>   ( max, min, _test_max_min, main_max_min
 >   ) where
 >
 > import Prelude hiding (max, min)
@@ -303,3 +303,6 @@ And the suite for ``max`` and ``min``:
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+
+> main_max_min :: IO ()
+> main_max_min = _test_max_min (zero :: Nat) 100 100

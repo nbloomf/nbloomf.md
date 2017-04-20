@@ -6,7 +6,7 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > module LeastCommonMultiple
->   ( lcm, _test_lcm
+>   ( lcm, _test_lcm, main_lcm
 >   ) where
 >
 > import Prelude hiding (div, rem, gcd, lcm)
@@ -443,3 +443,6 @@ And the suite:
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+
+> main_lcm :: IO ()
+> main_lcm = _test_lcm (zero :: Nat) 20 100

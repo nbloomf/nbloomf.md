@@ -73,62 +73,62 @@ check: FORCE
 
 
 
+#----------------#
+# literate posts #
+#----------------#
+
+literate: sth-test amd-test
+
+
+
 #---------------------------#
 # software tools in haskell #
 #---------------------------#
 
-sth:
-	$(call software_tools_exe,noop)
-	$(call software_tools_exe,copy)
-	$(call software_tools_exe,count)
-	$(call software_tools_exe,wordcount)
-	$(call software_tools_exe,sentcount)
-	$(call software_tools_exe,glyphcount)
-	$(call software_tools_exe,detab)
-	$(call software_tools_exe,charcombine)
-	$(call software_tools_exe,charfullwidth)
-	$(call software_tools_exe,entab)
-	$(call software_tools_exe,echo)
-	$(call software_tools_exe,overstrike)
-	$(call software_tools_exe,unescape)
-	$(call software_tools_exe,escape)
-	$(call software_tools_exe,compress)
-	$(call software_tools_exe,expand)
-	$(call software_tools_exe,crypt)
-	$(call software_tools_exe,translit)
-	$(call software_tools_exe,charreplace)
-	$(call software_tools_exe,tail)
-	$(call software_tools_exe,getlines)
-	$(call software_tools_exe,compare)
-	$(call software_tools_exe,import)
-	$(call software_tools_exe,concat)
-	$(call software_tools_exe,wye)
-	$(call software_tools_exe,pslineprint)
-	$(call software_tools_exe,paginate)
-	$(call software_tools_exe,examine)
-	$(call software_tools_exe,archive)
-	$(call software_tools_exe,linenumber)
-	$(call software_tools_exe,bubble)
-	@echo 'testing...' | doppler lightgreen
+sth-test: sth
+	@echo "testing sth..." | doppler lightblue
 	@(shelltest --color --execdir test/sth -- --threads=16 --hide-successes)
 
-# compile a literate haskell post
-# $(1) is the source file path sans name
-# $(2) is the source file name sans extension
-# $(3) is the desired executable name
-# $(4) is the target path inside _bin
-define haskell_exe
-  @echo "building $(1)/$(2)" | doppler lightblue
-  @cp posts/$(1)/$(2).lhs _temp/$(3).lhs
-  @cp -R posts/$(1)/Lib _temp/Lib
-  @(cd _temp/; ghc -O2 --make $(3).lhs)
-  @rm -r _temp/$(3).hi _temp/$(3).o _temp/$(3).lhs _temp/Lib
-  @mv _temp/$(3) _bin/$(4)/$(3)
-endef
+sth: FORCE
+	@echo "building sth..." | doppler lightblue
+	@(cd posts/software-tools-in-haskell; cabal install)
+	$(call sth_move,noop)
+	$(call sth_move,copy)
+	$(call sth_move,count)
+	$(call sth_move,wordcount)
+	$(call sth_move,sentcount)
+	$(call sth_move,glyphcount)
+	$(call sth_move,detab)
+	$(call sth_move,charcombine)
+	$(call sth_move,charfullwidth)
+	$(call sth_move,entab)
+	$(call sth_move,echo)
+	$(call sth_move,overstrike)
+	$(call sth_move,unescape)
+	$(call sth_move,escape)
+	$(call sth_move,compress)
+	$(call sth_move,expand)
+	$(call sth_move,crypt)
+	$(call sth_move,translit)
+	$(call sth_move,charreplace)
+	$(call sth_move,tail)
+	$(call sth_move,getlines)
+	$(call sth_move,compare)
+	$(call sth_move,import)
+	$(call sth_move,concat)
+	$(call sth_move,wye)
+	$(call sth_move,pslineprint)
+	$(call sth_move,paginate)
+	$(call sth_move,examine)
+	$(call sth_move,archive)
+	$(call sth_move,linenumber)
+	$(call sth_move,bubble)
+	@rm -rf posts/software-tools-in-haskell/dist
 
-# compile a software tools post
-define software_tools_exe
-  $(call haskell_exe,software-tools-in-haskell,$(1),sth-$(1),sth)
+# move an arithmetic made difficult exe
+define sth_move
+  @echo "moving $(1)" | doppler lightgreen
+  @mv posts/software-tools-in-haskell/dist/build/sth-$(1)/sth-$(1) _bin/sth
 endef
 
 
@@ -137,17 +137,30 @@ endef
 # arithmetic made difficult #
 #---------------------------#
 
+amd-test: amd
+	@echo "testing amd..." | doppler lightblue
+	@(shelltest --color --execdir test/amd -- --threads=16 --hide-successes)
+
 amd: FORCE
+	@echo "building amd..." | doppler lightblue
 	@(cd posts/arithmetic-made-difficult; cabal install)
 	$(call amd_move,plus)
 	$(call amd_move,times)
 	$(call amd_move,minus)
+	$(call amd_move,leq)
+	$(call amd_move,max-min)
+	$(call amd_move,divalg)
+	$(call amd_move,div)
+	$(call amd_move,gcd)
+	$(call amd_move,coprime)
+	$(call amd_move,lcm)
+	$(call amd_move,prime)
+	$(call amd_move,power)
 	@rm -rf posts/arithmetic-made-difficult/dist
-	@(shelltest --color --execdir test/amd -- --threads=16 --hide-successes)
 
 # move an arithmetic made difficult exe
 define amd_move
-  @echo "moving $(1)" | doppler lightblue
+  @echo "moving $(1)" | doppler lightgreen
   @mv posts/arithmetic-made-difficult/dist/build/amd-$(1)/amd-$(1) _bin/amd
 endef
 

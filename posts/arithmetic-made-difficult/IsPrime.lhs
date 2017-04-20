@@ -6,7 +6,7 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > module IsPrime
->   ( mindiv, prime, _test_prime
+>   ( mindiv, prime, _test_prime, main_prime
 >   ) where
 >
 > import Prelude hiding (div, rem, gcd, lcm)
@@ -207,3 +207,6 @@ And the suite:
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+
+> main_prime :: IO ()
+> main_prime = _test_prime (zero :: Nat) 20 100

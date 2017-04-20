@@ -6,7 +6,7 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > module Exponentiation
->   ( power, _test_power
+>   ( power, _test_power, main_power
 >   ) where
 >
 > import Prelude hiding (div, rem, gcd, lcm)
@@ -210,7 +210,7 @@ Property tests:
 
 And the suite:
 
-> -- run all tests for prime
+> -- run all tests for power
 > _test_power :: (Natural t, Arbitrary t, Show t)
 >   => t -> Int -> Int -> IO ()
 > _test_power t maxSize numCases = sequence_
@@ -226,3 +226,6 @@ And the suite:
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+
+> main_power :: IO ()
+> main_power = _test_power (zero :: Nat) 5 30

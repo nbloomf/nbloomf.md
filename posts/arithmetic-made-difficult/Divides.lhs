@@ -6,7 +6,7 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > module Divides
->   ( div, _test_div
+>   ( div, _test_div, main_div
 >   ) where
 >
 > import Prelude hiding (div, rem)
@@ -215,3 +215,6 @@ And the suite:
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+
+> main_div :: IO ()
+> main_div = _test_div (zero :: Nat) 50 100

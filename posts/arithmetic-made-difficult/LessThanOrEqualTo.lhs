@@ -6,7 +6,7 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > module LessThanOrEqualTo
->  ( leq, _test_leq
+>  ( leq, _test_leq, main_leq
 >  ) where
 > 
 > import NaturalNumbers
@@ -213,3 +213,6 @@ And a test wrapper:
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+
+> main_leq :: IO ()
+> main_leq = _test_leq (zero :: Nat) 50 100
