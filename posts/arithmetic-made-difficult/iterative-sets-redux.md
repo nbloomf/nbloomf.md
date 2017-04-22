@@ -142,6 +142,15 @@ Recall that an object in a category is called *initial* if there is exactly one 
 
 Now I am not too interested at the moment in digging into the conditions under which a given functor *has* an initial algebra; I am happy enough using the existence of an initial algebra as the basis for reasoning about recursively defined programs. So this is as far as I will take this business about categories. We will only be interested in a small handful of concrete polynomial endofunctors, and each time we see one, we will just add an axiom assuming that it has an initial algebra -- as we did with $\nats$.
 
-Now if an initial algebra $A$ exists for $F$, it turns out that this algebra acts like a *fixed point* up to isomorphism -- in fact, the algebra morphism $F(A) \rightarrow A$ is an isomorphism. This will allow us to define $A$ recursively, as we did with $\nats$.
+Now if an initial algebra $A$ exists for $F$, it turns out that this algebra acts like a *fixed point* up to isomorphism -- in fact, the algebra morphism $F(A) \rightarrow A$ is an isomorphism. This will allow us to define $A$ recursively, as we did with $\nats$. One hitch we have to worry about is that the initial algebra of a functor is its *least* fixed point, in the sense that there is a unique "injection" from the least fixed point to any other fixed point. Why is this relevant? It is tricky to impose this minimality condition on a Haskell type. For example, all along we've been implicitly assuming that every element of $\nats$ is somehow "finite" (whatever that means) -- obtained by a finite number of applications of $\next$ to $\zero$. But Haskell will happily typecheck an expression like
+
+```haskell
+omega :: Nat
+omega = next omega
+```
+
+What's going on here is that the ``Nat`` type doesn't quite model $\nats$. By definition it is a fixed point of the functor $F(X) = 1+X$, but it is not the *least* fixed point. (I want to say it is the greatest fixed point, but I'm not sure about that.)
+
+What should we do about this? Certainly this problem will pop up again. There are more powerful type systems that can enforce the minimalness of fixed points, but we'd prefer not to require too much type-fanciness. I think it is enough to simply require that recursion be defined using initial algebra maps like $\natrec{\ast}{\ast}$; this requirement would make a definition like ``omega`` illegal.
 
 So, in summary, given a functor $F$ the $F$-algebras are a family of structures, and the process of constructing an initial algebra for $F$ is a kind of uniform "recursivization". From now on we will define recursive sets simply by assuming that such an initial algebra exists.

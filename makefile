@@ -87,7 +87,7 @@ literate: sth-test amd-test
 
 sth-test: sth
 	@echo "testing sth..." | doppler lightblue
-	@(shelltest --color --execdir test/sth -- --threads=16 --hide-successes)
+	@(shelltest --color --execdir test/sth -- --threads=16)
 
 sth: FORCE
 	@echo "building sth..." | doppler lightblue
@@ -139,7 +139,7 @@ endef
 
 amd-test: amd
 	@echo "testing amd..." | doppler lightblue
-	@(shelltest --color --execdir test/amd -- --threads=16 --hide-successes)
+	@(shelltest --color --execdir test/amd -- --threads=16)
 
 amd: FORCE
 	@echo "building amd..." | doppler lightblue
@@ -156,6 +156,8 @@ amd: FORCE
 	$(call amd_move,lcm)
 	$(call amd_move,prime)
 	$(call amd_move,power)
+	$(call amd_move,rev)
+	$(call amd_move,cat)
 	@rm -rf posts/arithmetic-made-difficult/dist
 
 # move an arithmetic made difficult exe

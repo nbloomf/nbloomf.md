@@ -31,6 +31,13 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
 3. Finite Lists
     * [Iterative Sets Redux](/posts/arithmetic-made-difficult/iterative-sets-redux.html)
     * [Lists](/posts/arithmetic-made-difficult/Lists.html)
+    * [Reverse](/posts/arithmetic-made-difficult/Reverse.html)
+    * [Cat](/posts/arithmetic-made-difficult/Cat.html)
+    * Length
+    * At
+    * Map
+    * Filter
+    * Zip
 4. Fixed Radix Numeral Systems
 
 > The old idea that there was no reasoning in Arithmetic is dead; the idea that the *general axioms* have no place in Arithmetic is no longer held by a progressive teacher... <cite>J.B.F. Showalter in "Arithmetic Made Easy", 1897</cite>

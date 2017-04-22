@@ -5,9 +5,12 @@ date: 2017-04-23
 tags: arithmetic-made-difficult, literate-haskell
 ---
 
+> {-# LANGUAGE FlexibleInstances #-}
 > module Lists
->   ( List(), ListOf(..), ListShape(..)
+>   ( List(), ListOf(..), ListShape(..), foldr
 >   ) where
+> 
+> import Prelude hiding (foldr)
 > 
 > import Test.QuickCheck
 
@@ -19,7 +22,7 @@ Let $A$ be a set, and define a functor $F_A$ by $F_A(X) = 1 + A \times X$. We as
 </p></div>
 </div>
 
-Because the algebra map $\nil + \cons$ is an isomorphism, we have
+The names *nil* and *cons* come from the Lisp programming language, where they were first introduced. Now because the algebra map $\nil + \cons$ is an isomorphism, we have
 
 <div class="result">
 <div class="thm"><p>
@@ -27,11 +30,24 @@ If $x \in \lists{A}$, then either $x = \nil$ or $x = \cons(a,y)$ for some $a \in
 </p></div>
 </div>
 
+So what do the elements of $\lists{A}$ look like? Well, applying our "constructor" functions we can build elements like
+$$\begin{array}{c}
+\nil \\
+\cons(a,\nil) \\
+\cons(b,\cons(a,\nil)) \\
+\cons(c,\cons(b,\cons(a,\nil))) \\
+\vdots
+\end{array}$$
+
 We will wrap this definition up in code both as a concrete type and as a type class, so that later we can give alternative implementations.
 
 First the concrete type:
 
-> data List a = N | C a (List a)
+> data List a = N | C a (List a) deriving Eq
+>  
+> instance (Show a) => Show (List a) where
+>   show N        = "N"
+>   show (C x xs) = "C " ++ show x ++ " -- " ++ show xs
 
 And the class:
 
@@ -66,6 +82,7 @@ And the instance.
 >
 >   nil = N
 >   cons = C
+> 
 >   listShape x = case x of
 >     N      -> Nil
 >     C a as -> Cons a as
@@ -78,7 +95,7 @@ This business about initial algebras is nice, but it will be convenient to unpac
 
 <div class="result">
 <div class="defn"><p>
-($A$-inductive set.) Let $A$ be a set. And $A$-inductive set is a set $B$ together with an element $e$ and a mapping $f : A \times B \rightarrow B$.
+($A$-inductive set.) Let $A$ be a set. An $A$-inductive set is a set $B$ together with an element $e$ and a mapping $f : A \times B \rightarrow B$.
 </p></div>
 </div>
 
@@ -86,7 +103,7 @@ And a more concrete decription of $F_A$-algebra morphisms:
 
 <div class="result">
 <div class="defn"><p>
-($A$-inductive set homomorphism.) Let $A$ be a set. Given two $A$-inductive sets $(B,e,f)$ and $(C,u,g)$, an $A$-inductive set homomorphism is a mapping $\varphi : B \rightarrow C$ such that $\varphi(e) = u$ and $\varphi(f(a,x)) = g(a,\varphi(x))$ for all $a \in A$ and $x \in B$.
+($A$-inductive set homomorphism.) Let $A$ be a set. Given two $A$-inductive sets $(B,e,f)$ and $(C,u,g)$, an $A$-inductive set homomorphism is a mapping $\varphi : B \rightarrow C$ such that $\varphi(e) = u$ and $$\varphi(f(a,x)) = g(a,\varphi(x))$$ for all $a \in A$ and $x \in B$.
 </p></div>
 </div>
 
@@ -94,9 +111,60 @@ And finally, a more concrete description of the universal algebra from $\lists{A
 
 <div class="result">
 <div class="thm"><p>
-(Fold.) Let $A$ be a set, and let $(B,e,\varphi)$ be an $A$-inductive set. Then there is a unique map $\Theta : \lists{A} \rightarrow B$ such that $$\Theta(\nil) = e$$ and $$\Theta(\cons(a,x)) = \varphi(a,\Theta(x)).$$ We denote this unique $\Theta$ by $\fold{e}{\varphi}$.
+(Fold.) Let $A$ be a set, and let $(B,e,\varphi)$ be an $A$-inductive set. Then there is a unique map $\Theta : \lists{A} \rightarrow B$ such that $$\Theta(\nil) = e$$ and $$\Theta(\cons(a,x)) = \varphi(a,\Theta(x)).$$ We denote this unique $\Theta$ by $\foldr{e}{\varphi}$.
 </p></div>
 </div>
 
-> fold :: (ListOf t) => b -> (a -> b -> b) -> t a -> b
-> fold e phi x = undefined
+Here is a naive implementation of $\foldr{\ast}{\ast}$.
+
+> foldr :: (ListOf t) => b -> (a -> b -> b) -> t a -> b
+> foldr e phi x = case listShape x of
+>   Nil       -> e
+>   Cons a as -> phi a (foldr e phi as)
+
+Note that this definition is *not* tail recursive. This turns out not to be a huge problem in practice.
+
+Now $\lists{A}$ has an induction principle.
+
+<div class="result">
+<div class="thm">
+(List Induction.) Let $A$ be a set, and let $f : \lists{A} \rightarrow B$ be a map. Suppose $C \subseteq B$ is a subset with the property that
+
+1. $f(\nil) \in C$.
+2. If $f(x) \in C$ and $a \in A$, then $f(\cons(a,x)) \in C$.
+
+Then we have $f(x) \in C$ for all $x \in \lists{A}$.
+</div>
+
+<div class="proof"><p>
+This proof is analogous to the proof of the induction principle for $\nats$. We first define $T \subseteq \lists{A}$ by $$T = \{x \in \lists{A} \mid f(x) \in C \}.$$ Note that $\nil \in T$ and if $x \in T$ and $a \in A$ then $\cons(a,x) \in T$; in particular, $(T,\nil,\cons)$ is an $A$-iterative set. We let $\Theta = \foldr{\nil}{\cons}$. Now the inclusion map $\iota : T \rightarrow \lists{A}$ is an $A$-inducive set homomorphism, since $\iota(\nil) = \nil$ and $$\iota(\cons(a,x)) = \cons(a,x) = \cons(a,\iota(x)).$$ Thus $\iota \circ \Theta : \lists{A} \rightarrow \lists{A}$ is an $A$-inductive set homomorphism, so it must be $\id_A$. Thus if $x \in \lists{A}$ we have $$x = \id(x) = \iota(\Theta(x)) = \Theta(x) \in T$$ so that $f(x) \in C$ as claimed.
+</p></div>
+</div>
+
+Here's an example using list induction.
+
+<div class="result">
+<div class="thm">
+Let $A$ be a set. Then we have $$\foldr{\nil}{\cons}(x) = x$$ for all $x \in \lists{A}$.
+</div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have $$\foldr{\nil}{\cons}(\nil) = nil$$ as claimed. For the inductive step, suppose the equality holds for some $x \in \lists{A}$, and let $a \in A$. Now
+$$\begin{eqnarray*}
+ &   & \foldr{\nil}{\cons}(\cons(a,x)) \\
+ & = & \cons(a,\foldr{\nil}{\cons}(x)) \\
+ & = & \cons(a,x)
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
+We'll also throw in an ``Arbitrary`` instance for ``List`` here for use in testing later.
+
+> instance (Arbitrary a) => Arbitrary (List a) where
+>   arbitrary = do
+>     xs <- arbitrary
+>     return $ list xs
+> 
+>   shrink N       = []
+>   shrink (C _ x) = [x]

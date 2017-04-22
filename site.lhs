@@ -123,10 +123,14 @@ The ``matchPosts`` rule is a little different from the others we've seen so far.
 >     compile $ pandocMathCompiler
 >       >>= applyShortcodes allServices
 >       >>= applyTagTemplates ctx
->             [ ("literate-haskell",          "templates/literate-haskell.html")
->             , ("software-tools-in-haskell", "templates/sth-tools.html")
->             , ("arithmetic-made-difficult", "templates/amd.html")
->             , ("project-euler",             "templates/project-euler-solutions.html")
+>             [ ("literate-haskell",
+>                 "templates/literate-haskell.html")
+>             , ("software-tools-in-haskell",
+>                 "templates/sth-tools.html")
+>             , ("arithmetic-made-difficult",
+>                 "templates/amd.html")
+>             , ("project-euler",
+>                 "templates/project-euler-solutions.html")
 >             ]
 >       >>= loadAndApplyTemplate
 >             "templates/post.html" ctx
@@ -134,26 +138,15 @@ The ``matchPosts`` rule is a little different from the others we've seen so far.
 >             "templates/default.html" ctx
 >       >>= relativizeUrls
 
-Here we also used a custom compiler, ``loadAndApplyTemplateIfTagged``, which loads a given template only if a post has a given tag. This is a cheap way to give some and only some posts a custom header or style.
+Here we also used a custom compiler, ``applyTagTemplate``, which loads a given template only if a post has a given tag. This is a cheap way to give some and only some posts a custom header or style.
 
-> applyTagTemplates
->   :: Context String
->   -> [(String,Identifier)]
->   -> Item String
->   -> Compiler (Item String)
 > applyTagTemplates ctx ts x =
 >   let
->     foo z (tag,temp) = applyTemplateIfTagged tag temp ctx z
+>     foo z (tag,temp) = applyTagTemplate tag temp ctx z
 >   in foldM foo x ts
 > 
 > 
-> applyTemplateIfTagged
->   :: String
->   -> Identifier
->   -> Context String
->   -> Item String
->   -> Compiler (Item String)
-> applyTemplateIfTagged tag template context x = do
+> applyTagTemplate tag template context x = do
 >   path <- getUnderlying
 >   tags <- getTags path
 >   if elem tag tags

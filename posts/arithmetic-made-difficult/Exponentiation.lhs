@@ -35,7 +35,7 @@ Define $\varphi : \nats \rightarrow \nats$ by $\varphi(a) = \next(\zero)$, and d
 Some special cases:
 
 <div class="result">
-<div class="theorem">
+<div class="thm">
 Let $a \in \nats$. Then we have the following.
 
 1. $\npower(a,\zero) = \next(\zero)$.
@@ -83,7 +83,7 @@ as needed.
 And interaction with $\nplus$ and $\ntimes$.
 
 <div class="result">
-<div class="theorem">
+<div class="thm">
 Let $a,b,c \in \nats$. Then we have the following.
 
 1. $\npower(a,\next(b)) = \ntimes(a,\npower(a,b))$.

@@ -158,3 +158,29 @@ executable amd-power
     -O2
   default-language:
     Haskell2010
+
+executable amd-rev
+  main-is:
+    Reverse.lhs
+  build-depends:
+    base == 4.*,
+    QuickCheck
+  ghc-options:
+    -threaded
+    -main-is Reverse.main_rev
+    -O2
+  default-language:
+    Haskell2010
+
+executable amd-cat
+  main-is:
+    Cat.lhs
+  build-depends:
+    base == 4.*,
+    QuickCheck
+  ghc-options:
+    -threaded
+    -main-is Cat.main_cat
+    -O2
+  default-language:
+    Haskell2010

@@ -133,17 +133,9 @@ We'll wrap all these tests behind a single function, ``_test_plus``, which takes
 >       , maxSize    = maxSize
 >       }
 
-Sanity check:
-
-```haskell
-$> _test_plus (zero :: Nat) 100 1000
-+++ OK, passed 1000 tests.
-+++ OK, passed 1000 tests.
-+++ OK, passed 1000 tests.
-+++ OK, passed 1000 tests.
-```
-
 woo!
+
+I will also provide a ``main`` function so my build scripts for this blog can automatically compile and run the tests.
 
 > main_plus :: IO ()
 > main_plus = _test_plus (zero :: Nat) 100 100
