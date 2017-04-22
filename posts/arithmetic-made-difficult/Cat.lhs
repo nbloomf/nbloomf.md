@@ -60,6 +60,114 @@ as claimed.
 </p></div>
 </div>
 
+$\cat$ interacts with $\cons$ and $\snoc$:
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. The following hold for all $a \in A$ and $x,y \in \lists{A}$.
+
+1. $\cat(x,\cons(a,y)) = \cat(\snoc(a,x),y)$.
+2. $\cons(a,\cat(x,y)) = \cat(\cons(a,x),y)$.
+3. $\snoc(a,\cat(x,y)) = \cat(x,\snoc(a,y))$.
+</p></div>
+
+<div class="proof"><p>
+1. We have
+$$\begin{eqnarray*}
+ &   & \cat(x,\cons(a,y)) \\
+ & = & \foldr{\cons(a,y)}{\cons}(x) \\
+ & = & \foldr{y}{\cons}(\snoc(a,y)) \\
+ & = & \cat(x,\snoc(a,y))
+\end{eqnarray*}$$
+as claimed.
+2. We proceed by list induction on $y$. For the base case $y = \nil$ we have
+$$\begin{eqnarray*}
+ &   & \cons(a,\cat(x,\nil)) \\
+ & = & \cons(a,x) \\
+ & = & \cat(\cons(a,x),\nil)
+\end{eqnarray*}$$
+as claimed. For the inductive step, suppose the equality holds for some $y \in \lists{A}$, and let $b \in A$. Now
+$$\begin{eqnarray*}
+ &   & \cons(a,\cat(x,\cons(b,y))) \\
+ & = & \cons(a,\cat(\snoc(b,x),y)) \\
+ & = & \cat(\cons(a,\snoc(b,x)),y) \\
+ & = & \cat(\snoc(b,\cons(a,x)),y) \\
+ & = & \cat(\cons(a,x),\cons(b,y))
+\end{eqnarray*}$$
+as needed.
+3. We proceed by list induction on $y$. For the base case $y = \nil$ we have
+$$\begin{eqnarray*}
+ &   & \snoc(a,\cat(x,\nil)) \\
+ & = & \snoc(a,x) \\
+ & = & \foldr{\cons(a,\nil)}{\cons}(x) \\
+ & = & \cat(x,\cons(a,\nil))
+\end{eqnarray*}$$
+as claimed. For the inductive step, suppose the equality holds for some $y \in \lists{A}$, and let $b \in A$. Now
+$$\begin{eqnarray*}
+ &   & \snoc(a,\cat(x,\cons(b,y))) \\
+ & = & \snoc(a,\cat(\snoc(b,x),y)) \\
+ & = & \cat(\snoc(b,x),\snoc(a,y)) \\
+ & = & \cat(x,\cons(b,\snoc(a,y))) \\
+ & = & \cat(x,\snoc(a,\cons(b,y)))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
+And $\cat$ is associative.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set and $x,y,z \in \lists{A}$. Then $$\cat(\cat(x,y),z) = \cat(x,\cat(y,z)).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $z$. For the base case $z = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \cat(\cat(x,y),\nil) \\
+ & = & \cat(x,y) \\
+ & = & \cat(x,\cat(y,\nil))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $z \in \lists{A}$, and let $a \in A$. Then we have
+$$\begin{eqnarray*}
+ &   & \cat(\cat(x,y),\cons(a,z)) \\
+ & = & \cat(\snoc(a,\cat(x,y)),z) \\
+ & = & \cat(\cat(x,\snoc(a,y)),z) \\
+ & = & \cat(x,\cat(\snoc(a,y),z)) \\
+ & = & \cat(x,\cat(y,\cons(a,z)))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
+And $\rev$ is antidistributive over $\cat$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $x,y \in \lists{A}$ we have $$\rev(\cat(x,y)) = \cat(\rev(y),\rev(x)).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $y$. For the base case $y = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \rev(\cat(x,\nil)) \\
+ & = & \rev(x) \\
+ & = & \cat(\nil,\rev(x)) \\
+ & = & \cat(\rev(\nil),\rev(x))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $y \in \lists{A}$ and let $a \in A$. Then we have
+$$\begin{eqnarray*}
+ &   & \rev(\cat(x,\cons(a,y))) \\
+ & = & \rev(\cat(\snoc(a,x),y)) \\
+ & = & \cat(\rev(y),\rev(\snoc(a,x))) \\
+ & = & \cat(\rev(y),\cons(a,\rev(x))) \\
+ & = & \cat(\snoc(a,\rev(y)),\rev(x)) \\
+ & = & \cat(\rev(\cons(a,y)),\rev(x))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
 
 Testing
 -------
@@ -72,6 +180,36 @@ Here are our property tests for $\cat$.
 >   [ a == cat nil a
 >   , a == cat a nil
 >   ]
+> 
+> 
+> -- cat(x,cons(a,y)) == cat(snoc(a,x),y)
+> _test_cat_cons_snoc :: (ListOf t, Eq (t a)) => t a -> a -> t a -> t a -> Bool
+> _test_cat_cons_snoc _ a x y =
+>   (cat x (cons a y)) == (cat (snoc a x) y)
+> 
+> 
+> -- cons(a,cat(x,y)) == cat(cons(a,x),y)
+> _test_cat_cons :: (ListOf t, Eq (t a)) => t a -> a -> t a -> t a -> Bool
+> _test_cat_cons _ a x y =
+>   (cons a (cat x y)) == (cat (cons a x) y)
+> 
+> 
+> -- snoc(a,cat(x,y)) == cat(x,snoc(a,y))
+> _test_cat_snoc :: (ListOf t, Eq (t a)) => t a -> a -> t a -> t a -> Bool
+> _test_cat_snoc _ a x y =
+>   (snoc a (cat x y)) == (cat x (snoc a y))
+> 
+> 
+> -- cat(cat(x,y),z) == cat(x,cat(y,z))
+> _test_cat_associative :: (ListOf t, Eq (t a)) => t a -> t a -> t a -> t a -> Bool
+> _test_cat_associative _ x y z =
+>   (cat (cat x y) z) == (cat x (cat y z))
+> 
+> 
+> -- rev(cat(x,y)) == cat(rev(y),rev(x))
+> _test_cat_rev :: (ListOf t, Eq (t a)) => t a -> t a -> t a -> Bool
+> _test_cat_rev _ x y =
+>   (rev (cat x y)) == (cat (rev x) (rev y))
 
 And the suite:
 
@@ -80,6 +218,11 @@ And the suite:
 >   => t a -> Int -> Int -> IO ()
 > _test_cat t maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_cat_nil t)
+>   , quickCheckWith args (_test_cat_cons_snoc t)
+>   , quickCheckWith args (_test_cat_cons t)
+>   , quickCheckWith args (_test_cat_snoc t)
+>   , quickCheckWith args (_test_cat_associative t)
+>   , quickCheckWith args (_test_cat_rev t)
 >   ]
 >   where
 >     args = stdArgs
