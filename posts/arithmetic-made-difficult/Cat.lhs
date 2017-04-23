@@ -5,7 +5,6 @@ date: 2017-04-25
 tags: arithmetic-made-difficult, literate-haskell
 ---
 
-> {-# LANGUAGE BangPatterns #-}
 > module Cat
 >   ( cat, _test_cat, main_cat
 >   ) where
@@ -175,46 +174,46 @@ Testing
 Here are our property tests for $\cat$.
 
 > -- cat(nil,x) == x and cat(x,nil) == x
-> _test_cat_nil :: (ListOf t, Eq (t a)) => t a -> t a -> Bool
+> _test_cat_nil :: (ListOf t, Eq a) => t a -> t a -> Bool
 > _test_cat_nil _ a = and
->   [ a == cat nil a
->   , a == cat a nil
+>   [ a `listEq` cat nil a
+>   , a `listEq` cat a nil
 >   ]
 > 
 > 
 > -- cat(x,cons(a,y)) == cat(snoc(a,x),y)
-> _test_cat_cons_snoc :: (ListOf t, Eq (t a)) => t a -> a -> t a -> t a -> Bool
+> _test_cat_cons_snoc :: (ListOf t, Eq a) => t a -> a -> t a -> t a -> Bool
 > _test_cat_cons_snoc _ a x y =
->   (cat x (cons a y)) == (cat (snoc a x) y)
+>   (cat x (cons a y)) `listEq` (cat (snoc a x) y)
 > 
 > 
 > -- cons(a,cat(x,y)) == cat(cons(a,x),y)
-> _test_cat_cons :: (ListOf t, Eq (t a)) => t a -> a -> t a -> t a -> Bool
+> _test_cat_cons :: (ListOf t, Eq a) => t a -> a -> t a -> t a -> Bool
 > _test_cat_cons _ a x y =
->   (cons a (cat x y)) == (cat (cons a x) y)
+>   (cons a (cat x y)) `listEq` (cat (cons a x) y)
 > 
 > 
 > -- snoc(a,cat(x,y)) == cat(x,snoc(a,y))
-> _test_cat_snoc :: (ListOf t, Eq (t a)) => t a -> a -> t a -> t a -> Bool
+> _test_cat_snoc :: (ListOf t, Eq a) => t a -> a -> t a -> t a -> Bool
 > _test_cat_snoc _ a x y =
->   (snoc a (cat x y)) == (cat x (snoc a y))
+>   (snoc a (cat x y)) `listEq` (cat x (snoc a y))
 > 
 > 
 > -- cat(cat(x,y),z) == cat(x,cat(y,z))
-> _test_cat_associative :: (ListOf t, Eq (t a)) => t a -> t a -> t a -> t a -> Bool
+> _test_cat_associative :: (ListOf t, Eq a) => t a -> t a -> t a -> t a -> Bool
 > _test_cat_associative _ x y z =
->   (cat (cat x y) z) == (cat x (cat y z))
+>   (cat (cat x y) z) `listEq` (cat x (cat y z))
 > 
 > 
 > -- rev(cat(x,y)) == cat(rev(y),rev(x))
-> _test_cat_rev :: (ListOf t, Eq (t a)) => t a -> t a -> t a -> Bool
+> _test_cat_rev :: (ListOf t, Eq a) => t a -> t a -> t a -> Bool
 > _test_cat_rev _ x y =
->   (rev (cat x y)) == (cat (rev x) (rev y))
+>   (rev (cat x y)) `listEq` (cat (rev x) (rev y))
 
 And the suite:
 
 > -- run all tests for cat
-> _test_cat :: (ListOf t, Arbitrary a, Show a, Arbitrary (t a), Show (t a), Eq (t a))
+> _test_cat :: (ListOf t, Arbitrary a, Show a, Eq a, Arbitrary (t a), Show (t a))
 >   => t a -> Int -> Int -> IO ()
 > _test_cat t maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_cat_nil t)

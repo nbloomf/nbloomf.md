@@ -77,7 +77,7 @@ check: FORCE
 # literate posts #
 #----------------#
 
-literate: sth-test amd-test
+literate: sth amd
 
 
 
@@ -85,11 +85,11 @@ literate: sth-test amd-test
 # software tools in haskell #
 #---------------------------#
 
-sth-test: sth
+sth: sth-exe
 	@echo "testing sth..." | doppler lightblue
 	@(shelltest --color --execdir test/sth -- --threads=16)
 
-sth: FORCE
+sth-exe: FORCE
 	@echo "building sth..." | doppler lightblue
 	@(cd posts/software-tools-in-haskell; cabal install)
 	$(call sth_move,noop)
@@ -137,11 +137,11 @@ endef
 # arithmetic made difficult #
 #---------------------------#
 
-amd-test: amd
+amd: amd-exe
 	@echo "testing amd..." | doppler lightblue
 	@(shelltest --color --execdir test/amd -- --threads=16)
 
-amd: FORCE
+amd-exe: FORCE
 	@echo "building amd..." | doppler lightblue
 	@(cd posts/arithmetic-made-difficult; cabal install)
 	$(call amd_move,plus)
@@ -158,6 +158,7 @@ amd: FORCE
 	$(call amd_move,power)
 	$(call amd_move,rev)
 	$(call amd_move,cat)
+	$(call amd_move,length)
 	@rm -rf posts/arithmetic-made-difficult/dist
 
 # move an arithmetic made difficult exe

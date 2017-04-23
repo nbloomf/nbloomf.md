@@ -6,6 +6,7 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > {-# LANGUAGE BangPatterns #-}
+> {-# LANGUAGE ScopedTypeVariables #-}
 > module Reverse
 >   ( snoc, foldl, rev, _test_rev, main_rev
 >   ) where
@@ -35,6 +36,24 @@ In Haskell:
 > snoc :: (ListOf t) => a -> t a -> t a
 > snoc a = foldr (cons a nil) cons
 
+</p></div>
+</div>
+
+Special cases:
+
+<div class="result">
+<div class="lemma"><p>
+Let $A$ be a set. For all $a \in A$ we have $$\snoc(a,\nil) = \cons(a,\nil).$$
+</p></div>
+
+<div class="proof"><p>
+Note that
+$$\begin{eqnarray*}
+ &   & \snoc(a,\nil) \\
+ & = & \foldr{\cons(a,\nil)}{\cons}(\nil) \\
+ & = & \cons(a,\nil)
+\end{eqnarray*}$$
+by the universal property of $\foldr{\ast}{\ast}$.
 </p></div>
 </div>
 
@@ -96,6 +115,43 @@ In Haskell:
 > rev' :: (ListOf t) => t a -> t a
 > rev' = foldr nil snoc
 
+</p></div>
+</div>
+
+Special cases:
+
+<div class="result">
+<div class="lemma"><p>
+Let $A$ be a set. For all $a,b \in A$ we have the following.
+
+1. $\rev(\nil) = \nil$.
+2. $\rev(\cons(a,\nil)) = \cons(a,\nil)$.
+3. $\rev(\cons(a,\cons(b,\nil))) = \cons(b,\cons(a,\nil))$.
+</p></div>
+
+<div class="proof"><p>
+1. Follows from the universal property of $\foldr{\ast}{\ast}$.
+2. Note that
+$$\begin{eqnarray*}
+ &   & \rev(\cons(a,\nil)) \\
+ & = & \foldr{\nil}{\snoc}(\cons(a,\nil)) \\
+ & = & \snoc(a,\foldr{\nil}{\snoc}(\nil)) \\
+ & = & \snoc(a,\nil) \\
+ & = & \cons(a,\nil)
+\end{eqnarray*}$$
+as claimed.
+3. Note that
+$$\begin{eqnarray*}
+ &   & \rev(\cons(a,\cons(b,\nil))) \\
+ & = & \foldr{\nil}{\snoc}(\cons(a,\cons(b,\nil))) \\
+ & = & \snoc(a,\foldr{\nil}{\snoc}(\cons(b,\nil))) \\
+ & = & \snoc(a,\rev(\cons(b,\nil))) \\
+ & = & \snoc(a,\cons(b,\nil)) \\
+ & = & \foldr{\cons(a,\nil)}{\cons}(\cons(b,\nil)) \\
+ & = & \cons(b,\foldr{\cons(a,\nil)}{\cons}(\nil)) \\
+ & = & \cons(b,\cons(a,\nil))
+\end{eqnarray*}$$
+as claimed.
 </p></div>
 </div>
 
@@ -239,36 +295,55 @@ as claimed.
 Testing
 -------
 
+> withTypeOf :: a -> a -> a
+> withTypeOf x _ = x
+
 > -- snoc(a,cons(b,x)) == cons(b,snoc(a,x))
-> _test_snoc_cons_commute :: (ListOf t, Eq (t a)) => t a -> a -> a -> t a -> Bool
+> _test_snoc_cons_commute :: (ListOf t, Eq a) => t a -> a -> a -> t a -> Bool
 > _test_snoc_cons_commute _ a b x =
->   (snoc a (cons b x)) == (cons b (snoc a x))
+>   (snoc a (cons b x)) `listEq` (cons b (snoc a x))
+> 
+> 
+> -- rev'(cons(a,nil)) == cons(a,nil)
+> _test_rev_single :: (ListOf t, Eq a) => t a -> a -> Bool
+> _test_rev_single z a =
+>   let nil' = nil `withTypeOf` z in
+>   (rev' (cons a nil')) `listEq` (cons a nil')
+> 
+> 
+> -- rev'(cons(a,cons(b,nil))) == cons(b,cons(a,nil))
+> _test_rev_double :: (ListOf t, Eq a) => t a -> a -> a -> Bool
+> _test_rev_double z a b =
+>   let nil' = nil `withTypeOf` z in
+>   (rev' (cons a (cons b nil'))) `listEq` (cons b (cons a nil'))
 > 
 > 
 > -- rev'(snoc(a,x)) == cons(a,rev'(x))
-> _test_rev_snoc :: (ListOf t, Eq (t a)) => t a -> a -> a -> t a -> Bool
+> _test_rev_snoc :: (ListOf t, Eq a) => t a -> a -> a -> t a -> Bool
 > _test_rev_snoc _ a b x =
->   (rev' (snoc a x)) == (cons a (rev' x))
+>   (rev' (snoc a x)) `listEq` (cons a (rev' x))
 > 
 > 
 > -- rev'(rev'(x)) == x
-> _test_rev_involution :: (ListOf t, Eq (t a)) => t a -> t a -> Bool
+> _test_rev_involution :: (ListOf t, Eq a) => t a -> t a -> Bool
 > _test_rev_involution _ x =
->   (rev' (rev' x)) == x
+>   (rev' (rev' x)) `listEq` x
 > 
 > 
 > -- rev(x) == rev'(x)
-> _test_rev_alt :: (ListOf t, Eq (t a)) => t a -> t a -> Bool
+> _test_rev_alt :: (ListOf t, Eq a) => t a -> t a -> Bool
 > _test_rev_alt _ x =
->   (rev x) == (rev' x)
+>   (rev x) `listEq` (rev' x)
 
 And the suite:
 
 > -- run all tests for snoc and rev
-> _test_rev :: (ListOf t, Arbitrary a, Show a, Arbitrary (t a), Show (t a), Eq (t a))
+> _test_rev :: (ListOf t, Arbitrary a, Show a, Eq a, Arbitrary (t a), Show (t a))
 >   => t a -> Int -> Int -> IO ()
 > _test_rev t maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_snoc_cons_commute t)
+>   , quickCheckWith args (_test_rev_single t)
+>   , quickCheckWith args (_test_rev_double t)
 >   , quickCheckWith args (_test_rev_snoc t)
 >   , quickCheckWith args (_test_rev_involution t)
 >   , quickCheckWith args (_test_rev_alt t)

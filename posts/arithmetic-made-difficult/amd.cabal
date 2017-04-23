@@ -184,3 +184,16 @@ executable amd-cat
     -O2
   default-language:
     Haskell2010
+
+executable amd-length
+  main-is:
+    Length.lhs
+  build-depends:
+    base == 4.*,
+    QuickCheck
+  ghc-options:
+    -threaded
+    -main-is Length.main_length
+    -O2
+  default-language:
+    Haskell2010

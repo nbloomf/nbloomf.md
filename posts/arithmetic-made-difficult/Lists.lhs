@@ -7,10 +7,10 @@ tags: arithmetic-made-difficult, literate-haskell
 
 > {-# LANGUAGE FlexibleInstances #-}
 > module Lists
->   ( List(), ListOf(..), ListShape(..), foldr
+>   ( List(), ListOf(..), ListShape(..), foldr, tail, listEq
 >   ) where
 > 
-> import Prelude hiding (foldr)
+> import Prelude hiding (foldr, tail)
 > 
 > import Test.QuickCheck
 
@@ -43,7 +43,7 @@ We will wrap this definition up in code both as a concrete type and as a type cl
 
 First the concrete type:
 
-> data List a = N | C a (List a) deriving Eq
+> data List a = N | C a (List a)
 >  
 > instance (Show a) => Show (List a) where
 >   show N        = "N"
@@ -158,6 +158,97 @@ $$\begin{eqnarray*}
 as claimed.
 </p></div>
 </div>
+
+Here's a helper function.
+
+<div class="result">
+<div class="thm">
+Let $A$ be a set. Define $\varphi : A \times (\lists{A} \times \lists{A}) \rightarrow \lists{A} \times \lists{A}$ by $\varphi(a,(z,x)) = (x,\cons(a,x))$. Now define $\tail : \lists{A} \rightarrow \lists{A}$ by $$\tail(x) = \fst(\foldr{(\nil,\nil)}{\varphi}(x)).$$ Then we have the following for all $a \in A$ and $x \in \lists{A}$.
+
+1. $\tail(\nil) = \nil$.
+2. $\foldr{(\nil,\nil)}{\varphi}(\cons(a,x)) = (x,\cons(a,x))$.
+3. $\tail(\cons(a,x)) = x$.
+</div>
+
+<div class="proof"><p>
+1. 
+2. We proceed by list induction on $x$. For the base case $x = \nil$, note that
+$$\begin{eqnarray*}
+ &   & \foldr{(\nil,\nil)}{\varphi}(\cons(a,\nil)) \\
+ & = & \varphi(a,\foldr{(\nil,\nil)}{\varphi}(\nil)) \\
+ & = & \varphi(a,(\nil,\nil)) \\
+ & = & (\nil,\cons(a,\nil))
+\end{eqnarray*}$$
+as claimed. For the inductive step, suppose the equality holds for some $x \in \lists{A}$, and let $b \in A$. Now
+$$\begin{eqnarray*}
+ &   & \foldr{(\nil,\nil)}{\varphi}(\cons(a,\cons(b,x))) \\
+ & = & \varphi(a,\foldr{(\nil,\nil)}{\varphi}(\cons(b,x))) \\
+ & = & \varphi(a,(x,\cons(b,x))) \\
+ & = & (\cons(b,x),\cons(a,\cons(b,x)))
+\end{eqnarray*}$$
+as needed.
+3. We have
+$$\begin{eqnarray*}
+ &   & \tail(\cons(a,x)) \\
+ & = & \fst(\foldr{(\nil,\nil)}{\varphi}(\cons(a,x))) \\
+ & = & \fst(x,\cons(a,x)) \\
+ & = & x
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
+> tail :: (ListOf t) => t a -> t a
+> tail x = case listShape x of
+>   Nil      -> nil
+>   Cons _ y -> y
+
+And some properties of equality:
+
+<div class="result">
+<div class="thm">
+Let $A$ be a set. We have the following for all $a,b \in A$ and $x,y \in \lists{A}$.
+
+1. $\nil \neq \cons(a,x)$.
+2. $\cons(a,x) = \cons(b,y)$ if and only if $a = b$ and $x = y$.
+</div>
+
+<div class="proof"><p>
+1. Define $\varphi : A \times \bool \rightarrow \bool$ by $\varphi(a,b) = \btrue$. Suppose $\nil = \cons(a,x)$, and consider $\foldr{\bfalse}{\varphi}$. We have
+$$\begin{eqnarray*}
+ &   & \bfalse \\
+ & = & \foldr{\bfalse}{\varphi}(\nil) \\
+ & = & \foldr{\bfalse}{\varphi}(\cons(a,x)) \\
+ & = & \varphi(a,\foldr{\bfalse}{\varphi}(x)) \\
+ & = & \btrue,
+\end{eqnarray*}$$
+which is absurd.
+2. The "if" part is clear. Now suppose we have $\cons(a,x) = \cons(b,y)$. Define $\varphi : A \times A \rightarrow A$ by $\varphi(u,v) = u$, and consider $\foldr{a}{\varphi}$. We have
+$$\begin{eqnarray*}
+ &   & a \\
+ & = & \varphi(a,\foldr{a}{\varphi}(x)) \\
+ & = & \foldr{a}{\varphi}(\cons(a,x)) \\
+ & = & \foldr{a}{\varphi}(\cons(b,y)) \\
+ & = & \varphi(b,\foldr{a}{\varphi}(y)) \\
+ & = & b
+\end{eqnarray*}$$
+as claimed. Finally, we have
+$$\begin{eqnarray*}
+ &   & x \\
+ & = & \tail(\cons(a,x)) \\
+ & = & \tail(\cons(b,y)) \\
+ & = & y
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
+> listEq :: (ListOf t, Eq a) => t a -> t a -> Bool
+> listEq x y = case (listShape x, listShape y) of
+>   (Nil,      Nil     ) -> True
+>   (Nil,      Cons _ _) -> False
+>   (Cons _ _, Nil     ) -> False
+>   (Cons a u, Cons b v) -> (a == b) && (listEq u v)
 
 We'll also throw in an ``Arbitrary`` instance for ``List`` here for use in testing later.
 

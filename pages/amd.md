@@ -33,7 +33,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Lists](/posts/arithmetic-made-difficult/Lists.html)
     * [Reverse](/posts/arithmetic-made-difficult/Reverse.html)
     * [Cat](/posts/arithmetic-made-difficult/Cat.html)
-    * Length
+    * [Length](/posts/arithmetic-made-difficult/Length.html)
     * At
     * Map
     * Filter

@@ -22,7 +22,15 @@ A nice consequence of wrapping up recursion in the $\natrec{\ast}{\ast}$ functio
 <div class="proof">
 Suppose to the contrary that there is an element $s \in \nats$, not equal to $\zero$, which is not of the form $\next(m)$ for some $m$. Note that $\bool$, with the distinguished element $\btrue$ and the constant function $\const(\btrue) : \bool \rightarrow \bool$, is an iterative set. Let $\Theta$ denote the unique iterative homomorphism $\natrec{\btrue}{\const(\btrue)} : \nats \rightarrow \bool$.
 
-Now we define another mapping $\Psi : \nats \rightarrow \bool$ as follows: $$\Psi(x) = \left\{ \begin{array}{ll} \Theta(x) & \mathrm{if}\ x \neq s \\ \bnot(\Theta(x)) & \mathrm{if}\ x = s \end{array} \right.$$ We claim that $\Psi$ is an iterative homomorphism. To see this, note that $$\Psi(\zero) = \Theta(\zero) = \btrue$$ (since $\zero \neq s$) and that if $x \in \nats$, $$\Psi(\next(x)) = \Theta(\next(x)) = (\const\ \btrue)(\Theta(x)) = \btrue = (\const\ \btrue)(\Psi(x))$$ (since $\next(x) \neq s$). That is, $\Psi$ is an iterative homomorphism from $(\nats, \zero, \next)$ to $(\bool, \btrue, \const(\btrue))$, and since $\Theta$ is unique, we have $\Psi = \Theta$. But this implies that $\Theta(s) = \Psi(s) = \bnot(\Theta(s))$, which is absurd.
+Now we define another mapping $\Psi : \nats \rightarrow \bool$ as follows: $$\Psi(x) = \left\{ \begin{array}{ll} \Theta(x) & \mathrm{if}\ x \neq s \\ \bnot(\Theta(x)) & \mathrm{if}\ x = s \end{array} \right.$$ We claim that $\Psi$ is an iterative homomorphism. To see this, note that $$\Psi(\zero) = \Theta(\zero) = \btrue$$ (since $\zero \neq s$) and that if $x \in \nats$,
+$$\begin{eqnarray*}
+ &   & \Psi(\next(x)) \\
+ & = & \Theta(\next(x)) \\ 
+ & = & (\const\ \btrue)(\Theta(x)) \\
+ & = & \btrue \\
+ & = & (\const\ \btrue)(\Psi(x))
+\end{eqnarray*}$$
+(since $\next(x) \neq s$). That is, $\Psi$ is an iterative homomorphism from $(\nats, \zero, \next)$ to $(\bool, \btrue, \const(\btrue))$, and since $\Theta$ is unique, we have $\Psi = \Theta$. But this implies that $\Theta(s) = \Psi(s) = \bnot(\Theta(s))$, which is absurd.
 </div>
 </div>
 
