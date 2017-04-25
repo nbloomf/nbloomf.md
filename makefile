@@ -159,6 +159,7 @@ amd-exe: FORCE
 	$(call amd_move,rev)
 	$(call amd_move,cat)
 	$(call amd_move,length)
+	$(call amd_move,at)
 	@rm -rf posts/arithmetic-made-difficult/dist
 
 # move an arithmetic made difficult exe
