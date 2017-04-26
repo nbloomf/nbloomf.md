@@ -13,6 +13,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > 
 > import NaturalNumbers
 > import Plus
+> import Minus
 > import LessThanOrEqualTo
 >
 > import Lists
@@ -218,16 +219,24 @@ We can characterize the $k$ such that $\at(x,k) = \ast$.
 <div class="thm"><p>
 Let $A$ be a set. For all $x \in \lists{A}$ and $k \in \nats$ we have the following.
 
-1. If $\nleq(\length(x),k)$, then $\at(x,\next(k)) = \ast$.
+1. If $\nleq(\next(\length(x)),k)$, then $\at(x,k) = \ast$.
 2. If $\nleq(\next(\zero),k)$ and $\nleq(k,\length(x))$ then $\at(x,k) \neq \ast$.
 </p></div>
 
 <div class="proof"><p>
-1. We proceed by induction on $k$. For the base case $k = \zero$, suppose $\nleq(\length(x),\zero)$. Then we have $\length(x) = \zero$, so that $x = \nil$. Now $\at(\nil,\next(\zero)) = \ast$ as claimed. For the inductive step, suppose the implication holds for all $x \in \lists{A}$ for some $k \in \nats$, and suppose further that $x \in \lists{A}$ such that $\nleq(\length(x),\next(k))$. We consider two cases for $x$: either $x = \nil$ or $x = \cons(a,y)$ for some $y$. If $x = \nil$ we have $\at(\nil,\next(k)) = \ast$ as claimed. If $x = \cons(a,y)$, we have $\length(x) = \next(\length(y))$, so that $\nleq(\length(y),k)$. Using the induction hypothesis, we have
+1. We proceed by induction on $k$. For the base case $k = \zero$, note that $\nleq(\next(\length(x)),\zero)$ is false, so the implication holds vacuously. For the inductive step, suppose the implication holds for all $x \in \lists{A}$ for some $k$. Suppose further that $x \in \lists{A}$ such that $\nleq(\next(\length(x)),\next(k))$. We consider two cases for $x$: either $x = \nil$ or $x = \cons(a,y)$ for some $y$. If $x = \nil$ we have $\at(\nil,\next(k)) = \ast$ as claimed. If $x = \cons(a,y)$, we have
 $$\begin{eqnarray*}
- &   & \at(x,\next(\next(k))) \\
- & = & \at(\cons(a,y),\next(\next(k))) \\
- & = & \at(y,\next(k)) \\
+ &   & \nleq(\next(\length(x)),\next(k)) \\
+ & = & \nleq(\length(x),k) \\
+ & = & \nleq(\length(\cons(a,y),k) \\
+ & = & \nleq(\next(\length(y)),k).
+\end{eqnarray*}$$
+Note in particular that $k = \next(m)$ for some $m$. Using the induction hypothesis, we have
+$$\begin{eqnarray*}
+ &   & \at(x,\next(k)) \\
+ & = & \at(\cons(a,y),\next(\next(m))) \\
+ & = & \at(y,\next(m)) \\
+ & = & \at(y,k) \\
  & = & \ast
 \end{eqnarray*}$$
 as needed.
@@ -250,13 +259,251 @@ as needed.
 </p></div>
 </div>
 
+$\at$ interacts with $\snoc$:
+
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set. For all $x,y \in \lists{A}$ and $k \in \nats$, we have $$\at(\cat(x,y),k) = \left\{ \begin{array}{ll} \at(x,k) & \mathrm{if}\ \leq(k,\length(x)) \\ \at(y,\next(\nminus(k,\length(x)))) & \mathrm{if}\ \leq(\next(\length(x)),k). \end{array} \right.$$
+Let $A$ be a set. Let $a \in A$, $x \in \lists{A}$, and $k \in \nats$. Now if $\nleq(k,\length(x))$, we have $$\at(\snoc(a,x),k) = \at(x,k).$$
 </p></div>
 
 <div class="proof"><p>
-(@@@)
+We proceed by list induction on $x$. For the base case $x = \nil$, if $\nleq(k,\length(\nil))$ we have $k = \zero$. So
+$$\begin{eqnarray*}
+ &   & \at(\snoc(a,x),k) \\
+ & = & \at(\snoc(a,x),\zero) \\
+ & = & \ast \\
+ & = & \at(x,\zero) \\
+ & = & \at(x,k)
+\end{eqnarray*}$$
+as claimed. For the inductive step, suppose the implication holds for all $a \in A$ and $k \in \nats$ for some $x \in \lists{A}$, and let $b \in A$. Suppose further that $\nleq(k,\length(\cons(b,x))$. We consider three possibilities for $k$: either $k = \zero$, $k = \next(\zero)$, or $k = \next(\next(m))$ for some $m$.
+
+If $k = \zero$, we have
+$$\begin{eqnarray*}
+ &   & \at(\snoc(a,\cons(b,x)),k) \\
+ & = & \at(\snoc(a,\cons(b,x)),\zero) \\
+ & = & \ast \\
+ & = & \at(\cons(b,x),\zero) \\
+ & = & \at(\cons(b,x),k)
+\end{eqnarray*}$$
+as claimed.
+
+If $k = \next(\zero)$, we have
+$$\begin{eqnarray*}
+ &   & \at(\snoc(a,\cons(b,x)),k) \\
+ & = & \at(\snoc(a,\cons(b,x)),\next(\zero)) \\
+ & = & \at(\cons(b,\snoc(a,x)),\next(\zero)) \\
+ & = & b \\
+ & = & \at(\cons(b,x),\next(\zero)) \\
+ & = & \at(\cons(b,x),k)
+\end{eqnarray*}$$
+as claimed.
+
+Finally, suppose $k = \next(\next(m))$. Now
+$$\begin{eqnarray*}
+ &   & \nleq(k,\length(\cons(b,x))) \\
+ & = & \nleq(\next(\next(m)),\next(\length(x)) \\
+ & = & \nleq(\next(m),\length(x)).
+\end{eqnarray*}$$
+Using the inductive hypothesis, we have
+$$\begin{eqnarray*}
+ &   & \at(\snoc(a,\cons(b,x)),k) \\
+ & = & \at(\snoc(a,\cons(b,x)),\next(\next(m))) \\
+ & = & \at(\cons(b,\snoc(a,x)),\next(\next(m))) \\
+ & = & \at(\snoc(a,x),\next(m)) \\
+ & = & \at(x,\next(m)) \\
+ & = & \at(\cons(b,x),\next(\next(m))) \\
+ & = & \at(\cons(b,x),k)
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
+$\at$ interacts with $\cat$:
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $x,y \in \lists{A}$ and $k \in \nats$, we have $$\at(\cat(x,y),k) = \left\{ \begin{array}{ll} \at(x,k) & \mathrm{if}\ \nleq(k,\length(x)) \\ \at(y,\nminus(k,\length(x))) & \mathrm{if}\ \nleq(\next(\length(x)),k). \end{array} \right.$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $y$. For the base case $y = \nil$, note that $\cat(x,y) = x$. Now if $\nleq(k,\length(x))$, we have
+$$\begin{eqnarray*}
+ &   & \at(\cat(x,y),k) \\
+ & = & \at(x,k)
+\end{eqnarray*}$$
+as claimed.
+If $\nleq(\next(\length(x)),k)$, we have
+$$\begin{eqnarray*}
+ &   & \at(\cat(x,y),k) \\
+ & = & \at(x,k) \\
+ & = & \ast \\
+ & = & \at(\nil,\nminus(k,\length(x)))
+\end{eqnarray*}$$
+as claimed. For the inductive step, suppose the equality holds for all $x \in \lists{A}$ and $k \in \nats$ for some $y \in \lists{A}$, and let $a \in A$. First suppose $\nleq(k,\length(x))$. Now
+$$\begin{eqnarray*}
+ &   & \nleq(k,\length(x)) \\
+ & = & \nleq(k,\next(\length(x))) \\
+ & = & \nleq(k,\length(\snoc(a,x))).
+\end{eqnarray*}$$
+So by the inductive hypothesis we have
+$$\begin{eqnarray*}
+ &   & \at(\cat(x,\cons(a,y)),k) \\
+ & = & \at(\cat(\snoc(a,x),y),k) \\
+ & = & \at(\snoc(a,x),k) \\
+ & = & \at(x,k)
+\end{eqnarray*}$$
+as needed.
+Next suppose $\nleq(\next(\length(x)),k)$. We consider two possibilities: either $k = \next(\length(x))$ or $\nleq(\next(\next(\length(x)),k)$.
+
+First suppose $k = \next(\length(x))$. Note that $$\next(\length(x)) = \length(\snoc(a,x)),$$ so using the inductive hypothesis we have
+$$\begin{eqnarray*}
+ &   & \at(\cat(x,\cons(a,y)),k) \\
+ & = & \at(\cat(\snoc(a,x),y),k) \\
+ & = & \at(\snoc(a,x),k) \\
+ & = & \at(\snoc(a,x),\length(\snoc(a,x))) \\
+ & = & \head(\rev(\snoc(a,x))) \\
+ & = & \head(\cons(a,\rev(x))) \\
+ & = & a \\
+ & = & \at(\cons(a,y),\next(\zero)) \\
+ & = & \at(\cons(a,y),\nminus(\next(\length(x)),\length(x))) \\
+ & = & \at(\cons(a,y),\nminus(k,\length(x)))
+\end{eqnarray*}$$
+as needed.
+
+Next suppose $\nleq(\next(\next(\length(x))),k)$. Say $k = \next(\next(m))$. Again using the inductive hypothesis, and noting that $\length(\snoc(a,x)) = \next(\length(x))$, we now have
+$$\begin{eqnarray*}
+ &   & \at(\cat(x,\cons(a,y)),k) \\
+ & = & \at(\cat(\snoc(a,x),y),k) \\
+ & = & \at(y,\nminus(k,\length(\snoc(a,x))) \\
+ & = & \at(y,\nminus(k,\next(\length(x)))) \\
+ & = & \at(y,\nminus(\next(\next(m)),\next(\length(x)))) \\
+ & = & \at(y,\next(\nminus(\next(m),\next(\length(x))))) \\
+ & = & \at(\cons(a,y),\next(\next(\nminus(\next(m),\next(\length(x)))))) \\
+ & = & \at(\cons(a,y),\next(\next(\nminus(m,\length(x))))) \\
+ & = & \at(\cons(a,y),\nminus(\next(\next(m)),\length(x))) \\
+ & = & \at(\cons(a,y),\nminus(k,\length(x)))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
+$\at$ interacts with $\rev$:
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. Let $x \in \lists{A}$ and $u,v \in \nats$. If $\nplus(u,v) = \next(\length(x))$, then we have $$\at(x,u) = \at(\rev(u),v).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by induction on $u$. For the base case $u = \zero$, note that if $\nplus(u,v) = \next(\length(x))$ we have $v = \next(\length(x))$. Note also that $\length(x) = \length(\rev(x))$. So in this case we have
+$$\begin{eqnarray*}
+ &   & \at(x,u) \\
+ & = & \at(x,\zero) \\
+ & = & \ast \\
+ & = & \at(\rev(x),\next(\length(\rev(x)))) \\
+ & = & \at(\rev(x),\next(\length(x))) \\
+ & = & \at(\rev(x),v)
+\end{eqnarray*}$$
+as claimed.
+
+For the inductive step, suppose the implication holds for all $x \in \lists{A}$ and $v \in \nats$ for some $u$. Suppose further that $\nplus(\next(u),v) = \next(\length(x))$. We consider two possibilities for $x$; either $x = \nil$ or $x \neq \nil$. First suppose $x = \nil$. In this case we have
+$$\begin{eqnarray*}
+ &   & \at(x,\next(u)) \\
+ & = & \at(\nil,\next(u)) \\
+ & = & \ast \\
+ & = & \at(\nil,v) \\
+ & = & \at(\rev(\nil),v) \\
+ & = & \at(\rev(x),v)
+\end{eqnarray*}$$
+as needed.
+
+Suppose instead that $x = \cons(a,y)$. We now consider two possibilities for $u$; either $u = \zero$ or $u = \next(m)$ for some $m$. If $u = \zero$, we have $v = \length(x)$. In this case,
+$$\begin{eqnarray*}
+ &   & \at(x,\next(u)) \\
+ & = & \at(\cons(a,y),\next(\zero)) \\
+ & = & a \\
+ & = & \head(\cons(a,\rev(y))) \\
+ & = & \head(x) \\
+ & = & \head(\rev(\rev(x))) \\
+ & = & \at(\rev(x),\length(\rev(x))) \\
+ & = & \at(\rev(x),\length(x)) \\
+ & = & \at(\rev(x),v)
+\end{eqnarray*}$$
+as claimed. Finally, suppose $u = \next(m)$. Note that
+$$\begin{eqnarray*}
+ &   & \next(\nplus(u,v)) \\
+ & = & \nplus(\next(u),v) \\
+ & = & \next(\length(x)) \\
+ & = & \next(\next(\length(y)),
+\end{eqnarray*}$$
+so that $\nplus(u,v) = \next(\length(y))$. In fact we have $\nleq(v,\length(y))$, since $u = \next(m)$. Using the inductive hypothesis, we have
+$$\begin{eqnarray*}
+ &   & \at(x,\next(u)) \\
+ & = & \at(\cons(a,y),\next(\next(m))) \\
+ & = & \at(y,\next(m)) \\
+ & = & \at(y,u) \\
+ & = & \at(\rev(y),v) \\
+ & = & \at(\snoc(a,\rev(y)),v) \\
+ & = & \at(\rev(\cons(a,y)),v) \\
+ & = & \at(\rev(x),v)
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
+Finally, $\at$ detects equality for lists.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set, and let $x,y \in \lists{A}$. Then $x = y$ if and only if $\at(x,k) = \at(y,k)$ for all $k \in \nats$.
+</p></div>
+
+<div class="proof"><p>
+The "only if" direction is clear. We show the "if" part by list induction on $x$. For the base case $x = \nil$, suppose we have $\at(x,k) = \at(y,k)$ for all $k \in \nats$. If $y = \cons(a,z)$ for some $z$, then we have
+$$\begin{eqnarray*}
+ &   & a \\
+ & = & \at(\cons(a,z),\next(\zero)) \\
+ & = & \at(y,\next(\zero)) \\
+ & = & \at(x,\next(\zero)) \\
+ & = & \ast,
+\end{eqnarray*}$$
+a contradiction. So $y = \nil = x$ as claimed.
+
+For the inductive step, suppose the implication holds for some $x$, let $a \in A$, and suppose we have $\at(\cons(a,x),k) = \at(y,k)$ for all $k \in \nats$. If $y = \nil$, then again we have
+$$\begin{eqnarray*}
+ &   & a \\
+ & = & \at(\cons(a,x),\next(\zero)) \\
+ & = & \at(y,\next(\zero)) \\
+ & = & \at(\nil,\next(\zero)) \\
+ & = & \ast,
+\end{eqnarray*}$$
+a contradiction. Say $y = \cons(b,z)$. Now
+$$\begin{eqnarray*}
+ &   & a \\
+ & = & \at(\cons(a,x),\next(\zero)) \\
+ & = & \at(y,\next(\zero)) \\
+ & = & \at(\cons(b,z),\next(\zero)) \\
+ & = & b.
+\end{eqnarray*}$$
+Now we claim that $\at(x,k) = \at(z,k)$ for all $k$; to see this we consider two cases for $k$: either $k = \zero$ or $k = \next(m)$. If $k = \zero$ we have
+$$\begin{eqnarray*}
+ &   & \at(x,k) \\
+ & = & \at(x,\zero) \\
+ & = & \ast \\
+ & = & \at(z,\zero) \\
+ & = & \at(z,k).
+\end{eqnarray*}$$
+If $k = \next(m)$ we have
+$$\begin{eqnarray*}
+ &   & \at(x,k) \\
+ & = & \at(x,\next(m)) \\
+ & = & \at(\cons(a,x),\next(\next(m))) \\
+ & = & \at(y,\next(\next(m))) \\
+ & = & \at(\cons(b,z),\next(\next(m))) \\
+ & = & \at(z,\next(m)) \\
+ & = & \at(z,k).
+\end{eqnarray*}$$
+Thus $\at(x,k) = \at(z,k)$ for all $k$, and by the induction hypothesis we have $x = z$. Thus $\cons(a,x) = \cons(b,z) = y$ as claimed.
 </p></div>
 </div>
 
@@ -318,7 +565,7 @@ Here are our property tests for $\at$.
 >   (at x (length x)) == (head (rev x))
 > 
 > 
-> -- leq(length(x),k) ==> at(x,next(k)) == *
+> -- leq(length(x),k)                   ==> at(x,next(k)) == *
 > -- leq(next(0),k) && leq(k,length(x)) ==> at(x,next(k)) /= *
 > _test_at_range :: (ListOf t, Eq a)
 >   => t a -> t a -> Nat -> Bool
@@ -328,6 +575,37 @@ Here are our property tests for $\at$.
 >       Just _  -> True
 >       Nothing -> False
 >     else (at x n) == Nothing
+> 
+> 
+> -- leq(k,length(x)) ==> at(snoc(a,x),k) == at(x,k)
+> _test_at_snoc :: (ListOf t, Eq a)
+>   => t a -> t a -> a -> Nat -> Bool
+> _test_at_snoc z x a k =
+>   if (leq k (length x))
+>     then (at (snoc a x) k) == (at x k)
+>     else True
+> 
+> 
+> -- leq(k,length(x))       ==> at(cat(x,y),k) == at(x,k)
+> -- leq(next(length(x)),k) ==> at(cat(x,y),k) == at(y,minus(k,length(x)))
+> _test_at_cat :: (ListOf t, Eq a)
+>   => t a -> t a -> t a -> Nat -> Bool
+> _test_at_cat z x y k =
+>   if (leq k (length x))
+>     then
+>       (at (cat x y) k) == (at x k)
+>     else
+>       let Just m = minus k (length x) in
+>       (at (cat x y) k) == (at y m)
+> 
+> 
+> -- at(x,u) == at(rev(x),minus(next(length(x)),u))
+> _test_at_rev :: (ListOf t, Eq a)
+>   => t a -> t a -> Nat -> Bool
+> _test_at_rev z x u =
+>   case minus (next (length x)) u of
+>     Just v  -> (at x u) == (at (rev x) v)
+>     Nothing -> True
 
 And the suite:
 
@@ -341,6 +619,9 @@ And the suite:
 >   , quickCheckWith args (_test_at_next_next_cons t n)
 >   , quickCheckWith args (_test_at_length_rev t)
 >   , quickCheckWith args (_test_at_range t)
+>   , quickCheckWith args (_test_at_snoc t)
+>   , quickCheckWith args (_test_at_cat t)
+>   , quickCheckWith args (_test_at_rev t)
 >   ]
 >   where
 >     args = stdArgs

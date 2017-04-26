@@ -87,13 +87,16 @@ title: College Algebra
 * Apr 5
     * Practice Problems: 3.3 #63, 64, 69, 70
 * Apr 7
-    * Activity 10 [](/pdf/classes/coal/coal-a10-the-rational-root-theorem.pdf) [](/pdf/classes/coal/coal-soln-a10-the-rational-root-theorem.pdf)
+    * [Activity 10](/pdf/classes/coal/coal-a10-the-rational-root-theorem.pdf) ([solutions](/pdf/classes/coal/coal-soln-a10-the-rational-root-theorem.pdf))
 * Apr 10
     * Practice Problems: 3.2 #65--70; 3.3 #67, 68
 * Apr 12
-    * Review for Test 3 [](/pdf/classes/coal/coal-r3-polynomials.pdf) [](/pdf/classes/coal/coal-soln-r3-polynomials.pdf)
+    * [Review for Test 3](/pdf/classes/coal/coal-r3-polynomials.pdf) ([solutions](/pdf/classes/coal/coal-soln-r3-polynomials.pdf))
 * Apr 14
     * **Test 3**
+
+
+
 * Apr 17
     * Practice Problems: 4.1 #9--20, 21--32
 * Apr 19
