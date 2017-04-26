@@ -28,6 +28,7 @@ title: Statistical Methods
 
 1. [Test 1](/pdf/classes/stat/stat-r1-parameters-and-probability.pdf) ([solutions](/pdf/classes/stat/stat-soln-r1-parameters-and-probability.pdf))
 2. [Test 2](/pdf/classes/stat/stat-r2-counting.pdf)
+3. [Test 3](/pdf/classes/stat/stat-r3-continuous-rvs.pdf)
 
 <!-- 
 
