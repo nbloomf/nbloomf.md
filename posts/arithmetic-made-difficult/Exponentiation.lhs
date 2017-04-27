@@ -228,4 +228,4 @@ And the suite:
 >       }
 
 > main_power :: IO ()
-> main_power = _test_power (zero :: Nat) 5 30
+> main_power = _test_power (zero :: Nat) 4 30

@@ -35,7 +35,9 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Cat](/posts/arithmetic-made-difficult/Cat.html)
     * [Length](/posts/arithmetic-made-difficult/Length.html)
     * [At](/posts/arithmetic-made-difficult/At.html)
-    * Map
+    * [Map](/posts/arithmetic-made-difficult/Map.html)
+    * [UnfoldN](/posts/arithmetic-made-difficult/UnfoldN.html)
+    * [Range](/posts/arithmetic-made-difficult/Range.html)
     * Filter
     * Zip
 4. Fixed Radix Numeral Systems
