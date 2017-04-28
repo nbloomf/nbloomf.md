@@ -38,8 +38,10 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Map](/posts/arithmetic-made-difficult/Map.html)
     * [UnfoldN](/posts/arithmetic-made-difficult/UnfoldN.html)
     * [Range](/posts/arithmetic-made-difficult/Range.html)
+    * Zip and ZipPad
     * Filter
-    * Zip
+    * Prefix and Suffix
+    * Inits and Tails
 4. Fixed Radix Numeral Systems
 
 > The old idea that there was no reasoning in Arithmetic is dead; the idea that the *general axioms* have no place in Arithmetic is no longer held by a progressive teacher... <cite>J.B.F. Showalter in "Arithmetic Made Easy", 1897</cite>

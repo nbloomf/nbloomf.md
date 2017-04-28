@@ -12,6 +12,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Prelude hiding (foldr, foldl', foldl, length, head, tail, map)
 > 
 > import NaturalNumbers
+> import Plus
 >
 > import Lists
 > import Reverse
@@ -23,7 +24,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > 
 > import Test.QuickCheck
 
-
+For our first application of $\unfoldN$ we'll define a function, $\range$, that constructs lists of natural numbers. There are a few ways to do this. We could take an argument $n$ and construct the list of natural numbers from $\zero$ to $n$, but this is too specialized. We could instead take *two* arguments $a$ and $b$ and construct the list of natural numbers from $a$ to $b$, but we'll have to check whether or not the arguments are in order. A third option -- and the one we'll take -- is to take two arguments $a$ and $b$, and construct the list of the first $b$ natural numbers starting from $a$.
 
 <div class="result">
 <div class="defn"><p>
@@ -70,6 +71,8 @@ $$\begin{eqnarray*}
 as claimed.
 </p></div>
 </div>
+
+$\range$ interacts with $\next$ in its second argument:
 
 <div class="result">
 <div class="thm"><p>
@@ -130,6 +133,8 @@ as claimed.
 </p></div>
 </div>
 
+$\range$ interacts with $\nplus$ in its second argument:
+
 <div class="result">
 <div class="thm"><p>
 If $a,b,c \in \nats$, we have $$\range(a,\nplus(b,c)) = \cat(\range(a,b),\range(\nplus(a,b),c).$$
@@ -159,26 +164,65 @@ as needed.
 </p></div>
 </div>
 
-<div class="result">
-<div class="thm"><p>
-
-</p></div>
-
-<div class="proof"><p>
-
-</p></div>
-</div>
+$\range$ interacts with $\next$ in its first argument:
 
 <div class="result">
 <div class="thm"><p>
-
+For all $a,b \in \nats$ we have $$\range(\next(a),b) = \map(\next)(\range(a,b)).$$
 </p></div>
 
 <div class="proof"><p>
-
+We proceed by induction on $b$. For the base case $b = \zero$, we have
+$$\begin{eqnarray*}
+ &   & \range(\next(a),b) \\
+ & = & \range(\next(a),\zero) \\
+ & = & \nil \\
+ & = & \map(\next)(\nil) \\
+ & = & \map(\next)(\range(a,\zero)) \\
+ & = & \map(\next)(\range(a,b))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $b$. Now
+$$\begin{eqnarray*}
+ &   & \range(\next(a),\next(b)) \\
+ & = & \cons(\next(a),\range(\next(\next(a)),b)) \\
+ & = & \cons(\next(a),\map(\next)(\range(\next(a),b))) \\
+ & = & \map(\next)(\cons(a,\range(\next(a),b))) \\
+ & = & \map(\next)(\range(a,\next(b)))
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
 
+And $\range$ interacts with $\nplus$ in its first argument. In this theorem we use a bit of new notation. When a function argument is replaced by a dash, we implicitly mean lambda-abstraction. That is, if $f$ is a function, then $f(-)$ is short for $\lambda x. f(x)$.
+
+<div class="result">
+<div class="thm"><p>
+If $a,b,c \in \nats$, we have $$\range(\nplus(a,b),c) = \map(\nplus(a,-))(\range(b,c)).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by induction on $a$. For the base case $a = \zero$ note that $\nplus(a,-) = \id$, since for all $b \in \nats$ we have $$\nplus(\zero,-)(b) = \nplus(\zero,b) = b.$$ Thus
+$$\begin{eqnarray*}
+ &   & \range(\nplus(a,b),c) \\
+ & = & \range(\nplus(\zero,b),c) \\
+ & = & \range(b,c) \\
+ & = & \map(\id)(\range(b,c)) \\
+ & = & \map(\nplus(\zero,-))(\range(b,c)) \\
+ & = & \map(\nplus(a,-))(\range(b,c))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the result holds for some $a$. Now
+$$\begin{eqnarray*}
+ &   & \range(\nplus(\next(a),b),c) \\
+ & = & \range(\next(\nplus(a,b)),c) \\
+ & = & \map(\next)(\range(\nplus(a,b),c)) \\
+ & = & \map(\next)(\map(\nplus(a,-))(\range(b,c))) \\
+ & = & (\map(\next) \circ \map(\nplus(a,-)))(\range(b,c)) \\
+ & = & \map(\next(\nplus(a,-)))(\range(b,c)) \\
+ & = & \map(\nplus(\next(a),-))(\range(b,c))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
 
 
 Testing
@@ -192,12 +236,56 @@ A utility for type fixing:
 Here are our property tests for $\range$.
 
 > -- range(a,next(b)) == cons(a,range(next(a),b))
-> _test_range_cons :: (ListOf t, Natural n)
+> _test_range_next_cons :: (ListOf t, Natural n)
 >   => t n -> n -> n -> Bool
-> _test_range_cons t a b =
+> _test_range_next_cons t a b =
 >   let
 >     x = (range a (next b)) `withTypeOf` t
 >     y = (cons a (range (next a) b))
+>   in
+>     x `listEq` y
+> 
+> 
+> -- range(a,next(b)) == snoc(plus(a,b),range(a,b))
+> _test_range_next_snoc :: (ListOf t, Natural n)
+>   => t n -> n -> n -> Bool
+> _test_range_next_snoc t a b =
+>   let
+>     x = (range a (next b)) `withTypeOf` t
+>     y = (snoc (plus a b) (range a b))
+>   in
+>     x `listEq` y
+> 
+> 
+> -- range(a,plus(b,c)) == cat(range(a,b),range(plus(a,b),c))
+> _test_range_plus_right :: (ListOf t, Natural n)
+>   => t n -> n -> n -> n -> Bool
+> _test_range_plus_right t a b c =
+>   let
+>     x = (range a (plus b c)) `withTypeOf` t
+>     y = (cat (range a b) (range (plus a b) c))
+>   in
+>     x `listEq` y
+> 
+> 
+> -- range(next(a),b) == map(next,range(a,b))
+> _test_range_next_left :: (ListOf t, Natural n)
+>   => t n -> n -> n -> Bool
+> _test_range_next_left t a b =
+>   let
+>     x = (range (next a) b) `withTypeOf` t
+>     y = (map next (range a b))
+>   in
+>     x `listEq` y
+> 
+> 
+> -- range(plus(a,b),c) == map(plus(a,-),range(b,c))
+> _test_range_plus_left :: (ListOf t, Natural n)
+>   => t n -> n -> n -> n -> Bool
+> _test_range_plus_left t a b c =
+>   let
+>     x = (range (plus a b) c) `withTypeOf` t
+>     y = (map (plus a) (range b c))
 >   in
 >     x `listEq` y
 
@@ -207,7 +295,11 @@ And the suite:
 > _test_range :: (ListOf t, Arbitrary (t n), Show (t n), Natural n, Arbitrary n, Show n)
 >   => t n -> n -> Int -> Int -> IO ()
 > _test_range t n maxSize numCases = sequence_
->   [ quickCheckWith args (_test_range_cons t n)
+>   [ quickCheckWith args (_test_range_next_cons t n)
+>   , quickCheckWith args (_test_range_next_snoc t n)
+>   , quickCheckWith args (_test_range_plus_right t n)
+>   , quickCheckWith args (_test_range_next_left t n)
+>   , quickCheckWith args (_test_range_plus_left t n)
 >   ]
 >   where
 >     args = stdArgs

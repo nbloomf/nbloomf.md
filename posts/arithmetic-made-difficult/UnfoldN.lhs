@@ -41,49 +41,10 @@ Another strategy -- and the one we will take -- is to give unfold a natural numb
 <div class="result">
 <div class="defn"><p>
 Let $A$ and $B$ be sets. Define $\varphi : A \times \lists{B} \rightarrow \lists{B}$ by $$\varphi(a,x) = \rev(x),$$ $\beta : (\ast + A \times B)^A \rightarrow \nats \times (A \times \lists{B}) \rightarrow \bool$ by $$\beta(f)(k,(a,x)) = \left\{\begin{array}{ll} \btrue & \mathrm{if}\ f(a) = \ast \\ \bfalse & \mathrm{otherwise}, \end{array}\right.$$ $\psi : \nats \times (A \times \lists{B}) \rightarrow \lists{B}$ by $$\psi(k,(a,x)) = \rev(x),$$ and $\omega : (\ast + A \times B)^A \rightarrow \nats \times (A \times \lists{B}) \rightarrow A \times \lists{B}$ by $$\omega(f)(k,(a,x)) = \left\{\begin{array}{ll} (a,x) & \mathrm{if}\ f(a) = \ast \\ (d,\cons(b,x)) & \mathrm{if}\ f(a) = (d,b). \end{array}\right.$$ We then define $$\unfoldN : (\ast + A \times B)^A \times \nats \times A \rightarrow \lists{B}$$ by $$\unfoldN(f,k,a) = \bailrec{\varphi}{\beta(f)}{\psi}{\omega(f)}(k,(a,\nil)).$$
-
-In Haskell:
-
-> unfoldN :: (ListOf t, Natural n)
->   => (a -> Maybe (a,b)) -> n -> a -> t b
-> unfoldN f k a = bailoutRec phi (beta f) psi (omega f) k (a,nil)
->   where
->     phi       (_,x) = rev x
->
->     beta  g _ (b,y) = case g b of
->       Nothing -> True
->       Just _  -> False
->
->     psi     _ (_,x) = rev x
->
->     omega g _ (b,y) = case g b of
->       Nothing    -> (b,y)
->       Just (c,d) -> (c, cons d y)
-
 </p></div>
 </div>
 
 We let $\Theta = \bailrec{\varphi}{\beta(f)}{\psi}{\omega(f)}$ as in the definition of $\unfoldN$.
-
-Special case:
-
-<div class="result">
-<div class="thm"><p>
-For all $f$ and $a$, we have $\unfoldN(f,\zero,a) = \nil$.
-</p></div>
-
-<div class="proof"><p>
-Note that
-$$\begin{eqnarray*}
- &   & \unfoldN(f,\zero,a) \\
- & = & \Theta(\zero,(a,\nil)) \\
- & = & \varphi(a,\nil) \\
- & = & \rev(\nil) \\
- & = & \nil
-\end{eqnarray*}$$
-as claimed.
-</p></div>
-</div>
 
 We won't prove many general properties of $\unfoldN$ here; instead we will define more specific functions in terms of $\unfoldN$ and prove properties about them.
 
@@ -140,3 +101,76 @@ $$\begin{eqnarray*}
 as needed.
 </p></div>
 </div>
+
+
+Implementation
+--------------
+
+We can implement $\unfoldN$ in terms of bailout recursion as in the definition.
+
+> unfoldN' :: (ListOf t, Natural n)
+>   => (a -> Maybe (a,b)) -> n -> a -> t b
+> unfoldN' f k a = bailoutRec phi (beta f) psi (omega f) k (a,nil)
+>   where
+>     phi       (_,x) = rev x
+>
+>     beta  g _ (b,y) = case g b of
+>       Nothing -> True
+>       Just _  -> False
+>
+>     psi     _ (_,x) = rev x
+>
+>     omega g _ (b,y) = case g b of
+>       Nothing    -> (b,y)
+>       Just (c,d) -> (c, cons d y)
+
+However, unrolling the definition yields a more intuitive implementation.
+
+<div class="result">
+<div class="thm"><p>
+For all $f$, $k$, and $a$, we have the following.
+
+1. $\unfoldN(f,\zero,a) = \nil$.
+2. $$\unfoldN(f,\next(k),a) = \left\{\begin{array}{ll} \nil & \mathrm{if}\ f(a) = \ast \\ \cons(b,\unfoldN(f,k,c)) & \mathrm{if}\ f(a) = (c,b). \end{array}\right.$$
+</p></div>
+
+<div class="proof"><p>
+1. Note that
+$$\begin{eqnarray*}
+ &   & \unfoldN(f,\zero,a) \\
+ & = & \Theta(\zero,(a,\nil)) \\
+ & = & \varphi(a,\nil) \\
+ & = & \rev(\nil) \\
+ & = & \nil
+\end{eqnarray*}$$
+as claimed.
+2. If $f(a) = \ast$, then
+$$\begin{eqnarray*}
+ &   & \unfoldN(f,\next(k),a) \\
+ & = & \Theta(\next(k),(a,\nil)) \\
+ & = & \psi(k,(a,\nil)) \\
+ & = & \rev(\nil) \\
+ & = & \nil.
+\end{eqnarray*}$$
+If $f(a) = (c,b)$, then
+$$\begin{eqnarray*}
+ &   & \unfoldN(f,\next(k),a) \\
+ & = & \Theta(\next(k),(a,\nil)) \\
+ & = & \Theta(k,\omega(f)(a,\nil)) \\
+ & = & \Theta(k,(c,\cons(b,\nil))) \\
+ & = & \cat(\rev(\cons(b,\nil)),\unfoldN(f,k,c)) \\
+ & = & \cat(\cons(b,\nil),\unfoldN(f,k,c)) \\
+ & = & \cons(b,\cat(\nil,\unfoldN(f,k,c))) \\
+ & = & \cons(b,\unfoldN(f,k,c))
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
+> unfoldN :: (ListOf t, Natural n)
+>   => (a -> Maybe (a,b)) -> n -> a -> t b
+> unfoldN f n a = case shapeOf n of
+>   Zero   -> nil
+>   Next k -> case f a of
+>     Nothing    -> nil
+>     Just (c,b) -> cons b (unfoldN f k c)
