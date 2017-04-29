@@ -38,7 +38,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Map](/posts/arithmetic-made-difficult/Map.html)
     * [UnfoldN](/posts/arithmetic-made-difficult/UnfoldN.html)
     * [Range](/posts/arithmetic-made-difficult/Range.html)
-    * Zip and ZipPad
+    * [Zip and ZipPad](/posts/arithmetic-made-difficult/Zip.html)
     * Filter
     * Prefix and Suffix
     * Inits and Tails

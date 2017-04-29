@@ -236,3 +236,16 @@ executable amd-range
     -O2
   default-language:
     Haskell2010
+
+executable amd-zip
+  main-is:
+    Zip.lhs
+  build-depends:
+    base == 4.*,
+    QuickCheck
+  ghc-options:
+    -threaded
+    -main-is Zip.main_zip
+    -O2
+  default-language:
+    Haskell2010
