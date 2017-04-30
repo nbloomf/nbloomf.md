@@ -6,13 +6,14 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > module Zip
->   ( --zip, zipPad, _test_zip, main_zip
+>   ( zip, zipPad, _test_zip, main_zip
 >   ) where
 > 
-> import Prelude hiding (foldr, foldl', foldl, length, head, tail, map, zip)
+> import Prelude hiding (foldr, foldl', foldl, length, head, tail, map, zip, min, max)
 > 
 > import NaturalNumbers
 > import Plus
+> import MaxAndMin
 >
 > import Lists
 > import Reverse
@@ -83,7 +84,7 @@ We can implement $\zip$ directly with $\foldr{-}{-}$ as in the definition.
 >       Cons y ys -> cons (x,y) (f ys)
 >
 >     epsilon :: (ListOf t) => t b -> t (a,b)
->     epsilon z = nil
+>     epsilon _ = nil
 
 ```
 
@@ -127,6 +128,8 @@ as claimed.
 </p></div>
 </div>
 
+In Haskell:
+
 > zip :: (ListOf t) => t a -> t b -> t (a,b)
 > zip x y = case listShape x of
 >   Nil       -> nil
@@ -155,6 +158,8 @@ In Haskell:
 </p></div>
 </div>
 
+Now $\map(\swap) \circ \zip = \zip \circ \swap$:
+
 <div class="result">
 <div class="thm"><p>
 Let $A$ and $B$ be sets. Then for all $x \in \lists{A}$ and $y \in \lists{B}$ we have $$\map(\swap)(\zip(x,y)) = \zip(y,x).$$
@@ -170,7 +175,7 @@ $$\begin{eqnarray*}
  & = & \zip(y,\nil) \\
  & = & \zip(y,x)
 \end{eqnarray*}$$
-as needed. For the inductive step, suppose the equality holds for all $y \in \lists{B}$ for some $x \in \lists{A}$, and let $a \in A$. Now we proceed by list induction on $y$. For the base case $y = \nil$, we have
+as needed. For the inductive step, suppose the equality holds for all $y \in \lists{B}$ for some $x \in \lists{A}$, and let $a \in A$. Now we consider two possibilities for $y$. If $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \map(\swap)(\zip(\cons(a,x),y)) \\
  & = & \map(\swap)(\zip(\cons(a,x),\nil)) \\
@@ -179,17 +184,21 @@ $$\begin{eqnarray*}
  & = & \zip(\nil,\cons(a,x)) \\
  & = & \zip(y,\cons(a,x))
 \end{eqnarray*}$$
-as needed. For the inductive step, suppose the equality holds for $y$ and $\cons(a,x)$, and let $b \in B$. Using the induction hypotheses, we have
+as needed. If $y = \cons(b,z)$, using the induction hypotheses, we have
 $$\begin{eqnarray*}
- &   & \map(\swap)(\zip(\cons(a,x),\cons(b,y))) \\
- & = & \map(\swap)(\cons((a,b),\zip(x,y))) \\
- & = & \cons(\swap(a,b),\map(\swap)(\zip(x,y))) \\
- & = & \cons((b,a),\zip(y,x)) \\
- & = & \zip(\cons(b,y),\cons(a,x))
+ &   & \map(\swap)(\zip(\cons(a,x),y)) \\
+ & = & \map(\swap)(\zip(\cons(a,x),\cons(b,z))) \\
+ & = & \map(\swap)(\cons((a,b),\zip(x,z))) \\
+ & = & \cons(\swap(a,b),\map(\swap)(\zip(x,z))) \\
+ & = & \cons((b,a),\zip(z,x)) \\
+ & = & \zip(\cons(b,z),\cons(a,x)) \\
+ & = & \zip(y,\cons(a,x))
 \end{eqnarray*}$$
 as needed.
 </p></div>
 </div>
+
+And $\map(\pair(f,g)) \circ \zip = \zip \circ \pair(\map(f),\map(g))$:
 
 <div class="result">
 <div class="thm"><p>
@@ -207,7 +216,7 @@ $$\begin{eqnarray*}
  & = & \zip(\map(f)(\nil),\map(g)(y)) \\
  & = & \zip(\map(f)(x),\map(g)(y))
 \end{eqnarray*}$$
-as needed. For the inductive step, suppose the result holds for all $y$ for some $x \in \lists{A}$, and let $a \in A$. We now proceed by list induction on $y$. For the base case $y = \nil$, we have
+as needed. For the inductive step, suppose the result holds for all $y$ for some $x \in \lists{A}$, and let $a \in A$. We now consider two possibilities for $y$. If $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \map(\pair(f,g))(\zip(\cons(a,x),y)) \\
  & = & \map(\pair(f,g))(\zip(\cons(a,x),\nil)) \\
@@ -217,27 +226,236 @@ $$\begin{eqnarray*}
  & = & \zip(\map(f)(\cons(a,x)),\map(g)(\nil)) \\
  & = & \zip(\map(f)(\cons(a,x)),\map(g)(y))
 \end{eqnarray*}$$
-as needed. For the inductive step, suppose the equality holds for some $y \in \lists{B}$. Now we have
+as needed. If $y = \cons(b,z)$, using the inductive hypothesis we have
 $$\begin{eqnarray*}
- &   & \map(\pair(f,g))(\zip(\cons(a,x),\cons(b,y))) \\
- & = & \map(\pair(f,g))(\cons((a,b),\zip(x,y))) \\
- & = & \cons(\pair(f,g)(a,b),\map(\pair(f,g))(\zip(x,y))) \\
- & = & \cons(\pair(f,g)(a,b),\zip(\map(f)(x),\map(g)(y))) \\
- & = & \cons((f(a),g(b)),\zip(\map(f)(x),\map(g)(y))) \\
- & = & \zip(\cons(f(a),\map(f)(x)),\cons(g(b),\map(g)(y))) \\
- & = & \zip(\map(f)(\cons(a,x)),\map(g)(\cons(b,y)))
+ &   & \map(\pair(f,g))(\zip(\cons(a,x),y)) \\
+ & = & \map(\pair(f,g))(\zip(\cons(a,x),\cons(b,z))) \\
+ & = & \map(\pair(f,g))(\cons((a,b),\zip(x,z))) \\
+ & = & \cons(\pair(f,g)(a,b),\map(\pair(f,g))(\zip(x,z))) \\
+ & = & \cons(\pair(f,g)(a,b),\zip(\map(f)(x),\map(g)(z))) \\
+ & = & \cons((f(a),g(b)),\zip(\map(f)(x),\map(g)(z))) \\
+ & = & \zip(\cons(f(a),\map(f)(x)),\cons(g(b),\map(g)(z))) \\
+ & = & \zip(\map(f)(\cons(a,x)),\map(g)(\cons(b,z))) \\
+ & = & \zip(\map(f)(\cons(a,x)),\map(g)(y))
 \end{eqnarray*}$$
 as needed.
 </p></div>
 </div>
 
+The length of a zipped list:
+
 <div class="result">
 <div class="thm"><p>
-Let $A$ and $B$ be sets.
+Let $A$ and $B$ be sets, with $x \in \lists{A}$ and $y \in \lists{B}$. Then $$\length(\zip(x,y)) = \nmin(\length(x),\length(y)).$$
 </p></div>
 
 <div class="proof"><p>
+We proceed by list induction on $y$. For the base case $y = \nil$ we have
+$$\begin{eqnarray*}
+ &   & \length(\zip(x,y)) \\
+ & = & \length(\zip(x,\nil)) \\
+ & = & \length(\nil) \\
+ & = & \zero \\
+ & = & \nmin(\length(x),\zero) \\
+ & = & \nmin(\length(x),\length(\nil)) \\
+ & = & \nmin(\length(x),\length(y)) \\
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $x$ for some $y$ and let $b \in B$. We consider two cases: either $x = \nil$ or $x = \cons(a,z)$. If $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \length(\zip(x,\cons(b,y))) \\
+ & = & \length(\zip(\nil,\cons(b,y))) \\
+ & = & \length(\nil) \\
+ & = & \zero \\
+ & = & \nmin(\zero,\length(\cons(b,y))) \\
+ & = & \nmin(\length(\nil),\length(\cons(b,y))) \\
+ & = & \nmin(\length(x),\length(\cons(b,y)))
+\end{eqnarray*}$$
+as needed. Suppose $x = \cons(b,z)$; now we have
+$$\begin{eqnarray*}
+ &   & \length(\zip(x,\cons(b,y))) \\
+ & = & \length(\zip(\cons(a,z),\cons(b,y))) \\
+ & = & \length(\cons((a,b),\zip(z,y))) \\
+ & = & \next(\length(\zip(z,y))) \\
+ & = & \next(\min(\length(z),\length(y))) \\
+ & = & \nmin(\next(\length(z)),\next(\length(y))) \\
+ & = & \nmin(\length(\cons(a,z)),\length(\cons(b,y))) \\
+ & = & \nmin(x),\length(\cons(b,y))) \\
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
 
+How about $\zipPad$? We want a signature like $$A \times B \rightarrow \lists{A} \times \lists{B} \rightarrow \lists{A \times B},$$ from a function $$\foldr{\delta}{\psi} : \lists{A} \rightarrow \lists{A \times B}^{\lists{B}}.$$ Let $\alpha \in A$ and $\beta \in B$ be the "pad" elements. Now $\delta : \lists{A \times B}^{\lists{B}}$ should satisfy
+$$\begin{eqnarray*}
+ &   & \map((\alpha,-))(y) \\
+ & = & \zipPad(\alpha,\beta)(\nil,y) \\
+ & = & \foldr{\delta}{\psi}(\nil)(y) \\
+ & = & \delta(y),
+\end{eqnarray*}$$
+and $\psi : \lists{A} \times \lists{A \times B}^{\lists{B}} \rightarrow \lists{A \times B}^{\lists{B}}$ should satisfy
+$$\begin{eqnarray*}
+ &   & \cons((a,\beta),\foldr{\delta}{\psi}(x)(\nil)) \\
+ & = & \cons((a,\beta),\zipPad(\alpha,\beta)(x,\nil)) \\
+ & = & \zipPad(\alpha,\beta)(\cons(a,x),\nil) \\
+ & = & \foldr{\delta}{\psi}(\cons(a,x))(\nil) \\
+ & = & \psi(a,\foldr{\delta}{\psi}(x))(\nil)
+\end{eqnarray*}$$
+and
+$$\begin{eqnarray*}
+ &   & \cons((a,b),\zipPad(x,y)) \\
+ & = & \zipPad(\alpha,\beta)(\cons(a,x),\cons(b,y)) \\
+ & = & \foldr{\delta}{\psi}(\cons(a,x))(\cons(b,y)) \\
+ & = & \psi(a,\foldr{\delta}{\psi}(x))(\cons(b,y)).
+\end{eqnarray*}$$
+With this in mind, we define $\zipPad$ like so.
+
+<div class="result">
+<div class="defn"><p>
+Let $A$ and $B$ be sets. Define $\delta : A \rightarrow \lists{A \times B}^{\lists{B}}$ by $$\delta(u)(y) = \map((u,-))(y)$$ and define $\psi : B \rightarrow \lists{A} \times \lists{A \times B}^{\lists{B}} \rightarrow \lists{A\times B}^{\lists{B}}$ by $$\psi(v)(x,f)(z) = \left\{\begin{array}{ll} \cons((x,v),f(z)) & \mathrm{if}\ z = \nil \\ \cons((x,y),f(w)) & \mathrm{if}\ z = \cons(y,w). \end{array}\right.$$ We then define $\zipPad : A \times B \rightarrow \lists{A} \times \lists{B} \rightarrow \lists{A \times B}$ by $$\zipPad(u,v)(x,y) = \foldr{\delta(u)}{\psi(v)}(x)(y).$$
+</p></div>
+</div>
+
+The implementation from the definition does the job:
+
+```haskell
+
+> zipPad' :: (ListOf t) => a -> b -> t a -> t b -> t (a,b)
+> zipPad' u v = foldr (delta u) (psi v)
+>   where
+>     psi :: (ListOf t) => b -> a -> (t b -> t (a,b)) -> t b -> t (a,b)
+>     psi v x f z = case listShape z of
+>       Nil       -> cons (x,v) (f nil)
+>       Cons y ys -> cons (x,y) (f ys)
+>
+>     delta :: (ListOf t) => a -> t b -> t (a,b)
+>     delta u z = map (\t -> (u,t)) z
+
+```
+
+But again, a more straightforward implementation is possible.
+
+<div class="result">
+<div class="defn"><p>
+Let $A$ and $B$ be sets. The following hold for all $\alpha, a \in A$, $x \in \lists{A}$, $\beta, b \in B$, and $y \in \lists{B}$.
+
+1. $\zipPad(\alpha,\beta)(\nil,y) = \map((\alpha,-))(y)$.
+2. $\zipPad(\alpha,\beta)(x,\nil) = \map((-,\beta))(x)$.
+3. $\zipPad(\alpha,\beta)(\cons(a,x),\cons(b,y)) = \cons((a,b),\zipPad(\alpha,\beta)(x,y))$.
+</p></div>
+
+<div class="proof"><p>
+1. Note that
+$$\begin{eqnarray*}
+ &   & \zipPad(\alpha,\beta)(\nil,y) \\
+ & = & \foldr{\delta(\alpha)}{\psi(\beta)}(\nil)(y) \\
+ & = & \delta(\alpha)(y) \\
+ & = & \map((\alpha,-))(y)
+\end{eqnarray*}$$
+as claimed.
+2. We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \zipPad(\alpha,\beta)(\nil,\nil) \\
+ & = & \nil \\
+ & = & \map((-,\beta))(\nil) \\
+ & = & \map((-,\beta))(x)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
+$$\begin{eqnarray*}
+ &   & \zipPad(\alpha,\beta)(\cons(a,x),\nil) \\
+ & = & \foldr{\delta(\alpha)}{\psi(\beta)}(\cons(a,x))(\nil) \\
+ & = & \psi(\beta)(a,\foldr{\delta(\alpha)}{\psi(\beta)}(x))(\nil) \\
+ & = & \cons((a,\beta),\foldr{\delta(\alpha)}{\psi(\beta)}(x)(\nil)) \\
+ & = & \cons((a,\beta),\zipPad(\alpha,\beta)(x,\nil)) \\
+ & = & \cons((a,\beta),\map((-,\beta))(x)) \\
+ & = & \map((-,\beta))(\cons(a,x))
+\end{eqnarray*}$$
+as needed.
+3. We have
+$$\begin{eqnarray*}
+ &   & \zipPad(\alpha,\beta)(\cons(a,x),\cons(b,y)) \\
+ & = & \foldr{\delta(\alpha)}{\psi(\beta)}(\cons(a,x))(\cons(b,y)) \\
+ & = & \psi(\beta)(a,\foldr{\delta(\alpha)}{\psi(\beta)}(x))(\cons(b,y)) \\
+ & = & \cons((a,b),\foldr{\delta(\alpha)}{\psi(\beta)}(x)(y)) \\
+ & = & \cons((a,b),\zipPad(\alpha,\beta)(x,y))
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
+In Haskell:
+
+> zipPad :: (ListOf t) => a -> b -> t a -> t b -> t (a,b)
+> zipPad u v x y = case listShape x of
+>   Nil       -> map (\w -> (u,w)) y
+>   Cons a as -> case listShape y of
+>     Nil       -> map (\w -> (w,v)) x
+>     Cons b bs -> cons (a,b) (zipPad u v as bs)
+
+Now $\zipPad$ satisfies several properties analogous to those of $\zip$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ and $B$ be sets. Then for all $\alpha \in A$, $\beta \in B$, $x \in \lists{A}$, and $y \in \lists{B}$ we have $$\map(\swap)(\zipPad(\alpha,\beta)(x,y)) = \zipPad(\beta,\alpha)(y,x).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \map(\swap)(\zipPad(\alpha,\beta)(x,y)) \\
+ & = & \map(\swap)(\zipPad(\alpha,\beta)(\nil,y)) \\
+ & = & \map(\swap)(\map((\alpha,-))(y)) \\
+ & = & (\map(\swap) \circ \map((\alpha,-)))(y) \\
+ & = & \map(\swap \circ (\alpha,-))(y) \\
+ & = & \map((-,\alpha))(y) \\
+ & = & \zipPad(\beta,\alpha)(y,\nil) \\
+ & = & \zipPad(\beta,\alpha)(y,x)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now we consider two cases for $y$; either $y = \nil$ or $y = \cons(b,w)$. If $y = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \map(\swap)(\zipPad(\alpha,\beta)(\cons(a,x),y)) \\
+ & = & \map(\swap)(\zipPad(\alpha,\beta)(\cons(a,x),\nil)) \\
+ & = & \map(\swap)(\map((-,\beta))(\cons(a,x))) \\
+ & = & (\map(\swap) \circ \map((-,\beta)))(\cons(a,x)) \\
+ & = & \map(\swap \circ (-,\beta))(\cons(a,x)) \\
+ & = & \map((\beta,-))(\cons(a,x)) \\
+ & = & \zipPad(\alpha,\beta)(\nil,\cons(a,x)) \\
+ & = & \zipPad(\alpha,\beta)(y,\cons(a,x))
+\end{eqnarray*}$$
+as needed. Finally, suppose $y = \cons(b,w)$. Then we have
+$$\begin{eqnarray*}
+ &   & \map(\swap)(\zipPad(\alpha,\beta)(\cons(a,x),y)) \\
+ & = & \map(\swap)(\zipPad(\alpha,\beta)(\cons(a,x),\cons(b,w))) \\
+ & = & \map(\swap)(\cons((a,b),\zipPad(\alpha,\beta)(x,w)) \\
+ & = & \cons(\swap((a,b)),\map(\swap)(\zipPad(\alpha,\beta)(x,w))) \\
+ & = & \cons((b,a),\zipPad(\beta,\alpha)(w,x)) \\
+ & = & \zipPad(\beta,\alpha)(\cons(b,w),\cons(a,x)) \\
+ & = & \zipPad(\beta,\alpha)(y,\cons(a,x)) \\
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
+and...
+
+<div class="result">
+<div class="thm"><p>
+Let $A$, $B$, $U$, and $V$ be sets, with functions $f : A \rightarrow U$ and $g : B \rightarrow V$. Then for all $\alpha \in A$, $\beta \in B$, $x \in \lists{A}$, and $y \in \lists{B}$, we have $$\map(\pair(f,g))(\zipPad(\alpha,\beta)(x,y)) = \zipPad(f(\alpha),g(\beta))(\map(f)(x),\map(g)(y)).$$
+</p></div>
+
+<div class="proof"><p>
+(@@@)
+</p></div>
+</div>
+
+and...
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ and $B$ be sets, with $\alpha \in A$, $\beta \in B$, $x \in \lists{A}$, and $y \in \lists{B}$. Then $$\length(\zipPad(\alpha,\beta)(x,y)) = \nmax(\length(x),\length(y)).$$
+</p></div>
+
+<div class="proof"><p>
+(@@@)
 </p></div>
 </div>
 
@@ -250,13 +468,48 @@ A utility for type fixing:
 > withTypeOf :: a -> a -> a
 > withTypeOf x _ = x
 
-Here are our property tests for $\range$.
+Here are our property tests for $\zip$ and $\zipPad$.
 
-> -- map(swap)(zip(x,y)) = zip(y,x)
+> -- map(swap)(zip(x,y)) == zip(y,x)
 > _test_zip_swap :: (ListOf t, Eq a)
 >   => t a -> t a -> t a -> Bool
 > _test_zip_swap _ x y =
 >   (map swap (zip x y)) `listEq` (zip y x)
+> 
+> 
+> -- length(zip(x,y)) == min(length(x),length(y))
+> _test_zip_length :: (ListOf t, Eq a)
+>   => t a -> t a -> t a -> Bool
+> _test_zip_length _ x y =
+>   (length (zip x y)) == (min (length x) (length y))
+> 
+> 
+> -- zip'(x,y) == zip(x,y)
+> _test_zip_alt :: (ListOf t, Eq a)
+>   => t a -> t a -> t a -> Bool
+> _test_zip_alt _ x y =
+>   (zip' x y) `listEq` (zip x y)
+> 
+> 
+> -- map(swap)(zipPad(u,v)(x,y)) == zipPad(v,u)(y,x)
+> _test_zipPad_swap :: (ListOf t, Eq a)
+>   => t a -> a -> a -> t a -> t a -> Bool
+> _test_zipPad_swap _ u v x y =
+>   (map swap (zipPad u v x y)) `listEq` (zipPad v u y x)
+> 
+> 
+> -- length(zipPad(u,v)(x,y)) == max(length(x),length(y))
+> _test_zipPad_length :: (ListOf t, Eq a)
+>   => t a -> a -> a -> t a -> t a -> Bool
+> _test_zipPad_length _ u v x y =
+>   (length (zipPad u v x y)) == (max (length x) (length y))
+> 
+> 
+> -- zipPad'(x,y) == zipPad(x,y)
+> _test_zipPad_alt :: (ListOf t, Eq a)
+>   => t a -> a -> a -> t a -> t a -> Bool
+> _test_zipPad_alt _ u v x y =
+>   (zipPad' u v x y) `listEq` (zipPad u v x y)
 
 And the suite:
 
@@ -265,6 +518,12 @@ And the suite:
 >   => t n -> n -> Int -> Int -> IO ()
 > _test_zip t n maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_zip_swap t)
+>   , quickCheckWith args (_test_zip_length t)
+>   , quickCheckWith args (_test_zip_alt t)
+> 
+>   , quickCheckWith args (_test_zipPad_swap t)
+>   , quickCheckWith args (_test_zipPad_length t)
+>   , quickCheckWith args (_test_zipPad_alt t)
 >   ]
 >   where
 >     args = stdArgs
