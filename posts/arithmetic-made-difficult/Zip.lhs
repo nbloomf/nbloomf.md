@@ -443,7 +443,43 @@ Let $A$, $B$, $U$, and $V$ be sets, with functions $f : A \rightarrow U$ and $g 
 </p></div>
 
 <div class="proof"><p>
-(@@@)
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \map(\pair(f,g))(\zipPad(\alpha,\beta)(x,y)) \\
+ & = & \map(\pair(f,g))(\zipPad(\alpha,\beta)(\nil,y)) \\
+ & = & \map(\pair(f,g))(\map((\alpha,-))(y)) \\
+ & = & (\map(\pair(f,g)) \circ \map((\alpha,-)))(y) \\
+ & = & \map(\pair(f,g) \circ (\alpha,-))(y) \\
+ & = & \map((f(\alpha),g(-)))(y) \\
+ & = & \map((f(\alpha),-) \circ g)(y) \\
+ & = & \map((f(\alpha),-))(\map(g)(y)) \\
+ & = & \zipPad(f(\alpha),g(\beta))(\nil,\map(g)(y)) \\
+ & = & \zipPad(f(\alpha),g(\beta))(x,\map(g)(y))
+\end{eqnarray*}$$
+as needed. Now suppose the equality holds for some $x$ and let $a \in A$. We consider two cases for $y$; either $y = \nil$ or $y = \cons(b,w)$. If $y = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \map(\pair(f,g))(\zipPad(\alpha,\beta)(\cons(a,x),y)) \\
+ & = & \map(\pair(f,g))(\zipPad(\alpha,\beta)(\cons(a,x),\nil)) \\
+ & = & \map(\pair(f,g))(\map((-,\beta))(\cons(a,x))) \\
+ & = & (\map(\pair(f,g)) \circ \map((-,\beta)))(\cons(a,x)) \\
+ & = & \map(\pair(f,g) \circ (-,\beta))(\cons(a,x)) \\
+ & = & \map((f(-),g(\beta)))(\cons(a,x)) \\
+ & = & \map((-,g(\beta)) \circ f)(\cons(a,x)) \\
+ & = & \map((-,g(\beta)))(\map(f)(\cons(a,x))) \\
+ & = & \zipPad(f(\alpha),g(\beta))(\map(f)(\cons(a,x)),\nil) \\
+ & = & \zipPad(f(\alpha),g(\beta))(\map(f)(\cons(a,x)),y) \\
+\end{eqnarray*}$$
+as needed. If $y = \cons(b,w)$, we have
+$$\begin{eqnarray*}
+ &   & \map(\pair(f,g))(\zipPad(\alpha,\beta)(\cons(a,x),\cons(b,w))) \\
+ & = & \map(\pair(f,g))(\cons((a,b),\zipPad(\alpha,\beta)(x,w))) \\
+ & = & \cons(\pair(f,g)(a,b),\map(\pair(f,g))(\zipPad(\alpha,\beta)(x,w))) \\
+ & = & \cons((f(a),g(b)),\zipPad(f(\alpha),g(\beta))(\map(f)(x),\map(g)(w))) \\
+ & = & \zipPad(f(\alpha),g(\beta))(\cons(f(a),\map(f)(x)),\cons(g(b),\map(g)(w))) \\
+ & = & \zipPad(f(\alpha),g(\beta))(\map(f)(\cons(a,x)),\map(g)(\cons(b,w))) \\
+ & = & \zipPad(f(\alpha),g(\beta))(\map(f)(\cons(a,x)),\map(g)(y)) \\
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
 
