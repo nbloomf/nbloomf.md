@@ -491,7 +491,38 @@ Let $A$ and $B$ be sets, with $\alpha \in A$, $\beta \in B$, $x \in \lists{A}$, 
 </p></div>
 
 <div class="proof"><p>
-(@@@)
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \length(\zipPad(\alpha,\beta)(x,y)) \\
+ & = & \length(\zipPad(\alpha,\beta)(\nil,y)) \\
+ & = & \length(\map((\alpha,-))(y)) \\
+ & = & \length(y) \\
+ & = & \nmax(\zero,\length(y)) \\
+ & = & \nmax(\length(\nil),\length(y)) \\
+ & = & \nmax(\length(x),\length(y)) \\
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. We consider two possibilities for $y$: either $y = \nil$ or $y = \cons(b,w)$. If $y = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \length(\zipPad(\alpha,\beta)(\cons(a,x),y)) \\
+ & = & \length(\zipPad(\alpha,\beta)(\cons(a,x),\nil)) \\
+ & = & \length(\map((-,\beta))(\cons(a,x))) \\
+ & = & \length(\cons(a,x)) \\
+ & = & \nmax(\length(\cons(a,x)),\zero) \\
+ & = & \nmax(\length(\cons(a,x)),\length(\nil)) \\
+ & = & \nmax(\length(\cons(a,x)),\length(y)) \\
+\end{eqnarray*}$$
+as claimed. Suppose then that $y = \cons(b,w)$. Now
+$$\begin{eqnarray*}
+ &   & \length(\zipPad(\alpha,\beta)(\cons(a,x),y)) \\
+ & = & \length(\zipPad(\alpha,\beta)(\cons(a,x),\cons(b,w))) \\
+ & = & \length(\cons((a,b),\zipPad(\alpha,\beta)(x,w))) \\
+ & = & \next(\length(\zipPad(\alpha,\beta)(x,w))) \\
+ & = & \next(\nmax(\length(x),\length(w))) \\
+ & = & \nmax(\next(\length(x)),\next(\length(w))) \\
+ & = & \nmax(\length(\cons(a,x)),\length(\cons(b,w))) \\
+ & = & \nmax(\length(\cons(a,x)),\length(y)) \\
+\end{eqnarray*}$$
+as claimed.
 </p></div>
 </div>
 

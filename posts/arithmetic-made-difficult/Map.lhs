@@ -223,6 +223,33 @@ as claimed.
 </p></div>
 </div>
 
+And $\map$ preserves $\length$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. Then for all $x \in \lists{A}$ we have $$\length(\map(f)(x)) = \length(x).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$ we have
+$$\begin{eqnarray*}
+ &   & \length(\map(f)(x)) \\
+ & = & \length(\map(f)(\nil)) \\
+ & = & \length(\nil) \\
+ & = & \length(x)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
+$$\begin{eqnarray*}
+ &   & \length(\map(f)(\cons(a,x))) \\
+ & = & \length(\cons(f(a),\map(f)(x))) \\
+ & = & \next(\length(\map(f)(x))) \\
+ & = & \next(\length(x)) \\
+ & = & \length(\cons(a,x))
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
 
 Testing
 -------
