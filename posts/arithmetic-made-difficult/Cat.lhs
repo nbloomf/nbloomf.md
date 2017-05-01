@@ -167,6 +167,38 @@ as needed.
 </p></div>
 </div>
 
+Finally, $\cat$ is cancellative.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $x,y,z \in \lists{A}$ we have the following.
+
+1. If $\cat(z,x) = \cat(z,y)$, then $x = y$.
+2. If $\cat(x,z) = \cat(y,z)$, then $x = y$.
+</p></div>
+
+<div class="proof"><p>
+1. We proceed by list induction on $z$. For the base case $z = \nil$, suppose $\cat(z,x) = \cat(z,y)$. Then we have
+$$\begin{eqnarray*}
+ &   & x \\
+ & = & \cat(\nil,x) \\
+ & = & \cat(z,x) \\
+ & = & \cat(z,y) \\
+ & = & \cat(\nil,y) \\
+ & = & y
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the implication holds for some $z$, and let $a \in A$. Now suppose we have $$\cat(\cons(a,z),x) = \cat(\cons(a,z),y).$$ Then we have $\cons(a,\cat(z,x)) = \cons(a,\cat(z,y)),$$ so that $$\cat(z,x) = \cat(z,y).$$ By the inductive hypothesis, $x = y$ as claimed.
+2. Note that
+$$\begin{eqnarray*}
+ &   & \cat(\rev(z),\rev(x)) \\
+ & = & \rev(\cat(x,z)) \\
+ & = & \rev(\cat(y,z)) \\
+ & = & \cat(\rev(z),\rev(y)).
+\end{eqnarray*}$$
+By (1), we have $\rev(x) = \rev(y)$, and thus $x = y$ as claimed.
+</p></div>
+</div>
+
 
 Testing
 -------

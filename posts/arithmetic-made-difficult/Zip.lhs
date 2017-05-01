@@ -147,6 +147,10 @@ Define $\swap : A \times B \rightarrow B \times A$ by $$\swap(a,b) = (b,a).$$
 
 Define $\pair : U^A \times V^B \rightarrow (U \times V)^{A \times B}$ by $$\pair(f,g)(a,b) = (f(a),g(b)).$$
 
+Define $\assocL : A \times (B \times C) \rightarrow (A \times B) \times C$ by $$\assocL(a,(b,c)) = ((a,b),c).$$
+
+Define $\assocR : (A \times B) \times C \rightarrow A \times (B \times C)$ by $$\assocR((a,b),c) = (a,(b,c)).$$
+
 In Haskell:
 
 > swap :: (a,b) -> (b,a)
@@ -154,6 +158,12 @@ In Haskell:
 > 
 > pair :: (a -> u) -> (b -> v) -> (a,b) -> (u,v)
 > pair f g (a,b) = (f a, g b)
+> 
+> assocL :: (a,(b,c)) -> ((a,b),c)
+> assocL (a,(b,c)) = ((a,b),c)
+> 
+> assocR :: ((a,b),c) -> (a,(b,c))
+> assocR ((a,b),c) = (a,(b,c))
 
 </p></div>
 </div>
@@ -282,6 +292,72 @@ $$\begin{eqnarray*}
  & = & \nmin(x),\length(\cons(b,y))) \\
 \end{eqnarray*}$$
 as needed.
+</p></div>
+</div>
+
+$\zip$ is kind of associative:
+
+<div class="result">
+<div class="thm"><p>
+Let $A$, $B$, and $C$ be sets, with $x \in \lists{A}$, $y \in \lists{B}$, and $z \in \lists{C}$. Then the following hold.
+
+1. $\zip(\zip(x,y),z) = \map(\assocL)(\zip(x,\zip(y,z)))$.
+2. $\zip(x,\zip(y,z)) = \map(\assocR)(\zip(\zip(x,y),z))$.
+</p></div>
+
+<div class="proof"><p>
+1. We proceed by list induction on $x$. For the base case $x = \nil$, note that
+$$\begin{eqnarray*}
+ &   & \zip(\zip(x,y),z) \\
+ & = & \zip(\zip(\nil,y),z) \\
+ & = & \zip(\nil,z) \\
+ & = & \nil \\
+ & = & \map(\assocL)(\nil) \\
+ & = & \map(\assocL)(\zip(\nil,\zip(y,z)))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$, and let $a \in A$. If $y = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \zip(\zip(\cons(a,x),y),z) \\
+ & = & \zip(\zip(\cons(a,x),\nil),z) \\
+ & = & \zip(\nil,z) \\
+ & = & \nil \\
+ & = & \map(\assocL)(\nil) \\
+ & = & \map(\assocL)(\zip(\cons(a,x),\nil)) \\
+ & = & \map(\assocL)(\zip(\cons(a,x),\zip(\nil,z))) \\
+ & = & \map(\assocL)(\zip(\cons(a,x),\zip(y,z)))
+\end{eqnarray*}$$
+as claimed. Similarly, if $z = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \zip(\zip(\cons(a,x),y),z) \\
+ & = & \zip(\zip(\cons(a,x),y),\nil) \\
+ & = & \nil \\
+ & = & \map(\assocL)(\nil) \\
+ & = & \map(\assocL)(\zip(\cons(a,x),\nil)) \\
+ & = & \map(\assocL)(\zip(\cons(a,x),\zip(y,z)))
+\end{eqnarray*}$$
+as claimed. Suppose then that $y = \cons(b,u)$ and $z = \cons(c,v)$. Using the inductive hypothesis, we have
+$$\begin{eqnarray*}
+ &   & \zip(\zip(\cons(a,x),y),z) \\
+ & = & \zip(\zip(\cons(a,x),\cons(b,u)),\cons(c,v)) \\
+ & = & \zip(\cons((a,b),\zip(x,u)),\cons(c,v)) \\
+ & = & \cons(((a,b),c),\zip(\zip(x,u),v)) \\
+ & = & \cons(\assocL(a,(b,c)),\map(\assocL)(\zip(x,\zip(u,v)))) \\
+ & = & \map(\assocL)(\cons((a,(b,c)),\zip(x,\zip(u,v)))) \\
+ & = & \map(\assocL)(\zip(\cons(a,x),\cons((b,c),\zip(u,v)))) \\
+ & = & \map(\assocL)(\zip(\cons(a,x),\zip(\cons(b,u),\cons(c,v)))) \\
+ & = & \map(\assocL)(\zip(\cons(a,x),\zip(y,z))) \\
+\end{eqnarray*}$$
+as claimed.
+2. We have
+$$\begin{eqnarray*}
+ &   & \zip(x,\zip(y,z)) \\
+ & = & \id(\zip(x,\zip(y,z))) \\
+ & = & \map(\id)(\zip(x,\zip(y,z))) \\
+ & = & \map(\assocR \circ \assocL)(\zip(x,\zip(y,z))) \\
+ & = & \map(\assocR)(\map(\assocL)(\zip(x,\zip(y,z)))) \\
+ & = & \map(\assocR)(\zip(\zip(x,y),z)) 
+\end{eqnarray*}$$
+as claimed.
 </p></div>
 </div>
 
@@ -526,6 +602,80 @@ as claimed.
 </p></div>
 </div>
 
+$\zipPad$ is also kind of associative:
+
+<div class="result">
+<div class="thm"><p>
+Let $A$, $B$, and $C$ be sets, with $\alpha \in A$, $\beta \in B$, $\gamma \in C$, $x \in \lists{A}$, $y \in \lists{B}$, and $z \in \lists{C}$. Then the following hold.
+
+1. $$\begin{eqnarray*}
+ &   & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(x,y),z) \\
+ & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z))).
+\end{eqnarray*}$$
+2. $$\begin{eqnarray*}
+ &   & \zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z)) \\
+ & = & \map(\assocR)(\zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(x,y),z)).
+\end{eqnarray*}$$
+</p></div>
+
+<div class="proof"><p>
+1. We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(x,y),z) \\
+ & = & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(\nil,y),z) \\
+ & = & \zipPad((\alpha,\beta),\gamma)(\nil,z) \\
+ & = & \nil \\
+ & = & \map(\assocL)(\nil) \\
+ & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(\nil,\zipPad(\beta,\gamma)(y,z))) \\
+ & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z)))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. If $y = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(\cons(a,x),y),z) \\
+ & = & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(\cons(a,x),\nil),z) \\
+ & = & \zipPad((\alpha,\beta),\gamma)(\nil,z) \\
+ & = & \nil \\
+ & = & \map(\assocL)(\nil) \\
+ & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\nil)) \\
+ & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zipPad(\beta,\gamma)(\nil,z))) \\
+ & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zipPad(\beta,\gamma)(y,z)))
+\end{eqnarray*}$$
+as claimed. Similarly, if $z = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(\cons(a,x),y),z) \\
+ & = & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(\cons(a,x),y),\nil) \\
+ & = & \nil \\
+ & = & \map(\assocL)(\nil) \\
+ & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\nil)) \\
+ & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zipPad(\beta,\gamma)(y,\nil))) \\
+ & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zipPad(\beta,\gamma)(y,z))) \\
+\end{eqnarray*}$$
+as claimed. Suppose then that $y = \cons(b,u)$ and $z = \cons(c,v)$. Using the inductive hypothesis, we have
+$$\begin{eqnarray*}
+ &   & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(\cons(a,x),y),z) \\
+ & = & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(\cons(a,x),\cons(b,u)),\cons(c,v)) \\
+ & = & \zipPad((\alpha,\beta),\gamma)(\cons((a,b),\zipPad(\alpha,\beta)(x,u)),\cons(c,v)) \\
+ & = & \cons(((a,b),c),\zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(x,u),v)) \\
+ & = & \cons(\assocL(a,(b,c)),\map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(u,v)))) \\
+ & = & \map(\assocL)(\cons((a,(b,c)),\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(u,v)))) \\
+ & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\cons((b,c),\zipPad(\beta,\gamma)(u,v)))) \\
+ & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zipPad(\beta,\gamma)(\cons(b,u),\cons(c,v)))) \\
+ & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zip(y,z))) \\
+\end{eqnarray*}$$
+as claimed.
+2. We have
+$$\begin{eqnarray*}
+ &   & \zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z)) \\
+ & = & \id(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z))) \\
+ & = & \map(\id)(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z))) \\
+ & = & \map(\assocR \circ \assocL)(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z))) \\
+ & = & \map(\assocR)(\map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z)))) \\
+ & = & \map(\assocR)(\zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(x,y),z))
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
 
 Testing
 -------
@@ -551,6 +701,20 @@ Here are our property tests for $\zip$ and $\zipPad$.
 >   (length (zip x y)) == (min (length x) (length y))
 > 
 > 
+> -- zip(zip(x,y),z) == map(assocL)zip(x,zip(y,z))
+> _test_zip_zip_left :: (ListOf t, Eq a)
+>   => t a -> t a -> t a -> t a -> Bool
+> _test_zip_zip_left _ x y z =
+>   (zip (zip x y) z) `listEq` map assocL (zip x (zip y z))
+> 
+> 
+> -- zip(zip(x,y),z) == map(assocR)zip(x,zip(y,z))
+> _test_zip_zip_right :: (ListOf t, Eq a)
+>   => t a -> t a -> t a -> t a -> Bool
+> _test_zip_zip_right _ x y z =
+>   (zip x (zip y z)) `listEq` map assocR (zip (zip x y) z)
+> 
+> 
 > -- zip'(x,y) == zip(x,y)
 > _test_zip_alt :: (ListOf t, Eq a)
 >   => t a -> t a -> t a -> Bool
@@ -572,6 +736,26 @@ Here are our property tests for $\zip$ and $\zipPad$.
 >   (length (zipPad u v x y)) == (max (length x) (length y))
 > 
 > 
+> -- zipPad((a,b),c)(zipPad(a,b)(x,y),z)
+> --   == map(assocL)zipPad(a,(b,c))(x,zipPad(b,c)(y,z))
+> _test_zipPad_zipPad_left :: (ListOf t, Eq a)
+>   => t a -> a -> a -> a -> t a -> t a -> t a -> Bool
+> _test_zipPad_zipPad_left _ a b c x y z =
+>   listEq
+>     (zipPad (a,b) c (zipPad a b x y) z)
+>     (map assocL (zipPad a (b,c) x (zipPad b c y z)))
+> 
+> 
+> -- zipPad((a,b),c)(zipPad(a,b)(x,y),z)
+> --   == map(assocR)zipPad(a,(b,c))(x,zipPad(b,c)(y,z))
+> _test_zipPad_zipPad_right :: (ListOf t, Eq a)
+>   => t a -> a -> a -> a -> t a -> t a -> t a -> Bool
+> _test_zipPad_zipPad_right _ a b c x y z =
+>   listEq
+>     (zipPad a (b,c) x (zipPad b c y z))
+>     (map assocR (zipPad (a,b) c (zipPad a b x y) z))
+> 
+> 
 > -- zipPad'(x,y) == zipPad(x,y)
 > _test_zipPad_alt :: (ListOf t, Eq a)
 >   => t a -> a -> a -> t a -> t a -> Bool
@@ -586,10 +770,14 @@ And the suite:
 > _test_zip t n maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_zip_swap t)
 >   , quickCheckWith args (_test_zip_length t)
+>   , quickCheckWith args (_test_zip_zip_left t)
+>   , quickCheckWith args (_test_zip_zip_right t)
 >   , quickCheckWith args (_test_zip_alt t)
 > 
 >   , quickCheckWith args (_test_zipPad_swap t)
 >   , quickCheckWith args (_test_zipPad_length t)
+>   , quickCheckWith args (_test_zipPad_zipPad_left t)
+>   , quickCheckWith args (_test_zipPad_zipPad_right t)
 >   , quickCheckWith args (_test_zipPad_alt t)
 >   ]
 >   where

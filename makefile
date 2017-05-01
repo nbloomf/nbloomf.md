@@ -5,11 +5,17 @@ TEXDIR   = $(HOME)/documents/tex-examples
 
 PATH := $(shell pwd)/_bin/sth:$(shell pwd)/_bin/amd:$(PATH)
 
+targets: FORCE
+	@echo 'watch'
+	@echo 'literate'
+	@echo 'favicons'
+
 all: move FORCE
 	@echo "built nbloomf.github.io" | doppler lightgreen
 
 site: site.lhs
 	@ghc --make -threaded site.lhs
+	@rm site.o site.hi
 
 build: site gather FORCE
 	./site clean
@@ -23,12 +29,6 @@ move: build FORCE
 	@cp -r _site/. ../nbloomf.github.io/
 
 gather: FORCE
-	@echo 'generating icons' | doppler lightgreen
-	@inkscape -z -e icon/favicon-32.png  -w 32  -h 32  icon/info.svg
-	@inkscape -z -e icon/favicon-57.png  -w 57  -h 57  icon/info.svg
-	@inkscape -z -e icon/favicon-114.png -w 114 -h 114 icon/info.svg
-	@inkscape -z -e icon/favicon-152.png -w 152 -h 152 icon/info.svg
-	
 	@echo 'gathering documents' | doppler lightgreen
 	@echo '  class pdfs' | doppler lightmagenta
 	@cp -r $(CLASSDIR)/coal/pdf/. pdf/classes/coal
@@ -72,18 +72,22 @@ check: FORCE
 	@rm -r nbloomf.github.io
 
 
+favicons: icon/info.svg
+	@echo 'generating icons' | doppler lightgreen
+	@inkscape -z -e icon/favicon-32.png  -w 32  -h 32  icon/info.svg
+	@inkscape -z -e icon/favicon-57.png  -w 57  -h 57  icon/info.svg
+	@inkscape -z -e icon/favicon-114.png -w 114 -h 114 icon/info.svg
+	@inkscape -z -e icon/favicon-152.png -w 152 -h 152 icon/info.svg
 
-#----------------#
+
+#================#
 # literate posts #
-#----------------#
+#================#
 
 literate: sth amd
 
 
-
-#---------------------------#
 # software tools in haskell #
-#---------------------------#
 
 sth: sth-exe
 	@echo "testing sth..." | doppler lightblue
@@ -125,17 +129,14 @@ sth-exe: FORCE
 	$(call sth_move,bubble)
 	@rm -rf posts/software-tools-in-haskell/dist
 
-# move an arithmetic made difficult exe
+# move a software tools in haskell exe
 define sth_move
   @echo "moving $(1)" | doppler lightgreen
   @mv posts/software-tools-in-haskell/dist/build/sth-$(1)/sth-$(1) _bin/sth
 endef
 
 
-
-#---------------------------#
 # arithmetic made difficult #
-#---------------------------#
 
 amd: amd-exe
 	@echo "testing amd..." | doppler lightblue
@@ -173,5 +174,3 @@ endef
 
 
 FORCE:
-
-.PHONY: amd
