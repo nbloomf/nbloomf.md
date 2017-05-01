@@ -39,7 +39,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [UnfoldN](/posts/arithmetic-made-difficult/UnfoldN.html)
     * [Range](/posts/arithmetic-made-difficult/Range.html)
     * [Zip and ZipPad](/posts/arithmetic-made-difficult/Zip.html)
-    * Prefix and Suffix
+    * [Prefix and Suffix](/posts/arithmetic-made-difficult/Prefix.html)
     * Inits and Tails
     * Filter
 4. Basic Algebras
