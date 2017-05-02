@@ -12,7 +12,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Variations on Peano](/posts/arithmetic-made-difficult/variations-on-peano.html)
     * [Bailout Recursion](/posts/arithmetic-made-difficult/BailoutRecursion.html)
     * [The Universal Property of the Natural Numbers](/posts/arithmetic-made-difficult/NaturalNumbers.html)
-2. Basic Arithmetic
+2. Basic
     * [Equality](/posts/arithmetic-made-difficult/EqualTo.html)
     * [Addition](/posts/arithmetic-made-difficult/Plus.html)
     * [Multiplication](/posts/arithmetic-made-difficult/Times.html)
@@ -28,7 +28,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Least Common Multiple](/posts/arithmetic-made-difficult/LeastCommonMultiple.html)
     * [Primes](/posts/arithmetic-made-difficult/IsPrime.html)
     * [Exponentiation](/posts/arithmetic-made-difficult/Exponentiation.html)
-3. Finite Lists
+3. Arithmetic of Lists
     * [Iterative Sets Redux](/posts/arithmetic-made-difficult/iterative-sets-redux.html)
     * [Lists](/posts/arithmetic-made-difficult/Lists.html)
     * [Reverse](/posts/arithmetic-made-difficult/Reverse.html)
@@ -40,9 +40,12 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Range](/posts/arithmetic-made-difficult/Range.html)
     * [Zip and ZipPad](/posts/arithmetic-made-difficult/Zip.html)
     * [Prefix and Suffix](/posts/arithmetic-made-difficult/Prefix.html)
+    * Longest Common Prefix
     * Inits and Tails
     * Filter
-4. Basic Algebras
+    * Sort
+    * Cross
+4. List of Arithmetics
     * Monoids
     * Lattices
     * Semirings

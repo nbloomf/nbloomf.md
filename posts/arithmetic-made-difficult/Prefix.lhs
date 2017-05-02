@@ -81,8 +81,22 @@ Let $A$ be a set. For all $a,b \in A$ and $x,y \in \lists{A}$, we have the follo
 </p></div>
 
 <div class="proof"><p>
-1. (@@@)
-2. (@@@)
+1. Note that
+$$\begin{eqnarray*}
+ &   & \prefix(\nil,y) \\
+ & = & \foldr{\varepsilon}{\varphi}(\nil)(y) \\
+ & = & \varepsilon(y) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as claimed.
+2. Note that
+$$\begin{eqnarray*}
+ &   & \prefix(\cons(a,x),\nil) \\
+ & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\nil) \\
+ & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\nil) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as claimed.
 3. (@@@)
 </p></div>
 </div>
@@ -135,33 +149,87 @@ as needed.
 </p></div>
 </div>
 
+And $\prefix$ is a partial order:
+
 <div class="result">
 <div class="thm"><p>
+Let $A$ be a set. Then we have the following for all $x,y,z \in \lists{A}$.
 
+1. $\prefix(x,x) = \btrue$.
+2. If $\prefix(x,y)$ and $\prefix(y,x)$, then $x = y$.
+3. If $\prefix(x,y)$ and $\prefix(y,z)$, then $\prefix(x,z)$.
 </p></div>
 
 <div class="proof"><p>
-
+1. We have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \prefix(x,\cat(x,\nil)) \\
+ & = & \prefix(x,x)
+\end{eqnarray*}$$
+as claimed.
+2. If $\prefix(x,y)$, we have $y = \cat(x,u)$ for some $u$. Similarly, if $\prefix(y,x)$ then $x = \cat(y,v)$ for some $v. Now
+$$\begin{eqnarray*}
+ &   & \cat(x,\nil) \\
+ & = & x \\
+ & = & \cat(y,v) \\
+ & = & \cat(\cat(x,u),v) \\
+ & = & \cat(x,\cat(u,v)).
+\end{eqnarray*}$$
+Since $\cat$ is cancellative, we have $\nil = \cat(u,v)$, so that $u = \nil$, and thus $x = y$ as claimed.
+3. If $\prefix(x,y)$, we have $y = \cat(x,u)$. Similarly, if $\prefix(y,z)$, we have $z = \cat(y,v)$. Now $$z = \cat(\cat(x,u),v) = \cat(x,\cat(u,v))$$ so that $\prefix(x,z)$ as claimed.
 </p></div>
 </div>
 
+$\map$ preserves prefixes:
+
 <div class="result">
 <div class="thm"><p>
-
+Let $A$ and $B$ be sets with $f : A \rightarrow B$, and let $x,y \in \lists{A}$. If $\prefix(x,y) = \btrue$, then $\prefix(\map(f)(x),\map(f)(y)) = \btrue$.
 </p></div>
 
 <div class="proof"><p>
-
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \prefix(x,y) \\
+ & = & \prefix(\nil,y) \\
+ & = & \btrue
+\end{eqnarray*}$$
+and
+$$\begin{eqnarray*}
+ &   & \prefix(\map(f)(x),\map(f)(y)) \\
+ & = & \prefix(\map(f)(\nil),\map(f)(y)) \\
+ & = & \prefix(\nil,\map(f)(y)) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as claimed. Suppose now the implication holds for some $x$, and let $a \in A$. Suppose further that $\prefix(\cons(a,x),y)$. Now $y = \cons(a,w)$ for some $w$, and we have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \prefix(\cons(a,x),y) \\
+ & = & \prefix(\cons(a,x),\cons(a,w)) \\
+ & = & \prefix(x,w).
+\end{eqnarray*}$$
+Using the induction hypothesis, we have
+$$\begin{eqnarray*}
+ &   & \prefix(\map(f)(\cons(a,x)),\map(f)(y)) \\
+ & = & \prefix(\map(f)(\cons(a,x)),\map(f)(\cons(a,w))) \\
+ & = & \prefix(\cons(f(a),\map(f)(x)),\cons(f(a),\map(f)(w))) \\
+ & = & \prefix(\map(f)(x),\map(f)(w)) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as claimed.
 </p></div>
 </div>
 
+And $\zip$ preserves prefixes.
+
 <div class="result">
 <div class="thm"><p>
-
+Let $A$ and $B$ be sets with $x,y \in \lists{A}$ and $u,v \in \lists{B}$. If $\prefix(x,y) = \btrue$ and $\prefix(u,v) = \btrue$, then $$\prefix(\zip(x,u),\zip(y,v)) = \btrue.$$
 </p></div>
 
 <div class="proof"><p>
-
+(@@@)
 </p></div>
 </div>
 
@@ -179,6 +247,37 @@ In Haskell:
 </p></div>
 </div>
 
+Like $\prefix$, $\suffix$ also detects the existence of solutions $z$ to the equation $y = \cat(z,x)$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. The following hold for all $x,y \in \lists{A}$.
+
+1. $\suffix(x,\cat(y,x)) = \btrue$.
+2. If $\suffix(x,y) = \btrue$, then $y = \cat(z,x)$ for some $z \in \lists{A}$.
+</p></div>
+
+<div class="proof"><p>
+1. We have
+$$\begin{eqnarray*}
+ &   & \suffix(x,\cat(y,x)) \\
+ & = & \prefix(\rev(x),\rev(\cat(y,x))) \\
+ & = & \prefix(\rev(x),\cat(\rev(x),\rev(y))) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as claimed.
+2. Suppose $\suffix(x,y) = \btrue$. Then $\prefix(\rev(x),\rev(y)) = \btrue$, so we have $\rev(y) = \cat(\rev(x),w)$ for some $w$. Now
+$$\begin{eqnarray*}
+ &   & y \\
+ & = $ \rev(\rev(y)) \\
+ & = & \rev(\cat(\rev(x),w)) \\
+ & = & \cat(\rev(w),\rev(\rev(x))) \\
+ & = & \cat(\rev(w),x)
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
 
 Testing
 -------
@@ -191,10 +290,22 @@ Here are our property tests for $\prefix$ and $\suffix$.
 >   prefix x (cat x y)
 > 
 > 
+> -- prefix(x,x)
+> _test_prefix_reflexive :: (ListOf t, Eq a) => t a -> t a -> Bool
+> _test_prefix_reflexive _ x =
+>   prefix x x
+> 
+> 
 > -- suffix(y,cat(x,y))
 > _test_suffix_cat :: (ListOf t, Eq a) => t a -> t a -> t a -> Bool
 > _test_suffix_cat _ x y =
 >   suffix y (cat x y)
+> 
+> 
+> -- suffix(x,x)
+> _test_suffix_reflexive :: (ListOf t, Eq a) => t a -> t a -> Bool
+> _test_suffix_reflexive _ x =
+>   suffix x x
 
 And the suite:
 
@@ -203,7 +314,9 @@ And the suite:
 >   => t a -> Int -> Int -> IO ()
 > _test_prefix t maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_prefix_cat t)
+>   , quickCheckWith args (_test_prefix_reflexive t)
 >   , quickCheckWith args (_test_suffix_cat t)
+>   , quickCheckWith args (_test_suffix_reflexive t)
 >   ]
 >   where
 >     args = stdArgs

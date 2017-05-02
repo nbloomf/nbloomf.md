@@ -113,6 +113,14 @@ as needed.
 </p></div>
 </div>
 
+As a corollary, we can "solve" a simple list equation.
+
+<div class="result">
+<div class="corollary"><p>
+If $\nil = \cat(x,y)$, then $x = y = \nil$.
+</p></div>
+</div>
+
 And $\cat$ is associative.
 
 <div class="result">
