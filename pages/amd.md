@@ -40,11 +40,12 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Range](/posts/arithmetic-made-difficult/Range.html)
     * [Zip and ZipPad](/posts/arithmetic-made-difficult/Zip.html)
     * [Prefix and Suffix](/posts/arithmetic-made-difficult/Prefix.html)
-    * Longest Common Prefix
+    * [Longest Common Prefix](/posts/arithmetic-made-difficult/LongestCommonPrefix.html)
     * Inits and Tails
     * Filter
     * Sort
     * Cross
+    * Cycle
 4. List of Arithmetics
     * Monoids
     * Lattices
