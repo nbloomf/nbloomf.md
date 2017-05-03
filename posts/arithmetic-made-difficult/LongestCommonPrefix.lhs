@@ -97,7 +97,7 @@ In Haskell:
 >       then cons a (lcp u v)
 >       else nil
 
-Now $\lcp$ lives up to the name:
+Now $\lcp$ lives up to the name (the *universal property* of $\lcp$):
 
 <div class="result">
 <div class="thm"><p>
@@ -108,7 +108,67 @@ Let $A$ be a set. The following hold for all $x,y,z \in \lists{A}$.
 </p></div>
 
 <div class="proof"><p>
-1. (@@@)
+1. We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \prefix(\lcp(x,y),x) \\
+ & = & \prefix(\lcp(\nil,y),\nil) \\
+ & = & \prefix(\nil,\nil) \\
+ & = & \btrue
+\end{eqnarray*}$$
+and
+$$\begin{eqnarray*}
+ &   & \prefix(\lcp(x,y),y) \\
+ & = & \prefix(\lcp(\nil,y),y) \\
+ & = & \prefix(\nil,y) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equalities hold for all $y$ for some $x$, and let $a \in A$. We consider two cases for $y$. If $y = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \prefix(\lcp(\cons(a,x),y),\cons(a,x)) \\
+ & = & \prefix(\lcp(\cons(a,x),\nil),\cons(a,x)) \\
+ & = & \prefix(\nil,\cons(a,x)) \\
+ & = & \btrue
+\end{eqnarray*}$$
+and
+$$\begin{eqnarray*}
+ &   & \prefix(\lcp(\cons(a,x),y),y) \\
+ & = & \prefix(\lcp(\cons(a,x),\nil),\nil) \\
+ & = & \prefix(\nil,\nil) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed. Suppose now that $y = \cons(b,w)$. If $b = a$, we have
+$$\begin{eqnarray*}
+ &   & \prefix(\lcp(\cons(a,x),y),\cons(a,x)) \\
+ & = & \prefix(\lcp(\cons(a,x),\cons(b,w)),\cons(a,x)) \\
+ & = & \prefix(\lcp(\cons(a,x),\cons(a,w)),\cons(a,x)) \\
+ & = & \prefix(\cons(a,\lcp(x,w)),\cons(a,x)) \\
+ & = & \prefix(\lcp(x,w),x) \\
+ & = & \btrue
+\end{eqnarray*}$$
+and
+$$\begin{eqnarray*}
+ &   & \prefix(\lcp(\cons(a,x),y),y) \\
+ & = & \prefix(\lcp(\cons(a,x),\cons(b,w)),\cons(b,w)) \\
+ & = & \prefix(\lcp(\cons(a,x),\cons(a,w)),\cons(a,w)) \\
+ & = & \prefix(\cons(a,\lcp(x,w)),\cons(a,w)) \\
+ & = & \prefix(\lcp(x,w),w) \\
+ & = & \btrue,
+\end{eqnarray*}$$
+while if $b \neq a$, we have
+$$\begin{eqnarray*}
+ &   & \prefix(\lcp(\cons(a,x),y),\cons(a,x)) \\
+ & = & \prefix(\lcp(\cons(a,x),\cons(b,w)),\cons(a,x)) \\
+ & = & \prefix(\nil,\cons(a,x)) \\
+ & = & \btrue
+\end{eqnarray*}$$
+and
+$$\begin{eqnarray*}
+ &   & \prefix(\lcp(\cons(a,x),y),y) \\
+ & = & \prefix(\lcp(\cons(a,x),\cons(b,w)),\cons(b,w)) \\
+ & = & \prefix(\nil,\cons(b,w)) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed.
 2. (@@@)
 </p></div>
 </div>
@@ -126,10 +186,74 @@ Let $A$ be a set. The following hold for all $x,y,z \in \lists{A}$.
 </p></div>
 
 <div class="proof"><p>
-1. (@@@)
-2. (@@@)
+1. We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \lcp(x,x) \\
+ & = & \lcp(\nil,\nil) \\
+ & = & \nil \\
+ & = & x
+\end{eqnarray*}$$
+as claimed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
+$$\begin{eqnarray*}
+ &   & \lcp(\cons(a,x),\cons(a,x)) \\
+ & = & \cons(a,\lcp(x,x)) \\
+ & = & \cons(a,x)
+\end{eqnarray*}$$
+as needed.
+2. We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \lcp(x,y) \\
+ & = & \lcp(\nil,y) \\
+ & = & \nil \\
+ & = & \lcp(y,\nil) \\
+ & = & \lcp(y,x)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $y$ for some $x$, and let $a \in A$. Now we consider two possibilities for $y$. If $y = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \lcp(\cons(a,x),y) \\
+ & = & \lcp(\cons(a,x),\nil) \\
+ & = & \nil \\
+ & = & \lcp(\nil,\cons(a,x)) \\
+ & = & \lcp(y,\cons(a,x))
+\end{eqnarray*}$$
+as needed. Now suppose $y = \cons(b,w)$. If $b \neq a$, we have
+$$\begin{eqnarray*}
+ &   & \lcp(\cons(a,x),y) \\
+ & = & \lcp(\cons(a,x),\cons(b,w)) \\
+ & = & \nil \\
+ & = & \lcp(\cons(b,w),\cons(a,x)) \\
+ & = & \lcp(y,\cons(a,x)),
+\end{eqnarray*}$$
+while if $a = b$, we have
+$$\begin{eqnarray*}
+ &   & \lcp(\cons(a,x),y) \\
+ & = & \lcp(\cons(a,x),\cons(b,w)) \\
+ & = & \lcp(\cons(a,x),\cons(a,w)) \\
+ & = & \cons(a,\lcp(x,w)) \\
+ & = & \cons(a,\lcp(w,x)) \\
+ & = & \lcp(\cons(a,w),\cons(a,x)) \\
+ & = & \lcp(\cons(b,w),\cons(a,x)) \\
+ & = & \lcp(y,\cons(a,x))
+\end{eqnarray*}$$
+as needed.
 3. (@@@)
-4. (@@@)
+4. We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \cat(x,\lcp(y,z)) \\
+ & = & \cat(\nil,\lcp(y,z)) \\
+ & = & \lcp(y,z) \\
+ & = & \lcp(\cat(\nil,y),\cat(\nil,z)) \\
+ & = & \lcp(\cat(x,y),\cat(x,z))
+\end{eqnarray*}$$
+as needed. Suppose now that the equality holds for all $y$ and $z$ for some $x$, and let $a \in A$. Then we have
+$$\begin{eqnarray*}
+ &   & \cat(\cons(a,x),\lcp(y,z)) \\
+ & = & \cons(a,\cat(x,\lcp(y,z))) \\
+ & = & \cons(a,\lcp(\cat(x,y),\cat(x,z))) \\
+ & = & \lcp(\cons(a,\cat(x,y)),\cons(a,\cat(x,z))) \\
+ & = & \lcp(\cat(\cons(a,x),y),\cat(\cons(a,x),z))
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
 
@@ -137,11 +261,27 @@ $\lcp$ detects prefixes:
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set with $x,y \in \lists{A}$. Then $\lcp(x,y) = x$ if and only if $\prefix(x,y)$.
+Let $A$ be a set with $x,y \in \lists{A}$. Then $\lcp(x,y) = x$ if and only if $\prefix(x,y) = \btrue$.
 </p></div>
 
 <div class="proof"><p>
-(@@@)
+To see the "if" part, suppose $\prefix(x,y)$. Then we have $y = \cat(x,z)$ for some $z$. Now
+$$\begin{eqnarray*}
+ &   & \lcp(x,y) \\
+ & = & \lcp(\cat(x,\nil),\cat(x,z)) \\
+ & = & \cat(x,\lcp(\nil,z)) \\
+ & = & \cat(x,\nil) \\
+ & = & x
+\end{eqnarray*}$$
+as claimed.
+
+To see the "only if" part, suppose we have $\lcp(x,y) = x$; using the universal property of $\lcp$, we have
+$$\begin{eqnarray*}
+ &   & \prefix(x,y) \\
+ & = & \prefix(\lcp(x,y),y) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as claimed.
 </p></div>
 </div>
 
