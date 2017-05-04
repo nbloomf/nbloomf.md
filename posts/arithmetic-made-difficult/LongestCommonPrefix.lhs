@@ -543,7 +543,7 @@ Note that $$\lcs(x,y) = x$$ if and only if $$\rev(\lcp(\rev(x),\rev(y))) = x$$ i
 Testing
 -------
 
-Here are our property tests for $\lcp$ and $\lcs$.
+Here are our property tests for $\lcp$:
 
 > -- lcp(x,y) == lcp'(x,y)
 > _test_lcp_alt :: (ListOf t, Eq a)

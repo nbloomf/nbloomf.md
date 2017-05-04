@@ -20,6 +20,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import At
 > 
 > import Test.QuickCheck
+> import Text.Show.Functions
 
 Today we'll explore one of the most useful functions on $\lists{A}$: $\map$. What $\map$ does is take a function $A \rightarrow B$ and a list in $\lists{A}$, and apply the function "itemwise" to get a list in $\lists{B}$.
 
@@ -256,19 +257,35 @@ Testing
 
 Here are our property tests for $\map$.
 
-> -- at(nil,k) == *
+> -- map(id)(x) == x
 > _test_map_id :: (ListOf t, Eq a)
 >   => t a -> t a -> Bool
 > _test_map_id _ x =
 >   (map id x) `listEq` x
+>
+> 
+> -- map(f)(cat(x,y)) == cat(map(f)(x),map(f)(y))
+> _test_map_cat :: (ListOf t, Eq a)
+>   => t a -> (a -> a) -> t a -> t a -> Bool
+> _test_map_cat _ f x y =
+>   (map f (cat x y)) `listEq` (cat (map f x) (map f y))
+>
+> 
+> -- map(f)(rev(x)) == rev(map(f)(x))
+> _test_map_rev :: (ListOf t, Eq a)
+>   => t a -> (a -> a) -> t a -> Bool
+> _test_map_rev _ f x =
+>   (map f (rev x)) `listEq` (rev (map f x))
 
 And the suite:
 
 > -- run all tests for map
-> _test_map :: (ListOf t, Arbitrary a, Show a, Eq a, Arbitrary (t a), Show (t a), Natural n, Arbitrary n, Show n)
+> _test_map :: (ListOf t, Arbitrary a, CoArbitrary a, Show a, Eq a, Arbitrary (t a), Show (t a), Natural n, Arbitrary n, Show n)
 >   => t a -> n -> Int -> Int -> IO ()
 > _test_map t n maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_map_id t)
+>   , quickCheckWith args (_test_map_cat t)
+>   , quickCheckWith args (_test_map_rev t)
 >   ]
 >   where
 >     args = stdArgs

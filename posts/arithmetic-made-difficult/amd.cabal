@@ -275,3 +275,16 @@ executable amd-lcp
     -O2
   default-language:
     Haskell2010
+
+executable amd-all-any
+  main-is:
+    AllAndAny.lhs
+  build-depends:
+    base == 4.*,
+    QuickCheck
+  ghc-options:
+    -threaded
+    -main-is AllAndAny.main_all_any
+    -O2
+  default-language:
+    Haskell2010
