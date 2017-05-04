@@ -7,7 +7,7 @@ tags: arithmetic-made-difficult, literate-haskell
 
 > {-# LANGUAGE FlexibleInstances #-}
 > module Lists
->   ( List(), ListOf(..), ListShape(..), foldr, tail, listEq
+>   ( List(), ListOf(..), ListShape(..), foldr, tail, listEq, listEqBy
 >   ) where
 > 
 > import Prelude hiding (foldr, tail)
@@ -243,12 +243,15 @@ as claimed.
 </p></div>
 </div>
 
-> listEq :: (ListOf t, Eq a) => t a -> t a -> Bool
-> listEq x y = case (listShape x, listShape y) of
+> listEqBy :: (ListOf t) => (a -> a -> Bool) -> t a -> t a -> Bool
+> listEqBy f x y = case (listShape x, listShape y) of
 >   (Nil,      Nil     ) -> True
 >   (Nil,      Cons _ _) -> False
 >   (Cons _ _, Nil     ) -> False
->   (Cons a u, Cons b v) -> (a == b) && (listEq u v)
+>   (Cons a u, Cons b v) -> (f a b) && (listEqBy f u v)
+> 
+> listEq :: (ListOf t, Eq a) => t a -> t a -> Bool
+> listEq = listEqBy (==)
 
 We'll also throw in an ``Arbitrary`` instance for ``List`` here for use in testing later.
 
