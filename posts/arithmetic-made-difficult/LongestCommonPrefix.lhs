@@ -80,9 +80,39 @@ Let $A$ be a set with $x,y \in \lists{A}$ and $a,b \in A$. Then we have the foll
 </p></div>
 
 <div class="proof"><p>
-1. (@@@)
-2. (@@@)
-3. (@@@)
+1. We have
+$$\begin{eqnarray*}
+ &   & \lcp(\nil,y) \\
+ & = & \foldr{\varepsilon}{\varphi}(\nil)(y) \\
+ & = & \varepsilon(y) \\
+ & = & \nil
+\end{eqnarray*}$$
+as claimed.
+2. We have
+$$\begin{eqnarray*}
+ &   & \lcp(\cons(a,x),\nil) \\
+ & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\nil) \\
+ & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\nil) \\
+ & = & \nil
+\end{eqnarray*}$$
+as claimed.
+3. If $a = b$ we have
+$$\begin{eqnarray*}
+ &   & \lcp(\cons(a,x),\cons(b,y)) \\
+ & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\cons(b,y)) \\
+ & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\cons(b,y)) \\
+ & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\cons(a,y)) \\
+ & = & \cons(a,\foldr{\varepsilon}{\varphi}(x)(y)) \\
+ & = & \cons(a,\lcp(x,y)),
+\end{eqnarray*}$$
+and if $a \neq b$ we have
+$$\begin{eqnarray*}
+ &   & \lcp(\cons(a,x),\cons(b,y)) \\
+ & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\cons(b,y)) \\
+ & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\cons(b,y)) \\
+ & = & \nil
+\end{eqnarray*}$$
+as claimed.
 </p></div>
 </div>
 
@@ -169,7 +199,15 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
-2. (@@@)
+2. We proceed by list induction on $z$. For the base case $z = \nil$, note that $\prefix(\nil,x)$, $\prefix(\nil,y)$, and $\prefix(\nil,\lcp(x,y))$ are all $\btrue$. For the inductive step, suppose the result holds for all $x$ and $y$ for some $z$ and let $a \in A$. Suppose further that $\prefix(\cons(a,z),x)$ and $\prefix(\cons(a,z),y)$. Then we must have $x = \cons(a,u)$ and $y = \cons(a,v)$, and thus $\prefix(z,u)$ and $\prefix(z,v)$ are both $\btrue$. Using the inductive hypothesis, we have
+$$\begin{eqnarray*}
+ &   & \prefix(\cons(a,z),\lcp(x,y)) \\
+ & = & \prefix(\cons(a,z),\lcp(\cons(a,u),\cons(a,v))) \\
+ & = & \prefix(\cons(a,z),\cons(a,\lcp(u,v))) \\
+ & = & \prefix(z,\lcp(u,v)) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
 
@@ -236,7 +274,7 @@ $$\begin{eqnarray*}
  & = & \lcp(y,\cons(a,x))
 \end{eqnarray*}$$
 as needed.
-3. (@@@)
+3. Let $h = \lcp(\lcp(x,y),z)$, $k = \lcp(x,\lcp(y,z))$, $u = \lcp(x,y)$, and $v = \lcp(y,z)$. First we show that $\prefix(h,k)$. Note that $\prefix(h,u)$, so that $\prefix(h,x)$ and $\prefix(h,y)$. Now $\prefix(h,z)$, so that $\prefix(h,v)$. Thus $\prefix(h,k)$. The proof that $\prefix(k,h)$ is similar; thus $h = k$ as claimed.
 4. We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \cat(x,\lcp(y,z)) \\
@@ -293,7 +331,80 @@ Let $A$ and $B$ be sets with $x,y \in \lists{A}$ and $u,v \in \lists{B}$. Then $
 </p></div>
 
 <div class="proof"><p>
-(@@@)
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \lcp(\zip(x,u),\zip(y,v)) \\
+ & = & \lcp(\zip(\nil,u),\zip(y,v)) \\
+ & = & \lcp(\nil,\zip(y,v)) \\
+ & = & \nil \\
+ & = & \zip(\nil,\lcp(u,v)) \\
+ & = & \zip(\lcp(\nil,y),\lcp(u,v)) \\
+ & = & \zip(\lcp(x,y),\lcp(u,v))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. If $y = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \lcp(\zip(\cons(a,x),u),\zip(y,v)) \\
+ & = & \lcp(\zip(\cons(a,x),u),\zip(\nil,v)) \\
+ & = & \lcp(\zip(\cons(a,x),u),\nil) \\
+ & = & \nil \\
+ & = & \zip(\nil,\lcp(u,v)) \\
+ & = & \zip(\lcp(\cons(a,x),\nil),\lcp(u,v)) \\
+ & = & \zip(\lcp(\cons(a,x),y),\lcp(u,v))
+\end{eqnarray*}$$
+as claimed. If $u = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \lcp(\zip(\cons(a,x),u),\zip(y,v)) \\
+ & = & \lcp(\zip(\cons(a,x),\nil),\zip(y,v)) \\
+ & = & \lcp(\nil,\zip(y,v)) \\
+ & = & \nil \\
+ & = & \zip(\lcp(\cons(a,x),y),\nil) \\
+ & = & \zip(\lcp(\cons(a,x),y),\lcp(\nil,v)) \\
+ & = & \zip(\lcp(\cons(a,x),y),\lcp(u,v)) \\
+\end{eqnarray*}$$
+as claimed. If $v = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \lcp(\zip(\cons(a,x),u),\zip(y,v)) \\
+ & = & \lcp(\zip(\cons(a,x),u),\zip(y,\nil)) \\
+ & = & \lcp(\zip(\cons(a,x),u),\nil) \\
+ & = & \nil \\
+ & = & \zip(\lcp(\cons(a,x),y),\nil) \\
+ & = & \zip(\lcp(\cons(a,x),y),\lcp(u,\nil)) \\
+ & = & \zip(\lcp(\cons(a,x),y),\lcp(u,v)) \\
+\end{eqnarray*}$$
+as claimed. Thus we can say $y = \cons(c,w)$, $u = \cons(b,h)$, and $v = \cons(d,k)$. If $a \neq c$, we have
+$$\begin{eqnarray*}
+ &   & \zip(\lcp(\cons(a,x),y),\lcp(u,v)) \\
+ & = & \zip(\lcp(\cons(a,x),\cons(c,w)),\lcp(u,v)) \\
+ & = & \zip(\nil,\lcp(u,v)) \\
+ & = & \nil \\
+ & = & \lcp(\cons((a,b),\zip(x,h)),\cons((c,d),\zip(w,k))) \\
+ & = & \lcp(\zip(\cons(a,x),\cons(b,h)),\zip(\cons(c,w),\cons(d,k))) \\
+ & = & \lcp(\zip(\cons(a,x),u),\zip(y,v)) \\
+\end{eqnarray*}$$
+as claimed. If $b \neq d$, we have
+$$\begin{eqnarray*}
+ &   & \zip(\lcp(\cons(a,x),y),\lcp(u,v)) \\
+ & = & \zip(\lcp(\cons(a,x),y),\lcp(\cons(c,h),\cons(d,k))) \\
+ & = & \zip(\lcp(\cons(a,x),y),\nil) \\
+ & = & \nil \\
+ & = & \lcp(\cons((a,b),\zip(x,h)),\cons((c,d),\zip(w,k))) \\
+ & = & \lcp(\zip(\cons(a,x),\cons(b,h)),\zip(\cons(c,w),\cons(d,k))) \\
+ & = & \lcp(\zip(\cons(a,x),u),\zip(y,v)) \\
+\end{eqnarray*}$$
+as claimed. Finally, suppose $a = c$ and $b = d$. Using the inductive hypothesis, we have
+$$\begin{eqnarray*}
+ &   & \lcp(\zip(\cons(a,x),y),\zip(u,v)) \\
+ & = & \lcp(\zip(\cons(a,x),\cons(b,w)),\zip(\cons(c,w),\cons(d,k))) \\
+ & = & \lcp(\cons((a,b),\zip(x,h)),\cons((c,d),\zip(w,k))) \\
+ & = & \lcp(\cons((a,b),\zip(x,h)),\cons((a,b),\zip(w,k))) \\
+ & = & \cons((a,b),\lcp(\zip(x,h),\zip(w,k))) \\
+ & = & \cons((a,b),\zip(\lcp(x,w),\lcp(h,k))) \\
+ & = & \zip(\cons(a,\lcp(x,w)),\cons(b,\lcp(h,k))) \\
+ & = & \zip(\lcp(\cons(a,x),\cons(a,w)),\lcp(\cons(b,h),\cons(b,k))) \\
+ & = & \zip(\lcp(\cons(a,x),\cons(c,w)),\lcp(\cons(b,h),\cons(d,k))) \\
+ & = & \zip(\lcp(\cons(a,x),y),\lcp(u,v)) \\
+\end{eqnarray*}$$
+as claimed.
 </p></div>
 </div>
 
@@ -322,8 +433,43 @@ Let $A$ be a set with $x,y,z \in \lists{A}$. Then we have the following.
 </p></div>
 
 <div class="proof"><p>
-1. (@@@)
-2. (@@@)
+1. Note that
+$$\begin{eqnarray*}
+ &   & \suffix(\lcs(x,y),x) \\
+ & = & \prefix(\rev(\lcs(x,y)),\rev(x)) \\
+ & = & \prefix(\rev(\rev(\lcp(\rev(x),\rev(y)))),\rev(x)) \\
+ & = & \prefix(\lcp(\rev(x),\rev(y)),\rev(x)) \\
+ & = & \btrue,
+\end{eqnarray*}$$
+and likewise
+$$\begin{eqnarray*}
+ &   & \suffix(\lcs(x,y),y) \\
+ & = & \prefix(\rev(\lcs(x,y)),\rev(y)) \\
+ & = & \prefix(\rev(\rev(\lcp(\rev(x),\rev(y)))),\rev(y)) \\
+ & = & \prefix(\lcp(\rev(x),\rev(y)),\rev(y)) \\
+ & = & \btrue,
+\end{eqnarray*}$$
+2. Suppose $\suffix(z,x)$ and $\suffix(z,y)$. Then we have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \suffix(z,x) \\
+ & = & \prefix(\rev(z),\rev(x))
+\end{eqnarray*}$$
+and likewise
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \suffix(z,y) \\
+ & = & \prefix(\rev(z),\rev(y)).
+\end{eqnarray*}$$
+So we have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \prefix(\rev(z),\lcp(\rev(x),\rev(y))) \\
+ & = & \prefix(\rev(z),\rev(\rev(\lcp(\rev(x),\rev(y))))) \\
+ & = & \prefix(\rev(z),\rev(\lcs(x,y))) \\
+ & = & \suffix(z,\lcs(x,y))
+\end{eqnarray*}$$
+as claimed.
 </p></div>
 </div>
 
@@ -340,10 +486,44 @@ Let $A$ be a set. The following hold for all $x,y,z \in \lists{A}$.
 </p></div>
 
 <div class="proof"><p>
-1. (@@@)
-2. (@@@)
-3. (@@@)
-4. (@@@)
+1. Note that
+$$\begin{eqnarray*}
+ &   & \lcs(x,x) \\
+ & = & \rev(\lcp(\rev(x),\rev(x))) \\
+ & = & \rev(\rev(x)) \\
+ & = & x
+\end{eqnarray*}$$
+as claimed.
+2. We have
+$$\begin{eqnarray*}
+ &   & \lcs(x,y) \\
+ & = & \rev(\lcp(\rev(x),\rev(y))) \\
+ & = & \rev(\lcp(\rev(y),\rev(x))) \\
+ & = & \lcs(y,x)
+\end{eqnarray*}$$
+as claimed.
+3. We have
+$$\begin{eqnarray*}
+ &   & \lcs(\lcs(x,y),z) \\
+ & = & \lcs(\rev(\lcp(\rev(x),\rev(y))),z) \\
+ & = & \rev(\lcp(\rev(\rev(\lcp(\rev(x),\rev(y)))),\rev(z)) \\
+ & = & \rev(\lcp(\lcp(\rev(x),\rev(y)),\rev(z))) \\
+ & = & \rev(\lcp(\rev(x),\lcp(\rev(y),\rev(z)))) \\
+ & = & \rev(\lcp(\rev(x),\rev(\rev(\lcp(\rev(y),\rev(z)))))) \\
+ & = & \rev(\lcp(\rev(x),\rev(\lcs(y,z)))) \\
+ & = & \lcs(x,\lcs(y,z))
+\end{eqnarray*}$$
+as claimed.
+4. Note that
+$$\begin{eqnarray*}
+ &   & \lcs(\cat(x,z),\cat(y,z)) \\
+ & = & \rev(\lcp(\rev(\cat(x,z)),\rev(\cat(y,z)))) \\
+ & = & \rev(\lcp(\cat(\rev(z),\rev(x)),\cat(\rev(z),\rev(y)))) \\
+ & = & \rev(\cat(\rev(z),\lcp(\rev(x),\rev(y)))) \\
+ & = & \cat(\rev(\lcp(\rev(x),\rev(y))),\rev(\rev(z))) \\
+ & = & \cat(\lcs(x,y),z)
+\end{eqnarray*}$$
+as claimed.
 </p></div>
 </div>
 
@@ -355,7 +535,7 @@ Let $A$ be a set with $x,y \in \lists{A}$. Then $\lcs(x,y) = x$ if and only if $
 </p></div>
 
 <div class="proof"><p>
-(@@@)
+Note that $$\lcs(x,y) = x$$ if and only if $$\rev(\lcp(\rev(x),\rev(y))) = x$$ if and only if $$\rev(\rev(\lcp(\rev(x),\rev(y)))) = \rev(x)$$ if and only if $$\lcp(\rev(x),\rev(y)) = \rev(x)$$ if and only if $$\prefix(\rev(x),\rev(y)) = \btrue$$ if and only if $$\suffix(x,y) = \btrue$$ as claimed.
 </p></div>
 </div>
 
