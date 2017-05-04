@@ -41,6 +41,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Zip and ZipPad](/posts/arithmetic-made-difficult/Zip.html)
     * [Prefix and Suffix](/posts/arithmetic-made-difficult/Prefix.html)
     * [Longest Common Prefix](/posts/arithmetic-made-difficult/LongestCommonPrefix.html)
+    * [All and Any](/posts/arithmetic-made-difficult/AllAndAny.html)
     * Inits and Tails
     * Filter
     * Sort
