@@ -6,7 +6,7 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > module Zip
->   ( zip, zipPad, _test_zip, main_zip
+>   ( zip, zipPad, _test_zip, main_zip, swap, pair, assocL, assocR
 >   ) where
 > 
 > import Prelude hiding (foldr, foldl', foldl, length, head, tail, map, zip, min, max)
@@ -73,8 +73,6 @@ Let $A$ and $B$ be sets. Define $\varepsilon : \lists{A \times B}^{\lists{B}}$ b
 
 We can implement $\zip$ directly with $\foldr{-}{-}$ as in the definition.
 
-```haskell
-
 > zip' :: (ListOf t) => t a -> t b -> t (a,b)
 > zip' = foldr epsilon phi
 >   where
@@ -85,8 +83,6 @@ We can implement $\zip$ directly with $\foldr{-}{-}$ as in the definition.
 >
 >     epsilon :: (ListOf t) => t b -> t (a,b)
 >     epsilon _ = nil
-
-```
 
 This does the job. But it's also a little awkward; it constructs an intermediate list of functions. The following result suggests a more straightforward implementation.
 
@@ -679,11 +675,6 @@ as claimed.
 
 Testing
 -------
-
-A utility for type fixing:
-
-> withTypeOf :: a -> a -> a
-> withTypeOf x _ = x
 
 Here are our property tests for $\zip$ and $\zipPad$.
 

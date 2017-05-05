@@ -39,6 +39,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [UnfoldN](/posts/arithmetic-made-difficult/UnfoldN.html)
     * [Range](/posts/arithmetic-made-difficult/Range.html)
     * [Zip and ZipPad](/posts/arithmetic-made-difficult/Zip.html)
+    * [Unzip](/posts/arithmetic-made-difficult/Unzip.html)
     * [Prefix and Suffix](/posts/arithmetic-made-difficult/Prefix.html)
     * [Longest Common Prefix](/posts/arithmetic-made-difficult/LongestCommonPrefix.html)
     * [All and Any](/posts/arithmetic-made-difficult/AllAndAny.html)

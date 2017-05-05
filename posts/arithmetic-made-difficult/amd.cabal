@@ -250,6 +250,19 @@ executable amd-zip
   default-language:
     Haskell2010
 
+executable amd-unzip
+  main-is:
+    Unzip.lhs
+  build-depends:
+    base == 4.*,
+    QuickCheck
+  ghc-options:
+    -threaded
+    -main-is Unzip.main_unzip
+    -O2
+  default-language:
+    Haskell2010
+
 executable amd-prefix
   main-is:
     Prefix.lhs
