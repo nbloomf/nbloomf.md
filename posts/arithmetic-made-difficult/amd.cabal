@@ -4,30 +4,16 @@ build-type:    Simple
 cabal-version: >= 1.10
 
 executable amd-plus
-  main-is:
-    Plus.lhs
-  build-depends:
-    base == 4.*,
-    QuickCheck
-  ghc-options:
-    -threaded
-    -main-is Plus.main_plus
-    -O2
-  default-language:
-    Haskell2010
+  default-language: Haskell2010
+  main-is:          Plus.lhs
+  build-depends:    base == 4.*, QuickCheck
+  ghc-options:      -main-is Plus.main_plus
 
 executable amd-times
-  main-is:
-    Times.lhs
-  build-depends:
-    base == 4.*,
-    QuickCheck
-  ghc-options:
-    -threaded
-    -main-is Times.main_times
-    -O2
-  default-language:
-    Haskell2010
+  default-language: Haskell2010
+  main-is:          Times.lhs
+  build-depends:    base == 4.*, QuickCheck
+  ghc-options:      -main-is Times.main_times
 
 executable amd-minus
   main-is:
