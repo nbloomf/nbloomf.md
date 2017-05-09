@@ -5,6 +5,7 @@ date: 2017-05-12
 tags: arithmetic-made-difficult, literate-haskell
 ---
 
+> {-# LANGUAGE FlexibleInstances #-}
 > module TailsAndInits
 >   ( tails, inits, _test_tails_inits, main_tails_inits
 >   ) where
@@ -20,6 +21,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Cat
 > import Zip
 > import Prefix
+> import LongestCommonPrefix
 > import AllAndAny
 > 
 > import Test.QuickCheck
@@ -80,12 +82,12 @@ In Haskell:
 >   Nil      -> cons nil nil
 >   Cons a w -> cons (cons a w) (tails w)
 
+$\tails$ interacts with $\map$:
+
 <div class="result">
 <div class="thm"><p>
 Let $A$ and $B$ be sets with $f : A \rightarrow B$. For all $x \in \lists{A}$ we have $$\tails(\map(f)(x)) = \map(\map(f))(\tails(x)).$$
 </p></div>
-
-$\tails$ interacts with $\map$:
 
 <div class="proof"><p>
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -137,6 +139,61 @@ as claimed.
 </p></div>
 </div>
 
+And $\tails$ distributes over $\lcs$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $x,y \in \lists{A}$, we have the following.
+
+1. $\lcs(\cons(\nil,\nil),\tails(x)) = \cons(\nil,\nil)$.
+2. $\tails(\lcs(x,y)) = \lcs(\tails(x),\tails(y))$.
+</p></div>
+
+<div class="proof"><p>
+1. We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \lcs(\cons(\nil,\nil),\tails(x)) \\
+ & = & \lcs(\cons(\nil,\nil),\cons(\nil,\nil)) \\
+ & = & \cons(\nil,\nil)
+\end{eqnarray*}$$
+as claimed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now $\lcs(\cons(\nil,\nil),\tails(x)) = \cons(\nil,\nil)$, so that $\tails(x) = \cat(w,\cons(\nil,\nil))$ for some $w$. Now
+$$\begin{eqnarray*}
+ &   & \tails(\cons(a,x)) \\
+ & = & \cons(\cons(a,x),\tails(x)) \\
+ & = & \cons(\cons(a,x),\cat(w,\cons(\nil,\nil))) \\
+ & = & \cat(\cons(\cons(a,x),w),\cons(\nil,\nil))),
+\end{eqnarray*}$$
+and thus $$\lcs(\cons(\nil,\nil),\cons(a,x)) = \cons(\nil,\nil)$$ as claimed.
+2. We proceed by list induction on $x$. For the base case $x = \nil$ we have (using (1))
+$$\begin{eqnarray*}
+ &   & \tails(\lcs(x,y)) \\
+ & = & \tails(\lcs(\nil,y)) \\
+ & = & \tails(\nil) \\
+ & = & \cons(\nil,\nil) \\
+ & = & \lcs(\cons(\nil,\nil),\tails(y)) \\
+ & = & \lcs(\tails(\nil),\tails(y)) \\
+ & = & \lcs(\tails(x),\tails(y))
+\end{eqnarray*}$$
+as claimed. For the inductive step, suppose the equality holds for all $y$ for some $x$ and let $a \in A$. Note that $\cons(a,x) \neq \nil$; in particular $\cons(a,x) = \snoc(d,u)$ for some $u$ and $d$. We consider two cases for $y$. If $y = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \tails(\lcs(\cons(a,x),y)) \\
+ & = & \tails(\lcs(\cons(a,x),\nil)) \\
+ & = & \tails(\nil) \\
+ & = & \cons(\nil,\nil) \\
+ & = & \lcs(\tails(\cons(a,x)),\cons(\nil,\nil)) \\
+ & = & \lcs(\tails(\cons(a,x)),\tails(\nil)) \\
+ & = & \lcs(\tails(\cons(a,x)),y)
+\end{eqnarray*}$$
+as claimed. Suppose then that $y \neq \nil$; then we have $y = \snoc(b,w)$ for some $b \in A$ and $w \in \lists{A}$. If $d \neq b$, we have
+$$\begin{eqnarray*}
+ &   & \tails(\lcs(\cons(a,x),y)) \\
+ & = & \tails(\lcs(\snoc(d,u),\snoc(b,w))) \\
+ & = & \tails(\snoc(d,\lcs(u,w))) \\
+ & = & (@@@)
+\end{eqnarray*}$$
+</p></div>
+</div>
+
 Next we'll define $\inits$ in terms of $\tails$.
 
 > inits :: (ListOf t) => t a -> t (t a)
@@ -172,7 +229,7 @@ Let $A$ be a set. For all $x \in \lists{A}$, we have $$\length(\inits(x)) = \nex
 
 <div class="proof"><p>
 Note that
-$$begin{eqnarray*}
+$$\begin{eqnarray*}
  &   & \length(\inits(x)) \\
  & = & \length(\map(\rev)(\tails(\rev(x)))) \\
  & = & \length(\tails(\rev(x))) \\
@@ -210,6 +267,13 @@ Here are our property tests for $\tails$ and $\inits$:
 >   (length (tails x)) == (next (length x))
 > 
 > 
+> -- tails(lcs(x,y)) == lcs(tails(x),tails(y))
+> _test_tails_lcs :: (ListOf t, Eq a, Eq (t a))
+>   => t a -> t a -> t a -> Bool
+> _test_tails_lcs _ x y =
+>   listEqBy listEq (tails (lcs x y)) (lcs (tails x) (tails y))
+> 
+> 
 > -- inits(map(f)(x)) == map(map(f))(inits(x))
 > _test_inits_map :: (ListOf t, Eq a)
 >   => t a -> (a -> a) -> t a -> Bool
@@ -226,12 +290,13 @@ Here are our property tests for $\tails$ and $\inits$:
 And the suite:
 
 > -- run all tests for tails and inits
-> _test_tails_inits :: (ListOf t, Arbitrary a, CoArbitrary a, Show a, Eq a, Arbitrary (t a), Show (t a))
+> _test_tails_inits :: (ListOf t, Arbitrary a, CoArbitrary a, Show a, Eq a, Arbitrary (t a), Show (t a), Eq (t a))
 >   => t a -> Int -> Int -> IO ()
 > _test_tails_inits t maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_tails_alt t)
 >   , quickCheckWith args (_test_tails_map t)
 >   , quickCheckWith args (_test_tails_length t)
+>   , quickCheckWith args (_test_tails_lcs t)
 > 
 >   , quickCheckWith args (_test_inits_map t)
 >   , quickCheckWith args (_test_inits_length t)
@@ -243,6 +308,9 @@ And the suite:
 >       }
 
 And ``main``:
+
+> instance Eq (List Bool) where
+>   (==) = listEq
 
 > main_tails_inits :: IO ()
 > main_tails_inits = _test_tails_inits (nil :: List Bool) 20 100

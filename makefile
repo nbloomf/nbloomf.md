@@ -169,6 +169,7 @@ amd-exe: FORCE
 	$(call amd_move,lcp)
 	$(call amd_move,all-any)
 	$(call amd_move,tails-inits)
+	$(call amd_move,filter)
 	@rm -rf posts/arithmetic-made-difficult/dist
 
 # move an arithmetic made difficult exe

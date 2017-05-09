@@ -539,6 +539,38 @@ Note that $$\lcs(x,y) = x$$ if and only if $$\rev(\lcp(\rev(x),\rev(y))) = x$$ i
 </p></div>
 </div>
 
+And $\lcs$ cooperates with $\snoc$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $x,y \in \lists{A}$ and $a,b \in A$ we have $$\lcs(\snoc(a,x),\snoc(b,y)) = \left\{\begin{array}{ll} \snoc(a,\lcs(x,y)) & \mathrm{if}\ a = b \\ \nil & \mathrm{if}\ a \neq b. \end{array}\right.$$
+</p></div>
+
+<div class="proof"><p>
+Note that
+$$\begin{eqnarray*}
+ &   & \lcs(\snoc(a,x),\snoc(b,y)) \\
+ & = & \rev(\lcp(\rev(\snoc(a,x)),\rev(\snoc(b,y))) \\
+ & = & \rev(\lcp(\cons(a,\rev(x)),\cons(b,\rev(y)) \\
+ & = & Q.
+\end{eqnarray*}$$
+If $a = b$, we have
+$$\begin{eqnarray*}
+ &   & Q \\
+ & = & \rev(\cons(a,\lcp(\rev(x),\rev(y)))) \\
+ & = & \snoc(a,\rev(\lcp(\rev(x),\rev(y)))) \\
+ & = & \snoc(a,\lcs(x,y))
+\end{eqnarray*}$$
+as claimed. If $a \neq b$, we have
+$$\begin{eqnarray*}
+ &   & Q \\
+ & = & \rev(\nil) \\
+ & = & \nil
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
 
 Testing
 -------

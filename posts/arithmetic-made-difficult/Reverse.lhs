@@ -210,6 +210,24 @@ as needed.
 </p></div>
 </div>
 
+Finally, we can perform case analysis on lists with $\snoc$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set and let $x \in \lists{A}$. Then either $x = \nil$ or $x = \snoc(a,w)$ for some $w \in \lists{A}$ and $a \in A$.
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, the conclusion holds trivially. For the inductive step, suppose the conclusion holds for some $x$ and let $a \in A$. Now $\cons(a,x) \neq \nil$. We have two cases for $x$; if $x = \nil$, then $$\cons(a,x) = \cons(a,\nil) = \snoc(a,\nil)$$ as needed. Suppose instead that $x \neq \nil$; by the inductive hypothesis we have $x = \snoc(b,w)$ for some $b \in A$ and $w \in \lists{A}$. Then we have
+$$\begin{eqnarray*}
+ &   & \cons(a,x) \\
+ & = & \cons(a,\snoc(b,w)) \\
+ & = & \snoc(b,\cons(a,w))
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
 
 The Other Fold
 --------------
