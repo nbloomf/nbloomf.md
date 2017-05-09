@@ -11,7 +11,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Simple Recursion](/posts/arithmetic-made-difficult/SimpleRecursion.html)
     * [Variations on Peano](/posts/arithmetic-made-difficult/variations-on-peano.html)
     * [Bailout Recursion](/posts/arithmetic-made-difficult/BailoutRecursion.html)
-    * [The Universal Property of the Natural Numbers](/posts/arithmetic-made-difficult/NaturalNumbers.html)
+    * [The Uniqueness of the Natural Numbers](/posts/arithmetic-made-difficult/NaturalNumbers.html)
 2. Basic
     * [Equality](/posts/arithmetic-made-difficult/EqualTo.html)
     * [Addition](/posts/arithmetic-made-difficult/Plus.html)
@@ -44,15 +44,18 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Longest Common Prefix](/posts/arithmetic-made-difficult/LongestCommonPrefix.html)
     * [All and Any](/posts/arithmetic-made-difficult/AllAndAny.html)
     * [Tails and Inits](/posts/arithmetic-made-difficult/TailsAndInits.html)
-    * Filter
+    * [Filter](/posts/arithmetic-made-difficult/Filter.html)
     * Sort
     * Cross
     * Cycle
 4. List of Arithmetics
-    * Monoids
+    * On Boring and Repetitive Proofs
+    * Semigroups
     * Lattices
     * Semirings
 5. Fixed Radix Numeral Systems
+6. Binary Trees
+7. Sequences
 
 > The old idea that there was no reasoning in Arithmetic is dead; the idea that the *general axioms* have no place in Arithmetic is no longer held by a progressive teacher... <cite>J.B.F. Showalter in "Arithmetic Made Easy", 1897</cite>
 

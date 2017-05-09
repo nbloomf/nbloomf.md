@@ -1,5 +1,5 @@
 ---
-title: The Universal Property of the Natural Numbers
+title: The Uniqueness of the Natural Numbers
 author: nbloomf
 date: 2014-05-22
 tags: arithmetic-made-difficult, literate-haskell

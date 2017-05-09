@@ -167,7 +167,7 @@ as claimed.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set. For all $x \in \lists{A}$, we have $$\length(\inits(x)) = \next(\length(x))$.
+Let $A$ be a set. For all $x \in \lists{A}$, we have $$\length(\inits(x)) = \next(\length(x)).$$
 </p></div>
 
 <div class="proof"><p>
