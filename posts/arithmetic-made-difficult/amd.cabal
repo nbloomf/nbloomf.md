@@ -39,134 +39,54 @@ executable amd-div
   ghc-options:   -main-is Divides.main_div
 
 executable amd-gcd
-  main-is:
-    GreatestCommonDivisor.lhs
-  build-depends:
-    base == 4.*,
-    QuickCheck
-  ghc-options:
-    -threaded
-    -main-is GreatestCommonDivisor.main_gcd
-    -O2
-  default-language:
-    Haskell2010
+  main-is:       GreatestCommonDivisor.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options:   -main-is GreatestCommonDivisor.main_gcd
 
 executable amd-coprime
-  main-is:
-    CoprimeTo.lhs
-  build-depends:
-    base == 4.*,
-    QuickCheck
-  ghc-options:
-    -threaded
-    -main-is CoprimeTo.main_coprime
-    -O2
-  default-language:
-    Haskell2010
+  main-is:       CoprimeTo.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options:   -main-is CoprimeTo.main_coprime
 
 executable amd-lcm
-  main-is:
-    LeastCommonMultiple.lhs
-  build-depends:
-    base == 4.*,
-    QuickCheck
-  ghc-options:
-    -threaded
-    -main-is LeastCommonMultiple.main_lcm
-    -O2
-  default-language:
-    Haskell2010
+  main-is:       LeastCommonMultiple.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options:   -main-is LeastCommonMultiple.main_lcm
 
 executable amd-prime
-  main-is:
-    IsPrime.lhs
-  build-depends:
-    base == 4.*,
-    QuickCheck
-  ghc-options:
-    -threaded
-    -main-is IsPrime.main_prime
-    -O2
-  default-language:
-    Haskell2010
+  main-is:       IsPrime.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options:   -main-is IsPrime.main_prime
 
 executable amd-power
-  main-is:
-    Exponentiation.lhs
-  build-depends:
-    base == 4.*,
-    QuickCheck
-  ghc-options:
-    -threaded
-    -main-is Exponentiation.main_power
-    -O2
-  default-language:
-    Haskell2010
+  main-is:       Exponentiation.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options:   -main-is Exponentiation.main_power
 
 executable amd-rev
-  main-is:
-    Reverse.lhs
-  build-depends:
-    base == 4.*,
-    QuickCheck
-  ghc-options:
-    -threaded
-    -main-is Reverse.main_rev
-    -O2
-  default-language:
-    Haskell2010
+  main-is:       Reverse.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options:   -main-is Reverse.main_rev
 
 executable amd-cat
-  main-is:
-    Cat.lhs
-  build-depends:
-    base == 4.*,
-    QuickCheck
-  ghc-options:
-    -threaded
-    -main-is Cat.main_cat
-    -O2
-  default-language:
-    Haskell2010
+  main-is:       Cat.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options:   -main-is Cat.main_cat
 
 executable amd-length
-  main-is:
-    Length.lhs
-  build-depends:
-    base == 4.*,
-    QuickCheck
-  ghc-options:
-    -threaded
-    -main-is Length.main_length
-    -O2
-  default-language:
-    Haskell2010
+  main-is:       Length.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options:   -main-is Length.main_length
 
 executable amd-at
-  main-is:
-    At.lhs
-  build-depends:
-    base == 4.*,
-    QuickCheck
-  ghc-options:
-    -threaded
-    -main-is At.main_at
-    -O2
-  default-language:
-    Haskell2010
+  main-is:       At.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options:   -main-is At.main_at
 
 executable amd-map
-  main-is:
-    Map.lhs
-  build-depends:
-    base == 4.*,
-    QuickCheck
-  ghc-options:
-    -threaded
-    -main-is Map.main_map
-    -O2
-  default-language:
-    Haskell2010
+  main-is:       Map.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options:   -main-is Map.main_map
 
 executable amd-range
   main-is:
