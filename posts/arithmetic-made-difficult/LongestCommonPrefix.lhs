@@ -408,6 +408,61 @@ as claimed.
 </p></div>
 </div>
 
+And $\lcp$ interacts with $\map(f)$ if $f$ is injective.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ and $B$ be sets with $f : A \rightarrow B$ an injective map. For all $x,y \in \lists{A}$ we have $$\map(f)(\lcp(x,y)) = \lcp(\map(f)(x),\map(f)(y)).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$ we have
+$$\begin{eqnarray*}
+ &   & \map(f)(\lcp(x,y)) \\
+ & = & \map(f)(\lcp(\nil,y)) \\
+ & = & \map(f)(\nil) \\
+ & = & \nil \\
+ & = & \lcp(\nil,\map(f)(y)) \\
+ & = & \lcp(\map(f)(\nil),\map(f)(y)) \\
+ & = & \lcp(\map(f)(x),\map(f)(y))
+\end{eqnarray*}$$
+as needed. Suppose now the equality holds for some $x$ and let $a \in A$. We consider two possitiblities for $y$. If $y = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \map(f)(\lcp(\cons(a,x),y)) \\
+ & = & \map(f)(\lcp(\cons(a,x),\nil)) \\
+ & = & \map(f)(\nil) \\
+ & = & \nil \\
+ & = & \lcp(\map(f)(\cons(a,x)),\nil) \\
+ & = & \lcp(\map(f)(\cons(a,x)),\map(f)(\nil)) \\
+ & = & \lcp(\map(f)(\cons(a,x)),\map(f)(y))
+\end{eqnarray*}$$
+as needed. Suppose then that $y = \cons(b,u)$. If $a = b$, we have $f(a) = f(b)$. Now
+$$\begin{eqnarray*}
+ &   & \map(f)(\lcp(\cons(a,x),y)) \\
+ & = & \map(f)(\lcp(\cons(a,x),\cons(b,u))) \\
+ & = & \map(f)(\lcp(\cons(a,x),\cons(a,u))) \\
+ & = & \map(f)(\cons(a,\lcp(x,u))) \\
+ & = & \cons(f(a),\map(f)(\lcp(x,u))) \\
+ & = & \cons(f(a),\lcp(\map(f)(x),\map(f)(u))) \\
+ & = & \lcp(\cons(f(a),\map(f)(x)),\cons(f(a),\map(f)(u))) \\
+ & = & \lcp(\map(f)(\cons(a,x)),\map(f)(\cons(a,u))) \\
+ & = & \lcp(\map(f)(\cons(a,x)),\map(f)(\cons(b,u))) \\
+ & = & \lcp(\map(f)(\cons(a,x)),\map(f)(y))
+\end{eqnarray*}$$
+as needed. On the other hand, if $a \neq b$, then (since $f$ is injective) $f(a) \neq f(b)$. Then we have
+$$\begin{eqnarray*}
+ &   & \map(f)(\lcp(\cons(a,x),y)) \\
+ & = & \map(f)(\lcp(\cons(a,x),\cons(b,u))) \\
+ & = & \map(f)(\lcp(x,u)) \\
+ & = & \lcp(\map(f)(x),\map(f)(u)) \\
+ & = & \lcp(\cons(f(a),\map(f)(x)),\cons(f(b),\map(f)(u))) \\
+ & = & \lcp(\map(f)(\cons(a,x)),\map(f)(\cons(b,u))) \\
+ & = & \lcp(\map(f)(\cons(a,x)),\map(f)(y))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
 We can define the dual operation, longest common suffix, in terms of $\lcp$ like so.
 
 <div class="result">
@@ -566,6 +621,27 @@ $$\begin{eqnarray*}
  &   & Q \\
  & = & \rev(\nil) \\
  & = & \nil
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
+And $\lcs$ also interacts with $\map(f)$ if $f$ is injective.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ and $B$ be sets with $f : A \rightarrow B$ an injective map. For all $x,y \in \lists{A}$ we have $$\map(f)(\lcs(x,y)) = \lcs(\map(f)(x),\map(f)(y)).$$
+</p></div>
+
+<div class="proof"><p>
+Note that
+$$\begin{eqnarray*}
+ &   & \map(f)(\lcs(x,y)) \\
+ & = & \map(f)(\rev(\lcp(\rev(x),\rev(y)))) \\
+ & = & \rev(\map(f)(\lcp(\rev(x),\rev(y)))) \\
+ & = & \rev(\lcp(\map(f)(\rev(x)),\map(f)(\rev(y)))) \\
+ & = & \rev(\lcp(\rev(\map(f)(x)),\rev(\map(f)(y)))) \\
+ & = & \lcs(\map(f)(x),\map(f)(y))
 \end{eqnarray*}$$
 as claimed.
 </p></div>
