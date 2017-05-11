@@ -7,11 +7,16 @@ tags: arithmetic-made-difficult, literate-haskell
 
 > {-# LANGUAGE BangPatterns #-}
 > module NaturalNumbers
->   ( Natural(..), naturalRec, simpleRec, bailoutRec, Nat(), NatShape(..)
+>   ( Natural(..), Nat(..), NatShape(..), Unary()
+>   , naturalRec, simpleRec, bailoutRec
+>   , _test_nat, main_nat
 >   ) where
 > 
-> import Nat
+> import Booleans
 > 
+> import Unary
+> 
+> import Prelude(Show(..), IO, Bool(..), Integer, Int, return, sequence_, (.))
 > import Test.QuickCheck
 
 We have assumed the existence of a set $\nats$ such that there is a unique inductive set homomorphism from $\nats$ to any other inductive set. But it turns out that this set is not *unique* with this property; any other inductive set which is *isomorphic* to $\nats$ enjoys it as well.
@@ -24,54 +29,57 @@ From a mathematical point of view, isomorphic objects are interchangeable. But a
 
 Now every inductive set isomorphic to $\nats$ is characterized by (1) its zero element, (2) its successor function, (3) the unique map $A \rightarrow \nats$, and (4) the unique map $\nats \rightarrow A$. We will also need a helper function to recognize the shape of a natural number, and for convenience a helper to convert a Haskell-native ``Integer`` to a natural number.
 
-> class (Eq t) => Natural t where
->   toNat   :: t -> Nat
->   fromNat :: Nat -> t
+> class Natural t where
+>   toUnary   :: t -> Unary
+>   fromUnary :: Unary -> t
 > 
 >   zero :: t
->   zero = fromNat zero
+>   zero = fromUnary zero
 > 
 >   next :: t -> t
->   next = fromNat . next . toNat
-> 
->   shapeOf :: t -> NatShape t
->   shapeOf m = case shapeOf $ toNat m of
->     Zero   -> Zero
->     Next k -> Next $ fromNat k
-> 
->   isZero :: t -> Bool
->   isZero m = case shapeOf m of
->     Zero   -> True
->     Next _ -> False
-> 
->   prev :: t -> t
->   prev m = case shapeOf m of
->     Zero   -> zero
->     Next k -> k
+>   next x = fromUnary (next (toUnary x))
 > 
 >   natural :: Integer -> t
->   natural = fromNat . mkNat
+>   natural x = fromUnary (mkUnary x)
+> 
+>   natShape :: t -> NatShape t
+>   natShape m = case natShape (toUnary m) of
+>     Zero   -> Zero
+>     Next k -> Next (fromUnary k)
 
-Here's the ``Natural`` instance for ``Nat``:
+And some helpers:
 
-> instance Natural Nat where
->   toNat = id
->   fromNat = id
+> isZero :: (Natural t) => t -> Bool
+> isZero m = case natShape m of
+>   Zero   -> True
+>   Next _ -> False
+> 
+> prev :: (Natural t) => t -> t
+> prev m = case natShape m of
+>   Zero   -> zero
+>   Next k -> k
+
+Here's the ``Natural`` instance for ``Unary``:
+
+> instance Natural Unary where
+>   toUnary   x = x
+>   fromUnary x = x
+> 
 >   zero = Z
 >   next = N
 > 
->   shapeOf m = case m of
+>   natShape m = case m of
 >     Z   -> Zero
 >     N k -> Next k
 > 
->   natural = mkNat
+>   natural = mkUnary
 
 And note that natural, simple, and primitive recursion can be written against the ``Natural`` interface.
 
 > naturalRec :: (Natural t) => a -> (a -> a) -> t -> a
 > naturalRec e phi n =
 >   let
->     tau !x k = case shapeOf k of
+>     tau !x k = case natShape k of
 >       Zero   -> x
 >       Next m -> tau (phi x) m
 >   in tau e n
@@ -81,7 +89,7 @@ And note that natural, simple, and primitive recursion can be written against th
 >   (a -> b) -> (t -> a -> b -> b) -> t -> a -> b
 > simpleRec phi mu n a =
 >   let
->     tau !x h m = case shapeOf m of
+>     tau !x h m = case natShape m of
 >       Zero   -> x
 >       Next k -> tau (mu h a x) (next h) k
 >   in tau (phi a) zero n
@@ -91,7 +99,7 @@ And note that natural, simple, and primitive recursion can be written against th
 >   (a -> b) -> (t -> a -> Bool) -> (t -> a -> b) -> (t -> a -> a) -> t -> a -> b
 > bailoutRec phi beta psi omega =
 >   let
->     theta n a = case shapeOf n of
+>     theta n a = case natShape n of
 >       Zero -> phi a
 >
 >       Next m ->
@@ -101,4 +109,112 @@ And note that natural, simple, and primitive recursion can be written against th
 > 
 >   in theta
 
-From now on we'll use the ``Natural`` interface with ``naturalRec`` and ``simpleRec`` instead of ``Nat``.
+From now on we'll use the ``Natural`` interface with ``naturalRec`` and ``simpleRec`` instead of ``Unary``.
+
+There is one bit of Haskell wierdness we have to deal with. We can define an ``Equal`` instance against the ``Natural`` interface (as we'll see), but the instance declaration
+
+```haskell
+instance (Natural t) => Equal t where
+  ...
+```
+
+is undecidable. To get around this we'll use a wrapper type, ``Nat``.
+
+> newtype Nat t = Nat { unNat :: t }
+> 
+> 
+> instance (Show t) => Show (Nat t) where
+>   show = show . unNat
+> 
+> 
+> instance (Natural t) => Natural (Nat t) where
+>   toUnary   = toUnary . unNat
+>   fromUnary = Nat . fromUnary
+> 
+>   zero = Nat zero
+> 
+>   next = Nat . next . unNat
+> 
+>   natural = Nat . natural
+> 
+>   natShape (Nat x) = case natShape x of
+>     Zero   -> Zero
+>     Next y -> Next (Nat y)
+> 
+> 
+> instance (Arbitrary a) => Arbitrary (Nat a) where
+>   arbitrary = do
+>     x <- arbitrary
+>     return (Nat x)
+
+Okay!
+
+
+Equality
+--------
+
+We have an implicit equality among natural numbers, but in this post we'll make that relation computable. We won't say much else about this function.
+
+<div class="result">
+<div class="thm"><p>
+Define $\beta : \nats \times \nats \rightarrow \bool$ by $$\beta(a,b) = \iszero(b),$$ $\psi : \nats \times \nats \rightarrow \bool$ by $$\psi(a,b) = \bfalse,$$ and $\omega : \nats \times \nats \rightarrow \nats$ by $$\omega(a,b) = \prev(b).$$ Now define $\nequal : \nats \times \nats \rightarrow \bool$ by $$\nequal = \bailrec{\iszero}{\beta}{\psi}{\omega}.$$
+
+Then $$\nequal(a,b) = \left\{ \begin{array}{ll} \btrue & \mathrm{if}\ a = b \\ \bfalse & \mathrm{otherwise}. \end{array} \right.$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by induction on $a$. For the base case, $a = \zero$, note that
+$$\begin{eqnarray*}
+ &   & \nequal(a,b) \\
+ & = & \iszero(b) \\
+ & = & \left\{ \begin{array}{ll} \btrue & \mathrm{if}\ b = a \\ \bfalse & \mathrm{otherwise} \end{array} \right.
+\end{eqnarray*}$$
+as claimed. For the inductive step, suppose the result holds for some $a$. Now if $b = \zero$, we have $\nequal(\next(a),b) = \bfalse$, and indeed $\zero \neq \next(a)$. If $b \neq \zero$, then we have 
+$$\begin{eqnarray*}
+ &   & \nequal(\next(a),b) \\
+ & = & \nequal(a,\prev(b)).
+\end{eqnarray*}$$
+And indeed, we have $$\next(a) = b$$ if and only if $$\prev(\next(a)) = \prev(b)$$ if and only if $$a = \prev(b)$$ as claimed.
+</p></div>
+</div>
+
+In Haskell:
+
+> instance (Natural t) => Equal (Nat t) where
+>   eq = bailoutRec isZero beta psi omega
+>     where
+>       beta  _ b = isZero b
+>       psi   _ _ = False
+>       omega _ b = prev b
+
+Note that we'll be writing functions against ``Nat t``, which is isomorphic to ``t``. This is so we can avoid undecidable instance declarations in Haskell.
+
+
+Testing
+-------
+
+Let's give ``Natural`` a test drive. :) Here's a test of one simple property of equality.
+
+> -- eq(a,a) == True
+> _test_eq_reflexive :: (Natural n) => n -> Nat n -> Bool
+> _test_eq_reflexive _ a =
+>   (eq a a) ==== True
+
+And a test wrapper:
+
+> -- run all tests for eq
+> _test_nat :: (Natural t, Arbitrary t, Show t)
+>   => t -> Int -> Int -> IO ()
+> _test_nat t maxSize numCases = sequence_
+>   [ quickCheckWith args (_test_eq_reflexive t)
+>   ]
+>   where
+>     args = stdArgs
+>       { maxSuccess = numCases
+>       , maxSize    = maxSize
+>       }
+
+And a default main function:
+
+> main_nat :: IO ()
+> main_nat = _test_nat (zero :: Unary) 20 100

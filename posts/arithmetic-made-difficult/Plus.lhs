@@ -9,8 +9,10 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( plus, _test_plus, main_plus
 >   ) where
 >
+> import Booleans
 > import NaturalNumbers
 > 
+> import Prelude(Show, IO, Bool(..), Int, sequence_, id)
 > import Test.QuickCheck
 
 So far we've characterized the natural numbers via a unique mapping $$\natrec{\ast}{\ast} : \nats \rightarrow A,$$ and we defined another parameterized mapping $$\simprec{\ast}{\ast} : \nats \times A \rightarrow B.$$ From now on, when we want to define a mapping with one of these signatures, these prepackaged recursive maps may come in handy. What's more, we can use the universal properties of these maps to define them in terms of *desired behavior*.
@@ -89,32 +91,38 @@ Here's ``plus``:
 We've proved a bunch of properties for ``plus``, but it's still a good idea to verify them. We can do this with ``QuickCheck``. First we express each property to be tested as a boolean function. Note that each one takes an "extra" argument; this is just to fix the type of the function being tested. (There may be a better way to do this.)
 
 > -- a == plus(a,0) and a == plus(0,a)
-> _test_plus_zero :: (Natural t) => t -> t -> Bool
-> _test_plus_zero _ a = and
->   [ a == plus a zero
->   , a == plus zero a
->   ]
+> _test_plus_zero :: (Natural t)
+>   => t -> Nat t -> Bool
+> _test_plus_zero _ a =
+>   (a ==== plus a zero) &&& (a ==== plus zero a)
 > 
 > 
 > -- next(plus(a,b)) == plus(next(a),b)
-> -- next(plus(a,b)) == plus(a,next(b))
-> _test_plus_next :: (Natural t) => t -> t -> t -> Bool
-> _test_plus_next _ a b = and
->   [ (next $ plus a b) == (plus (next a) b)
->   , (next $ plus a b) == (plus a (next b))
->   ]
+> _test_plus_next_left :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
+> _test_plus_next_left _ a b =
+>   (next (plus a b)) ==== (plus (next a) b)
 > 
+> 
+> -- next(plus(a,b)) == plus(a,next(b))
+> _test_plus_next_right :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
+> _test_plus_next_right _ a b =
+>   (next (plus a b)) ==== (plus a (next b))
+>   
 > 
 > -- plus(plus(a,b),c) == plus(a,plus(b,c))
-> _test_plus_associative :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_plus_associative :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_plus_associative _ a b c =
->   (plus (plus a b) c) == (plus a (plus b c))
+>   (plus (plus a b) c) ==== (plus a (plus b c))
 > 
 > 
 > -- plus(a,b) == plus(b,a)
-> _test_plus_commutative :: (Natural t) => t -> t -> t -> Bool
+> _test_plus_commutative :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_plus_commutative _ a b =
->   (plus a b) == (plus b a)
+>   (plus a b) ==== (plus b a)
 
 We'll wrap all these tests behind a single function, ``_test_plus``, which takes the number of cases to check as an argument.
 
@@ -123,7 +131,8 @@ We'll wrap all these tests behind a single function, ``_test_plus``, which takes
 >   => t -> Int -> Int -> IO ()
 > _test_plus t maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_plus_zero t)
->   , quickCheckWith args (_test_plus_next t)
+>   , quickCheckWith args (_test_plus_next_left t)
+>   , quickCheckWith args (_test_plus_next_right t)
 >   , quickCheckWith args (_test_plus_associative t)
 >   , quickCheckWith args (_test_plus_commutative t)
 >   ]
@@ -138,4 +147,4 @@ woo!
 I will also provide a ``main`` function so my build scripts for this blog can automatically compile and run the tests.
 
 > main_plus :: IO ()
-> main_plus = _test_plus (zero :: Nat) 100 100
+> main_plus = _test_plus (zero :: Unary) 100 100

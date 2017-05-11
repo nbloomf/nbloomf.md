@@ -8,6 +8,11 @@ executable amd-boolean
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is Booleans.main_boolean
 
+executable amd-nat
+  main-is:       NaturalNumbers.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options:   -main-is NaturalNumbers.main_nat
+
 executable amd-plus
   main-is:       Plus.lhs
   build-depends: base == 4.*, QuickCheck

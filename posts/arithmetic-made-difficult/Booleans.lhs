@@ -6,8 +6,8 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > module Booleans
->   ( not, and, or, ifThenElse
->   , Equal, eq
+>   ( not, and, (&&&), or, (|||), ifThenElse
+>   , Equal, eq, (====)
 >   , _test_boolean, main_boolean
 >   ) where
 > 
@@ -65,9 +65,13 @@ In Haskell:
 > and True True = True
 > and _    _    = False
 > 
+> (&&&) = and
+> 
 > or :: Bool -> Bool -> Bool
 > or False False = False
 > or _     _     = True
+> 
+> (|||) = or
 
 And $\bnot$, $\band$, and $\bor$ satisfy some nice properties.
 
@@ -214,6 +218,8 @@ as claimed.
 </p></div>
 </div>
 
+Wow, that was tedious! But we only have to do it once. :)
+
 Next we nail down conditional expressions.
 
 <div class="result">
@@ -238,15 +244,43 @@ Let $A$ and $B$ be sets with $f : A \rightarrow B$ a map. For all $p \in \bool$ 
 </p></div>
 
 <div class="proof"><p>
-(@@@)
+If $p = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & f(\bif(p,u,v)) \\
+ & = & f(\bif(\btrue,u,v)) \\
+ & = & f(u) \\
+ & = & \bif(\btrue,f(u),f(v)) \\
+ & = & \bif(p,f(u),f(v))
+\end{eqnarray*}$$
+as claimed. If $p = \bfalse$, we have
+$$\begin{eqnarray*}
+ &   & f(\bif(p,u,v)) \\
+ & = & f(\bif(\bfalse,u,v)) \\
+ & = & f(v) \\
+ & = & \bif(\bfalse,f(u),f(v)) \\
+ & = & \bif(p,f(u),f(v))
+\end{eqnarray*}$$
+as claimed.
 </p></div>
 </div>
 
 
+Equality
+--------
+
+Now that we've algebraified truth values, we will also algebraify equality. Typically I think of equality (as in the $=$ symbol) as a metalanguage expression. Sure, we can define a relation that captures equality on a given set, but really equality is a "logical" thing, not a "mathematical" one. We'll express this using a type class in Haskell like so.
+
 > class Equal a where
 >   eq :: a -> a -> Bool
 > 
+> -- alias
+> (====) :: (Equal a) => a -> a -> Bool
+> (====) = eq
 > 
+> infixr 0 ====
+
+(Why not use the built in `Eq` class? No good reason.) For example, here is the ``Equal`` instance for ``Bool``:
+
 > instance Equal Bool where
 >   eq True  True  = True
 >   eq True  False = False
@@ -262,94 +296,94 @@ Here are our property tests for $\bnot$:
 > -- not(not(p)) == p
 > _test_not_involutive :: Bool -> Bool
 > _test_not_involutive p =
->   (not (not p)) `eq` p
+>   (not (not p)) ==== p
 
 Tests for $\band$:
 
 > -- and(false,p) == false
 > _test_and_false :: Bool -> Bool
 > _test_and_false p =
->   (and False p) `eq` False
+>   (and False p) ==== False
 > 
 > 
 > -- and(true,p) == p
 > _test_and_true :: Bool -> Bool
 > _test_and_true p =
->   (and True p) `eq` p
+>   (and True p) ==== p
 > 
 > 
 > -- and(p,p) == p
 > _test_and_idempotent :: Bool -> Bool
 > _test_and_idempotent p =
->   (and p p) `eq` p
+>   (and p p) ==== p
 > 
 > 
 > -- and(p,q) == and(q,p)
 > _test_and_commutative :: Bool -> Bool -> Bool
 > _test_and_commutative p q =
->   (and p q) `eq` (and q p)
+>   (and p q) ==== (and q p)
 > 
 > 
 > -- and(and(p,q),r) == and(p,and(q,r))
 > _test_and_associative :: Bool -> Bool -> Bool -> Bool
 > _test_and_associative p q r =
->   (and (and p q) r) `eq` (and p (and q r))
+>   (and (and p q) r) ==== (and p (and q r))
 
 Tests for $\bor$:
 
 > -- or(true,p) == true
 > _test_or_true :: Bool -> Bool
 > _test_or_true p =
->   (or True p) `eq` True
+>   (or True p) ==== True
 > 
 > 
 > -- or(false,p) == p
 > _test_or_false :: Bool -> Bool
 > _test_or_false p =
->   (or False p) `eq` p
+>   (or False p) ==== p
 > 
 > 
 > -- or(p,p) == p
 > _test_or_idempotent :: Bool -> Bool
 > _test_or_idempotent p =
->   (or p p) `eq` p
+>   (or p p) ==== p
 > 
 > 
 > -- or(p,q) == or(q,p)
 > _test_or_commutative :: Bool -> Bool -> Bool
 > _test_or_commutative p q =
->   (or p q) `eq` (or q p)
+>   (or p q) ==== (or q p)
 > 
 > 
 > -- or(or(p,q),r) == or(p,or(q,r))
 > _test_or_associative :: Bool -> Bool -> Bool -> Bool
 > _test_or_associative p q r =
->   (or (or p q) r) `eq` (or p (or q r))
+>   (or (or p q) r) ==== (or p (or q r))
 
 Tests for more than one function:
 
 > -- not(and(p,q)) == or(not(p),not(q))
 > _test_not_and :: Bool -> Bool -> Bool
 > _test_not_and p q =
->   (not (and p q)) `eq` (or (not p) (not q))
+>   (not (and p q)) ==== (or (not p) (not q))
 > 
 > 
 > -- not(or(p,q)) == and(not(p),not(q))
 > _test_not_or :: Bool -> Bool -> Bool
 > _test_not_or p q =
->   (not (or p q)) `eq` (and (not p) (not q))
+>   (not (or p q)) ==== (and (not p) (not q))
 > 
 > 
 > -- and(p,or(q,r)) == or(and(p,q),and(p,r))
 > _test_and_or :: Bool -> Bool -> Bool -> Bool
 > _test_and_or p q r =
->   (and p (or q r)) `eq` (or (and p q) (and p r))
+>   (and p (or q r)) ==== (or (and p q) (and p r))
 > 
 > 
 > -- or(p,and(q,r)) == and(or(p,q),or(p,r))
 > _test_or_and :: Bool -> Bool -> Bool -> Bool
 > _test_or_and p q r =
->   (or p (and q r)) `eq` (and (or p q) (or p r))
+>   (or p (and q r)) ==== (and (or p q) (or p r))
 
 And the suite:
 

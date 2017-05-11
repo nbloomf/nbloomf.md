@@ -6,10 +6,13 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > {-# LANGUAGE BangPatterns #-}
-> module Nat
->   ( Nat(Z,N), mkNat, natRec
+> module Unary
+>   ( Unary(Z,N), mkUnary, natRec
 >   ) where
 > 
+> import Booleans
+> 
+> import Prelude(Show(..), Bool(..), Integer, (-), (<=), return)
 > import Test.QuickCheck
 
 A nice consequence of wrapping up recursion in the $\natrec{\ast}{\ast}$ function is that it allows us to write programs, independent of any implementation, and prove things about them. We'll see lots of examples of this, but first we need to establish a structural result: every natural number is either $\zero$ or of the form $\next(m)$ for some natural number $m$.
@@ -61,28 +64,27 @@ as claimed.
 
 Establishing that every natural number is either $\zero$ or of the form $\next(m)$ for some $m$ also justifies our use of the following Haskell type to model the natural numbers.
 
-> data Nat
->   = Z | N Nat
->   deriving Eq
+> data Unary
+>   = Z | N Unary
 > 
-> instance Show Nat where
->   show  Z    = "Z"
->   show (N k) = 'N' : show k
+> instance Show Unary where
+>   show  Z    = "O"
+>   show (N k) = 'I' : show k
 
 (That ``show`` instance is so we can display elements of ``Nat`` without too many parentheses.) We also define a helper function to convert integers into ``Nat``s as follows.
 
-> mkNat :: Integer -> Nat
-> mkNat k = if k <= 0
+> mkUnary :: Integer -> Unary
+> mkUnary k = if k <= 0
 >   then Z
->   else N $ mkNat (k-1)
+>   else N (mkUnary (k-1))
 
-So calling ``mkNat 7`` in ``ghci``, for instance, prints
+So calling ``mkUnary 7`` in ``ghci``, for instance, prints
 
     NNNNNNNZ
 
 And we can also give a straightforward implementation of $\natrec{\ast}{\ast}$.
 
-> natRec' :: a -> (a -> a) -> Nat -> a
+> natRec' :: a -> (a -> a) -> Unary -> a
 > natRec' e _    Z    = e
 > natRec' e phi (N n) = phi (natRec' e phi n)
 
@@ -92,9 +94,9 @@ For example:
 
 and we can test out this map by evaluating it on several natural numbers:
 
-    > theta' $ mkNat 10
+    > theta' $ mkUnary 10
     True
-    > theta' $ mkNat 11
+    > theta' $ mkUnary 11
     False
 
 Now this ``theta'`` is pretty silly (though not *that* silly, it detects the parity of a natural number, which we haven't defined yet). But in the next section we'll define a more interesting recursive function.
@@ -116,7 +118,7 @@ There is a practical problem with this implementation of ``natRec'``. If we eval
 
 So we generate a tower of unevaluated calls to ``phi``, $n$ tall, before collapsing it down again. In the meantime all those unevaluated ``phi``s are sitting in memory. It is not difficult to see that if we evaluate ``natRec'`` on a "larger" number (whatever that means) we will quickly run out of actual memory. To help with this, we can try rewriting ``natRec`` in so-called "tail call" recursive form like so.
 
-> natRec :: a -> (a -> a) -> Nat -> a
+> natRec :: a -> (a -> a) -> Unary -> a
 > natRec e phi n =
 >   let
 >     tau !x k = case k of
@@ -181,12 +183,12 @@ Testing
 
 Along the way we'll be writing some proofs involving ``Nat``s, but it is also useful to do some automated testing. I'll toss in an ``Arbitrary`` instance here.
 
-> instance Arbitrary Nat where
+> instance Arbitrary Unary where
 >   arbitrary = do
 >     NonNegative k <- arbitrary
->     return $ mkNat k
+>     return (mkUnary k)
 >
->   shrink Z     = []
+>   shrink  Z    = []
 >   shrink (N k) = [k]
 
 We can try out this instance with the following command.
