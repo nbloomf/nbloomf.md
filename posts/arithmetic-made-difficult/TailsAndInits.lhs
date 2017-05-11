@@ -289,7 +289,7 @@ Note that
 $$\begin{eqnarray*}
  &   & \inits(\map(f)(x)) \\
  & = & \rev(\map(\rev)(\tails(\rev(\map(f)(x))))) \\
- & = & \rev(\map(\rev)(\tails(\map(f)(\rev(x))))_ \\
+ & = & \rev(\map(\rev)(\tails(\map(f)(\rev(x)))) \\
  & = & \rev(\map(\rev)(\map(\map(f))(\tails(\rev(x))))) \\
  & = & \rev(\map(\rev \circ \map(f))(\tails(\rev(x)))) \\
  & = & \rev(\map(\map(f) \circ \rev)(\tails(\rev(x)))) \\

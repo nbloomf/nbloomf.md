@@ -68,8 +68,30 @@ Let $A$ be a set and $p : A \rightarrow \bool$ a function. Then we have the foll
 </p></div>
 
 <div class="proof"><p>
-1. (@@@)
-2. (@@@)
+1. Note that
+$$\begin{eqnarray*}
+ &   & \filter(p,\nil) \\
+ & = & \foldr{\nil}{\varphi(p)}(\nil) \\
+ & = & \nil
+\end{eqnarray*}$$
+as claimed.
+2. If $p(a) = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \filter(p,\cons(a,x)) \\
+ & = & \foldr{\nil}{\varphi(p)}(\cons(a,x)) \\
+ & = & \varphi(p)(a,\foldr{\nil}{\varphi(p)}(x)) \\
+ & = & \cons(a,\foldr{\nil}{\varphi(p)}(x)) \\
+ & = & \cons(a,\filter(p,x)),
+\end{eqnarray*}$$
+while if $p(a) = \bfalse$, we have
+$$\begin{eqnarray*}
+ &   & \filter(p,\cons(a,x)) \\
+ & = & \foldr{\nil}{\varphi(p)}(\cons(a,x)) \\
+ & = & \varphi(p)(a,\foldr{\nil}{\varphi(p)}(x)) \\
+ & = & \foldr{\nil}{\varphi(p)}(x) \\
+ & = & \filter(p,x)
+\end{eqnarray*}$$
+as claimed.
 </p></div>
 </div>
 
@@ -90,19 +112,116 @@ Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $x \in \list
 </p></div>
 
 <div class="proof"><p>
-(@@@)
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \all(p,\filter(p,\nil)) \\
+ & = & \all(p,\nil) \\
+ & = & \nil
+\end{eqnarray*}$$
+as claimed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. If $p(a) = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \all(p,\filter(p,\cons(a,x))) \\
+ & = & \all(p,\cons(a,\filter(p,x))) \\
+ & = & \and(p(a),\all(p,\filter(p,x))) \\
+ & = & \and(\btrue,\btrue) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as claimed, while if $p(a) = \bfalse$, we have
+$$\begin{eqnarray*}
+ &   & \all(p,\filter(p,\cons(a,x))) \\
+ & = & \all(p,\filter(p,x)) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as claimed.
 </p></div>
 </div>
 
-$\filter$ interacts with $\rev$:
+$\filter$ interacts with $\snoc$ and $\rev$:
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $x \in \lists{A}$, we have $$\filter(p,\rev(x)) = \rev(\filter(p,x)).$$
+Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $x \in \lists{A}$, we have the following.
+
+1. $$\filter(p,\snoc(a,x)) = \left\{\begin{array}{ll} \snoc(a,\filter(p,x)) & \mathrm{if}\ p(a) = \btrue \\ \filter(p,x) & \mathrm{if}\ p(a) = \bfalse. \end{array}\right.$$
+2. $\filter(p,\rev(x)) = \rev(\filter(p,x))$.
 </p></div>
 
 <div class="proof"><p>
-(@@@)
+1. We proceed by list induction on $x$. For the base case $x = \nil$, if $p(a) = \btrue$ we have
+$$\begin{eqnarray*}
+ &   & \filter(p,\snoc(a,\nil)) \\
+ & = & \filter(p,\cons(a,\nil)) \\
+ & = & \cons(a,\filter(p,\nil)) \\
+ & = & \cons(a,\nil) \\
+ & = & \snoc(a,\nil)
+\end{eqnarray*}$$
+as claimed, while if $p(a) = \bfalse$ we have
+$$\begin{eqnarray*}
+ &   & \filter(p,\snoc(a,\nil)) \\
+ & = & \filter(p,\cons(a,\nil)) \\
+ & = & \filter(p,\nil) \\
+ & = & \nil
+\end{eqnarray*}$$
+as claimed. For the inductive step, suppose the equality holds for some $x$ and let $b \in A$. If $p(a) = p(b) = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \filter(p,\snoc(a,\cons(b,x))) \\
+ & = & \filter(p,\cons(b,\snoc(a,x))) \\
+ & = & \cons(b,\filter(p,\snoc(a,x))) \\
+ & = & \cons(b,\snoc(a,\filter(p,x))) \\
+ & = & \snoc(a,\cons(b,\filter(p,x))) \\
+ & = & \snoc(a,\filter(p,\cons(b,x)))
+\end{eqnarray*}$$
+as needed. If $p(a) = \btrue$ and $p(b) = \bfalse$, we have
+$$\begin{eqnarray*}
+ &   & \filter(p,\snoc(a,\cons(b,x))) \\
+ & = & \filter(p,\cons(b,\snoc(a,x))) \\
+ & = & \filter(p,\snoc(a,x)) \\
+ & = & \snoc(a,\filter(p,x)) \\
+ & = & \snoc(a,\filter(p,\cons(b,x)))
+\end{eqnarray*}$$
+as needed. If $p(a) = \bfalse$ and $p(b) = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \filter(p,\snoc(a,\cons(b,x))) \\
+ & = & \filter(p,\cons(b,\snoc(a,x))) \\
+ & = & \cons(b,\filter(p,\snoc(a,x))) \\
+ & = & \cons(b,\filter(p,x)) \\
+ & = & \filter(p,\cons(b,x))
+\end{eqnarray*}$$
+as needed. Finally, if $p(a) = p(b) = \bfalse$, we have
+$$\begin{eqnarray*}
+ &   & \filter(p,\snoc(a,\cons(b,x))) \\
+ & = & \filter(p,\cons(b,\snoc(a,x))) \\
+ & = & \filter(p,\snoc(a,x)) \\
+ & = & \filter(p,x) \\
+ & = & \filter(p,\cons(b,x))
+\end{eqnarray*}$$
+as needed.
+2. We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \filter(p,\rev(\nil)) \\
+ & = & \filter(p,\nil) \\
+ & = & \nil \\
+ & = & \rev(\nil) \\
+ & = & \rev(\filter(p,\nil))
+\end{eqnarray*}$$
+as claimed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. If $p(a) = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \rev(\filter(p,\cons(a,x))) \\
+ & = & \rev(\cons(a,\filter(p,x))) \\
+ & = & \snoc(a,\rev(\filter(p,x))) \\
+ & = & \snoc(a,\filter(p,\rev(x))) \\
+ & = & \filter(p,\snoc(a,\rev(x))) \\
+ & = & \filter(p,\rev(\cons(a,x)))
+\end{eqnarray*}$$
+as claimed. If $p(a) = \bfalse$, we have
+$$\begin{eqnarray*}
+ &   & \rev(\filter(p,\cons(a,x))) \\
+ & = & \rev(\filter(p,x)) \\
+ & = & \filter(p,\rev(x)) \\
+ & = & \filter(p,\snoc(a,\rev(x))) \\
+ & = & \filter(p,\rev(\cons(a,x)))
+\end{eqnarray*}$$
+as claimed.
 </p></div>
 </div>
 
@@ -114,37 +233,33 @@ Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $x,y \in \li
 </p></div>
 
 <div class="proof"><p>
-(@@@)
-</p></div>
-</div>
-
-<div class="result">
-<div class="thm"><p>
-
-</p></div>
-
-<div class="proof"><p>
-
-</p></div>
-</div>
-
-<div class="result">
-<div class="thm"><p>
-
-</p></div>
-
-<div class="proof"><p>
-
-</p></div>
-</div>
-
-<div class="result">
-<div class="thm"><p>
-
-</p></div>
-
-<div class="proof"><p>
-
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \filter(p,\cat(x,y)) \\
+ & = & \filter(p,\cat(\nil,y)) \\
+ & = & \filter(p,y) \\
+ & = & \cat(\nil,\filter(p,y)) \\
+ & = & \cat(\filter(p,\nil),\filter(p,y)) \\
+ & = & \cat(\filter(p,x),\filter(p,y))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. If $p(a) = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \filter(p,\cat(\cons(a,x),y)) \\
+ & = & \filter(p,\cons(a,\cat(x,y))) \\
+ & = & \cons(a,\filter(p,\cat(x,y))) \\
+ & = & \cons(a,\cat(\filter(p,x),\filter(p,y))) \\
+ & = & \cat(\cons(a,\filter(p,x)),\filter(p,y)) \\
+ & = & \cat(\filter(p,\cons(a,x)),\filter(p,y))
+\end{eqnarray*}$$
+as needed. If $p(a) = \bfalse$, we have
+$$\begin{eqnarray*}
+ &   & \filter(p,\cat(\cons(a,x),y)) \\
+ & = & \filter(p,\cons(a,\cat(x,y))) \\
+ & = & \filter(p,\cat(x,y)) \\
+ & = & \cat(\filter(p,x),\filter(p,y)) \\
+ & = & \cat(\filter(p,\cons(a,x)),\filter(p,y))
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
 
@@ -168,6 +283,15 @@ Here are our property tests for $\filter$:
 >   (all p (filter p x)) == True
 > 
 > 
+> -- filter(p,snoc(a,x)) == if(p(a),snoc(a,filter(p,x)),filter(p,x))
+> _test_filter_snoc :: (ListOf t, Eq a)
+>   => t a -> (a -> Bool) -> a -> t a -> Bool
+> _test_filter_snoc _ p a x =
+>   if p a == True
+>     then (filter p (snoc a x)) `listEq` (snoc a (filter p x))
+>     else (filter p (snoc a x)) `listEq` (filter p x)
+> 
+> 
 > -- filter(p,rev(x)) == rev(filter(p,x))
 > _test_filter_rev :: (ListOf t, Eq a)
 >   => t a -> (a -> Bool) -> t a -> Bool
@@ -189,6 +313,7 @@ And the suite:
 > _test_filter t maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_filter_alt t)
 >   , quickCheckWith args (_test_filter_all t)
+>   , quickCheckWith args (_test_filter_snoc t)
 >   , quickCheckWith args (_test_filter_rev t)
 >   , quickCheckWith args (_test_filter_cat t)
 >   ]

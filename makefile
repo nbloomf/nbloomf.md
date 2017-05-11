@@ -145,6 +145,7 @@ amd: amd-exe
 amd-exe: FORCE
 	@echo "building amd..." | doppler lightblue
 	@(cd posts/arithmetic-made-difficult; cabal install)
+	$(call amd_move,boolean)
 	$(call amd_move,plus)
 	$(call amd_move,times)
 	$(call amd_move,minus)

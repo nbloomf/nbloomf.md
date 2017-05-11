@@ -6,6 +6,8 @@ author: nbloomf
 Under construction. I don't know exactly what this is yet. Links that don't exist are my to-do list.
 
 1. First Steps
+    * [Booleans](/posts/arithmetic-made-difficult/Booleans.html)
+    * Tuples
     * [Natural Numbers](/posts/arithmetic-made-difficult/natural-numbers.html)
     * [From Arrows to Programs](/posts/arithmetic-made-difficult/Nat.html)
     * [Simple Recursion](/posts/arithmetic-made-difficult/SimpleRecursion.html)
