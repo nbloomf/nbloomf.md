@@ -7,8 +7,8 @@ tags: arithmetic-made-difficult, literate-haskell
 
 > {-# LANGUAGE BangPatterns #-}
 > module NaturalNumbers
->   ( Natural(..), Nat(..), NatShape(..), Unary()
->   , naturalRec, simpleRec, bailoutRec
+>   ( Natural(..), NatShape(..), Nat(..), Unary()
+>   , isZero, prev, naturalRec, simpleRec, bailoutRec
 >   , _test_nat, main_nat
 >   ) where
 > 
@@ -25,36 +25,36 @@ Here's a handwavy proof. Let $(A,\varphi,e)$ be an inductive set, and suppose th
 
 From a mathematical point of view, isomorphic objects are interchangeable. But as we'll eventually see, from a *computational* point of view, isomorphic objects can behave very differently. For this reason we will think of the properties of $\nats$ as a kind of interface, and write our programs against that. Specifically, every element of a $\nats$-like set is either the zero or the successor of some other element; we'll represent this with the type ``NatShape``.
 
-> data NatShape t = Zero | Next t
+> data NatShape n = Zero | Next n
 
 Now every inductive set isomorphic to $\nats$ is characterized by (1) its zero element, (2) its successor function, (3) the unique map $A \rightarrow \nats$, and (4) the unique map $\nats \rightarrow A$. We will also need a helper function to recognize the shape of a natural number, and for convenience a helper to convert a Haskell-native ``Integer`` to a natural number.
 
-> class Natural t where
->   toUnary   :: t -> Unary
->   fromUnary :: Unary -> t
+> class Natural n where
+>   toUnary   :: n -> Unary
+>   fromUnary :: Unary -> n
 > 
->   zero :: t
+>   zero :: n
 >   zero = fromUnary zero
 > 
->   next :: t -> t
->   next x = fromUnary (next (toUnary x))
+>   next :: n -> n
+>   next = fromUnary . next . toUnary
 > 
->   natural :: Integer -> t
->   natural x = fromUnary (mkUnary x)
+>   natural :: Integer -> n
+>   natural = fromUnary . mkUnary
 > 
->   natShape :: t -> NatShape t
+>   natShape :: n -> NatShape n
 >   natShape m = case natShape (toUnary m) of
 >     Zero   -> Zero
 >     Next k -> Next (fromUnary k)
 
 And some helpers:
 
-> isZero :: (Natural t) => t -> Bool
+> isZero :: (Natural n) => n -> Bool
 > isZero m = case natShape m of
 >   Zero   -> True
 >   Next _ -> False
 > 
-> prev :: (Natural t) => t -> t
+> prev :: (Natural n) => n -> n
 > prev m = case natShape m of
 >   Zero   -> zero
 >   Next k -> k
@@ -76,7 +76,11 @@ Here's the ``Natural`` instance for ``Unary``:
 
 And note that natural, simple, and primitive recursion can be written against the ``Natural`` interface.
 
-> naturalRec :: (Natural t) => a -> (a -> a) -> t -> a
+> naturalRec :: (Natural n)
+>   => a
+>   -> (a -> a)
+>   -> n
+>   -> a
 > naturalRec e phi n =
 >   let
 >     tau !x k = case natShape k of
@@ -85,8 +89,12 @@ And note that natural, simple, and primitive recursion can be written against th
 >   in tau e n
 > 
 > 
-> simpleRec :: (Natural t) =>
->   (a -> b) -> (t -> a -> b -> b) -> t -> a -> b
+> simpleRec :: (Natural n)
+>   => (a -> b)
+>   -> (n -> a -> b -> b)
+>   -> n
+>   -> a
+>   -> b
 > simpleRec phi mu n a =
 >   let
 >     tau !x h m = case natShape m of
@@ -95,8 +103,14 @@ And note that natural, simple, and primitive recursion can be written against th
 >   in tau (phi a) zero n
 > 
 > 
-> bailoutRec :: (Natural t) =>
->   (a -> b) -> (t -> a -> Bool) -> (t -> a -> b) -> (t -> a -> a) -> t -> a -> b
+> bailoutRec :: (Natural n)
+>   => (a -> b)
+>   -> (n -> a -> Bool)
+>   -> (n -> a -> b)
+>   -> (n -> a -> a)
+>   -> n
+>   -> a
+>   -> b
 > bailoutRec phi beta psi omega =
 >   let
 >     theta n a = case natShape n of
@@ -120,7 +134,7 @@ instance (Natural t) => Equal t where
 
 is undecidable. To get around this we'll use a wrapper type, ``Nat``.
 
-> newtype Nat t = Nat { unNat :: t }
+> newtype Nat n = Nat { unNat :: n }
 > 
 > 
 > instance (Show t) => Show (Nat t) where

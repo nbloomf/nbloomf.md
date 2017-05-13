@@ -6,11 +6,15 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > {-# LANGUAGE FlexibleInstances #-}
+> {-# LANGUAGE FlexibleContexts #-}
 > module Lists
->   ( List(), ListOf(..), ListShape(..), foldr, tail, listEq, listEqBy
+>   ( List(..), ListShape(..), ListOf(..), ConsList()
+>   , isNil, tail, foldr
 >   ) where
 > 
-> import Prelude hiding (foldr, tail)
+> import Booleans
+> 
+> import Prelude (Show(..), (++), id, return, (.))
 > 
 > import Test.QuickCheck
 
@@ -43,49 +47,62 @@ We will wrap this definition up in code both as a concrete type and as a type cl
 
 First the concrete type:
 
-> data List a = N | C a (List a)
+> data ConsList a = N | C a (ConsList a)
+> 
 >  
-> instance (Show a) => Show (List a) where
->   show N        = "N"
->   show (C x xs) = "C " ++ show x ++ " -- " ++ show xs
+> instance (Show a) => Show (ConsList a) where
+>   show N        = "()"
+>   show (C x xs) = "(" ++ show x ++ show xs ++ ")"
+> 
+> 
+> instance (Arbitrary a) => Arbitrary (ConsList a) where
+>   arbitrary = do
+>     xs <- arbitrary
+>     return (list xs)
+> 
+>   shrink  N      = []
+>   shrink (C _ x) = [x]
 
 And the class:
 
-> data ListShape a t = Nil | Cons a (t a)
+> data ListShape a t
+>   = Nil
+>   | Cons a (t a)
+>   deriving Show
 > 
-> class ListOf t where
->   toList :: t a -> List a
->   fromList :: List a -> t a
+> class List t where
+>   toConsList   :: t a -> ConsList a
+>   fromConsList :: ConsList a -> t a
 > 
 >   nil :: t a
 > 
 >   cons :: a -> t a -> t a
 > 
 >   listShape :: t a -> ListShape a t
->   listShape x = case listShape $ toList x of
+>   listShape x = case listShape (toConsList x) of
 >     Nil       -> Nil
->     Cons a as -> Cons a (fromList as)
-> 
->   isNil :: t a -> Bool
->   isNil x = case listShape x of
->     Nil      -> True
->     Cons _ _ -> False
+>     Cons a as -> Cons a (fromConsList as)
 > 
 >   list :: [a] -> t a
->   list xs = fromList $ list xs
+>   list xs = fromConsList (list xs)
+> 
+> 
+> isNil :: (List t) => t a -> Bool
+> isNil x = case listShape x of
+>   Nil      -> True
+>   Cons _ _ -> False
 
 And the instance.
 
-> instance ListOf List where
->   toList = id
->   fromList = id
+> instance List ConsList where
+>   toConsList   = id
+>   fromConsList = id
 >
->   nil = N
+>   nil  = N
 >   cons = C
 > 
->   listShape x = case x of
->     N      -> Nil
->     C a as -> Cons a as
+>   listShape  N      = Nil
+>   listShape (C a x) = Cons a x
 > 
 >   list m = case m of
 >     []     -> N
@@ -117,7 +134,7 @@ And finally, a more concrete description of the universal algebra from $\lists{A
 
 Here is a naive implementation of $\foldr{\ast}{\ast}$.
 
-> foldr :: (ListOf t) => b -> (a -> b -> b) -> t a -> b
+> foldr :: (List t) => b -> (a -> b -> b) -> t a -> b
 > foldr e phi x = case listShape x of
 >   Nil       -> e
 >   Cons a as -> phi a (foldr e phi as)
@@ -198,10 +215,42 @@ as claimed.
 </p></div>
 </div>
 
-> tail :: (ListOf t) => t a -> t a
+> tail :: (List t) => t a -> t a
 > tail x = case listShape x of
 >   Nil      -> nil
 >   Cons _ y -> y
+
+One more bit of wierdness. Just like with ``Natural``, even though it makes sense to define an ``Equal`` instance against ``ListOf``, the naive way to do it,
+
+```haskell
+instance (Equal a, ListOf t) => Equal (t a) where
+  ...
+```
+
+is undecidable. But we can get around this with a simple wrapper type:
+
+> newtype ListOf t a = ListOf { unListOf :: t a }
+> 
+> 
+> instance (List t) => List (ListOf t) where
+>   toConsList   = toConsList . unListOf
+>   fromConsList = ListOf . fromConsList
+> 
+>   nil      = ListOf nil
+>   cons a x = ListOf (cons a (unListOf x))
+> 
+> 
+> instance (List t, Show a) => Show (ListOf t a) where
+>   show = show . toConsList
+> 
+> instance (Arbitrary a, Arbitrary (t a)) => Arbitrary (ListOf t a) where
+>   arbitrary = do
+>     x <- arbitrary
+>     return (ListOf x)
+
+
+Equality
+--------
 
 And some properties of equality:
 
@@ -243,22 +292,9 @@ as claimed.
 </p></div>
 </div>
 
-> listEqBy :: (ListOf t) => (a -> a -> Bool) -> t a -> t a -> Bool
-> listEqBy f x y = case (listShape x, listShape y) of
->   (Nil,      Nil     ) -> True
->   (Nil,      Cons _ _) -> False
->   (Cons _ _, Nil     ) -> False
->   (Cons a u, Cons b v) -> (f a b) && (listEqBy f u v)
-> 
-> listEq :: (ListOf t, Eq a) => t a -> t a -> Bool
-> listEq = listEqBy (==)
-
-We'll also throw in an ``Arbitrary`` instance for ``List`` here for use in testing later.
-
-> instance (Arbitrary a) => Arbitrary (List a) where
->   arbitrary = do
->     xs <- arbitrary
->     return $ list xs
-> 
->   shrink N       = []
->   shrink (C _ x) = [x]
+> instance (List t, Equal a) => Equal (ListOf t a) where
+>   eq x y = case (listShape x, listShape y) of
+>     (Nil,      Nil     ) -> True
+>     (Nil,      Cons _ _) -> False
+>     (Cons _ _, Nil     ) -> False
+>     (Cons a u, Cons b v) -> (eq a b) &&& (eq u v)

@@ -9,8 +9,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( zip, zipPad, _test_zip, main_zip, swap, pair, assocL, assocR
 >   ) where
 > 
-> import Prelude hiding (foldr, foldl', foldl, length, head, tail, map, zip, min, max)
-> 
+> import Booleans
 > import NaturalNumbers
 > import Plus
 > import MaxAndMin
@@ -24,6 +23,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import UnfoldN
 > import Range
 > 
+> import Prelude (Show, Int, IO, sequence_)
 > import Test.QuickCheck
 
 Today we'll define a really useful function on lists called $\zip$. This map will take two lists, one in $\lists{A}$ and one in $\lists{B}$, and return a list in $\lists{A \times B}$. In progress, $\zip$ping two lists looks something like this:
@@ -73,15 +73,15 @@ Let $A$ and $B$ be sets. Define $\varepsilon : \lists{A \times B}^{\lists{B}}$ b
 
 We can implement $\zip$ directly with $\foldr{-}{-}$ as in the definition.
 
-> zip' :: (ListOf t) => t a -> t b -> t (a,b)
+> zip' :: (List t) => t a -> t b -> t (a,b)
 > zip' = foldr epsilon phi
 >   where
->     phi :: (ListOf t) => a -> (t b -> t (a,b)) -> t b -> t (a,b)
+>     phi :: (List t) => a -> (t b -> t (a,b)) -> t b -> t (a,b)
 >     phi x f z = case listShape z of
 >       Nil       -> nil
 >       Cons y ys -> cons (x,y) (f ys)
 >
->     epsilon :: (ListOf t) => t b -> t (a,b)
+>     epsilon :: (List t) => t b -> t (a,b)
 >     epsilon _ = nil
 
 This does the job. But it's also a little awkward; it constructs an intermediate list of functions. The following result suggests a more straightforward implementation.
@@ -126,7 +126,7 @@ as claimed.
 
 In Haskell:
 
-> zip :: (ListOf t) => t a -> t b -> t (a,b)
+> zip :: (List t) => t a -> t b -> t (a,b)
 > zip x y = case listShape x of
 >   Nil       -> nil
 >   Cons a as -> case listShape y of
@@ -391,15 +391,15 @@ The implementation from the definition does the job:
 
 ```haskell
 
-> zipPad' :: (ListOf t) => a -> b -> t a -> t b -> t (a,b)
+> zipPad' :: (List t) => a -> b -> t a -> t b -> t (a,b)
 > zipPad' u v = foldr (delta u) (psi v)
 >   where
->     psi :: (ListOf t) => b -> a -> (t b -> t (a,b)) -> t b -> t (a,b)
+>     psi :: (List t) => b -> a -> (t b -> t (a,b)) -> t b -> t (a,b)
 >     psi v x f z = case listShape z of
 >       Nil       -> cons (x,v) (f nil)
 >       Cons y ys -> cons (x,y) (f ys)
 >
->     delta :: (ListOf t) => a -> t b -> t (a,b)
+>     delta :: (List t) => a -> t b -> t (a,b)
 >     delta u z = map (\t -> (u,t)) z
 
 ```
@@ -456,7 +456,7 @@ as claimed.
 
 In Haskell:
 
-> zipPad :: (ListOf t) => a -> b -> t a -> t b -> t (a,b)
+> zipPad :: (List t) => a -> b -> t a -> t b -> t (a,b)
 > zipPad u v x y = case listShape x of
 >   Nil       -> map (\w -> (u,w)) y
 >   Cons a as -> case listShape y of
@@ -676,97 +676,108 @@ as claimed.
 Testing
 -------
 
+A utility for type fixing:
+
+> withTypeOf :: a -> a -> a
+> withTypeOf x _ = x
+
 Here are our property tests for $\zip$ and $\zipPad$.
 
 > -- map(swap)(zip(x,y)) == zip(y,x)
-> _test_zip_swap :: (ListOf t, Eq a)
->   => t a -> t a -> t a -> Bool
+> _test_zip_swap :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> Bool
 > _test_zip_swap _ x y =
->   (map swap (zip x y)) `listEq` (zip y x)
+>   (map swap (zip x y)) ==== (zip y x)
 > 
 > 
 > -- length(zip(x,y)) == min(length(x),length(y))
-> _test_zip_length :: (ListOf t, Eq a)
->   => t a -> t a -> t a -> Bool
-> _test_zip_length _ x y =
->   (length (zip x y)) == (min (length x) (length y))
+> _test_zip_length :: (List t, Equal a, Natural n)
+>   => t a -> n -> ListOf t a -> ListOf t a -> Bool
+> _test_zip_length _ n x y =
+>   let
+>     lx = length x `withTypeOf` Nat n
+>   in
+>     (length (zip x y)) ==== (min lx (length y))
 > 
 > 
 > -- zip(zip(x,y),z) == map(assocL)zip(x,zip(y,z))
-> _test_zip_zip_left :: (ListOf t, Eq a)
->   => t a -> t a -> t a -> t a -> Bool
+> _test_zip_zip_left :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
 > _test_zip_zip_left _ x y z =
->   (zip (zip x y) z) `listEq` map assocL (zip x (zip y z))
+>   (zip (zip x y) z) ==== map assocL (zip x (zip y z))
 > 
 > 
 > -- zip(zip(x,y),z) == map(assocR)zip(x,zip(y,z))
-> _test_zip_zip_right :: (ListOf t, Eq a)
->   => t a -> t a -> t a -> t a -> Bool
+> _test_zip_zip_right :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
 > _test_zip_zip_right _ x y z =
->   (zip x (zip y z)) `listEq` map assocR (zip (zip x y) z)
+>   (zip x (zip y z)) ==== map assocR (zip (zip x y) z)
 > 
 > 
 > -- zip'(x,y) == zip(x,y)
-> _test_zip_alt :: (ListOf t, Eq a)
->   => t a -> t a -> t a -> Bool
+> _test_zip_alt :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> Bool
 > _test_zip_alt _ x y =
->   (zip' x y) `listEq` (zip x y)
+>   (zip' x y) ==== (zip x y)
 > 
 > 
 > -- map(swap)(zipPad(u,v)(x,y)) == zipPad(v,u)(y,x)
-> _test_zipPad_swap :: (ListOf t, Eq a)
->   => t a -> a -> a -> t a -> t a -> Bool
+> _test_zipPad_swap :: (List t, Equal a)
+>   => t a -> a -> a -> ListOf t a -> ListOf t a -> Bool
 > _test_zipPad_swap _ u v x y =
->   (map swap (zipPad u v x y)) `listEq` (zipPad v u y x)
+>   (map swap (zipPad u v x y)) ==== (zipPad v u y x)
 > 
 > 
 > -- length(zipPad(u,v)(x,y)) == max(length(x),length(y))
-> _test_zipPad_length :: (ListOf t, Eq a)
->   => t a -> a -> a -> t a -> t a -> Bool
-> _test_zipPad_length _ u v x y =
->   (length (zipPad u v x y)) == (max (length x) (length y))
+> _test_zipPad_length :: (List t, Equal a, Natural n)
+>   => t a -> n -> a -> a -> ListOf t a -> ListOf t a -> Bool
+> _test_zipPad_length _ n u v x y =
+>   let
+>     lx = length x `withTypeOf` Nat n
+>   in
+>     (length (zipPad u v x y)) ==== (max lx (length y))
 > 
 > 
 > -- zipPad((a,b),c)(zipPad(a,b)(x,y),z)
 > --   == map(assocL)zipPad(a,(b,c))(x,zipPad(b,c)(y,z))
-> _test_zipPad_zipPad_left :: (ListOf t, Eq a)
->   => t a -> a -> a -> a -> t a -> t a -> t a -> Bool
+> _test_zipPad_zipPad_left :: (List t, Equal a)
+>   => t a -> a -> a -> a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
 > _test_zipPad_zipPad_left _ a b c x y z =
->   listEq
+>   eq
 >     (zipPad (a,b) c (zipPad a b x y) z)
 >     (map assocL (zipPad a (b,c) x (zipPad b c y z)))
 > 
 > 
 > -- zipPad((a,b),c)(zipPad(a,b)(x,y),z)
 > --   == map(assocR)zipPad(a,(b,c))(x,zipPad(b,c)(y,z))
-> _test_zipPad_zipPad_right :: (ListOf t, Eq a)
->   => t a -> a -> a -> a -> t a -> t a -> t a -> Bool
+> _test_zipPad_zipPad_right :: (List t, Equal a)
+>   => t a -> a -> a -> a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
 > _test_zipPad_zipPad_right _ a b c x y z =
->   listEq
+>   eq
 >     (zipPad a (b,c) x (zipPad b c y z))
 >     (map assocR (zipPad (a,b) c (zipPad a b x y) z))
 > 
 > 
 > -- zipPad'(x,y) == zipPad(x,y)
-> _test_zipPad_alt :: (ListOf t, Eq a)
->   => t a -> a -> a -> t a -> t a -> Bool
+> _test_zipPad_alt :: (List t, Equal a)
+>   => t a -> a -> a -> ListOf t a -> ListOf t a -> Bool
 > _test_zipPad_alt _ u v x y =
->   (zipPad' u v x y) `listEq` (zipPad u v x y)
+>   (zipPad' u v x y) ==== (zipPad u v x y)
 
 And the suite:
 
 > -- run all tests for zip
-> _test_zip :: (ListOf t, Arbitrary (t n), Show (t n), Natural n, Arbitrary n, Show n)
->   => t n -> n -> Int -> Int -> IO ()
+> _test_zip :: (List t, Arbitrary (t a), Show (t n), Equal a, Show a, Natural n, Arbitrary a, Arbitrary n, Show n)
+>   => t a -> n -> Int -> Int -> IO ()
 > _test_zip t n maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_zip_swap t)
->   , quickCheckWith args (_test_zip_length t)
+>   , quickCheckWith args (_test_zip_length t n)
 >   , quickCheckWith args (_test_zip_zip_left t)
 >   , quickCheckWith args (_test_zip_zip_right t)
 >   , quickCheckWith args (_test_zip_alt t)
 > 
 >   , quickCheckWith args (_test_zipPad_swap t)
->   , quickCheckWith args (_test_zipPad_length t)
+>   , quickCheckWith args (_test_zipPad_length t n)
 >   , quickCheckWith args (_test_zipPad_zipPad_left t)
 >   , quickCheckWith args (_test_zipPad_zipPad_right t)
 >   , quickCheckWith args (_test_zipPad_alt t)
@@ -780,4 +791,4 @@ And the suite:
 And ``main``:
 
 > main_zip :: IO ()
-> main_zip = _test_zip (nil :: List Nat) (zero :: Nat) 20 100
+> main_zip = _test_zip (nil :: ConsList Bool) (zero :: Unary) 20 100

@@ -9,8 +9,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( gcd, _test_gcd, main_gcd
 >   ) where
 >
-> import Prelude hiding (div, rem, gcd)
->
+> import Booleans
 > import NaturalNumbers
 > import Plus
 > import Times
@@ -19,6 +18,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import DivisionAlgorithm
 > import Divides
 > 
+> import Prelude (Show, Int, IO, sequence_)
 > import Test.QuickCheck
 
 Today we'll define the greatest common divisor of two natural numbers. The usual way to do this (in books I've seen) is to define what it means to say that $d$ is a greatest common divisor of $a$ and $b$, then show (possibly nonconstructively) that any two $a$ and $b$ have a greatest common divisor, and finally establish the Euclidean algorithm that actually computes GCDs. We will work backwards: first *defining* the GCD of two natural numbers using the punchline of the Euclidean algorithm and then proving that the output of this function acts like the GCD.
@@ -367,67 +367,70 @@ Implementation and Testing
 Here's ``gcd``:
 
 > gcd :: (Natural t) => t -> t -> t
-> gcd a b = (bailoutRec phi beta psi omega) (next $ plus a b) (a,b)
+> gcd a b = (bailoutRec phi beta psi omega) (next (plus a b)) (a,b)
 >   where
 >     phi     (_,b) = b
->     beta  _ (_,b) = b == zero
+>     beta  _ (_,b) = isZero b
 >     psi   _ (a,_) = a
 >     omega _ (a,b) = (b, rem a b)
 
 Property tests for ``gcd``:
 
 > -- gcd(a,0) == a and gcd(0,a) == a
-> _test_gcd_zero :: (Natural t) => t -> t -> Bool
-> _test_gcd_zero _ a = and
->   [ a == gcd a zero
->   , a == gcd zero a
->   ]
+> _test_gcd_zero :: (Natural n)
+>   => n -> Nat n -> Bool
+> _test_gcd_zero _ a =
+>   (a ==== gcd a zero) &&& (a ==== gcd zero a)
 > 
 > 
 > -- gcd(a,next(0)) == next(0) and gcd(next(0),a) == next(0)
-> _test_gcd_one :: (Natural t) => t -> t -> Bool
+> _test_gcd_one :: (Natural n)
+>   => n -> Nat n -> Bool
 > _test_gcd_one _ a = and
->   [ (next zero) == gcd a (next zero)
->   , (next zero) == gcd (next zero) a
->   ]
+>   ((next zero) ==== gcd a (next zero))
+>   ((next zero) ==== gcd (next zero) a)
 > 
 > 
 > -- gcd(a,b) == gcd(b,rem(a,b))
-> _test_gcd_rem :: (Natural t) => t -> t -> t -> Bool
+> _test_gcd_rem :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_gcd_rem _ a b =
->   (gcd a b) == (gcd b (rem a b))
+>   (gcd a b) ==== (gcd b (rem a b))
 > 
 > 
 > -- gcd(a,b) == gcd(b,a)
-> _test_gcd_commutative :: (Natural t) => t -> t -> t -> Bool
+> _test_gcd_commutative :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_gcd_commutative _ a b =
->   (gcd a b) == (gcd b a)
+>   (gcd a b) ==== (gcd b a)
 > 
 > 
 > -- div(gcd(a,b),a) and div(gcd(a,b),b)
-> _test_gcd_div_args :: (Natural t) => t -> t -> t -> Bool
-> _test_gcd_div_args _ a b = and
->   [ div (gcd a b) a
->   , div (gcd a b) b
->   ]
+> _test_gcd_div_args :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
+> _test_gcd_div_args _ a b =
+>   (div (gcd a b) a) &&& (div (gcd a b) b)
 > 
 > 
 > -- gcd(a,a) = a
-> _test_gcd_idempotent :: (Natural t) => t -> t -> Bool
+> _test_gcd_idempotent :: (Natural n)
+>   => n -> Nat n -> Bool
 > _test_gcd_idempotent _ a =
->   (gcd a a) == a
+>   (gcd a a) ==== a
 > 
 > 
 > -- gcd(gcd(a,b),c) == gcd(a,gcd(b,c))
-> _test_gcd_associative :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_gcd_associative :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_gcd_associative _ a b c =
->   (gcd (gcd a b) c) == (gcd a (gcd b c))
+>   (gcd (gcd a b) c) ==== (gcd a (gcd b c))
 > 
 > 
 > -- times(gcd(a,b),c) == gcd(times(a,c),times(b,c))
-> _test_gcd_distributive_times :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_gcd_distributive_times :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_gcd_distributive_times _ a b c =
->   (times (gcd a b) c) == (gcd (times a c) (times b c))
+>   (times (gcd a b) c) ==== (gcd (times a c) (times b c))
 
 And the suite:
 
@@ -451,4 +454,4 @@ And the suite:
 >       }
 
 > main_gcd :: IO ()
-> main_gcd = _test_gcd (zero :: Nat) 20 100
+> main_gcd = _test_gcd (zero :: Unary) 20 100

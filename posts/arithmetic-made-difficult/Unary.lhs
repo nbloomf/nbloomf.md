@@ -70,6 +70,12 @@ Establishing that every natural number is either $\zero$ or of the form $\next(m
 > instance Show Unary where
 >   show  Z    = "O"
 >   show (N k) = 'I' : show k
+> 
+> instance Equal Unary where
+>   eq Z     Z     = True
+>   eq Z     (N _) = False
+>   eq (N _) Z     = False
+>   eq (N x) (N y) = eq x y
 
 (That ``show`` instance is so we can display elements of ``Nat`` without too many parentheses.) We also define a helper function to convert integers into ``Nat``s as follows.
 

@@ -9,21 +9,21 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( div, _test_div, main_div
 >   ) where
 >
-> import Prelude hiding (div, rem)
->
+> import Booleans
 > import NaturalNumbers
 > import Plus
 > import Times
 > import LessThanOrEqualTo
 > import DivisionAlgorithm
 > 
+> import Prelude (Show, Int, IO, sequence_)
 > import Test.QuickCheck
 
 With the division algorithm in hand we can define what it means for one natural number to divide another.
 
 <div class="result">
 <div class="defn"><p>
-We define $\ndiv : \nats \times \nats \rightarrow \bool$ by $$\ndiv(a,b) = \left\{ \begin{array}{ll} \btrue & \mathrm{if}\ \nrem(b,a) = \zero \\ \bfalse & \mathrm{otherwise}. \end{array}\right.$$
+We define $\ndiv : \nats \times \nats \rightarrow \bool$ by $$\ndiv(a,b) = \iszero(\nrem(b,a)).$$
 </p></div>
 </div>
 
@@ -172,30 +172,34 @@ Implementation and Testing
 Here's ``div``:
 
 > div :: (Natural t) => t -> t -> Bool
-> div a b = (rem b a) == zero
+> div a b = isZero (rem b a)
 
 Property tests:
 
 > -- div(a,0)
-> _test_div_zero_right :: (Natural t) => t -> t -> Bool
+> _test_div_zero_right :: (Natural n)
+>   => n -> Nat n -> Bool
 > _test_div_zero_right _ a =
 >   div a zero
 > 
 > 
 > -- div(next(0),a)
-> _test_div_one_left :: (Natural t) => t -> t -> Bool
+> _test_div_one_left :: (Natural n)
+>   => n -> Nat n -> Bool
 > _test_div_one_left _ a =
 >   div (next zero) a
 > 
 > 
 > -- div(a,a)
-> _test_div_reflexive :: (Natural t) => t -> t -> Bool
+> _test_div_reflexive :: (Natural n)
+>   => n -> Nat n -> Bool
 > _test_div_reflexive _ a =
 >   div a a
 > 
 > 
 > -- div(a,times(a,b))
-> _test_div_times :: (Natural t) => t -> t -> t -> Bool
+> _test_div_times :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_div_times _ a b =
 >   div a (times a b)
 
@@ -217,4 +221,4 @@ And the suite:
 >       }
 
 > main_div :: IO ()
-> main_div = _test_div (zero :: Nat) 50 100
+> main_div = _test_div (zero :: Unary) 50 100

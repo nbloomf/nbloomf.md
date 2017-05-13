@@ -9,14 +9,14 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( max, min, _test_max_min, main_max_min
 >   ) where
 >
-> import Prelude hiding (max, min)
->
+> import Booleans
 > import NaturalNumbers
 > import Plus
 > import Times
 > import LessThanOrEqualTo
 > import Minus
 > 
+> import Prelude (Show, Int, IO, sequence_)
 > import Test.QuickCheck
 
 With $\nleq$ in hand we can also define max and min functions. These are less interesting since they do not have to be defined recursively. :)
@@ -24,6 +24,15 @@ With $\nleq$ in hand we can also define max and min functions. These are less in
 <div class="result">
 <div class="defn"><p>
 We define $\nmax : \nats \times \nats \rightarrow \nats$ by $$\nmax(a,b) = \left\{ \begin{array}{ll} b & \mathrm{if}\ \nleq(a,b) \\ a & \mathrm{otherwise} \end{array} \right.$$ and $\nmin : \nats \times \nats \rightarrow \nats$ by $$\nmin(a,b) = \left\{ \begin{array}{ll} a & \mathrm{if}\ \nleq(a,b) \\ b & \mathrm{otherwise.} \end{array} \right.$$
+
+In Haskell:
+
+> max :: (Natural t) => t -> t -> t
+> max a b = if leq a b then b else a
+> 
+> min :: (Natural t) => t -> t -> t
+> min a b = if leq a b then a else b
+
 </p></div>
 </div>
 
@@ -104,167 +113,173 @@ woo!
 Implementation and Testing
 --------------------------
 
-Here's ``max`` and ``min``:
-
-> max :: (Natural t) => t -> t -> t
-> max a b = if leq a b then b else a
-> 
-> 
-> min :: (Natural t) => t -> t -> t
-> min a b = if leq a b then a else b
-
 Property tests for ``max``:
 
 > -- a == max(a,0) and a == max(0,a)
-> _test_max_zero :: (Natural t) => t -> t -> Bool
-> _test_max_zero _ a = and
->   [ a == max a zero
->   , a == max zero a
->   ]
+> _test_max_zero :: (Natural n)
+>   => n -> Nat n -> Bool
+> _test_max_zero _ a =
+>   (a ==== max a zero) &&& (a ==== max zero a)
 > 
 > 
 > -- a == max(a,a)
-> _test_max_idempotent :: (Natural t) => t -> t -> Bool
+> _test_max_idempotent :: (Natural n)
+>   => n -> Nat n -> Bool
 > _test_max_idempotent _ a =
->   (max a a) == a
+>   (max a a) ==== a
 > 
 > 
 > -- max(a,b) == max(b,a)
-> _test_max_commutative :: (Natural t) => t -> t -> t -> Bool
+> _test_max_commutative :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_max_commutative _ a b =
->   (max a b) == (max b a)
+>   (max a b) ==== (max b a)
 > 
 > 
 > -- max(next(a),next(b)) == next(max(a,b))
-> _test_max_next :: (Natural t) => t -> t -> t -> Bool
+> _test_max_next :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_max_next _ a b =
->   (max (next a) (next b)) == next (max a b)
+>   (max (next a) (next b)) ==== next (max a b)
 > 
 > 
 > -- max(plus(c,a),plus(c,b)) == plus(c,max(a,b))
-> _test_max_plus :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_max_plus :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_max_plus _ a b c =
->   (max (plus c a) (plus c b)) == plus c (max a b)
+>   (max (plus c a) (plus c b)) ==== plus c (max a b)
 > 
 > 
 > -- max(times(c,a),times(c,b)) == times(c,max(a,b))
-> _test_max_times :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_max_times :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_max_times _ a b c =
->   (max (times c a) (times c b)) == times c (max a b)
+>   (max (times c a) (times c b)) ==== times c (max a b)
 > 
 > 
 > -- max(max(a,b),c) == max(a,max(b,c))
-> _test_max_associative :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_max_associative :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_max_associative _ a b c =
->   (max (max a b) c) == (max a (max b c))
+>   (max (max a b) c) ==== (max a (max b c))
 > 
 > 
 > -- if leq(a,c) and leq(b,c) then leq(max(a,b),c)
-> _test_max_leq :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_max_leq :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_max_leq _ a b c =
->   if (leq a c) && (leq b c)
+>   if (leq a c) &&& (leq b c)
 >     then leq (max a b) c
 >     else True
 
 Property tests for ``min``:
 
 > -- 0 == min(a,0) and 0 == min(0,a)
-> _test_min_zero :: (Natural t) => t -> t -> Bool
-> _test_min_zero _ a = and
->   [ zero == min a zero
->   , zero == min zero a
->   ]
+> _test_min_zero :: (Natural n)
+>   => n -> Nat n -> Bool
+> _test_min_zero _ a =
+>   (zero ==== min a zero) &&& (zero ==== min zero a)
 > 
 > 
 > -- a == min(a,a)
-> _test_min_idempotent :: (Natural t) => t -> t -> Bool
+> _test_min_idempotent :: (Natural n)
+>   => n -> Nat n -> Bool
 > _test_min_idempotent _ a =
->   (min a a) == a
+>   (min a a) ==== a
 > 
 > 
 > -- min(a,b) == min(b,a)
-> _test_min_commutative :: (Natural t) => t -> t -> t -> Bool
+> _test_min_commutative :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_min_commutative _ a b =
->   (min a b) == (min b a)
+>   (min a b) ==== (min b a)
 > 
 > 
 > -- min(next(a),next(b)) == next(min(a,b))
-> _test_min_next :: (Natural t) => t -> t -> t -> Bool
+> _test_min_next :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_min_next _ a b =
->   (min (next a) (next b)) == next (min a b)
+>   (min (next a) (next b)) ==== next (min a b)
 > 
 > 
 > -- min(plus(c,a),plus(c,b)) == plus(c,min(a,b))
-> _test_min_plus :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_min_plus :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_min_plus _ a b c =
->   (min (plus c a) (plus c b)) == plus c (min a b)
+>   (min (plus c a) (plus c b)) ==== plus c (min a b)
 > 
 > 
 > -- min(times(c,a),times(c,b)) == times(c,min(a,b))
-> _test_min_times :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_min_times :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_min_times _ a b c =
->   (min (times c a) (times c b)) == times c (min a b)
+>   (min (times c a) (times c b)) ==== times c (min a b)
 > 
 > 
 > -- min(min(a,b),c) == min(a,min(b,c))
-> _test_min_associative :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_min_associative :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_min_associative _ a b c =
->   (min (min a b) c) == (min a (min b c))
+>   (min (min a b) c) ==== (min a (min b c))
 > 
 > 
 > -- if leq(c,a) and leq(c,b) then leq(c,min(a,b))
-> _test_min_leq :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_min_leq :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_min_leq _ a b c =
->   if (leq c a) && (leq c b)
+>   if (leq c a) &&& (leq c b)
 >     then leq c (min a b)
 >     else True
 
 And property tests using both:
 
 > -- leq(min(a,b),max(a,b))
-> _test_max_min_leq :: (Natural t) => t -> t -> t -> Bool
+> _test_max_min_leq :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_max_min_leq _ a b =
 >   leq (min a b) (max a b)
 > 
 > 
 > -- plus(min(a,b),max(a,b)) == plus(a,b)
-> _test_max_min_plus :: (Natural t) => t -> t -> t -> Bool
+> _test_max_min_plus :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_max_min_plus _ a b =
->   (plus (min a b) (max a b)) == (plus a b)
+>   (plus (min a b) (max a b)) ==== (plus a b)
 > 
 > 
 > -- times(min(a,b),max(a,b)) == times(a,b)
-> _test_max_min_times :: (Natural t) => t -> t -> t -> Bool
+> _test_max_min_times :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_max_min_times _ a b =
->   (times (min a b) (max a b)) == (times a b)
+>   (times (min a b) (max a b)) ==== (times a b)
 > 
 > 
 > -- max(a,min(b,c)) == min(max(a,b),max(a,c))
-> _test_max_min_distributive_left :: (Natural t)
->   => t -> t -> t -> t -> Bool
+> _test_max_min_distributive_left :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_max_min_distributive_left _ a b c =
->   (max a (min b c)) == (min (max a b) (max a c))
+>   (max a (min b c)) ==== (min (max a b) (max a c))
 > 
 > 
 > -- max(min(b,c),a) == min(max(b,a),max(c,a))
-> _test_max_min_distributive_right :: (Natural t)
->   => t -> t -> t -> t -> Bool
+> _test_max_min_distributive_right :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_max_min_distributive_right _ a b c =
->   (max (min b c) a) == (min (max b a) (max c a))
+>   (max (min b c) a) ==== (min (max b a) (max c a))
 > 
 > 
 > -- min(a,max(b,c)) == max(min(a,b),min(a,c))
-> _test_min_max_distributive_left :: (Natural t)
->   => t -> t -> t -> t -> Bool
+> _test_min_max_distributive_left :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_min_max_distributive_left _ a b c =
->   (min a (max b c)) == (max (min a b) (min a c))
+>   (min a (max b c)) ==== (max (min a b) (min a c))
 > 
 > 
 > -- min(max(b,c),a) == max(min(b,a),min(c,a))
-> _test_min_max_distributive_right :: (Natural t)
->   => t -> t -> t -> t -> Bool
+> _test_min_max_distributive_right :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_min_max_distributive_right _ a b c =
->   (min (max b c) a) == (max (min b a) (min c a))
+>   (min (max b c) a) ==== (max (min b a) (min c a))
 
 And the suite for ``max`` and ``min``:
 
@@ -305,4 +320,4 @@ And the suite for ``max`` and ``min``:
 >       }
 
 > main_max_min :: IO ()
-> main_max_min = _test_max_min (zero :: Nat) 100 100
+> main_max_min = _test_max_min (zero :: Unary) 100 100

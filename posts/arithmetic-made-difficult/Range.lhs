@@ -9,8 +9,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( range, _test_range, main_range
 >   ) where
 > 
-> import Prelude hiding (foldr, foldl', foldl, length, head, tail, map)
-> 
+> import Booleans
 > import NaturalNumbers
 > import Plus
 >
@@ -22,6 +21,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Map
 > import UnfoldN
 > 
+> import Prelude (Show, Int, IO, sequence_, Maybe(..))
 > import Test.QuickCheck
 
 For our first application of $\unfoldN$ we'll define a function, $\range$, that constructs lists of natural numbers. There are a few ways to do this. We could take an argument $n$ and construct the list of natural numbers from $\zero$ to $n$, but this is too specialized. We could instead take *two* arguments $a$ and $b$ and construct the list of natural numbers from $a$ to $b$, but we'll have to check whether or not the arguments are in order. A third option -- and the one we'll take -- is to take two arguments $a$ and $b$, and construct the list of the first $b$ natural numbers starting from $a$.
@@ -32,7 +32,7 @@ Define $f : \nats \rightarrow \ast + \nats \times \nats$ by $$f(k) = (\next(k),k
 
 In Haskell:
 
-> range :: (ListOf t, Natural n) => n -> n -> t n
+> range :: (List t, Natural n) => n -> n -> t n
 > range a b = unfoldN f b a
 >   where f k = Just (next k, k)
 
@@ -236,70 +236,70 @@ A utility for type fixing:
 Here are our property tests for $\range$.
 
 > -- range(a,next(b)) == cons(a,range(next(a),b))
-> _test_range_next_cons :: (ListOf t, Natural n)
->   => t n -> n -> n -> Bool
+> _test_range_next_cons :: (List t, Natural n)
+>   => t (Nat n) -> Nat n -> Nat n -> Bool
 > _test_range_next_cons t a b =
 >   let
->     x = (range a (next b)) `withTypeOf` t
+>     x = (range a (next b)) `withTypeOf` ListOf t
 >     y = (cons a (range (next a) b))
 >   in
->     x `listEq` y
+>     x ==== y
 > 
 > 
 > -- range(a,next(b)) == snoc(plus(a,b),range(a,b))
-> _test_range_next_snoc :: (ListOf t, Natural n)
->   => t n -> n -> n -> Bool
+> _test_range_next_snoc :: (List t, Natural n)
+>   => t (Nat n) -> Nat n -> Nat n -> Bool
 > _test_range_next_snoc t a b =
 >   let
->     x = (range a (next b)) `withTypeOf` t
+>     x = (range a (next b)) `withTypeOf` ListOf t
 >     y = (snoc (plus a b) (range a b))
 >   in
->     x `listEq` y
+>     x ==== y
 > 
 > 
 > -- range(a,plus(b,c)) == cat(range(a,b),range(plus(a,b),c))
-> _test_range_plus_right :: (ListOf t, Natural n)
->   => t n -> n -> n -> n -> Bool
+> _test_range_plus_right :: (List t, Natural n)
+>   => t (Nat n) -> Nat n -> Nat n -> Nat n -> Bool
 > _test_range_plus_right t a b c =
 >   let
->     x = (range a (plus b c)) `withTypeOf` t
+>     x = (range a (plus b c)) `withTypeOf` ListOf t
 >     y = (cat (range a b) (range (plus a b) c))
 >   in
->     x `listEq` y
+>     x ==== y
 > 
 > 
 > -- range(next(a),b) == map(next,range(a,b))
-> _test_range_next_left :: (ListOf t, Natural n)
->   => t n -> n -> n -> Bool
+> _test_range_next_left :: (List t, Natural n)
+>   => t (Nat n) -> Nat n -> Nat n -> Bool
 > _test_range_next_left t a b =
 >   let
->     x = (range (next a) b) `withTypeOf` t
+>     x = (range (next a) b) `withTypeOf` ListOf t
 >     y = (map next (range a b))
 >   in
->     x `listEq` y
+>     x ==== y
 > 
 > 
 > -- range(plus(a,b),c) == map(plus(a,-),range(b,c))
-> _test_range_plus_left :: (ListOf t, Natural n)
->   => t n -> n -> n -> n -> Bool
+> _test_range_plus_left :: (List t, Natural n)
+>   => t (Nat n) -> Nat n -> Nat n -> Nat n -> Bool
 > _test_range_plus_left t a b c =
 >   let
->     x = (range (plus a b) c) `withTypeOf` t
+>     x = (range (plus a b) c) `withTypeOf` ListOf t
 >     y = (map (plus a) (range b c))
 >   in
->     x `listEq` y
+>     x ==== y
 
 And the suite:
 
 > -- run all tests for range
-> _test_range :: (ListOf t, Arbitrary (t n), Show (t n), Natural n, Arbitrary n, Show n)
->   => t n -> n -> Int -> Int -> IO ()
-> _test_range t n maxSize numCases = sequence_
->   [ quickCheckWith args (_test_range_next_cons t n)
->   , quickCheckWith args (_test_range_next_snoc t n)
->   , quickCheckWith args (_test_range_plus_right t n)
->   , quickCheckWith args (_test_range_next_left t n)
->   , quickCheckWith args (_test_range_plus_left t n)
+> _test_range :: (List t, Arbitrary (t n), Show (t n), Natural n, Arbitrary n, Show n)
+>   => t (Nat n) -> Int -> Int -> IO ()
+> _test_range t maxSize numCases = sequence_
+>   [ quickCheckWith args (_test_range_next_cons t)
+>   , quickCheckWith args (_test_range_next_snoc t)
+>   , quickCheckWith args (_test_range_plus_right t)
+>   , quickCheckWith args (_test_range_next_left t)
+>   , quickCheckWith args (_test_range_plus_left t)
 >   ]
 >   where
 >     args = stdArgs
@@ -310,4 +310,4 @@ And the suite:
 And ``main``:
 
 > main_range :: IO ()
-> main_range = _test_range (nil :: List Nat) (zero :: Nat) 20 100
+> main_range = _test_range (nil :: ConsList (Nat Unary)) 20 100

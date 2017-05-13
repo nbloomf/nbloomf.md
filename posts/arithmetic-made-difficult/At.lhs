@@ -9,8 +9,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( at, _test_at, main_at
 >   ) where
 > 
-> import Prelude hiding (foldr, foldl', foldl, length, head, tail)
-> 
+> import Booleans
 > import NaturalNumbers
 > import Plus
 > import Minus
@@ -21,6 +20,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Cat
 > import Length
 > 
+> import Prelude (Show, Int, IO, sequence_, Maybe(..))
 > import Test.QuickCheck
 
 In this post we'll investigate $\at$, which extracts the element at an arbitrary position in a list. First, we need $\head$, which extracts the *first* element of a list. To a first approximation $\head$ has a signature like $$\lists{A} \rightarrow A,$$ and certainly we want $\head(\cons(a,x)) = a$. But what about $\head(\nil)$? In this case there is no element to extract. Taking a cue from our definition of $\nminus$, we will make $\head$ return not an $A$, but a $\ast + A$, letting the $\ast$ represent $\head(\nil)$. Now $\head$ can be expressed as a $\foldr{\ast}{\ast}$ as follows.
@@ -31,7 +31,7 @@ Define $\varphi : A \times (\ast + A) \rightarrow \ast + A$ by $$\varphi(a,b) = 
 
 In Haskell:
 
-> head :: (ListOf t) => t a -> Maybe a
+> head :: (List t) => t a -> Maybe a
 > head = foldr Nothing phi
 >   where
 >     phi a _ = Just a
@@ -87,11 +87,11 @@ Define $\varphi : \lists{A} \rightarrow \ast + A$ by $$\varphi(a) = \ast,$$ $\be
 
 In Haskell:
 
-> at :: (Natural n, ListOf t) => t a -> n -> Maybe a
+> at :: (Natural n, List t) => t a -> n -> Maybe a
 > at x k = bailoutRec phi beta psi omega k x
 >   where
 >     phi   _   = Nothing
->     beta  k x = isZero k || isNil x
+>     beta  k x = isZero k ||| isNil x
 >     psi   _ x = head x
 >     omega _ x = tail x
 
@@ -519,109 +519,125 @@ A utility for type fixing:
 Here are our property tests for $\at$.
 
 > -- at(nil,k) == *
-> _test_at_nil :: (ListOf t, Eq a, Natural n)
->   => t a -> n -> n -> Bool
-> _test_at_nil z _ m =
->   let nil' = nil `withTypeOf` z in
->   (at nil' m) == Nothing
+> _test_at_nil :: (List t, Equal a, Natural n)
+>   => t a -> n -> Nat n -> Bool
+> _test_at_nil z n m =
+>   let
+>     nil' = nil `withTypeOf` z
+>   in
+>     (at nil' m) ==== Nothing
 > 
 > 
 > -- at(cons(a,nil),next(0)) == *
-> _test_at_single :: (ListOf t, Eq a, Natural n)
+> _test_at_single :: (List t, Equal a, Natural n)
 >   => t a -> n -> a -> Bool
-> _test_at_single z k a =
+> _test_at_single z n a =
 >   let
 >     nil'  = nil  `withTypeOf` z
->     zero' = zero `withTypeOf` k
+>     zero' = zero `withTypeOf` n
 >   in
->     (at (cons a nil') (next zero')) == Just a
+>     (at (cons a nil') (next zero')) ==== Just a
 > 
 > 
 > -- at(cons(a,cons(b,nil)),next(next(0))) == *
-> _test_at_double :: (ListOf t, Eq a, Natural n)
+> _test_at_double :: (List t, Equal a, Natural n)
 >   => t a -> n -> a -> a -> Bool
-> _test_at_double z k a b =
+> _test_at_double z n a b =
 >   let
 >     nil'  = nil  `withTypeOf` z
->     zero' = zero `withTypeOf` k
+>     zero' = zero `withTypeOf` n
 >   in
->     (at (cons a (cons b nil')) (next (next zero'))) == Just b
+>     (at (cons a (cons b nil')) (next (next zero'))) ==== Just b
 > 
 > 
 > -- at(cons(a,x),next(next(k))) == at(x,next(k))
-> _test_at_next_next_cons :: (ListOf t, Eq a, Natural n)
->   => t a -> n -> t a -> a -> n -> Bool
+> _test_at_next_next_cons :: (List t, Equal a, Natural n)
+>   => t a -> n -> ListOf t a -> a -> Nat n -> Bool
 > _test_at_next_next_cons z _ x a k =
->   let
->     nil'  = nil  `withTypeOf` z
->   in
->     (at (cons a x) (next (next k))) == (at x (next k))
+>   (at (cons a x) (next (next k))) ==== (at x (next k))
 > 
 > 
 > -- at(x,length(x)) == head(rev(x))
-> _test_at_length_rev :: (ListOf t, Eq a)
->   => t a -> t a -> Bool
-> _test_at_length_rev z x =
->   (at x (length x)) == (head (rev x))
+> _test_at_length_rev :: (List t, Equal a, Natural n)
+>   => t a -> n -> ListOf t a -> Bool
+> _test_at_length_rev _ n x =
+>   let
+>     lx = length x `withTypeOf` n
+>   in
+>     (at x lx) ==== (head (rev x))
 > 
 > 
 > -- leq(length(x),k)                   ==> at(x,next(k)) == *
 > -- leq(next(0),k) && leq(k,length(x)) ==> at(x,next(k)) /= *
-> _test_at_range :: (ListOf t, Eq a)
->   => t a -> t a -> Nat -> Bool
-> _test_at_range _ x n =
->   if n /= zero && leq n (length x)
->     then case at x n of
->       Just _  -> True
->       Nothing -> False
->     else (at x n) == Nothing
+> _test_at_range :: (List t, Equal a, Natural n)
+>   => t a -> n -> ListOf t a -> Nat n -> Bool
+> _test_at_range _ n x k =
+>   let
+>     lx = length x `withTypeOf` Nat n
+>   in
+>     if (not (isZero k)) &&& (leq k lx)
+>       then case at x k of
+>         Just _  -> True
+>         Nothing -> False
+>       else (at x k) ==== Nothing
 > 
 > 
 > -- leq(k,length(x)) ==> at(snoc(a,x),k) == at(x,k)
-> _test_at_snoc :: (ListOf t, Eq a)
->   => t a -> t a -> a -> Nat -> Bool
-> _test_at_snoc z x a k =
->   if (leq k (length x))
->     then (at (snoc a x) k) == (at x k)
->     else True
+> _test_at_snoc :: (List t, Equal a, Natural n)
+>   => t a -> n -> ListOf t a -> a -> Nat n -> Bool
+> _test_at_snoc z n x a k =
+>   let
+>     lx = length x `withTypeOf` Nat n
+>   in
+>     if leq k lx
+>       then (at (snoc a x) k) ==== (at x k)
+>       else True
 > 
 > 
 > -- leq(k,length(x))       ==> at(cat(x,y),k) == at(x,k)
 > -- leq(next(length(x)),k) ==> at(cat(x,y),k) == at(y,minus(k,length(x)))
-> _test_at_cat :: (ListOf t, Eq a)
->   => t a -> t a -> t a -> Nat -> Bool
-> _test_at_cat z x y k =
->   if (leq k (length x))
->     then
->       (at (cat x y) k) == (at x k)
->     else
->       let Just m = minus k (length x) in
->       (at (cat x y) k) == (at y m)
+> _test_at_cat :: (List t, Equal a, Natural n)
+>   => t a -> n -> ListOf t a -> ListOf t a -> Nat n -> Bool
+> _test_at_cat z n x y k =
+>   let
+>     lx = length x `withTypeOf` Nat n
+>   in
+>     if leq k lx
+>       then
+>         (at (cat x y) k) ==== (at x k)
+>       else
+>         let
+>           Just m = minus k lx
+>         in
+>           (at (cat x y) k) ==== (at y m)
 > 
 > 
 > -- at(x,u) == at(rev(x),minus(next(length(x)),u))
-> _test_at_rev :: (ListOf t, Eq a)
->   => t a -> t a -> Nat -> Bool
-> _test_at_rev z x u =
->   case minus (next (length x)) u of
->     Just v  -> (at x u) == (at (rev x) v)
->     Nothing -> True
+> _test_at_rev :: (List t, Equal a, Natural n)
+>   => t a -> n -> ListOf t a -> Nat n -> Bool
+> _test_at_rev z n x u =
+>   let 
+>     lx = (length x) `withTypeOf` n
+>   in
+>     case minus (next (length x)) u of
+>       Just v  -> (at x u) ==== (at (rev x) v)
+>       Nothing -> True
 
 And the suite:
 
 > -- run all tests for at
-> _test_at :: (ListOf t, Arbitrary a, Show a, Eq a, Arbitrary (t a), Show (t a), Natural n, Arbitrary n, Show n)
+> _test_at :: (List t, Arbitrary a, Arbitrary (t a), Show a, Equal a, Show (t a), Natural n, Arbitrary n, Show n)
 >   => t a -> n -> Int -> Int -> IO ()
 > _test_at t n maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_at_nil t n)
 >   , quickCheckWith args (_test_at_single t n)
 >   , quickCheckWith args (_test_at_double t n)
 >   , quickCheckWith args (_test_at_next_next_cons t n)
->   , quickCheckWith args (_test_at_length_rev t)
->   , quickCheckWith args (_test_at_range t)
->   , quickCheckWith args (_test_at_snoc t)
->   , quickCheckWith args (_test_at_cat t)
->   , quickCheckWith args (_test_at_rev t)
+>   , quickCheckWith args (_test_at_length_rev t n)
+>   , quickCheckWith args (_test_at_range t n)
+>   , quickCheckWith args (_test_at_snoc t n)
+>   , quickCheckWith args (_test_at_cat t n)
+>   , quickCheckWith args (_test_at_rev t n)
 >   ]
 >   where
 >     args = stdArgs
@@ -632,4 +648,4 @@ And the suite:
 And ``main``:
 
 > main_at :: IO ()
-> main_at = _test_at (nil :: List Bool) (zero :: Nat) 20 100
+> main_at = _test_at (nil :: ConsList Bool) (zero :: Unary) 20 100

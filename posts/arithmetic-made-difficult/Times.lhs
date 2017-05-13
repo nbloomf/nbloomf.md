@@ -9,9 +9,11 @@ tags: arithmetic-made-difficult, literate-haskell
 >  ( times, _test_times, main_times
 >  ) where
 > 
+> import Booleans
 > import NaturalNumbers
 > import Plus
 > 
+> import Prelude (Show(..), IO, Int, sequence_)
 > import Test.QuickCheck
 
 Natural number multiplication has signature $\nats \times \nats \rightarrow \nats$, so we might hope to define it as $\Theta = \simprec{\varphi}{\mu}$ for some appropriate $\varphi$ and $\mu$. Using the universal property of simple recursion and how we want multiplication to behave, note that on the one hand we want $\Theta(\zero,m) = \zero$ for all $m$, while on the other hand we have $\Theta(\zero,m) = \varphi(m)$. So apparently we need $\varphi(m) = \zero$ for all $m$.
@@ -23,6 +25,15 @@ With this in mind, we define a binary operation $\ntimes$ on $\nats$ as follows.
 <div class="result">
 <div class="defn"><p>
 Let $\varphi : \nats \rightarrow \nats$ be given by $\varphi(m) = \zero$, and let $\mu : \nats \times \nats \times \nats \rightarrow \nats$ be given by $\mu(k,a,b) = \nplus(b,a)$. We then define $\ntimes : \nats \times \nats \rightarrow \nats$ by $$\ntimes = \simprec{\varphi}{\mu}.$$
+
+In Haskell:
+
+> times :: (Natural t) => t -> t -> t
+> times = simpleRec phi mu
+>   where
+>     phi _ = zero
+>     mu _ a b = plus b a
+
 </p></div>
 </div>
 
@@ -62,74 +73,86 @@ The following hold for all natural numbers $a$, $b$, and $c$.
 Implementation and Testing
 --------------------------
 
-Here's ``times``:
+As with $\nplus$, it's a good idea to test the properties of $\ntimes$.
 
-> times :: (Natural t) => t -> t -> t
-> times = simpleRec phi mu
->   where
->     phi _ = zero
->     mu _ a b = plus b a
-
-As with ``plus``, it's a good idea to test the properties of ``times``.
-
-> -- 0 == times(a,0) and 0 == times(0,a)
-> _test_times_zero :: (Natural t) => t -> t -> Bool
-> _test_times_zero _ a = and
->   [ zero == times a zero
->   , zero == times zero a
->   ]
+> -- 0 == times(0,a)
+> _test_times_zero_left :: (Natural n)
+>   => n -> Nat n -> Bool
+> _test_times_zero_left _ a =
+>   zero ==== times zero a
 > 
 > 
-> -- a == times(a,1) and a == times(1,a)
-> _test_times_one :: (Natural t) => t -> t -> Bool
-> _test_times_one _ a = and
->   [ a == times a (next zero)
->   , a == times (next zero) a
->   ]
+> -- 0 == times(a,0)
+> _test_times_zero_right :: (Natural n)
+>   => n -> Nat n -> Bool
+> _test_times_zero_right _ a =
+>   zero ==== times a zero
+> 
+> 
+> -- a == times(1,a)
+> _test_times_one_left :: (Natural n)
+>   => n -> Nat n -> Bool
+> _test_times_one_left _ a =
+>   a ==== times (next zero) a
+> 
+> 
+> -- a == times(a,1)
+> _test_times_one_right :: (Natural n)
+>   => n -> Nat n -> Bool
+> _test_times_one_right _ a =
+>   a ==== times a (next zero)
 > 
 > 
 > -- times(next(a),b) == plus(times(a,b),b)
-> _test_times_next_left :: (Natural t) => t -> t -> t -> Bool
+> _test_times_next_left :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_times_next_left _ a b =
->   (times (next a) b) == (plus (times a b) b)
+>   (times (next a) b) ==== (plus (times a b) b)
 > 
 > 
 > -- times(a,next(b)) == plus(times(a,b),a)
-> _test_times_next_right :: (Natural t) => t -> t -> t -> Bool
+> _test_times_next_right :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_times_next_right _ a b =
->   (times a (next b)) == (plus (times a b) a)
+>   (times a (next b)) ==== (plus (times a b) a)
 > 
 > 
 > -- times(a,b) == times(b,a)
-> _test_times_commutative :: (Natural t) => t -> t -> t -> Bool
+> _test_times_commutative :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_times_commutative _ a b =
->   (times a b) == (times b a)
+>   (times a b) ==== (times b a)
 > 
 > 
 > -- times(a,plus(b,c)) == plus(times(a,b),times(a,c))
-> _test_times_distributive_left :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_times_distributive_left :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_times_distributive_left _ a b c =
->   (times a (plus b c)) == (plus (times a b) (times a c))
+>   (times a (plus b c)) ==== (plus (times a b) (times a c))
 > 
 > 
 > -- times(plus(a,b),c) == plus(times(a,c),times(b,c))
-> _test_times_distributive_right :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_times_distributive_right :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_times_distributive_right _ a b c =
->   (times (plus a b) c) == (plus (times a c) (times b c))
+>   (times (plus a b) c) ==== (plus (times a c) (times b c))
 > 
 > 
 > -- times(times(a,b),c) == times(a,times(b,c))
-> _test_times_associative :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_times_associative :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_times_associative _ a b c =
->   (times (times a b) c) == (times a (times b c))
+>   (times (times a b) c) ==== (times a (times b c))
 
 And one function to rule them all:
 
 > _test_times :: (Natural t, Arbitrary t, Show t)
 >   => t -> Int -> Int -> IO ()
 > _test_times t maxSize numCases = sequence_
->   [ quickCheckWith args (_test_times_zero t)
->   , quickCheckWith args (_test_times_one t)
+>   [ quickCheckWith args (_test_times_zero_left t)
+>   , quickCheckWith args (_test_times_zero_right t)
+>   , quickCheckWith args (_test_times_one_left t)
+>   , quickCheckWith args (_test_times_one_right t)
 >   , quickCheckWith args (_test_times_next_left t)
 >   , quickCheckWith args (_test_times_next_right t)
 >   , quickCheckWith args (_test_times_commutative t)
@@ -143,23 +166,9 @@ And one function to rule them all:
 >       , maxSize    = maxSize
 >       }
 
-And a sanity check:
-
-```haskell
-$> _test_times (zero :: Nat) 10 10
-+++ OK, passed 10 tests.
-+++ OK, passed 10 tests.
-+++ OK, passed 10 tests.
-+++ OK, passed 10 tests.
-+++ OK, passed 10 tests.
-+++ OK, passed 10 tests.
-+++ OK, passed 10 tests.
-+++ OK, passed 10 tests.
-```
-
 I used a much smaller number of test cases this time, because these run much more slowly than the tests for ``plus``. The culprit is ``_test_times_associative``. What's happening is that multiplication of ``Nat``s is inherently slow; it's implemented as iterated addition, which itself is iterated ``N``.
 
 The problem lies in our *representation* of the natural numbers. A better representation might make a more efficient ``times`` possible.
 
 > main_times :: IO ()
-> main_times = _test_times (zero :: Nat) 20 100
+> main_times = _test_times (zero :: Unary) 20 100

@@ -9,8 +9,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( filter, _test_filter, main_filter
 >   ) where
 > 
-> import Prelude hiding (foldr, foldl', foldl, map, zip, all, any, tail, length, filter)
-> 
+> import Booleans
 > import NaturalNumbers
 > 
 > import Lists
@@ -23,6 +22,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import AllAndAny
 > import TailsAndInits
 > 
+> import Prelude (Show, Int, IO, sequence_)
 > import Test.QuickCheck
 > import Text.Show.Functions
 
@@ -50,10 +50,10 @@ Let $A$ be a set. Define $\varphi : \bool^A \rightarrow A \times \lists{A} \righ
 
 We can translate $\filter$ to Haskell directly as follows:
 
-> filter' :: (ListOf t) => (a -> Bool) -> t a -> t a
+> filter' :: (List t) => (a -> Bool) -> t a -> t a
 > filter' p x = foldr nil (phi p) x
 >   where
->     phi q a w = if q a == True
+>     phi q a w = if q a ==== True
 >       then cons a w
 >       else w
 
@@ -97,10 +97,10 @@ as claimed.
 
 In Haskell:
 
-> filter :: (ListOf t) => (a -> Bool) -> t a -> t a
+> filter :: (List t) => (a -> Bool) -> t a -> t a
 > filter p x = case listShape x of
 >   Nil      -> nil
->   Cons a w -> if p a == True
+>   Cons a w -> if p a ==== True
 >     then cons a (filter p w)
 >     else filter p w
 
@@ -270,45 +270,45 @@ Testing
 Here are our property tests for $\filter$:
 
 > -- filter(p,x) == filter'(p,x)
-> _test_filter_alt :: (ListOf t, Eq a)
->   => t a -> (a -> Bool) -> t a -> Bool
+> _test_filter_alt :: (List t, Equal a)
+>   => t a -> (a -> Bool) -> ListOf t a -> Bool
 > _test_filter_alt _ p x =
->   (filter p x) `listEq` (filter' p x)
+>   (filter p x) ==== (filter' p x)
 > 
 > 
 > -- all(p,filter(p,x)) == true
-> _test_filter_all :: (ListOf t, Eq a)
->   => t a -> (a -> Bool) -> t a -> Bool
+> _test_filter_all :: (List t, Equal a)
+>   => t a -> (a -> Bool) -> ListOf t a -> Bool
 > _test_filter_all _ p x =
->   (all p (filter p x)) == True
+>   (all p (filter p x)) ==== True
 > 
 > 
 > -- filter(p,snoc(a,x)) == if(p(a),snoc(a,filter(p,x)),filter(p,x))
-> _test_filter_snoc :: (ListOf t, Eq a)
->   => t a -> (a -> Bool) -> a -> t a -> Bool
+> _test_filter_snoc :: (List t, Equal a)
+>   => t a -> (a -> Bool) -> a -> ListOf t a -> Bool
 > _test_filter_snoc _ p a x =
->   if p a == True
->     then (filter p (snoc a x)) `listEq` (snoc a (filter p x))
->     else (filter p (snoc a x)) `listEq` (filter p x)
+>   if p a ==== True
+>     then (filter p (snoc a x)) ==== (snoc a (filter p x))
+>     else (filter p (snoc a x)) ==== (filter p x)
 > 
 > 
 > -- filter(p,rev(x)) == rev(filter(p,x))
-> _test_filter_rev :: (ListOf t, Eq a)
->   => t a -> (a -> Bool) -> t a -> Bool
+> _test_filter_rev :: (List t, Equal a)
+>   => t a -> (a -> Bool) -> ListOf t a -> Bool
 > _test_filter_rev _ p x =
->   (filter p (rev x)) `listEq` (rev (filter p x))
+>   (filter p (rev x)) ==== (rev (filter p x))
 > 
 > 
 > -- filter(p,cat(x,y)) == cat(filter(p,x),filter(p,y))
-> _test_filter_cat :: (ListOf t, Eq a)
->   => t a -> (a -> Bool) -> t a -> t a -> Bool
+> _test_filter_cat :: (List t, Equal a)
+>   => t a -> (a -> Bool) -> ListOf t a -> ListOf t a -> Bool
 > _test_filter_cat _ p x y =
->   (filter p (cat x y)) `listEq` (cat (filter p x) (filter p y))
+>   (filter p (cat x y)) ==== (cat (filter p x) (filter p y))
 
 And the suite:
 
 > -- run all tests for filter
-> _test_filter :: (ListOf t, Arbitrary a, CoArbitrary a, Show a, Eq a, Arbitrary (t a), Show (t a))
+> _test_filter :: (List t, Arbitrary a, CoArbitrary a, Show a, Equal a, Arbitrary (t a), Show (t a))
 >   => t a -> Int -> Int -> IO ()
 > _test_filter t maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_filter_alt t)
@@ -326,4 +326,4 @@ And the suite:
 And ``main``:
 
 > main_filter :: IO ()
-> main_filter = _test_filter (nil :: List Bool) 20 100
+> main_filter = _test_filter (nil :: ConsList Bool) 20 100

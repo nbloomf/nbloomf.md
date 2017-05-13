@@ -9,14 +9,14 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( lcp, lcs, _test_lcp, main_lcp
 >   ) where
 > 
-> import Prelude hiding (foldr, foldl', foldl, map, zip)
-> 
+> import Booleans
 > import Lists
 > import Reverse
 > import Cat
 > import Zip
 > import Prefix
-> 
+>
+> import Prelude (Show, Int, IO, sequence_) 
 > import Test.QuickCheck
 
 Today we'll compute the *longest common prefix* of two strings (and while we're at it, the *longest common suffix*). Given two lists $x$ and $y$, their longest common prefix is the longest list which is a prefix of both, just like it says on the tin. We'll denote this function $\lcp$, and we want it to have a signature like $$\lists{A} \times \lists{A} \rightarrow \lists{A}.$$ To define $\lcp$ as a fold like $$\lcp(x,y) = \foldr{\varepsilon}{\varphi}(x)(y)$$ we need $\varepsilon : \lists{A}^{\lists{A}}$ such that
@@ -57,14 +57,14 @@ Let $A$ be a set. Define $\varepsilon : \lists{A} \rightarrow \lists{A}$ by $$\v
 
 We can translate $\lcp$ to Haskell directly as follows:
 
-> lcp' :: (ListOf t, Eq a) => t a -> t a -> t a
+> lcp' :: (List t, Equal a) => t a -> t a -> t a
 > lcp' = foldr epsilon phi
 >   where
 >     epsilon _ = nil
 > 
 >     phi a f w = case listShape w of
 >       Nil      -> nil
->       Cons b u -> if a == b
+>       Cons b u -> if a ==== b
 >         then cons a (f u)
 >         else nil
 
@@ -118,12 +118,12 @@ as claimed.
 
 In Haskell:
 
-> lcp :: (ListOf t, Eq a) => t a -> t a -> t a
+> lcp :: (List t, Equal a) => t a -> t a -> t a
 > lcp x y = case listShape x of
 >   Nil      -> nil
 >   Cons a u -> case listShape y of
 >     Nil      -> nil
->     Cons b v -> if a == b
+>     Cons b v -> if a ==== b
 >       then cons a (lcp u v)
 >       else nil
 
@@ -471,7 +471,7 @@ Let $A$ be a set. We define $\lcs : \lists{A} \times \lists{A} \rightarrow \list
 
 In Haskell:
 
-> lcs :: (ListOf t, Eq a) => t a -> t a -> t a
+> lcs :: (List t, Equal a) => t a -> t a -> t a
 > lcs x y = rev (lcp (rev x) (rev y))
 
 </p></div>
@@ -654,93 +654,93 @@ Testing
 Here are our property tests for $\lcp$:
 
 > -- lcp(x,y) == lcp'(x,y)
-> _test_lcp_alt :: (ListOf t, Eq a)
->   => t a -> t a -> t a -> Bool
+> _test_lcp_alt :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> Bool
 > _test_lcp_alt _ x y =
->   (lcp x y) `listEq` (lcp' x y)
+>   (lcp x y) ==== (lcp' x y)
 > 
 > 
 > -- lcp(x,x) == x
-> _test_lcp_idempotent :: (ListOf t, Eq a)
->   => t a -> t a -> Bool
+> _test_lcp_idempotent :: (List t, Equal a)
+>   => t a -> ListOf t a -> Bool
 > _test_lcp_idempotent _ x =
->   (lcp x x) `listEq` x
+>   (lcp x x) ==== x
 > 
 > 
 > -- lcp(x,y) == lcp(y,x)
-> _test_lcp_commutative :: (ListOf t, Eq a)
->   => t a -> t a -> t a -> Bool
+> _test_lcp_commutative :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> Bool
 > _test_lcp_commutative _ x y =
->   (lcp x y) `listEq` (lcp y x)
+>   (lcp x y) ==== (lcp y x)
 > 
 > 
 > -- lcp(lcp(x,y),z) == lcp(x,lcp(y,z))
-> _test_lcp_associative :: (ListOf t, Eq a)
->   => t a -> t a -> t a -> t a -> Bool
+> _test_lcp_associative :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
 > _test_lcp_associative _ x y z =
->   (lcp (lcp x y) z) `listEq` (lcp x (lcp y z))
+>   (lcp (lcp x y) z) ==== (lcp x (lcp y z))
 > 
 > 
 > -- cat(x,lcp(y,z)) == lcp(cat(x,y),cat(x,z))
-> _test_lcp_cat :: (ListOf t, Eq a)
->   => t a -> t a -> t a -> t a -> Bool
+> _test_lcp_cat :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
 > _test_lcp_cat _ x y z =
->   (cat x (lcp y z)) `listEq` (lcp (cat x y) (cat x z))
+>   (cat x (lcp y z)) ==== (lcp (cat x y) (cat x z))
 > 
 > 
 > -- lcp(x,y) == x iff prefix(x,y)
-> _test_lcp_prefix :: (ListOf t, Eq a)
->   => t a -> t a -> t a -> Bool
+> _test_lcp_prefix :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> Bool
 > _test_lcp_prefix _ x y =
->   ((lcp x y) `listEq` x) == (prefix x y)
+>   ((lcp x y) ==== x) ==== (prefix x y)
 > 
 > 
 > -- zip(lcp(x,y),lcp(u,v)) == lcp(zip(x,u),zip(y,v))
-> _test_lcp_zip :: (ListOf t, Eq a)
->   => t a -> t a -> t a -> t a -> t a -> Bool
+> _test_lcp_zip :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
 > _test_lcp_zip _ x y u v =
->   (zip (lcp x y) (lcp u v)) `listEq` (lcp (zip x u) (zip y v))
+>   (zip (lcp x y) (lcp u v)) ==== (lcp (zip x u) (zip y v))
 
 Tests for $\lcs$:
 
 > -- lcs(x,x) == x
-> _test_lcs_idempotent :: (ListOf t, Eq a)
->   => t a -> t a -> Bool
+> _test_lcs_idempotent :: (List t, Equal a)
+>   => t a -> ListOf t a -> Bool
 > _test_lcs_idempotent _ x =
->   (lcs x x) `listEq` x
+>   (lcs x x) ==== x
 > 
 > 
 > -- lcs(x,y) == lcs(y,x)
-> _test_lcs_commutative :: (ListOf t, Eq a)
->   => t a -> t a -> t a -> Bool
+> _test_lcs_commutative :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> Bool
 > _test_lcs_commutative _ x y =
->   (lcs x y) `listEq` (lcs y x)
+>   (lcs x y) ==== (lcs y x)
 > 
 > 
 > -- lcs(lcs(x,y),z) == lcs(x,lcs(y,z))
-> _test_lcs_associative :: (ListOf t, Eq a)
->   => t a -> t a -> t a -> t a -> Bool
+> _test_lcs_associative :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
 > _test_lcs_associative _ x y z =
->   (lcs (lcs x y) z) `listEq` (lcs x (lcs y z))
+>   (lcs (lcs x y) z) ==== (lcs x (lcs y z))
 > 
 > 
 > -- cat(lcs(x,y),z) == lcs(cat(x,z),cat(y,z))
-> _test_lcs_cat :: (ListOf t, Eq a)
->   => t a -> t a -> t a -> t a -> Bool
+> _test_lcs_cat :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
 > _test_lcs_cat _ x y z =
->   (cat (lcs x y) z) `listEq` (lcs (cat x z) (cat y z))
+>   (cat (lcs x y) z) ==== (lcs (cat x z) (cat y z))
 > 
 > 
 > -- lcs(x,y) == x iff suffix(x,y)
-> _test_lcs_suffix :: (ListOf t, Eq a)
->   => t a -> t a -> t a -> Bool
+> _test_lcs_suffix :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> Bool
 > _test_lcs_suffix _ x y =
->   ((lcs x y) `listEq` x) == (suffix x y)
+>   ((lcs x y) ==== x) ==== (suffix x y)
 
 And the suite:
 
 > -- run all tests for lcp and lcs
-> _test_lcp :: (ListOf t, Arbitrary a, Show a, Eq a, Arbitrary (t a), Show (t a))
+> _test_lcp :: (List t, Arbitrary a, Show a, Equal a, Arbitrary (t a), Show (t a))
 >   => t a -> Int -> Int -> IO ()
 > _test_lcp t maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_lcp_alt t)
@@ -766,4 +766,4 @@ And the suite:
 And ``main``:
 
 > main_lcp :: IO ()
-> main_lcp = _test_lcp (nil :: List Bool) 20 100
+> main_lcp = _test_lcp (nil :: ConsList Bool) 20 100

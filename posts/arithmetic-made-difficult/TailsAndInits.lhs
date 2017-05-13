@@ -10,8 +10,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( tails, inits, _test_tails_inits, main_tails_inits
 >   ) where
 > 
-> import Prelude hiding (foldr, foldl', foldl, map, zip, all, any, tail, length)
-> 
+> import Booleans
 > import NaturalNumbers
 > 
 > import Lists
@@ -24,6 +23,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import LongestCommonPrefix
 > import AllAndAny
 > 
+> import Prelude (Show, Int, IO, sequence_, (.))
 > import Test.QuickCheck
 > import Text.Show.Functions
 
@@ -37,7 +37,7 @@ Let $A$ be a set. Define $\varepsilon : \lists{A} \rightarrow \lists{\lists{A}}$
 
 We can translate $\tails$ to Haskell directly as follows:
 
-> tails' :: (ListOf t) => t a -> t (t a)
+> tails' :: (List t) => t a -> t (t a)
 > tails' x = foldr epsilon phi x x
 >   where
 >     epsilon w = cons w nil
@@ -77,7 +77,7 @@ as claimed.
 
 In Haskell:
 
-> tails :: (ListOf t) => t a -> t (t a)
+> tails :: (List t) => t a -> t (t a)
 > tails x = case listShape x of
 >   Nil      -> cons nil nil
 >   Cons a w -> cons (cons a w) (tails w)
@@ -274,7 +274,7 @@ as needed.
 
 Next we'll define $\inits$ in terms of $\tails$.
 
-> inits :: (ListOf t) => t a -> t (t a)
+> inits :: (List t) => t a -> t (t a)
 > inits = rev . map rev . tails . rev
 
 $\inits$ interacts with $\map$:
@@ -346,77 +346,88 @@ as claimed.
 Testing
 -------
 
+A utility for type fixing:
+
+> withTypeOf :: a -> a -> a
+> withTypeOf x _ = x
+
 Here are our property tests for $\tails$ and $\inits$:
 
 > -- tails(x) == tails'(x)
-> _test_tails_alt :: (ListOf t, Eq a)
->   => t a -> t a -> Bool
+> _test_tails_alt :: (List t, Equal a)
+>   => t a -> ListOf t a -> Bool
 > _test_tails_alt _ x =
->   listEqBy listEq (tails x) (tails' x)
+>   (tails x) ==== (tails' x)
 > 
 > 
 > -- tails(map(f)(x)) == map(map(f))(tails(x))
-> _test_tails_map :: (ListOf t, Eq a)
->   => t a -> (a -> a) -> t a -> Bool
+> _test_tails_map :: (List t, Equal a)
+>   => t a -> (a -> a) -> ListOf t a -> Bool
 > _test_tails_map _ f x =
->   listEqBy listEq (tails (map f x)) (map (map f) (tails x))
+>   (tails (map f x)) ==== (map (map f) (tails x))
 > 
 > 
 > -- length(tails(x)) == next(length(x))
-> _test_tails_length :: (ListOf t, Eq a)
->   => t a -> t a -> Bool
-> _test_tails_length _ x =
->   (length (tails x)) == (next (length x))
+> _test_tails_length :: (List t, Equal a, Natural n)
+>   => t a -> n -> ListOf t a -> Bool
+> _test_tails_length _ n x =
+>   let
+>     lx = length x `withTypeOf` Nat n
+>   in
+>     (length (tails x)) ==== (next lx)
 > 
 > 
 > -- tails(snoc(a,x)) == snoc(nil,map(snoc(a,-))(tails(x)))
-> _test_tails_snoc :: (ListOf t, Eq a)
->   => t a -> a -> t a -> Bool
+> _test_tails_snoc :: (List t, Equal a)
+>   => t a -> a -> ListOf t a -> Bool
 > _test_tails_snoc _ a x =
->   listEqBy listEq (tails (snoc a x)) (snoc nil (map (snoc a) (tails x)))
+>   (tails (snoc a x)) ==== (snoc nil (map (snoc a) (tails x)))
 > 
 > 
 > -- tails(lcs(x,y)) == lcs(tails(x),tails(y))
-> _test_tails_lcs :: (ListOf t, Eq a, Eq (t a))
->   => t a -> t a -> t a -> Bool
+> _test_tails_lcs :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> Bool
 > _test_tails_lcs _ x y =
->   listEqBy listEq (tails (lcs x y)) (lcs (tails x) (tails y))
+>   (tails (lcs x y)) ==== (lcs (tails x) (tails y))
 > 
 > 
 > -- inits(map(f)(x)) == map(map(f))(inits(x))
-> _test_inits_map :: (ListOf t, Eq a)
->   => t a -> (a -> a) -> t a -> Bool
+> _test_inits_map :: (List t, Equal a)
+>   => t a -> (a -> a) -> ListOf t a -> Bool
 > _test_inits_map _ f x =
->   listEqBy listEq (inits (map f x)) (map (map f) (inits x))
+>   (inits (map f x)) ==== (map (map f) (inits x))
 > 
 > 
 > -- length(inits(x)) == next(length(x))
-> _test_inits_length :: (ListOf t, Eq a)
->   => t a -> t a -> Bool
-> _test_inits_length _ x =
->   (length (inits x)) == (next (length x))
+> _test_inits_length :: (List t, Equal a, Natural n)
+>   => t a -> n -> ListOf t a -> Bool
+> _test_inits_length _ n x =
+>   let
+>     lx = length x `withTypeOf` Nat n
+>   in
+>     (length (inits x)) ==== (next lx)
 > 
 > 
 > -- inits(lcp(x,y)) == lcp(inits(x),inits(y))
-> _test_inits_lcp :: (ListOf t, Eq a, Eq (t a))
->   => t a -> t a -> t a -> Bool
+> _test_inits_lcp :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> Bool
 > _test_inits_lcp _ x y =
->   listEqBy listEq (inits (lcp x y)) (lcp (inits x) (inits y))
+>   (inits (lcp x y)) ==== (lcp (inits x) (inits y))
 
 And the suite:
 
 > -- run all tests for tails and inits
-> _test_tails_inits :: (ListOf t, Arbitrary a, CoArbitrary a, Show a, Eq a, Arbitrary (t a), Show (t a), Eq (t a))
->   => t a -> Int -> Int -> IO ()
-> _test_tails_inits t maxSize numCases = sequence_
+> _test_tails_inits :: (List t, Arbitrary a, CoArbitrary a, Show a, Equal a, Arbitrary (t a), Show (t a), Natural n)
+>   => t a -> n -> Int -> Int -> IO ()
+> _test_tails_inits t n maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_tails_alt t)
 >   , quickCheckWith args (_test_tails_map t)
->   , quickCheckWith args (_test_tails_length t)
+>   , quickCheckWith args (_test_tails_length t n)
 >   , quickCheckWith args (_test_tails_snoc t)
 >   , quickCheckWith args (_test_tails_lcs t)
 > 
 >   , quickCheckWith args (_test_inits_map t)
->   , quickCheckWith args (_test_inits_length t)
+>   , quickCheckWith args (_test_inits_length t n)
 >   , quickCheckWith args (_test_inits_lcp t)
 >   ]
 >   where
@@ -427,8 +438,5 @@ And the suite:
 
 And ``main``:
 
-> instance Eq (List Bool) where
->   (==) = listEq
-
 > main_tails_inits :: IO ()
-> main_tails_inits = _test_tails_inits (nil :: List Bool) 20 100
+> main_tails_inits = _test_tails_inits (nil :: ConsList Bool) (zero :: Unary) 20 100

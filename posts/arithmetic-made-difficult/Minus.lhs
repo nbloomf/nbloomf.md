@@ -9,10 +9,12 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( minus, _test_minus, main_minus
 >   ) where
 >
+> import Booleans
 > import NaturalNumbers
 > import Plus
 > import Times
 > 
+> import Prelude (Show(), Int, IO, sequence_, Maybe(..))
 > import Test.QuickCheck
 
 We'd eventually like to solve some equations; for instance, one of the simplest equations we can construct with the tools we have so far is $$\nplus(a,x) = b$$ where $a$ and $b$ are in $\nats$. Putting on our third-grader hat of course the solution to $b = a+x$ is $x = b-a$. So we'll call this solution "b minus a". Our goal in this post is to give a constructive characterization for subtraction.
@@ -30,6 +32,22 @@ The third option is a blend of the first two. We can attach an extra element to 
 Define maps $\varphi : \nats \rightarrow \ast + \nats$ by $$\varphi(x) = \left\{\begin{array}{ll} \zero & \mathrm{if}\ x == \zero \\ \ast & \mathrm{otherwise}; \end{array}\right.$$ $\beta : \nats \times \nats \rightarrow \bool$ by $$\beta(a,b) = \left\{\begin{array}{ll} \btrue & \mathrm{if}\ b = \zero \\ \bfalse & \mathrm{otherwise}; \end{array}\right.$$ $\psi : \nats \times \nats \rightarrow \ast + \nats$ by $$\psi(a,b) = \next(a);$$ and $\omega : \nats \times \nats \rightarrow \nats$ by $$\omega(a,b) = \prev(b).$$
 
 Now define $\nminus : \nats \times \nats \rightarrow \ast + \nats$ by $$\nminus = \bailrec{\varphi}{\beta}{\psi}{\omega}.$$
+
+In Haskell:
+
+> minus :: (Natural t) => t -> t -> Maybe t
+> minus = bailoutRec phi beta psi omega
+>   where
+>     phi x = if isZero x
+>       then Just zero
+>       else Nothing
+> 
+>     beta _ b = isZero b
+> 
+>     psi a _ = Just (next a)
+> 
+>     omega _ b = prev b
+
 </p></div>
 </div>
 
@@ -184,54 +202,45 @@ as needed.
 Implementation and Testing
 --------------------------
 
-Here's ``minus``:
-
-> minus :: (Natural t) => t -> t -> Maybe t
-> minus = bailoutRec phi beta psi omega
->   where
->     phi x = if x == zero
->       then Just zero
->       else Nothing
-> 
->     beta _ b = b == zero
-> 
->     psi a _ = Just (next a)
-> 
->     omega _ b = prev b
-
 And some properties. Some of these are less nice because ``minus`` returns a ``Maybe t``.
 
-> _test_minus_next :: (Natural t) => t -> t -> t -> Bool
+> _test_minus_next :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_minus_next _ a b =
->   (minus (next a) (next b)) == (minus a b)
+>   (minus (next a) (next b)) ==== (minus a b)
 > 
 > 
-> _test_minus_zero_left :: (Natural t) => t -> t -> Bool
+> _test_minus_zero_left :: (Natural n)
+>   => n -> Nat n -> Bool
 > _test_minus_zero_left _ a =
->   (minus zero (next a)) == Nothing
+>   (minus zero (next a)) ==== Nothing
 > 
 > 
-> _test_minus_zero_right :: (Natural t) => t -> t -> Bool
+> _test_minus_zero_right :: (Natural n)
+>   => n -> Nat n -> Bool
 > _test_minus_zero_right _ a =
->   (minus a zero) == Just a
+>   (minus a zero) ==== Just a
 > 
 > 
-> _test_minus_plus :: (Natural t) => t -> t -> t -> Bool
+> _test_minus_plus :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_minus_plus _ a b =
->   (minus (plus a b) b) == Just a
+>   (minus (plus a b) b) ==== Just a
 > 
 > 
-> _test_minus_next_left :: (Natural t) => t -> t -> t -> Bool
+> _test_minus_next_left :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_minus_next_left _ a b =
 >   case minus b a of
->     Just c  -> (minus (next b) a) == Just (next c)
+>     Just c  -> (minus (next b) a) ==== Just (next c)
 >     Nothing -> True
 > 
 > 
-> _test_minus_swap :: (Natural t) => t -> t -> t -> Bool
+> _test_minus_swap :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_minus_swap _ a b =
 >   case minus b a of
->     Just c  -> minus b c == Just a
+>     Just c  -> minus b c ==== Just a
 >     Nothing -> True
 
 And a suite:
@@ -252,5 +261,7 @@ And a suite:
 >      , maxSize    = maxSize
 >      }
 
+And the runner:
+
 > main_minus :: IO ()
-> main_minus = _test_minus (zero :: Nat) 100 100
+> main_minus = _test_minus (zero :: Unary) 100 100

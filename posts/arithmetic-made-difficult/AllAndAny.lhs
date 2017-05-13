@@ -9,8 +9,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( all, any, _test_all_any, main_all_any
 >   ) where
 > 
-> import Prelude hiding (foldr, foldl', foldl, map, zip, all, any)
-> 
+> import Booleans
 > import Lists
 > import Reverse
 > import Map
@@ -18,6 +17,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Zip
 > import Prefix
 > 
+> import Prelude (Show, Int, IO, sequence_, const, (.))
 > import Test.QuickCheck
 > import Text.Show.Functions
 
@@ -31,10 +31,10 @@ Define $\varphi : \bool^A \rightarrow A \times \bool \rightarrow \bool$ by $$\va
 
 We can translate $\all$ to Haskell directly as follows:
 
-> all' :: (ListOf t) => (a -> Bool) -> t a -> Bool
+> all' :: (List t) => (a -> Bool) -> t a -> Bool
 > all' p = foldr True (phi p)
 >   where
->     phi p a q = (p a) && q
+>     phi p a q = (p a) &&& q
 
 The next result suggests a more straightforward implementation.
 
@@ -68,10 +68,10 @@ as claimed.
 
 In Haskell:
 
-> all :: (ListOf t) => (a -> Bool) -> t a -> Bool
+> all :: (List t) => (a -> Bool) -> t a -> Bool
 > all p x = case listShape x of
 >   Nil      -> True
->   Cons a w -> (p a) && (all p w)
+>   Cons a w -> (p a) &&& (all p w)
 
 As a corollary:
 
@@ -179,10 +179,10 @@ Define $\varphi : \bool^A \rightarrow A \times \bool \rightarrow \bool$ by $$\va
 
 We can translate $\any$ to Haskell directly as follows:
 
-> any' :: (ListOf t) => (a -> Bool) -> t a -> Bool
+> any' :: (List t) => (a -> Bool) -> t a -> Bool
 > any' p = foldr False (phi p)
 >   where
->     phi p a q = (p a) || q
+>     phi p a q = (p a) ||| q
 
 The following result suggests a more straightforward implementation:
 
@@ -214,10 +214,10 @@ as claimed.
 </p></div>
 </div>
 
-> any :: (ListOf t) => (a -> Bool) -> t a -> Bool
+> any :: (List t) => (a -> Bool) -> t a -> Bool
 > any p x = case listShape x of
 >   Nil      -> False
->   Cons a w -> (p a) || (any p w)
+>   Cons a w -> (p a) ||| (any p w)
 
 And a corollary.
 
@@ -325,93 +325,93 @@ Testing
 Here are our property tests for $\all$:
 
 > -- all(p,x) == all'(p,x)
-> _test_all_alt :: (ListOf t, Eq a)
->   => t a -> (a -> Bool) -> t a -> Bool
+> _test_all_alt :: (List t, Equal a)
+>   => t a -> (a -> Bool) -> ListOf t a -> Bool
 > _test_all_alt _ p x =
->   (all p x) == (all' p x)
+>   (all p x) ==== (all' p x)
 > 
 > 
 > -- all(p,x) == foldr(true,and)(map(p)(x))
-> _test_all_mapfold :: (ListOf t, Eq a)
+> _test_all_mapfold :: (List t, Equal a)
 >   => t a -> (a -> Bool) -> t a -> Bool
 > _test_all_mapfold _ p x =
->   (all p x) == (foldr True (&&) (map p x))
+>   (all p x) ==== (foldr True (&&&) (map p x))
 > 
 > 
 > -- all(p,x) == not(any(not . p, x))
-> _test_all_not_any :: (ListOf t, Eq a)
->   => t a -> (a -> Bool) -> t a -> Bool
+> _test_all_not_any :: (List t, Equal a)
+>   => t a -> (a -> Bool) -> ListOf t a -> Bool
 > _test_all_not_any _ p x =
->   (all p x) == (not (any (not . p) x))
+>   (all p x) ==== (not (any (not . p) x))
 > 
 > 
 > -- all(const(true),x) == true
-> _test_all_const_true :: (ListOf t, Eq a)
->   => t a -> t a -> Bool
+> _test_all_const_true :: (List t, Equal a)
+>   => t a -> ListOf t a -> Bool
 > _test_all_const_true _ x =
->   (all (const True) x) == True
+>   (all (const True) x) ==== True
 > 
 > 
 > -- all(p,cat(x,y)) == all(p,x) && all(p,y)
-> _test_all_cat :: (ListOf t, Eq a)
->   => t a -> (a -> Bool) -> t a -> t a -> Bool
+> _test_all_cat :: (List t, Equal a)
+>   => t a -> (a -> Bool) -> ListOf t a -> ListOf t a -> Bool
 > _test_all_cat _ p x y =
->   (all p (cat x y)) == ((all p x) && (all p y))
+>   (all p (cat x y)) ==== ((all p x) &&& (all p y))
 > 
 > 
 > -- all(p,rev(x)) == all(p,x)
-> _test_all_rev :: (ListOf t, Eq a)
->   => t a -> (a -> Bool) -> t a -> t a -> Bool
+> _test_all_rev :: (List t, Equal a)
+>   => t a -> (a -> Bool) -> ListOf t a -> ListOf t a -> Bool
 > _test_all_rev _ p x y =
->   (all p (rev x)) == (all p x)
+>   (all p (rev x)) ==== (all p x)
 
 Tests for $\any$:
 
 > -- any(p,x) == any'(p,x)
-> _test_any_alt :: (ListOf t, Eq a)
->   => t a -> (a -> Bool) -> t a -> Bool
+> _test_any_alt :: (List t, Equal a)
+>   => t a -> (a -> Bool) -> ListOf t a -> Bool
 > _test_any_alt _ p x =
->   (any p x) == (any' p x)
+>   (any p x) ==== (any' p x)
 > 
 > 
 > -- any(p,x) == foldr(false,or)(map(p)(x))
-> _test_any_mapfold :: (ListOf t, Eq a)
->   => t a -> (a -> Bool) -> t a -> Bool
+> _test_any_mapfold :: (List t, Equal a)
+>   => t a -> (a -> Bool) -> ListOf t a -> Bool
 > _test_any_mapfold _ p x =
->   (any p x) == (foldr False (||) (map p x))
+>   (any p x) ==== (foldr False (|||) (map p x))
 > 
 > 
 > -- any(p,x) == not(all(not . p, x))
-> _test_any_not_all :: (ListOf t, Eq a)
->   => t a -> (a -> Bool) -> t a -> Bool
+> _test_any_not_all :: (List t, Equal a)
+>   => t a -> (a -> Bool) -> ListOf t a -> Bool
 > _test_any_not_all _ p x =
->   (any p x) == (not (all (not . p) x))
+>   (any p x) ==== (not (all (not . p) x))
 > 
 > 
 > -- any(const(false),x) == false
-> _test_any_const_false :: (ListOf t, Eq a)
->   => t a -> t a -> Bool
+> _test_any_const_false :: (List t, Equal a)
+>   => t a -> ListOf t a -> Bool
 > _test_any_const_false _ x =
->   (any (const False) x) == False
+>   (any (const False) x) ==== False
 > 
 > 
 > -- any(p,cat(x,y)) == any(p,x) || any(p,y)
-> _test_any_cat :: (ListOf t, Eq a)
->   => t a -> (a -> Bool) -> t a -> t a -> Bool
+> _test_any_cat :: (List t, Equal a)
+>   => t a -> (a -> Bool) -> ListOf t a -> ListOf t a -> Bool
 > _test_any_cat _ p x y =
->   (any p (cat x y)) == ((any p x) || (any p y))
+>   (any p (cat x y)) ==== ((any p x) ||| (any p y))
 > 
 > 
 > -- any(p,rev(x)) == any(p,x)
-> _test_any_rev :: (ListOf t, Eq a)
->   => t a -> (a -> Bool) -> t a -> t a -> Bool
+> _test_any_rev :: (List t, Equal a)
+>   => t a -> (a -> Bool) -> ListOf t a -> ListOf t a -> Bool
 > _test_any_rev _ p x y =
->   (any p (rev x)) == (any p x)
+>   (any p (rev x)) ==== (any p x)
 
 And the suite:
 
 > -- run all tests for all and any
-> _test_all_any :: (ListOf t, Arbitrary a, CoArbitrary a, Show a, Eq a, Arbitrary (t a), Show (t a))
+> _test_all_any :: (List t, Arbitrary a, CoArbitrary a, Show a, Equal a, Arbitrary (t a), Show (t a))
 >   => t a -> Int -> Int -> IO ()
 > _test_all_any t maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_all_alt t)
@@ -437,4 +437,4 @@ And the suite:
 And ``main``:
 
 > main_all_any :: IO ()
-> main_all_any = _test_all_any (nil :: List Bool) 20 100
+> main_all_any = _test_all_any (nil :: ConsList Bool) 20 100

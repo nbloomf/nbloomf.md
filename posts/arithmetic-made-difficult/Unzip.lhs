@@ -9,8 +9,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( unzip, _test_unzip, main_unzip
 >   ) where
 > 
-> import Prelude hiding (foldr, foldl', foldl, length, head, tail, map, zip, unzip)
-> 
+> import Booleans
 > import NaturalNumbers
 > import Plus
 > import MaxAndMin
@@ -25,6 +24,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Range
 > import Zip
 > 
+> import Prelude (Show, Int, IO, sequence_, uncurry)
 > import Test.QuickCheck
 
 Today we will define a kind of one-sided inverse of $\zip$, called $\unzip$. Recall that $\zip$ has signature $$\lists{A} \times \lists{B} \rightarrow \lists{A \times B}.$$ An inverse will then have signature $$\lists{A \times B} \rightarrow \lists{A} \times \lists{B},$$ and should "undo" the zipping. As usual we'd like to define this as a fold if possible; to that end we need $\varepsilon : \lists{A} \times \lists{B}$ and $$\varphi : (A \times B) \times (\lists{A} \times \lists{B}) \rightarrow \lists{A} \times \lists{B}$$ such that
@@ -51,7 +51,7 @@ Let $A$ and $B$ be sets. Define $\varphi : (A \times B) \times (\lists{A} \times
 
 In Haskell:
 
-> unzip :: (ListOf t) => t (a,b) -> (t a, t b)
+> unzip :: (List t) => t (a,b) -> (t a, t b)
 > unzip = foldr (nil,nil) phi
 >   where
 >     phi (a,b) (u,v) = (cons a u, cons b v)
@@ -193,26 +193,24 @@ Testing
 Here are our property tests for $\unzip$.
 
 > -- zip(unzip(x)) == x
-> _test_unzip_zip :: (ListOf t, Eq a)
->   => t a -> t (a,a) -> Bool
+> _test_unzip_zip :: (List t, Equal a)
+>   => t a -> ListOf t (a,a) -> Bool
 > _test_unzip_zip _ x =
->   ((uncurry zip) (unzip x)) `listEq` x
+>   ((uncurry zip) (unzip x)) ==== x
 > 
 > 
 > -- swap(unzip(x)) == unzip(map(swap)(x))
-> _test_unzip_swap :: (ListOf t, Eq a)
->   => t a -> t (a,a) -> Bool
+> _test_unzip_swap :: (List t, Equal a)
+>   => t a -> ListOf t (a,a) -> Bool
 > _test_unzip_swap _ x =
->   (\(a,b) (c,d) -> (listEq a c) && (listEq b d))
->     (unzip (map swap x))
->     (swap (unzip x))
+>   (unzip (map swap x)) ==== (swap (unzip x))
 
 And the suite:
 
 > -- run all tests for unzip
-> _test_unzip :: (ListOf t, Arbitrary (t n), Show (t n), Natural n, Arbitrary n, Show n, Arbitrary (t (n,n)), Show (t (n,n)))
->   => t n -> n -> Int -> Int -> IO ()
-> _test_unzip t n maxSize numCases = sequence_
+> _test_unzip :: (List t, Equal a, Arbitrary (t a), Show (t a), Arbitrary a, Show a, Arbitrary (t (a,a)), Show (t (a,a)))
+>   => t a -> Int -> Int -> IO ()
+> _test_unzip t maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_unzip_zip t)
 >   , quickCheckWith args (_test_unzip_swap t)
 >   ]
@@ -225,4 +223,4 @@ And the suite:
 And ``main``:
 
 > main_unzip :: IO ()
-> main_unzip = _test_unzip (nil :: List Nat) (zero :: Nat) 20 100
+> main_unzip = _test_unzip (nil :: ConsList Bool) 20 100

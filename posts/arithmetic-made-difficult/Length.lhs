@@ -9,8 +9,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( length, _test_length, main_length
 >   ) where
 > 
-> import Prelude hiding (foldr, foldl', foldl, length)
-> 
+> import Booleans
 > import NaturalNumbers
 > import Plus
 >
@@ -18,6 +17,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Reverse
 > import Cat
 > 
+> import Prelude (Show, Int, IO, sequence_)
 > import Test.QuickCheck
 
 Today we'll measure the sizes of lists with $\length$. Intuitively this function should "count" the "number" of "items" in a list. Thinking recuresively, it is reasonable to want the length of $\nil$ to be zero, and the length of $\cons(a,x)$ to be one more than the length of $x$. $\foldr{\ast}{\ast}$ was made for situations like this. But wait! Remember that $\foldr{\ast}{\ast}$ is not tail recursive, so on large lists it may have problems. But $\foldl{\ast}{\ast}$ is tail recursive, and is interchangeable with $\foldr{\ast}{\ast}$ *as long as* whatever we're doing to the list doesn't care what *order* the items come in. And it seems reasonable to say that the length of a list is not dependent on the order of its items. With this in mind we define $\length$ as follows.
@@ -28,7 +28,7 @@ Let $A$ be a set. Define $\varphi : A \times \nats \rightarrow \nats$ by $\varph
 
 In Haskell:
 
-> length :: (ListOf t) => t a -> Nat
+> length :: (List t, Natural n) => t a -> n
 > length = foldl zero phi
 >   where
 >     phi _ k = next k
@@ -240,68 +240,100 @@ Testing
 Here are our property tests for $\length$.
 
 > -- length(cons(a,x)) == length(cons(b,x))
-> _test_length_cons :: (ListOf t, Eq a) => t a -> a -> a -> t a -> Bool
-> _test_length_cons _ a b x =
->   (length (cons a x)) == (length (cons b x))
+> _test_length_cons :: (List t, Equal a, Natural n)
+>   => t a -> Nat n -> a -> a -> ListOf t a -> Bool
+> _test_length_cons _ n a b x =
+>   let
+>     lcx = (length (cons a x)) `withTypeOf` n
+>   in
+>     lcx ==== (length (cons b x))
 > 
 > 
 > -- length(cons(a,x)) == length(snoc(a,x))
-> _test_length_cons_snoc :: (ListOf t, Eq a) => t a -> a -> t a -> Bool
-> _test_length_cons_snoc _ a x =
->   (length (cons a x)) == (length (snoc a x))
+> _test_length_cons_snoc :: (List t, Equal a, Natural n)
+>   => t a -> Nat n -> a -> ListOf t a -> Bool
+> _test_length_cons_snoc _ n a x =
+>   let
+>     lcx = (length (cons a x)) `withTypeOf` n
+>   in
+>     lcx ==== (length (snoc a x))
 > 
 > 
 > -- length(cons(a,x)) == next(length(x))
-> _test_length_cons_next :: (ListOf t, Eq a) => t a -> a -> t a -> Bool
-> _test_length_cons_next _ a x =
->   (length (cons a x)) == next (length x)
+> _test_length_cons_next :: (List t, Equal a, Natural n)
+>   => t a -> Nat n -> a -> ListOf t a -> Bool
+> _test_length_cons_next _ n a x =
+>   let
+>     lx = (length x) `withTypeOf` n
+>   in
+>     (length (cons a x)) ==== next lx
 > 
 > 
 > -- length(cons(a,nil)) == next(zero)
-> _test_length_single :: (ListOf t, Eq a) => t a -> a -> Bool
-> _test_length_single z a =
->   let nil' = nil `withTypeOf` z in
->   (length (cons a nil')) == next zero
+> _test_length_single :: (List t, Equal a, Natural n)
+>   => t a -> Nat n -> a -> Bool
+> _test_length_single z n a =
+>   let
+>     nil' = nil `withTypeOf` z
+>     one  = (next zero) `withTypeOf` n
+>   in
+>     one ==== (length (cons a nil'))
 > 
 > 
 > -- length(cons(a,cons(b,nil))) == next(next(zero))
-> _test_length_double :: (ListOf t, Eq a) => t a -> a -> a -> Bool
-> _test_length_double z a b =
->   let nil' = nil `withTypeOf` z in
->   (length (cons a (cons b nil'))) == next (next zero)
+> _test_length_double :: (List t, Equal a, Natural n)
+>   => t a -> Nat n -> a -> a -> Bool
+> _test_length_double z n a b =
+>   let
+>     nil' = nil `withTypeOf` (ListOf z)
+>     two  = (next (next zero)) `withTypeOf` n
+>   in
+>     two ==== (length (cons a (cons b nil')))
 > 
 > 
 > -- length(snoc(a,x)) == next(length(x))
-> _test_length_snoc_next :: (ListOf t, Eq a) => t a -> a -> t a -> Bool
-> _test_length_snoc_next _ a x =
->   (length (snoc a x)) == next (length x)
+> _test_length_snoc_next :: (List t, Equal a, Natural n)
+>   => t a -> Nat n -> a -> ListOf t a -> Bool
+> _test_length_snoc_next _ n a x =
+>   let
+>     nlx = (next (length x)) `withTypeOf` n
+>   in
+>     nlx ==== (length (snoc a x))
 > 
 > 
 > -- length(rev(x)) == length(x)
-> _test_length_rev :: (ListOf t, Eq a) => t a -> t a -> Bool
-> _test_length_rev _ x =
->   (length (rev x)) == (length x)
+> _test_length_rev :: (List t, Equal a, Natural n)
+>   => t a -> Nat n -> ListOf t a -> Bool
+> _test_length_rev _ n x =
+>   let
+>     lx = length x `withTypeOf` n
+>   in
+>     lx ==== (length (rev x))
 > 
 > 
 > -- length(cat(x,y)) == plus(length(x),length(y))
-> _test_length_cat :: (ListOf t, Eq a) => t a -> t a -> t a -> Bool
-> _test_length_cat _ x y =
->   (length (cat x y)) == (plus (length x) (length y))
+> _test_length_cat :: (List t, Equal a, Natural n)
+>   => t a -> Nat n -> ListOf t a -> ListOf t a -> Bool
+> _test_length_cat _ n x y =
+>   let
+>     lxy = (length (cat x y)) `withTypeOf` n
+>   in
+>     lxy ==== (plus (length x) (length y))
 
 And the suite:
 
 > -- run all tests for length
-> _test_length :: (ListOf t, Arbitrary a, Show a, Eq a, Arbitrary (t a), Show (t a))
->   => t a -> Int -> Int -> IO ()
-> _test_length t maxSize numCases = sequence_
->   [ quickCheckWith args (_test_length_cons t)
->   , quickCheckWith args (_test_length_cons_snoc t)
->   , quickCheckWith args (_test_length_cons_next t)
->   , quickCheckWith args (_test_length_single t)
->   , quickCheckWith args (_test_length_double t)
->   , quickCheckWith args (_test_length_snoc_next t)
->   , quickCheckWith args (_test_length_rev t)
->   , quickCheckWith args (_test_length_cat t)
+> _test_length :: (List t, Show a, Equal a, Arbitrary a, Arbitrary (t a), Natural n)
+>   => t a -> n -> Int -> Int -> IO ()
+> _test_length t n maxSize numCases = sequence_
+>   [ quickCheckWith args (_test_length_cons t (Nat n))
+>   , quickCheckWith args (_test_length_cons_snoc t (Nat n))
+>   , quickCheckWith args (_test_length_cons_next t (Nat n))
+>   , quickCheckWith args (_test_length_single t (Nat n))
+>   , quickCheckWith args (_test_length_double t (Nat n))
+>   , quickCheckWith args (_test_length_snoc_next t (Nat n))
+>   , quickCheckWith args (_test_length_rev t (Nat n))
+>   , quickCheckWith args (_test_length_cat t (Nat n))
 >   ]
 >   where
 >     args = stdArgs
@@ -312,4 +344,4 @@ And the suite:
 And ``main``:
 
 > main_length :: IO ()
-> main_length = _test_length (nil :: List Bool) 20 100
+> main_length = _test_length (nil :: ConsList Bool) (zero :: Unary) 20 100

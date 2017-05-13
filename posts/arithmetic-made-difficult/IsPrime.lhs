@@ -9,8 +9,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( mindiv, prime, _test_prime, main_prime
 >   ) where
 >
-> import Prelude hiding (div, rem, gcd, lcm)
->
+> import Booleans
 > import NaturalNumbers
 > import Plus
 > import Times
@@ -22,6 +21,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import CoprimeTo
 > import LeastCommonMultiple
 > 
+> import Prelude (Show, Int, IO, sequence_)
 > import Test.QuickCheck
 
 Today we'll nail down what it means for a natural number to be *prime*. Typically this is done by saying something like "a natural number other than 0 or 1 is prime if it is not divisible by any natural number besides itself and 1" and from there, arguing that this property can be checked using trial division. As is typical in this series, we will turn this around -- *defining* primes to be those numbers which are detected by trial division (i.e. an algorithm) and then proving that such numbers have the divisibility properties we expect.
@@ -173,25 +173,27 @@ Here's ``mindiv`` and ``prime``:
 >     omega a _ b = next b
 > 
 > 
-> prime :: (Natural t) => t -> Bool
-> prime a
->   | leq a (next zero) = False
->   | otherwise         = a == mindiv a
+> prime :: (Natural n, Equal n) => n -> Bool
+> prime a = if leq a (next zero)
+>   then False
+>   else a ==== mindiv a
 
 Property tests:
 
 > -- div(mindiv(a),a) == true
-> _test_mindiv_div :: (Natural t) => t -> t -> Bool
+> _test_mindiv_div :: (Natural n)
+>   => n -> Nat n -> Bool
 > _test_mindiv_div _ a =
->   (div (mindiv a) a) == True
+>   (div (mindiv a) a) ==== True
 > 
 > 
 > -- prime(mindiv(a)) == true
-> _test_prime_mindiv :: (Natural t) => t -> t -> Bool
+> _test_prime_mindiv :: (Natural n)
+>   => n -> Nat n -> Bool
 > _test_prime_mindiv _ a =
->   if a /= zero && a /= next zero
->     then (prime (mindiv a)) == True
->     else True
+>   if (a ==== zero) ||| (a ==== next zero)
+>     then True
+>     else (prime (mindiv a)) ==== True
 
 And the suite:
 
@@ -209,4 +211,4 @@ And the suite:
 >       }
 
 > main_prime :: IO ()
-> main_prime = _test_prime (zero :: Nat) 20 100
+> main_prime = _test_prime (zero :: Unary) 20 100

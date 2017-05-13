@@ -9,8 +9,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( power, _test_power, main_power
 >   ) where
 >
-> import Prelude hiding (div, rem, gcd, lcm)
->
+> import Booleans
 > import NaturalNumbers
 > import Plus
 > import Times
@@ -22,6 +21,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import CoprimeTo
 > import LeastCommonMultiple
 > 
+> import Prelude (Show, Int, IO, sequence_)
 > import Test.QuickCheck
 
 We defined $\ntimes$ as iterated addition; similarly, exponentiation is iterated multiplication. We'll call this function $\npower$.
@@ -174,39 +174,45 @@ Here's ``power``:
 Property tests:
 
 > -- power(a,0) == 1
-> _test_power_zero_right :: (Natural t) => t -> t -> Bool
+> _test_power_zero_right :: (Natural n)
+>   => n -> Nat n -> Bool
 > _test_power_zero_right _ a =
->   (power a zero) == (next zero)
+>   (power a zero) ==== (next zero)
 > 
 > 
 > -- power(a,1) == a
-> _test_power_one_right :: (Natural t) => t -> t -> Bool
+> _test_power_one_right :: (Natural n)
+>   => n -> Nat n -> Bool
 > _test_power_one_right _ a =
->   (power a (next zero)) == a
+>   (power a (next zero)) ==== a
 > 
 > 
 > -- power(a,0) == 1
-> _test_power_zero_left :: (Natural t) => t -> t -> Bool
+> _test_power_zero_left :: (Natural n)
+>   => n -> Nat n -> Bool
 > _test_power_zero_left _ a =
->   (power zero (next a)) == zero
+>   (power zero (next a)) ==== zero
 > 
 > 
 > -- power(a,plus(b,c)) == times(power(a,b),power(a,c))
-> _test_power_plus_right :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_power_plus_right :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_power_plus_right _ a b c =
->   (power a (plus b c)) == times (power a b) (power a c)
+>   (power a (plus b c)) ==== times (power a b) (power a c)
 > 
 > 
 > -- power(a,times(b,c)) == power(power(a,b),c)
-> _test_power_times_right :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_power_times_right :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_power_times_right _ a b c =
->   (power a (times b c)) == power (power a b) c
+>   (power a (times b c)) ==== power (power a b) c
 > 
 > 
 > -- power(times(a,b),c) == times(power(a,c),power(b,c))
-> _test_power_times_left :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_power_times_left :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_power_times_left _ a b c =
->   (power (times a b) c) == times (power a c) (power b c)
+>   (power (times a b) c) ==== times (power a c) (power b c)
 
 And the suite:
 
@@ -228,4 +234,4 @@ And the suite:
 >       }
 
 > main_power :: IO ()
-> main_power = _test_power (zero :: Nat) 4 30
+> main_power = _test_power (zero :: Unary) 4 30

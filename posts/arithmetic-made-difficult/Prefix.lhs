@@ -9,13 +9,13 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( prefix, suffix, _test_prefix, main_prefix
 >   ) where
 > 
-> import Prelude hiding (foldr, foldl', foldl, map, zip)
-> 
+> import Booleans
 > import Lists
 > import Reverse
 > import Cat
 > import Zip
 > 
+> import Prelude (Show, Int, IO, sequence_)
 > import Test.QuickCheck
 
 The $\cat$ function on $\lists{A}$ is analogous to $\nplus$ on $\nats$. Carrying this analogy further, $\zip$ and $\zipPad$ are analogous to $\nmin$ and $\nmax$, respectively. When analogies like this occur in mathematics it can be fruitful to see how far they go. With that in mind, today we will explore the list-analogue of $\nleq$. This role is played by two functions which we call $\prefix$ and $\suffix$.
@@ -59,14 +59,14 @@ Let $A$ be a set. Define $\varepsilon : \lists{A} \rightarrow \bool$ by $$\varep
 
 We can translate this definition directly to Haskell:
 
-> prefix' :: (ListOf t, Eq a) => t a -> t a -> Bool
+> prefix' :: (List t, Equal a) => t a -> t a -> Bool
 > prefix' = foldr epsilon phi
 >   where
 >     epsilon _ = True
 > 
 >     phi a f w = case listShape w of
 >       Nil      -> False
->       Cons b u -> if a == b
+>       Cons b u -> if a ==== b
 >         then f u
 >         else False
 
@@ -119,14 +119,14 @@ as claimed.
 
 In Haskell:
 
-> prefix :: (ListOf t, Eq a) => t a -> t a -> Bool
+> prefix :: (List t, Equal a) => t a -> t a -> Bool
 > prefix u v = case listShape u of
 >   Nil      -> True
 >   Cons a x -> case listShape v of
 >     Nil      -> False
->     Cons b y -> if a /= b
->       then False
->       else prefix x y
+>     Cons b y -> if a ==== b
+>       then prefix x y
+>       else False
 
 Now $\prefix$ is analogous to $\nleq$ in that it detects the existence of solutions $z$ to the equation $y = \cat(x,z)$.
 
@@ -279,7 +279,7 @@ Let $A$ be a set. Define $\suffix : \lists{A} \times \lists{A} \rightarrow \bool
 
 In Haskell:
 
-> suffix :: (ListOf t, Eq a) => t a -> t a -> Bool
+> suffix :: (List t, Equal a) => t a -> t a -> Bool
 > suffix x y = prefix (rev x) (rev y)
 
 </p></div>
@@ -439,73 +439,64 @@ Testing
 Here are our property tests for $\prefix$ and $\suffix$.
 
 > -- prefix(x,cat(x,y))
-> _test_prefix_cat :: (ListOf t, Eq a)
->   => t a -> t a -> t a -> Bool
+> _test_prefix_cat :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> Bool
 > _test_prefix_cat _ x y =
 >   prefix x (cat x y)
 > 
 > 
 > -- prefix(x,x)
-> _test_prefix_reflexive :: (ListOf t, Eq a)
->   => t a -> t a -> Bool
+> _test_prefix_reflexive :: (List t, Equal a)
+>   => t a -> ListOf t a -> Bool
 > _test_prefix_reflexive _ x =
 >   prefix x x
 > 
 > 
 > -- prefix(x,y) & prefix(y,z) ==> prefix(x,z)
-> _test_prefix_transitive :: (ListOf t, Eq a)
->   => t a -> t a -> t a -> t a -> Bool
+> _test_prefix_transitive :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
 > _test_prefix_transitive _ x y z =
->   if (prefix x y) && (prefix y z)
+>   if (prefix x y) &&& (prefix y z)
 >     then prefix x z
 >     else True
 > 
 > 
 > -- prefix(x,y) & prefix(u,v) ==> prefix(zip(x,u),zip(y,v))
-> _test_prefix_zip :: (ListOf t, Eq a)
->   => t a -> t a -> t a -> t a -> t a -> Bool
+> _test_prefix_zip :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
 > _test_prefix_zip _ x y u v =
->   if (prefix x y) && (prefix u v)
+>   if (prefix x y) &&& (prefix u v)
 >     then prefix (zip x u) (zip y v)
 >     else True
 
 Tests for $\suffix$:
 
 > -- suffix(y,cat(x,y))
-> _test_suffix_cat :: (ListOf t, Eq a)
->   => t a -> t a -> t a -> Bool
+> _test_suffix_cat :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> Bool
 > _test_suffix_cat _ x y =
 >   suffix y (cat x y)
 > 
 > 
 > -- suffix(x,x)
-> _test_suffix_reflexive :: (ListOf t, Eq a)
->   => t a -> t a -> Bool
+> _test_suffix_reflexive :: (List t, Equal a)
+>   => t a -> ListOf t a -> Bool
 > _test_suffix_reflexive _ x =
 >   suffix x x
 > 
 > 
 > -- suffix(x,y) & suffix(y,z) ==> suffix(x,z)
-> _test_suffix_transitive :: (ListOf t, Eq a)
->   => t a -> t a -> t a -> t a -> Bool
+> _test_suffix_transitive :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
 > _test_suffix_transitive _ x y z =
->   if (suffix x y) && (suffix y z)
+>   if (suffix x y) &&& (suffix y z)
 >     then suffix x z
->     else True
-> 
-> 
-> -- suffix(x,y) & suffix(u,v) ==> suffix(zip(x,u),zip(y,v))
-> _test_suffix_zip :: (ListOf t, Eq a)
->   => t a -> t a -> t a -> t a -> t a -> Bool
-> _test_suffix_zip _ x y u v =
->   if (suffix x y) && (suffix u v)
->     then suffix (zip x u) (zip y v)
 >     else True
 
 And the suite:
 
 > -- run all tests for prefix
-> _test_prefix :: (ListOf t, Arbitrary a, Show a, Eq a, Arbitrary (t a), Show (t a))
+> _test_prefix :: (List t, Arbitrary a, Show a, Equal a, Arbitrary (t a), Show (t a))
 >   => t a -> Int -> Int -> IO ()
 > _test_prefix t maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_prefix_cat t)
@@ -516,7 +507,6 @@ And the suite:
 >   , quickCheckWith args (_test_suffix_cat t)
 >   , quickCheckWith args (_test_suffix_reflexive t)
 >   , quickCheckWith args (_test_suffix_transitive t)
->   , quickCheckWith args (_test_suffix_zip t)
 >   ]
 >   where
 >     args = stdArgs
@@ -527,4 +517,4 @@ And the suite:
 And ``main``:
 
 > main_prefix :: IO ()
-> main_prefix = _test_prefix (nil :: List Bool) 20 100
+> main_prefix = _test_prefix (nil :: ConsList Bool) 20 100

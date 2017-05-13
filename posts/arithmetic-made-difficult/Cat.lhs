@@ -9,11 +9,11 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( cat, _test_cat, main_cat
 >   ) where
 > 
-> import Prelude hiding (foldr, foldl', foldl)
-> 
+> import Booleans
 > import Lists
 > import Reverse
 > 
+> import Prelude (Show, Int, IO, sequence_)
 > import Test.QuickCheck
 
 In this post we'll consider the function that takes two lists and appends one to the "end" of the other. This function is known as $\cat$, which is short for *catenate* -- a jargony word that means *to connect in a series*.
@@ -24,7 +24,7 @@ We define a map $\cat : \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\
 
 In Haskell:
 
-> cat :: (ListOf t) => t a -> t a -> t a
+> cat :: (List t) => t a -> t a -> t a
 > cat x y = foldr y cons x
 
 </p></div>
@@ -214,46 +214,50 @@ Testing
 Here are our property tests for $\cat$.
 
 > -- cat(nil,x) == x and cat(x,nil) == x
-> _test_cat_nil :: (ListOf t, Eq a) => t a -> t a -> Bool
-> _test_cat_nil _ a = and
->   [ a `listEq` cat nil a
->   , a `listEq` cat a nil
->   ]
+> _test_cat_nil :: (List t, Equal a)
+>   => t a -> ListOf t a -> Bool
+> _test_cat_nil _ a =
+>   (a ==== cat nil a) &&& (a ==== cat a nil)
 > 
 > 
 > -- cat(x,cons(a,y)) == cat(snoc(a,x),y)
-> _test_cat_cons_snoc :: (ListOf t, Eq a) => t a -> a -> t a -> t a -> Bool
+> _test_cat_cons_snoc :: (List t, Equal a)
+>   => t a -> a -> ListOf t a -> ListOf t a -> Bool
 > _test_cat_cons_snoc _ a x y =
->   (cat x (cons a y)) `listEq` (cat (snoc a x) y)
+>   (cat x (cons a y)) ==== (cat (snoc a x) y)
 > 
 > 
 > -- cons(a,cat(x,y)) == cat(cons(a,x),y)
-> _test_cat_cons :: (ListOf t, Eq a) => t a -> a -> t a -> t a -> Bool
+> _test_cat_cons :: (List t, Equal a)
+>   => t a -> a -> ListOf t a -> ListOf t a -> Bool
 > _test_cat_cons _ a x y =
->   (cons a (cat x y)) `listEq` (cat (cons a x) y)
+>   (cons a (cat x y)) ==== (cat (cons a x) y)
 > 
 > 
 > -- snoc(a,cat(x,y)) == cat(x,snoc(a,y))
-> _test_cat_snoc :: (ListOf t, Eq a) => t a -> a -> t a -> t a -> Bool
+> _test_cat_snoc :: (List t, Equal a)
+>   => t a -> a -> ListOf t a -> ListOf t a -> Bool
 > _test_cat_snoc _ a x y =
->   (snoc a (cat x y)) `listEq` (cat x (snoc a y))
+>   (snoc a (cat x y)) ==== (cat x (snoc a y))
 > 
 > 
 > -- cat(cat(x,y),z) == cat(x,cat(y,z))
-> _test_cat_associative :: (ListOf t, Eq a) => t a -> t a -> t a -> t a -> Bool
+> _test_cat_associative :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
 > _test_cat_associative _ x y z =
->   (cat (cat x y) z) `listEq` (cat x (cat y z))
+>   (cat (cat x y) z) ==== (cat x (cat y z))
 > 
 > 
 > -- rev(cat(x,y)) == cat(rev(y),rev(x))
-> _test_cat_rev :: (ListOf t, Eq a) => t a -> t a -> t a -> Bool
+> _test_cat_rev :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> Bool
 > _test_cat_rev _ x y =
->   (rev (cat x y)) `listEq` (cat (rev x) (rev y))
+>   (rev (cat x y)) ==== (cat (rev y) (rev x))
 
 And the suite:
 
 > -- run all tests for cat
-> _test_cat :: (ListOf t, Arbitrary a, Show a, Eq a, Arbitrary (t a), Show (t a))
+> _test_cat :: (List t, Show a, Equal a, Arbitrary a, Arbitrary (t a))
 >   => t a -> Int -> Int -> IO ()
 > _test_cat t maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_cat_nil t)
@@ -272,4 +276,4 @@ And the suite:
 And ``main``:
 
 > main_cat :: IO ()
-> main_cat = _test_cat (nil :: List Bool) 20 100
+> main_cat = _test_cat (nil :: ConsList Bool) 20 100

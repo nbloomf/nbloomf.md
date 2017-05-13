@@ -9,8 +9,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( lcm, _test_lcm, main_lcm
 >   ) where
 >
-> import Prelude hiding (div, rem, gcd, lcm)
->
+> import Booleans
 > import NaturalNumbers
 > import Plus
 > import Times
@@ -21,6 +20,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import GreatestCommonDivisor
 > import CoprimeTo
 > 
+> import Prelude (Show, Int, IO, sequence_)
 > import Test.QuickCheck
 
 Recall the following property of $\nmax$: if $\nleq(c,a)$ and $\nleq(c,b)$, then $\nleq(c,\nmax(a,b))$. This statement fell out of the definition of $\nmax$ without much fuss, and may seem anticlimactic. But compare it to this analogous statement about $\ngcd$: if $\ndiv(c,a)$ and $\ndiv(c,b)$, then $\ndiv(c,\ngcd(a,b))$. Now $\nmax$ and $\ngcd$ seem to play very similar roles. Where $\nleq$ is a kind of "additive order" on $\nats$ and $\nmax$ gives an additive ceiling to $a$ and $b$, $\ndiv$ is a kind of "multiplicative order" and $\ngcd$ gives a multiplicative ceiling to $a$ and $b$. When an analogy this strong holds between two concepts in mathematics, it is frequently useful to see how far the analogy goes. To that end, today we will define the multiplicative counterpart to $\nmin$.
@@ -364,63 +364,66 @@ Here's ``lcm``:
 Property tests for ``lcm``:
 
 > -- lcm(a,0) == 0 and lcm(0,a) == 0
-> _test_lcm_zero :: (Natural t) => t -> t -> Bool
-> _test_lcm_zero _ a = and
->   [ zero == lcm a zero
->   , zero == lcm zero a
->   ]
+> _test_lcm_zero :: (Natural n)
+>   => n -> Nat n -> Bool
+> _test_lcm_zero _ a =
+>   (zero ==== lcm a zero) &&& (zero ==== lcm zero a)
 > 
 > 
 > -- lcm(a,next(0)) == a and lcm(next(0),a) == a
-> _test_lcm_one :: (Natural t) => t -> t -> Bool
-> _test_lcm_one _ a = and
->   [ a == lcm a (next zero)
->   , a == lcm (next zero) a
->   ]
+> _test_lcm_one :: (Natural n)
+>   => n -> Nat n -> Bool
+> _test_lcm_one _ a =
+>   (a ==== lcm a (next zero)) &&& (a ==== lcm (next zero) a)
 > 
 > 
 > -- div(a,lcm(a,b)) and div(b,lcm(a,b))
-> _test_lcm_div_args :: (Natural t) => t -> t -> t -> Bool
-> _test_lcm_div_args _ a b = and
->   [ div a (lcm a b)
->   , div b (lcm a b)
->   ]
+> _test_lcm_div_args :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
+> _test_lcm_div_args _ a b =
+>   (div a (lcm a b)) &&& (div b (lcm a b))
 > 
 > 
 > -- lcm(a,a) = a
-> _test_lcm_idempotent :: (Natural t) => t -> t -> Bool
+> _test_lcm_idempotent :: (Natural n)
+>   => n -> Nat n -> Bool
 > _test_lcm_idempotent _ a =
->   (lcm a a) == a
+>   (lcm a a) ==== a
 > 
 > 
 > -- lcm(a,b) == lcm(b,a)
-> _test_lcm_commutative :: (Natural t) => t -> t -> t -> Bool
+> _test_lcm_commutative :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_lcm_commutative _ a b =
->   (lcm a b) == (lcm b a)
+>   (lcm a b) ==== (lcm b a)
 > 
 > 
 > -- lcm(lcm(a,b),c) == lcm(a,lcm(b,c))
-> _test_lcm_associative :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_lcm_associative :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_lcm_associative _ a b c =
->   (lcm (lcm a b) c) == (lcm a (lcm b c))
+>   (lcm (lcm a b) c) ==== (lcm a (lcm b c))
 > 
 > 
 > -- lcm(times(c,a),times(c,b)) == times(c,lcm(a,b))
-> _test_lcm_distributive_times :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_lcm_distributive_times :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_lcm_distributive_times _ a b c =
->   (lcm (times c a) (times c b)) == (times c (lcm a b))
+>   (lcm (times c a) (times c b)) ==== (times c (lcm a b))
 > 
 > 
 > -- lcm(gcd(c,a),gcd(c,b)) == gcd(c,lcm(a,b))
-> _test_lcm_distributive_gcd :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_lcm_distributive_gcd :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_lcm_distributive_gcd _ a b c =
->   (lcm (gcd c a) (gcd c b)) == (gcd c (lcm a b))
+>   (lcm (gcd c a) (gcd c b)) ==== (gcd c (lcm a b))
 > 
 > 
 > -- gcd(lcm(c,a),lcm(c,b)) == lcm(c,gcd(a,b))
-> _test_gcd_distributive_lcm :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_gcd_distributive_lcm :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_gcd_distributive_lcm _ a b c =
->   (gcd (lcm c a) (lcm c b)) == (lcm c (gcd a b))
+>   (gcd (lcm c a) (lcm c b)) ==== (lcm c (gcd a b))
 
 And the suite:
 
@@ -445,4 +448,4 @@ And the suite:
 >       }
 
 > main_lcm :: IO ()
-> main_lcm = _test_lcm (zero :: Nat) 20 100
+> main_lcm = _test_lcm (zero :: Unary) 20 100

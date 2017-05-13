@@ -9,8 +9,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( map, _test_map, main_map
 >   ) where
 > 
-> import Prelude hiding (foldr, foldl', foldl, length, head, tail, map)
-> 
+> import Booleans
 > import NaturalNumbers
 >
 > import Lists
@@ -19,6 +18,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Length
 > import At
 > 
+> import Prelude (Show, Int, IO, sequence_, id)
 > import Test.QuickCheck
 > import Text.Show.Functions
 
@@ -30,7 +30,7 @@ Let $A$ and $B$ be sets. Define $\varphi : B^A \rightarrow A \times \lists{B} \r
 
 In Haskell:
 
-> map :: (ListOf t) => (a -> b) -> t a -> t b
+> map :: (List t) => (a -> b) -> t a -> t b
 > map f = foldr nil (phi f)
 >   where
 >     phi g a x = cons (g a) x
@@ -258,31 +258,31 @@ Testing
 Here are our property tests for $\map$.
 
 > -- map(id)(x) == x
-> _test_map_id :: (ListOf t, Eq a)
->   => t a -> t a -> Bool
+> _test_map_id :: (List t, Equal a)
+>   => t a -> ListOf t a -> Bool
 > _test_map_id _ x =
->   (map id x) `listEq` x
+>   (map id x) ==== x
 >
 > 
 > -- map(f)(cat(x,y)) == cat(map(f)(x),map(f)(y))
-> _test_map_cat :: (ListOf t, Eq a)
->   => t a -> (a -> a) -> t a -> t a -> Bool
+> _test_map_cat :: (List t, Equal a)
+>   => t a -> (a -> a) -> ListOf t a -> ListOf t a -> Bool
 > _test_map_cat _ f x y =
->   (map f (cat x y)) `listEq` (cat (map f x) (map f y))
+>   (map f (cat x y)) ==== (cat (map f x) (map f y))
 >
 > 
 > -- map(f)(rev(x)) == rev(map(f)(x))
-> _test_map_rev :: (ListOf t, Eq a)
->   => t a -> (a -> a) -> t a -> Bool
+> _test_map_rev :: (List t, Equal a)
+>   => t a -> (a -> a) -> ListOf t a -> Bool
 > _test_map_rev _ f x =
->   (map f (rev x)) `listEq` (rev (map f x))
+>   (map f (rev x)) ==== (rev (map f x))
 
 And the suite:
 
 > -- run all tests for map
-> _test_map :: (ListOf t, Arbitrary a, CoArbitrary a, Show a, Eq a, Arbitrary (t a), Show (t a), Natural n, Arbitrary n, Show n)
->   => t a -> n -> Int -> Int -> IO ()
-> _test_map t n maxSize numCases = sequence_
+> _test_map :: (List t, Arbitrary a, CoArbitrary a, Show a, Equal a, Arbitrary (t a), Show (t a))
+>   => t a -> Int -> Int -> IO ()
+> _test_map t maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_map_id t)
 >   , quickCheckWith args (_test_map_cat t)
 >   , quickCheckWith args (_test_map_rev t)
@@ -296,4 +296,4 @@ And the suite:
 And ``main``:
 
 > main_map :: IO ()
-> main_map = _test_map (nil :: List Bool) (zero :: Nat) 20 100
+> main_map = _test_map (nil :: ConsList Bool) 20 100

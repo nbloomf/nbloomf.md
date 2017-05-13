@@ -9,13 +9,13 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( divalg, quo, rem, _test_divalg, main_divalg
 >   ) where
 >
-> import Prelude hiding (rem)
->
+> import Booleans
 > import NaturalNumbers
 > import Plus
 > import Times
 > import LessThanOrEqualTo
 > 
+> import Prelude (Show, Int, IO, sequence_)
 > import Test.QuickCheck
 
 Finally we come to the first power tool for natural numbers: the division algorithm. Remember this theorem states that given any two natural numbers $a$ and $b$, with $b \neq \zero$, there is a *unique* pair of natural numbers $(q,r)$ such that $a = qb+r$ and $r$ is not "too big", specifically, $r < b$; this $q$ is called the *quotient* of $a$ by $b$, and $r$ is the *remainder*.
@@ -148,7 +148,7 @@ Here's ``divalg``, ``quo``, and ``rem``:
 > divalg = simpleRec phi mu
 >   where
 >     phi _ = (zero, zero)
->     mu _ b (q,r) = if b == next r
+>     mu _ b (q,r) = if Nat b ==== Nat (next r)
 >       then (next q, zero)
 >       else (q, next r)
 > 
@@ -163,63 +163,72 @@ Here's ``divalg``, ``quo``, and ``rem``:
 Property tests:
 
 > -- a == plus(times(q,b),r) where (q,r) = divalg(a,b)
-> _test_divalg_equality :: (Natural t) => t -> t -> t -> Bool
+> _test_divalg_equality :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_divalg_equality _ a b =
 >   let (q,r) = divalg a b in
->   a == plus (times q b) r
+>   a ==== plus (times q b) r
 > 
 > 
 > -- leq(r,b) where (_,r) = divalg(a,next(b))
-> _test_divalg_inequality :: (Natural t) => t -> t -> t -> Bool
+> _test_divalg_inequality :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_divalg_inequality _ a b =
 >   let (_,r) = divalg a (next b) in
 >   leq r b
 > 
 > 
 > -- divalg(0,a) = (0,0)
-> _test_divalg_zero_left :: (Natural t) => t -> t -> Bool
+> _test_divalg_zero_left :: (Natural n)
+>   => n -> Nat n -> Bool
 > _test_divalg_zero_left _ a =
->   (divalg zero a) == (zero, zero)
+>   (divalg zero a) ==== (zero, zero)
 > 
 > 
 > -- divalg(a,0) = (0,a)
-> _test_divalg_zero_right :: (Natural t) => t -> t -> Bool
+> _test_divalg_zero_right :: (Natural n)
+>   => n -> Nat n -> Bool
 > _test_divalg_zero_right _ a =
->   (divalg a zero) == (zero, a)
+>   (divalg a zero) ==== (zero, a)
 > 
 > 
 > -- divalg(a,next(0)) = (a,0)
-> _test_divalg_one_right :: (Natural t) => t -> t -> Bool
+> _test_divalg_one_right :: (Natural n)
+>   => n -> Nat n -> Bool
 > _test_divalg_one_right _ a =
->   (divalg a (next zero)) == (a, zero)
+>   (divalg a (next zero)) ==== (a, zero)
 > 
 > 
 > -- if leq(a,b) then divalg(a,next(b)) = (0,a)
-> _test_divalg_leq :: (Natural t) => t -> t -> t -> Bool
+> _test_divalg_leq :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_divalg_leq _ a b =
 >   if leq a b
->     then (divalg a (next b)) == (zero, a)
+>     then (divalg a (next b)) ==== (zero, a)
 >     else True
 > 
 > 
 > -- quo(times(a,next(b)),next(b)) = a
-> _test_divalg_times_left :: (Natural t) => t -> t -> t -> Bool
+> _test_divalg_times_left :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_divalg_times_left _ a b =
->   (quo (times a (next b)) (next b)) == a
+>   (quo (times a (next b)) (next b)) ==== a
 > 
 > 
 > -- quo(a,b) = q where (q,_) = divalg(a,b)
-> _test_divalg_quo :: (Natural t) => t -> t -> t -> Bool
+> _test_divalg_quo :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_divalg_quo _ a b =
 >   let (q,_) = divalg a b in
->   q == quo a b
+>   q ==== quo a b
 > 
 > 
 > -- rem(a,b) = r where (_,r) = divalg(a,b)
-> _test_divalg_rem :: (Natural t) => t -> t -> t -> Bool
+> _test_divalg_rem :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_divalg_rem _ a b =
 >   let (_,r) = divalg a b in
->   r == rem a b
+>   r ==== rem a b
 
 And the suite:
 
@@ -244,4 +253,4 @@ And the suite:
 >       }
 
 > main_divalg :: IO ()
-> main_divalg = _test_divalg (zero :: Nat) 20 100
+> main_divalg = _test_divalg (zero :: Unary) 20 100

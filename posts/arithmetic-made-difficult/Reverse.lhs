@@ -11,10 +11,10 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( snoc, foldl, rev, _test_rev, main_rev
 >   ) where
 > 
-> import Prelude hiding (foldr, foldl', foldl)
-> 
+> import Booleans
 > import Lists
 > 
+> import Prelude (Show, Int, IO, sequence_, (.))
 > import Test.QuickCheck
 
 In the last post we defined a set $\lists{A}$ with a special element $\nil$, a map $\cons : A \times \lists{A} \rightarrow \lists{A}$, and a universal map $\foldr{\ast}{\ast}$. As you might guess we'll be thinking of the elements of $\lists{A}$ as finite lists, and they will form a simple kind of data structure.
@@ -33,7 +33,7 @@ Let $A$ be a set. We now define a map $\snoc : A \times \lists{A} \rightarrow \l
 
 In Haskell:
 
-> snoc :: (ListOf t) => a -> t a -> t a
+> snoc :: (List t) => a -> t a -> t a
 > snoc a = foldr (cons a nil) cons
 
 </p></div>
@@ -112,7 +112,7 @@ Let $A$ be a set. We now define a map $\rev : \lists{A} \rightarrow \lists{A}$ b
 
 In Haskell:
 
-> rev' :: (ListOf t) => t a -> t a
+> rev' :: (List t) => t a -> t a
 > rev' = foldr nil snoc
 
 </p></div>
@@ -240,7 +240,7 @@ Let $A$ and $B$ be sets, with $e \in B$ and $\varphi : A \times B \rightarrow B$
 
 In Haskell:
 
-> foldl' :: (ListOf t) => b -> (a -> b -> b) -> t a -> b
+> foldl' :: (List t) => b -> (a -> b -> b) -> t a -> b
 > foldl' e phi = (foldr e phi) . rev'
 
 </p></div>
@@ -279,7 +279,7 @@ as claimed.
 
 This theorem says that $\foldl{\ast}{\ast}$ is naturally tail recursive like so:
 
-> foldl :: (ListOf t) => b -> (a -> b -> b) -> t a -> b
+> foldl :: (List t) => b -> (a -> b -> b) -> t a -> b
 > foldl !e phi x = case listShape x of
 >   Nil       -> e
 >   Cons a as -> foldl (phi a e) phi as
@@ -292,7 +292,7 @@ We have $\rev = \foldl{\nil}{\cons}$.
 
 In Haskell:
 
-> rev :: (ListOf t) => t a -> t a
+> rev :: (List t) => t a -> t a
 > rev = foldl nil cons
 
 </p></div>
@@ -317,46 +317,56 @@ Testing
 > withTypeOf x _ = x
 
 > -- snoc(a,cons(b,x)) == cons(b,snoc(a,x))
-> _test_snoc_cons_commute :: (ListOf t, Eq a) => t a -> a -> a -> t a -> Bool
+> _test_snoc_cons_commute :: (List t, Equal a)
+>   => t a -> a -> a -> ListOf t a -> Bool
 > _test_snoc_cons_commute _ a b x =
->   (snoc a (cons b x)) `listEq` (cons b (snoc a x))
+>   (snoc a (cons b x)) ==== (cons b (snoc a x))
 > 
 > 
-> -- rev'(cons(a,nil)) == cons(a,nil)
-> _test_rev_single :: (ListOf t, Eq a) => t a -> a -> Bool
+> -- rev(cons(a,nil)) == cons(a,nil)
+> _test_rev_single :: (List t, Equal a)
+>   => t a -> a -> Bool
 > _test_rev_single z a =
->   let nil' = nil `withTypeOf` z in
->   (rev' (cons a nil')) `listEq` (cons a nil')
+>   let
+>     nil' = nil `withTypeOf` (ListOf z)
+>   in
+>     (rev (cons a nil')) ==== (cons a nil')
 > 
 > 
-> -- rev'(cons(a,cons(b,nil))) == cons(b,cons(a,nil))
-> _test_rev_double :: (ListOf t, Eq a) => t a -> a -> a -> Bool
+> -- rev(cons(a,cons(b,nil))) == cons(b,cons(a,nil))
+> _test_rev_double :: (List t, Equal a)
+>   => t a -> a -> a -> Bool
 > _test_rev_double z a b =
->   let nil' = nil `withTypeOf` z in
->   (rev' (cons a (cons b nil'))) `listEq` (cons b (cons a nil'))
+>   let
+>     nil' = nil `withTypeOf` (ListOf z)
+>   in
+>     (rev (cons a (cons b nil'))) ==== (cons b (cons a nil'))
 > 
 > 
-> -- rev'(snoc(a,x)) == cons(a,rev'(x))
-> _test_rev_snoc :: (ListOf t, Eq a) => t a -> a -> a -> t a -> Bool
+> -- rev(snoc(a,x)) == cons(a,rev(x))
+> _test_rev_snoc :: (List t, Equal a)
+>   => t a -> a -> a -> ListOf t a -> Bool
 > _test_rev_snoc _ a b x =
->   (rev' (snoc a x)) `listEq` (cons a (rev' x))
+>   (rev (snoc a x)) ==== (cons a (rev x))
 > 
 > 
-> -- rev'(rev'(x)) == x
-> _test_rev_involution :: (ListOf t, Eq a) => t a -> t a -> Bool
+> -- rev(rev(x)) == x
+> _test_rev_involution :: (List t, Equal a)
+>   => t a -> ListOf t a -> Bool
 > _test_rev_involution _ x =
->   (rev' (rev' x)) `listEq` x
+>   (rev (rev x)) ==== x
 > 
 > 
 > -- rev(x) == rev'(x)
-> _test_rev_alt :: (ListOf t, Eq a) => t a -> t a -> Bool
+> _test_rev_alt :: (List t, Equal a)
+>   => t a -> ListOf t a -> Bool
 > _test_rev_alt _ x =
->   (rev x) `listEq` (rev' x)
+>   (rev x) ==== (rev' x)
 
 And the suite:
 
 > -- run all tests for snoc and rev
-> _test_rev :: (ListOf t, Arbitrary a, Show a, Eq a, Arbitrary (t a), Show (t a))
+> _test_rev :: (List t, Show a, Equal a, Arbitrary a, Arbitrary (t a))
 >   => t a -> Int -> Int -> IO ()
 > _test_rev t maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_snoc_cons_commute t)
@@ -373,4 +383,4 @@ And the suite:
 >       }
 
 > main_rev :: IO ()
-> main_rev = _test_rev (nil :: List Bool) 20 100
+> main_rev = _test_rev (nil :: ConsList Bool) 20 100

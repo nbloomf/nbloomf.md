@@ -6,12 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > module Booleans
->   ( not, and, (&&&), or, (|||), ifThenElse
+>   ( Bool(True,False), not, and, (&&&), or, (|||), ifThenElse
 >   , Equal, eq, (====)
 >   , _test_boolean, main_boolean
 >   ) where
 > 
-> import Prelude(Show, IO, Bool(..), Int, sequence_)
+> import Prelude(Show, IO, Bool(..), Int, sequence_, Maybe(..))
 > import Test.QuickCheck
 > import Text.Show.Functions
 
@@ -286,6 +286,15 @@ Now that we've algebraified truth values, we will also algebraify equality. Typi
 >   eq True  False = False
 >   eq False True  = False
 >   eq False False = True
+> 
+> instance Equal a => Equal (Maybe a) where
+>   eq Nothing  Nothing  = True
+>   eq Nothing  (Just _) = False
+>   eq (Just _) Nothing  = False
+>   eq (Just x) (Just y) = eq x y
+> 
+> instance (Equal a, Equal b) => Equal (a,b) where
+>   eq (a1,b1) (a2,b2) = (a1 ==== a2) &&& (b1 ==== b2)
 
 
 Testing

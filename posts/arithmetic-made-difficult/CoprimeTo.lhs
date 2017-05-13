@@ -9,8 +9,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( coprime, _test_coprime, main_coprime
 >   ) where
 >
-> import Prelude hiding (div, rem, gcd, lcm)
->
+> import Booleans
 > import NaturalNumbers
 > import Plus
 > import Times
@@ -20,6 +19,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Divides
 > import GreatestCommonDivisor
 > 
+> import Prelude (Show, Int, IO, sequence_)
 > import Test.QuickCheck
 
 Today we'll take a break from reasoning about $\ngcd$ to name a special relationship among natural numbers: *coprimality*. Recall that two integers are called *coprime* if their greatest common divisor is 1. This definition does not require recursion.
@@ -79,12 +79,13 @@ Implementation and Testing
 
 Here's ``coprime``:
 
-> coprime :: (Natural t) => t -> t -> Bool
-> coprime a b = (next zero) == (gcd a b)
+> coprime :: (Natural n, Equal n) => n -> n -> Bool
+> coprime a b = (next zero) ==== (gcd a b)
 
 Property tests:
 
-> _test_coprime_gcd_quo :: (Natural t) => t -> t -> t -> Bool
+> _test_coprime_gcd_quo :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_coprime_gcd_quo _ x y =
 >   let
 >     a = next x
@@ -108,4 +109,4 @@ And the suite:
 >       }
 
 > main_coprime :: IO ()
-> main_coprime = _test_coprime (zero :: Nat) 20 100
+> main_coprime = _test_coprime (zero :: Unary) 20 100

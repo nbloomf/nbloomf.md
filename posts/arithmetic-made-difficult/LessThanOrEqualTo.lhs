@@ -9,11 +9,13 @@ tags: arithmetic-made-difficult, literate-haskell
 >  ( leq, _test_leq, main_leq
 >  ) where
 > 
+> import Booleans
 > import NaturalNumbers
 > import Plus
 > import Times
 > import Minus
 > 
+> import Prelude (Show, Int, IO, sequence_, Maybe(..))
 > import Test.QuickCheck
 
 Next we'd like to nail down what it means for one natural number to be less than or equal to another. Note that while $\nplus$ and $\ntimes$ have signatures $$\nats \times \nats \rightarrow \nats,$$ "less than or equal to" (which I will abbrebiate to *leq* from now on) does not. In fact $\leq$ is typically defined as a set of pairs. To make $\leq$ computable, we will instead (try to) define it as a function with signature $$\nats \times \nats \rightarrow \bool.$$ In fact, we can make a reasonable attempt on $\nleq$ without using recursion at all.
@@ -175,27 +177,31 @@ Here's ``leq``:
 And some property tests:
 
 > -- leq(a,plus(a,b)) == True
-> _test_leq_right_plus :: (Natural t) => t -> t -> t -> Bool
+> _test_leq_right_plus :: (Natural n)
+>   => n -> Nat n -> Nat n -> Bool
 > _test_leq_right_plus _ a b =
->   (leq a (plus a b)) == True
+>   (leq a (plus a b)) ==== True
 > 
 > 
 > -- leq(a,a) == True
-> _test_leq_reflexive :: (Natural t) => t -> t -> Bool
+> _test_leq_reflexive :: (Natural n)
+>   => n -> Nat n -> Bool
 > _test_leq_reflexive _ a =
->   (leq a a) == True
+>   (leq a a) ==== True
 > 
 > 
 > -- leq(a,b) == leq(plus(a,c),plus(b,c))
-> _test_leq_plus :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_leq_plus :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_leq_plus _ a b c =
->   (leq a b) == (leq (plus a c) (plus b c))
+>   (leq a b) ==== (leq (plus a c) (plus b c))
 > 
 > 
 > -- leq(a,b) == leq(times(a,next(c)),times(b,next(c)))
-> _test_leq_times :: (Natural t) => t -> t -> t -> t -> Bool
+> _test_leq_times :: (Natural n)
+>   => n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_leq_times _ a b c =
->   (leq a b) == (leq (times a (next c)) (times b (next c)))
+>   (leq a b) ==== (leq (times a (next c)) (times b (next c)))
 
 And a test wrapper:
 
@@ -215,4 +221,4 @@ And a test wrapper:
 >       }
 
 > main_leq :: IO ()
-> main_leq = _test_leq (zero :: Nat) 50 100
+> main_leq = _test_leq (zero :: Unary) 50 100
