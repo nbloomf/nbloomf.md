@@ -129,7 +129,7 @@ We'll wrap all these tests behind a single function, ``_test_plus``, which takes
 > -- run all tests for plus
 > _test_plus :: (Natural n, Arbitrary n, Show n)
 >   => n -> Int -> Int -> IO ()
-> _test_plus n maxSize numCases = sequence
+> _test_plus n maxSize numCases = sequence_
 >   [ quickCheckWith args (_test_plus_zero n)
 >   , quickCheckWith args (_test_plus_next_left n)
 >   , quickCheckWith args (_test_plus_next_right n)

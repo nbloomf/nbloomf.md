@@ -1,31 +1,36 @@
-SHELL    = /bin/bash
+SHELL = /bin/bash
 
 PATH := $(shell pwd)/_bin/sth:$(shell pwd)/_bin/amd:$(PATH)
 
 targets: FORCE
-	@echo 'watch'
-	@echo 'literate'
-	@echo 'favicons'
-	@echo 'winfiles'
+	@echo 'watch    : serve pages locally'           | doppler lightcyan
+	@echo 'build    : generate nbloomf.github.io'    | doppler lightcyan
+	@echo 'site     : compile site'                  | doppler lightcyan
+	@echo 'literate : compile literate posts'        | doppler lightcyan
+	@echo 'favicons : generate favicons'             | doppler lightcyan
+	@echo 'winfiles : convert raw file line endings' | doppler lightcyan
 
-all: move FORCE
+
+
+#=====================#
+# serve pages locally #
+#=====================#
+
+watch: site FORCE
+	@echo 'View at localhost:8000' | doppler lightcyan
+	./site watch
+
+
+build: site favicons winfiles FORCE
+	./site clean
+	./site build
+	@cp -r _site/. ../nbloomf.github.io/
 	@echo "built nbloomf.github.io" | doppler lightgreen
+
 
 site: site.lhs
 	@ghc --make -threaded site.lhs
 	@rm site.o site.hi
-
-build: site gather FORCE
-	./site clean
-	./site build
-
-watch: FORCE
-	@echo 'View at localhost:8000' | doppler lightcyan
-	./site watch
-
-move: build FORCE
-	@cp -r _site/. ../nbloomf.github.io/
-
 
 check: FORCE
 	@wget -r -nv --spider https://nbloomf.github.io
@@ -122,7 +127,6 @@ sth-exe: FORCE
 	$(call sth_move,archive)
 	$(call sth_move,linenumber)
 	$(call sth_move,bubble)
-	@rm -rf posts/software-tools-in-haskell/dist
 
 # move a software tools in haskell exe
 define sth_move
@@ -167,7 +171,6 @@ amd-exe: FORCE
 	$(call amd_move,all-any)
 	$(call amd_move,tails-inits)
 	$(call amd_move,filter)
-	@rm -rf posts/arithmetic-made-difficult/dist
 
 # move an arithmetic made difficult exe
 define amd_move

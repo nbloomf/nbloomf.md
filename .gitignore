@@ -5,3 +5,5 @@ _*
 site
 *.hi
 *.o
+posts/arithmetic-made-difficult/dist/*
+posts/software-tools-in-haskell/dist/*
