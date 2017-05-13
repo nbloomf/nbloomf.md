@@ -1,4 +1,7 @@
+*.draft
+
 _*
+
 site
 *.hi
 *.o
