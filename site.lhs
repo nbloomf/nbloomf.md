@@ -50,6 +50,7 @@ where ``Rules`` is a special monad for turning source files into web pages. Come
 >   matchRawFiles
 >   matchCssFiles
 >   matchLoneFiles
+>   matchPages
 >   matchClasses
 >   matchProjectPages
 >   matchTemplates
@@ -72,7 +73,6 @@ The ``matchRawFiles`` rule handles files that should be copied verbatim, with no
 >     raw = anyPattern
 >       [ "LICENSE"
 >       , "raw/**"
->       , "images/**"
 >       , "pdf/**"
 >       , "icon/*.png"
 >       ]
@@ -92,17 +92,7 @@ The ``matchLoneFiles`` rule handles standalone pages, like ``about`` and ``conta
 > matchLoneFiles =
 >   let
 >     names = fromList
->       [ "site.lhs"
->       , "index.md"
->       , "about.md"
->       , "contact.md"
->       , "projects.md"
->       , "pages/sth/index.md"
->       , "pages/sth/formats.md"
->       , "pages/amd.md"
->       , "pages/alg-notes.md"
->       , "pages/geo-notes.md"
->       ]
+>       [ "site.lhs", "index.md" ]
 >   in
 >     match names $ do
 >       route $ setExtension "html"
@@ -110,6 +100,15 @@ The ``matchLoneFiles`` rule handles standalone pages, like ``about`` and ``conta
 >         >>= loadAndApplyTemplate
 >               "templates/default.html" postCtx
 >         >>= relativizeUrls
+
+> matchPages :: Rules ()
+> matchPages = do
+>   match "pages/**" $ do
+>     route $ setExtension "html"
+>     compile $ pandocMathCompiler
+>       >>= loadAndApplyTemplate
+>             "templates/default.html" postCtx
+>       >>= relativizeUrls
 
 The ``matchPosts`` rule is a little different from the others we've seen so far. It handles blog posts. But instead of listing out the source files by name, we capture them in a glob: ``"posts/*"``. These work similarly to shell globs but (as usual) have their own quirks; see the [documentation](https://jaspervdj.be/hakyll/reference/Hakyll-Core-Identifier-Pattern.html) for details.
 
@@ -141,8 +140,7 @@ The ``matchPosts`` rule is a little different from the others we've seen so far.
 Here we also used a custom compiler, ``applyTagTemplate``, which loads a given template only if a post has a given tag. This is a cheap way to give some and only some posts a custom header or style.
 
 > applyTagTemplates ctx ts x =
->   let
->     foo z (tag,temp) = applyTagTemplate tag temp ctx z
+>   let foo z (tag,temp) = applyTagTemplate tag temp ctx z
 >   in foldM foo x ts
 > 
 > 
