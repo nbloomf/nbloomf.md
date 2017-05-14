@@ -74,7 +74,6 @@ The ``matchRawFiles`` rule handles files that should be copied verbatim, with no
 >       [ "LICENSE"
 >       , "raw/**"
 >       , "pdf/**"
->       , "icon/*.png"
 >       ]
 >   in
 >     match raw $
