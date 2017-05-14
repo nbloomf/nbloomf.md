@@ -23,7 +23,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import LongestCommonPrefix
 > import AllAndAny
 > 
-> import Prelude (Show, Int, IO, sequence_, (.))
+> import Prelude (Show, Int, IO, (.))
 > import Test.QuickCheck
 > import Text.Show.Functions
 
@@ -419,24 +419,26 @@ And the suite:
 > -- run all tests for tails and inits
 > _test_tails_inits :: (List t, Arbitrary a, CoArbitrary a, Show a, Equal a, Arbitrary (t a), Show (t a), Natural n)
 >   => t a -> n -> Int -> Int -> IO ()
-> _test_tails_inits t n maxSize numCases = sequence_
->   [ quickCheckWith args (_test_tails_alt t)
->   , quickCheckWith args (_test_tails_map t)
->   , quickCheckWith args (_test_tails_length t n)
->   , quickCheckWith args (_test_tails_snoc t)
->   , quickCheckWith args (_test_tails_lcs t)
-> 
->   , quickCheckWith args (_test_inits_map t)
->   , quickCheckWith args (_test_inits_length t n)
->   , quickCheckWith args (_test_inits_lcp t)
->   ]
->   where
+> _test_tails_inits t n maxSize numCases = do
+>   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+> 
+>   runTest args (_test_tails_alt t)
+>   runTest args (_test_tails_map t)
+>   runTest args (_test_tails_length t n)
+>   runTest args (_test_tails_snoc t)
+>   runTest args (_test_tails_lcs t)
+> 
+>   runTest args (_test_inits_map t)
+>   runTest args (_test_inits_length t n)
+>   runTest args (_test_inits_lcp t)
 
 And ``main``:
 
 > main_tails_inits :: IO ()
-> main_tails_inits = _test_tails_inits (nil :: ConsList Bool) (zero :: Unary) 20 100
+> main_tails_inits = do
+>   _test_tails_inits (nil :: ConsList Bool) (zero :: Unary) 20 100
+>   _test_tails_inits (nil :: ConsList Unary) (zero :: Unary) 20 100

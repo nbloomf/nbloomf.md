@@ -10,12 +10,13 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ) where
 > 
 > import Booleans
+> import NaturalNumbers
 > import Lists
 > import Reverse
 > import Cat
 > import Zip
 > 
-> import Prelude (Show, Int, IO, sequence_)
+> import Prelude (Show, Int, IO)
 > import Test.QuickCheck
 
 The $\cat$ function on $\lists{A}$ is analogous to $\nplus$ on $\nats$. Carrying this analogy further, $\zip$ and $\zipPad$ are analogous to $\nmin$ and $\nmax$, respectively. When analogies like this occur in mathematics it can be fruitful to see how far they go. With that in mind, today we will explore the list-analogue of $\nleq$. This role is played by two functions which we call $\prefix$ and $\suffix$.
@@ -498,23 +499,25 @@ And the suite:
 > -- run all tests for prefix
 > _test_prefix :: (List t, Arbitrary a, Show a, Equal a, Arbitrary (t a), Show (t a))
 >   => t a -> Int -> Int -> IO ()
-> _test_prefix t maxSize numCases = sequence_
->   [ quickCheckWith args (_test_prefix_cat t)
->   , quickCheckWith args (_test_prefix_reflexive t)
->   , quickCheckWith args (_test_prefix_transitive t)
->   , quickCheckWith args (_test_prefix_zip t)
-> 
->   , quickCheckWith args (_test_suffix_cat t)
->   , quickCheckWith args (_test_suffix_reflexive t)
->   , quickCheckWith args (_test_suffix_transitive t)
->   ]
->   where
+> _test_prefix t maxSize numCases = do
+>   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+> 
+>   runTest args (_test_prefix_cat t)
+>   runTest args (_test_prefix_reflexive t)
+>   runTest args (_test_prefix_transitive t)
+>   runTest args (_test_prefix_zip t)
+> 
+>   runTest args (_test_suffix_cat t)
+>   runTest args (_test_suffix_reflexive t)
+>   runTest args (_test_suffix_transitive t)
 
 And ``main``:
 
 > main_prefix :: IO ()
-> main_prefix = _test_prefix (nil :: ConsList Bool) 20 100
+> main_prefix = do
+>   _test_prefix (nil :: ConsList Bool) 20 100
+>   _test_prefix (nil :: ConsList Unary) 20 100

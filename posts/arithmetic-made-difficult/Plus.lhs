@@ -12,8 +12,9 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Booleans
 > import NaturalNumbers
 > 
-> import Prelude(Show, IO, Bool(..), Int, sequence_, id)
+> import Prelude(Show, IO, Bool(..), Int, id)
 > import Test.QuickCheck
+> import Test.QuickCheck.Test
 
 So far we've characterized the natural numbers via a unique mapping $$\natrec{\ast}{\ast} : \nats \rightarrow A,$$ and we defined another parameterized mapping $$\simprec{\ast}{\ast} : \nats \times A \rightarrow B.$$ From now on, when we want to define a mapping with one of these signatures, these prepackaged recursive maps may come in handy. What's more, we can use the universal properties of these maps to define them in terms of *desired behavior*.
 
@@ -129,18 +130,18 @@ We'll wrap all these tests behind a single function, ``_test_plus``, which takes
 > -- run all tests for plus
 > _test_plus :: (Natural n, Arbitrary n, Show n)
 >   => n -> Int -> Int -> IO ()
-> _test_plus n maxSize numCases = sequence_
->   [ quickCheckWith args (_test_plus_zero n)
->   , quickCheckWith args (_test_plus_next_left n)
->   , quickCheckWith args (_test_plus_next_right n)
->   , quickCheckWith args (_test_plus_associative n)
->   , quickCheckWith args (_test_plus_commutative n)
->   ]
->   where
+> _test_plus n maxSize numCases = do
+>   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+> 
+>   runTest args (_test_plus_zero n)
+>   runTest args (_test_plus_next_left n)
+>   runTest args (_test_plus_next_right n)
+>   runTest args (_test_plus_associative n)
+>   runTest args (_test_plus_commutative n)
 
 woo!
 

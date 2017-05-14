@@ -17,7 +17,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Reverse
 > import Cat
 > 
-> import Prelude (Show, Int, IO, sequence_)
+> import Prelude (Show, Int, IO)
 > import Test.QuickCheck
 
 Today we'll measure the sizes of lists with $\length$. Intuitively this function should "count" the "number" of "items" in a list. Thinking recuresively, it is reasonable to want the length of $\nil$ to be zero, and the length of $\cons(a,x)$ to be one more than the length of $x$. $\foldr{\ast}{\ast}$ was made for situations like this. But wait! Remember that $\foldr{\ast}{\ast}$ is not tail recursive, so on large lists it may have problems. But $\foldl{\ast}{\ast}$ is tail recursive, and is interchangeable with $\foldr{\ast}{\ast}$ *as long as* whatever we're doing to the list doesn't care what *order* the items come in. And it seems reasonable to say that the length of a list is not dependent on the order of its items. With this in mind we define $\length$ as follows.
@@ -325,23 +325,25 @@ And the suite:
 > -- run all tests for length
 > _test_length :: (List t, Show a, Equal a, Arbitrary a, Arbitrary (t a), Natural n)
 >   => t a -> n -> Int -> Int -> IO ()
-> _test_length t n maxSize numCases = sequence_
->   [ quickCheckWith args (_test_length_cons t (Nat n))
->   , quickCheckWith args (_test_length_cons_snoc t (Nat n))
->   , quickCheckWith args (_test_length_cons_next t (Nat n))
->   , quickCheckWith args (_test_length_single t (Nat n))
->   , quickCheckWith args (_test_length_double t (Nat n))
->   , quickCheckWith args (_test_length_snoc_next t (Nat n))
->   , quickCheckWith args (_test_length_rev t (Nat n))
->   , quickCheckWith args (_test_length_cat t (Nat n))
->   ]
->   where
+> _test_length t n maxSize numCases = do
+>   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+> 
+>   runTest args (_test_length_cons t (Nat n))
+>   runTest args (_test_length_cons_snoc t (Nat n))
+>   runTest args (_test_length_cons_next t (Nat n))
+>   runTest args (_test_length_single t (Nat n))
+>   runTest args (_test_length_double t (Nat n))
+>   runTest args (_test_length_snoc_next t (Nat n))
+>   runTest args (_test_length_rev t (Nat n))
+>   runTest args (_test_length_cat t (Nat n))
 
 And ``main``:
 
 > main_length :: IO ()
-> main_length = _test_length (nil :: ConsList Bool) (zero :: Unary) 20 100
+> main_length = do
+>   _test_length (nil :: ConsList Bool) (zero :: Unary) 20 100
+>   _test_length (nil :: ConsList Unary) (zero :: Unary) 20 100

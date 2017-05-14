@@ -18,7 +18,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Length
 > import At
 > 
-> import Prelude (Show, Int, IO, sequence_, id)
+> import Prelude (Show, Int, IO, id)
 > import Test.QuickCheck
 > import Text.Show.Functions
 
@@ -282,18 +282,20 @@ And the suite:
 > -- run all tests for map
 > _test_map :: (List t, Arbitrary a, CoArbitrary a, Show a, Equal a, Arbitrary (t a), Show (t a))
 >   => t a -> Int -> Int -> IO ()
-> _test_map t maxSize numCases = sequence_
->   [ quickCheckWith args (_test_map_id t)
->   , quickCheckWith args (_test_map_cat t)
->   , quickCheckWith args (_test_map_rev t)
->   ]
->   where
+> _test_map t maxSize numCases = do
+>   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+> 
+>   runTest args (_test_map_id t)
+>   runTest args (_test_map_cat t)
+>   runTest args (_test_map_rev t)
 
 And ``main``:
 
 > main_map :: IO ()
-> main_map = _test_map (nil :: ConsList Bool) 20 100
+> main_map = do
+>   _test_map (nil :: ConsList Bool) 20 100
+>   _test_map (nil :: ConsList Unary) 20 100

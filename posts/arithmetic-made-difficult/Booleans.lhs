@@ -8,12 +8,14 @@ tags: arithmetic-made-difficult, literate-haskell
 > module Booleans
 >   ( Bool(True,False), not, and, (&&&), or, (|||), ifThenElse
 >   , Equal, eq, (====)
->   , _test_boolean, main_boolean
+>   , runTest, _test_boolean, main_boolean
 >   ) where
 > 
-> import Prelude(Show, IO, Bool(..), Int, sequence_, Maybe(..))
+> import Prelude(Show(show), IO, Bool(..), Int, Maybe(..), putStrLn, (>>), return)
 > import Test.QuickCheck
+> import Test.QuickCheck.Test
 > import Text.Show.Functions
+> import System.Exit
 
 Before we think about numbers or writing programs, let's start by nailing down some important functions about truth values. In math there can be a kind of other-worldness about True and False, since they live in the "metalanguage" of mathematical logic rather than the "object language" of whatever we are studying. But it will turn out to be useful to algebraify the truth values themselves.
 
@@ -394,35 +396,44 @@ Tests for more than one function:
 > _test_or_and p q r =
 >   (or p (and q r)) ==== (and (or p q) (or p r))
 
+One of our main uses for ``Bool`` will be checking the results of tests, so this is as good a place as any to introduce a QuickCheck helper function for this.
+
+> runTest :: Testable prop => Args -> prop -> IO ()
+> runTest args prop = do
+>   result <- quickCheckWithResult args prop
+>   if isSuccess result
+>     then putStrLn (show result) >> return ()
+>     else putStrLn (show result) >> exitFailure
+
 And the suite:
 
 > -- run all tests for booleans
 > _test_boolean :: Int -> Int -> IO ()
-> _test_boolean maxSize numCases = sequence_
->   [ quickCheckWith args _test_not_involutive
-> 
->   , quickCheckWith args _test_and_false
->   , quickCheckWith args _test_and_true
->   , quickCheckWith args _test_and_idempotent
->   , quickCheckWith args _test_and_commutative
->   , quickCheckWith args _test_and_associative
-> 
->   , quickCheckWith args _test_or_true
->   , quickCheckWith args _test_or_false
->   , quickCheckWith args _test_or_idempotent
->   , quickCheckWith args _test_or_commutative
->   , quickCheckWith args _test_or_associative
-> 
->   , quickCheckWith args _test_not_and
->   , quickCheckWith args _test_not_or
->   , quickCheckWith args _test_and_or
->   , quickCheckWith args _test_or_and
->   ]
->   where
+> _test_boolean size num = do
+>   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = num
+>       , maxSize = size
 >       }
+> 
+>   runTest args _test_not_involutive
+> 
+>   runTest args _test_and_false
+>   runTest args _test_and_true
+>   runTest args _test_and_idempotent
+>   runTest args _test_and_commutative
+>   runTest args _test_and_associative
+> 
+>   runTest args _test_or_true
+>   runTest args _test_or_false
+>   runTest args _test_or_idempotent
+>   runTest args _test_or_commutative
+>   runTest args _test_or_associative
+> 
+>   runTest args _test_not_and
+>   runTest args _test_not_or
+>   runTest args _test_and_or
+>   runTest args _test_or_and
 
 And ``main``:
 

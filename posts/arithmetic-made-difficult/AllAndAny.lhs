@@ -10,6 +10,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ) where
 > 
 > import Booleans
+> import NaturalNumbers
 > import Lists
 > import Reverse
 > import Map
@@ -17,7 +18,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Zip
 > import Prefix
 > 
-> import Prelude (Show, Int, IO, sequence_, const, (.))
+> import Prelude (Show, Int, IO, const, (.))
 > import Test.QuickCheck
 > import Text.Show.Functions
 
@@ -413,28 +414,30 @@ And the suite:
 > -- run all tests for all and any
 > _test_all_any :: (List t, Arbitrary a, CoArbitrary a, Show a, Equal a, Arbitrary (t a), Show (t a))
 >   => t a -> Int -> Int -> IO ()
-> _test_all_any t maxSize numCases = sequence_
->   [ quickCheckWith args (_test_all_alt t)
->   , quickCheckWith args (_test_all_mapfold t)
->   , quickCheckWith args (_test_all_not_any t)
->   , quickCheckWith args (_test_all_const_true t)
->   , quickCheckWith args (_test_all_cat t)
->   , quickCheckWith args (_test_all_rev t)
-> 
->   , quickCheckWith args (_test_any_alt t)
->   , quickCheckWith args (_test_any_mapfold t)
->   , quickCheckWith args (_test_any_not_all t)
->   , quickCheckWith args (_test_any_const_false t)
->   , quickCheckWith args (_test_any_cat t)
->   , quickCheckWith args (_test_any_rev t)
->   ]
->   where
+> _test_all_any t maxSize numCases = do
+>   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+> 
+>   runTest args (_test_all_alt t)
+>   runTest args (_test_all_mapfold t)
+>   runTest args (_test_all_not_any t)
+>   runTest args (_test_all_const_true t)
+>   runTest args (_test_all_cat t)
+>   runTest args (_test_all_rev t)
+> 
+>   runTest args (_test_any_alt t)
+>   runTest args (_test_any_mapfold t)
+>   runTest args (_test_any_not_all t)
+>   runTest args (_test_any_const_false t)
+>   runTest args (_test_any_cat t)
+>   runTest args (_test_any_rev t)
 
 And ``main``:
 
 > main_all_any :: IO ()
-> main_all_any = _test_all_any (nil :: ConsList Bool) 20 100
+> main_all_any = do
+>   _test_all_any (nil :: ConsList Bool) 20 100
+>   _test_all_any (nil :: ConsList Unary) 20 100

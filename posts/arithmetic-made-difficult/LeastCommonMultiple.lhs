@@ -20,7 +20,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import GreatestCommonDivisor
 > import CoprimeTo
 > 
-> import Prelude (Show, Int, IO, sequence_)
+> import Prelude (Show, Int, IO)
 > import Test.QuickCheck
 
 Recall the following property of $\nmax$: if $\nleq(c,a)$ and $\nleq(c,b)$, then $\nleq(c,\nmax(a,b))$. This statement fell out of the definition of $\nmax$ without much fuss, and may seem anticlimactic. But compare it to this analogous statement about $\ngcd$: if $\ndiv(c,a)$ and $\ndiv(c,b)$, then $\ndiv(c,\ngcd(a,b))$. Now $\nmax$ and $\ngcd$ seem to play very similar roles. Where $\nleq$ is a kind of "additive order" on $\nats$ and $\nmax$ gives an additive ceiling to $a$ and $b$, $\ndiv$ is a kind of "multiplicative order" and $\ngcd$ gives a multiplicative ceiling to $a$ and $b$. When an analogy this strong holds between two concepts in mathematics, it is frequently useful to see how far the analogy goes. To that end, today we will define the multiplicative counterpart to $\nmin$.
@@ -430,22 +430,24 @@ And the suite:
 > -- run all tests for lcm
 > _test_lcm :: (Natural t, Arbitrary t, Show t)
 >   => t -> Int -> Int -> IO ()
-> _test_lcm t maxSize numCases = sequence_
->   [ quickCheckWith args (_test_lcm_zero t)
->   , quickCheckWith args (_test_lcm_one t)
->   , quickCheckWith args (_test_lcm_div_args t)
->   , quickCheckWith args (_test_lcm_idempotent t)
->   , quickCheckWith args (_test_lcm_commutative t)
->   , quickCheckWith args (_test_lcm_associative t)
->   , quickCheckWith args (_test_lcm_distributive_times t)
->   , quickCheckWith args (_test_lcm_distributive_gcd t)
->   , quickCheckWith args (_test_gcd_distributive_lcm t)
->   ]
->   where
+> _test_lcm t maxSize numCases = do
+>   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+> 
+>   runTest args (_test_lcm_zero t)
+>   runTest args (_test_lcm_one t)
+>   runTest args (_test_lcm_div_args t)
+>   runTest args (_test_lcm_idempotent t)
+>   runTest args (_test_lcm_commutative t)
+>   runTest args (_test_lcm_associative t)
+>   runTest args (_test_lcm_distributive_times t)
+>   runTest args (_test_lcm_distributive_gcd t)
+>   runTest args (_test_gcd_distributive_lcm t)
+
+And the main function:
 
 > main_lcm :: IO ()
 > main_lcm = _test_lcm (zero :: Unary) 20 100

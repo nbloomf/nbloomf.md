@@ -13,7 +13,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import NaturalNumbers
 > import Plus
 > 
-> import Prelude (Show(..), IO, Int, sequence_)
+> import Prelude (Show(..), IO, Int)
 > import Test.QuickCheck
 
 Natural number multiplication has signature $\nats \times \nats \rightarrow \nats$, so we might hope to define it as $\Theta = \simprec{\varphi}{\mu}$ for some appropriate $\varphi$ and $\mu$. Using the universal property of simple recursion and how we want multiplication to behave, note that on the one hand we want $\Theta(\zero,m) = \zero$ for all $m$, while on the other hand we have $\Theta(\zero,m) = \varphi(m)$. So apparently we need $\varphi(m) = \zero$ for all $m$.
@@ -148,23 +148,23 @@ And one function to rule them all:
 
 > _test_times :: (Natural t, Arbitrary t, Show t)
 >   => t -> Int -> Int -> IO ()
-> _test_times t maxSize numCases = sequence_
->   [ quickCheckWith args (_test_times_zero_left t)
->   , quickCheckWith args (_test_times_zero_right t)
->   , quickCheckWith args (_test_times_one_left t)
->   , quickCheckWith args (_test_times_one_right t)
->   , quickCheckWith args (_test_times_next_left t)
->   , quickCheckWith args (_test_times_next_right t)
->   , quickCheckWith args (_test_times_commutative t)
->   , quickCheckWith args (_test_times_distributive_left t)
->   , quickCheckWith args (_test_times_distributive_right t)
->   , quickCheckWith args (_test_times_associative t)
->   ]
->   where
+> _test_times t maxSize numCases = do
+>   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+> 
+>   runTest args (_test_times_zero_left t)
+>   runTest args (_test_times_zero_right t)
+>   runTest args (_test_times_one_left t)
+>   runTest args (_test_times_one_right t)
+>   runTest args (_test_times_next_left t)
+>   runTest args (_test_times_next_right t)
+>   runTest args (_test_times_commutative t)
+>   runTest args (_test_times_distributive_left t)
+>   runTest args (_test_times_distributive_right t)
+>   runTest args (_test_times_associative t)
 
 I used a much smaller number of test cases this time, because these run much more slowly than the tests for ``plus``. The culprit is ``_test_times_associative``. What's happening is that multiplication of ``Nat``s is inherently slow; it's implemented as iterated addition, which itself is iterated ``N``.
 

@@ -16,7 +16,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import LessThanOrEqualTo
 > import Minus
 > 
-> import Prelude (Show, Int, IO, sequence_)
+> import Prelude (Show, Int, IO)
 > import Test.QuickCheck
 
 With $\nleq$ in hand we can also define max and min functions. These are less interesting since they do not have to be defined recursively. :)
@@ -286,38 +286,38 @@ And the suite for ``max`` and ``min``:
 > -- run all tests for max
 > _test_max_min :: (Natural t, Arbitrary t, Show t)
 >   => t -> Int -> Int -> IO ()
-> _test_max_min t maxSize numCases = sequence_
->   [ quickCheckWith args (_test_max_zero t)
->   , quickCheckWith args (_test_max_idempotent t)
->   , quickCheckWith args (_test_max_commutative t)
->   , quickCheckWith args (_test_max_next t)
->   , quickCheckWith args (_test_max_plus t)
->   , quickCheckWith args (_test_max_times t)
->   , quickCheckWith args (_test_max_associative t)
->   , quickCheckWith args (_test_max_leq t)
-> 
->   , quickCheckWith args (_test_min_zero t)
->   , quickCheckWith args (_test_min_idempotent t)
->   , quickCheckWith args (_test_min_commutative t)
->   , quickCheckWith args (_test_min_next t)
->   , quickCheckWith args (_test_min_plus t)
->   , quickCheckWith args (_test_min_times t)
->   , quickCheckWith args (_test_min_associative t)
->   , quickCheckWith args (_test_min_leq t)
-> 
->   , quickCheckWith args (_test_max_min_leq t)
->   , quickCheckWith args (_test_max_min_plus t)
->   , quickCheckWith args (_test_max_min_times t)
->   , quickCheckWith args (_test_max_min_distributive_left t)
->   , quickCheckWith args (_test_max_min_distributive_right t)
->   , quickCheckWith args (_test_min_max_distributive_left t)
->   , quickCheckWith args (_test_min_max_distributive_right t)
->   ]
->   where
+> _test_max_min t maxSize numCases = do
+>   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+> 
+>   runTest args (_test_max_zero t)
+>   runTest args (_test_max_idempotent t)
+>   runTest args (_test_max_commutative t)
+>   runTest args (_test_max_next t)
+>   runTest args (_test_max_plus t)
+>   runTest args (_test_max_times t)
+>   runTest args (_test_max_associative t)
+>   runTest args (_test_max_leq t)
+> 
+>   runTest args (_test_min_zero t)
+>   runTest args (_test_min_idempotent t)
+>   runTest args (_test_min_commutative t)
+>   runTest args (_test_min_next t)
+>   runTest args (_test_min_plus t)
+>   runTest args (_test_min_times t)
+>   runTest args (_test_min_associative t)
+>   runTest args (_test_min_leq t)
+> 
+>   runTest args (_test_max_min_leq t)
+>   runTest args (_test_max_min_plus t)
+>   runTest args (_test_max_min_times t)
+>   runTest args (_test_max_min_distributive_left t)
+>   runTest args (_test_max_min_distributive_right t)
+>   runTest args (_test_min_max_distributive_left t)
+>   runTest args (_test_min_max_distributive_right t)
 
 > main_max_min :: IO ()
 > main_max_min = _test_max_min (zero :: Unary) 100 100

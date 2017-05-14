@@ -16,7 +16,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import LessThanOrEqualTo
 > import DivisionAlgorithm
 > 
-> import Prelude (Show, Int, IO, sequence_)
+> import Prelude (Show, Int, IO)
 > import Test.QuickCheck
 
 With the division algorithm in hand we can define what it means for one natural number to divide another.
@@ -208,17 +208,19 @@ And the suite:
 > -- run all tests for div
 > _test_div :: (Natural t, Arbitrary t, Show t)
 >   => t -> Int -> Int -> IO ()
-> _test_div t maxSize numCases = sequence_
->   [ quickCheckWith args (_test_div_zero_right t)
->   , quickCheckWith args (_test_div_one_left t)
->   , quickCheckWith args (_test_div_reflexive t)
->   , quickCheckWith args (_test_div_times t)
->   ]
->   where
+> _test_div t maxSize numCases = do
+>   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+> 
+>   runTest args (_test_div_zero_right t)
+>   runTest args (_test_div_one_left t)
+>   runTest args (_test_div_reflexive t)
+>   runTest args (_test_div_times t)
+
+And the main function:
 
 > main_div :: IO ()
 > main_div = _test_div (zero :: Unary) 50 100

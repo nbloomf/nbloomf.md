@@ -21,7 +21,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import CoprimeTo
 > import LeastCommonMultiple
 > 
-> import Prelude (Show, Int, IO, sequence_)
+> import Prelude (Show, Int, IO)
 > import Test.QuickCheck
 
 We defined $\ntimes$ as iterated addition; similarly, exponentiation is iterated multiplication. We'll call this function $\npower$.
@@ -219,19 +219,21 @@ And the suite:
 > -- run all tests for power
 > _test_power :: (Natural t, Arbitrary t, Show t)
 >   => t -> Int -> Int -> IO ()
-> _test_power t maxSize numCases = sequence_
->   [ quickCheckWith args (_test_power_zero_right t)
->   , quickCheckWith args (_test_power_one_right t)
->   , quickCheckWith args (_test_power_zero_left t)
->   , quickCheckWith args (_test_power_plus_right t)
->   , quickCheckWith args (_test_power_times_right t)
->   , quickCheckWith args (_test_power_times_left t)
->   ]
->   where
+> _test_power t maxSize numCases = do
+>   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+> 
+>   runTest args (_test_power_zero_right t)
+>   runTest args (_test_power_one_right t)
+>   runTest args (_test_power_zero_left t)
+>   runTest args (_test_power_plus_right t)
+>   runTest args (_test_power_times_right t)
+>   runTest args (_test_power_times_left t)
+
+And the main function:
 
 > main_power :: IO ()
 > main_power = _test_power (zero :: Unary) 4 30

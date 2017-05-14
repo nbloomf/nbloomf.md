@@ -10,13 +10,14 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ) where
 > 
 > import Booleans
+> import NaturalNumbers
 > import Lists
 > import Reverse
 > import Cat
 > import Zip
 > import Prefix
 >
-> import Prelude (Show, Int, IO, sequence_) 
+> import Prelude (Show, Int, IO) 
 > import Test.QuickCheck
 
 Today we'll compute the *longest common prefix* of two strings (and while we're at it, the *longest common suffix*). Given two lists $x$ and $y$, their longest common prefix is the longest list which is a prefix of both, just like it says on the tin. We'll denote this function $\lcp$, and we want it to have a signature like $$\lists{A} \times \lists{A} \rightarrow \lists{A}.$$ To define $\lcp$ as a fold like $$\lcp(x,y) = \foldr{\varepsilon}{\varphi}(x)(y)$$ we need $\varepsilon : \lists{A}^{\lists{A}}$ such that
@@ -742,28 +743,30 @@ And the suite:
 > -- run all tests for lcp and lcs
 > _test_lcp :: (List t, Arbitrary a, Show a, Equal a, Arbitrary (t a), Show (t a))
 >   => t a -> Int -> Int -> IO ()
-> _test_lcp t maxSize numCases = sequence_
->   [ quickCheckWith args (_test_lcp_alt t)
->   , quickCheckWith args (_test_lcp_idempotent t)
->   , quickCheckWith args (_test_lcp_commutative t)
->   , quickCheckWith args (_test_lcp_associative t)
->   , quickCheckWith args (_test_lcp_cat t)
->   , quickCheckWith args (_test_lcp_prefix t)
->   , quickCheckWith args (_test_lcp_zip t)
-> 
->   , quickCheckWith args (_test_lcs_idempotent t)
->   , quickCheckWith args (_test_lcs_commutative t)
->   , quickCheckWith args (_test_lcs_associative t)
->   , quickCheckWith args (_test_lcs_cat t)
->   , quickCheckWith args (_test_lcs_suffix t)
->   ]
->   where
+> _test_lcp t maxSize numCases = do
+>   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+> 
+>   runTest args (_test_lcp_alt t)
+>   runTest args (_test_lcp_idempotent t)
+>   runTest args (_test_lcp_commutative t)
+>   runTest args (_test_lcp_associative t)
+>   runTest args (_test_lcp_cat t)
+>   runTest args (_test_lcp_prefix t)
+>   runTest args (_test_lcp_zip t)
+> 
+>   runTest args (_test_lcs_idempotent t)
+>   runTest args (_test_lcs_commutative t)
+>   runTest args (_test_lcs_associative t)
+>   runTest args (_test_lcs_cat t)
+>   runTest args (_test_lcs_suffix t)
 
 And ``main``:
 
 > main_lcp :: IO ()
-> main_lcp = _test_lcp (nil :: ConsList Bool) 20 100
+> main_lcp = do
+>   _test_lcp (nil :: ConsList Bool) 20 100
+>   _test_lcp (nil :: ConsList Unary) 20 100

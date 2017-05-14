@@ -24,7 +24,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Range
 > import Zip
 > 
-> import Prelude (Show, Int, IO, sequence_, uncurry)
+> import Prelude (Show, Int, IO, uncurry)
 > import Test.QuickCheck
 
 Today we will define a kind of one-sided inverse of $\zip$, called $\unzip$. Recall that $\zip$ has signature $$\lists{A} \times \lists{B} \rightarrow \lists{A \times B}.$$ An inverse will then have signature $$\lists{A \times B} \rightarrow \lists{A} \times \lists{B},$$ and should "undo" the zipping. As usual we'd like to define this as a fold if possible; to that end we need $\varepsilon : \lists{A} \times \lists{B}$ and $$\varphi : (A \times B) \times (\lists{A} \times \lists{B}) \rightarrow \lists{A} \times \lists{B}$$ such that
@@ -210,17 +210,19 @@ And the suite:
 > -- run all tests for unzip
 > _test_unzip :: (List t, Equal a, Arbitrary (t a), Show (t a), Arbitrary a, Show a, Arbitrary (t (a,a)), Show (t (a,a)))
 >   => t a -> Int -> Int -> IO ()
-> _test_unzip t maxSize numCases = sequence_
->   [ quickCheckWith args (_test_unzip_zip t)
->   , quickCheckWith args (_test_unzip_swap t)
->   ]
->   where
+> _test_unzip t maxSize numCases = do
+>   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+> 
+>   runTest args (_test_unzip_zip t)
+>   runTest args (_test_unzip_swap t)
 
 And ``main``:
 
 > main_unzip :: IO ()
-> main_unzip = _test_unzip (nil :: ConsList Bool) 20 100
+> main_unzip = do
+>   _test_unzip (nil :: ConsList Bool) 20 100
+>   _test_unzip (nil :: ConsList Unary) 20 100

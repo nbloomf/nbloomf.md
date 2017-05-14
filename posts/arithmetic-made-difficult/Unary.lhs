@@ -12,7 +12,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > 
 > import Booleans
 > 
-> import Prelude(Show(..), Bool(..), Integer, (-), (<=), return)
+> import Prelude(Show(..), Bool(..), Integer, (-), (<=), return, (.))
 > import Test.QuickCheck
 
 A nice consequence of wrapping up recursion in the $\natrec{\ast}{\ast}$ function is that it allows us to write programs, independent of any implementation, and prove things about them. We'll see lots of examples of this, but first we need to establish a structural result: every natural number is either $\zero$ or of the form $\next(m)$ for some natural number $m$.
@@ -196,6 +196,10 @@ Along the way we'll be writing some proofs involving ``Nat``s, but it is also us
 >
 >   shrink  Z    = []
 >   shrink (N k) = [k]
+> 
+> instance CoArbitrary Unary where
+>   coarbitrary Z = variant 0
+>   coarbitrary (N x) = variant 1 . coarbitrary x
 
 We can try out this instance with the following command.
 

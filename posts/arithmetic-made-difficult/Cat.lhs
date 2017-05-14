@@ -10,10 +10,11 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ) where
 > 
 > import Booleans
+> import NaturalNumbers
 > import Lists
 > import Reverse
 > 
-> import Prelude (Show, Int, IO, sequence_)
+> import Prelude (Show, Int, IO)
 > import Test.QuickCheck
 
 In this post we'll consider the function that takes two lists and appends one to the "end" of the other. This function is known as $\cat$, which is short for *catenate* -- a jargony word that means *to connect in a series*.
@@ -259,21 +260,23 @@ And the suite:
 > -- run all tests for cat
 > _test_cat :: (List t, Show a, Equal a, Arbitrary a, Arbitrary (t a))
 >   => t a -> Int -> Int -> IO ()
-> _test_cat t maxSize numCases = sequence_
->   [ quickCheckWith args (_test_cat_nil t)
->   , quickCheckWith args (_test_cat_cons_snoc t)
->   , quickCheckWith args (_test_cat_cons t)
->   , quickCheckWith args (_test_cat_snoc t)
->   , quickCheckWith args (_test_cat_associative t)
->   , quickCheckWith args (_test_cat_rev t)
->   ]
->   where
+> _test_cat t maxSize numCases = do
+>   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+> 
+>   runTest args (_test_cat_nil t)
+>   runTest args (_test_cat_cons_snoc t)
+>   runTest args (_test_cat_cons t)
+>   runTest args (_test_cat_snoc t)
+>   runTest args (_test_cat_associative t)
+>   runTest args (_test_cat_rev t)
 
 And ``main``:
 
 > main_cat :: IO ()
-> main_cat = _test_cat (nil :: ConsList Bool) 20 100
+> main_cat = do
+>   _test_cat (nil :: ConsList Bool) 20 100
+>   _test_cat (nil :: ConsList Unary) 20 100

@@ -21,7 +21,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Map
 > import UnfoldN
 > 
-> import Prelude (Show, Int, IO, sequence_, Maybe(..))
+> import Prelude (Show, Int, IO, Maybe(..))
 > import Test.QuickCheck
 
 For our first application of $\unfoldN$ we'll define a function, $\range$, that constructs lists of natural numbers. There are a few ways to do this. We could take an argument $n$ and construct the list of natural numbers from $\zero$ to $n$, but this is too specialized. We could instead take *two* arguments $a$ and $b$ and construct the list of natural numbers from $a$ to $b$, but we'll have to check whether or not the arguments are in order. A third option -- and the one we'll take -- is to take two arguments $a$ and $b$, and construct the list of the first $b$ natural numbers starting from $a$.
@@ -294,18 +294,18 @@ And the suite:
 > -- run all tests for range
 > _test_range :: (List t, Arbitrary (t n), Show (t n), Natural n, Arbitrary n, Show n)
 >   => t (Nat n) -> Int -> Int -> IO ()
-> _test_range t maxSize numCases = sequence_
->   [ quickCheckWith args (_test_range_next_cons t)
->   , quickCheckWith args (_test_range_next_snoc t)
->   , quickCheckWith args (_test_range_plus_right t)
->   , quickCheckWith args (_test_range_next_left t)
->   , quickCheckWith args (_test_range_plus_left t)
->   ]
->   where
+> _test_range t maxSize numCases = do
+>   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+> 
+>   runTest args (_test_range_next_cons t)
+>   runTest args (_test_range_next_snoc t)
+>   runTest args (_test_range_plus_right t)
+>   runTest args (_test_range_next_left t)
+>   runTest args (_test_range_plus_left t)
 
 And ``main``:
 

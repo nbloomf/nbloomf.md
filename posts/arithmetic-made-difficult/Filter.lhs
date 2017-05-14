@@ -22,7 +22,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import AllAndAny
 > import TailsAndInits
 > 
-> import Prelude (Show, Int, IO, sequence_)
+> import Prelude (Show, Int, IO)
 > import Test.QuickCheck
 > import Text.Show.Functions
 
@@ -310,20 +310,22 @@ And the suite:
 > -- run all tests for filter
 > _test_filter :: (List t, Arbitrary a, CoArbitrary a, Show a, Equal a, Arbitrary (t a), Show (t a))
 >   => t a -> Int -> Int -> IO ()
-> _test_filter t maxSize numCases = sequence_
->   [ quickCheckWith args (_test_filter_alt t)
->   , quickCheckWith args (_test_filter_all t)
->   , quickCheckWith args (_test_filter_snoc t)
->   , quickCheckWith args (_test_filter_rev t)
->   , quickCheckWith args (_test_filter_cat t)
->   ]
->   where
+> _test_filter t maxSize numCases = do
+>   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+> 
+>   runTest args (_test_filter_alt t)
+>   runTest args (_test_filter_all t)
+>   runTest args (_test_filter_snoc t)
+>   runTest args (_test_filter_rev t)
+>   runTest args (_test_filter_cat t)
 
 And ``main``:
 
 > main_filter :: IO ()
-> main_filter = _test_filter (nil :: ConsList Bool) 20 100
+> main_filter = do
+>   _test_filter (nil :: ConsList Bool) 20 100
+>   _test_filter (nil :: ConsList Unary) 20 100

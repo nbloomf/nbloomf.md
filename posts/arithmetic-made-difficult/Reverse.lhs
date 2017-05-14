@@ -12,9 +12,10 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ) where
 > 
 > import Booleans
+> import NaturalNumbers
 > import Lists
 > 
-> import Prelude (Show, Int, IO, sequence_, (.))
+> import Prelude (Show, Int, IO, (.))
 > import Test.QuickCheck
 
 In the last post we defined a set $\lists{A}$ with a special element $\nil$, a map $\cons : A \times \lists{A} \rightarrow \lists{A}$, and a universal map $\foldr{\ast}{\ast}$. As you might guess we'll be thinking of the elements of $\lists{A}$ as finite lists, and they will form a simple kind of data structure.
@@ -368,19 +369,23 @@ And the suite:
 > -- run all tests for snoc and rev
 > _test_rev :: (List t, Show a, Equal a, Arbitrary a, Arbitrary (t a))
 >   => t a -> Int -> Int -> IO ()
-> _test_rev t maxSize numCases = sequence_
->   [ quickCheckWith args (_test_snoc_cons_commute t)
->   , quickCheckWith args (_test_rev_single t)
->   , quickCheckWith args (_test_rev_double t)
->   , quickCheckWith args (_test_rev_snoc t)
->   , quickCheckWith args (_test_rev_involution t)
->   , quickCheckWith args (_test_rev_alt t)
->   ]
->   where
+> _test_rev t maxSize numCases = do
+>   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+> 
+>   runTest args (_test_snoc_cons_commute t)
+>   runTest args (_test_rev_single t)
+>   runTest args (_test_rev_double t)
+>   runTest args (_test_rev_snoc t)
+>   runTest args (_test_rev_involution t)
+>   runTest args (_test_rev_alt t)
+
+And the main function:
 
 > main_rev :: IO ()
-> main_rev = _test_rev (nil :: ConsList Bool) 20 100
+> main_rev = do
+>   _test_rev (nil :: ConsList Bool) 20 100
+>   _test_rev (nil :: ConsList Unary) 20 100

@@ -14,7 +14,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Plus
 > import Times
 > 
-> import Prelude (Show(), Int, IO, sequence_, Maybe(..))
+> import Prelude (Show(), Int, IO, Maybe(..))
 > import Test.QuickCheck
 
 We'd eventually like to solve some equations; for instance, one of the simplest equations we can construct with the tools we have so far is $$\nplus(a,x) = b$$ where $a$ and $b$ are in $\nats$. Putting on our third-grader hat of course the solution to $b = a+x$ is $x = b-a$. So we'll call this solution "b minus a". Our goal in this post is to give a constructive characterization for subtraction.
@@ -247,19 +247,19 @@ And a suite:
 
 > _test_minus :: (Natural t, Arbitrary t, Show t)
 >   => t -> Int -> Int -> IO ()
-> _test_minus t maxSize numCases = sequence_
->   [ quickCheckWith args (_test_minus_next t)
->   , quickCheckWith args (_test_minus_zero_left t)
->   , quickCheckWith args (_test_minus_zero_right t)
->   , quickCheckWith args (_test_minus_plus t)
->   , quickCheckWith args (_test_minus_next_left t)
->   , quickCheckWith args (_test_minus_swap t)
->   ]
->   where
+> _test_minus t maxSize numCases = do
+>   let
 >     args = stdArgs
 >      { maxSuccess = numCases
 >      , maxSize    = maxSize
 >      }
+> 
+>   runTest args (_test_minus_next t)
+>   runTest args (_test_minus_zero_left t)
+>   runTest args (_test_minus_zero_right t)
+>   runTest args (_test_minus_plus t)
+>   runTest args (_test_minus_next_left t)
+>   runTest args (_test_minus_swap t)
 
 And the runner:
 

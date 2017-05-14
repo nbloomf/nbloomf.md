@@ -20,7 +20,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Cat
 > import Length
 > 
-> import Prelude (Show, Int, IO, sequence_, Maybe(..))
+> import Prelude (Show, Int, IO, Maybe(..))
 > import Test.QuickCheck
 
 In this post we'll investigate $\at$, which extracts the element at an arbitrary position in a list. First, we need $\head$, which extracts the *first* element of a list. To a first approximation $\head$ has a signature like $$\lists{A} \rightarrow A,$$ and certainly we want $\head(\cons(a,x)) = a$. But what about $\head(\nil)$? In this case there is no element to extract. Taking a cue from our definition of $\nminus$, we will make $\head$ return not an $A$, but a $\ast + A$, letting the $\ast$ represent $\head(\nil)$. Now $\head$ can be expressed as a $\foldr{\ast}{\ast}$ as follows.
@@ -628,22 +628,22 @@ And the suite:
 > -- run all tests for at
 > _test_at :: (List t, Arbitrary a, Arbitrary (t a), Show a, Equal a, Show (t a), Natural n, Arbitrary n, Show n)
 >   => t a -> n -> Int -> Int -> IO ()
-> _test_at t n maxSize numCases = sequence_
->   [ quickCheckWith args (_test_at_nil t n)
->   , quickCheckWith args (_test_at_single t n)
->   , quickCheckWith args (_test_at_double t n)
->   , quickCheckWith args (_test_at_next_next_cons t n)
->   , quickCheckWith args (_test_at_length_rev t n)
->   , quickCheckWith args (_test_at_range t n)
->   , quickCheckWith args (_test_at_snoc t n)
->   , quickCheckWith args (_test_at_cat t n)
->   , quickCheckWith args (_test_at_rev t n)
->   ]
->   where
+> _test_at t n maxSize numCases = do
+>   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+> 
+>   runTest args (_test_at_nil t n)
+>   runTest args (_test_at_single t n)
+>   runTest args (_test_at_double t n)
+>   runTest args (_test_at_next_next_cons t n)
+>   runTest args (_test_at_length_rev t n)
+>   runTest args (_test_at_range t n)
+>   runTest args (_test_at_snoc t n)
+>   runTest args (_test_at_cat t n)
+>   runTest args (_test_at_rev t n)
 
 And ``main``:
 

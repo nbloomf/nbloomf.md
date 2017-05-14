@@ -18,7 +18,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import DivisionAlgorithm
 > import Divides
 > 
-> import Prelude (Show, Int, IO, sequence_)
+> import Prelude (Show, Int, IO)
 > import Test.QuickCheck
 
 Today we'll define the greatest common divisor of two natural numbers. The usual way to do this (in books I've seen) is to define what it means to say that $d$ is a greatest common divisor of $a$ and $b$, then show (possibly nonconstructively) that any two $a$ and $b$ have a greatest common divisor, and finally establish the Euclidean algorithm that actually computes GCDs. We will work backwards: first *defining* the GCD of two natural numbers using the punchline of the Euclidean algorithm and then proving that the output of this function acts like the GCD.
@@ -437,21 +437,23 @@ And the suite:
 > -- run all tests for gcd
 > _test_gcd :: (Natural t, Arbitrary t, Show t)
 >   => t -> Int -> Int -> IO ()
-> _test_gcd t maxSize numCases = sequence_
->   [ quickCheckWith args (_test_gcd_zero t)
->   , quickCheckWith args (_test_gcd_one t)
->   , quickCheckWith args (_test_gcd_rem t)
->   , quickCheckWith args (_test_gcd_commutative t)
->   , quickCheckWith args (_test_gcd_div_args t)
->   , quickCheckWith args (_test_gcd_idempotent t)
->   , quickCheckWith args (_test_gcd_associative t)
->   , quickCheckWith args (_test_gcd_distributive_times t)
->   ]
->   where
+> _test_gcd t maxSize numCases = do
+>   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+> 
+>   runTest args (_test_gcd_zero t)
+>   runTest args (_test_gcd_one t)
+>   runTest args (_test_gcd_rem t)
+>   runTest args (_test_gcd_commutative t)
+>   runTest args (_test_gcd_div_args t)
+>   runTest args (_test_gcd_idempotent t)
+>   runTest args (_test_gcd_associative t)
+>   runTest args (_test_gcd_distributive_times t)
+
+And the main function:
 
 > main_gcd :: IO ()
 > main_gcd = _test_gcd (zero :: Unary) 20 100

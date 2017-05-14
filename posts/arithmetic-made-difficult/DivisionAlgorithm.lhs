@@ -15,7 +15,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Times
 > import LessThanOrEqualTo
 > 
-> import Prelude (Show, Int, IO, sequence_)
+> import Prelude (Show, Int, IO)
 > import Test.QuickCheck
 
 Finally we come to the first power tool for natural numbers: the division algorithm. Remember this theorem states that given any two natural numbers $a$ and $b$, with $b \neq \zero$, there is a *unique* pair of natural numbers $(q,r)$ such that $a = qb+r$ and $r$ is not "too big", specifically, $r < b$; this $q$ is called the *quotient* of $a$ by $b$, and $r$ is the *remainder*.
@@ -235,22 +235,24 @@ And the suite:
 > -- run all tests for divalg
 > _test_divalg :: (Natural t, Arbitrary t, Show t)
 >   => t -> Int -> Int -> IO ()
-> _test_divalg t maxSize numCases = sequence_
->   [ quickCheckWith args (_test_divalg_equality t)
->   , quickCheckWith args (_test_divalg_inequality t)
->   , quickCheckWith args (_test_divalg_zero_left t)
->   , quickCheckWith args (_test_divalg_zero_right t)
->   , quickCheckWith args (_test_divalg_one_right t)
->   , quickCheckWith args (_test_divalg_leq t)
->   , quickCheckWith args (_test_divalg_times_left t)
->   , quickCheckWith args (_test_divalg_quo t)
->   , quickCheckWith args (_test_divalg_rem t)
->   ]
->   where
+> _test_divalg t maxSize numCases = do
+>   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+> 
+>   runTest args (_test_divalg_equality t)
+>   runTest args (_test_divalg_inequality t)
+>   runTest args (_test_divalg_zero_left t)
+>   runTest args (_test_divalg_zero_right t)
+>   runTest args (_test_divalg_one_right t)
+>   runTest args (_test_divalg_leq t)
+>   runTest args (_test_divalg_times_left t)
+>   runTest args (_test_divalg_quo t)
+>   runTest args (_test_divalg_rem t)
+
+And the main function.
 
 > main_divalg :: IO ()
 > main_divalg = _test_divalg (zero :: Unary) 20 100

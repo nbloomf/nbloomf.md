@@ -23,7 +23,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import UnfoldN
 > import Range
 > 
-> import Prelude (Show, Int, IO, sequence_)
+> import Prelude (Show, Int, IO)
 > import Test.QuickCheck
 
 Today we'll define a really useful function on lists called $\zip$. This map will take two lists, one in $\lists{A}$ and one in $\lists{B}$, and return a list in $\lists{A \times B}$. In progress, $\zip$ping two lists looks something like this:
@@ -769,26 +769,28 @@ And the suite:
 > -- run all tests for zip
 > _test_zip :: (List t, Arbitrary (t a), Show (t n), Equal a, Show a, Natural n, Arbitrary a, Arbitrary n, Show n)
 >   => t a -> n -> Int -> Int -> IO ()
-> _test_zip t n maxSize numCases = sequence_
->   [ quickCheckWith args (_test_zip_swap t)
->   , quickCheckWith args (_test_zip_length t n)
->   , quickCheckWith args (_test_zip_zip_left t)
->   , quickCheckWith args (_test_zip_zip_right t)
->   , quickCheckWith args (_test_zip_alt t)
-> 
->   , quickCheckWith args (_test_zipPad_swap t)
->   , quickCheckWith args (_test_zipPad_length t n)
->   , quickCheckWith args (_test_zipPad_zipPad_left t)
->   , quickCheckWith args (_test_zipPad_zipPad_right t)
->   , quickCheckWith args (_test_zipPad_alt t)
->   ]
->   where
+> _test_zip t n maxSize numCases = do
+>   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+> 
+>   runTest args (_test_zip_swap t)
+>   runTest args (_test_zip_length t n)
+>   runTest args (_test_zip_zip_left t)
+>   runTest args (_test_zip_zip_right t)
+>   runTest args (_test_zip_alt t)
+> 
+>   runTest args (_test_zipPad_swap t)
+>   runTest args (_test_zipPad_length t n)
+>   runTest args (_test_zipPad_zipPad_left t)
+>   runTest args (_test_zipPad_zipPad_right t)
+>   runTest args (_test_zipPad_alt t)
 
 And ``main``:
 
 > main_zip :: IO ()
-> main_zip = _test_zip (nil :: ConsList Bool) (zero :: Unary) 20 100
+> main_zip = do
+>   _test_zip (nil :: ConsList Bool) (zero :: Unary) 20 100
+>   _test_zip (nil :: ConsList Unary) (zero :: Unary) 20 100
