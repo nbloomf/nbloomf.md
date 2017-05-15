@@ -6,10 +6,11 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > module Zip
->   ( zip, zipPad, _test_zip, main_zip, swap, pair, assocL, assocR
+>   ( zip, zipPad, _test_zip, main_zip
 >   ) where
 > 
 > import Booleans
+> import Tuples
 > import NaturalNumbers
 > import Plus
 > import MaxAndMin
@@ -132,37 +133,6 @@ In Haskell:
 >   Cons a as -> case listShape y of
 >     Nil       -> nil
 >     Cons b bs -> cons (a,b) (zip as bs)
-
-$\zip$ will turn out to be pretty useful. Before establishing some properties for it, we need a few utility functions on pairs.
-
-<div class="result">
-<div class="defn"><p>
-Let $A$, $B$, $U$, and $V$ be sets.
-
-Define $\swap : A \times B \rightarrow B \times A$ by $$\swap(a,b) = (b,a).$$
-
-Define $\pair : U^A \times V^B \rightarrow (U \times V)^{A \times B}$ by $$\pair(f,g)(a,b) = (f(a),g(b)).$$
-
-Define $\assocL : A \times (B \times C) \rightarrow (A \times B) \times C$ by $$\assocL(a,(b,c)) = ((a,b),c).$$
-
-Define $\assocR : (A \times B) \times C \rightarrow A \times (B \times C)$ by $$\assocR((a,b),c) = (a,(b,c)).$$
-
-In Haskell:
-
-> swap :: (a,b) -> (b,a)
-> swap (a,b) = (b,a)
-> 
-> pair :: (a -> u) -> (b -> v) -> (a,b) -> (u,v)
-> pair f g (a,b) = (f a, g b)
-> 
-> assocL :: (a,(b,c)) -> ((a,b),c)
-> assocL (a,(b,c)) = ((a,b),c)
-> 
-> assocR :: ((a,b),c) -> (a,(b,c))
-> assocR ((a,b),c) = (a,(b,c))
-
-</p></div>
-</div>
 
 Now $\map(\swap) \circ \zip = \zip \circ \swap$:
 

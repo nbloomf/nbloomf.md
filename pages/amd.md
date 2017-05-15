@@ -7,7 +7,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
 
 1. First Steps
     * [Booleans](/posts/arithmetic-made-difficult/Booleans.html)
-    * Tuples
+    * [Tuples](/posts/arithmetic-made-difficult/Tuples.html)
     * [Natural Numbers](/posts/arithmetic-made-difficult/natural-numbers.html)
     * [From Arrows to Programs](/posts/arithmetic-made-difficult/Unary.html)
     * [Simple Recursion](/posts/arithmetic-made-difficult/SimpleRecursion.html)
@@ -46,11 +46,11 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [All and Any](/posts/arithmetic-made-difficult/AllAndAny.html)
     * [Tails and Inits](/posts/arithmetic-made-difficult/TailsAndInits.html)
     * [Filter](/posts/arithmetic-made-difficult/Filter.html)
-    * Sort
     * Cross
     * Cycle
 4. List of Arithmetics
     * On Boring and Repetitive Proofs
+    * Partial Orders
     * Semigroups
     * Lattices
     * Semirings

@@ -3,13 +3,17 @@ MKSHELL=/bin/bash
 PATH = `{pwd}/_bin/sth:`{pwd}/_bin/amd:$PATH
 
 targets:VQ:
-  echo 'all      : everything'                    | doppler lightcyan
-  echo 'watch    : serve pages at localhost:8000' | doppler lightcyan
-  echo 'build    : generate nbloomf.github.io'    | doppler lightcyan
-  echo 'site     : compile site'                  | doppler lightcyan
-  echo 'literate : compile literate posts'        | doppler lightcyan
-  echo 'favicons : generate favicons'             | doppler lightcyan
-  echo 'winfiles : convert raw file line endings' | doppler lightcyan
+  echo 'compile'                                    | doppler lightgreen
+  echo '  all      : everything'                    | doppler lightcyan
+  echo '  watch    : serve pages at localhost:8000' | doppler lightcyan
+  echo '  build    : generate nbloomf.github.io'    | doppler lightcyan
+  echo '  site     : compile site'                  | doppler lightcyan
+  echo '  literate : compile literate posts'        | doppler lightcyan
+  echo '  favicons : generate favicons'             | doppler lightcyan
+  echo '  winfiles : convert raw file line endings' | doppler lightcyan
+  echo 'test'                                       | doppler lightgreen
+  echo '  amd-test : run amd tests'                 | doppler lightcyan
+  echo '  sth-test : run sth tests'                 | doppler lightcyan
 
 all:VQ: literate build watch
 
@@ -86,7 +90,9 @@ raw/tex/win/%:Q: raw/tex/unix/%
 # compile literate posts #
 #========================#
 
-literate: sth amd
+literate:V: sth amd
+
+literate-test:V: sth-test amd-test
 
 
 #---------------------------#
@@ -95,7 +101,9 @@ literate: sth amd
 
 STH_TOOLS = archive bubble charcombine charfullwidth charreplace compare compress concat copy count crypt detab echo entab escape examine expand getlines glyphcount import linenumber noop overstrike paginate pslineprint sentcount tail translit unescape wordcount wye
 
-sth:VQ: sth-exe
+sth:VQ: sth-exe sth-test
+
+sth-test:VQ:
   echo "testing sth..." | doppler lightblue
   (shelltest --color --execdir test/sth -- --threads=16)
 
@@ -116,9 +124,11 @@ sth-build:VQ:
 # arithmetic made difficult #
 #---------------------------#
 
-AMD_TOOLS = all-any at boolean cat coprime div divalg filter gcd lcm lcp length leq map max-min minus nat plus power prefix prime range rev tails-inits times unzip zip
+AMD_TOOLS = all-any at boolean cat coprime div divalg filter gcd lcm lcp length leq map max-min minus nat plus power prefix prime range rev tails-inits times tuple unzip zip
 
-amd:VQ: amd-exe
+amd:VQ: amd-exe amd-test
+
+amd-test:VQ:
   echo "testing amd..." | doppler lightblue
   (shelltest --color --execdir test/amd -- --threads=16)
 

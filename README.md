@@ -5,7 +5,7 @@ This is the source of nbloomf.github.io, which is generated using Hakyll.
 You will need:
 
 * GHC+cabal
-* mk
+* mk (via plan9port)
 * inkscape
 * shelltestrunner
 

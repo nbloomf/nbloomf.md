@@ -10,6 +10,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ) where
 > 
 > import Booleans
+> import Tuples
 > import NaturalNumbers
 > import Plus
 > import MaxAndMin
