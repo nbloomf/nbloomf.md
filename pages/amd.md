@@ -46,10 +46,17 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [All and Any](/posts/arithmetic-made-difficult/AllAndAny.html)
     * [Tails and Inits](/posts/arithmetic-made-difficult/TailsAndInits.html)
     * [Filter](/posts/arithmetic-made-difficult/Filter.html)
-    * Cross
+    * [Elt](/posts/arithmetic-made-difficult/Elt.html)
+    * Repeat
+    * Count
+    * Unique
+    * Take and Drop
+    * Group
+    * Run Length Encode
+    * First and Last
     * Cycle
 4. List of Arithmetics
-    * On Boring and Repetitive Proofs
+    * [On Boring and Repetitive Proofs](/posts/arithmetic-made-difficult/on-boring-proofs.html)
     * Partial Orders
     * Semigroups
     * Lattices

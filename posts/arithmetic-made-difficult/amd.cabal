@@ -142,3 +142,8 @@ executable amd-filter
   main-is:       Filter.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is Filter.main_filter
+
+executable amd-elt
+  main-is:       Elt.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options:   -main-is Elt.main_elt

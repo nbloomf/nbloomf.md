@@ -16,7 +16,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import LessThanOrEqualTo
 > import Minus
 > 
-> import Prelude (Show, Int, IO)
+> import Prelude ()
 > import Test.QuickCheck
 
 With $\nleq$ in hand we can also define max and min functions. These are less interesting since they do not have to be defined recursively. :)
@@ -285,8 +285,10 @@ And the suite for ``max`` and ``min``:
 
 > -- run all tests for max
 > _test_max_min :: (Natural t, Arbitrary t, Show t)
->   => t -> Int -> Int -> IO ()
-> _test_max_min t maxSize numCases = do
+>   => String -> t -> Int -> Int -> IO ()
+> _test_max_min label t maxSize numCases = do
+>   testLabel ("min & max: " ++ label)
+> 
 >   let
 >     args = stdArgs
 >       { maxSuccess = numCases
@@ -320,4 +322,5 @@ And the suite for ``max`` and ``min``:
 >   runTest args (_test_min_max_distributive_right t)
 
 > main_max_min :: IO ()
-> main_max_min = _test_max_min (zero :: Unary) 100 100
+> main_max_min = do
+>   _test_max_min "Unary" (zero :: Unary) 100 100

@@ -14,7 +14,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Plus
 > import Times
 > 
-> import Prelude (Show(), Int, IO, Maybe(..))
+> import Prelude ()
 > import Test.QuickCheck
 
 We'd eventually like to solve some equations; for instance, one of the simplest equations we can construct with the tools we have so far is $$\nplus(a,x) = b$$ where $a$ and $b$ are in $\nats$. Putting on our third-grader hat of course the solution to $b = a+x$ is $x = b-a$. So we'll call this solution "b minus a". Our goal in this post is to give a constructive characterization for subtraction.
@@ -246,8 +246,10 @@ And some properties. Some of these are less nice because ``minus`` returns a ``M
 And a suite:
 
 > _test_minus :: (Natural t, Arbitrary t, Show t)
->   => t -> Int -> Int -> IO ()
-> _test_minus t maxSize numCases = do
+>   => String -> t -> Int -> Int -> IO ()
+> _test_minus label t maxSize numCases = do
+>   testLabel ("minus: " ++ label)
+> 
 >   let
 >     args = stdArgs
 >      { maxSuccess = numCases
@@ -264,4 +266,5 @@ And a suite:
 And the runner:
 
 > main_minus :: IO ()
-> main_minus = _test_minus (zero :: Unary) 100 100
+> main_minus = do
+>   _test_minus "Unary" (zero :: Unary) 100 100

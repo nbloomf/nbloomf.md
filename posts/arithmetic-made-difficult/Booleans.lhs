@@ -6,12 +6,13 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > module Booleans
->   ( Bool(True,False), not, and, (&&&), or, (|||), ifThenElse
+>   ( Bool(..), not, and, (&&&), or, (|||), ifThenElse
 >   , Equal, eq, (====)
->   , runTest, _test_boolean, main_boolean
+>   , runTest, testLabel, Show, String, (++), Int, IO, Maybe(..)
+>   , _test_boolean, main_boolean
 >   ) where
 > 
-> import Prelude(Show(show), IO, Bool(..), Int, Maybe(..), putStrLn, (>>), return)
+> import Prelude(Show(show), IO, Bool(..), Int, Maybe(..), putStrLn, (>>), return, (++), String)
 > import Test.QuickCheck
 > import Test.QuickCheck.Test
 > import Text.Show.Functions
@@ -396,20 +397,25 @@ Tests for more than one function:
 > _test_or_and p q r =
 >   (or p (and q r)) ==== (and (or p q) (or p r))
 
-One of our main uses for ``Bool`` will be checking the results of tests, so this is as good a place as any to introduce a QuickCheck helper function for this.
+One of our main uses for ``Bool`` will be checking the results of tests, so this is as good a place as any to introduce a couple of QuickCheck helper functions for this.
 
 > runTest :: Testable prop => Args -> prop -> IO ()
 > runTest args prop = do
 >   result <- quickCheckWithResult args prop
 >   if isSuccess result
->     then putStrLn (show result) >> return ()
+>     then return ()
 >     else putStrLn (show result) >> exitFailure
+> 
+> testLabel :: String -> IO ()
+> testLabel msg = putStrLn ("\x1b[1;32m" ++ msg ++ "\x1b[0;39;49m")
 
 And the suite:
 
 > -- run all tests for booleans
 > _test_boolean :: Int -> Int -> IO ()
 > _test_boolean size num = do
+>   testLabel "Bool"
+> 
 >   let
 >     args = stdArgs
 >       { maxSuccess = num

@@ -13,7 +13,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import NaturalNumbers
 > import Plus
 > 
-> import Prelude (Show(..), IO, Int)
+> import Prelude ()
 > import Test.QuickCheck
 
 Natural number multiplication has signature $\nats \times \nats \rightarrow \nats$, so we might hope to define it as $\Theta = \simprec{\varphi}{\mu}$ for some appropriate $\varphi$ and $\mu$. Using the universal property of simple recursion and how we want multiplication to behave, note that on the one hand we want $\Theta(\zero,m) = \zero$ for all $m$, while on the other hand we have $\Theta(\zero,m) = \varphi(m)$. So apparently we need $\varphi(m) = \zero$ for all $m$.
@@ -147,8 +147,10 @@ As with $\nplus$, it's a good idea to test the properties of $\ntimes$.
 And one function to rule them all:
 
 > _test_times :: (Natural t, Arbitrary t, Show t)
->   => t -> Int -> Int -> IO ()
-> _test_times t maxSize numCases = do
+>   => String -> t -> Int -> Int -> IO ()
+> _test_times label t maxSize numCases = do
+>   testLabel ("times: " ++ label)
+> 
 >   let
 >     args = stdArgs
 >       { maxSuccess = numCases
@@ -171,4 +173,5 @@ I used a much smaller number of test cases this time, because these run much mor
 The problem lies in our *representation* of the natural numbers. A better representation might make a more efficient ``times`` possible.
 
 > main_times :: IO ()
-> main_times = _test_times (zero :: Unary) 20 100
+> main_times = do
+>   _test_times "Unary" (zero :: Unary) 20 100

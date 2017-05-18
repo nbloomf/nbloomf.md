@@ -308,8 +308,10 @@ Here are our property tests for $\filter$:
 And the suite:
 
 > -- run all tests for filter
-> _test_filter :: (List t, Arbitrary a, CoArbitrary a, Show a, Equal a, Arbitrary (t a), Show (t a))
->   => t a -> Int -> Int -> IO ()
+> _test_filter ::
+>   ( Equal a, Show a, Arbitrary a, CoArbitrary a
+>   , List t
+>   ) => t a -> Int -> Int -> IO ()
 > _test_filter t maxSize numCases = do
 >   let
 >     args = stdArgs

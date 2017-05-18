@@ -737,8 +737,11 @@ Here are our property tests for $\zip$ and $\zipPad$.
 And the suite:
 
 > -- run all tests for zip
-> _test_zip :: (List t, Arbitrary (t a), Show (t n), Equal a, Show a, Natural n, Arbitrary a, Arbitrary n, Show n)
->   => t a -> n -> Int -> Int -> IO ()
+> _test_zip ::
+>   ( Equal a, Show a, Arbitrary a
+>   , Natural n, Show n, Arbitrary n
+>   , List t
+>   ) => t a -> n -> Int -> Int -> IO ()
 > _test_zip t n maxSize numCases = do
 >   let
 >     args = stdArgs

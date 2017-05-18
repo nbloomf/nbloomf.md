@@ -741,8 +741,10 @@ Tests for $\lcs$:
 And the suite:
 
 > -- run all tests for lcp and lcs
-> _test_lcp :: (List t, Arbitrary a, Show a, Equal a, Arbitrary (t a), Show (t a))
->   => t a -> Int -> Int -> IO ()
+> _test_lcp ::
+>   ( Equal a, Show a, Arbitrary a
+>   , List t
+>   ) => t a -> Int -> Int -> IO ()
 > _test_lcp t maxSize numCases = do
 >   let
 >     args = stdArgs

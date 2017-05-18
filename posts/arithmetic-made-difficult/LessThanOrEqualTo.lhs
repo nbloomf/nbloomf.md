@@ -15,7 +15,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Times
 > import Minus
 > 
-> import Prelude (Show, Int, IO, Maybe(..))
+> import Prelude ()
 > import Test.QuickCheck
 
 Next we'd like to nail down what it means for one natural number to be less than or equal to another. Note that while $\nplus$ and $\ntimes$ have signatures $$\nats \times \nats \rightarrow \nats,$$ "less than or equal to" (which I will abbrebiate to *leq* from now on) does not. In fact $\leq$ is typically defined as a set of pairs. To make $\leq$ computable, we will instead (try to) define it as a function with signature $$\nats \times \nats \rightarrow \bool.$$ In fact, we can make a reasonable attempt on $\nleq$ without using recursion at all.
@@ -207,8 +207,10 @@ And a test wrapper:
 
 > -- run all tests for leq
 > _test_leq :: (Natural t, Arbitrary t, Show t)
->   => t -> Int -> Int -> IO ()
-> _test_leq t maxSize numCases = do
+>   => String -> t -> Int -> Int -> IO ()
+> _test_leq label t maxSize numCases = do
+>   testLabel ("leq: " ++ label)
+> 
 >   let
 >     args = stdArgs
 >       { maxSuccess = numCases
@@ -221,4 +223,5 @@ And a test wrapper:
 >   runTest args (_test_leq_times t)
 
 > main_leq :: IO ()
-> main_leq = _test_leq (zero :: Unary) 50 100
+> main_leq = do
+>   _test_leq "Unary" (zero :: Unary) 50 100

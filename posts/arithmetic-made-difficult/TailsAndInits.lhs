@@ -274,6 +274,14 @@ as needed.
 
 Next we'll define $\inits$ in terms of $\tails$.
 
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a sets. We define $\inits : \lists{A} \rightarrow \lists{\lists{A}}$ by $$\inits(x) = \rev(\map(\rev)(\tails(\rev(x)))).$$
+</p></div>
+</div>
+
+In Haskell:
+
 > inits :: (List t) => t a -> t (t a)
 > inits = rev . map rev . tails . rev
 

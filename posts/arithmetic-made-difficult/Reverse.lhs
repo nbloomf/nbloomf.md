@@ -367,8 +367,10 @@ Testing
 And the suite:
 
 > -- run all tests for snoc and rev
-> _test_rev :: (List t, Show a, Equal a, Arbitrary a, Arbitrary (t a))
->   => t a -> Int -> Int -> IO ()
+> _test_rev ::
+>   ( Equal a, Show a, Arbitrary a
+>   , List t
+>   ) => t a -> Int -> Int -> IO ()
 > _test_rev t maxSize numCases = do
 >   let
 >     args = stdArgs

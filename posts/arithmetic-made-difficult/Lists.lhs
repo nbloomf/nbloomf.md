@@ -243,10 +243,10 @@ is undecidable. But we can get around this with a simple wrapper type:
 > instance (List t, Show a) => Show (ListOf t a) where
 >   show = show . toConsList
 > 
-> instance (Arbitrary a, Arbitrary (t a)) => Arbitrary (ListOf t a) where
+> instance (List t, Arbitrary a) => Arbitrary (ListOf t a) where
 >   arbitrary = do
 >     x <- arbitrary
->     return (ListOf x)
+>     return (ListOf (fromConsList x))
 
 
 Equality

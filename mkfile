@@ -101,9 +101,9 @@ literate-test:V: sth-test amd-test
 
 STH_TOOLS = archive bubble charcombine charfullwidth charreplace compare compress concat copy count crypt detab echo entab escape examine expand getlines glyphcount import linenumber noop overstrike paginate pslineprint sentcount tail translit unescape wordcount wye
 
-sth:VQ: sth-exe sth-test
+sth:VQ: sth-test
 
-sth-test:VQ:
+sth-test:VQ: sth-exe
   echo "testing sth..." | doppler lightblue
   (shelltest --color --execdir test/sth -- --threads=16)
 
@@ -124,11 +124,11 @@ sth-build:VQ:
 # arithmetic made difficult #
 #---------------------------#
 
-AMD_TOOLS = all-any at boolean cat coprime div divalg filter gcd lcm lcp length leq map max-min minus nat plus power prefix prime range rev tails-inits times tuple unzip zip
+AMD_TOOLS = all-any at boolean cat coprime div divalg elt filter gcd lcm lcp length leq map max-min minus nat plus power prefix prime range rev tails-inits times tuple unzip zip
 
-amd:VQ: amd-exe amd-test
+amd:VQ: amd-test
 
-amd-test:VQ:
+amd-test:VQ: amd-exe
   echo "testing amd..." | doppler lightblue
   (shelltest --color --execdir test/amd -- --threads=16)
 

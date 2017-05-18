@@ -433,6 +433,26 @@ as claimed.
 </p></div>
 </div>
 
+Finally:
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. If $y \neq \cons(a,x)$, then $$\suffix(y,x) = \suffix(y,\cons(a,x)).$$
+</p></div>
+
+<div class="proof"><p>
+Suppose $\suffix(y,x) = \btrue$. Then we have $x = \cat(z,y)$, so that $$\cons(a,x) = \cons(a,\cat(z,y)) = \cat(\cons(a,z),y),$$ so that $\suffix(y,\cons(a,x))$.
+
+Conversely, suppose $\suffix(y,\cons(a,x)) = \btrue$. Then we have $\cons(a,x) = \cat(z,y)$ for some $z$. If $z = \nil$, then $\cons(a,x) = y$; a contradiction. Say then that $z = \cons(b,w)$. Now
+$$\begin{eqnarray*}
+ &   & \cons(a,x) \\
+ & = & \cat(z,y) \\
+ & = & \cat(\cons(b,w),y) \\
+ & = & \cons(b,\cat(w,y));
+</p></div>
+in particular we must have $a = b$ and $x = \cat(w,y)$. Thus $\suffix(y,x) = \btrue$.
+</div>
+
 
 Testing
 -------
