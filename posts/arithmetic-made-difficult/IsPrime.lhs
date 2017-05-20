@@ -21,7 +21,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import CoprimeTo
 > import LeastCommonMultiple
 > 
-> import Prelude (Show, Int, IO, sequence_)
+> import Prelude ()
 > import Test.QuickCheck
 
 Today we'll nail down what it means for a natural number to be *prime*. Typically this is done by saying something like "a natural number other than 0 or 1 is prime if it is not divisible by any natural number besides itself and 1" and from there, arguing that this property can be checked using trial division. As is typical in this series, we will turn this around -- *defining* primes to be those numbers which are detected by trial division (i.e. an algorithm) and then proving that such numbers have the divisibility properties we expect.
@@ -199,16 +199,21 @@ And the suite:
 
 > -- run all tests for prime
 > _test_prime :: (Natural t, Arbitrary t, Show t)
->   => t -> Int -> Int -> IO ()
-> _test_prime t maxSize numCases = sequence_
->   [ quickCheckWith args (_test_mindiv_div t)
->   , quickCheckWith args (_test_prime_mindiv t)
->   ]
->   where
+>   => String -> t -> Int -> Int -> IO ()
+> _test_prime label t maxSize numCases = do
+>   testLabel ("mindiv & prime: " ++ label)
+> 
+>   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
+> 
+>   runTest args (_test_mindiv_div t)
+>   runTest args (_test_prime_mindiv t)
+
+And the main function:
 
 > main_prime :: IO ()
-> main_prime = _test_prime (zero :: Unary) 20 100
+> main_prime = do
+>   _test_prime "Unary" (zero :: Unary) 20 100

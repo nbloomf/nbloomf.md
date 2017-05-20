@@ -20,7 +20,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import GreatestCommonDivisor
 > import CoprimeTo
 > 
-> import Prelude (Show, Int, IO)
+> import Prelude ()
 > import Test.QuickCheck
 
 Recall the following property of $\nmax$: if $\nleq(c,a)$ and $\nleq(c,b)$, then $\nleq(c,\nmax(a,b))$. This statement fell out of the definition of $\nmax$ without much fuss, and may seem anticlimactic. But compare it to this analogous statement about $\ngcd$: if $\ndiv(c,a)$ and $\ndiv(c,b)$, then $\ndiv(c,\ngcd(a,b))$. Now $\nmax$ and $\ngcd$ seem to play very similar roles. Where $\nleq$ is a kind of "additive order" on $\nats$ and $\nmax$ gives an additive ceiling to $a$ and $b$, $\ndiv$ is a kind of "multiplicative order" and $\ngcd$ gives a multiplicative ceiling to $a$ and $b$. When an analogy this strong holds between two concepts in mathematics, it is frequently useful to see how far the analogy goes. To that end, today we will define the multiplicative counterpart to $\nmin$.
@@ -429,8 +429,10 @@ And the suite:
 
 > -- run all tests for lcm
 > _test_lcm :: (Natural t, Arbitrary t, Show t)
->   => t -> Int -> Int -> IO ()
-> _test_lcm t maxSize numCases = do
+>   => String -> t -> Int -> Int -> IO ()
+> _test_lcm label t maxSize numCases = do
+>   testLabel ("lcm: " ++ label)
+> 
 >   let
 >     args = stdArgs
 >       { maxSuccess = numCases
@@ -450,4 +452,5 @@ And the suite:
 And the main function:
 
 > main_lcm :: IO ()
-> main_lcm = _test_lcm (zero :: Unary) 20 100
+> main_lcm = do
+>   _test_lcm "Unary" (zero :: Unary) 20 100

@@ -19,7 +19,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Divides
 > import GreatestCommonDivisor
 > 
-> import Prelude (Show, Int, IO)
+> import Prelude ()
 > import Test.QuickCheck
 
 Today we'll take a break from reasoning about $\ngcd$ to name a special relationship among natural numbers: *coprimality*. Recall that two integers are called *coprime* if their greatest common divisor is 1. This definition does not require recursion.
@@ -98,8 +98,10 @@ And the suite:
 
 > -- run all tests for coprime
 > _test_coprime :: (Natural t, Arbitrary t, Show t)
->   => t -> Int -> Int -> IO ()
-> _test_coprime t maxSize numCases = do
+>   => String -> t -> Int -> Int -> IO ()
+> _test_coprime label t maxSize numCases = do
+>   testLabel ("coprime: " ++ label)
+> 
 >   let
 >     args = stdArgs
 >       { maxSuccess = numCases
@@ -111,4 +113,5 @@ And the suite:
 And the main function:
 
 > main_coprime :: IO ()
-> main_coprime = _test_coprime (zero :: Unary) 20 100
+> main_coprime = do
+>   _test_coprime "Unary" (zero :: Unary) 20 100

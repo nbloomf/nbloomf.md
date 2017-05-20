@@ -22,7 +22,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import AllAndAny
 > import TailsAndInits
 > 
-> import Prelude (Show, Int, IO)
+> import Prelude ()
 > import Test.QuickCheck
 > import Text.Show.Functions
 

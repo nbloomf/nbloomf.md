@@ -20,7 +20,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Cat
 > import Length
 > 
-> import Prelude (Show, Int, IO, Maybe(..))
+> import Prelude ()
 > import Test.QuickCheck
 
 In this post we'll investigate $\at$, which extracts the element at an arbitrary position in a list. First, we need $\head$, which extracts the *first* element of a list. To a first approximation $\head$ has a signature like $$\lists{A} \rightarrow A,$$ and certainly we want $\head(\cons(a,x)) = a$. But what about $\head(\nil)$? In this case there is no element to extract. Taking a cue from our definition of $\nminus$, we will make $\head$ return not an $A$, but a $\ast + A$, letting the $\ast$ represent $\head(\nil)$. Now $\head$ can be expressed as a $\foldr{\ast}{\ast}$ as follows.
@@ -510,11 +510,6 @@ Thus $\at(x,k) = \at(z,k)$ for all $k$, and by the induction hypothesis we have 
 
 Testing
 -------
-
-A utility for type fixing:
-
-> withTypeOf :: a -> a -> a
-> withTypeOf x _ = x
 
 Here are our property tests for $\at$.
 

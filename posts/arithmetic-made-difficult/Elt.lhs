@@ -23,7 +23,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import TailsAndInits
 > import Filter
 > 
-> import Prelude (Show, Int, IO, (.))
+> import Prelude ()
 > import Test.QuickCheck
 > import Text.Show.Functions
 
@@ -307,9 +307,6 @@ as claimed.
 Testing
 -------
 
-> withTypeOf :: a -> a -> a
-> withTypeOf x _ = x
-
 Here are our property tests for $\elt$:
 
 > -- elt'(a,x) == elt(a,x)
@@ -369,8 +366,10 @@ And the suite:
 > _test_elt ::
 >   ( Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , List t
->   ) => t a -> Int -> Int -> IO ()
-> _test_elt t maxSize numCases = do
+>   ) => String -> t a -> Int -> Int -> IO ()
+> _test_elt label t maxSize numCases = do
+>   testLabel ("elt: " ++ label)
+> 
 >   let
 >     args = stdArgs
 >       { maxSuccess = numCases
@@ -389,5 +388,5 @@ And ``main``:
 
 > main_elt :: IO ()
 > main_elt = do
->   _test_elt (nil :: ConsList Bool) 20 100
->   _test_elt (nil :: ConsList Unary) 20 100
+>   _test_elt "ConsList Bool"  (nil :: ConsList Bool) 20 100
+>   _test_elt "ConsList Unary" (nil :: ConsList Unary) 20 100

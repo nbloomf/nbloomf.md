@@ -23,7 +23,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import LongestCommonPrefix
 > import AllAndAny
 > 
-> import Prelude (Show, Int, IO, (.))
+> import Prelude ()
 > import Test.QuickCheck
 > import Text.Show.Functions
 
@@ -353,11 +353,6 @@ as claimed.
 
 Testing
 -------
-
-A utility for type fixing:
-
-> withTypeOf :: a -> a -> a
-> withTypeOf x _ = x
 
 Here are our property tests for $\tails$ and $\inits$:
 

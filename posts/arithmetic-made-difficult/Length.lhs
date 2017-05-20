@@ -17,7 +17,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Reverse
 > import Cat
 > 
-> import Prelude (Show, Int, IO)
+> import Prelude ()
 > import Test.QuickCheck
 
 Today we'll measure the sizes of lists with $\length$. Intuitively this function should "count" the "number" of "items" in a list. Thinking recuresively, it is reasonable to want the length of $\nil$ to be zero, and the length of $\cons(a,x)$ to be one more than the length of $x$. $\foldr{\ast}{\ast}$ was made for situations like this. But wait! Remember that $\foldr{\ast}{\ast}$ is not tail recursive, so on large lists it may have problems. But $\foldl{\ast}{\ast}$ is tail recursive, and is interchangeable with $\foldr{\ast}{\ast}$ *as long as* whatever we're doing to the list doesn't care what *order* the items come in. And it seems reasonable to say that the length of a list is not dependent on the order of its items. With this in mind we define $\length$ as follows.
@@ -233,9 +233,6 @@ as needed.
 
 Testing
 -------
-
-> withTypeOf :: a -> a -> a
-> withTypeOf x _ = x
 
 Here are our property tests for $\length$.
 

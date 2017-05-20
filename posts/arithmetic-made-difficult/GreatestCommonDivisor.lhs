@@ -18,7 +18,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import DivisionAlgorithm
 > import Divides
 > 
-> import Prelude (Show, Int, IO)
+> import Prelude ()
 > import Test.QuickCheck
 
 Today we'll define the greatest common divisor of two natural numbers. The usual way to do this (in books I've seen) is to define what it means to say that $d$ is a greatest common divisor of $a$ and $b$, then show (possibly nonconstructively) that any two $a$ and $b$ have a greatest common divisor, and finally establish the Euclidean algorithm that actually computes GCDs. We will work backwards: first *defining* the GCD of two natural numbers using the punchline of the Euclidean algorithm and then proving that the output of this function acts like the GCD.
@@ -436,8 +436,10 @@ And the suite:
 
 > -- run all tests for gcd
 > _test_gcd :: (Natural t, Arbitrary t, Show t)
->   => t -> Int -> Int -> IO ()
-> _test_gcd t maxSize numCases = do
+>   => String -> t -> Int -> Int -> IO ()
+> _test_gcd label t maxSize numCases = do
+>   testLabel ("gcd: " ++ label)
+> 
 >   let
 >     args = stdArgs
 >       { maxSuccess = numCases
@@ -456,4 +458,5 @@ And the suite:
 And the main function:
 
 > main_gcd :: IO ()
-> main_gcd = _test_gcd (zero :: Unary) 20 100
+> main_gcd = do
+>   _test_gcd "Unary" (zero :: Unary) 20 100

@@ -24,7 +24,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import UnfoldN
 > import Range
 > 
-> import Prelude (Show, Int, IO)
+> import Prelude ()
 > import Test.QuickCheck
 
 Today we'll define a really useful function on lists called $\zip$. This map will take two lists, one in $\lists{A}$ and one in $\lists{B}$, and return a list in $\lists{A \times B}$. In progress, $\zip$ping two lists looks something like this:
@@ -645,11 +645,6 @@ as claimed.
 
 Testing
 -------
-
-A utility for type fixing:
-
-> withTypeOf :: a -> a -> a
-> withTypeOf x _ = x
 
 Here are our property tests for $\zip$ and $\zipPad$.
 

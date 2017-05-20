@@ -15,7 +15,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import NaturalNumbers
 > import Lists
 > 
-> import Prelude (Show, Int, IO, (.))
+> import Prelude ()
 > import Test.QuickCheck
 
 In the last post we defined a set $\lists{A}$ with a special element $\nil$, a map $\cons : A \times \lists{A} \rightarrow \lists{A}$, and a universal map $\foldr{\ast}{\ast}$. As you might guess we'll be thinking of the elements of $\lists{A}$ as finite lists, and they will form a simple kind of data structure.
@@ -285,6 +285,26 @@ This theorem says that $\foldl{\ast}{\ast}$ is naturally tail recursive like so:
 >   Nil       -> e
 >   Cons a as -> foldl (phi a e) phi as
 
+Now $\foldl{\ast}{\ast}$ interacts with $\snoc$:
+
+<div class="result">
+<div class="thm"><p>
+We have $$\foldl{e}{\varphi}(\snoc(a,x)) = \varphi(a,\foldl{e}{\varphi}(x).$$
+</p></div>
+
+<div class="proof"><p>
+Note that
+$$\begin{eqnarray*}
+ &   & \foldl{e}{\varphi}(\snoc(a,x)) \\
+ & = & \foldr{e}{\varphi}(\rev(\snoc(a,x))) \\
+ & = & \foldr{e}{\varphi}(\cons(a,\rev(x)) \\
+ & = & \varphi(a,\foldr{e}{\varphi}(\rev(x)) \\
+ & = & \varphi(a,\foldl{e}{\varphi}(x))
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
 Now many list functions can be implemented in terms of either $\foldr{\ast}{\ast}$ or $\foldl{\ast}{\ast}$, and depending on the function, one may be preferable over the other. For example, we will prefer the following implementation of $\rev$.
 
 <div class="result">
@@ -310,12 +330,69 @@ as claimed.
 </p></div>
 </div>
 
+A useful question to ask is this: under what circumstances can a function be defined using either a right fold or a left fold? The next result provides a sufficient condition.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ and $B$ be sets, and suppose $\varphi : A \times B \rightarrow B$ has the property that $$\varphi(a,\varphi(b,e)) = \varphi(b,\varphi(a,e))$$ for all $a,b \in A$ and $e \in B$. Then we have the following.
+
+1. $\foldr{e}{\varphi}(\snoc(a,x)) = \foldr{e}{\varphi}(\cons(a,x))$.
+2. $\foldr{e}{\varphi}(\rev(x)) = \foldr{e}{\varphi}(x)$.
+3. In particular, $\foldr{e}{\varphi} = \foldl{e}{\varphi}$.
+</p></div>
+
+<div class="proof"><p>
+1. We consider two cases. If $x = \nil$, we have $$\foldr{e}{\varphi}(\snoc(a,\nil)) = \foldr{e}{\varphi}(\cons(a,\nil))$$ as claimed. Suppose instead that $x = \cons(b,w)$; we now proceed by list induction on $w$. For the base case $w = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \foldr{e}{\varphi}(\snoc(a,\cons(b,\nil))) \\
+ & = & \foldr{\varphi(a,e)}{\varphi}(\cons(b,\nil)) \\
+ & = & \varphi(b,\foldr{\varphi(a,e)}{\varphi}(\nil)) \\
+ & = & \varphi(b,\varphi(a,e)) \\
+ & = & \varphi(a,\varphi(b,e)) \\
+ & = & \varphi(a,\varphi(b,\foldr{e}{\varphi}(\nil))) \\
+ & = & \varphi(a,\foldr{e}{\varphi}(\cons(b,\nil))) \\
+ & = & \foldr{e}{\varphi}(\cons(a,\cons(b,\nil)))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $w$ and let $c \in A$. Now
+$$\begin{eqnarray*}
+ &   & \foldr{e}{\varphi}(\snoc(a,\cons(b,\cons(c,w)))) \\
+ & = & \foldr{\varphi(a,e)}{\varphi}(\cons(b,\cons(c,w))) \\
+ & = & \varphi(b,\foldr{\varphi(a,e)}{\varphi}(\cons(c,w))) \\
+ & = & \varphi(b,\varphi(c,\foldr{\varphi(a,e)}{\varphi}(w))) \\
+ & = & \varphi(b,\varphi(c,\foldr{e}{\varphi}(\snoc(a,w)))) \\
+ & = & \varphi(b,\varphi(c,\foldr{e}{\varphi}(\cons(a,w)))) \\
+ & = & \varphi(b,\varphi(c,\varphi(a,\foldr{e}{\varphi}(w)))) \\
+ & = & \varphi(b,\varphi(a,\varphi(c,\foldr{e}{\varphi}(w)))) \\
+ & = & \varphi(a,\varphi(b,\varphi(c,\foldr{e}{\varphi}(w)))) \\
+ & = & \foldr{e}{\varphi}(\cons(a,\cons(b,\cons(c,w))))
+\end{eqnarray*}$$
+as needed.
+2. We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \foldr{e}{\varphi}(\rev(x)) \\
+ & = & \foldr{e}{\varphi}(\rev(\nil)) \\
+ & = & \foldr{e}{\varphi}(\nil) \\
+ & = & \foldr{e}{\varphi}(x)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now we have
+$$\begin{eqnarray*}
+ &   & \foldr{e}{\varphi}(\rev(\cons(a,x))) \\
+ & = & \foldr{e}{\varphi}(\snoc(a,\rev(x))) \\
+ & = & \foldr{e}{\varphi}(\cons(a,\rev(x))) \\
+ & = & \varphi(a,\foldr{e}{\varphi}(\rev(x))) \\
+ & = & \varphi(a,\foldr{e}{\varphi}(x)) \\
+ & = & \foldr{e}{\varphi}(\cons(a,x))
+\end{eqnarray*}$$
+as needed.
+3. This is a restatement of (2).
+</p></div>
+</div>
+
 
 Testing
 -------
 
-> withTypeOf :: a -> a -> a
-> withTypeOf x _ = x
+Here are our property tests.
 
 > -- snoc(a,cons(b,x)) == cons(b,snoc(a,x))
 > _test_snoc_cons_commute :: (List t, Equal a)

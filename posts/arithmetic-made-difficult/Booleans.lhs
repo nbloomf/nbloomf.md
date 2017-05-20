@@ -8,11 +8,14 @@ tags: arithmetic-made-difficult, literate-haskell
 > module Booleans
 >   ( Bool(..), not, and, (&&&), or, (|||), ifThenElse
 >   , Equal, eq, (====)
->   , runTest, testLabel, Show, String, (++), Int, IO, Maybe(..)
+>   , runTest, testLabel, withTypeOf, Show, String, (++), Int, IO, Maybe(..), (.)
 >   , _test_boolean, main_boolean
 >   ) where
 > 
-> import Prelude(Show(show), IO, Bool(..), Int, Maybe(..), putStrLn, (>>), return, (++), String)
+> import Prelude
+>   ( Show(show), IO, Bool(..), Int, Maybe(..)
+>   , putStrLn, (>>), return, (++), String, (.)
+>   )
 > import Test.QuickCheck
 > import Test.QuickCheck.Test
 > import Text.Show.Functions
@@ -267,6 +270,62 @@ as claimed.
 </p></div>
 </div>
 
+Nested $\bif{\ast}{\ast}{\ast}$s commute (sort of).
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $p,q \in \bool$ and $a,b,c,d \in A$. Then we have
+$$\begin{eqnarray*}
+ &   & \bif{p}{\bif{q}{a}{b}}{\bif{q}{c}{d}} \\
+ & = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}}.
+\end{eqnarray*}$$
+</p></div>
+
+<div class="proof"><p>
+We have four possibilities for $(p,q)$. If $p = \btrue$ and $q = \btrue$,
+$$\begin{eqnarray*}
+ &   & \bif{p}{\bif{q}{a}{b}}{\bif{q}{c}{d}} \\
+ & = & \bif{\btrue}{\bif{\btrue}{a}{b}}{\bif{q}{c}{d}} \\
+ & = & \bif{\btrue}{a}{b} \\
+ & = & a \\
+ & = & \bif{\btrue}{a}{c} \\
+ & = & \bif{\btrue}{\bif{\btrue}{a}{c}}{\bif{p}{b}{d}} \\
+ & = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
+\end{eqnarray*}$$
+as claimed. If $p = \btrue$ and $q = \bfalse$,
+$$\begin{eqnarray*}
+ &   & \bif{p}{\bif{q}{a}{b}}{\bif{q}{c}{d}} \\
+ & = & \bif{\btrue}{\bif{\bfalse}{a}{b}}{\bif{q}{c}{d}} \\
+ & = & \bif{\bfalse}{a}{b} \\
+ & = & b \\
+ & = & \bif{\btrue}{b}{d} \\
+ & = & \bif{\bfalse}{\bif{p}{a}{c}}{\bif{\btrue}{b}{d}} \\
+ & = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
+\end{eqnarray*}$$
+as claimed. If $p = \bfalse$ and $q = \btrue$,
+$$\begin{eqnarray*}
+ &   & \bif{p}{\bif{q}{a}{b}}{\bif{q}{c}{d}} \\
+ & = & \bif{\bfalse}{\bif{q}{a}{b}}{\bif{\btrue}{c}{d}} \\
+ & = & \bif{\btrue}{c}{d} \\
+ & = & c \\
+ & = & \bif{\bfalse}{a}{c} \\
+ & = & \bif{\btrue}{\bif{\bfalse}{a}{c}}{\bif{p}{b}{d}} \\
+ & = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
+\end{eqnarray*}$$
+as claimed. If $p = \bfalse$ and $q = \bfalse$,
+$$\begin{eqnarray*}
+ &   & \bif{p}{\bif{q}{a}{b}}{\bif{q}{c}{d}} \\
+ & = & \bif{\bfalse}{\bif{q}{a}{b}}{\bif{\bfalse}{c}{d}} \\
+ & = & \bif{\bfalse}{c}{d} \\
+ & = & d \\
+ & = & \bif{\bfalse}{b}{d} \\
+ & = & \bif{\bfalse}{\bif{p}{a}{c}}{\bif{\bfalse}{b}{d}} \\
+ & = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
 
 Equality
 --------
@@ -408,6 +467,9 @@ One of our main uses for ``Bool`` will be checking the results of tests, so this
 > 
 > testLabel :: String -> IO ()
 > testLabel msg = putStrLn ("\x1b[1;32m" ++ msg ++ "\x1b[0;39;49m")
+> 
+> withTypeOf :: a -> a -> a
+> withTypeOf x _ = x
 
 And the suite:
 
