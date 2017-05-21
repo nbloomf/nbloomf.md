@@ -18,7 +18,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Zip
 > import Prefix
 > 
-> import Prelude (Show, Int, IO, const, (.))
+> import Prelude (const, (.))
 > import Test.QuickCheck
 > import Text.Show.Functions
 
@@ -334,7 +334,7 @@ Here are our property tests for $\all$:
 > 
 > -- all(p,x) == foldr(true,and)(map(p)(x))
 > _test_all_mapfold :: (List t, Equal a)
->   => t a -> (a -> Bool) -> t a -> Bool
+>   => t a -> (a -> Bool) -> ListOf t a -> Bool
 > _test_all_mapfold _ p x =
 >   (all p x) ==== (foldr True (&&&) (map p x))
 > 
@@ -412,9 +412,13 @@ Tests for $\any$:
 And the suite:
 
 > -- run all tests for all and any
-> _test_all_any :: (List t, Arbitrary a, CoArbitrary a, Show a, Equal a, Arbitrary (t a), Show (t a))
->   => t a -> Int -> Int -> IO ()
-> _test_all_any t maxSize numCases = do
+> _test_all_any ::
+>   ( Show a, Equal a, Arbitrary a, CoArbitrary a
+>   , List t
+>   ) => String -> t a -> Int -> Int -> IO ()
+> _test_all_any label t maxSize numCases = do
+>   testLabel ("all & any: " ++ label)
+> 
 >   let
 >     args = stdArgs
 >       { maxSuccess = numCases
@@ -439,5 +443,5 @@ And ``main``:
 
 > main_all_any :: IO ()
 > main_all_any = do
->   _test_all_any (nil :: ConsList Bool) 20 100
->   _test_all_any (nil :: ConsList Unary) 20 100
+>   _test_all_any "ConsList Bool"  (nil :: ConsList Bool)  20 100
+>   _test_all_any "ConsList Unary" (nil :: ConsList Unary) 20 100

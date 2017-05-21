@@ -649,16 +649,16 @@ Testing
 Here are our property tests for $\zip$ and $\zipPad$.
 
 > -- map(swap)(zip(x,y)) == zip(y,x)
-> _test_zip_swap :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> Bool
-> _test_zip_swap _ x y =
+> _test_zip_swap :: (List t, Equal a, Equal b)
+>   => t a -> t b -> ListOf t a -> ListOf t b -> Bool
+> _test_zip_swap _ _ x y =
 >   (map swap (zip x y)) ==== (zip y x)
 > 
 > 
 > -- length(zip(x,y)) == min(length(x),length(y))
-> _test_zip_length :: (List t, Equal a, Natural n)
->   => t a -> n -> ListOf t a -> ListOf t a -> Bool
-> _test_zip_length _ n x y =
+> _test_zip_length :: (List t, Equal a, Equal b, Natural n)
+>   => t a -> t b -> n -> ListOf t a -> ListOf t b -> Bool
+> _test_zip_length _ _ n x y =
 >   let
 >     lx = length x `withTypeOf` Nat n
 >   in
@@ -680,23 +680,23 @@ Here are our property tests for $\zip$ and $\zipPad$.
 > 
 > 
 > -- zip'(x,y) == zip(x,y)
-> _test_zip_alt :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> Bool
-> _test_zip_alt _ x y =
+> _test_zip_alt :: (List t, Equal a, Equal b)
+>   => t a -> t b -> ListOf t a -> ListOf t b -> Bool
+> _test_zip_alt _ _ x y =
 >   (zip' x y) ==== (zip x y)
 > 
 > 
 > -- map(swap)(zipPad(u,v)(x,y)) == zipPad(v,u)(y,x)
-> _test_zipPad_swap :: (List t, Equal a)
->   => t a -> a -> a -> ListOf t a -> ListOf t a -> Bool
-> _test_zipPad_swap _ u v x y =
+> _test_zipPad_swap :: (List t, Equal a, Equal b)
+>   => t a -> t b -> a -> b -> ListOf t a -> ListOf t b -> Bool
+> _test_zipPad_swap _ _ u v x y =
 >   (map swap (zipPad u v x y)) ==== (zipPad v u y x)
 > 
 > 
 > -- length(zipPad(u,v)(x,y)) == max(length(x),length(y))
-> _test_zipPad_length :: (List t, Equal a, Natural n)
->   => t a -> n -> a -> a -> ListOf t a -> ListOf t a -> Bool
-> _test_zipPad_length _ n u v x y =
+> _test_zipPad_length :: (List t, Equal a, Equal b, Natural n)
+>   => t a -> t b -> n -> a -> b -> ListOf t a -> ListOf t b -> Bool
+> _test_zipPad_length _ _ n u v x y =
 >   let
 >     lx = length x `withTypeOf` Nat n
 >   in
@@ -724,9 +724,9 @@ Here are our property tests for $\zip$ and $\zipPad$.
 > 
 > 
 > -- zipPad'(x,y) == zipPad(x,y)
-> _test_zipPad_alt :: (List t, Equal a)
->   => t a -> a -> a -> ListOf t a -> ListOf t a -> Bool
-> _test_zipPad_alt _ u v x y =
+> _test_zipPad_alt :: (List t, Equal a, Equal b)
+>   => t a -> t b -> a -> b -> ListOf t a -> ListOf t b -> Bool
+> _test_zipPad_alt _ _ u v x y =
 >   (zipPad' u v x y) ==== (zipPad u v x y)
 
 And the suite:
@@ -734,31 +734,34 @@ And the suite:
 > -- run all tests for zip
 > _test_zip ::
 >   ( Equal a, Show a, Arbitrary a
+>   , Equal b, Show b, Arbitrary b
 >   , Natural n, Show n, Arbitrary n
 >   , List t
->   ) => t a -> n -> Int -> Int -> IO ()
-> _test_zip t n maxSize numCases = do
+>   ) => String -> t a -> t b -> n -> Int -> Int -> IO ()
+> _test_zip label t u n maxSize numCases = do
+>   testLabel ("zip & zipPad: " ++ label)
+> 
 >   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_zip_swap t)
->   runTest args (_test_zip_length t n)
+>   runTest args (_test_zip_swap t u)
+>   runTest args (_test_zip_length t u n)
 >   runTest args (_test_zip_zip_left t)
 >   runTest args (_test_zip_zip_right t)
->   runTest args (_test_zip_alt t)
+>   runTest args (_test_zip_alt t u)
 > 
->   runTest args (_test_zipPad_swap t)
->   runTest args (_test_zipPad_length t n)
+>   runTest args (_test_zipPad_swap t u)
+>   runTest args (_test_zipPad_length t u n)
 >   runTest args (_test_zipPad_zipPad_left t)
 >   runTest args (_test_zipPad_zipPad_right t)
->   runTest args (_test_zipPad_alt t)
+>   runTest args (_test_zipPad_alt t u)
 
 And ``main``:
 
 > main_zip :: IO ()
 > main_zip = do
->   _test_zip (nil :: ConsList Bool) (zero :: Unary) 20 100
->   _test_zip (nil :: ConsList Unary) (zero :: Unary) 20 100
+>   _test_zip "ConsList Bool & ConsListBool & Unary" (nil :: ConsList Bool) (nil :: ConsList Bool) (zero :: Unary) 20 100
+>   _test_zip "ConsList Unary & ConsList Unary & Unary" (nil :: ConsList Unary) (nil :: ConsList Unary) (zero :: Unary) 20 100

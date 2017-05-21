@@ -92,7 +92,7 @@ as claimed.
 2. Note that
 $$\begin{eqnarray*}
  &   & \count(a,\cons(b,\nil)) \\
- & = & \foldl{\zero}{\varphi(a)}(cons(b,\nil)) \\
+ & = & \foldl{\zero}{\varphi(a)}(\cons(b,\nil)) \\
  & = & \foldl{\varphi(a)(b,\zero)}{\varphi(a)}(\nil) \\
  & = & \varphi(a)(b,\zero) \\
  & = & \bif{\beq(a,b)}{\next(\zero)}{\zero}
@@ -181,11 +181,39 @@ Let $A$ be a set. We have $$\count(a,x) = \length(\filter(\beq(a,-),x)).$$
 </p></div>
 
 <div class="proof"><p>
-(@@@)
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \count(a,x) \\
+ & = & \count(a,\nil) \\
+ & = & \foldr{\zero}{\varphi(a)}(\nil) \\
+ & = & \zero \\
+ & = & \length(\nil) \\
+ & = & \length(\filter(\beq(a,-),\nil)) \\
+ & = & \length(\filter(\beq(a,-),x))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$ and let $b \in A$. We consider two possibilities. If $a = b$, we have
+$$\begin{eqnarray*}
+ &   & \count(a,\cons(b,x)) \\
+ & = & \count(a,\cons(a,x)) \\
+ & = & \bif{\beq(a,a)}{\next(\count(a,x))}{\count(a,x)} \\
+ & = & \next(\count(a,x)) \\
+ & = & \next(\length(\filter(\beq(a,-),x))) \\
+ & = & \length(\cons(a,\filter(\beq(a,-),x))) \\
+ & = & \length(\filter(\beq(a,-),\cons(a,x)))
+\end{eqnarray*}$$
+as needed. If $a \neq b$, we have
+$$\begin{eqnarray*}
+ &   & \count(a,\cons(b,x)) \\
+ & = & \bif{\beq(a,b)}{\next(\count(a,x))}{\count(a,x)} \\
+ & = & \count(a,x) \\
+ & = & \length(\filter(\beq(a,-),x)) \\
+ & = & \length(\filter(\beq(a,-),\cons(b,x)))
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
 
-$\count$ interacts with $\map(f)$ if $f$ is injective:
+And $\count$ interacts with $\map(f)$ if $f$ is injective.
 
 <div class="result">
 <div class="thm"><p>
@@ -193,7 +221,32 @@ Let $A$ and $B$ be sets and $f : A \rightarrow B$ an injective map. Then $$\coun
 </p></div>
 
 <div class="proof"><p>
-(@@@)
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \count(a,x) \\
+ & = & \count(a,\nil) \\
+ & = & \count(a,\map(f)(\nil)) \\
+ & = & \count(a,\map(f)(x))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$, and let $b \in A$. We consider two possibilities. If $a = b$, then $f(a) = f(b)$, and we have
+$$\begin{eqnarray*}
+ &   & \count(a,\cons(b,x)) \\
+ & = & \count(a,\cons(a,x)) \\
+ & = & \next(\count(a,x)) \\
+ & = & \next(\count(f(a),\map(f)(x))) \\
+ & = & \count(f(a),\cons(f(a),\map(f)(x))) \\
+ & = & \count(f(a),\map(f)(\cons(a,x))) \\
+ & = & \count(f(a),\map(f)(\cons(b,x)))
+\end{eqnarray*}$$
+as needed. If $a \neq b$, then we have $f(a) \neq f(b)$ (since $f$ is injective), so that
+$$\begin{eqnarray*}
+ &   & \count(a,\cons(b,x)) \\
+ & = & \count(a,x) \\
+ & = & \count(f(a),\map(f)(x)) \\
+ & = & \count(f(a),\cons(f(b),\map(f)(x))) \\
+ & = & \count(f(a),\map(f)(\cons(b,x)))
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
 
@@ -253,6 +306,16 @@ Here are our property tests for $\count$:
 >    cx = count a x `withTypeOf` Nat k
 >  in
 >    (count a (cat x y)) ==== plus cx (count a y)
+> 
+> 
+> -- count(a,x) == length(filter(eq(a,-),x))
+> _test_count_length :: (List t, Equal a, Natural n)
+>   => t a -> n -> a -> ListOf t a -> Bool
+> _test_count_length t k a x =
+>  let
+>    cx = count a x `withTypeOf` Nat k
+>  in
+>    cx ==== (length (filter (eq a) x))
 
 And the suite:
 
@@ -276,6 +339,7 @@ And the suite:
 >   runTest args (_test_count_snoc_cons t n)
 >   runTest args (_test_count_rev t n)
 >   runTest args (_test_count_cat t n)
+>   runTest args (_test_count_length t n)
 
 And ``main``:
 

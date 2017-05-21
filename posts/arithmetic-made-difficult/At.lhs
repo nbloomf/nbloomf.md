@@ -621,9 +621,14 @@ Here are our property tests for $\at$.
 And the suite:
 
 > -- run all tests for at
-> _test_at :: (List t, Arbitrary a, Arbitrary (t a), Show a, Equal a, Show (t a), Natural n, Arbitrary n, Show n)
->   => t a -> n -> Int -> Int -> IO ()
-> _test_at t n maxSize numCases = do
+> _test_at ::
+>   ( Show a, Equal a, Arbitrary a
+>   , Natural n, Show n, Arbitrary n
+>   , List t
+>   ) => String -> t a -> n -> Int -> Int -> IO ()
+> _test_at label t n maxSize numCases = do
+>   testLabel ("at: " ++ label)
+> 
 >   let
 >     args = stdArgs
 >       { maxSuccess = numCases
@@ -643,4 +648,6 @@ And the suite:
 And ``main``:
 
 > main_at :: IO ()
-> main_at = _test_at (nil :: ConsList Bool) (zero :: Unary) 20 100
+> main_at = do
+>   _test_at "ConsList Bool & Unary"  (nil :: ConsList Bool)  (zero :: Unary) 20 100
+>   _test_at "ConsList Unary & Unary" (nil :: ConsList Unary) (zero :: Unary) 20 100

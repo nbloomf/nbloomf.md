@@ -420,9 +420,14 @@ Here are our property tests for $\tails$ and $\inits$:
 And the suite:
 
 > -- run all tests for tails and inits
-> _test_tails_inits :: (List t, Arbitrary a, CoArbitrary a, Show a, Equal a, Arbitrary (t a), Show (t a), Natural n)
->   => t a -> n -> Int -> Int -> IO ()
-> _test_tails_inits t n maxSize numCases = do
+> _test_tails_inits ::
+>   ( Show a, Equal a, Arbitrary a, CoArbitrary a
+>   , Natural n
+>   , List t
+>   ) => String -> t a -> n -> Int -> Int -> IO ()
+> _test_tails_inits label t n maxSize numCases = do
+>   testLabel ("tails & inits: " ++ label)
+> 
 >   let
 >     args = stdArgs
 >       { maxSuccess = numCases
@@ -443,5 +448,5 @@ And ``main``:
 
 > main_tails_inits :: IO ()
 > main_tails_inits = do
->   _test_tails_inits (nil :: ConsList Bool) (zero :: Unary) 20 100
->   _test_tails_inits (nil :: ConsList Unary) (zero :: Unary) 20 100
+>   _test_tails_inits "ConsList Bool & Unary"  (nil :: ConsList Bool) (zero :: Unary) 20 100
+>   _test_tails_inits "ConsList Unary & Unary" (nil :: ConsList Unary) (zero :: Unary) 20 100

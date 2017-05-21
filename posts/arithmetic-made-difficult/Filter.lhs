@@ -311,8 +311,10 @@ And the suite:
 > _test_filter ::
 >   ( Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , List t
->   ) => t a -> Int -> Int -> IO ()
-> _test_filter t maxSize numCases = do
+>   ) => String -> t a -> Int -> Int -> IO ()
+> _test_filter label t maxSize numCases = do
+>   testLabel ("filter: " ++ label)
+> 
 >   let
 >     args = stdArgs
 >       { maxSuccess = numCases
@@ -329,5 +331,5 @@ And ``main``:
 
 > main_filter :: IO ()
 > main_filter = do
->   _test_filter (nil :: ConsList Bool) 20 100
->   _test_filter (nil :: ConsList Unary) 20 100
+>   _test_filter "ConsList Bool"  (nil :: ConsList Bool)  20 100
+>   _test_filter "ConsList Unary" (nil :: ConsList Unary) 20 100

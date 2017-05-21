@@ -287,9 +287,13 @@ Here are our property tests for $\range$.
 And the suite:
 
 > -- run all tests for range
-> _test_range :: (List t, Arbitrary (t n), Show (t n), Natural n, Arbitrary n, Show n)
->   => t (Nat n) -> Int -> Int -> IO ()
-> _test_range t maxSize numCases = do
+> _test_range ::
+>   ( Natural n, Show n, Arbitrary n
+>   , List t
+>   ) => String -> t (Nat n) -> Int -> Int -> IO ()
+> _test_range label t maxSize numCases = do
+>   testLabel ("range: " ++ label)
+> 
 >   let
 >     args = stdArgs
 >       { maxSuccess = numCases
@@ -305,4 +309,5 @@ And the suite:
 And ``main``:
 
 > main_range :: IO ()
-> main_range = _test_range (nil :: ConsList (Nat Unary)) 20 100
+> main_range = do
+>   _test_range "ConsList Unary" (nil :: ConsList (Nat Unary)) 20 100

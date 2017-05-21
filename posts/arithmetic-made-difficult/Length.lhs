@@ -238,109 +238,114 @@ Here are our property tests for $\length$.
 
 > -- length(cons(a,x)) == length(cons(b,x))
 > _test_length_cons :: (List t, Equal a, Natural n)
->   => t a -> Nat n -> a -> a -> ListOf t a -> Bool
+>   => t a -> n -> a -> a -> ListOf t a -> Bool
 > _test_length_cons _ n a b x =
 >   let
->     lcx = (length (cons a x)) `withTypeOf` n
+>     lcx = (length (cons a x)) `withTypeOf` Nat n
 >   in
 >     lcx ==== (length (cons b x))
 > 
 > 
 > -- length(cons(a,x)) == length(snoc(a,x))
 > _test_length_cons_snoc :: (List t, Equal a, Natural n)
->   => t a -> Nat n -> a -> ListOf t a -> Bool
+>   => t a -> n -> a -> ListOf t a -> Bool
 > _test_length_cons_snoc _ n a x =
 >   let
->     lcx = (length (cons a x)) `withTypeOf` n
+>     lcx = (length (cons a x)) `withTypeOf` Nat n
 >   in
 >     lcx ==== (length (snoc a x))
 > 
 > 
 > -- length(cons(a,x)) == next(length(x))
 > _test_length_cons_next :: (List t, Equal a, Natural n)
->   => t a -> Nat n -> a -> ListOf t a -> Bool
+>   => t a -> n -> a -> ListOf t a -> Bool
 > _test_length_cons_next _ n a x =
 >   let
->     lx = (length x) `withTypeOf` n
+>     lx = (length x) `withTypeOf` Nat n
 >   in
 >     (length (cons a x)) ==== next lx
 > 
 > 
 > -- length(cons(a,nil)) == next(zero)
 > _test_length_single :: (List t, Equal a, Natural n)
->   => t a -> Nat n -> a -> Bool
+>   => t a -> n -> a -> Bool
 > _test_length_single z n a =
 >   let
 >     nil' = nil `withTypeOf` z
->     one  = (next zero) `withTypeOf` n
+>     one  = (next zero) `withTypeOf` Nat n
 >   in
 >     one ==== (length (cons a nil'))
 > 
 > 
 > -- length(cons(a,cons(b,nil))) == next(next(zero))
 > _test_length_double :: (List t, Equal a, Natural n)
->   => t a -> Nat n -> a -> a -> Bool
+>   => t a -> n -> a -> a -> Bool
 > _test_length_double z n a b =
 >   let
 >     nil' = nil `withTypeOf` (ListOf z)
->     two  = (next (next zero)) `withTypeOf` n
+>     two  = (next (next zero)) `withTypeOf` Nat n
 >   in
 >     two ==== (length (cons a (cons b nil')))
 > 
 > 
 > -- length(snoc(a,x)) == next(length(x))
 > _test_length_snoc_next :: (List t, Equal a, Natural n)
->   => t a -> Nat n -> a -> ListOf t a -> Bool
+>   => t a -> n -> a -> ListOf t a -> Bool
 > _test_length_snoc_next _ n a x =
 >   let
->     nlx = (next (length x)) `withTypeOf` n
+>     nlx = (next (length x)) `withTypeOf` Nat n
 >   in
 >     nlx ==== (length (snoc a x))
 > 
 > 
 > -- length(rev(x)) == length(x)
 > _test_length_rev :: (List t, Equal a, Natural n)
->   => t a -> Nat n -> ListOf t a -> Bool
+>   => t a -> n -> ListOf t a -> Bool
 > _test_length_rev _ n x =
 >   let
->     lx = length x `withTypeOf` n
+>     lx = length x `withTypeOf` Nat n
 >   in
 >     lx ==== (length (rev x))
 > 
 > 
 > -- length(cat(x,y)) == plus(length(x),length(y))
 > _test_length_cat :: (List t, Equal a, Natural n)
->   => t a -> Nat n -> ListOf t a -> ListOf t a -> Bool
+>   => t a -> n -> ListOf t a -> ListOf t a -> Bool
 > _test_length_cat _ n x y =
 >   let
->     lxy = (length (cat x y)) `withTypeOf` n
+>     lxy = (length (cat x y)) `withTypeOf` Nat n
 >   in
 >     lxy ==== (plus (length x) (length y))
 
 And the suite:
 
 > -- run all tests for length
-> _test_length :: (List t, Show a, Equal a, Arbitrary a, Arbitrary (t a), Natural n)
->   => t a -> n -> Int -> Int -> IO ()
-> _test_length t n maxSize numCases = do
+> _test_length ::
+>   ( Show a, Equal a, Arbitrary a
+>   , Natural n
+>   , List t
+>   ) => String -> t a -> n -> Int -> Int -> IO ()
+> _test_length label t n maxSize numCases = do
+>   testLabel ("length: " ++ label)
+> 
 >   let
 >     args = stdArgs
 >       { maxSuccess = numCases
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_length_cons t (Nat n))
->   runTest args (_test_length_cons_snoc t (Nat n))
->   runTest args (_test_length_cons_next t (Nat n))
->   runTest args (_test_length_single t (Nat n))
->   runTest args (_test_length_double t (Nat n))
->   runTest args (_test_length_snoc_next t (Nat n))
->   runTest args (_test_length_rev t (Nat n))
->   runTest args (_test_length_cat t (Nat n))
+>   runTest args (_test_length_cons t n)
+>   runTest args (_test_length_cons_snoc t n)
+>   runTest args (_test_length_cons_next t n)
+>   runTest args (_test_length_single t n)
+>   runTest args (_test_length_double t n)
+>   runTest args (_test_length_snoc_next t n)
+>   runTest args (_test_length_rev t n)
+>   runTest args (_test_length_cat t n)
 
 And ``main``:
 
 > main_length :: IO ()
 > main_length = do
->   _test_length (nil :: ConsList Bool) (zero :: Unary) 20 100
->   _test_length (nil :: ConsList Unary) (zero :: Unary) 20 100
+>   _test_length "ConsList Bool & Unary"  (nil :: ConsList Bool)  (zero :: Unary) 20 100
+>   _test_length "ConsList Unary & Unary" (nil :: ConsList Unary) (zero :: Unary) 20 100

@@ -258,9 +258,13 @@ Here are our property tests for $\cat$.
 And the suite:
 
 > -- run all tests for cat
-> _test_cat :: (List t, Show a, Equal a, Arbitrary a, Arbitrary (t a))
->   => t a -> Int -> Int -> IO ()
-> _test_cat t maxSize numCases = do
+> _test_cat ::
+>   ( Show a, Equal a, Arbitrary a
+>   , List t
+>   ) => String -> t a -> Int -> Int -> IO ()
+> _test_cat label t maxSize numCases = do
+>   testLabel ("cat:" ++ label)
+> 
 >   let
 >     args = stdArgs
 >       { maxSuccess = numCases
@@ -278,5 +282,5 @@ And ``main``:
 
 > main_cat :: IO ()
 > main_cat = do
->   _test_cat (nil :: ConsList Bool) 20 100
->   _test_cat (nil :: ConsList Unary) 20 100
+>   _test_cat "ConsList Bool"  (nil :: ConsList Bool) 20 100
+>   _test_cat "ConsList Unary" (nil :: ConsList Unary) 20 100

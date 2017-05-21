@@ -16,7 +16,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Cat
 > import Zip
 > 
-> import Prelude (Show, Int, IO)
+> import Prelude ()
 > import Test.QuickCheck
 
 The $\cat$ function on $\lists{A}$ is analogous to $\nplus$ on $\nats$. Carrying this analogy further, $\zip$ and $\zipPad$ are analogous to $\nmin$ and $\nmax$, respectively. When analogies like this occur in mathematics it can be fruitful to see how far they go. With that in mind, today we will explore the list-analogue of $\nleq$. This role is played by two functions which we call $\prefix$ and $\suffix$.
@@ -517,9 +517,13 @@ Tests for $\suffix$:
 And the suite:
 
 > -- run all tests for prefix
-> _test_prefix :: (List t, Arbitrary a, Show a, Equal a, Arbitrary (t a), Show (t a))
->   => t a -> Int -> Int -> IO ()
-> _test_prefix t maxSize numCases = do
+> _test_prefix ::
+>   ( Show a, Equal a, Arbitrary a
+>   , List t
+>   ) => String -> t a -> Int -> Int -> IO ()
+> _test_prefix label t maxSize numCases = do
+>   testLabel ("prefix & suffix: " ++ label)
+> 
 >   let
 >     args = stdArgs
 >       { maxSuccess = numCases
@@ -539,5 +543,5 @@ And ``main``:
 
 > main_prefix :: IO ()
 > main_prefix = do
->   _test_prefix (nil :: ConsList Bool) 20 100
->   _test_prefix (nil :: ConsList Unary) 20 100
+>   _test_prefix "ConsList Bool"  (nil :: ConsList Bool)  20 100
+>   _test_prefix "ConsList Unary" (nil :: ConsList Unary) 20 100

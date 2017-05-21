@@ -209,9 +209,13 @@ Here are our property tests for $\unzip$.
 And the suite:
 
 > -- run all tests for unzip
-> _test_unzip :: (List t, Equal a, Arbitrary (t a), Show (t a), Arbitrary a, Show a, Arbitrary (t (a,a)), Show (t (a,a)))
->   => t a -> Int -> Int -> IO ()
-> _test_unzip t maxSize numCases = do
+> _test_unzip ::
+>   ( Show a, Equal a, Arbitrary a
+>   , List t
+>   ) => String -> t a -> Int -> Int -> IO ()
+> _test_unzip label t maxSize numCases = do
+>   testLabel ("unzip: " ++ label)
+> 
 >   let
 >     args = stdArgs
 >       { maxSuccess = numCases
@@ -225,5 +229,5 @@ And ``main``:
 
 > main_unzip :: IO ()
 > main_unzip = do
->   _test_unzip (nil :: ConsList Bool) 20 100
->   _test_unzip (nil :: ConsList Unary) 20 100
+>   _test_unzip "ConsList Bool"  (nil :: ConsList Bool)  20 100
+>   _test_unzip "ConsList Unary" (nil :: ConsList Unary) 20 100

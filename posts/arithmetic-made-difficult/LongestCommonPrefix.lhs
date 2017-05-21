@@ -17,7 +17,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Zip
 > import Prefix
 >
-> import Prelude (Show, Int, IO) 
+> import Prelude ()
 > import Test.QuickCheck
 
 Today we'll compute the *longest common prefix* of two strings (and while we're at it, the *longest common suffix*). Given two lists $x$ and $y$, their longest common prefix is the longest list which is a prefix of both, just like it says on the tin. We'll denote this function $\lcp$, and we want it to have a signature like $$\lists{A} \times \lists{A} \rightarrow \lists{A}.$$ To define $\lcp$ as a fold like $$\lcp(x,y) = \foldr{\varepsilon}{\varphi}(x)(y)$$ we need $\varepsilon : \lists{A}^{\lists{A}}$ such that
@@ -744,8 +744,10 @@ And the suite:
 > _test_lcp ::
 >   ( Equal a, Show a, Arbitrary a
 >   , List t
->   ) => t a -> Int -> Int -> IO ()
-> _test_lcp t maxSize numCases = do
+>   ) => String -> t a -> Int -> Int -> IO ()
+> _test_lcp label t maxSize numCases = do
+>   testLabel ("lcp & lcs: " ++ label)
+> 
 >   let
 >     args = stdArgs
 >       { maxSuccess = numCases
@@ -770,5 +772,5 @@ And ``main``:
 
 > main_lcp :: IO ()
 > main_lcp = do
->   _test_lcp (nil :: ConsList Bool) 20 100
->   _test_lcp (nil :: ConsList Unary) 20 100
+>   _test_lcp "ConsList Bool"  (nil :: ConsList Bool)  20 100
+>   _test_lcp "ConsList Unary" (nil :: ConsList Unary) 20 100

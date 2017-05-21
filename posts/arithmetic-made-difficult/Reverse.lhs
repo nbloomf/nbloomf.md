@@ -447,8 +447,10 @@ And the suite:
 > _test_rev ::
 >   ( Equal a, Show a, Arbitrary a
 >   , List t
->   ) => t a -> Int -> Int -> IO ()
-> _test_rev t maxSize numCases = do
+>   ) => String -> t a -> Int -> Int -> IO ()
+> _test_rev label t maxSize numCases = do
+>   testLabel ("rev: " ++ label)
+> 
 >   let
 >     args = stdArgs
 >       { maxSuccess = numCases
@@ -466,5 +468,5 @@ And the main function:
 
 > main_rev :: IO ()
 > main_rev = do
->   _test_rev (nil :: ConsList Bool) 20 100
->   _test_rev (nil :: ConsList Unary) 20 100
+>   _test_rev "ConsList Bool"  (nil :: ConsList Bool)  20 100
+>   _test_rev "ConsList Unary" (nil :: ConsList Unary) 20 100
