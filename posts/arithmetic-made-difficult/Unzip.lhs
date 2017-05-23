@@ -194,27 +194,28 @@ Testing
 Here are our property tests for $\unzip$.
 
 > -- zip(unzip(x)) == x
-> _test_unzip_zip :: (List t, Equal a)
->   => t a -> ListOf t (a,a) -> Bool
-> _test_unzip_zip _ x =
+> _test_unzip_zip :: (List t, Equal a, Equal b)
+>   => t a -> t b -> ListOf t (a,b) -> Bool
+> _test_unzip_zip _ _ x =
 >   ((uncurry zip) (unzip x)) ==== x
 > 
 > 
 > -- swap(unzip(x)) == unzip(map(swap)(x))
-> _test_unzip_swap :: (List t, Equal a)
->   => t a -> ListOf t (a,a) -> Bool
-> _test_unzip_swap _ x =
+> _test_unzip_swap :: (List t, Equal a, Equal b)
+>   => t a -> t b -> ListOf t (a,b) -> Bool
+> _test_unzip_swap _ _ x =
 >   (unzip (map swap x)) ==== (swap (unzip x))
 
 And the suite:
 
 > -- run all tests for unzip
 > _test_unzip ::
->   ( Show a, Equal a, Arbitrary a
->   , List t
->   ) => String -> t a -> Int -> Int -> IO ()
-> _test_unzip label t maxSize numCases = do
->   testLabel ("unzip: " ++ label)
+>   ( TypeName a, Show a, Equal a, Arbitrary a
+>   , TypeName b, Show b, Equal b, Arbitrary b
+>   , TypeName (t a), TypeName (t b), List t
+>   ) => t a -> t b -> Int -> Int -> IO ()
+> _test_unzip t u maxSize numCases = do
+>   testLabel ("unzip: " ++ typeName t ++ " & " ++ typeName u)
 > 
 >   let
 >     args = stdArgs
@@ -222,12 +223,12 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_unzip_zip t)
->   runTest args (_test_unzip_swap t)
+>   runTest args (_test_unzip_zip t u)
+>   runTest args (_test_unzip_swap t u)
 
 And ``main``:
 
 > main_unzip :: IO ()
 > main_unzip = do
->   _test_unzip "ConsList Bool"  (nil :: ConsList Bool)  20 100
->   _test_unzip "ConsList Unary" (nil :: ConsList Unary) 20 100
+>   _test_unzip (nil :: ConsList Bool)  (nil :: ConsList Bool)  20 100
+>   _test_unzip (nil :: ConsList Unary) (nil :: ConsList Unary) 20 100

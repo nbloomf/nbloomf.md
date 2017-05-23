@@ -742,11 +742,11 @@ And the suite:
 
 > -- run all tests for lcp and lcs
 > _test_lcp ::
->   ( Equal a, Show a, Arbitrary a
->   , List t
->   ) => String -> t a -> Int -> Int -> IO ()
-> _test_lcp label t maxSize numCases = do
->   testLabel ("lcp & lcs: " ++ label)
+>   ( TypeName a, Equal a, Show a, Arbitrary a
+>   , TypeName (t a), List t
+>   ) => t a -> Int -> Int -> IO ()
+> _test_lcp t maxSize numCases = do
+>   testLabel ("lcp & lcs: " ++ typeName t)
 > 
 >   let
 >     args = stdArgs
@@ -772,5 +772,5 @@ And ``main``:
 
 > main_lcp :: IO ()
 > main_lcp = do
->   _test_lcp "ConsList Bool"  (nil :: ConsList Bool)  20 100
->   _test_lcp "ConsList Unary" (nil :: ConsList Unary) 20 100
+>   _test_lcp (nil :: ConsList Bool)  20 100
+>   _test_lcp (nil :: ConsList Unary) 20 100

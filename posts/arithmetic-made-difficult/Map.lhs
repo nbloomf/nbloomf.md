@@ -281,11 +281,11 @@ And the suite:
 
 > -- run all tests for map
 > _test_map ::
->   ( Show a, Equal a, Arbitrary a, CoArbitrary a
->   , List t
->   ) => String -> t a -> Int -> Int -> IO ()
-> _test_map label t maxSize numCases = do
->   testLabel ("map: " ++ label)
+>   ( TypeName a, Show a, Equal a, Arbitrary a, CoArbitrary a
+>   , TypeName (t a), List t
+>   ) => t a -> Int -> Int -> IO ()
+> _test_map t maxSize numCases = do
+>   testLabel ("map: " ++ typeName t)
 > 
 >   let
 >     args = stdArgs
@@ -301,5 +301,5 @@ And ``main``:
 
 > main_map :: IO ()
 > main_map = do
->   _test_map "ConsList Bool"  (nil :: ConsList Bool)  20 100
->   _test_map "ConsList Unary" (nil :: ConsList Unary) 20 100
+>   _test_map (nil :: ConsList Bool)  20 100
+>   _test_map (nil :: ConsList Unary) 20 100

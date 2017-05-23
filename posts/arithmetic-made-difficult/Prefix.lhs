@@ -516,13 +516,13 @@ Tests for $\suffix$:
 
 And the suite:
 
-> -- run all tests for prefix
+> -- run all tests for prefix & suffix
 > _test_prefix ::
->   ( Show a, Equal a, Arbitrary a
->   , List t
->   ) => String -> t a -> Int -> Int -> IO ()
-> _test_prefix label t maxSize numCases = do
->   testLabel ("prefix & suffix: " ++ label)
+>   ( TypeName a, Show a, Equal a, Arbitrary a
+>   , TypeName (t a), List t
+>   ) => t a -> Int -> Int -> IO ()
+> _test_prefix t maxSize numCases = do
+>   testLabel ("prefix & suffix: " ++ typeName t)
 > 
 >   let
 >     args = stdArgs
@@ -543,5 +543,5 @@ And ``main``:
 
 > main_prefix :: IO ()
 > main_prefix = do
->   _test_prefix "ConsList Bool"  (nil :: ConsList Bool)  20 100
->   _test_prefix "ConsList Unary" (nil :: ConsList Unary) 20 100
+>   _test_prefix (nil :: ConsList Bool)  20 100
+>   _test_prefix (nil :: ConsList Unary) 20 100

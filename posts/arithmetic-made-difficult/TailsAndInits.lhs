@@ -421,12 +421,12 @@ And the suite:
 
 > -- run all tests for tails and inits
 > _test_tails_inits ::
->   ( Show a, Equal a, Arbitrary a, CoArbitrary a
->   , Natural n
->   , List t
->   ) => String -> t a -> n -> Int -> Int -> IO ()
-> _test_tails_inits label t n maxSize numCases = do
->   testLabel ("tails & inits: " ++ label)
+>   ( TypeName a, Show a, Equal a, Arbitrary a, CoArbitrary a
+>   , TypeName n, Natural n
+>   , TypeName (t a), List t
+>   ) => t a -> n -> Int -> Int -> IO ()
+> _test_tails_inits t n maxSize numCases = do
+>   testLabel ("tails & inits: " ++ typeName t ++ " & " ++ typeName n)
 > 
 >   let
 >     args = stdArgs
@@ -448,5 +448,5 @@ And ``main``:
 
 > main_tails_inits :: IO ()
 > main_tails_inits = do
->   _test_tails_inits "ConsList Bool & Unary"  (nil :: ConsList Bool) (zero :: Unary) 20 100
->   _test_tails_inits "ConsList Unary & Unary" (nil :: ConsList Unary) (zero :: Unary) 20 100
+>   _test_tails_inits (nil :: ConsList Bool)  (zero :: Unary) 20 100
+>   _test_tails_inits (nil :: ConsList Unary) (zero :: Unary) 20 100

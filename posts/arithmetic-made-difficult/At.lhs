@@ -622,12 +622,12 @@ And the suite:
 
 > -- run all tests for at
 > _test_at ::
->   ( Show a, Equal a, Arbitrary a
->   , Natural n, Show n, Arbitrary n
->   , List t
->   ) => String -> t a -> n -> Int -> Int -> IO ()
-> _test_at label t n maxSize numCases = do
->   testLabel ("at: " ++ label)
+>   ( TypeName a, Show a, Equal a, Arbitrary a
+>   , TypeName n, Natural n, Show n, Arbitrary n
+>   , TypeName (t a), List t
+>   ) => t a -> n -> Int -> Int -> IO ()
+> _test_at t n maxSize numCases = do
+>   testLabel ("at: " ++ typeName t ++ " & " ++ typeName n)
 > 
 >   let
 >     args = stdArgs
@@ -649,5 +649,5 @@ And ``main``:
 
 > main_at :: IO ()
 > main_at = do
->   _test_at "ConsList Bool & Unary"  (nil :: ConsList Bool)  (zero :: Unary) 20 100
->   _test_at "ConsList Unary & Unary" (nil :: ConsList Unary) (zero :: Unary) 20 100
+>   _test_at (nil :: ConsList Bool)  (zero :: Unary) 20 100
+>   _test_at (nil :: ConsList Unary) (zero :: Unary) 20 100

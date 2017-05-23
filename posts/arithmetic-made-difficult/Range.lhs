@@ -232,10 +232,10 @@ Here are our property tests for $\range$.
 
 > -- range(a,next(b)) == cons(a,range(next(a),b))
 > _test_range_next_cons :: (List t, Natural n)
->   => t (Nat n) -> Nat n -> Nat n -> Bool
+>   => t n -> Nat n -> Nat n -> Bool
 > _test_range_next_cons t a b =
 >   let
->     x = (range a (next b)) `withTypeOf` ListOf t
+>     x = (range a (next b)) `withTypeOf` ListOf (map Nat t)
 >     y = (cons a (range (next a) b))
 >   in
 >     x ==== y
@@ -243,10 +243,10 @@ Here are our property tests for $\range$.
 > 
 > -- range(a,next(b)) == snoc(plus(a,b),range(a,b))
 > _test_range_next_snoc :: (List t, Natural n)
->   => t (Nat n) -> Nat n -> Nat n -> Bool
+>   => t n -> Nat n -> Nat n -> Bool
 > _test_range_next_snoc t a b =
 >   let
->     x = (range a (next b)) `withTypeOf` ListOf t
+>     x = (range a (next b)) `withTypeOf` ListOf (map Nat t)
 >     y = (snoc (plus a b) (range a b))
 >   in
 >     x ==== y
@@ -254,10 +254,10 @@ Here are our property tests for $\range$.
 > 
 > -- range(a,plus(b,c)) == cat(range(a,b),range(plus(a,b),c))
 > _test_range_plus_right :: (List t, Natural n)
->   => t (Nat n) -> Nat n -> Nat n -> Nat n -> Bool
+>   => t n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_range_plus_right t a b c =
 >   let
->     x = (range a (plus b c)) `withTypeOf` ListOf t
+>     x = (range a (plus b c)) `withTypeOf` ListOf (map Nat t)
 >     y = (cat (range a b) (range (plus a b) c))
 >   in
 >     x ==== y
@@ -265,10 +265,10 @@ Here are our property tests for $\range$.
 > 
 > -- range(next(a),b) == map(next,range(a,b))
 > _test_range_next_left :: (List t, Natural n)
->   => t (Nat n) -> Nat n -> Nat n -> Bool
+>   => t n -> Nat n -> Nat n -> Bool
 > _test_range_next_left t a b =
 >   let
->     x = (range (next a) b) `withTypeOf` ListOf t
+>     x = (range (next a) b) `withTypeOf` ListOf (map Nat t)
 >     y = (map next (range a b))
 >   in
 >     x ==== y
@@ -276,10 +276,10 @@ Here are our property tests for $\range$.
 > 
 > -- range(plus(a,b),c) == map(plus(a,-),range(b,c))
 > _test_range_plus_left :: (List t, Natural n)
->   => t (Nat n) -> Nat n -> Nat n -> Nat n -> Bool
+>   => t n -> Nat n -> Nat n -> Nat n -> Bool
 > _test_range_plus_left t a b c =
 >   let
->     x = (range (plus a b) c) `withTypeOf` ListOf t
+>     x = (range (plus a b) c) `withTypeOf` ListOf (map Nat t)
 >     y = (map (plus a) (range b c))
 >   in
 >     x ==== y
@@ -288,11 +288,11 @@ And the suite:
 
 > -- run all tests for range
 > _test_range ::
->   ( Natural n, Show n, Arbitrary n
->   , List t
->   ) => String -> t (Nat n) -> Int -> Int -> IO ()
-> _test_range label t maxSize numCases = do
->   testLabel ("range: " ++ label)
+>   ( TypeName n, Natural n, Show n, Arbitrary n
+>   , TypeName (t n), List t
+>   ) => t n -> Int -> Int -> IO ()
+> _test_range t maxSize numCases = do
+>   testLabel ("range: " ++ typeName t)
 > 
 >   let
 >     args = stdArgs
@@ -310,4 +310,4 @@ And ``main``:
 
 > main_range :: IO ()
 > main_range = do
->   _test_range "ConsList Unary" (nil :: ConsList (Nat Unary)) 20 100
+>   _test_range (nil :: ConsList Unary) 20 100

@@ -733,13 +733,13 @@ And the suite:
 
 > -- run all tests for zip
 > _test_zip ::
->   ( Equal a, Show a, Arbitrary a
->   , Equal b, Show b, Arbitrary b
->   , Natural n, Show n, Arbitrary n
->   , List t
->   ) => String -> t a -> t b -> n -> Int -> Int -> IO ()
-> _test_zip label t u n maxSize numCases = do
->   testLabel ("zip & zipPad: " ++ label)
+>   ( TypeName a, Equal a, Show a, Arbitrary a
+>   , TypeName b, Equal b, Show b, Arbitrary b
+>   , TypeName n, Natural n, Show n, Arbitrary n
+>   , TypeName (t a), TypeName (t b), List t
+>   ) => t a -> t b -> n -> Int -> Int -> IO ()
+> _test_zip t u n maxSize numCases = do
+>   testLabel ("zip & zipPad: " ++ typeName t ++ " & " ++ typeName u ++ " & " ++ typeName n)
 > 
 >   let
 >     args = stdArgs
@@ -763,5 +763,5 @@ And ``main``:
 
 > main_zip :: IO ()
 > main_zip = do
->   _test_zip "ConsList Bool & ConsListBool & Unary" (nil :: ConsList Bool) (nil :: ConsList Bool) (zero :: Unary) 20 100
->   _test_zip "ConsList Unary & ConsList Unary & Unary" (nil :: ConsList Unary) (nil :: ConsList Unary) (zero :: Unary) 20 100
+>   _test_zip (nil :: ConsList Bool)  (nil :: ConsList Bool)  (zero :: Unary) 20 100
+>   _test_zip (nil :: ConsList Unary) (nil :: ConsList Unary) (zero :: Unary) 20 100

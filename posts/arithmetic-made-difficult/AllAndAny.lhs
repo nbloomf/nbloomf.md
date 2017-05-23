@@ -18,7 +18,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Zip
 > import Prefix
 > 
-> import Prelude (const, (.))
+> import Prelude (const)
 > import Test.QuickCheck
 > import Text.Show.Functions
 
@@ -413,11 +413,11 @@ And the suite:
 
 > -- run all tests for all and any
 > _test_all_any ::
->   ( Show a, Equal a, Arbitrary a, CoArbitrary a
->   , List t
->   ) => String -> t a -> Int -> Int -> IO ()
-> _test_all_any label t maxSize numCases = do
->   testLabel ("all & any: " ++ label)
+>   ( TypeName a, Show a, Equal a, Arbitrary a, CoArbitrary a
+>   , TypeName (t a), List t
+>   ) => t a -> Int -> Int -> IO ()
+> _test_all_any t maxSize numCases = do
+>   testLabel ("all & any: " ++ typeName t)
 > 
 >   let
 >     args = stdArgs
@@ -443,5 +443,5 @@ And ``main``:
 
 > main_all_any :: IO ()
 > main_all_any = do
->   _test_all_any "ConsList Bool"  (nil :: ConsList Bool)  20 100
->   _test_all_any "ConsList Unary" (nil :: ConsList Unary) 20 100
+>   _test_all_any (nil :: ConsList Bool)  20 100
+>   _test_all_any (nil :: ConsList Unary) 20 100

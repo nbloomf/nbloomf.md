@@ -321,12 +321,12 @@ And the suite:
 
 > -- run all tests for length
 > _test_length ::
->   ( Show a, Equal a, Arbitrary a
->   , Natural n
->   , List t
->   ) => String -> t a -> n -> Int -> Int -> IO ()
-> _test_length label t n maxSize numCases = do
->   testLabel ("length: " ++ label)
+>   ( TypeName a, Show a, Equal a, Arbitrary a
+>   , TypeName n, Natural n
+>   , TypeName (t a), List t
+>   ) => t a -> n -> Int -> Int -> IO ()
+> _test_length t n maxSize numCases = do
+>   testLabel ("length: " ++ typeName t ++ " & " ++ typeName n)
 > 
 >   let
 >     args = stdArgs
@@ -347,5 +347,5 @@ And ``main``:
 
 > main_length :: IO ()
 > main_length = do
->   _test_length "ConsList Bool & Unary"  (nil :: ConsList Bool)  (zero :: Unary) 20 100
->   _test_length "ConsList Unary & Unary" (nil :: ConsList Unary) (zero :: Unary) 20 100
+>   _test_length (nil :: ConsList Bool)  (zero :: Unary) 20 100
+>   _test_length (nil :: ConsList Unary) (zero :: Unary) 20 100

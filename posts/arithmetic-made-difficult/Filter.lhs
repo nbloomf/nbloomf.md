@@ -309,11 +309,11 @@ And the suite:
 
 > -- run all tests for filter
 > _test_filter ::
->   ( Equal a, Show a, Arbitrary a, CoArbitrary a
->   , List t
->   ) => String -> t a -> Int -> Int -> IO ()
-> _test_filter label t maxSize numCases = do
->   testLabel ("filter: " ++ label)
+>   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
+>   , TypeName (t a), List t
+>   ) => t a -> Int -> Int -> IO ()
+> _test_filter t maxSize numCases = do
+>   testLabel ("filter: " ++ typeName t)
 > 
 >   let
 >     args = stdArgs
@@ -331,5 +331,5 @@ And ``main``:
 
 > main_filter :: IO ()
 > main_filter = do
->   _test_filter "ConsList Bool"  (nil :: ConsList Bool)  20 100
->   _test_filter "ConsList Unary" (nil :: ConsList Unary) 20 100
+>   _test_filter (nil :: ConsList Bool)  20 100
+>   _test_filter (nil :: ConsList Unary) 20 100

@@ -321,12 +321,12 @@ And the suite:
 
 > -- run all tests for count
 > _test_count ::
->   ( Equal a, Show a, Arbitrary a, CoArbitrary a
->   , List t
->   , Natural n
->   ) => String -> t a -> n -> Int -> Int -> IO ()
-> _test_count label t n maxSize numCases = do
->   testLabel ("count: " ++ label)
+>   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
+>   , TypeName (t a), List t
+>   , TypeName n, Natural n
+>   ) => t a -> n -> Int -> Int -> IO ()
+> _test_count t n maxSize numCases = do
+>   testLabel ("count: " ++ typeName t ++ " & " ++ typeName n)
 > 
 >   let
 >     args = stdArgs
@@ -345,5 +345,5 @@ And ``main``:
 
 > main_count :: IO ()
 > main_count = do
->   _test_count "ConsList Bool; Unary"  (nil :: ConsList Bool)  (zero :: Unary) 20 100
->   _test_count "ConsList Unary; Unary" (nil :: ConsList Unary) (zero :: Unary) 20 100
+>   _test_count (nil :: ConsList Bool)  (zero :: Unary) 20 100
+>   _test_count (nil :: ConsList Unary) (zero :: Unary) 20 100

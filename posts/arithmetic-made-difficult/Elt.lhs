@@ -364,11 +364,11 @@ And the suite:
 
 > -- run all tests for elt
 > _test_elt ::
->   ( Equal a, Show a, Arbitrary a, CoArbitrary a
->   , List t
->   ) => String -> t a -> Int -> Int -> IO ()
-> _test_elt label t maxSize numCases = do
->   testLabel ("elt: " ++ label)
+>   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
+>   , TypeName (t a), List t
+>   ) => t a -> Int -> Int -> IO ()
+> _test_elt t maxSize numCases = do
+>   testLabel ("elt: " ++ typeName t)
 > 
 >   let
 >     args = stdArgs
@@ -388,5 +388,5 @@ And ``main``:
 
 > main_elt :: IO ()
 > main_elt = do
->   _test_elt "ConsList Bool"  (nil :: ConsList Bool) 20 100
->   _test_elt "ConsList Unary" (nil :: ConsList Unary) 20 100
+>   _test_elt (nil :: ConsList Bool)  20 100
+>   _test_elt (nil :: ConsList Unary) 20 100
