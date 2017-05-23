@@ -284,10 +284,11 @@ And property tests using both:
 And the suite for ``max`` and ``min``:
 
 > -- run all tests for max
-> _test_max_min :: (Natural t, Arbitrary t, Show t)
->   => String -> t -> Int -> Int -> IO ()
-> _test_max_min label t maxSize numCases = do
->   testLabel ("min & max: " ++ label)
+> _test_max_min ::
+>   ( TypeName n, Natural n, Arbitrary n, Show n
+>   ) => n -> Int -> Int -> IO ()
+> _test_max_min n maxSize numCases = do
+>   testLabel ("min & max: " ++ typeName n)
 > 
 >   let
 >     args = stdArgs
@@ -295,32 +296,32 @@ And the suite for ``max`` and ``min``:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_max_zero t)
->   runTest args (_test_max_idempotent t)
->   runTest args (_test_max_commutative t)
->   runTest args (_test_max_next t)
->   runTest args (_test_max_plus t)
->   runTest args (_test_max_times t)
->   runTest args (_test_max_associative t)
->   runTest args (_test_max_leq t)
+>   runTest args (_test_max_zero n)
+>   runTest args (_test_max_idempotent n)
+>   runTest args (_test_max_commutative n)
+>   runTest args (_test_max_next n)
+>   runTest args (_test_max_plus n)
+>   runTest args (_test_max_times n)
+>   runTest args (_test_max_associative n)
+>   runTest args (_test_max_leq n)
 > 
->   runTest args (_test_min_zero t)
->   runTest args (_test_min_idempotent t)
->   runTest args (_test_min_commutative t)
->   runTest args (_test_min_next t)
->   runTest args (_test_min_plus t)
->   runTest args (_test_min_times t)
->   runTest args (_test_min_associative t)
->   runTest args (_test_min_leq t)
+>   runTest args (_test_min_zero n)
+>   runTest args (_test_min_idempotent n)
+>   runTest args (_test_min_commutative n)
+>   runTest args (_test_min_next n)
+>   runTest args (_test_min_plus n)
+>   runTest args (_test_min_times n)
+>   runTest args (_test_min_associative n)
+>   runTest args (_test_min_leq n)
 > 
->   runTest args (_test_max_min_leq t)
->   runTest args (_test_max_min_plus t)
->   runTest args (_test_max_min_times t)
->   runTest args (_test_max_min_distributive_left t)
->   runTest args (_test_max_min_distributive_right t)
->   runTest args (_test_min_max_distributive_left t)
->   runTest args (_test_min_max_distributive_right t)
+>   runTest args (_test_max_min_leq n)
+>   runTest args (_test_max_min_plus n)
+>   runTest args (_test_max_min_times n)
+>   runTest args (_test_max_min_distributive_left n)
+>   runTest args (_test_max_min_distributive_right n)
+>   runTest args (_test_min_max_distributive_left n)
+>   runTest args (_test_min_max_distributive_right n)
 
 > main_max_min :: IO ()
 > main_max_min = do
->   _test_max_min "Unary" (zero :: Unary) 100 100
+>   _test_max_min (zero :: Unary) 100 100

@@ -198,10 +198,11 @@ Property tests:
 And the suite:
 
 > -- run all tests for prime
-> _test_prime :: (Natural t, Arbitrary t, Show t)
->   => String -> t -> Int -> Int -> IO ()
-> _test_prime label t maxSize numCases = do
->   testLabel ("mindiv & prime: " ++ label)
+> _test_prime ::
+>   ( TypeName n, Natural n, Arbitrary n, Show n
+>   ) => n -> Int -> Int -> IO ()
+> _test_prime n maxSize numCases = do
+>   testLabel ("mindiv & prime: " ++ typeName n)
 > 
 >   let
 >     args = stdArgs
@@ -209,11 +210,11 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_mindiv_div t)
->   runTest args (_test_prime_mindiv t)
+>   runTest args (_test_mindiv_div n)
+>   runTest args (_test_prime_mindiv n)
 
 And the main function:
 
 > main_prime :: IO ()
 > main_prime = do
->   _test_prime "Unary" (zero :: Unary) 20 100
+>   _test_prime (zero :: Unary) 20 100

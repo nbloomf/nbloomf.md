@@ -206,10 +206,10 @@ And some property tests:
 And a test wrapper:
 
 > -- run all tests for leq
-> _test_leq :: (Natural t, Arbitrary t, Show t)
->   => String -> t -> Int -> Int -> IO ()
-> _test_leq label t maxSize numCases = do
->   testLabel ("leq: " ++ label)
+> _test_leq :: (TypeName n, Natural n, Arbitrary n, Show n)
+>   => n -> Int -> Int -> IO ()
+> _test_leq n maxSize numCases = do
+>   testLabel ("leq: " ++ typeName n)
 > 
 >   let
 >     args = stdArgs
@@ -217,11 +217,11 @@ And a test wrapper:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_leq_reflexive t)
->   runTest args (_test_leq_right_plus t)
->   runTest args (_test_leq_plus t)
->   runTest args (_test_leq_times t)
+>   runTest args (_test_leq_reflexive n)
+>   runTest args (_test_leq_right_plus n)
+>   runTest args (_test_leq_plus n)
+>   runTest args (_test_leq_times n)
 
 > main_leq :: IO ()
 > main_leq = do
->   _test_leq "Unary" (zero :: Unary) 50 100
+>   _test_leq (zero :: Unary) 50 100

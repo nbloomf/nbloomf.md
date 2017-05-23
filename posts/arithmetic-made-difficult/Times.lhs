@@ -146,10 +146,10 @@ As with $\nplus$, it's a good idea to test the properties of $\ntimes$.
 
 And one function to rule them all:
 
-> _test_times :: (Natural t, Arbitrary t, Show t)
->   => String -> t -> Int -> Int -> IO ()
-> _test_times label t maxSize numCases = do
->   testLabel ("times: " ++ label)
+> _test_times :: (TypeName n, Natural n, Arbitrary n, Show n)
+>   => n -> Int -> Int -> IO ()
+> _test_times n maxSize numCases = do
+>   testLabel ("times: " ++ typeName n)
 > 
 >   let
 >     args = stdArgs
@@ -157,16 +157,16 @@ And one function to rule them all:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_times_zero_left t)
->   runTest args (_test_times_zero_right t)
->   runTest args (_test_times_one_left t)
->   runTest args (_test_times_one_right t)
->   runTest args (_test_times_next_left t)
->   runTest args (_test_times_next_right t)
->   runTest args (_test_times_commutative t)
->   runTest args (_test_times_distributive_left t)
->   runTest args (_test_times_distributive_right t)
->   runTest args (_test_times_associative t)
+>   runTest args (_test_times_zero_left n)
+>   runTest args (_test_times_zero_right n)
+>   runTest args (_test_times_one_left n)
+>   runTest args (_test_times_one_right n)
+>   runTest args (_test_times_next_left n)
+>   runTest args (_test_times_next_right n)
+>   runTest args (_test_times_commutative n)
+>   runTest args (_test_times_distributive_left n)
+>   runTest args (_test_times_distributive_right n)
+>   runTest args (_test_times_associative n)
 
 I used a much smaller number of test cases this time, because these run much more slowly than the tests for ``plus``. The culprit is ``_test_times_associative``. What's happening is that multiplication of ``Nat``s is inherently slow; it's implemented as iterated addition, which itself is iterated ``N``.
 
@@ -174,4 +174,4 @@ The problem lies in our *representation* of the natural numbers. A better repres
 
 > main_times :: IO ()
 > main_times = do
->   _test_times "Unary" (zero :: Unary) 20 100
+>   _test_times (zero :: Unary) 20 100

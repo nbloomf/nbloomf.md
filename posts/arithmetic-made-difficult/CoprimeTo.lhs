@@ -97,10 +97,11 @@ Property tests:
 And the suite:
 
 > -- run all tests for coprime
-> _test_coprime :: (Natural t, Arbitrary t, Show t)
->   => String -> t -> Int -> Int -> IO ()
-> _test_coprime label t maxSize numCases = do
->   testLabel ("coprime: " ++ label)
+> _test_coprime ::
+>   ( TypeName n, Natural n, Arbitrary n, Show n
+>   ) => n -> Int -> Int -> IO ()
+> _test_coprime n maxSize numCases = do
+>   testLabel ("coprime: " ++ typeName n)
 > 
 >   let
 >     args = stdArgs
@@ -108,10 +109,10 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_coprime_gcd_quo t)
+>   runTest args (_test_coprime_gcd_quo n)
 
 And the main function:
 
 > main_coprime :: IO ()
 > main_coprime = do
->   _test_coprime "Unary" (zero :: Unary) 20 100
+>   _test_coprime (zero :: Unary) 20 100

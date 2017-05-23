@@ -233,10 +233,11 @@ Property tests:
 And the suite:
 
 > -- run all tests for divalg
-> _test_divalg :: (Natural t, Arbitrary t, Show t)
->   => String -> t -> Int -> Int -> IO ()
-> _test_divalg label t maxSize numCases = do
->   testLabel ("divalg: " ++ label)
+> _test_divalg ::
+>   ( TypeName n, Natural n, Arbitrary n, Show n
+>   ) => n -> Int -> Int -> IO ()
+> _test_divalg n maxSize numCases = do
+>   testLabel ("divalg: " ++ typeName n)
 > 
 >   let
 >     args = stdArgs
@@ -244,18 +245,18 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_divalg_equality t)
->   runTest args (_test_divalg_inequality t)
->   runTest args (_test_divalg_zero_left t)
->   runTest args (_test_divalg_zero_right t)
->   runTest args (_test_divalg_one_right t)
->   runTest args (_test_divalg_leq t)
->   runTest args (_test_divalg_times_left t)
->   runTest args (_test_divalg_quo t)
->   runTest args (_test_divalg_rem t)
+>   runTest args (_test_divalg_equality n)
+>   runTest args (_test_divalg_inequality n)
+>   runTest args (_test_divalg_zero_left n)
+>   runTest args (_test_divalg_zero_right n)
+>   runTest args (_test_divalg_one_right n)
+>   runTest args (_test_divalg_leq n)
+>   runTest args (_test_divalg_times_left n)
+>   runTest args (_test_divalg_quo n)
+>   runTest args (_test_divalg_rem n)
 
 And the main function.
 
 > main_divalg :: IO ()
 > main_divalg = do
->   _test_divalg "Unary" (zero :: Unary) 20 100
+>   _test_divalg (zero :: Unary) 20 100

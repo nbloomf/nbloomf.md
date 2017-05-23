@@ -128,10 +128,10 @@ We've proved a bunch of properties for ``plus``, but it's still a good idea to v
 We'll wrap all these tests behind a single function, ``_test_plus``, which takes the number of cases to check as an argument.
 
 > -- run all tests for plus
-> _test_plus :: (Natural n, Show n, Arbitrary n)
->   => String -> n -> Int -> Int -> IO ()
-> _test_plus label n maxSize numCases = do
->   testLabel ("plus: " ++ label)
+> _test_plus :: (TypeName n, Natural n, Show n, Arbitrary n)
+>   => n -> Int -> Int -> IO ()
+> _test_plus n maxSize numCases = do
+>   testLabel ("plus: " ++ typeName n)
 > 
 >   let
 >     args = stdArgs
@@ -151,4 +151,4 @@ I will also provide a ``main`` function so my build scripts for this blog can au
 
 > main_plus :: IO ()
 > main_plus = do
->   _test_plus "Unary" (zero :: Unary) 100 100
+>   _test_plus (zero :: Unary) 100 100

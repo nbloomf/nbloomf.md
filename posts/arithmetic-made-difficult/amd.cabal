@@ -152,3 +152,8 @@ executable amd-count
   main-is:       Count.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is Count.main_count
+
+executable amd-repeat
+  main-is:       Repeat.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options:   -main-is Repeat.main_repeat

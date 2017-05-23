@@ -19,7 +19,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import At
 > import Map
 > 
-> import Prelude (Maybe(..))
+> import Prelude ()
 > import Test.QuickCheck
 
 So far we've developed a few functions that operate on lists. But we don't have a convenient programmatic way to *construct* lists -- we'll remedy this today with a function called $\unfoldN$. From the name, it sounds like unfold should be the "opposite" (or *dual*) of a fold. But the full story is a little more complicated than this; the true opposite to fold doesn't operate on lists at all, but on *streams* (which we haven't defined). Roughly speaking, $\lists{A}$ is an initial algebra, elements of $\lists{A}$ are required to be "finite", and $\foldr{\ast}{\ast}$ condenses a $\lists{A}$ element to a single item. Streams, in contrast, are required to be "infinite" and collectively form a *terminal algebra* and their universal map expands a single item to an infinite structure. All that is to say that the $\unfoldN$ function we define here is *not* the real dual of $\foldr{\ast}{\ast}$ -- which partly explains why it is so complicated looking.

@@ -217,10 +217,11 @@ Property tests:
 And the suite:
 
 > -- run all tests for power
-> _test_power :: (Natural t, Arbitrary t, Show t)
->   => String -> t -> Int -> Int -> IO ()
-> _test_power label t maxSize numCases = do
->   testLabel ("power: " ++ label)
+> _test_power ::
+>   ( TypeName n, Natural n, Arbitrary n, Show n
+>   ) => n -> Int -> Int -> IO ()
+> _test_power n maxSize numCases = do
+>   testLabel ("power: " ++ typeName n)
 > 
 >   let
 >     args = stdArgs
@@ -228,15 +229,15 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_power_zero_right t)
->   runTest args (_test_power_one_right t)
->   runTest args (_test_power_zero_left t)
->   runTest args (_test_power_plus_right t)
->   runTest args (_test_power_times_right t)
->   runTest args (_test_power_times_left t)
+>   runTest args (_test_power_zero_right n)
+>   runTest args (_test_power_one_right n)
+>   runTest args (_test_power_zero_left n)
+>   runTest args (_test_power_plus_right n)
+>   runTest args (_test_power_times_right n)
+>   runTest args (_test_power_times_left n)
 
 And the main function:
 
 > main_power :: IO ()
 > main_power = do
->   _test_power "Unary" (zero :: Unary) 4 30
+>   _test_power (zero :: Unary) 4 30

@@ -428,10 +428,11 @@ Property tests for ``lcm``:
 And the suite:
 
 > -- run all tests for lcm
-> _test_lcm :: (Natural t, Arbitrary t, Show t)
->   => String -> t -> Int -> Int -> IO ()
-> _test_lcm label t maxSize numCases = do
->   testLabel ("lcm: " ++ label)
+> _test_lcm ::
+>   ( TypeName n, Natural n, Arbitrary n, Show n
+>   ) => n -> Int -> Int -> IO ()
+> _test_lcm n maxSize numCases = do
+>   testLabel ("lcm: " ++ typeName n)
 > 
 >   let
 >     args = stdArgs
@@ -439,18 +440,18 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_lcm_zero t)
->   runTest args (_test_lcm_one t)
->   runTest args (_test_lcm_div_args t)
->   runTest args (_test_lcm_idempotent t)
->   runTest args (_test_lcm_commutative t)
->   runTest args (_test_lcm_associative t)
->   runTest args (_test_lcm_distributive_times t)
->   runTest args (_test_lcm_distributive_gcd t)
->   runTest args (_test_gcd_distributive_lcm t)
+>   runTest args (_test_lcm_zero n)
+>   runTest args (_test_lcm_one n)
+>   runTest args (_test_lcm_div_args n)
+>   runTest args (_test_lcm_idempotent n)
+>   runTest args (_test_lcm_commutative n)
+>   runTest args (_test_lcm_associative n)
+>   runTest args (_test_lcm_distributive_times n)
+>   runTest args (_test_lcm_distributive_gcd n)
+>   runTest args (_test_gcd_distributive_lcm n)
 
 And the main function:
 
 > main_lcm :: IO ()
 > main_lcm = do
->   _test_lcm "Unary" (zero :: Unary) 20 100
+>   _test_lcm (zero :: Unary) 20 100

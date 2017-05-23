@@ -245,10 +245,11 @@ And some properties. Some of these are less nice because ``minus`` returns a ``M
 
 And a suite:
 
-> _test_minus :: (Natural t, Arbitrary t, Show t)
->   => String -> t -> Int -> Int -> IO ()
-> _test_minus label t maxSize numCases = do
->   testLabel ("minus: " ++ label)
+> _test_minus ::
+>   ( TypeName n, Natural n, Arbitrary n, Show n
+>   ) => n -> Int -> Int -> IO ()
+> _test_minus n maxSize numCases = do
+>   testLabel ("minus: " ++ typeName n)
 > 
 >   let
 >     args = stdArgs
@@ -256,15 +257,15 @@ And a suite:
 >      , maxSize    = maxSize
 >      }
 > 
->   runTest args (_test_minus_next t)
->   runTest args (_test_minus_zero_left t)
->   runTest args (_test_minus_zero_right t)
->   runTest args (_test_minus_plus t)
->   runTest args (_test_minus_next_left t)
->   runTest args (_test_minus_swap t)
+>   runTest args (_test_minus_next n)
+>   runTest args (_test_minus_zero_left n)
+>   runTest args (_test_minus_zero_right n)
+>   runTest args (_test_minus_plus n)
+>   runTest args (_test_minus_next_left n)
+>   runTest args (_test_minus_swap n)
 
 And the runner:
 
 > main_minus :: IO ()
 > main_minus = do
->   _test_minus "Unary" (zero :: Unary) 100 100
+>   _test_minus (zero :: Unary) 100 100

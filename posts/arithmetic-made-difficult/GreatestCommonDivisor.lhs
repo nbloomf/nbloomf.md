@@ -435,10 +435,11 @@ Property tests for ``gcd``:
 And the suite:
 
 > -- run all tests for gcd
-> _test_gcd :: (Natural t, Arbitrary t, Show t)
->   => String -> t -> Int -> Int -> IO ()
-> _test_gcd label t maxSize numCases = do
->   testLabel ("gcd: " ++ label)
+> _test_gcd ::
+>   ( TypeName n, Natural n, Arbitrary n, Show n
+>   ) => n -> Int -> Int -> IO ()
+> _test_gcd n maxSize numCases = do
+>   testLabel ("gcd: " ++ typeName n)
 > 
 >   let
 >     args = stdArgs
@@ -446,17 +447,17 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_gcd_zero t)
->   runTest args (_test_gcd_one t)
->   runTest args (_test_gcd_rem t)
->   runTest args (_test_gcd_commutative t)
->   runTest args (_test_gcd_div_args t)
->   runTest args (_test_gcd_idempotent t)
->   runTest args (_test_gcd_associative t)
->   runTest args (_test_gcd_distributive_times t)
+>   runTest args (_test_gcd_zero n)
+>   runTest args (_test_gcd_one n)
+>   runTest args (_test_gcd_rem n)
+>   runTest args (_test_gcd_commutative n)
+>   runTest args (_test_gcd_div_args n)
+>   runTest args (_test_gcd_idempotent n)
+>   runTest args (_test_gcd_associative n)
+>   runTest args (_test_gcd_distributive_times n)
 
 And the main function:
 
 > main_gcd :: IO ()
 > main_gcd = do
->   _test_gcd "Unary" (zero :: Unary) 20 100
+>   _test_gcd (zero :: Unary) 20 100

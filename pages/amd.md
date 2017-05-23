@@ -48,7 +48,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Filter](/posts/arithmetic-made-difficult/Filter.html)
     * [Elt](/posts/arithmetic-made-difficult/Elt.html)
     * [Count](/posts/arithmetic-made-difficult/Count.html)
-    * Repeat
+    * [Repeat](/posts/arithmetic-made-difficult/Repeat.html)
     * Unique
     * Take and Drop
     * Group

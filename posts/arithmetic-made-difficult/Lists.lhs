@@ -7,6 +7,7 @@ tags: arithmetic-made-difficult, literate-haskell
 
 > {-# LANGUAGE FlexibleInstances #-}
 > {-# LANGUAGE FlexibleContexts #-}
+> {-# LANGUAGE ScopedTypeVariables #-}
 > module Lists
 >   ( List(..), ListShape(..), ListOf(..), ConsList()
 >   , isNil, tail, foldr
@@ -14,7 +15,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > 
 > import Booleans
 > 
-> import Prelude (Show(..), (++), id, return, (.))
+> import Prelude ((++), return, undefined)
 > 
 > import Test.QuickCheck
 
@@ -53,6 +54,10 @@ First the concrete type:
 > instance (Show a) => Show (ConsList a) where
 >   show N        = "()"
 >   show (C x xs) = "(" ++ show x ++ show xs ++ ")"
+> 
+> 
+> instance (TypeName a) => TypeName (ConsList a) where
+>   typeName _ = "ConsList " ++ (typeName (undefined :: a))
 > 
 > 
 > instance (Arbitrary a) => Arbitrary (ConsList a) where

@@ -206,10 +206,11 @@ Property tests:
 And the suite:
 
 > -- run all tests for div
-> _test_div :: (Natural t, Arbitrary t, Show t)
->   => String -> t -> Int -> Int -> IO ()
-> _test_div label t maxSize numCases = do
->   testLabel ("div: " ++ label)
+> _test_div ::
+>   ( TypeName n, Natural n, Arbitrary n, Show n
+>   ) => n -> Int -> Int -> IO ()
+> _test_div n maxSize numCases = do
+>   testLabel ("div: " ++ typeName n)
 > 
 >   let
 >     args = stdArgs
@@ -217,13 +218,13 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_div_zero_right t)
->   runTest args (_test_div_one_left t)
->   runTest args (_test_div_reflexive t)
->   runTest args (_test_div_times t)
+>   runTest args (_test_div_zero_right n)
+>   runTest args (_test_div_one_left n)
+>   runTest args (_test_div_reflexive n)
+>   runTest args (_test_div_times n)
 
 And the main function:
 
 > main_div :: IO ()
 > main_div = do
->   _test_div "Unary" (zero :: Unary) 50 100
+>   _test_div (zero :: Unary) 50 100

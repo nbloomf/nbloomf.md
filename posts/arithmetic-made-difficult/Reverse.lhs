@@ -445,11 +445,11 @@ And the suite:
 
 > -- run all tests for snoc and rev
 > _test_rev ::
->   ( Equal a, Show a, Arbitrary a
->   , List t
->   ) => String -> t a -> Int -> Int -> IO ()
-> _test_rev label t maxSize numCases = do
->   testLabel ("rev: " ++ label)
+>   ( TypeName a, Equal a, Show a, Arbitrary a
+>   , TypeName (t a), List t
+>   ) => t a -> Int -> Int -> IO ()
+> _test_rev t maxSize numCases = do
+>   testLabel ("rev: " ++ typeName t)
 > 
 >   let
 >     args = stdArgs
@@ -468,5 +468,5 @@ And the main function:
 
 > main_rev :: IO ()
 > main_rev = do
->   _test_rev "ConsList Bool"  (nil :: ConsList Bool)  20 100
->   _test_rev "ConsList Unary" (nil :: ConsList Unary) 20 100
+>   _test_rev (nil :: ConsList Bool)  20 100
+>   _test_rev (nil :: ConsList Unary) 20 100

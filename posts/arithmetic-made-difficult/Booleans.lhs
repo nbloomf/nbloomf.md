@@ -8,12 +8,13 @@ tags: arithmetic-made-difficult, literate-haskell
 > module Booleans
 >   ( Bool(..), not, and, (&&&), or, (|||), ifThenElse
 >   , Equal, eq, (====)
->   , runTest, testLabel, withTypeOf, Show, String, (++), Int, IO, Maybe(..), (.)
+>   , runTest, testLabel, withTypeOf, TypeName(..)
+>   , Show(..), String, (++), Int, IO, Maybe(..), (.), id
 >   , _test_boolean, main_boolean
 >   ) where
 > 
 > import Prelude
->   ( Show(show), IO, Bool(..), Int, Maybe(..)
+>   ( Show(show), IO, Bool(..), Int, Maybe(..), id
 >   , putStrLn, (>>), return, (++), String, (.)
 >   )
 > import Test.QuickCheck
@@ -470,6 +471,12 @@ One of our main uses for ``Bool`` will be checking the results of tests, so this
 > 
 > withTypeOf :: a -> a -> a
 > withTypeOf x _ = x
+> 
+> class TypeName t where
+>   typeName :: t -> String
+> 
+> instance TypeName Bool where
+>   typeName _ = "Bool"
 
 And the suite:
 

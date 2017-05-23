@@ -71,6 +71,9 @@ Establishing that every natural number is either $\zero$ or of the form $\next(m
 >   show  Z    = "O"
 >   show (N k) = 'I' : show k
 > 
+> instance TypeName Unary where
+>   typeName _ = "Unary"
+> 
 > instance Equal Unary where
 >   eq Z     Z     = True
 >   eq Z     (N _) = False

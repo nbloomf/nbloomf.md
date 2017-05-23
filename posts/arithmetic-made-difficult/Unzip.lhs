@@ -25,7 +25,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Range
 > import Zip
 > 
-> import Prelude (Show, Int, IO, uncurry)
+> import Prelude (uncurry)
 > import Test.QuickCheck
 
 Today we will define a kind of one-sided inverse of $\zip$, called $\unzip$. Recall that $\zip$ has signature $$\lists{A} \times \lists{B} \rightarrow \lists{A \times B}.$$ An inverse will then have signature $$\lists{A \times B} \rightarrow \lists{A} \times \lists{B},$$ and should "undo" the zipping. As usual we'd like to define this as a fold if possible; to that end we need $\varepsilon : \lists{A} \times \lists{B}$ and $$\varphi : (A \times B) \times (\lists{A} \times \lists{B}) \rightarrow \lists{A} \times \lists{B}$$ such that
