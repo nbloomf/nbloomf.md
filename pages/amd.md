@@ -49,7 +49,10 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Elt](/posts/arithmetic-made-difficult/Elt.html)
     * [Count](/posts/arithmetic-made-difficult/Count.html)
     * [Repeat](/posts/arithmetic-made-difficult/Repeat.html)
-    * Unique
+    * [Sublist](/posts/arithmetic-made-difficult/Sublist.html)
+    * [Select](/posts/arithmetic-made-difficult/Select.html)
+    * [Unique](/posts/arithmetic-made-difficult/Unique.html)
+    * [Dedupe](/posts/arithmetic-made-difficult/Dedupe.html)
     * Take and Drop
     * Group
     * Run Length Encode

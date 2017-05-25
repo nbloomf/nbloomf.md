@@ -34,11 +34,20 @@ Let $a \in \nats$. Then we have the following.
 
 1. $\nleq(\next(a),\zero) = \bfalse$.
 2. $\nleq(\next(\next(a)),\next(\zero)) = \bfalse$.
+3. $\nleq(\next(a),a) = \bfalse$.
 </div>
 
 <div class="proof"><p>
 1. Note that $$\zero = \nplus(\next(a),x) = \next(\nplus(a,x))$$ has no solution, so that $\nminus(\zero,\next(a)) = \ast$. Thus $\nleq(\next(a),\zero) = \bfalse$.
 2. Note that $\nminus(\next(\next(a)),\next(\zero)) = \nminus(\next(a),\zero)$; the conclusion follows from (1).
+3. Suppose $x \in \nats$ is a solution to the equation $$a = \nplus(\next(a),x).$$ Now
+$$\begin{eqnarray*}
+ &   & \nplus(a,\zero) \\
+ & = & a \\
+ & = & \nplus(\next(a),x) \\
+ & = & \nplus(a,\next(x)),
+\end{eqnarray*}$$
+so by cancellation we have $\zero = \next(x)$ -- a contradiction. Thus $a = \nplus(\next(a),x)$ has no solution $x \in \nats$, and so $\nminus(a,\next(a)) = \ast$. Thus $\nleq(\next(a),a) = \bfalse$ as claimed.
 </p></div>
 </div>
 
@@ -176,14 +185,21 @@ Here's ``leq``:
 
 And some property tests:
 
-> -- leq(a,plus(a,b)) == True
+> -- leq(next(a),a) == false
+> _test_leq_next_left :: (Natural n)
+>   => n -> Nat n -> Bool
+> _test_leq_next_left _ a =
+>   (leq (next a) a) ==== False
+> 
+> 
+> -- leq(a,plus(a,b)) == true
 > _test_leq_right_plus :: (Natural n)
 >   => n -> Nat n -> Nat n -> Bool
 > _test_leq_right_plus _ a b =
 >   (leq a (plus a b)) ==== True
 > 
 > 
-> -- leq(a,a) == True
+> -- leq(a,a) == true
 > _test_leq_reflexive :: (Natural n)
 >   => n -> Nat n -> Bool
 > _test_leq_reflexive _ a =
@@ -217,6 +233,7 @@ And a test wrapper:
 >       , maxSize    = maxSize
 >       }
 > 
+>   runTest args (_test_leq_next_left n)
 >   runTest args (_test_leq_reflexive n)
 >   runTest args (_test_leq_right_plus n)
 >   runTest args (_test_leq_plus n)

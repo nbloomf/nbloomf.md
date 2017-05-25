@@ -157,3 +157,23 @@ executable amd-repeat
   main-is:       Repeat.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is Repeat.main_repeat
+
+executable amd-sublist
+  main-is:       Sublist.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options:   -main-is Sublist.main_sublist
+
+executable amd-select
+  main-is:       Select.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options:   -main-is Select.main_select
+
+executable amd-unique
+  main-is:       Unique.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options:   -main-is Unique.main_unique
+
+executable amd-dedupe
+  main-is:       Dedupe.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options:   -main-is Dedupe.main_dedupe

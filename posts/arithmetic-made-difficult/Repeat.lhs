@@ -35,7 +35,7 @@ So far we've defined a bunch of functions that operate on lists, but still only 
 
 <div class="result">
 <div class="defn"><p>
-Let $A$ be a set, and define $f : A \rightarrow \ast + A times A$ by $f(x) = (x,x)$. Now define $\repeat : \nats \times A \rightarrow \lists{A}$ by $$\repeat(n,a) = \unfoldN(f,n,a).$$
+Let $A$ be a set, and define $f : A \rightarrow \ast + A \times A$ by $f(x) = (x,x)$. Now define $\repeat : \nats \times A \rightarrow \lists{A}$ by $$\repeat(n,a) = \unfoldN(f,n,a).$$
 </p></div>
 </div>
 
@@ -136,7 +136,7 @@ as needed.
 </p></div>
 </div>
 
-$\repeat$ and $\plus$:
+$\repeat$ and $\nplus$:
 
 <div class="result">
 <div class="thm"><p>
