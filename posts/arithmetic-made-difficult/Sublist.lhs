@@ -42,7 +42,6 @@ Blah blah, define $\sublist$ like this.
 <div class="result">
 <div class="defn"><p>
 Let $A$ be a set. Define $\varphi : A \times \bool^{\lists{A}} \rightarrow \bool^{\lists{A}}$ by $$\varphi(a,f)(x) = \left\{\begin{array}{ll} \btrue & \mathrm{if}\ x = \nil \\ \bif{\beq(a,b)}{f(w)}{f(x)} & \mathrm{if}\ x = \cons(b,w). \end{array}\right.$$ Now define $\sublist : \lists{A} \times \lists{A} \rightarrow \bool$ by $$\sublist(x,y) = \foldr{\isnil}{\varphi}(y)(x).$$
-
 </p></div>
 </div>
 
@@ -118,16 +117,71 @@ Let $A$ be a set with $a \in A$ and $x,y \in \lists{A}$. Then we have the follow
 </p></div>
 
 <div class="proof"><p>
-1. Note that
+Note that
 $$\begin{eqnarray*}
  &   & \sublist(\cons(a,x),\cons(a,y)) \\
  & = & \bif{\beq(a,a)}{\sublist(x,y)}{\sublist(\cons(a,x),y)} \\
  & = & \sublist(x,y)
 \end{eqnarray*}$$
 as claimed.
-2. (@@@)
-3. (@@@)
-4. (@@@)
+</p></div>
+</div>
+
+Another lemma. This one seems like it should be obvious, but the only proof I could find was kind of complicated -- nested induction of two statements at once.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $a \in A$ and $x,y \in \lists{A}$. Then we have the following.
+
+1. If $\sublist(x,y) = \btrue$, then $\sublist(x,\cons(b,y)) = \btrue$.
+2. If $\sublist(\cons(a,x),y) = \btrue$, then $\sublist(x,y) = \btrue$.
+</p></div>
+
+<div class="proof"><p>
+This proof is a little different: we will prove both (1) and (2) simultaneously by list induction on $x$. For the base case $x = \nil$, to see (1), note that for all $b \in A$ and $y \in \lists{A}$ we have $$\sublist(\nil,y) = \btrue = \sublist(\nil,\cons(b,y))$$ as needed. To see (2), note that $\sublist(\nil,y)$, so the implication holds regardless of the values of $a$ and $x$.
+
+For the inductive step, suppose both (1) and (2) hold for all $a,b \in A$ and $y \in \lists{A}$ for some $x \in \lists{A}$, and let $c \in A$.
+
+Now we claim that (1) holds with $x$ replaced by $\cons(c,x)$; that is, for all $b \in A$ and $y \in \lists{A}$, if $\sublist(\cons(c,x),y) = \btrue$ then $\sublist(\cons(c,x),\cons(b,y)) = \btrue$. To this end, suppose we have $\sublist(\cons(c,x),y) = \btrue$. Using part (2) of the induction hypothesis, we have $\sublist(x,y) = \btrue$. Now
+$$\begin{eqnarray*}
+ &   & \sublist(\cons(c,x),\cons(b,y)) \\
+ & = & \bif{\beq(c,b)}{\sublist(x,y)}{\sublist(\cons(c,x),y)} \\
+ & = & \bif{\beq(c,b)}{\btrue}{\btrue} \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed.
+
+Next we claim that (2) holds with $x$ replaced by $\cons(c,x)$. That is, for all $a \in A$ and $y \in \lists{A}$, if $\sublist(\cons(a,\cons(c,x)),y) = \btrue$ then $\sublist(\cons(c,x),y) = \btrue$. We proceed by list induction on $y$. For the base case $y = \nil$, note that
+$$\begin{eqnarray*}
+ &   & \sublist(\cons(a,\cons(c,x)),y) \\
+ & = & \sublist(\cons(a,\cons(c,x)),\nil) \\
+ & = & \isnil(\cons(a,\cons(c,x))) \\
+ & = & \bfalse;
+\end{eqnarray*}$$
+thus the implication (2) holds vacuously.
+
+For the inductive step, suppose we have $y \in \lists{A}$ such that, for all $a \in A$, if $\sublist(\cons(a,\cons(c,x)),y) = \btrue$ then $\sublist(\cons(c,x),y) = \btrue$. Let $d \in A$, and suppose $$\sublist(\cons(a,\cons(c,x)),\cons(d,y)) = \btrue.$$
+
+We consider two possibilities. If $a \neq d$, we have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \sublist(\cons(a,\cons(c,x)),\cons(d,y)) \\
+ & = & \sublist(\cons(a,\cons(c,x)),y).
+\end{eqnarray*}$$
+By the (nested) induction hypothesis, we have $$\sublist(\cons(c,x),y) = \btrue.$$ We established above that this implies $$\sublist(\cons(c,x),\cons(d,y)) = \btrue$$ as needed. Now suppose instead that $a = d$. Then
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \sublist(\cons(a,\cons(c,x)),\cons(d,y)) \\
+ & = & \sublist(\cons(c,x),y).
+\end{eqnarray*}$$
+By part (2) of the (outer) induction hypothesis, we have $$\sublist(x,y) = \btrue.$$ Now
+$$\begin{eqnarray*}
+ &   & \sublist(\cons(c,x),\cons(d,y)) \\
+ & = & \bif{\beq(c,d)}{\sublist(x,y)}{\sublist(\cons(c,x),y)} \\
+ & = & \bif{\beq(c,d)}{\btrue}{\btrue} \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
 
@@ -296,6 +350,19 @@ By the inductive hypothesis, $\sublist(u,z)$, so that $\sublist(x,\cons(c,z))$ a
 </p></div>
 </div>
 
+$\sublist$ interacts with $\snoc$:
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $a \in A$ and $x,y \in \lists{A}$. Then we have $$\sublist(x,y) = \sublist(\snoc(a,x),\snoc(a,y)).$$
+</p></div>
+
+<div class="proof"><p>
+(@@@)
+</p></div>
+</div>
+
+$\sublist$ interacts with $\cat$:
 
 <div class="result">
 <div class="thm"><p>
@@ -381,6 +448,31 @@ Here are our property tests for $\sublist$:
 >    (sublist' x y) ==== (sublist x y)
 > 
 > 
+> -- sublist(x,y) == sublist(cons(a,x),cons(a,y))
+> _test_sublist_cons :: (List t, Equal a)
+>   => t a -> a -> ListOf t a -> ListOf t a -> Bool
+> _test_sublist_cons _ a x y =
+>    (sublist (cons a x) (cons a y)) ==== (sublist x y)
+> 
+> 
+> -- sublist(cons(a,x),y) ==> sublist(x,y)
+> _test_sublist_cons_left :: (List t, Equal a)
+>   => t a -> a -> ListOf t a -> ListOf t a -> Bool
+> _test_sublist_cons_left _ a x y =
+>    if sublist (cons a x) y
+>      then sublist x y
+>      else True
+> 
+> 
+> -- sublist(x,y) ==> sublist(x,cons(a,y))
+> _test_sublist_cons_right :: (List t, Equal a)
+>   => t a -> a -> ListOf t a -> ListOf t a -> Bool
+> _test_sublist_cons_right _ a x y =
+>    if sublist x y
+>      then sublist x (cons a y)
+>      else True
+> 
+> 
 > -- sublist(x,x) == true
 > _test_sublist_reflexive :: (List t, Equal a)
 >   => t a -> ListOf t a -> Bool
@@ -454,6 +546,9 @@ And the suite:
 >       }
 > 
 >   runTest args (_test_sublist_alt t)
+>   runTest args (_test_sublist_cons t)
+>   runTest args (_test_sublist_cons_left t)
+>   runTest args (_test_sublist_cons_right t)
 >   runTest args (_test_sublist_reflexive t)
 >   runTest args (_test_sublist_antisymmetric t)
 >   runTest args (_test_sublist_transitive t)
