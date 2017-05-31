@@ -13,6 +13,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Simple Recursion](/posts/arithmetic-made-difficult/SimpleRecursion.html)
     * [Variations on Peano](/posts/arithmetic-made-difficult/variations-on-peano.html)
     * [Bailout Recursion](/posts/arithmetic-made-difficult/BailoutRecursion.html)
+    * [Mutating Recursion](/posts/arithmetic-made-difficult/MutatingRecursion.html)
     * [The Uniqueness of the Natural Numbers](/posts/arithmetic-made-difficult/NaturalNumbers.html)
 2. Basic
     * [Addition](/posts/arithmetic-made-difficult/Plus.html)
@@ -29,6 +30,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Least Common Multiple](/posts/arithmetic-made-difficult/LeastCommonMultiple.html)
     * [Primes](/posts/arithmetic-made-difficult/IsPrime.html)
     * [Exponentiation](/posts/arithmetic-made-difficult/Exponentiation.html)
+    * -> [Choose](/posts/arithmetic-made-difficult/Choose.html)
 3. Arithmetic of Lists
     * [Iterative Sets Redux](/posts/arithmetic-made-difficult/iterative-sets-redux.html)
     * [Lists](/posts/arithmetic-made-difficult/Lists.html)
@@ -49,10 +51,11 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Elt](/posts/arithmetic-made-difficult/Elt.html)
     * [Count](/posts/arithmetic-made-difficult/Count.html)
     * [Repeat](/posts/arithmetic-made-difficult/Repeat.html)
-    * [Sublist](/posts/arithmetic-made-difficult/Sublist.html)
-    * [Select](/posts/arithmetic-made-difficult/Select.html)
-    * [Unique](/posts/arithmetic-made-difficult/Unique.html)
-    * [Dedupe](/posts/arithmetic-made-difficult/Dedupe.html)
+    * -> [Sublist](/posts/arithmetic-made-difficult/Sublist.html)
+    * -> Infix
+    * -> [Select](/posts/arithmetic-made-difficult/Select.html)
+    * -> [Unique](/posts/arithmetic-made-difficult/Unique.html)
+    * -> [Dedupe](/posts/arithmetic-made-difficult/Dedupe.html)
     * Take and Drop
     * Group
     * Run Length Encode
@@ -60,11 +63,16 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * Cycle
 4. List of Arithmetics
     * [On Boring and Repetitive Proofs](/posts/arithmetic-made-difficult/on-boring-proofs.html)
-    * Partial Orders
-    * Semigroups
+    * Partial and Total Orders
+        * Sorted
+        * Insertion Sort
+        * Merge Sort
+        * Lex and Friends
+    * Semigroups and Monoids
     * Lattices
     * Semirings
 5. Fixed Radix Numeral Systems
+    * Carry
 6. Binary Trees
 7. Sequences
 

@@ -1,7 +1,7 @@
 ---
 title: Exponentiation
 author: nbloomf
-date: 2017-04-21
+date: 2017-04-14
 tags: arithmetic-made-difficult, literate-haskell
 ---
 

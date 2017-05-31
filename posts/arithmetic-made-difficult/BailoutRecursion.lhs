@@ -10,7 +10,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( bailRec
 >   ) where
 > 
-> import Nat
+> import Unary
 
 So far we have defined two special *recursion operators*, $\natrec{\ast}{\ast}$ and $\simprec{\ast}{\ast}$. These act like program skeletons: fill in the slots with functions of the right signatures and get a computable function out. In this post we'll define one more operator, which we will call *bailout recursion*.
 
@@ -125,10 +125,10 @@ As we did with $\natrec{\ast}{\ast}$ and $\simprec{\ast}{\ast}$, we'd like to im
 
 > bailRec, bailRec'
 >   :: (a -> b)
->   -> (Nat -> a -> Bool)
->   -> (Nat -> a -> b)
->   -> (Nat -> a -> a)
->   -> Nat
+>   -> (Unary -> a -> Bool)
+>   -> (Unary -> a -> b)
+>   -> (Unary -> a -> a)
+>   -> Unary
 >   -> a
 >   -> b
 

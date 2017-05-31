@@ -108,12 +108,7 @@ A lemma.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set with $a \in A$ and $x,y \in \lists{A}$. Then we have the following.
-
-1. $\sublist(x,y) = \sublist(\cons(a,x),\cons(a,y))$.
-2. If $\sublist(\cons(a,x),y) = \btrue$, then $\sublist(x,y) = \btrue$.
-3. If $\sublist(x,y) = \btrue$, then $\sublist(x,\cons(b,y)) = \btrue$.
-4. $\sublist(x,y) = \sublist(\snoc(a,x),\snoc(a,y))$.
+Let $A$ be a set with $a \in A$ and $x,y \in \lists{A}$. Then $$\sublist(x,y) = \sublist(\cons(a,x),\cons(a,y)).$$
 </p></div>
 
 <div class="proof"><p>
@@ -189,7 +184,7 @@ Now $\sublist$ interacts with $\length$:
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set, with $x,y \in \lists{A}$. If $\sublist(x,y)$, then $\leq(\length(x),\length(y))$.
+Let $A$ be a set, with $x,y \in \lists{A}$. If $\sublist(x,y)$, then $\nleq(\length(x),\length(y))$.
 </p></div>
 
 <div class="proof"><p>
@@ -354,11 +349,56 @@ $\sublist$ interacts with $\snoc$:
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set with $a \in A$ and $x,y \in \lists{A}$. Then we have $$\sublist(x,y) = \sublist(\snoc(a,x),\snoc(a,y)).$$
+Let $A$ be a set with $a \in A$ and $x,y \in \lists{A}$. We have the following.
+
+1. $\sublist(\snoc(a,x),\nil) = \bfalse$.
+2. $\sublist(x,y) = \sublist(\snoc(a,x),\snoc(a,y))$.
 </p></div>
 
 <div class="proof"><p>
-(@@@)
+1. Note that $\snoc(a,x) = \cons(b,u)$ for some $b \in A$ and $u \in \lists{A}$; then
+$$\begin{eqnarray*}
+ &   & \sublist(\snoc(a,x),\nil) \\
+ & = & \sublist(\cons(b,u),\nil) \\
+ & = & \isnil(\cons(b,u)) \\
+ & = & \bfalse
+\end{eqnarray*}$
+as claimed.
+2. We proceed by list induction on $x$. For the base case $x = \nil$, note that $\sublist(x,y) = \btrue$. We show that $\sublist(\snoc(a,\nil),\snoc(a,y)) = \btrue$ by list induction on $y$. For the base case $y = \nil$, we have $$\sublist(\snoc(a,\nil),\snoc(a,\nil)) = \btrue$$ by reflexivity. For the inductive step (on $y$), suppose the equality holds for some $y$ and let $b \in A$. Now
+$$\begin{eqnarray*}
+ &   & \sublist(\snoc(a,\nil),\snoc(a,\cons(b,y))) \\
+ & = & \sublist(\cons(a,\nil),\cons(b,\snoc(a,y))) \\
+ & = & \bif{\beq(a,b)}{\sublist(\nil,\snoc(a,y))}{\sublist(\cons(a,\nil),\snoc(a,y))} \\
+ & = & \bif{\beq(a,b)}{\btrue}{\sublist(\snoc(a,\nil),\snoc(a,y))} \\
+ & = & \bif{\beq(a,b)}{\btrue}{\btrue} \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed. For the inductive step (on $x$), suppose the equality holds for some $x$ and let $c \in A$. We need to show that $$\sublist(\cons(c,x),y) = \sublist(\snoc(a,\cons(c,x)),\snoc(a,y))$$ for all $y$; we again proceed by list induction on $y$. For the base case $y = \nil$, note that
+$$\begin{eqnarray*}
+ &   & \sublist(\cons(c,x),y) \\
+ & = & \sublist(\cons(c,x),\nil) \\
+ & = & \isnil(\cons(c,x)) \\
+ & = & \bfalse,
+\end{eqnarray*}$$
+and likewise
+$$\begin{eqnarray*}
+ &   & \sublist(\snoc(a,\cons(c,x)),\snoc(a,y)) \\
+ & = & \sublist(\snoc(a,\cons(c,x)),\snoc(a,\nil)) \\
+ & = & \sublist(\cons(c,\snoc(a,x)),\cons(a,\nil)) \\
+ & = & \bif{\beq(c,a)}{\sublist(\snoc(a,x),\nil)}{\sublist(\cons(c,\snoc(a,x)),\nil)} \\
+ & = & \bif{\beq(c,a)}{\bfalse}{\bfalse} \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as needed. For the inductive step (on $y$), suppose we have $$\sublist(\cons(c,x),y) = \sublist(\snoc(a,\cons(c,x)),\snoc(a,y))$$ for some $y$, and let $b \in A$. Using both the outer and nested inductive hypotheses we have
+$$\begin{eqnarray*}
+ &   & \sublist(\snoc(a,\cons(c,x)),\snoc(a,\cons(b,y))) \\
+ & = & \sublist(\cons(c,\snoc(a,x)),\cons(b,\snoc(a,y))) \\
+ & = & \bif{\beq(c,b)}{\sublist(\snoc(a,x),\snoc(a,y))}{\sublist(\cons(c,\snoc(a,x)),\snoc(a,y))} \\
+ & = & \bif{\beq(c,b)}{\sublist(x,y)}{\sublist(\snoc(a,\cons(c,x)),\snoc(a,y))} \\
+ & = & \bif{\beq(c,b)}{\sublist(x,y)}{\sublist(\cons(c,x),y)} \\
+ & = & \sublist(\cons(c,x),\cons(b,y))
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
 
@@ -368,70 +408,189 @@ $\sublist$ interacts with $\cat$:
 <div class="thm"><p>
 Let $A$ be a set. The following hold for all $x,y,u,v \in \lists{A}$.
 
-1. If $\sublist(x,y)$, then $\sublist(\cat(u,x),\cat(u,y))$.
-2. If $\sublist(x,y)$, then $\sublist(\cat(x,u),\cat(y,u))$.
-3. If $\sublist(x,u)$ and $\sublist(y,v)$, then $\sublist(\cat(x,u),\cat(y,v))$.
+1. $\sublist(x,y) = \sublist(\cat(u,x),\cat(u,y))$.
+2. $\sublist(x,y) = \sublist(\cat(x,u),\cat(y,u))$.
+3. If $\sublist(x,u)$ and $\sublist(y,v)$, then $\sublist(\cat(x,y),\cat(u,v))$.
 </p></div>
 
 <div class="proof"><p>
-1. (@@@)
-2. (@@@)
-3. (@@@)
+1. We proceed by list induction on $u$. For the base case $u = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \sublist(\cat(u,x),\cat(u,y)) \\
+ & = & \sublist(\cat(\nil,x),\cat(\nil,y)) \\
+ & = & \sublist(x,y)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $u$ and let $a \in A$. Now
+$$\begin{eqnarray*}
+ &   & \sublist(x,y) \\
+ & = & \sublist(\cat(u,x),\cat(u,y)) \\
+ & = & \sublist(\cons(a,\cat(u,x)),\cons(a,\cat(u,y))) \\
+ & = & \sublist(\cat(\cons(a,u),x),\cat(\cons(a,u),y))
+\end{eqnarray*}$$
+as needed.
+2. We proceed by list induction on $u$. For the base case $u = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \sublist(\cat(x,u),\cat(y,u)) \\
+ & = & \sublist(\cat(x,\nil),\cat(y,\nil)) \\
+ & = & \sublist(x,y)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $u$ and let $a \in A$. Now we have
+$$\begin{eqnarray*}
+ &   & \sublist(x,y) \\
+ & = & \sublist(\snoc(a,x),\snoc(a,y)) \\
+ & = & \sublist(\cat(\snoc(a,x),u),\cat(\snoc(a,y),u)) \\
+ & = & \sublist(\cat(x,\cons(a,u)),\cat(y,\cons(a,u)))
+\end{eqnarray*}$$
+as needed.
+3. If $\sublist(x,u) = \btrue$, then $\sublist(\cat(x,y),\cat(u,y)) = \btrue$. Similarly, if $\sublist(y,v) = \btrue$, then $\sublist(\cat(u,y),\cat(u,v)) = \btrue$. By transitivity, we have $$\sublist(\cat(x,y),cat(u,v)) = \btrue$.
 </p></div>
 </div>
+
+Another lemma.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set. For all $x,y \in \lists{A}$ we have $\sublist(x,y)$ if and only if $\sublist(\rev(x),\rev(y))$.
+Let $A$ be a set. For all $a,b \in A$ and $x,y \in \lists{A}$ we have $$\sublist(\snoc(a,x),\snoc(b,y)) = \left\{ \begin{array}{ll} \sublist(x,y) & \mathrm{if}\ \eq(a,b) \\ \sublist(\snoc(a,x),y) & \mathrm{otherwise}. \end{array} \right.$$
 </p></div>
 
 <div class="proof"><p>
-(@@@)
+We've already seen that $$\sublist(\snoc(a,x),\snoc(a,y)) = \sublist(x,y).$$ So it suffices to show that if $a \neq b$ we have $$\sublist(\snoc(a,x),\snoc(b,y)) = \sublist(\snoc(a,x),y).$$ We proceed by list induction on $y$. For the base case $y = \nil$, note that
+$$\begin{eqnarray*}
+ &   & \sublist(\snoc(a,x),y) \\
+ & = & \sublist(\snoc(a,x),\nil) \\
+ & = & \isnil(\snoc(a,x)) \\
+ & = & \bfalse.
+\end{eqnarray*}$$
+We will now show that $\sublist(\snoc(a,x),\snoc(b,\nil)) = \bfalse$ by considering two cases for $x$. If $x = nil$, we have
+$$\begin{eqnarray*}
+ &   & \sublist(\snoc(a,x),\snoc(b,\nil)) \\
+ & = & \sublist(\snoc(a,\nil),\snoc(b,\nil)) \\
+ & = & \sublist(\cons(a,\nil),\cons(b,\nil)) \\
+ & = & \sublist(\cons(a,\nil),\nil) \\
+ & = & \isnil(\cons(a,\nil)) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as needed. If $x = \cons(c,u)$ and $\sublist(\snoc(a,x),\snoc(b,\nil)) = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \nleq(\length(\snoc(a,x)),\length(\snoc(b,\nil)) \\
+ & = & \nleq(\next(\length(x)),\next(\length(\nil))) \\
+ & = & \nleq(\next(\length(\cons(c,u))),\next(\zero)) \\
+ & = & \nleq(\next(\next(\length(u))),\next(\zero)) \\
+ & = & \bfalse,
+\end{eqnarray*}$$
+a contradiction.
+
+Now for the inductive step, suppose the equality holds for some $y$. That is, for all $a \neq b$ and all $x$ we have $$\sublist(\snoc(a,x),\snoc(b,y)) = \sublist(\snoc(a,x),y).$$ Let $d \in A$. We consider two possibilities for $x$. If $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \sublist(\snoc(a,x),\snoc(b,\cons(d,y))) \\
+ & = & \sublist(\snoc(a,\nil),\snoc(b,\cons(d,y))) \\
+ & = & \sublist(\cons(a,\nil),\cons(d,\snoc(b,y))) \\
+ & = & \bif{\beq(a,d)}{\sublist(\nil,\snoc(b,y))}{\sublist(\cons(a,\nil),\snoc(b,y))} \\
+ & = & \bif{\beq(a,d)}{\btrue}{\sublist(\snoc(a,\nil),\snoc(b,y))} \\
+ & = & \bif{\beq(a,d)}{\btrue}{\sublist(\snoc(a,\nil),y)} \\
+ & = & \bif{\beq(a,d)}{\sublist(\nil,y)}{\sublist(\cons(a,\nil),y)} \\
+ & = & \sublist(\cons(a,\nil),\cons(d,y)) \\
+ & = & \sublist(\snoc(a,\nil),\cons(d,y))
+\end{eqnarray*}$$
+as needed. Suppose instead that $x = \cons(c,u)$. Now we have
+$$\begin{eqnarray*}
+ &   & \sublist(\snoc(a,x),\snoc(b,\cons(d,y))) \\
+ & = & \sublist(\snoc(a,\cons(c,u)),\snoc(b,\cons(d,y))) \\
+ & = & \sublist(\cons(c,\snoc(a,u)),\cons(d,\snoc(b,y))) \\
+ & = & \bif{\beq(c,d)}{\sublist(\snoc(a,u),\snoc(b,y))}{\sublist(\cons(c,\snoc(a,u)),\snoc(b,y))} \\
+ & = & \bif{\beq(c,d)}{\sublist(\snoc(a,u),y)}{\sublist(\snoc(a,\cons(c,u)),\snoc(b,y))} \\
+ & = & \bif{\beq(c,d)}{\sublist(\snoc(a,u),y)}{\sublist(\snoc(a,\cons(c,u)),y)} \\
+ & = & \bif{\beq(c,d)}{\sublist(\snoc(a,u),y)}{\sublist(\cons(c,\snoc(a,u)),y)} \\
+ & = & \sublist(\cons(c,\snoc(a,u)),\cons(d,y)) \\
+ & = & \sublist(\snoc(a,\cons(c,u)),\cons(d,y)) \\
+ & = & \sublist(\snoc(a,x),\cons(d,y))
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
+
+$\sublist$ interacts with $\rev$:
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set, let $x,y \in \lists{A}$, and let $p : A \rightarrow \bool$. If $\sublist(x,y)$, then we have the following.
-
-1. If $\all(p,y)$ then $\all(p,x)$.
-2. If $\any(p,x)$ then $\any(p,y)$.
+Let $A$ be a set. For all $x,y \in \lists{A}$ we have $$\sublist(x,y) = \sublist(\rev(x),\rev(y)).$$
 </p></div>
 
 <div class="proof"><p>
-1. (@@@)
-2. (@@@)
+We proceed by list induction on $y$. For the base case $y = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \sublist(x,y) \\
+ & = & \sublist(x,\nil) \\
+ & = & \isnil(x) \\
+ & = & \isnil(\rev(x)) \\
+ & = & \sublist(\rev(x),\nil) \\
+ & = & \sublist(\rev(x),\rev(\nil)) \\
+ & = & \sublist(\rev(x),\rev(y))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $x$ for some $y$ and let $b \in A$. We consider two possibilities for $x$. If $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \sublist(x,\cons(b,y)) \\
+ & = & \sublist(\nil,\cons(b,y)) \\
+ & = & \btrue \\
+ & = & \sublist(\nil,\rev(\cons(b,y))) \\
+ & = & \sublist(\rev(\nil),\rev(\cons(b,y))) \\
+ & = & \sublist(\rev(x),\rev(\cons(b,y)))
+\end{eqnarray*}$$
+as needed. Suppose instead that $x = \cons(a,w)$. Then we have
+$$\begin{eqnarray*}
+ & = & \sublist(\rev(x),\rev(\cons(b,y))) \\
+ & = & \sublist(\rev(\cons(a,w)),\rev(\cons(b,y))) \\
+ & = & \sublist(\snoc(a,\rev(w)),\snoc(b,\rev(y))) \\
+ & = & \bif{\beq(a,b)}{\sublist(\rev(w),\rev(y))}{\sublist(\snoc(a,\rev(w)),\rev(y))} \\
+ & = & \bif{\beq(a,b)}{\sublist(w,y)}{\sublist(\rev(\cons(a,w)),\rev(y))} \\
+ & = & \bif{\beq(a,b)}{\sublist(w,y)}{\sublist(\cons(a,w),y)} \\
+ & = & \sublist(\cons(a,w),\cons(b,y)) \\
+ & = & \sublist(x,\cons(b,y))
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
+
+Finally, $\sublist$ interacts with $\and$ and $\all$.
 
 <div class="result">
 <div class="thm"><p>
+Let $A$ be a set, let $x,y \in \lists{A}$, and let $p : A \rightarrow \bool$. If $\sublist(x,y)= \btrue$, then we have the following.
 
+1. If $\all(p,y) = \btrue$ then $\all(p,x) = \btrue$.
+2. If $\any(p,x) = \btrue$ then $\any(p,y) = \btrue$.
 </p></div>
 
 <div class="proof"><p>
-
-</p></div>
-</div>
-
-Now for $\infix$.
-
-<div class="result">
-<div class="defn"><p>
-(@@@)
-
-In Haskell:
-
-</p></div>
-</div>
-
-<div class="result">
-<div class="thm"><p>
-
-</p></div>
-
-<div class="proof"><p>
-
+1. We proceed by list induction on $y$. For the base case $y = \nil$, since $\sublist(x,y) = \btrue$ we have $x = \nil$. Now $$\all(p,y) = \all(p,\nil) = \btrue$$ and $$\all(p,x) = \all(p,\nil) = \btrue$$ as needed. For the inductive step, suppose the result holds for all $x$ for some $y$, and let $b \in A$. Suppose $\sublist(x,\cons(b,y)) = \btrue$, and further suppose that $\all(p,\cons(b,y)) = \btrue$. In particular, note that $p(b) = \btrue$. We consider two possibilities for $x$. If $x = \nil$, note that $$\all(p,x) = \all(p,\nil) = \btrue,$$ so the implication holds regardless of $y$. Suppose instead that $x = \cons(a,u)$. Now
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \sublist(x,\cons(b,y)) \\
+ & = & \sublist(\cons(a,u),\cons(b,y)) \\
+ & = & \bif{\beq(a,b)}{\sublist(u,y)}{\sublist(\cons(a,u),y)} \\
+ & = & \bif{\beq(a,b)}{\all(p,u)}{\all(p,\cons(a,u))} \\
+ & = & \bif{\beq(a,b)}{\all(p,\cons(a,u))}{\all(p,\cons(a,u))} \\
+ & = & \all(p,\cons(a,u)) \\
+ & = & \all(p,x)
+\end{eqnarray*}$$
+as needed.
+2. We prove this implication by contraposition. Suppose $\any(p,y) = \bfalse$; then we have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \bnot(\bfalse) \\
+ & = & \bnot(\any(p,y)) \\
+ & = & \all(\bnot \circ p, y).
+\end{eqnarray*}$$
+Using (1), we thus have
+$$\begin{eqnarray*}
+ &   & \bfalse \\
+ & = & \bnot(\btrue) \\
+ & = & \bnot(\all(\bnot \circ p,x)) \\
+ & = & \bnot(\bnot(\any(p,x))) \\
+ & = & \any(p,x)
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
 
@@ -496,6 +655,13 @@ Here are our property tests for $\sublist$:
 >      else True
 > 
 > 
+> -- sublist(snoc(a,x),nil) == false
+> _test_sublist_snoc_nil :: (List t, Equal a)
+>   => t a -> a -> ListOf t a -> Bool
+> _test_sublist_snoc_nil _ a x =
+>    (sublist (snoc a x) nil) ==== False
+> 
+> 
 > -- sublist(x,y) == sublist(rev(x),rev(y))
 > _test_sublist_rev :: (List t, Equal a)
 >   => t a -> ListOf t a -> ListOf t a -> Bool
@@ -531,13 +697,13 @@ Here are our property tests for $\sublist$:
 
 And the suite:
 
-> -- run all tests for sublist and isInfix
+> -- run all tests for sublist
 > _test_sublist ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
 >   ) => t a -> Int -> Int -> IO ()
 > _test_sublist t maxSize numCases = do
->   testLabel ("sublist & isInfix: " ++ typeName t)
+>   testLabel ("sublist: " ++ typeName t)
 > 
 >   let
 >     args = stdArgs
@@ -552,6 +718,7 @@ And the suite:
 >   runTest args (_test_sublist_reflexive t)
 >   runTest args (_test_sublist_antisymmetric t)
 >   runTest args (_test_sublist_transitive t)
+>   runTest args (_test_sublist_snoc_nil t)
 >   runTest args (_test_sublist_rev t)
 >   runTest args (_test_sublist_cat_left t)
 >   runTest args (_test_sublist_cat_right t)

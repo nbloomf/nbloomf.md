@@ -1,7 +1,7 @@
 ---
 title: Unique
 author: nbloomf
-date: 2017-05-25
+date: 2017-05-26
 tags: arithmetic-made-difficult, literate-haskell
 ---
 

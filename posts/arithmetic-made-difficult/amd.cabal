@@ -78,6 +78,11 @@ executable amd-power
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is Exponentiation.main_power
 
+executable amd-choose
+  main-is:       Choose.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options:   -main-is Choose.main_choose
+
 executable amd-rev
   main-is:       Reverse.lhs
   build-depends: base == 4.*, QuickCheck
@@ -162,6 +167,11 @@ executable amd-sublist
   main-is:       Sublist.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is Sublist.main_sublist
+
+executable amd-infix
+  main-is:       Infix.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options:   -main-is Infix.main_isInfix
 
 executable amd-select
   main-is:       Select.lhs

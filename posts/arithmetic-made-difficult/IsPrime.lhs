@@ -1,7 +1,7 @@
 ---
 title: Is Prime
 author: nbloomf
-date: 2017-04-20
+date: 2017-04-13
 tags: arithmetic-made-difficult, literate-haskell
 ---
 

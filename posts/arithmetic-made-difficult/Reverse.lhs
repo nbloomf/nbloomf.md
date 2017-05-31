@@ -229,6 +229,25 @@ as claimed.
 </p></div>
 </div>
 
+For example:
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $a \in A$ and $x \in \lists{A}$. Then $\isnil(\rev(\cons(a,x))) = \bfalse$.
+</p></div>
+
+<div class="proof"><p>
+Note that $\cons(a,x)$ is either $\nil$ or of the form $\snoc(b,u)$ for some $b \in A$ and $u \in \lists{A}$. Since $\cons(a,x) \neq \nil$, we have
+$$\begin{eqnarray*}
+ &   & \isnil(\rev(\cons(a,x))) \\
+ & = & \isnil(\rev(\snoc(b,u))) \\
+ & = & \isnil(\cons(b,\rev(u))) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
 
 The Other Fold
 --------------
@@ -418,7 +437,9 @@ Here are our property tests.
 >   let
 >     nil' = nil `withTypeOf` (ListOf z)
 >   in
->     (rev (cons a (cons b nil'))) ==== (cons b (cons a nil'))
+>     eq
+>       (rev (cons a (cons b nil')))
+>       (cons b (cons a nil'))
 > 
 > 
 > -- rev(snoc(a,x)) == cons(a,rev(x))
@@ -433,6 +454,13 @@ Here are our property tests.
 >   => t a -> ListOf t a -> Bool
 > _test_rev_involution _ x =
 >   (rev (rev x)) ==== x
+> 
+> 
+> -- isnil(rev(cons(a,x))) == false
+> _test_rev_isnil_cons :: (List t, Equal a)
+>   => t a -> a -> ListOf t a -> Bool
+> _test_rev_isnil_cons _ a x =
+>   (isNil (rev (cons a x))) ==== False
 > 
 > 
 > -- rev(x) == rev'(x)
@@ -462,6 +490,7 @@ And the suite:
 >   runTest args (_test_rev_double t)
 >   runTest args (_test_rev_snoc t)
 >   runTest args (_test_rev_involution t)
+>   runTest args (_test_rev_isnil_cons t)
 >   runTest args (_test_rev_alt t)
 
 And the main function:

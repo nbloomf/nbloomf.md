@@ -1,14 +1,14 @@
 ---
 title: The Uniqueness of the Natural Numbers
 author: nbloomf
-date: 2014-05-22
+date: 2014-05-23
 tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > {-# LANGUAGE BangPatterns #-}
 > module NaturalNumbers
 >   ( Natural(..), NatShape(..), Nat(..), Unary()
->   , isZero, prev, naturalRec, simpleRec, bailoutRec
+>   , isZero, prev, naturalRec, simpleRec, bailoutRec, mutatingRec
 >   , _test_nat, main_nat
 >   ) where
 > 
@@ -122,8 +122,24 @@ And note that natural, simple, and primitive recursion can be written against th
 >           else theta m (omega m a)
 > 
 >   in theta
+> 
+> 
+> mutatingRec :: (Natural n)
+>   => (a -> b)
+>   -> (a -> a)
+>   -> (a -> (a -> b) -> b)
+>   -> n
+>   -> a
+>   -> b
+> mutatingRec phi omega chi =
+>   let
+>     theta n a = case natShape n of
+>       Zero   -> phi a
+>       Next m -> chi (omega a) (theta m)
+> 
+>   in theta
 
-From now on we'll use the ``Natural`` interface with ``naturalRec`` and ``simpleRec`` instead of ``Unary``.
+From now on we'll use the ``Natural`` interface with ``naturalRec``, ``simpleRec``, ``bailoutRec``, and ``mutatingRec`` instead of ``Unary``.
 
 There is one bit of Haskell wierdness we have to deal with. We can define an ``Equal`` instance against the ``Natural`` interface (as we'll see), but the instance declaration
 
