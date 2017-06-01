@@ -180,7 +180,7 @@ as claimed.
 </p></div>
 </div>
 
-One more.
+And another:
 
 <div class="result">
 <div class="thm"><p>
@@ -194,6 +194,35 @@ $$\begin{eqnarray*}
  & = & \band(q(a),\all(q,x)) \\
  & = & \band(\btrue,\btrue) \\
  & = & \btrue
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
+One more.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ and $B$ be sets with $f : A \rightarrow B$ and $p : B \rightarrow \bool$. Then for all $x \in \lists{A}$ we have $$\all(p,\map(f)(x)) = \all(p \circ f,x).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \all(p,\map(f)(x)) \\
+ & = & \all(p,\map(f)(\nil)) \\
+ & = & \all(p,\nil) \\
+ & = & \btrue \\
+ & = & \all(p \circ f,\nil) \\
+ & = & \all(p \circ f,x)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
+$$\begin{eqnarray*}
+ &   & \all(p,\map(f)(\cons(a,x))) \\
+ & = & \all(p,\cons(f(a),\map(f)(x))) \\
+ & = & \band(p(f(a)),\all(p,\map(f)(x))) \\
+ & = & \band((p \circ f)(a),\all(p \circ f,x)) \\
+ & = & \all(p \circ f,\cons(a,x))
 \end{eqnarray*}$$
 as needed.
 </p></div>
@@ -353,6 +382,26 @@ $$\begin{eqnarray*}
  & = & \bnot(\all(\bnot \circ p,\rev(x))) \\
  & = & \bnot(\all(\bnot \circ p,x)) \\
  & = & \any(p,x)
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
+One more.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ and $B$ be sets with $f : A \rightarrow B$ and $p : B \rightarrow \bool$. Then for all $x \in \lists{A}$ we have $$\any(p,\map(f)(x)) = \any(p \circ f,x).$$
+</p></div>
+
+<div class="proof"><p>
+Note that
+$$\begin{eqnarray*}
+ &   & \any(p,\map(f)(x)) \\
+ & = & \bnot(\all(\bnot \circ p,\map(f)(x))) \\
+ & = & \bnot(\all((\bnot \circ p) \circ f,x)) \\
+ & = & \bnot(\all(\bnot \circ (p \circ f),x)) \\
+ & = & \any(p \circ f,x)
 \end{eqnarray*}$$
 as claimed.
 </p></div>

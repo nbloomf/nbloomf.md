@@ -272,6 +272,41 @@ as claimed.
 </p></div>
 </div>
 
+$\length$ can detect when $\prefix$ is false (sometimes):
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $x,y \in \lists{A}$. If $\nleq(\next(\length(y)),\length(x)) = \btrue$, then $\prefix(x,y) = \bfalse$.
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, note that
+$$\begin{eqnarray*}
+ &   & \nleq(\next(\length(y)),\length(x)) \\
+ & = & \nleq(\next(\length(y)),\length(\nil)) \\
+ & = & \nleq(\next(\length(y)),\zero) \\
+ & = & \bfalse,
+\end{eqnarray*}$$
+so the implication holds vacuously. For the inductive step, suppose the implication holds for all $y$ for some $x$ and let $a \in A$. Suppose further that $$\nleq(\next(\length(y)),\length(\cons(a,x))) = \btrue.$$ We consider two possibilities for $y$. If $y = \nil$, then $$\prefix(\cons(a,x),y) = \prefix(\cons(a,x),\nil) = \bfalse$$ as needed. Suppose then that $y = \cons(b,v)$ for some $b \in A$ and $v \in \lists{A}$. Now
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \nleq(\next(\length(y)),\length(\cons(a,x))) \\
+ & = & \nleq(\next(\length(\cons(b,v))),\next(\length(x))) \\
+ & = & \nleq(\next(\next(\length(v))),\next(\length(x))) \\
+ & = & \nleq(\next(\length(v)),\length(x)).
+\end{eqnarray*}$$
+By the inductive hypothesis, we have $\prefix(x,v) = \bfalse$. Now
+$$\begin{eqnarray*}
+ &   & \prefix(\cons(a,x),y) \\
+ & = & \prefix(\cons(a,x),\cons(b,v)) \\
+ & = & \bif{\beq(a,b)}{\prefix(x,v)}{\bfalse} \\
+ & = & \bif{\beq(a,b)}{\bfalse}{\bfalse} \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
 The simplest way to define $\suffix$ is in terms of $\prefix$.
 
 <div class="result">
@@ -433,6 +468,30 @@ as claimed.
 </p></div>
 </div>
 
+$\suffix$ and $\length$:
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $x,y \in \lists{A}$. If $\nleq(\next(\length(y)),\length(x)) = \btrue$, then $\suffix(x,y) = \bfalse$. 
+</p></div>
+
+<div class="proof"><p>
+Note that
+$$\begin{eqnarray*}
+ &   & \nleq(\next(\length(\rev(y))),\length(\rev(x))) \\
+ & = & \nleq(\next(\length(y)),\length(x)) \\
+ & = & \btrue,
+\end{eqnarray*}$$
+so that
+$$\begin{eqnarray*}
+ &   & \suffix(x,y) \\
+ & = & \prefix(\rev(x),\rev(y)) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
 Finally:
 
 <div class="result">
@@ -452,6 +511,45 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 </p></div>
 in particular we must have $a = b$ and $x = \cat(w,y)$. Thus $\suffix(y,x) = \btrue$.
+</div>
+
+One more special case.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$ we have $$\prefix(x,\cons(a,\nil)) = \suffix(x,\cons(a,\nil)).$$
+</p></div>
+
+<div class="proof"><p>
+We consider three possibilities for $x$. If $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \prefix(x,\cons(a,\nil)) \\
+ & = & \prefix(\nil,\cons(a,\nil)) \\
+ & = & \btrue \\
+ & = & \suffix(\nil,\cons(a,\nil)) \\
+ & = & \suffix(x,\cons(a,\nil))
+\end{eqnarray*}$$
+as needed. If $x = \cons(b,\nil)$, we have
+$$\begin{eqnarray*}
+ &   & \prefix(x,\cons(a,\nil)) \\
+ & = & \prefix(\cons(b,\nil),\cons(a,\nil)) \\
+ & = & \bif{\beq(a,b)}{\prefix(\nil,\nil)}{\bfalse} \\
+ & = & \bif{\beq(a,b)}{\btrue}{\bfalse} \\
+ & = & \bif{\beq(a,b)}{\suffix(\nil,\nil)}{\bfalse} \\
+ & = & \suffix(\snoc(b,\nil),\snoc(a,\nil)) \\
+ & = & \suffix(\cons(b,\nil),\cons(a,\nil)) \\
+ & = & \suffix(x,\cons(a,\nil))
+\end{eqnarray*}$$
+as needed. Finally, suppose $x = \cons(b,\cons(c,u))$ for some $u$. In this case we have
+$$\begin{eqnarray*}
+ &   & \nleq(\next(\length(\cons(a,\nil))),\length(x)) \\
+ & = & \nleq(\next(\next(\zero)),\length(\cons(b,\cons(c,u)))) \\
+ & = & \nleq(\next(\next(\zero)),\next(\next(\length(u)))) \\
+ & = & \nleq(\zero,\length(u)) \\
+ & = & \btrue,
+\end{eqnarray*}$$
+so that $\prefix(x,\cons(a,\nil)) = \bfalse$. Similarly, $$\nleq(\next(\length(\cons(a,\nil))),\length(x)) = \btrue$$ so that $\suffix(x,\cons(a,\nil)) = \bfalse$ as needed.
+</p></div>
 </div>
 
 
