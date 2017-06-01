@@ -110,8 +110,9 @@ Now $\all$ satisfies some nice properties.
 Let $A$ be a set and $p : A \rightarrow \bool$. Then the following hold for all $x,y \in \lists{A}$.
 
 1. $\all(\const(\btrue),x) = \btrue$.
-2. $\all(p,\cat(x,y)) = \band(\all(p)(x),\all(p)(y))$.
-3. $\all(p,\rev(x)) = \all(p,x)$.
+2. If $x \neq \nil$, then $\all(\const(\bfalse),x) = \bfalse$.
+3. $\all(p,\cat(x,y)) = \band(\all(p)(x),\all(p)(y))$.
+4. $\all(p,\rev(x)) = \all(p,x)$.
 </p></div>
 
 <div class="proof"><p>
@@ -129,7 +130,16 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.
-2. We proceed by list induction on $x$. For the base case $x = \nil$, we have
+2. Say $x = \cons(a,u)$. Now
+$$\begin{eqnarray*}
+ &   & \all(\const(\bfalse),x) \\
+ & = & \all(\const(\bfalse),\cons(a,u)) \\
+ & = & \band(\const(\bfalse)(a),\all(\const(\bfalse),u)) \\
+ & = & \band(\bfalse,\all(\const(\bfalse),u)) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as claimed.
+3. We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \all(p,\cat(x,y)) \\
  & = & \all(p,\cat(\nil,y)) \\
@@ -148,7 +158,7 @@ $$\begin{eqnarray*}
  & = & \band(\all(p,\cons(a,x)),\all(p,y))
 \end{eqnarray*}$$
 as needed.
-3. We proceed by list induction on $x$. For the base case $x = \nil$, we have
+4. We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \all(p,\rev(x)) \\
  & = & \all(p,\rev(\nil)) \\
@@ -167,6 +177,25 @@ $$\begin{eqnarray*}
  & = & \all(p,\cons(a,x))
 \end{eqnarray*}$$
 as claimed.
+</p></div>
+</div>
+
+One more.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set and $p,q : A \rightarrow \bool$. If $p(a)$ implies $q(a)$ for all $a \in A$, then if $$\all(p,x) = \btrue,$$ then $$\all(q,x) = \btrue.$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have $$\all(p,x) = \all(p,\nil) = \btrue$$ and $$\all(q,x) = \all(q,\nil) = \btrue$$, which is sufficient. For the inductive step, suppose the implication holds for all $p$ and $q$ for some $x$ and let $a \in A$. Suppose further that $$\all(p,\cons(a,x)) = \btrue.$$ In particular, we have $$\band(p(a),\all(p,x)) = \btrue,$$ so that $p(a) = \btrue$ and $\all(p,x) = \btrue$. Now $q(a) = \btrue$, and we have
+$$\begin{eqnarray*}
+ &   & \all(q,\cons(a,x)) \\
+ & = & \band(q(a),\all(q,x)) \\
+ & = & \band(\btrue,\btrue) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
 
@@ -285,8 +314,9 @@ more stuff
 Let $A$ be a set and $p : A \rightarrow \bool$. Then the following hold for all $x,y \in \lists{A}$.
 
 1. $\any(\const(\bfalse),x) = \bfalse$.
-2. $\any(p,\cat(x,y)) = \bor(\any(p)(x),\any(p)(y))$.
-3. $\any(p,\rev(x)) = \any(p,x)$.
+2. If $x \neq \nil$, then $\any(\const(\btrue),x) = \btrue$.
+3. $\any(p,\cat(x,y)) = \bor(\any(p)(x),\any(p)(y))$.
+4. $\any(p,\rev(x)) = \any(p,x)$.
 </p></div>
 
 <div class="proof"><p>
@@ -301,6 +331,15 @@ $$\begin{eqnarray*}
 as claimed.
 2. Note that
 $$\begin{eqnarray*}
+ &   & \any(\const(\btrue),x) \\
+ & = & \all(\bnot \circ \const(\btrue),x) \\
+ & = & \all(\const(\bnot(\btrue)),x) \\
+ & = & \all(\const(\bfalse),x) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as claimed.
+3. Note that
+$$\begin{eqnarray*}
  &   & \any(p,\cat(x,y)) \\
  & = & \bnot(\all(\bnot \circ p,\cat(x,y))) \\
  & = & \bnot(\band(\all(\bnot \circ p,x),\all(\bnot \circ p,y))) \\
@@ -308,7 +347,7 @@ $$\begin{eqnarray*}
  & = & \bor(\any(p,x),\any(p,y))
 \end{eqnarray*}$$
 as claimed.
-3. Note that
+4. Note that
 $$\begin{eqnarray*}
  &   & \any(p,\rev(x)) \\
  & = & \bnot(\all(\bnot \circ p,\rev(x))) \\

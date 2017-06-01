@@ -449,6 +449,7 @@ $$\begin{eqnarray*}
  & = & \cat(z,y) \\
  & = & \cat(\cons(b,w),y) \\
  & = & \cons(b,\cat(w,y));
+\end{eqnarray*}$$
 </p></div>
 in particular we must have $a = b$ and $x = \cat(w,y)$. Thus $\suffix(y,x) = \btrue$.
 </div>

@@ -134,7 +134,7 @@ $\tails$ interacts with $\length$:
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set. For all $x \in \lists{A}$ we have $$\length(\tails(x)) = \next(\length(x)).$$
+Let $A$ be a set. For all $x \in \lists{A}$ we have $$\length(\tails(x)) = \next(\length(x)).$$ In particular, $\tails{x} \neq \nil$.
 </p></div>
 
 <div class="proof"><p>
@@ -267,6 +267,36 @@ $$\begin{eqnarray*}
  & = & \tails(\nil) \\
  & = & \tails(\lcs(\snoc(d,u),\snoc(b,w))) \\
  & = & \tails(\lcs(x,y))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
+And $\tails$ consists of suffixes.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $x \in \lists{A}$ we have $$\all(\suffix(-,x),\tails(x)) = \btrue.$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, note that
+$$\begin{eqnarray*}
+ &   & \all(\suffix(-,x),\tails(x)) \\
+ & = & \all(\suffix(-,\nil),\cons(\nil,\nil)) \\
+ & = & \band(\suffix(\nil,\nil),\all(\suffix(-,\nil),\nil)) \\
+ & = & \band(\btrue,\btrue) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Note that if $\suffix(u,x) = \btrue$ then $\suffix(u,\cons(a,x)) = \btrue$. Using the inductive hypothesis, we have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \all(\suffix(-,x),\tails(x)) \\
+ & = & \all(\suffix(-,\cons(a,x)),\tails(x)) \\
+ & = & \band(\btrue,\all(\suffix(-,\cons(a,x)),\tails(x)) \\
+ & = & \band(\suffix(\cons(a,x),\cons(a,x)),\all(\suffix(-,\cons(a,x)),\tails(x)))) \\
+ & = & \all(\suffix(-,\cons(a,x)),\cons(\cons(a,x),\tails(x))) \\
+ & = & \all(\suffix(-,\cons(a,x)),\tails(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
 </p></div>

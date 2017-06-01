@@ -230,6 +230,24 @@ as needed.
 </p></div>
 </div>
 
+And $\length$ detects $\nil$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $x \in \lists{A}$. Then $x = \nil$ if and only if $\length(x) = 0$.
+</p></div>
+
+<div class="proof"><p>
+We've already seen that $\length(\nil) = \zero$. Suppose then that $x = \cons(a,u)$; then
+$$\begin{eqnarray*}
+ &   & \length(x) \\
+ & = & \length(\cons(a,u)) \\
+ & = & \next(\length(u));
+\end{eqnarray*}$$
+in particular, $\length(x) \neq \zero$.
+</p></div>
+</div>
+
 
 Testing
 -------

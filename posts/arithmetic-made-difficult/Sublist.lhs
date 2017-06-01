@@ -197,8 +197,8 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 we have $x = \nil$, so that $\length(x) = \zero$. Thus
 $$\begin{eqnarray*}
- &   & \leq(\length(x),\length(y)) \\
- & = & \leq(\zero,\zero) \\
+ &   & \nleq(\length(x),\length(y)) \\
+ & = & \nleq(\zero,\zero) \\
  & = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the implication holds for all $x$ for some $y$, and let $b \in A$. We consider two cases for $x$. If $x = \nil$, we have
@@ -209,9 +209,9 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 and furthermore
 $$\begin{eqnarray*}
- &   & \leq(\length(x),\length(\cons(b,y))) \\
- & = & \leq(\length(\nil),\length(\cons(b,y))) \\
- & = & \leq(\zero,\length(\cons(b,y)))
+ &   & \nleq(\length(x),\length(\cons(b,y))) \\
+ & = & \nleq(\length(\nil),\length(\cons(b,y))) \\
+ & = & \nleq(\zero,\length(\cons(b,y)))
 \end{eqnarray*}$$
 as needed. Suppose then that $x = \cons(a,u)$, and suppose further that $\sublist(x,\cons(b,y)) = \btrue$. We have two possibilities. If $a = b$, we have
 $$\begin{eqnarray*}
@@ -221,13 +221,13 @@ $$\begin{eqnarray*}
  & = & \sublist(u,y).
 \end{eqnarray*}$$
 By the induction hypothesis, we have
-$$\begin{eqnarray*
+$$\begin{eqnarray*}
  &   & \btrue \\
- & = & \leq(\length(u),\length(y)) \\
- & = & \leq(\next(\length(u)),\next(\length(y))) \\
- & = & \leq(\length(\cons(a,u)),\length(\cons(b,y))) \\
- & = & \leq(\length(x),\length(\cons(b,y)))
-</p></div>
+ & = & \nleq(\length(u),\length(y)) \\
+ & = & \nleq(\next(\length(u)),\next(\length(y))) \\
+ & = & \nleq(\length(\cons(a,u)),\length(\cons(b,y))) \\
+ & = & \nleq(\length(x),\length(\cons(b,y)))
+\end{eqnarray*}$$
 as needed. If $a \neq b$, we have
 $$\begin{eqnarray*}
  &   & \btrue \\
@@ -238,12 +238,13 @@ $$\begin{eqnarray*}
 By the induction hypothesis, we have
 $$\begin{eqnarray*}
  &   & \btrue \\
- & = & \leq(\length(\cons(a,u)),\length(y)) \\
- & = & \leq(\length(x),\length(y)) \\
- & = & \leq(\length(x),\next(\length(y))) \\
- & = & \leq(\length(x),\length(\cons(b,y)))
+ & = & \nleq(\length(\cons(a,u)),\length(y)) \\
+ & = & \nleq(\length(x),\length(y)) \\
+ & = & \nleq(\length(x),\next(\length(y))) \\
+ & = & \nleq(\length(x),\length(\cons(b,y)))
 \end{eqnarray*}$$
 as needed.
+</p></div>
 </div>
 
 $\sublist$ is a partial order:
@@ -290,15 +291,15 @@ $$\begin{eqnarray*}
 But now we have
 $$\begin{eqnarray*}
  &   & \btrue \\
- & = & \leq(\lenth(\cons(a,x)),\length(y)) \\
- & = & \leq(\next(\length(x)),\length(y)
+ & = & \nleq(\length(\cons(a,x)),\length(y)) \\
+ & = & \nleq(\next(\length(x)),\length(y)
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
  &   & \btrue \\
- & = & \leq(\length(y),\length(x));
+ & = & \nleq(\length(y),\length(x));
 \end{eqnarray*}$$
-by transitivity, we thus also have $$\leq(\next(\length(x)),\length(x)),$$ a contradiction. So in fact $a = b$. Thus we have
+by transitivity, we thus also have $$\nleq(\next(\length(x)),\length(x)),$$ a contradiction. So in fact $a = b$. Thus we have
 $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \sublist(\cons(b,v),\cons(a,x)) \\
@@ -450,7 +451,7 @@ Another lemma.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set. For all $a,b \in A$ and $x,y \in \lists{A}$ we have $$\sublist(\snoc(a,x),\snoc(b,y)) = \left\{ \begin{array}{ll} \sublist(x,y) & \mathrm{if}\ \eq(a,b) \\ \sublist(\snoc(a,x),y) & \mathrm{otherwise}. \end{array} \right.$$
+Let $A$ be a set. For all $a,b \in A$ and $x,y \in \lists{A}$ we have $$\sublist(\snoc(a,x),\snoc(b,y)) = \left\{ \begin{array}{ll} \sublist(x,y) & \mathrm{if}\ \beq(a,b) \\ \sublist(\snoc(a,x),y) & \mathrm{otherwise}. \end{array} \right.$$
 </p></div>
 
 <div class="proof"><p>
@@ -552,7 +553,7 @@ as needed.
 </p></div>
 </div>
 
-Finally, $\sublist$ interacts with $\and$ and $\all$.
+Finally, $\sublist$ interacts with $\any$ and $\all$.
 
 <div class="result">
 <div class="thm"><p>
