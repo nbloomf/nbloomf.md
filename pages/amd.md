@@ -52,7 +52,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Count](/posts/arithmetic-made-difficult/Count.html)
     * [Repeat](/posts/arithmetic-made-difficult/Repeat.html)
     * [Sublist](/posts/arithmetic-made-difficult/Sublist.html)
-    * -> [Infix](/posts/arithmetic-made-difficult/Infix.html)
+    * [Infix](/posts/arithmetic-made-difficult/Infix.html)
     * -> [Select](/posts/arithmetic-made-difficult/Select.html)
     * -> [Unique](/posts/arithmetic-made-difficult/Unique.html)
     * -> [Dedupe](/posts/arithmetic-made-difficult/Dedupe.html)

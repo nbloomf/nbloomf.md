@@ -208,6 +208,68 @@ By (1), we have $\rev(x) = \rev(y)$, and thus $x = y$ as claimed.
 </p></div>
 </div>
 
+One more.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. The following hold for all $x,u,v \in \lists{A}$.
+
+1. If $x = \cat(x,v)$ then $v = \nil$.
+2. If $x = \cat(u,x)$ then $u = \nil$.
+3. If $x = \cat(u,\cat(x,v))$ then $u = v = \nil$.
+</p></div>
+
+<div class="proof"><p>
+1. We proceed by list induction on $x$. For the base case $x = \nil$, if $x = \cat(x,v)$ we have
+$$\begin{eqnarray*}
+ &   & \nil \\
+ & = & x \\
+ & = & \cat(x,v) \\
+ & = & \cat(\nil,v) \\
+ & = & \nil
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the implication holds for some $x$ and let $a \in A$. Suppose further that $\cons(a,x) = \cat(\cons(a,x),v)$. Then $$\cons(a,x) = \cons(a,\cat(x,v)),$$ so that $x = \cat(x,v)$, and by the inductive hypothesis, $v = \nil$ as needed.
+2. Suppose $x = \cat(u,x)$. Then
+$$\begin{eqnarray*}
+ &   & \rev(x) \\
+ & = & \rev(\cat(u,x)) \\
+ & = & \cat(\rev(x),\rev(u));
+\end{eqnarray*}$$
+by part (1) we have $\rev(u) = \nil$, so that $$u = \rev(\rev(u)) = \rev(\nil) = \nil$$ as claimed.
+3. We proceed by list induction on $x$. For the base case $x = \nil$, if $x = \cat(u,\cat(x,v))$ we have
+$$\begin{eqnarray*}
+ &   & \nil \\
+ & = & x \\
+ & = & \cat(u,\cat(x,v)) \\
+ & = & \cat(u,\cat(\nil,v)) \\
+ & = & \cat(u,v)
+\end{eqnarray*}$$
+so that $v = u = \nil$ as needed. For the inductive step, suppose the implication holds for all $u$ and $v$ for some $x$, and let $a \in A$. Suppose further that $\cons(a,x) = \cat(u,\cat(\cons(a,x),v))$ for some $u$ and $v$. We consider two possibilities for $u$. If $u = \cons(b,w)$, we have
+$$\begin{eqnarray*}
+ &   & \cons(a,x) \\
+ & = & \cat(u,\cat(\cons(a,x),v)) \\
+ & = & \cat(\cons(b,w),\cat(\cons(a,x),v)) \\
+ & = & \cons(b,\cat(w,\cat(\cons(a,x),v))).
+\end{eqnarray*}$$
+So in fact we have $a = b$, and
+$$\begin{eqnarray*}
+ &   & x \\
+ & = & \cat(w,\cat(\cons(a,x),v)) \\
+ & = & \cat(\cat(w,\cons(a,x)),v) \\
+ & = & \cat(\cat(\snoc(a,w),x),v) \\
+ & = & \cat(\snoc(a,w),\cat(x,v)).
+\end{eqnarray*}$$
+By the inductive hypothesis, we have $\snoc(a,w) = \nil$, a contradiction. So we must have $u = \nil$. Now
+$$\begin{eqnarray*}
+ &   & \cons(a,x) \\
+ & = & \cat(u,\cat(\cons(a,x),v)) \\
+ & = & \cat(\nil,\cat(\cons(a,x),v)) \\
+ & = & \cat(\cons(a,x),v)
+\end{eqnarray*}$$
+so that $v = u = \nil$ as claimed.
+</p></div>
+</div>
+
 
 Testing
 -------

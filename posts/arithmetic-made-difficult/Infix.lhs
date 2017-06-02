@@ -259,7 +259,7 @@ $$\begin{eqnarray*}
  & = & \infix(x,\cons(a,y)) \\
  & = & \bor(\prefix(x,\cons(a,y)),\infix(x,y)).
 \end{eqnarray*}$$
-We have two possibilities. If $\prefix(x,\cons(a,y)) = \btrue$, then $\cons(a,y) = \cat(x,z)$ for some $z$; then $\cons(a,y) = \cat(\nil,\cat(x,z))$ as needed. Suppose instead that $\infix(x,y) = \btrue$. By the inductive hypothesis we have $y = \cat(u,\cat(x,v))$ for some $u$ and $v$, so that
+We have two possibilities. If $\prefix(x,\cons(a,y)) = \btrue$, then $\cons(a,y) = \cat(x,z)$ for some $z$; now $$\cons(a,y) = \cat(\nil,\cat(x,z))$$ as needed. Suppose instead that $\infix(x,y) = \btrue$. By the inductive hypothesis we have $y = \cat(u,\cat(x,v))$ for some $u$ and $v$, so that
 $$\begin{eqnarray*}
  &   & \cons(a,y) \\
  & = & \cons(a,\cat(u,\cat(x,v))) \\
@@ -275,13 +275,21 @@ $\infix$ interacts with $\snoc$ and $\rev$:
 <div class="thm"><p>
 Let $A$ be a set. We have the following.
 
-1. $\infix(\snoc(a,x),\nil) = \bfalse$.
-2. $\infix(x,\snoc(b,y)) = \bor(\suffix(x,\snoc(b,y)),\infix(x,y))$.
-3. $\infix(\rev(x),\rev(y)) = \infix(x,y)$.
+1. $\infix(\rev(x),\rev(y)) = \infix(x,y)$.
+2. $\infix(\snoc(a,x),\nil) = \bfalse$.
+3. $\infix(x,\snoc(b,y)) = \bor(\suffix(x,\snoc(b,y)),\infix(x,y))$.
 </p></div>
 
 <div class="proof"><p>
-1. We consider two cases for $x$. If $x = \nil$, we have
+1. Note that, for all $x,u,v \in \lists{A}$, we have
+$$\begin{eqnarray*}
+ &   & \rev(\cat(u,\cat(x,v))) \\
+ & = & \cat(\rev(\cat(x,v)),\rev(u)) \\
+ & = & \cat(\cat(\rev(v),\rev(x)),\rev(u)) \\
+ & = & \cat(\rev(v),\cat(\rev(x),\rev(u))).
+\end{eqnarray*}$$
+In particular, $$y = \cat(u,\cat(x,v))$$ for some $u$ and $v$ if and only if $$\rev(y) = \cat(h,\cat(\rev(x),k))$$ for some $h$ and $k$. So $\infix(x,y) = \btrue$ if and only if $\infix(\rev(x),\rev(y)) = \btrue$.
+2. We consider two cases for $x$. If $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \infix(\snoc(a,x),\nil) \\
  & = & \infix(\snoc(a,\nil),\nil) \\
@@ -296,38 +304,16 @@ $$\begin{eqnarray*}
  & = & \bfalse
 \end{eqnarray*}$$
 as claimed.
-2. We begin by proving the following statement: for all $x$, $y$, and $b$, we have $$\any(\prefix(x,\snoc(b,-)),\tails(y)) = \bor(\suffix(x,\snoc(b,y)),\infix(x,y)).$$ We proceed by list induction on $y$. For the base case $y = \nil$, we have
-(@@@)
-For the inductive step, suppose the equality holds for all $x$ for some $y$ and let $c \in A$. Now
-$$\begin{eqnarray*}
- &   & \bor(\suffix(x,\snoc(b,\cons(c,y))),\infix(x,\cons(c,y))) \\
- & = & \bor(\suffix(x,\snoc(b,\cons(c,y))),\bor(\prefix(x,\cons(c,y)),\infix(x,y))) \\
-\end{eqnarray*}$$
-
-Now for the main result: we consider two possibilities for $x$. If $x = \nil$, we have
+3. Note that
 $$\begin{eqnarray*}
  &   & \infix(x,\snoc(b,y)) \\
- & = & \infix(\nil,\snoc(b,y)) \\
- & = & \btrue \\
- & = & \bor(\btrue,\btrue) \\
- & = & \bor(\suffix(\nil,\snoc(b,y)),\infix(\nil,y)) \\
+ & = & \infix(\rev(x),\rev(\snoc(b,y))) \\
+ & = & \infix(\rev(x),\cons(b,\rev(y))) \\
+ & = & \bor(\prefix(\rev(x),\cons(b,\rev(y))),\infix(\rev(x),\rev(y))) \\
+ & = & \bor(\prefix(\rev(x),\rev(\snoc(b,y))),\infix(x,y)) \\
  & = & \bor(\suffix(x,\snoc(b,y)),\infix(x,y))
 \end{eqnarray*}$$
-as claimed. Suppose now that $x = \cons(a,u)$. Now we have
-$$\begin{eqnarray*}
- &   & \infix(x,\snoc(b,y)) \\
- & = & \any(\prefix(x,-),\tails(\snoc(b,y))) \\
- & = & \any(\prefix(x,-),\cons(\nil,\map(\snoc(b,-))(\tails(y)))) \\
- & = & \bor(\prefix(x,\nil),\any(\prefix(x,-),\map(\snoc(b,-))(\tails(y)))) \\
- & = & \bor(\prefix(\cons(a,u),\nil),\any(\prefix(x,-),\map(\snoc(b,-))(\tails(y)))) \\
- & = & \bor(\bfalse,\any(\prefix(x,-),\map(\snoc(b,-))(\tails(y)))) \\
- & = & \any(\prefix(x,-),\map(\snoc(b,-))(\tails(y))) \\
- & = & \any(\prefix(x,-) \circ \snoc(b,-), \tails(y)) \\
- & = & \any(\prefix(x,\snoc(b,-)),\tails(y)) \\
- & = & (@@@) \\
- & = & \bor(\suffix(x,\snoc(b,y)),\infix(x,y))
-\end{eqnarray*}$$
-3. (@@@)
+as claimed.
 </p></div>
 </div>
 
@@ -342,8 +328,32 @@ Let $A$ be a set. The following hold for all $x,y,z \in \lists{A}$.
 </p></div>
 
 <div class="proof"><p>
-1. (@@@)
-2. (@@@)
+1. Suppose $\infix(x,y) = \btrue$; then we have $u$ and $v$ such that $$y = \cat(u,\cat(x,v)).$$ Similarly, if $\infix(y,x) = \btrue$ we have $h$ and $k$ such that $$x = \cat(h,\cat(y,k)).$$ Now
+$$\begin{eqnarray*}
+ &   & x \\
+ & = & \cat(h,\cat(y,k)) \\
+ & = & \cat(h,\cat(\cat(u,\cat(x,v)),k)) \\
+ & = & \cat(\cat(h,u),\cat(\cat(x,v),k)) \\
+ & = & \cat(\cat(h,u),\cat(x,\cat(v,k))),
+\end{eqnarray*}$$
+so that $\cat(h,u) = \nil$ and $\cat(v,k) = \nil$. Thus $h = k = \nil$, and we have
+$$\begin{eqnarray*}
+ &   & x \\
+ & = & \cat(h,\cat(y,k)) \\
+ & = & \cat(\nil,\cat(y,\nil)) \\
+ & = & \cat(\nil,y) \\
+ & = & y
+\end{eqnarray*}$$
+as claimed.
+2. If $\infix(x,y) = \btrue$, we have $$y = \cat(u,\cat(x,v))$ for some $u$ and $v$, and if $\infix(y,z) = \btrue$ we have $$z = \cat(h,cat(y,k))$ for some $h$ and $k$. Now
+$$\begin{eqnarray*}
+ &   & z \\
+ & = & \cat(h,\cat(y,k)) \\
+ & = & \cat(h,\cat(\cat(u,\cat(x,v)),k)) \\
+ & = & \cat(\cat(h,u),\cat(\cat(x,v),k)) \\
+ & = & \cat(\cat(h,u),\cat(x,\cat(v,k)))
+\end{eqnarray*}$$
+so that $\infix(x,z) = \btrue$ as claimed.
 </p></div>
 </div>
 
@@ -351,11 +361,31 @@ And infixes are also sublists:
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set and $x,y \in \lists{A}$. If $\infix(x,y) = \btrue$, then $\sublist(x,y) = \btrue$.
+Let $A$ be a set and $x,y \in \lists{A}$.
+
+1. If $\infix(x,y) = \btrue$, then $\sublist(x,y) = \btrue$.
+2. If $\prefix(x,y) = \btrue$, then $\sublist(x,y) = \btrue$.
+3. If $\suffix(x,y) = \btrue$, then $\sublist(x,y) = \btrue$.
 </p></div>
 
 <div class="proof"><p>
-(@@@)
+1. We proceed by list induction on $y$. For the base case $y = \nil$, note that if $$\btrue = \infix(x,y) = \infix(x,\nil),$$ we have $x = \nil$. Then $$\sublist(x,y) = \sublist(\nil,y) = \btrue$$ as needed. For the inductive step, suppose the implication holds for all $x$ for some $y$, and let $a \in A$. Suppose further that $\infix(x,\cons(a,y)) = \btrue$. Now
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \infix(x,\cons(a,y)) \\
+ & = & \bor(\prefix(x,\cons(a,y)),\infix(x,y)).
+\end{eqnarray*}$$
+We consider two possibilities. If $\prefix(x,\cons(a,y)) = \btrue$, we consider two possibilities for $x$. If $x = \nil$, we have $$\sublist(x,\cons(a,y)) = \sublist(\nil,\cons(a,y)) = \btrue$$ as needed. Suppose then that $x = \cons(b,u)$; since $\prefix(x,\cons(a,y)) = \btrue$, we have $b = a$ and $\prefix(u,y) = \btrue$. Now $\infix(u,y)$, and by the induction hypothesis $\sublist(u,y) = \btrue$, so that
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \sublist(u,y) \\
+ & = & \sublist(\cons(a,u),\cons(a,y)) \\
+ & = & \sublist(\cons(b,u),\cons(a,y)) \\
+ & = & \sublist(x,\cons(a,y))
+\end{eqnarray*}$$
+as needed. Now suppose $\infix(x,y) = \btrue$. By the induction hypothesis, we have $\sublist(x,y) = \btrue$, so that $\sublist(x,\cons(b,y)) = \btrue$ as needed.
+2. If $\prefix(x,y) = \btrue$, then $\infix(x,y) = \btrue$.
+3. If $\suffix(x,y) = \btrue$, then $\infix(x,y) = \btrue$.
 </p></div>
 </div>
 
