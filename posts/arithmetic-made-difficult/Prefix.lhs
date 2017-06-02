@@ -166,6 +166,16 @@ as needed.
 </p></div>
 </div>
 
+<div class="result">
+<div class="corollary"><p>
+Let $A$ be a set. For all $x,y \in \lists{A}$, if $\prefix(x,y) = \btrue$, then $\prefix(x,\snoc(a,y)) = \btrue$.
+</p></div>
+
+<div class="proof"><p>
+If $\prefix(x,y) = \btrue$, then $y = \cat(x,z)$ for some $z$. Now $$\snoc(a,y) = \snoc(\cat(x,z)) = \cat(x,\snoc(a,z)),$$ and so $\prefix(x,\snoc(a,y)) = \btrue$ as claimed.
+</p></div>
+</div>
+
 And $\prefix$ is a partial order:
 
 <div class="result">

@@ -90,6 +90,185 @@ as claimed.
 </p></div>
 </div>
 
+$\infix$ is reflexive:
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. If $x \in \lists{A}$, then $\infix(x,x) = \btrue$.
+</p></div>
+
+<div class="proof"><p>
+We consider two cases for $x$. If $x = \nil$, we have $$\infix(x,x) = \infix(\nil,\nil) = \btrue$$ as claimed. If $x = \cons(a,u)$, we have
+$$\begin{eqnarray*}
+ &   & \infix(x,x) \\
+ & = & \infix(x,\cons(a,u)) \\
+ & = & \bor(\prefix(x,\cons(a,u)),\infix(x,u)) \\
+ & = & \bor(\prefix(x,x),\infix(x,u)) \\
+ & = & \bor(\btrue,\infix(x,u)) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as claimed. 
+</p></div>
+</div>
+
+$\infix$ interacts with $\cat$:
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set and $x,y \in \lists{A}$.
+
+1. $\infix(x,\cat(y,x)) = \btrue$.
+2. $\infix(x,\cat(x,y)) = \btrue$.
+</p></div>
+
+<div class="proof"><p>
+1. We proceed by list induction on $y$. For the base case, note that
+$$\begin{eqnarray*}
+ &   & \infix(x,\cat(y,x)) \\
+ & = & \infix(x,\cat(\nil,x)) \\
+ & = & \infix(x,x) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $y$ and let $b \in A$. Now
+$$\begin{eqnarray*}
+ &   & \infix(x,\cat(\cons(b,y),x) \\
+ & = & \infix(x,\cons(b,\cat(x,y))) \\
+ & = & \bor(\prefix(x,\cons(b,\cat(x,y))),\infix(x,\cat(x,y))) \\
+ & = & \bor(\prefix(x,\cons(b,\cat(x,y))),\btrue) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed.
+2. We consider two possibilities for $x$. If $x = \nil$, we have $$\infix(x,\cat(x,y)) = \infix(\nil,\cat(x,y)) = \btrue$$ as claimed. Suppose then that $x = \cons(a,u)$. Then we have
+$$\begin{eqnarray*}
+ &   & \infix(x,\cat(x,y)) \\
+ & = & \infix(x,\cat(\cons(a,u),y)) \\
+ & = & \infix(x,\cons(a,\cat(u,y))) \\
+ & = & \bor(\prefix(x,\cons(a,\cat(u,y))),\infix(x,\cat(u,y))) \\
+ & = & \bor(\prefix(x,\cat(\cons(a,u),y)),\infix(x,\cat(u,y))) \\
+ & = & \bor(\prefix(x,\cat(x,y)),\infix(x,\cat(u,y))) \\
+ & = & \bor(\btrue,\infix(x,\cat(u,y))) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
+Prefixes and suffixes are also infixes:
+
+<div class="result">
+<div class="corollary"><p>
+Let $A$ be a set. The following hold for all $x,y \in \lists{A}$.
+
+1. If $\prefix(x,y) = \btrue$, then $\infix(x,y) = \btrue$.
+2. If $\suffix(x,y) = \btrue$, then $\infix(x,y) = \btrue$.
+</p></div>
+
+<div class="proof"><p>
+1. Recall that $\prefix(x,y) = \btrue$ if and only if $y = \cat(x,z)$ for some $z$. Then $$\infix(x,y) = \infix(x,\cat(x,z)) = \btrue$$ as claimed.
+2. Recall that $\suffix(x,y) = \btrue$ if and only if $y = \cat(z,x)$ for some $z$. Then $$\infix(x,y) = \infix(x,\cat(z,x)) = \btrue$$ as claimed.
+</p></div>
+</div>
+
+$\infix$ interacts with $\cons$:
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set and $x,y \in \lists{A}$.
+
+1. If $\infix(x,y) = \btrue$, then $\infix(x,\cons(a,y)) = \btrue$.
+2. If $\infix(x,y) = \btrue$, then $\infix(x,\snoc(a,y)) = \btrue$.
+</p></div>
+
+<div class="proof"><p>
+1. Note that
+$$\begin{eqnarray*}
+ &   & \infix(x,\cons(a,y)) \\
+ & = & \bor(\prefix(x,\cons(a,y)),\infix(x,y)) \\
+ & = & \bor(\prefix(x,\cons(a,y)),\btrue) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as claimed.
+2. We proceed by list induction on $y$. For the base case $y = \nil$, note that we must have $x = \nil$. Now $$\infix(x,\snoc(a,y)) = \infix(\nil,\snoc(a,y)) = \btrue$$ as needed. For the inductive step, suppose the implication holds for some $y$ and let $b \in A$. Suppose further that $\infix(x,\cons(b,y)) = \btrue$. Now
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \infix(x,\cons(a,y)) \\
+ & = & \bor(\prefix(x,\cons(b,y)),\infix(x,y)).
+\end{eqnarray*}$$
+We have two possibilities. First suppose $\prefix(x,\cons(b,y)) = \btrue$. Then $\prefix(x,\snoc(a,\cons(a,y))) = \btrue$, and so $\infix(x,\snoc(a,\cons(b,y))$ as needed. Suppose instead that $\infix(x,y) = \btrue$. By the inductive hypothesis we have $$\infix(x,\snoc(a,y)) = \btrue,$$ and by the previous result we have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \infix(x,\cons(b,\snoc(a,y))) \\
+ & = & \infix(x,\snoc(a,\cons(b,y)))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set and $x,y \in \lists{A}$.
+
+1. If $\infix(x,y) = \btrue$, then $\infix(x,\cat(y,z)) = \btrue$.
+2. If $\infix(x,y) = \btrue$, then $\infix(x,\cat(z,y)) = \btrue$.
+</p></div>
+
+<div class="proof"><p>
+1. We proceed by list induction on $z$. For the base case $z = \nil$, we have $$\infix(x,\cat(y,z)) = \infix(x,\cat(y,\nil)) = \infix(x,y) = \btrue.$$ For the inductive step, suppose the implication holds for some $z$ and let $a \in A$. Now
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \infix(x,y) \\
+ & = & \infix(x,\snoc(a,y)) \\
+ & = & \infix(x,\cat(\snoc(a,y),z)) \\
+ & = & \infix(x,\cat(y,\cons(a,z)))
+\end{eqnarray*}$$
+as needed.
+2. We proceed by list induction on $z$. For the base case $z = \nil$ we have $$\infix(x,\cat(z,y)) = \infix(x,\cat(\nil,y)) = \infix(x,y) = \btrue$$ as needed. For the inductive step, suppose the implication holds for some $z$ and let $a \in A$. Now
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \infix(x,y) \\
+ & = & \infix(x,\cat(z,y)) \\
+ & = & \infix(x,\cons(a,\cat(z,y))) \\
+ & = & \infix(x,\cat(\cons(a,z),y))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
+Now $\infix$ detects two-sided $\cat$-factorizations:
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. Then the following hold for all $x,y \in \lists{A}$.
+
+1. $\infix(x,\cat(u,\cat(x,v))) = \btrue$ for all $u,v \in \lists{A}$.
+2. If $\infix(x,y) = \btrue$, then $y = \cat(u,\cat(x,v))$ for some $u,v \in \lists{A}$.
+</p></div>
+
+<div class="proof"><p>
+1. We have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \infix(x,x) \\
+ & = & \infix(x,\cat(x,v)) \\
+ & = & \infix(x,\cat(u,\cat(x,v)))
+\end{eqnarray*}$$
+as claimed.
+2. We proceed by list induction on $y$. For the base case $y = \nil$, if $\infix(x,y) = \btrue$, we have $x = \nil$. Now $x = y$, so that $y = \cat(\nil,\cat(x,\nil))$ as needed. For the inductive step, suppose the implication holds for some $y$ and let $a \in A$. Suppose further that $\infix(x,\cons(a,y)) = \btrue$. Now
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \infix(x,\cons(a,y)) \\
+ & = & \bor(\prefix(x,\cons(a,y)),\infix(x,y)).
+\end{eqnarray*}$$
+We have two possibilities. If $\prefix(x,\cons(a,y)) = \btrue$, then $\cons(a,y) = \cat(x,z)$ for some $z$; then $\cons(a,y) = \cat(\nil,\cat(x,z))$ as needed. Suppose instead that $\infix(x,y) = \btrue$. By the inductive hypothesis we have $y = \cat(u,\cat(x,v))$ for some $u$ and $v$, so that
+$$\begin{eqnarray*}
+ &   & \cons(a,y) \\
+ & = & \cons(a,\cat(u,\cat(x,v))) \\
+ & = & \cat(\cons(a,u),\cat(x,v))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
 $\infix$ interacts with $\snoc$ and $\rev$:
 
 <div class="result">
@@ -117,7 +296,15 @@ $$\begin{eqnarray*}
  & = & \bfalse
 \end{eqnarray*}$$
 as claimed.
-2. We consider two possibilities for $x$. If $x = \nil$, we have
+2. We begin by proving the following statement: for all $x$, $y$, and $b$, we have $$\any(\prefix(x,\snoc(b,-)),\tails(y)) = \bor(\suffix(x,\snoc(b,y)),\infix(x,y)).$$ We proceed by list induction on $y$. For the base case $y = \nil$, we have
+(@@@)
+For the inductive step, suppose the equality holds for all $x$ for some $y$ and let $c \in A$. Now
+$$\begin{eqnarray*}
+ &   & \bor(\suffix(x,\snoc(b,\cons(c,y))),\infix(x,\cons(c,y))) \\
+ & = & \bor(\suffix(x,\snoc(b,\cons(c,y))),\bor(\prefix(x,\cons(c,y)),\infix(x,y))) \\
+\end{eqnarray*}$$
+
+Now for the main result: we consider two possibilities for $x$. If $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \infix(x,\snoc(b,y)) \\
  & = & \infix(\nil,\snoc(b,y)) \\
@@ -137,60 +324,10 @@ $$\begin{eqnarray*}
  & = & \any(\prefix(x,-),\map(\snoc(b,-))(\tails(y))) \\
  & = & \any(\prefix(x,-) \circ \snoc(b,-), \tails(y)) \\
  & = & \any(\prefix(x,\snoc(b,-)),\tails(y)) \\
- & = & (@@@)
+ & = & (@@@) \\
+ & = & \bor(\suffix(x,\snoc(b,y)),\infix(x,y))
 \end{eqnarray*}$$
 3. (@@@)
-</p></div>
-</div>
-
-Prefixes and suffixes are also infixes:
-
-<div class="result">
-<div class="thm"><p>
-Let $A$ be a set. The following hold for all $x,y \in \lists{A}$.
-
-1. If $\prefix(x,y) = \btrue$, then $\infix(x,y) = \btrue$.
-2. If $\suffix(x,y) = \btrue$, then $\infix(x,y) = \btrue$.
-</p></div>
-
-<div class="proof"><p>
-1. We proceed by list induction on $x$. For the base case $x = \nil$, note that $$\prefix(x,y) = \prefix(\nil,y) = \btrue$$ and, since $\tails(y) \neq \nil$,
-$$\begin{eqnarray*}
- &   & \infix(x,y) \\
- & = & \infix(\nil,y) \\
- & = & \any(\prefix(\nil,-),\tails(y)) \\
- & = & \any(\const(\btrue),\tails(y)) \\
- & = & \btrue
-\end{eqnarray*}$$
-as needed. For the inductive step, suppose the implication holds for all $y$ for some $x$, and let $a \in A$. Suppose further that $\prefix(\cons(a,x),y) = \btrue$. Since $\prefix(\cons(a,x),\nil) = \bfalse$, we must have $y = \cons(b,v)$ for some $b \in A$ and $v \in \lists{A}$. Now
-$$\begin{eqnarray*}
- &   & \infix(\cons(a,x),y) \\
- & = & \infix(\cons(a,x),\cons(b,v)) \\
- & = & \any(\prefix(\cons(a,x),-),\tails(\cons(b,v))) \\
- & = & \any(\prefix(\cons(a,x),-),\cons(\cons(b,v),\tails(v))) \\
- & = & \bor(\prefix(\cons(a,x),\cons(b,v)),\any(\prefix(\cons(a,x),-),\tails(v))) \\
- & = & \bor(\prefix(\cons(a,x),y),\any(\prefix(\cons(a,x),-),\tails(v))) \\
- & = & \bor(\btrue,\any(\prefix(\cons(a,x),-),\tails(v))) \\
- & = & \btrue
-\end{eqnarray*}$$
-as needed.
-2. (@@@)
-</p></div>
-</div>
-
-Now $\infix$ detects two-sided $\cat$-factorizations:
-
-<div class="result">
-<div class="thm"><p>
-Let $A$ be a set. Then the following hold for all $x,y \in \lists{A}$.
-
-1. $\infix(x,\cat(u,\cat(x,v))) = \btrue$ for all $u,v \in \lists{A}$.
-2. If $\infix(x,y) = \btrue$, then $y = \cat(u,\cat(x,v))$ for some $u,v \in \lists{A}$.
-</p></div>
-
-<div class="proof"><p>
-1. (@@@)
-2. (@@@)
 </p></div>
 </div>
 
@@ -200,15 +337,13 @@ And $\infix$ is a partial order:
 <div class="thm"><p>
 Let $A$ be a set. The following hold for all $x,y,z \in \lists{A}$.
 
-1. $\infix(x,x) = \btrue$.
-2. If $\infix(x,y) = \btrue$ and $\infix(y,x) = \btrue$, then $x = y$.
-3. If $\infix(x,y) = \btrue$ and $\infix(y,z) = \btrue$, then $\infix(x,z) = \btrue$.
+1. If $\infix(x,y) = \btrue$ and $\infix(y,x) = \btrue$, then $x = y$.
+2. If $\infix(x,y) = \btrue$ and $\infix(y,z) = \btrue$, then $\infix(x,z) = \btrue$.
 </p></div>
 
 <div class="proof"><p>
 1. (@@@)
 2. (@@@)
-3. (@@@)
 </p></div>
 </div>
 
@@ -242,6 +377,20 @@ Here are our property tests for $\infix$:
 >   => t a -> a -> ListOf t a -> Bool
 > _test_infix_nil_right _ a x =
 >    (isInfix (cons a x) nil) ==== False
+> 
+> 
+> -- infix(x,cat(x,y)) = true
+> _test_infix_cat_right :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> Bool
+> _test_infix_cat_right _ x y =
+>    isInfix x (cat x y)
+> 
+> 
+> -- infix(x,cat(y,x)) = true
+> _test_infix_cat_left :: (List t, Equal a)
+>   => t a -> ListOf t a -> ListOf t a -> Bool
+> _test_infix_cat_left _ x y =
+>    isInfix x (cat y x)
 > 
 > 
 > -- infix(x,cons(b,y)) == or(prefix(x,cons(b,y)),infix(x,y))
@@ -353,6 +502,8 @@ And the suite:
 >   runTest args (_test_infix_nil_left t)
 >   runTest args (_test_infix_nil_right t)
 >   runTest args (_test_infix_cons t)
+>   runTest args (_test_infix_cat_left t)
+>   runTest args (_test_infix_cat_right t)
 >   runTest args (_test_infix_snoc_nil t)
 >   runTest args (_test_infix_snoc t)
 >   runTest args (_test_infix_rev t)
