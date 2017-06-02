@@ -79,3 +79,9 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
 > The old idea that there was no reasoning in Arithmetic is dead; the idea that the *general axioms* have no place in Arithmetic is no longer held by a progressive teacher... <cite>J.B.F. Showalter in "Arithmetic Made Easy", 1897</cite>
 
 > Beware of bugs in the above code; I have only proved it correct, not tried it. <cite>Donald Knuth in "Notes on the van Emde Boas construction of priority deques: An instructive use of recursion", 1977</cite>
+
+> 古人の跡を求めず、古人の求めたるの所を求めよ。
+> 
+> Do not seek the footsteps of the wise; seek what they sought.
+> 
+> <cite>Matsuo Bashō (松尾芭蕉), from 「柴門の辞」 "Words by a Brushwood Gate"</cite>
