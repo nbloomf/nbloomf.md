@@ -8,14 +8,14 @@ tags: arithmetic-made-difficult, literate-haskell
 > module Booleans
 >   ( Bool(..), not, and, (&&&), or, (|||), ifThenElse
 >   , Equal, eq, (====)
->   , runTest, testLabel, withTypeOf, TypeName(..)
->   , Show(..), String, (++), Int, IO, Maybe(..), (.), id
+>   , Test, runTest, testName, testLabel, withTypeOf, TypeName(..)
+>   , Show(..), String, (++), Int, IO, Maybe(..), (.), id, ($)
 >   , _test_boolean, main_boolean
 >   ) where
 > 
 > import Prelude
 >   ( Show(show), IO, Bool(..), Int, Maybe(..), id
->   , putStrLn, (>>), return, (++), String, (.)
+>   , putStrLn, (>>), return, (++), String, (.), ($)
 >   )
 > import Test.QuickCheck
 > import Test.QuickCheck.Test
@@ -365,102 +365,108 @@ Testing
 
 Here are our property tests for $\bnot$:
 
-> -- not(not(p)) == p
-> _test_not_involutive :: Bool -> Bool
-> _test_not_involutive p =
->   (not (not p)) ==== p
+> _test_not_involutive :: Test (Bool -> Bool)
+> _test_not_involutive =
+>   testName "not(not(p)) == p" $
+>   \p -> (not (not p)) ==== p
 
 Tests for $\band$:
 
-> -- and(false,p) == false
-> _test_and_false :: Bool -> Bool
-> _test_and_false p =
->   (and False p) ==== False
+> _test_and_false :: Test (Bool -> Bool)
+> _test_and_false =
+>   testName "and(false,p) == false" $
+>   \p -> (and False p) ==== False
 > 
 > 
-> -- and(true,p) == p
-> _test_and_true :: Bool -> Bool
-> _test_and_true p =
->   (and True p) ==== p
+> _test_and_true :: Test (Bool -> Bool)
+> _test_and_true =
+>   testName "and(true,p) == p" $
+>   \p -> (and True p) ==== p
 > 
 > 
-> -- and(p,p) == p
-> _test_and_idempotent :: Bool -> Bool
-> _test_and_idempotent p =
->   (and p p) ==== p
+> _test_and_idempotent :: Test (Bool -> Bool)
+> _test_and_idempotent =
+>   testName "and(p,p) == p" $
+>   \p -> (and p p) ==== p
 > 
 > 
-> -- and(p,q) == and(q,p)
-> _test_and_commutative :: Bool -> Bool -> Bool
-> _test_and_commutative p q =
->   (and p q) ==== (and q p)
+> _test_and_commutative :: Test (Bool -> Bool -> Bool)
+> _test_and_commutative =
+>   testName "and(p,q) == and(q,p)" $
+>   \p q -> (and p q) ==== (and q p)
 > 
 > 
-> -- and(and(p,q),r) == and(p,and(q,r))
-> _test_and_associative :: Bool -> Bool -> Bool -> Bool
-> _test_and_associative p q r =
->   (and (and p q) r) ==== (and p (and q r))
+> _test_and_associative :: Test (Bool -> Bool -> Bool -> Bool)
+> _test_and_associative =
+>   testName "and(and(p,q),r) == and(p,and(q,r))" $
+>   \p q r -> (and (and p q) r) ==== (and p (and q r))
 
 Tests for $\bor$:
 
-> -- or(true,p) == true
-> _test_or_true :: Bool -> Bool
-> _test_or_true p =
->   (or True p) ==== True
+> _test_or_true :: Test (Bool -> Bool)
+> _test_or_true =
+>   testName "or(true,p) == true" $
+>   \p -> (or True p) ==== True
 > 
 > 
-> -- or(false,p) == p
-> _test_or_false :: Bool -> Bool
-> _test_or_false p =
->   (or False p) ==== p
+> _test_or_false :: Test (Bool -> Bool)
+> _test_or_false =
+>   testName "or(false,p) == p" $
+>   \p -> (or False p) ==== p
 > 
 > 
-> -- or(p,p) == p
-> _test_or_idempotent :: Bool -> Bool
-> _test_or_idempotent p =
->   (or p p) ==== p
+> _test_or_idempotent :: Test (Bool -> Bool)
+> _test_or_idempotent =
+>   testName "or(p,p) == p" $
+>   \p -> (or p p) ==== p
 > 
 > 
-> -- or(p,q) == or(q,p)
-> _test_or_commutative :: Bool -> Bool -> Bool
-> _test_or_commutative p q =
->   (or p q) ==== (or q p)
+> _test_or_commutative :: Test (Bool -> Bool -> Bool)
+> _test_or_commutative =
+>   testName "or(p,q) == or(q,p)" $
+>   \p q -> (or p q) ==== (or q p)
 > 
 > 
-> -- or(or(p,q),r) == or(p,or(q,r))
-> _test_or_associative :: Bool -> Bool -> Bool -> Bool
-> _test_or_associative p q r =
->   (or (or p q) r) ==== (or p (or q r))
+> _test_or_associative :: Test (Bool -> Bool -> Bool -> Bool)
+> _test_or_associative =
+>   testName "or(or(p,q),r) == or(p,or(q,r))" $
+>   \p q r -> (or (or p q) r) ==== (or p (or q r))
 
 Tests for more than one function:
 
-> -- not(and(p,q)) == or(not(p),not(q))
-> _test_not_and :: Bool -> Bool -> Bool
-> _test_not_and p q =
->   (not (and p q)) ==== (or (not p) (not q))
+> _test_not_and :: Test (Bool -> Bool -> Bool)
+> _test_not_and =
+>   testName "not(and(p,q)) == or(not(p),not(q))" $
+>   \p q -> (not (and p q)) ==== (or (not p) (not q))
 > 
 > 
-> -- not(or(p,q)) == and(not(p),not(q))
-> _test_not_or :: Bool -> Bool -> Bool
-> _test_not_or p q =
->   (not (or p q)) ==== (and (not p) (not q))
+> _test_not_or :: Test (Bool -> Bool -> Bool)
+> _test_not_or =
+>   testName "not(or(p,q)) == and(not(p),not(q))" $
+>   \p q -> (not (or p q)) ==== (and (not p) (not q))
 > 
 > 
-> -- and(p,or(q,r)) == or(and(p,q),and(p,r))
-> _test_and_or :: Bool -> Bool -> Bool -> Bool
-> _test_and_or p q r =
->   (and p (or q r)) ==== (or (and p q) (and p r))
+> _test_and_or :: Test (Bool -> Bool -> Bool -> Bool)
+> _test_and_or =
+>   testName "and(p,or(q,r)) == or(and(p,q),and(p,r))" $
+>   \p q r -> (and p (or q r)) ==== (or (and p q) (and p r))
 > 
 > 
-> -- or(p,and(q,r)) == and(or(p,q),or(p,r))
-> _test_or_and :: Bool -> Bool -> Bool -> Bool
-> _test_or_and p q r =
->   (or p (and q r)) ==== (and (or p q) (or p r))
+> _test_or_and :: Test (Bool -> Bool -> Bool -> Bool)
+> _test_or_and =
+>   testName "or(p,and(q,r)) == and(or(p,q),or(p,r))" $
+>   \p q r -> (or p (and q r)) ==== (and (or p q) (or p r))
 
 One of our main uses for ``Bool`` will be checking the results of tests, so this is as good a place as any to introduce a couple of QuickCheck helper functions for this.
 
-> runTest :: Testable prop => Args -> prop -> IO ()
-> runTest args prop = do
+> type Test prop = (String, prop)
+> 
+> testName :: String -> prop -> Test prop
+> testName name prop = (name, prop)
+> 
+> runTest :: Testable prop => Args -> Test prop -> IO ()
+> runTest args (name, prop) = do
+>   putStrLn ("\x1b[1;34m" ++ name ++ "\x1b[0;39;49m")
 >   result <- quickCheckWithResult args prop
 >   if isSuccess result
 >     then return ()

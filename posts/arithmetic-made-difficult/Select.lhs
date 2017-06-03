@@ -270,45 +270,102 @@ as needed.
 </p></div>
 </div>
 
+Selections are sublists:
+
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set with $x \in \lists{A}$ and $k \in \nats$. Then $$\all(\sublist(-,x),\select(k,x)).$$
+Let $A$ be a set with $x \in \lists{A}$ and $k \in \nats$. Then $$\all(\sublist(-,x),\select(k,x)) = \btrue.$$
 </p></div>
 
 <div class="proof"><p>
-We proceed by list induction on $x$. For the base case $x = \nil$, we consider two possibilities for $k$. If $k = \zero$, then
+We consider two possibilities for $k$. If $k = \zero$, we have
 $$\begin{eqnarray*}
  &   & \all(\sublist(-,x),\select(k,x)) \\
- & = & \all(\sublist(-,\nil),\select(\zero,\nil)) \\
- & = & (@@@)
+ & = & \all(\sublist(-,x),\select(\zero,x)) \\
+ & = & \all(\sublist(-,x),\cons(\nil,\nil)) \\
+ & = & \band(\sublist(\nil,x),\all(\sublist(-,x),\nil)) \\
+ & = & \band(\btrue,\btrue) \\
+ & = & \btrue
 \end{eqnarray*}$$
-(@@@)
+as claimed. Suppose instead that $k = \next(m)$; we proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \all(\sublist(-,x),\select(k,x)) \\
+ & = & \all(\sublist(-,\nil),\select(\next(m),\nil)) \\
+ & = & \all(\sublist(-,\nil),\nil) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $k$ for some $x$ and let $a \in A$. Using the inductive hypothesis we have
+$$\begin{eqnarray*}
+ &   & \all(\sublist(-,\cons(a,x)),\map(\cons(a,-))(\select(m,x))) \\
+ & = & \all(\sublist(-,\cons(a,x)) \circ \cons(a,-),\select(m,x)) \\
+ & = & \all(\sublist(\cons(a,-),\cons(a,x)),\select(m,x)) \\
+ & = & \all(\sublist(-,x),\select(m,x)) \\
+ & = & \btrue.
+\end{eqnarray*}$$
+Also using the inductive hypothesis, we have
+$$\begin{eqnarray*}
+ &   & \all(\sublist(-,x),\select(\next(m),x)) \\
+ & = & \btrue,
+\end{eqnarray*}$$
+and for all $u \in \lists{A}$, if $\sublist(u,x) = \btrue$ then $\sublist(u,\cons(a,x)) = \btrue$. Thus we have
+$$\begin{eqnarray*}
+ &   & \all(\sublist(-,\cons(a,x)),\select(\next(m),x)) \\
+ & = & \btrue.
+\end{eqnarray*}$$
+ Now
+$$\begin{eqnarray*}
+ &   & \all(\sublist(-,\cons(a,x)),\select(k,\cons(a,x))) \\
+ & = & \all(\sublist(-,\cons(a,x)),\select(\next(m),\cons(a,x))) \\
+ & = & \all(\sublist(-,\cons(a,x)),\cat(\map(\cons(a,-))(\select(m,x)),\select(\next(m),x))) \\
+ & = & \band(\all(\sublist(-,\cons(a,x)),\map(\cons(a,-))(\select(m,x))),\all(\sublist(-,\cons(a,x)),\select(\next(m),x))) \\
+ & = & \band(\btrue,\btrue) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
+
+Selections have fixed length:
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set with $x \in \lists{A}$ and $k \in \nats$. Then $$\all(\beq(k,\length(-)),\select(k,x)).$$
+Let $A$ be a set with $x \in \lists{A}$ and $k \in \nats$. Then $$\all(\beq(k,\length(-)),\select(k,x)) = \btrue.$$
 </p></div>
 
 <div class="proof"><p>
-(@@@)
-</p></div>
-</div>
-
-<div class="result">
-<div class="defn"><p>
-
-</p></div>
-</div>
-
-<div class="result">
-<div class="thm"><p>
-
-</p></div>
-
-<div class="proof"><p>
-
+We consider two possibilities for $k$. If $k = \zero$, we have
+$$\begin{eqnarray*}
+ &   & \all(\beq(k,\length(-)),\select(k,x)) \\
+ & = & \all(\beq(\zero,\length(-)),\select(\zero,x)) \\
+ & = & \all(\beq(\zero,\length(-)),\cons(\nil,\nil)) \\
+ & = & \band(\beq(\zero,\length(\nil)),\all(\beq(\zero,\length(-)),\nil)) \\
+ & = & \band(\beq(\zero,\zero),\btrue) \\
+ & = & \band(\btrue,\btrue) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as claimed. Suppose instead that $k = \next(m)$. We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \all(\beq(k,\length(-)),\select(k,x)) \\
+ & = & \all(\beq(k,\length(-)),\select(\next(m),\nil)) \\
+ & = & \all(\beq(k,\length(-)),\nil) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $k$ for some $x$ and let $a \in A$. Using the inductive hypothesis (twice!) we have
+$$\begin{eqnarray*}
+ &   & \all(\beq(k,\length(-)),\select(k,\cons(a,x))) \\
+ & = & \all(\beq(k,\length(-)),\select(\next(m),\cons(a,x))) \\
+ & = & \all(\beq(k,\length(-)),\cat(\map(\cons(a,-))(\select(m,x)),\select(\next(m),x))) \\
+ & = & \band(\all(\beq(k,\length(-)),\map(\cons(a,-))(\select(m,x))),\all(\beq(k,\length(-)),\select(\next(m),x))) \\
+ & = & \band(\all(\beq(k,\length(-)),\map(\cons(a,-))(\select(m,x))),\all(\beq(k,\length(-)),\select(k,x))) \\
+ & = & \band(\all(\beq(k,\length(-)),\map(\cons(a,-))(\select(m,x))),\btrue) \\
+ & = & \band(\all(\beq(k,\length(-) \circ \cons(a,-)),\select(m,x)),\btrue) \\
+ & = & \band(\all(\beq(k,\length(\cons(a,-))),\select(m,x)),\btrue) \\
+ & = & \band(\all(\beq(\next(m),\next(\length(-))),\select(m,x)),\btrue) \\
+ & = & \band(\all(\beq(m,\length(-)),\select(m,x)),\btrue) \\
+ & = & \band(\btrue,\btrue) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
 

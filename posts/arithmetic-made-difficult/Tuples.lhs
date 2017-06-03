@@ -220,67 +220,67 @@ Testing
 
 Here are our property tests for $\bnot$:
 
-> -- dup(fst(x),snd(x)) == x
 > _test_dup_fst_snd :: (Equal a, Equal b)
->   => a -> b -> (a,b) -> Bool
-> _test_dup_fst_snd _ _ x =
->   (dup fst snd x) ==== x
+>   => a -> b -> Test ((a,b) -> Bool)
+> _test_dup_fst_snd _ _ =
+>   testName "dup(fst(x),snd(x)) == x" $
+>   \x -> (dup fst snd x) ==== x
 > 
 > 
-> -- dup(snd(x),fst(x)) == swap(x)
 > _test_dup_snd_fst :: (Equal a, Equal b)
->   => a -> b -> (a,b) -> Bool
-> _test_dup_snd_fst _ _ x =
->   (dup snd fst x) ==== (swap x)
+>   => a -> b -> Test ((a,b) -> Bool)
+> _test_dup_snd_fst _ _ =
+>   testName "dup(snd(x),fst(x)) == swap(x)" $
+>   \x -> (dup snd fst x) ==== (swap x)
 > 
 > 
-> -- swap(swap(x)) == x
 > _test_swap_swap :: (Equal a, Equal b)
->   => a -> b -> (a,b) -> Bool
-> _test_swap_swap _ _ x =
->   (swap (swap x)) ==== x
+>   => a -> b -> Test ((a,b) -> Bool)
+> _test_swap_swap _ _ =
+>   testName "swap(swap(x)) == x" $
+>   \x -> (swap (swap x)) ==== x
 > 
 > 
-> -- pair(f,g)(a,b) == (f(a),g(b))
 > _test_pair_apply :: (Equal a, Equal b)
->   => a -> b -> (a -> a) -> (b -> b) -> (a,b) -> Bool
-> _test_pair_apply _ _ f g (a,b) =
->   (pair f g (a,b)) ==== (f a, g b)
+>   => a -> b -> Test ((a -> a) -> (b -> b) -> (a,b) -> Bool)
+> _test_pair_apply _ _ =
+>   testName "pair(f,g)(a,b) == (f(a),g(b))" $
+>   \f g (a,b) -> (pair f g (a,b)) ==== (f a, g b)
 > 
 > 
-> -- pair(f,g) o pair(h,k) == pair(f o h, g o k)
 > _test_pair_pair :: (Equal a, Equal b)
->   => a -> b -> (a -> a) -> (b -> b) -> (a -> a) -> (b -> b) -> (a,b) -> Bool
-> _test_pair_pair _ _ f g h k (a,b) =
->   (pair f g (pair h k (a,b))) ==== (pair (f . h) (g . k) (a,b))
+>   => a -> b -> Test ((a -> a) -> (b -> b) -> (a -> a) -> (b -> b) -> (a,b) -> Bool)
+> _test_pair_pair _ _ =
+>   testName "pair(f,g) o pair(h,k) == pair(f o h, g o k)" $
+>   \f g h k (a,b) -> (pair f g (pair h k (a,b))) ==== (pair (f . h) (g . k) (a,b))
 > 
 > 
-> -- assocL == dup(dup(fst, fst o snd), snd o snd)
 > _test_assocL_alt :: (Equal a, Equal b, Equal c)
->   => a -> b -> c -> (a,(b,c)) -> Bool
-> _test_assocL_alt _ _ _ x =
->   (assocL x) ==== (dup (dup fst (fst . snd)) (snd . snd) x)
+>   => a -> b -> c -> Test ((a,(b,c)) -> Bool)
+> _test_assocL_alt _ _ _ =
+>   testName "assocL == dup(dup(fst, fst o snd), snd o snd)" $
+>   \x -> (assocL x) ==== (dup (dup fst (fst . snd)) (snd . snd) x)
 > 
 > 
-> -- assocR == dup(fst o fst, dup(snd o fst, snd))
 > _test_assocR_alt :: (Equal a, Equal b, Equal c)
->   => a -> b -> c -> ((a,b),c) -> Bool
-> _test_assocR_alt _ _ _ x =
->   (assocR x) ==== (dup (fst . fst) (dup (snd . fst) snd) x)
+>   => a -> b -> c -> Test (((a,b),c) -> Bool)
+> _test_assocR_alt _ _ _ =
+>   testName "assocR == dup(fst o fst, dup(snd o fst, snd))" $
+>   \x -> (assocR x) ==== (dup (fst . fst) (dup (snd . fst) snd) x)
 > 
 > 
-> -- assocL o assocR == id
 > _test_assocL_assocR :: (Equal a, Equal b, Equal c)
->   => a -> b -> c -> ((a,b),c) -> Bool
-> _test_assocL_assocR _ _ _ x =
->   (assocL (assocR x)) ==== x
+>   => a -> b -> c -> Test (((a,b),c) -> Bool)
+> _test_assocL_assocR _ _ _ =
+>   testName "assocL o assocR == id" $
+>   \x -> (assocL (assocR x)) ==== x
 > 
 > 
-> -- assocR o assocL == id
 > _test_assocR_assocL :: (Equal a, Equal b, Equal c)
->   => a -> b -> c -> (a,(b,c)) -> Bool
-> _test_assocR_assocL _ _ _ x =
->   (assocR (assocL x)) ==== x
+>   => a -> b -> c -> Test ((a,(b,c)) -> Bool)
+> _test_assocR_assocL _ _ _ =
+>   testName "assocR o assocL == id" $
+>   \x -> (assocR (assocL x)) ==== x
 
 And the suite:
 
