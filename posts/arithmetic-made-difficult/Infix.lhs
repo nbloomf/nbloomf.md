@@ -395,123 +395,123 @@ Testing
 
 Here are our property tests for $\infix$:
 
-> -- infix(nil,x) == true
 > _test_infix_nil_left :: (List t, Equal a)
->   => t a -> ListOf t a -> Bool
-> _test_infix_nil_left _ x =
->    (isInfix nil x) ==== True
+>   => t a -> Test (ListOf t a -> Bool)
+> _test_infix_nil_left _ =
+>   testName "infix(nil,x) == true" $
+>   \x -> (isInfix nil x) ==== True
 > 
 > 
-> -- infix(cons(a,x),nil) == false
 > _test_infix_nil_right :: (List t, Equal a)
->   => t a -> a -> ListOf t a -> Bool
-> _test_infix_nil_right _ a x =
->    (isInfix (cons a x) nil) ==== False
+>   => t a -> Test (a -> ListOf t a -> Bool)
+> _test_infix_nil_right _ =
+>   testName "infix(cons(a,x),nil) == false" $
+>   \a x -> (isInfix (cons a x) nil) ==== False
 > 
 > 
-> -- infix(x,cat(x,y)) = true
 > _test_infix_cat_right :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> Bool
-> _test_infix_cat_right _ x y =
->    isInfix x (cat x y)
+>   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+> _test_infix_cat_right _ =
+>   testName "infix(x,cat(x,y)) = true" $
+>   \x y -> isInfix x (cat x y)
 > 
 > 
-> -- infix(x,cat(y,x)) = true
 > _test_infix_cat_left :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> Bool
-> _test_infix_cat_left _ x y =
->    isInfix x (cat y x)
+>   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+> _test_infix_cat_left _ =
+>   testName "infix(x,cat(y,x)) = true" $
+>   \x y -> isInfix x (cat y x)
 > 
 > 
-> -- infix(x,cons(b,y)) == or(prefix(x,cons(b,y)),infix(x,y))
 > _test_infix_cons :: (List t, Equal a)
->   => t a -> ListOf t a -> a -> ListOf t a -> Bool
-> _test_infix_cons _ x b y =
->    eq
->      (isInfix x (cons b y))
->      (or (prefix x (cons b y)) (isInfix x y))
+>   => t a -> Test (ListOf t a -> a -> ListOf t a -> Bool)
+> _test_infix_cons _ =
+>   testName "infix(x,cons(b,y)) == or(prefix(x,cons(b,y)),infix(x,y))" $
+>   \x b y -> eq
+>     (isInfix x (cons b y))
+>     (or (prefix x (cons b y)) (isInfix x y))
 > 
 > 
-> -- infix(snoc(a,x),nil) == false
 > _test_infix_snoc_nil :: (List t, Equal a)
->   => t a -> a -> ListOf t a -> Bool
-> _test_infix_snoc_nil _ a x =
->    (isInfix (snoc a x) nil) ==== False
+>   => t a -> Test (a -> ListOf t a -> Bool)
+> _test_infix_snoc_nil _ =
+>   testName "infix(snoc(a,x),nil) == false" $
+>   \a x -> (isInfix (snoc a x) nil) ==== False
 > 
 > 
-> -- infix(x,snoc(b,y)) == or(suffix(x,snoc(b,y)),infix(x,y))
 > _test_infix_snoc :: (List t, Equal a)
->   => t a -> ListOf t a -> a -> ListOf t a -> Bool
-> _test_infix_snoc _ x b y =
->    eq
->      (isInfix x (snoc b y))
->      (or (suffix x (snoc b y)) (isInfix x y))
+>   => t a -> Test (ListOf t a -> a -> ListOf t a -> Bool)
+> _test_infix_snoc _ =
+>   testName "infix(x,snoc(b,y)) == or(suffix(x,snoc(b,y)),infix(x,y))" $
+>   \x b y -> eq
+>     (isInfix x (snoc b y))
+>     (or (suffix x (snoc b y)) (isInfix x y))
 > 
 > 
-> -- infix(rev(x),rev(y)) == infix(x,y)
 > _test_infix_rev :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> Bool
-> _test_infix_rev _ x y =
->    (isInfix (rev x) (rev y)) ==== (isInfix x y)
+>   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+> _test_infix_rev _ =
+>   testName "infix(rev(x),rev(y)) == infix(x,y)" $
+>   \x y -> (isInfix (rev x) (rev y)) ==== (isInfix x y)
 > 
 > 
-> -- infix(x,cat(u,cat(x,v)))
 > _test_infix_cat :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
-> _test_infix_cat _ x u v =
->    isInfix x (cat u (cat x v))
+>   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
+> _test_infix_cat _ =
+>   testName "infix(x,cat(u,cat(x,v)))" $
+>   \x u v -> isInfix x (cat u (cat x v))
 > 
 > 
-> -- infix(x,x) == true
 > _test_infix_reflexive :: (List t, Equal a)
->   => t a -> ListOf t a -> Bool
-> _test_infix_reflexive _ x =
->    (isInfix x x) ==== True
+>   => t a -> Test (ListOf t a -> Bool)
+> _test_infix_reflexive _ =
+>   testName "infix(x,x) == true" $
+>   \x -> (isInfix x x) ==== True
 > 
 > 
-> -- infix(x,y) & infix(y,x) ==> eq(x,y)
 > _test_infix_symmetric :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> Bool
-> _test_infix_symmetric _ x y =
->    if (isInfix x y) &&& (isInfix y x)
->      then x ==== y
->      else True
+>   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+> _test_infix_symmetric _ =
+>   testName "infix(x,y) & infix(y,x) ==> eq(x,y)" $
+>   \x y -> if (isInfix x y) &&& (isInfix y x)
+>     then x ==== y
+>     else True
 > 
 > 
-> -- infix(x,y) & infix(y,z) ==> sublist(x,z)
 > _test_infix_transitive :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
-> _test_infix_transitive _ x y z =
->    if (isInfix x y) &&& (isInfix y z)
->      then isInfix x z
->      else True
+>   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
+> _test_infix_transitive _ =
+>   testName "infix(x,y) & infix(y,z) ==> sublist(x,z)" $
+>   \x y z -> if (isInfix x y) &&& (isInfix y z)
+>     then isInfix x z
+>     else True
 > 
 > 
-> -- prefix(x,y) ==> infix(x,y)
 > _test_infix_prefix :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> Bool
-> _test_infix_prefix _ x y =
->    if prefix x y
->      then isInfix x y
->      else True
+>   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+> _test_infix_prefix _ =
+>   testName "prefix(x,y) ==> infix(x,y)" $
+>   \x y -> if prefix x y
+>     then isInfix x y
+>     else True
 > 
 > 
-> -- suffix(x,y) ==> infix(x,y)
 > _test_infix_suffix :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> Bool
-> _test_infix_suffix _ x y =
->    if suffix x y
->      then isInfix x y
->      else True
+>   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+> _test_infix_suffix _ =
+>   testName "suffix(x,y) ==> infix(x,y)" $
+>   \x y -> if suffix x y
+>     then isInfix x y
+>     else True
 > 
 > 
-> -- infix(x,y) ==> sublist(x,y)
 > _test_infix_sublist :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> Bool
-> _test_infix_sublist _ x y =
->    if isInfix x y
->      then sublist x y
->      else True
+>   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+> _test_infix_sublist _ =
+>   testName "infix(x,y) ==> sublist(x,y)" $
+>   \x y -> if isInfix x y
+>     then sublist x y
+>     else True
 
 And the suite:
 

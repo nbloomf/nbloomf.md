@@ -309,56 +309,56 @@ Testing
 
 Here are our property tests for $\elt$:
 
-> -- elt'(a,x) == elt(a,x)
 > _test_elt_alt :: (List t, Equal a)
->   => t a -> a -> ListOf t a -> Bool
-> _test_elt_alt _ a x =
->     (elt a x) ==== (elt' a x)
+>   => t a -> Test (a -> ListOf t a -> Bool)
+> _test_elt_alt _ =
+>   testName "elt'(a,x) == elt(a,x)" $
+>   \a x -> (elt a x) ==== (elt' a x)
 > 
 > 
-> -- elt(a,nil) == false
 > _test_elt_nil :: (List t, Equal a)
->   => t a -> a -> Bool
-> _test_elt_nil x a =
->   let
+>   => t a -> Test (a -> Bool)
+> _test_elt_nil x =
+>   testName "elt(a,nil) == false" $
+>   \a -> let
 >     nil' = nil `withTypeOf` x
 >   in
 >     (elt a nil') ==== False
 > 
 > 
-> -- elt(a,cat(x,y)) == or(elt(a,x),elt(a,y))
 > _test_elt_cat :: (List t, Equal a)
->   => t a -> a -> ListOf t a -> ListOf t a -> Bool
-> _test_elt_cat _ a x y =
->     (elt a (cat x y)) ==== ((elt a x) ||| (elt a y))
+>   => t a -> Test (a -> ListOf t a -> ListOf t a -> Bool)
+> _test_elt_cat _ =
+>   testName "elt(a,cat(x,y)) == or(elt(a,x),elt(a,y))" $
+>   \a x y -> (elt a (cat x y)) ==== ((elt a x) ||| (elt a y))
 > 
 > 
-> -- elt(a,x) == elt(a,rev(x))
 > _test_elt_rev :: (List t, Equal a)
->   => t a -> a -> ListOf t a -> Bool
-> _test_elt_rev _ a x =
->     (elt a x) ==== (elt a (rev x))
+>   => t a -> Test (a -> ListOf t a -> Bool)
+> _test_elt_rev _ =
+>   testName "elt(a,x) == elt(a,rev(x))" $
+>   \a x -> (elt a x) ==== (elt a (rev x))
 > 
 > 
-> -- elt(y,tails(x)) == suffix(y,x)
 > _test_elt_tails :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> Bool
-> _test_elt_tails _ x y =
->     (elt y (tails x)) ==== (suffix y x)
+>   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+> _test_elt_tails _ =
+>   testName "elt(y,tails(x)) == suffix(y,x)" $
+>   \x y -> (elt y (tails x)) ==== (suffix y x)
 > 
 > 
-> -- elt(y,inits(x)) == prefix(y,x)
 > _test_elt_inits :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> Bool
-> _test_elt_inits _ x y =
->     (elt y (inits x)) ==== (prefix y x)
+>   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+> _test_elt_inits _ =
+>   testName "elt(y,inits(x)) == prefix(y,x)" $
+>   \x y -> (elt y (inits x)) ==== (prefix y x)
 > 
 > 
-> -- elt(a,filter(eq(a,-),x)) == false
 > _test_elt_filter_eq :: (List t, Equal a)
->   => t a -> a -> ListOf t a -> Bool
-> _test_elt_filter_eq _ a x =
->     (elt a (filter (not . eq a) x)) ==== False
+>   => t a -> Test (a -> ListOf t a -> Bool)
+> _test_elt_filter_eq _ =
+>   testName "elt(a,filter(eq(a,-),x)) == false" $
+>   \a x -> (elt a (filter (not . eq a) x)) ==== False
 
 And the suite:
 

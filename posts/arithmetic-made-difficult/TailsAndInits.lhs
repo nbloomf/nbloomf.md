@@ -386,66 +386,66 @@ Testing
 
 Here are our property tests for $\tails$ and $\inits$:
 
-> -- tails(x) == tails'(x)
 > _test_tails_alt :: (List t, Equal a)
->   => t a -> ListOf t a -> Bool
-> _test_tails_alt _ x =
->   (tails x) ==== (tails' x)
+>   => t a -> Test (ListOf t a -> Bool)
+> _test_tails_alt _ =
+>   testName "tails(x) == tails'(x)" $
+>   \x -> (tails x) ==== (tails' x)
 > 
 > 
-> -- tails(map(f)(x)) == map(map(f))(tails(x))
 > _test_tails_map :: (List t, Equal a)
->   => t a -> (a -> a) -> ListOf t a -> Bool
-> _test_tails_map _ f x =
->   (tails (map f x)) ==== (map (map f) (tails x))
+>   => t a -> Test ((a -> a) -> ListOf t a -> Bool)
+> _test_tails_map _ =
+>   testName "tails(map(f)(x)) == map(map(f))(tails(x))" $
+>   \f x -> (tails (map f x)) ==== (map (map f) (tails x))
 > 
 > 
-> -- length(tails(x)) == next(length(x))
 > _test_tails_length :: (List t, Equal a, Natural n)
->   => t a -> n -> ListOf t a -> Bool
-> _test_tails_length _ n x =
->   let
+>   => t a -> n -> Test (ListOf t a -> Bool)
+> _test_tails_length _ n =
+>   testName "length(tails(x)) == next(length(x))" $
+>   \x -> let
 >     lx = length x `withTypeOf` Nat n
 >   in
 >     (length (tails x)) ==== (next lx)
 > 
 > 
-> -- tails(snoc(a,x)) == snoc(nil,map(snoc(a,-))(tails(x)))
 > _test_tails_snoc :: (List t, Equal a)
->   => t a -> a -> ListOf t a -> Bool
-> _test_tails_snoc _ a x =
->   (tails (snoc a x)) ==== (snoc nil (map (snoc a) (tails x)))
+>   => t a -> Test (a -> ListOf t a -> Bool)
+> _test_tails_snoc _ =
+>   testName "tails(snoc(a,x)) == snoc(nil,map(snoc(a,-))(tails(x)))" $
+>   \a x -> (tails (snoc a x)) ==== (snoc nil (map (snoc a) (tails x)))
 > 
 > 
-> -- tails(lcs(x,y)) == lcs(tails(x),tails(y))
 > _test_tails_lcs :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> Bool
-> _test_tails_lcs _ x y =
->   (tails (lcs x y)) ==== (lcs (tails x) (tails y))
+>   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+> _test_tails_lcs _ =
+>   testName "tails(lcs(x,y)) == lcs(tails(x),tails(y))" $
+>   \x y -> (tails (lcs x y)) ==== (lcs (tails x) (tails y))
 > 
 > 
-> -- inits(map(f)(x)) == map(map(f))(inits(x))
 > _test_inits_map :: (List t, Equal a)
->   => t a -> (a -> a) -> ListOf t a -> Bool
-> _test_inits_map _ f x =
->   (inits (map f x)) ==== (map (map f) (inits x))
+>   => t a -> Test ((a -> a) -> ListOf t a -> Bool)
+> _test_inits_map _ =
+>   testName "inits(map(f)(x)) == map(map(f))(inits(x))" $
+>   \f x -> (inits (map f x)) ==== (map (map f) (inits x))
 > 
 > 
-> -- length(inits(x)) == next(length(x))
 > _test_inits_length :: (List t, Equal a, Natural n)
->   => t a -> n -> ListOf t a -> Bool
-> _test_inits_length _ n x =
->   let
+>   => t a -> n -> Test (ListOf t a -> Bool)
+> _test_inits_length _ n =
+>   testName "length(inits(x)) == next(length(x))" $
+>   \x -> let
 >     lx = length x `withTypeOf` Nat n
 >   in
 >     (length (inits x)) ==== (next lx)
 > 
 > 
-> -- inits(lcp(x,y)) == lcp(inits(x),inits(y))
 > _test_inits_lcp :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> Bool
-> _test_inits_lcp _ x y =
->   (inits (lcp x y)) ==== (lcp (inits x) (inits y))
+>   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+> _test_inits_lcp _ =
+>   testName "inits(lcp(x,y)) == lcp(inits(x),inits(y))" $
+>   \x y -> (inits (lcp x y)) ==== (lcp (inits x) (inits y))
 
 And the suite:
 

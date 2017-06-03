@@ -217,61 +217,61 @@ Testing
 
 Here are our property tests for $\repeat$:
 
-> -- repeat'(n,a) == repeat(n,a)
 > _test_repeat_alt :: (List t, Equal a, Natural n)
->   => t a -> n -> Nat n -> a -> Bool
-> _test_repeat_alt t _ k a =
->  let
+>   => t a -> n -> Test (Nat n -> a -> Bool)
+> _test_repeat_alt t _ =
+>  testName "repeat'(n,a) == repeat(n,a)" $
+>  \k a -> let
 >    rna = repeat k a `withTypeOf` ListOf t
 >  in
 >    (repeat' k a) ==== rna
 > 
 > 
-> -- length(repeat(n,a)) == n
 > _test_repeat_length :: (List t, Equal a, Natural n)
->   => t a -> n -> Nat n -> a -> Bool
-> _test_repeat_length t _ k a =
->  let
+>   => t a -> n -> Test (Nat n -> a -> Bool)
+> _test_repeat_length t _ =
+>  testName "length(repeat(n,a)) == n" $
+>  \k a -> let
 >    rka = repeat k a `withTypeOf` ListOf t
 >  in
 >    (length rka) ==== k
 > 
 > 
-> -- map(f)(repeat(n,a)) == repeat(n,f(a))
 > _test_repeat_map :: (List t, Equal a, Equal b, Natural n)
->   => t a -> t b -> n -> (a -> b) -> Nat n -> a -> Bool
-> _test_repeat_map t _ _ f k a =
->  let
+>   => t a -> t b -> n -> Test ((a -> b) -> Nat n -> a -> Bool)
+> _test_repeat_map t _ _ =
+>  testName "map(f)(repeat(n,a)) == repeat(n,f(a))" $
+>  \f k a -> let
 >    rka = repeat k a `withTypeOf` ListOf t
 >  in
 >    (repeat k (f a)) ==== (map f rka)
 > 
 > 
-> -- repeat(plus(m,n),a)) == cat(repeat(m,a),repeat(n,a))
 > _test_repeat_plus :: (List t, Equal a, Natural n)
->   => t a -> n -> Nat n -> Nat n -> a -> Bool
-> _test_repeat_plus t _ m n a =
->  let
+>   => t a -> n -> Test (Nat n -> Nat n -> a -> Bool)
+> _test_repeat_plus t _ =
+>  testName "repeat(plus(m,n),a)) == cat(repeat(m,a),repeat(n,a))" $
+>  \m n a -> let
 >    rma = repeat m a `withTypeOf` ListOf t
 >  in
 >    (repeat (plus m n) a) ==== (cat rma (repeat n a))
 > 
 > 
-> -- snoc(a,repeat(n,a)) == repeat(next(n),a)
 > _test_repeat_snoc :: (List t, Equal a, Natural n)
->   => t a -> n -> Nat n -> a -> Bool
-> _test_repeat_snoc t _ n a =
->  let
+>   => t a -> n -> Test (Nat n -> a -> Bool)
+> _test_repeat_snoc t _ =
+>  testName "snoc(a,repeat(n,a)) == repeat(next(n),a)" $
+>  \n a -> let
 >    rna = repeat n a `withTypeOf` ListOf t
 >  in
 >    (snoc a rna) ==== (repeat (next n) a)
 > 
 > 
-> -- rev(repeat(n,a)) == repeat(n,a)
 > _test_repeat_rev :: (List t, Equal a, Natural n)
->   => t a -> n -> Nat n -> a -> Bool
-> _test_repeat_rev t _ n a =
->  let
+>   => t a -> n -> Test (Nat n -> a -> Bool)
+> _test_repeat_rev t _ =
+>  testName "rev(repeat(n,a)) == repeat(n,a)" $
+>  \n a -> let
 >    rna = repeat n a `withTypeOf` ListOf t
 >  in
 >    (rev rna) ==== rna

@@ -269,41 +269,41 @@ Testing
 
 Here are our property tests for $\filter$:
 
-> -- filter(p,x) == filter'(p,x)
 > _test_filter_alt :: (List t, Equal a)
->   => t a -> (a -> Bool) -> ListOf t a -> Bool
-> _test_filter_alt _ p x =
->   (filter p x) ==== (filter' p x)
+>   => t a -> Test ((a -> Bool) -> ListOf t a -> Bool)
+> _test_filter_alt _ =
+>   testName "filter(p,x) == filter'(p,x)" $
+>   \p x -> (filter p x) ==== (filter' p x)
 > 
 > 
-> -- all(p,filter(p,x)) == true
 > _test_filter_all :: (List t, Equal a)
->   => t a -> (a -> Bool) -> ListOf t a -> Bool
-> _test_filter_all _ p x =
->   (all p (filter p x)) ==== True
+>   => t a -> Test ((a -> Bool) -> ListOf t a -> Bool)
+> _test_filter_all _ =
+>   testName "all(p,filter(p,x)) == true" $
+>   \p x -> (all p (filter p x)) ==== True
 > 
 > 
-> -- filter(p,snoc(a,x)) == if(p(a),snoc(a,filter(p,x)),filter(p,x))
 > _test_filter_snoc :: (List t, Equal a)
->   => t a -> (a -> Bool) -> a -> ListOf t a -> Bool
-> _test_filter_snoc _ p a x =
->   if p a ==== True
+>   => t a -> Test ((a -> Bool) -> a -> ListOf t a -> Bool)
+> _test_filter_snoc _ =
+>   testName "filter(p,snoc(a,x)) == if(p(a),snoc(a,filter(p,x)),filter(p,x))" $
+>   \p a x -> if p a ==== True
 >     then (filter p (snoc a x)) ==== (snoc a (filter p x))
 >     else (filter p (snoc a x)) ==== (filter p x)
 > 
 > 
-> -- filter(p,rev(x)) == rev(filter(p,x))
 > _test_filter_rev :: (List t, Equal a)
->   => t a -> (a -> Bool) -> ListOf t a -> Bool
-> _test_filter_rev _ p x =
->   (filter p (rev x)) ==== (rev (filter p x))
+>   => t a -> Test ((a -> Bool) -> ListOf t a -> Bool)
+> _test_filter_rev _ =
+>   testName "filter(p,rev(x)) == rev(filter(p,x))" $
+>   \p x -> (filter p (rev x)) ==== (rev (filter p x))
 > 
 > 
-> -- filter(p,cat(x,y)) == cat(filter(p,x),filter(p,y))
 > _test_filter_cat :: (List t, Equal a)
->   => t a -> (a -> Bool) -> ListOf t a -> ListOf t a -> Bool
-> _test_filter_cat _ p x y =
->   (filter p (cat x y)) ==== (cat (filter p x) (filter p y))
+>   => t a -> Test ((a -> Bool) -> ListOf t a -> ListOf t a -> Bool)
+> _test_filter_cat _ =
+>   testName "filter(p,cat(x,y)) == cat(filter(p,x),filter(p,y))" $
+>   \p x y -> (filter p (cat x y)) ==== (cat (filter p x) (filter p y))
 
 And the suite:
 

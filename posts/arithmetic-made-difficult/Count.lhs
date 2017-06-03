@@ -256,63 +256,63 @@ Testing
 
 Here are our property tests for $\count$:
 
-> -- count(a,nil) == zero
 > _test_count_nil :: (List t, Equal a, Natural n)
->   => t a -> n -> a -> Bool
-> _test_count_nil t k a =
->  let
+>   => t a -> n -> Test (a -> Bool)
+> _test_count_nil t k =
+>  testName "count(a,nil) == zero" $
+>  \a -> let
 >    nil'  = nil `withTypeOf` ListOf t
 >    zero' = zero `withTypeOf` Nat k
 >  in
 >    (count a nil') ==== zero'
 > 
 > 
-> -- count(a,cons(a,nil)) == next(zero)
 > _test_count_one :: (List t, Equal a, Natural n)
->   => t a -> n -> a -> Bool
-> _test_count_one t k a =
->  let
+>   => t a -> n -> Test (a -> Bool)
+> _test_count_one t k =
+>  testName "count(a,cons(a,nil)) == next(zero)" $
+>  \a -> let
 >    nil' = nil `withTypeOf` ListOf t
 >    one  = next zero `withTypeOf` Nat k
 >  in
 >    (count a (cons a nil')) ==== one
 > 
 > 
-> -- count(a,cons(a,nil)) == next(zero)
 > _test_count_rev :: (List t, Equal a, Natural n)
->   => t a -> n -> a -> ListOf t a -> Bool
-> _test_count_rev t k a x =
->  let
+>   => t a -> n -> Test (a -> ListOf t a -> Bool)
+> _test_count_rev t k =
+>  testName "count(a,cons(a,nil)) == next(zero)" $
+>  \a x -> let
 >    cx = count a x `withTypeOf` Nat k
 >  in
 >    (count a (rev x)) ==== cx
 > 
 > 
-> -- count(a,cons(a,nil)) == next(zero)
 > _test_count_snoc_cons :: (List t, Equal a, Natural n)
->   => t a -> n -> a -> a -> ListOf t a -> Bool
-> _test_count_snoc_cons t k a b x =
->  let
+>   => t a -> n -> Test (a -> a -> ListOf t a -> Bool)
+> _test_count_snoc_cons t k =
+>  testName "count(a,cons(a,nil)) == next(zero)" $
+>  \a b x -> let
 >    cbx = count a (cons b x) `withTypeOf` Nat k
 >  in
 >    (count a (snoc b x)) ==== cbx
 > 
 > 
-> -- count(a,cat(x,y)) == plus(count(a,x),count(a,y))
 > _test_count_cat :: (List t, Equal a, Natural n)
->   => t a -> n -> a -> ListOf t a -> ListOf t a -> Bool
-> _test_count_cat t k a x y =
->  let
+>   => t a -> n -> Test (a -> ListOf t a -> ListOf t a -> Bool)
+> _test_count_cat t k =
+>  testName "count(a,cat(x,y)) == plus(count(a,x),count(a,y))" $
+>  \a x y -> let
 >    cx = count a x `withTypeOf` Nat k
 >  in
 >    (count a (cat x y)) ==== plus cx (count a y)
 > 
 > 
-> -- count(a,x) == length(filter(eq(a,-),x))
 > _test_count_length :: (List t, Equal a, Natural n)
->   => t a -> n -> a -> ListOf t a -> Bool
-> _test_count_length t k a x =
->  let
+>   => t a -> n -> Test (a -> ListOf t a -> Bool)
+> _test_count_length t k =
+>  testName "count(a,x) == length(filter(eq(a,-),x))" $
+>  \a x -> let
 >    cx = count a x `withTypeOf` Nat k
 >  in
 >    cx ==== (length (filter (eq a) x))
