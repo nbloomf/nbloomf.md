@@ -363,67 +363,67 @@ Here's ``lcm``:
 
 Property tests for ``lcm``:
 
-> -- lcm(a,0) == 0 and lcm(0,a) == 0
 > _test_lcm_zero :: (Natural n)
->   => n -> Nat n -> Bool
-> _test_lcm_zero _ a =
->   (zero ==== lcm a zero) &&& (zero ==== lcm zero a)
+>   => n -> Test (Nat n -> Bool)
+> _test_lcm_zero _ =
+>   testName "lcm(a,0) == 0 and lcm(0,a) == 0" $
+>   \a -> (zero ==== lcm a zero) &&& (zero ==== lcm zero a)
 > 
 > 
-> -- lcm(a,next(0)) == a and lcm(next(0),a) == a
 > _test_lcm_one :: (Natural n)
->   => n -> Nat n -> Bool
-> _test_lcm_one _ a =
->   (a ==== lcm a (next zero)) &&& (a ==== lcm (next zero) a)
+>   => n -> Test (Nat n -> Bool)
+> _test_lcm_one _ =
+>   testName "lcm(a,next(0)) == a and lcm(next(0),a) == a" $
+>   \a -> (a ==== lcm a (next zero)) &&& (a ==== lcm (next zero) a)
 > 
 > 
-> -- div(a,lcm(a,b)) and div(b,lcm(a,b))
 > _test_lcm_div_args :: (Natural n)
->   => n -> Nat n -> Nat n -> Bool
-> _test_lcm_div_args _ a b =
->   (div a (lcm a b)) &&& (div b (lcm a b))
+>   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_lcm_div_args _ =
+>   testName "div(a,lcm(a,b)) and div(b,lcm(a,b))" $
+>   \a b -> (div a (lcm a b)) &&& (div b (lcm a b))
 > 
 > 
-> -- lcm(a,a) = a
 > _test_lcm_idempotent :: (Natural n)
->   => n -> Nat n -> Bool
-> _test_lcm_idempotent _ a =
->   (lcm a a) ==== a
+>   => n -> Test (Nat n -> Bool)
+> _test_lcm_idempotent _ =
+>   testName "lcm(a,a) == a" $
+>   \a -> (lcm a a) ==== a
 > 
 > 
-> -- lcm(a,b) == lcm(b,a)
 > _test_lcm_commutative :: (Natural n)
->   => n -> Nat n -> Nat n -> Bool
-> _test_lcm_commutative _ a b =
->   (lcm a b) ==== (lcm b a)
+>   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_lcm_commutative _ =
+>   testName "lcm(a,b) == lcm(b,a)" $
+>   \a b -> (lcm a b) ==== (lcm b a)
 > 
 > 
-> -- lcm(lcm(a,b),c) == lcm(a,lcm(b,c))
 > _test_lcm_associative :: (Natural n)
->   => n -> Nat n -> Nat n -> Nat n -> Bool
-> _test_lcm_associative _ a b c =
->   (lcm (lcm a b) c) ==== (lcm a (lcm b c))
+>   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_lcm_associative _ =
+>   testName "lcm(lcm(a,b),c) == lcm(a,lcm(b,c))" $
+>   \a b c -> (lcm (lcm a b) c) ==== (lcm a (lcm b c))
 > 
 > 
-> -- lcm(times(c,a),times(c,b)) == times(c,lcm(a,b))
 > _test_lcm_distributive_times :: (Natural n)
->   => n -> Nat n -> Nat n -> Nat n -> Bool
-> _test_lcm_distributive_times _ a b c =
->   (lcm (times c a) (times c b)) ==== (times c (lcm a b))
+>   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_lcm_distributive_times _ =
+>   testName "lcm(times(c,a),times(c,b)) == times(c,lcm(a,b))" $
+>   \a b c -> (lcm (times c a) (times c b)) ==== (times c (lcm a b))
 > 
 > 
-> -- lcm(gcd(c,a),gcd(c,b)) == gcd(c,lcm(a,b))
 > _test_lcm_distributive_gcd :: (Natural n)
->   => n -> Nat n -> Nat n -> Nat n -> Bool
-> _test_lcm_distributive_gcd _ a b c =
->   (lcm (gcd c a) (gcd c b)) ==== (gcd c (lcm a b))
+>   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_lcm_distributive_gcd _ =
+>   testName "lcm(gcd(c,a),gcd(c,b)) == gcd(c,lcm(a,b))" $
+>   \a b c -> (lcm (gcd c a) (gcd c b)) ==== (gcd c (lcm a b))
 > 
 > 
-> -- gcd(lcm(c,a),lcm(c,b)) == lcm(c,gcd(a,b))
 > _test_gcd_distributive_lcm :: (Natural n)
->   => n -> Nat n -> Nat n -> Nat n -> Bool
-> _test_gcd_distributive_lcm _ a b c =
->   (gcd (lcm c a) (lcm c b)) ==== (lcm c (gcd a b))
+>   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_gcd_distributive_lcm _ =
+>   testName "gcd(lcm(c,a),lcm(c,b)) == lcm(c,gcd(a,b))" $
+>   \a b c -> (gcd (lcm c a) (lcm c b)) ==== (lcm c (gcd a b))
 
 And the suite:
 

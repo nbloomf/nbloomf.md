@@ -513,61 +513,60 @@ Testing
 
 Here are our property tests for $\at$.
 
-> -- at(nil,k) == *
 > _test_at_nil :: (List t, Equal a, Natural n)
->   => t a -> n -> Nat n -> Bool
-> _test_at_nil z n m =
->   let
+>   => t a -> n -> Test (Nat n -> Bool)
+> _test_at_nil z n =
+>   testName "at(nil,k) == *" $
+>   \m -> let
 >     nil' = nil `withTypeOf` z
 >   in
 >     (at nil' m) ==== Nothing
 > 
 > 
-> -- at(cons(a,nil),next(0)) == *
 > _test_at_single :: (List t, Equal a, Natural n)
->   => t a -> n -> a -> Bool
-> _test_at_single z n a =
->   let
+>   => t a -> n -> Test (a -> Bool)
+> _test_at_single z n =
+>   testName "at(cons(a,nil),next(0)) == a" $
+>   \a -> let
 >     nil'  = nil  `withTypeOf` z
 >     zero' = zero `withTypeOf` n
 >   in
 >     (at (cons a nil') (next zero')) ==== Just a
 > 
 > 
-> -- at(cons(a,cons(b,nil)),next(next(0))) == *
 > _test_at_double :: (List t, Equal a, Natural n)
->   => t a -> n -> a -> a -> Bool
-> _test_at_double z n a b =
->   let
+>   => t a -> n -> Test (a -> a -> Bool)
+> _test_at_double z n =
+>   testName "at(cons(a,cons(b,nil)),next(next(0))) == b" $
+>   \a b -> let
 >     nil'  = nil  `withTypeOf` z
 >     zero' = zero `withTypeOf` n
 >   in
 >     (at (cons a (cons b nil')) (next (next zero'))) ==== Just b
 > 
 > 
-> -- at(cons(a,x),next(next(k))) == at(x,next(k))
 > _test_at_next_next_cons :: (List t, Equal a, Natural n)
->   => t a -> n -> ListOf t a -> a -> Nat n -> Bool
-> _test_at_next_next_cons z _ x a k =
->   (at (cons a x) (next (next k))) ==== (at x (next k))
+>   => t a -> n -> Test (ListOf t a -> a -> Nat n -> Bool)
+> _test_at_next_next_cons z _ =
+>   testName "at(cons(a,x),next(next(k))) == at(x,next(k))" $
+>   \x a k -> (at (cons a x) (next (next k))) ==== (at x (next k))
 > 
 > 
-> -- at(x,length(x)) == head(rev(x))
 > _test_at_length_rev :: (List t, Equal a, Natural n)
->   => t a -> n -> ListOf t a -> Bool
-> _test_at_length_rev _ n x =
->   let
+>   => t a -> n -> Test (ListOf t a -> Bool)
+> _test_at_length_rev _ n =
+>   testName "at(x,length(x)) == head(rev(x))" $
+>   \x -> let
 >     lx = length x `withTypeOf` n
 >   in
 >     (at x lx) ==== (head (rev x))
 > 
 > 
-> -- leq(length(x),k)                   ==> at(x,next(k)) == *
-> -- leq(next(0),k) && leq(k,length(x)) ==> at(x,next(k)) /= *
 > _test_at_range :: (List t, Equal a, Natural n)
->   => t a -> n -> ListOf t a -> Nat n -> Bool
-> _test_at_range _ n x k =
->   let
+>   => t a -> n -> Test (ListOf t a -> Nat n -> Bool)
+> _test_at_range _ n =
+>   testName "leq(length(x),k) <==> at(x,next(k)) == *" $
+>   \x k -> let
 >     lx = length x `withTypeOf` Nat n
 >   in
 >     if (not (isZero k)) &&& (leq k lx)
@@ -577,11 +576,11 @@ Here are our property tests for $\at$.
 >       else (at x k) ==== Nothing
 > 
 > 
-> -- leq(k,length(x)) ==> at(snoc(a,x),k) == at(x,k)
 > _test_at_snoc :: (List t, Equal a, Natural n)
->   => t a -> n -> ListOf t a -> a -> Nat n -> Bool
-> _test_at_snoc z n x a k =
->   let
+>   => t a -> n -> Test (ListOf t a -> a -> Nat n -> Bool)
+> _test_at_snoc z n =
+>   testName "leq(k,length(x)) ==> at(snoc(a,x),k) == at(x,k)" $
+>   \x a k -> let
 >     lx = length x `withTypeOf` Nat n
 >   in
 >     if leq k lx
@@ -589,29 +588,37 @@ Here are our property tests for $\at$.
 >       else True
 > 
 > 
-> -- leq(k,length(x))       ==> at(cat(x,y),k) == at(x,k)
-> -- leq(next(length(x)),k) ==> at(cat(x,y),k) == at(y,minus(k,length(x)))
-> _test_at_cat :: (List t, Equal a, Natural n)
->   => t a -> n -> ListOf t a -> ListOf t a -> Nat n -> Bool
-> _test_at_cat z n x y k =
->   let
+> _test_at_cat_left :: (List t, Equal a, Natural n)
+>   => t a -> n -> Test (ListOf t a -> ListOf t a -> Nat n -> Bool)
+> _test_at_cat_left z n =
+>   testName "leq(k,length(x))       ==> at(cat(x,y),k) == at(x,k)" $
+>   \x y k -> let
 >     lx = length x `withTypeOf` Nat n
 >   in
 >     if leq k lx
->       then
->         (at (cat x y) k) ==== (at x k)
+>       then (at (cat x y) k) ==== (at x k)
+>       else True
+> 
+> 
+> _test_at_cat_right :: (List t, Equal a, Natural n)
+>   => t a -> n -> Test (ListOf t a -> ListOf t a -> Nat n -> Bool)
+> _test_at_cat_right z n =
+>   testName "leq(next(length(x)),k) ==> at(cat(x,y),k) == at(y,minus(k,length(x)))" $
+>   \x y k -> let
+>     lx = length x `withTypeOf` Nat n
+>   in
+>     if leq k lx
+>       then True
 >       else
->         let
->           Just m = minus k lx
->         in
->           (at (cat x y) k) ==== (at y m)
+>         let Just m = minus k lx in
+>         (at (cat x y) k) ==== (at y m)
 > 
 > 
-> -- at(x,u) == at(rev(x),minus(next(length(x)),u))
 > _test_at_rev :: (List t, Equal a, Natural n)
->   => t a -> n -> ListOf t a -> Nat n -> Bool
-> _test_at_rev z n x u =
->   let 
+>   => t a -> n -> Test (ListOf t a -> Nat n -> Bool)
+> _test_at_rev z n =
+>   testName "at(x,u) == at(rev(x),minus(next(length(x)),u))" $
+>   \x u -> let 
 >     lx = (length x) `withTypeOf` n
 >   in
 >     case minus (next (length x)) u of
@@ -642,7 +649,8 @@ And the suite:
 >   runTest args (_test_at_length_rev t n)
 >   runTest args (_test_at_range t n)
 >   runTest args (_test_at_snoc t n)
->   runTest args (_test_at_cat t n)
+>   runTest args (_test_at_cat_left t n)
+>   runTest args (_test_at_cat_right t n)
 >   runTest args (_test_at_rev t n)
 
 And ``main``:

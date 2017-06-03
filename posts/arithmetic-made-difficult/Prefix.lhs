@@ -568,58 +568,58 @@ Testing
 
 Here are our property tests for $\prefix$ and $\suffix$.
 
-> -- prefix(x,cat(x,y))
 > _test_prefix_cat :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> Bool
-> _test_prefix_cat _ x y =
->   prefix x (cat x y)
+>   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+> _test_prefix_cat _ =
+>   testName "prefix(x,cat(x,y))" $
+>   \x y -> prefix x (cat x y)
 > 
 > 
-> -- prefix(x,x)
 > _test_prefix_reflexive :: (List t, Equal a)
->   => t a -> ListOf t a -> Bool
-> _test_prefix_reflexive _ x =
->   prefix x x
+>   => t a -> Test (ListOf t a -> Bool)
+> _test_prefix_reflexive _ =
+>   testName "prefix(x,x)" $
+>   \x -> prefix x x
 > 
 > 
-> -- prefix(x,y) & prefix(y,z) ==> prefix(x,z)
 > _test_prefix_transitive :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
-> _test_prefix_transitive _ x y z =
->   if (prefix x y) &&& (prefix y z)
+>   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
+> _test_prefix_transitive _ =
+>   testName "prefix(x,y) & prefix(y,z) ==> prefix(x,z)" $
+>   \x y z -> if (prefix x y) &&& (prefix y z)
 >     then prefix x z
 >     else True
 > 
 > 
-> -- prefix(x,y) & prefix(u,v) ==> prefix(zip(x,u),zip(y,v))
 > _test_prefix_zip :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
-> _test_prefix_zip _ x y u v =
->   if (prefix x y) &&& (prefix u v)
+>   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool)
+> _test_prefix_zip _ =
+>   testName "prefix(x,y) & prefix(u,v) ==> prefix(zip(x,u),zip(y,v))" $
+>   \x y u v -> if (prefix x y) &&& (prefix u v)
 >     then prefix (zip x u) (zip y v)
 >     else True
 
 Tests for $\suffix$:
 
-> -- suffix(y,cat(x,y))
 > _test_suffix_cat :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> Bool
-> _test_suffix_cat _ x y =
->   suffix y (cat x y)
+>   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+> _test_suffix_cat _ =
+>   testName "suffix(y,cat(x,y)) == true" $
+>   \x y -> (suffix y (cat x y)) ==== True
 > 
 > 
-> -- suffix(x,x)
 > _test_suffix_reflexive :: (List t, Equal a)
->   => t a -> ListOf t a -> Bool
-> _test_suffix_reflexive _ x =
->   suffix x x
+>   => t a -> Test (ListOf t a -> Bool)
+> _test_suffix_reflexive _ =
+>   testName "suffix(x,x) == true" $
+>   \x -> (suffix x x) ==== True
 > 
 > 
-> -- suffix(x,y) & suffix(y,z) ==> suffix(x,z)
 > _test_suffix_transitive :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
-> _test_suffix_transitive _ x y z =
->   if (suffix x y) &&& (suffix y z)
+>   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
+> _test_suffix_transitive _ =
+>   testName "suffix(x,y) & suffix(y,z) ==> suffix(x,z)" $
+>   \x y z -> if (suffix x y) &&& (suffix y z)
 >     then suffix x z
 >     else True
 

@@ -230,55 +230,55 @@ Testing
 
 Here are our property tests for $\range$.
 
-> -- range(a,next(b)) == cons(a,range(next(a),b))
 > _test_range_next_cons :: (List t, Natural n)
->   => t n -> Nat n -> Nat n -> Bool
-> _test_range_next_cons t a b =
->   let
+>   => t n -> Test (Nat n -> Nat n -> Bool)
+> _test_range_next_cons t =
+>   testName "range(a,next(b)) == cons(a,range(next(a),b))" $
+>   \a b -> let
 >     x = (range a (next b)) `withTypeOf` ListOf (map Nat t)
 >     y = (cons a (range (next a) b))
 >   in
 >     x ==== y
 > 
 > 
-> -- range(a,next(b)) == snoc(plus(a,b),range(a,b))
 > _test_range_next_snoc :: (List t, Natural n)
->   => t n -> Nat n -> Nat n -> Bool
-> _test_range_next_snoc t a b =
->   let
+>   => t n -> Test (Nat n -> Nat n -> Bool)
+> _test_range_next_snoc t =
+>   testName "range(a,next(b)) == snoc(plus(a,b),range(a,b))" $
+>   \a b -> let
 >     x = (range a (next b)) `withTypeOf` ListOf (map Nat t)
 >     y = (snoc (plus a b) (range a b))
 >   in
 >     x ==== y
 > 
 > 
-> -- range(a,plus(b,c)) == cat(range(a,b),range(plus(a,b),c))
 > _test_range_plus_right :: (List t, Natural n)
->   => t n -> Nat n -> Nat n -> Nat n -> Bool
-> _test_range_plus_right t a b c =
->   let
+>   => t n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_range_plus_right t =
+>   testName "range(a,plus(b,c)) == cat(range(a,b),range(plus(a,b),c))" $
+>   \a b c -> let
 >     x = (range a (plus b c)) `withTypeOf` ListOf (map Nat t)
 >     y = (cat (range a b) (range (plus a b) c))
 >   in
 >     x ==== y
 > 
 > 
-> -- range(next(a),b) == map(next,range(a,b))
 > _test_range_next_left :: (List t, Natural n)
->   => t n -> Nat n -> Nat n -> Bool
-> _test_range_next_left t a b =
->   let
+>   => t n -> Test (Nat n -> Nat n -> Bool)
+> _test_range_next_left t =
+>   testName "range(next(a),b) == map(next,range(a,b))" $
+>   \a b -> let
 >     x = (range (next a) b) `withTypeOf` ListOf (map Nat t)
 >     y = (map next (range a b))
 >   in
 >     x ==== y
 > 
 > 
-> -- range(plus(a,b),c) == map(plus(a,-),range(b,c))
 > _test_range_plus_left :: (List t, Natural n)
->   => t n -> Nat n -> Nat n -> Nat n -> Bool
-> _test_range_plus_left t a b c =
->   let
+>   => t n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_range_plus_left t =
+>   testName "range(plus(a,b),c) == map(plus(a,-),range(b,c))" $
+>   \a b c -> let
 >     x = (range (plus a b) c) `withTypeOf` ListOf (map Nat t)
 >     y = (map (plus a) (range b c))
 >   in

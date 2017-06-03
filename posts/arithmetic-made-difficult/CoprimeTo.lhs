@@ -85,14 +85,15 @@ Here's ``coprime``:
 Property tests:
 
 > _test_coprime_gcd_quo :: (Natural n)
->   => n -> Nat n -> Nat n -> Bool
-> _test_coprime_gcd_quo _ x y =
->   let
+>   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_coprime_gcd_quo _ =
+>   testName "coprime(quo(next(a),gcd(next(a),next(b))),quo(next(b),gcd(next(a),next(b)))) == true" $
+>   \x y -> let
 >     a = next x
 >     b = next y
 >     u = quo a (gcd a b)
 >     v = quo b (gcd a b)
->   in coprime u v
+>   in (coprime u v) ==== True
 
 And the suite:
 

@@ -176,32 +176,32 @@ Here's ``div``:
 
 Property tests:
 
-> -- div(a,0)
 > _test_div_zero_right :: (Natural n)
->   => n -> Nat n -> Bool
-> _test_div_zero_right _ a =
->   div a zero
+>   => n -> Test (Nat n -> Bool)
+> _test_div_zero_right _ =
+>   testName "div(a,0) == true" $
+>   \a -> (div a zero) ==== True
 > 
 > 
-> -- div(next(0),a)
 > _test_div_one_left :: (Natural n)
->   => n -> Nat n -> Bool
-> _test_div_one_left _ a =
->   div (next zero) a
+>   => n -> Test (Nat n -> Bool)
+> _test_div_one_left _ =
+>   testName "div(next(0),a)" $
+>   \a -> div (next zero) a
 > 
 > 
-> -- div(a,a)
 > _test_div_reflexive :: (Natural n)
->   => n -> Nat n -> Bool
-> _test_div_reflexive _ a =
->   div a a
+>   => n -> Test (Nat n -> Bool)
+> _test_div_reflexive _ =
+>   testName "div(a,a) == true" $
+>   \a -> (div a a) ==== True
 > 
 > 
-> -- div(a,times(a,b))
 > _test_div_times :: (Natural n)
->   => n -> Nat n -> Nat n -> Bool
-> _test_div_times _ a b =
->   div a (times a b)
+>   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_div_times _ =
+>   testName "div(a,times(a,b))" $
+>   \a b -> div a (times a b)
 
 And the suite:
 

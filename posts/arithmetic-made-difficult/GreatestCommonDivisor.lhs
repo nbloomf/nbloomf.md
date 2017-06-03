@@ -376,61 +376,67 @@ Here's ``gcd``:
 
 Property tests for ``gcd``:
 
-> -- gcd(a,0) == a and gcd(0,a) == a
 > _test_gcd_zero :: (Natural n)
->   => n -> Nat n -> Bool
-> _test_gcd_zero _ a =
->   (a ==== gcd a zero) &&& (a ==== gcd zero a)
+>   => n -> Test (Nat n -> Bool)
+> _test_gcd_zero _ =
+>   testName "gcd(a,0) == a and gcd(0,a) == a" $
+>   \a -> (a ==== gcd a zero) &&& (a ==== gcd zero a)
 > 
 > 
-> -- gcd(a,next(0)) == next(0) and gcd(next(0),a) == next(0)
-> _test_gcd_one :: (Natural n)
->   => n -> Nat n -> Bool
-> _test_gcd_one _ a = and
->   ((next zero) ==== gcd a (next zero))
->   ((next zero) ==== gcd (next zero) a)
+> _test_gcd_one_right :: (Natural n)
+>   => n -> Test (Nat n -> Bool)
+> _test_gcd_one_right _ =
+>   testName "gcd(a,next(0)) == next(0)" $
+>   \a -> (next zero) ==== gcd a (next zero)
 > 
 > 
-> -- gcd(a,b) == gcd(b,rem(a,b))
+> _test_gcd_one_left :: (Natural n)
+>   => n -> Test (Nat n -> Bool)
+> _test_gcd_one_left _ =
+>   testName "gcd(next(0),a) == next(0)" $
+>   \a -> (next zero) ==== gcd (next zero) a
+> 
+> 
 > _test_gcd_rem :: (Natural n)
->   => n -> Nat n -> Nat n -> Bool
-> _test_gcd_rem _ a b =
->   (gcd a b) ==== (gcd b (rem a b))
+>   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_gcd_rem _ =
+>   testName "gcd(a,b) == gcd(b,rem(a,b))" $
+>   \a b -> (gcd a b) ==== (gcd b (rem a b))
 > 
 > 
-> -- gcd(a,b) == gcd(b,a)
 > _test_gcd_commutative :: (Natural n)
->   => n -> Nat n -> Nat n -> Bool
-> _test_gcd_commutative _ a b =
->   (gcd a b) ==== (gcd b a)
+>   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_gcd_commutative _ =
+>   testName "gcd(a,b) == gcd(b,a)" $
+>   \a b -> (gcd a b) ==== (gcd b a)
 > 
 > 
-> -- div(gcd(a,b),a) and div(gcd(a,b),b)
 > _test_gcd_div_args :: (Natural n)
->   => n -> Nat n -> Nat n -> Bool
-> _test_gcd_div_args _ a b =
->   (div (gcd a b) a) &&& (div (gcd a b) b)
+>   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_gcd_div_args _ =
+>   testName "div(gcd(a,b),a) and div(gcd(a,b),b)" $
+>   \a b -> (div (gcd a b) a) &&& (div (gcd a b) b)
 > 
 > 
-> -- gcd(a,a) = a
 > _test_gcd_idempotent :: (Natural n)
->   => n -> Nat n -> Bool
-> _test_gcd_idempotent _ a =
->   (gcd a a) ==== a
+>   => n -> Test (Nat n -> Bool)
+> _test_gcd_idempotent _ =
+>   testName "gcd(a,a) = a" $
+>   \a -> (gcd a a) ==== a
 > 
 > 
-> -- gcd(gcd(a,b),c) == gcd(a,gcd(b,c))
 > _test_gcd_associative :: (Natural n)
->   => n -> Nat n -> Nat n -> Nat n -> Bool
-> _test_gcd_associative _ a b c =
->   (gcd (gcd a b) c) ==== (gcd a (gcd b c))
+>   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_gcd_associative _ =
+>   testName "gcd(gcd(a,b),c) == gcd(a,gcd(b,c))" $
+>   \a b c -> (gcd (gcd a b) c) ==== (gcd a (gcd b c))
 > 
 > 
-> -- times(gcd(a,b),c) == gcd(times(a,c),times(b,c))
 > _test_gcd_distributive_times :: (Natural n)
->   => n -> Nat n -> Nat n -> Nat n -> Bool
-> _test_gcd_distributive_times _ a b c =
->   (times (gcd a b) c) ==== (gcd (times a c) (times b c))
+>   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_gcd_distributive_times _ =
+>   testName "times(gcd(a,b),c) == gcd(times(a,c),times(b,c))" $
+>   \a b c -> (times (gcd a b) c) ==== (gcd (times a c) (times b c))
 
 And the suite:
 
@@ -448,7 +454,8 @@ And the suite:
 >       }
 > 
 >   runTest args (_test_gcd_zero n)
->   runTest args (_test_gcd_one n)
+>   runTest args (_test_gcd_one_right n)
+>   runTest args (_test_gcd_one_left n)
 >   runTest args (_test_gcd_rem n)
 >   runTest args (_test_gcd_commutative n)
 >   runTest args (_test_gcd_div_args n)

@@ -162,72 +162,72 @@ Here's ``divalg``, ``quo``, and ``rem``:
 
 Property tests:
 
-> -- a == plus(times(q,b),r) where (q,r) = divalg(a,b)
 > _test_divalg_equality :: (Natural n)
->   => n -> Nat n -> Nat n -> Bool
-> _test_divalg_equality _ a b =
->   let (q,r) = divalg a b in
+>   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_divalg_equality _ =
+>   testName "a == plus(times(q,b),r) where (q,r) = divalg(a,b)" $
+>   \a b -> let (q,r) = divalg a b in
 >   a ==== plus (times q b) r
 > 
 > 
-> -- leq(r,b) where (_,r) = divalg(a,next(b))
 > _test_divalg_inequality :: (Natural n)
->   => n -> Nat n -> Nat n -> Bool
-> _test_divalg_inequality _ a b =
->   let (_,r) = divalg a (next b) in
+>   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_divalg_inequality _ =
+>   testName "leq(r,b) where (_,r) = divalg(a,next(b))" $
+>   \a b -> let (_,r) = divalg a (next b) in
 >   leq r b
 > 
 > 
-> -- divalg(0,a) = (0,0)
 > _test_divalg_zero_left :: (Natural n)
->   => n -> Nat n -> Bool
-> _test_divalg_zero_left _ a =
->   (divalg zero a) ==== (zero, zero)
+>   => n -> Test (Nat n -> Bool)
+> _test_divalg_zero_left _ =
+>   testName "divalg(0,a) = (0,0)" $
+>   \a -> (divalg zero a) ==== (zero, zero)
 > 
 > 
-> -- divalg(a,0) = (0,a)
 > _test_divalg_zero_right :: (Natural n)
->   => n -> Nat n -> Bool
-> _test_divalg_zero_right _ a =
->   (divalg a zero) ==== (zero, a)
+>   => n -> Test (Nat n -> Bool)
+> _test_divalg_zero_right _ =
+>   testName "divalg(a,0) = (0,a)" $
+>   \a -> (divalg a zero) ==== (zero, a)
 > 
 > 
-> -- divalg(a,next(0)) = (a,0)
 > _test_divalg_one_right :: (Natural n)
->   => n -> Nat n -> Bool
-> _test_divalg_one_right _ a =
->   (divalg a (next zero)) ==== (a, zero)
+>   => n -> Test (Nat n -> Bool)
+> _test_divalg_one_right _ =
+>   testName "divalg(a,next(0)) = (a,0)" $
+>   \a -> (divalg a (next zero)) ==== (a, zero)
 > 
 > 
-> -- if leq(a,b) then divalg(a,next(b)) = (0,a)
 > _test_divalg_leq :: (Natural n)
->   => n -> Nat n -> Nat n -> Bool
-> _test_divalg_leq _ a b =
->   if leq a b
+>   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_divalg_leq _ =
+>   testName "if leq(a,b) then divalg(a,next(b)) = (0,a)" $
+>   \a b -> if leq a b
 >     then (divalg a (next b)) ==== (zero, a)
 >     else True
 > 
 > 
-> -- quo(times(a,next(b)),next(b)) = a
 > _test_divalg_times_left :: (Natural n)
->   => n -> Nat n -> Nat n -> Bool
-> _test_divalg_times_left _ a b =
->   (quo (times a (next b)) (next b)) ==== a
+>   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_divalg_times_left _ =
+>   testName "quo(times(a,next(b)),next(b)) = a" $
+>   \a b -> (quo (times a (next b)) (next b)) ==== a
 > 
 > 
-> -- quo(a,b) = q where (q,_) = divalg(a,b)
 > _test_divalg_quo :: (Natural n)
->   => n -> Nat n -> Nat n -> Bool
-> _test_divalg_quo _ a b =
->   let (q,_) = divalg a b in
+>   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_divalg_quo _ =
+>   testName "quo(a,b) = q where (q,_) = divalg(a,b)" $
+>   \a b -> let (q,_) = divalg a b in
 >   q ==== quo a b
 > 
 > 
-> -- rem(a,b) = r where (_,r) = divalg(a,b)
 > _test_divalg_rem :: (Natural n)
->   => n -> Nat n -> Nat n -> Bool
-> _test_divalg_rem _ a b =
->   let (_,r) = divalg a b in
+>   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_divalg_rem _ =
+>   testName "rem(a,b) = r where (_,r) = divalg(a,b)" $
+>   \a b -> let (_,r) = divalg a b in
 >   r ==== rem a b
 
 And the suite:

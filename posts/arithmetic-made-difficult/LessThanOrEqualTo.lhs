@@ -185,39 +185,39 @@ Here's ``leq``:
 
 And some property tests:
 
-> -- leq(next(a),a) == false
 > _test_leq_next_left :: (Natural n)
->   => n -> Nat n -> Bool
-> _test_leq_next_left _ a =
->   (leq (next a) a) ==== False
+>   => n -> Test (Nat n -> Bool)
+> _test_leq_next_left _ =
+>   testName "leq(next(a),a) == false" $
+>   \a -> (leq (next a) a) ==== False
 > 
 > 
-> -- leq(a,plus(a,b)) == true
 > _test_leq_right_plus :: (Natural n)
->   => n -> Nat n -> Nat n -> Bool
-> _test_leq_right_plus _ a b =
->   (leq a (plus a b)) ==== True
+>   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_leq_right_plus _ =
+>   testName "leq(a,plus(a,b)) == true" $
+>   \a b -> (leq a (plus a b)) ==== True
 > 
 > 
-> -- leq(a,a) == true
 > _test_leq_reflexive :: (Natural n)
->   => n -> Nat n -> Bool
-> _test_leq_reflexive _ a =
->   (leq a a) ==== True
+>   => n -> Test (Nat n -> Bool)
+> _test_leq_reflexive _ =
+>   testName "leq(a,a) == true" $
+>   \a -> (leq a a) ==== True
 > 
 > 
-> -- leq(a,b) == leq(plus(a,c),plus(b,c))
 > _test_leq_plus :: (Natural n)
->   => n -> Nat n -> Nat n -> Nat n -> Bool
-> _test_leq_plus _ a b c =
->   (leq a b) ==== (leq (plus a c) (plus b c))
+>   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_leq_plus _ =
+>   testName "leq(a,b) == leq(plus(a,c),plus(b,c))" $
+>   \a b c -> (leq a b) ==== (leq (plus a c) (plus b c))
 > 
 > 
-> -- leq(a,b) == leq(times(a,next(c)),times(b,next(c)))
 > _test_leq_times :: (Natural n)
->   => n -> Nat n -> Nat n -> Nat n -> Bool
-> _test_leq_times _ a b c =
->   (leq a b) ==== (leq (times a (next c)) (times b (next c)))
+>   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_leq_times _ =
+>   testName "leq(a,b) == leq(times(a,next(c)),times(b,next(c)))" $
+>   \a b c -> (leq a b) ==== (leq (times a (next c)) (times b (next c)))
 
 And a test wrapper:
 

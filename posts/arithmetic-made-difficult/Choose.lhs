@@ -230,59 +230,59 @@ Implementation and Testing
 
 Property tests:
 
-> -- choose(n,k) == choose'(n,k)
 > _test_choose_alt :: (Natural n)
->   => n -> Nat n -> Nat n -> Bool
-> _test_choose_alt _ n k =
->   (choose n k) ==== (choose' n k)
+>   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_choose_alt _ =
+>   testName "choose(n,k) == choose'(n,k)" $
+>   \n k -> (choose n k) ==== (choose' n k)
 > 
 > 
-> -- choose(0,k) == if k==0 then 0 else 1
 > _test_choose_zero_left :: (Natural n)
->   => n -> Nat n -> Bool
-> _test_choose_zero_left _ k =
->   if isZero k
+>   => n -> Test (Nat n -> Bool)
+> _test_choose_zero_left _ =
+>   testName "choose(0,k) == if k==0 then 0 else 1" $
+>   \k -> if isZero k
 >     then (choose zero k) ==== (next zero)
 >     else (choose zero k) ==== (zero)
 > 
 > 
-> -- choose(n,0) == 1
 > _test_choose_zero_right :: (Natural n)
->   => n -> Nat n -> Bool
-> _test_choose_zero_right _ n =
->   (choose n zero) ==== (next zero)
+>   => n -> Test (Nat n -> Bool)
+> _test_choose_zero_right _ =
+>   testName "choose(n,0) == 1" $
+>   \n -> (choose n zero) ==== (next zero)
 > 
 > 
-> -- choose(n,n) == 1
 > _test_choose_equal_args :: (Natural n)
->   => n -> Nat n -> Bool
-> _test_choose_equal_args _ n =
->   (choose n n) ==== (next zero)
+>   => n -> Test (Nat n -> Bool)
+> _test_choose_equal_args _ =
+>   testName "choose(n,n) == 1" $
+>   \n -> (choose n n) ==== (next zero)
 > 
 > 
-> -- choose(next(n),next(k)) == plus(choose(n,next(k)),choose(n,k))
 > _test_choose_plus_plus :: (Natural n)
->   => n -> Nat n -> Nat n -> Bool
-> _test_choose_plus_plus _ n k =
->   eq
+>   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_choose_plus_plus _ =
+>   testName "choose(next(n),next(k)) == plus(choose(n,next(k)),choose(n,k))" $
+>   \n k -> eq
 >     (choose (next n) (next k))
 >     (plus (choose n (next k)) (choose n k))
 > 
 > 
-> -- leq(next(n),k) ==> choose(n,k) == 0
 > _test_choose_big_k :: (Natural n)
->   => n -> Nat n -> Nat n -> Bool
-> _test_choose_big_k _ n k =
->   if leq (next n) k
+>   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_choose_big_k _ =
+>   testName "leq(next(n),k) ==> choose(n,k) == 0" $
+>   \n k -> if leq (next n) k
 >     then (choose n k) ==== zero
 >     else True
 > 
 > 
-> -- choose(plus(a,b),a) == choose(plus(a,b),b)
 > _test_choose_plus :: (Natural n)
->   => n -> Nat n -> Nat n -> Bool
-> _test_choose_plus _ a b =
->   (choose (plus a b) a) ==== (choose (plus a b) b)
+>   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_choose_plus _ =
+>   testName "choose(plus(a,b),a) == choose(plus(a,b),b)" $
+>   \a b -> (choose (plus a b) a) ==== (choose (plus a b) b)
 
 And the suite:
 

@@ -648,86 +648,84 @@ Testing
 
 Here are our property tests for $\zip$ and $\zipPad$.
 
-> -- map(swap)(zip(x,y)) == zip(y,x)
 > _test_zip_swap :: (List t, Equal a, Equal b)
->   => t a -> t b -> ListOf t a -> ListOf t b -> Bool
-> _test_zip_swap _ _ x y =
->   (map swap (zip x y)) ==== (zip y x)
+>   => t a -> t b -> Test (ListOf t a -> ListOf t b -> Bool)
+> _test_zip_swap _ _ =
+>   testName "map(swap)(zip(x,y)) == zip(y,x)" $
+>   \x y -> (map swap (zip x y)) ==== (zip y x)
 > 
 > 
-> -- length(zip(x,y)) == min(length(x),length(y))
 > _test_zip_length :: (List t, Equal a, Equal b, Natural n)
->   => t a -> t b -> n -> ListOf t a -> ListOf t b -> Bool
-> _test_zip_length _ _ n x y =
->   let
+>   => t a -> t b -> n -> Test (ListOf t a -> ListOf t b -> Bool)
+> _test_zip_length _ _ n =
+>   testName "length(zip(x,y)) == min(length(x),length(y))" $
+>   \x y -> let
 >     lx = length x `withTypeOf` Nat n
 >   in
 >     (length (zip x y)) ==== (min lx (length y))
 > 
 > 
-> -- zip(zip(x,y),z) == map(assocL)zip(x,zip(y,z))
 > _test_zip_zip_left :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
-> _test_zip_zip_left _ x y z =
->   (zip (zip x y) z) ==== map assocL (zip x (zip y z))
+>   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
+> _test_zip_zip_left _ =
+>   testName "zip(zip(x,y),z) == map(assocL)zip(x,zip(y,z))" $
+>   \x y z -> (zip (zip x y) z) ==== map assocL (zip x (zip y z))
 > 
 > 
-> -- zip(zip(x,y),z) == map(assocR)zip(x,zip(y,z))
 > _test_zip_zip_right :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
-> _test_zip_zip_right _ x y z =
->   (zip x (zip y z)) ==== map assocR (zip (zip x y) z)
+>   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
+> _test_zip_zip_right _ =
+>   testName "zip(zip(x,y),z) == map(assocR)zip(x,zip(y,z))" $
+>   \x y z -> (zip x (zip y z)) ==== map assocR (zip (zip x y) z)
 > 
 > 
-> -- zip'(x,y) == zip(x,y)
 > _test_zip_alt :: (List t, Equal a, Equal b)
->   => t a -> t b -> ListOf t a -> ListOf t b -> Bool
-> _test_zip_alt _ _ x y =
->   (zip' x y) ==== (zip x y)
+>   => t a -> t b -> Test (ListOf t a -> ListOf t b -> Bool)
+> _test_zip_alt _ _ =
+>   testName "zip'(x,y) == zip(x,y)" $
+>   \x y -> (zip' x y) ==== (zip x y)
 > 
 > 
-> -- map(swap)(zipPad(u,v)(x,y)) == zipPad(v,u)(y,x)
 > _test_zipPad_swap :: (List t, Equal a, Equal b)
->   => t a -> t b -> a -> b -> ListOf t a -> ListOf t b -> Bool
-> _test_zipPad_swap _ _ u v x y =
->   (map swap (zipPad u v x y)) ==== (zipPad v u y x)
+>   => t a -> t b -> Test (a -> b -> ListOf t a -> ListOf t b -> Bool)
+> _test_zipPad_swap _ _ =
+>   testName "map(swap)(zipPad(u,v)(x,y)) == zipPad(v,u)(y,x)" $
+>   \u v x y -> (map swap (zipPad u v x y)) ==== (zipPad v u y x)
 > 
 > 
-> -- length(zipPad(u,v)(x,y)) == max(length(x),length(y))
 > _test_zipPad_length :: (List t, Equal a, Equal b, Natural n)
->   => t a -> t b -> n -> a -> b -> ListOf t a -> ListOf t b -> Bool
-> _test_zipPad_length _ _ n u v x y =
->   let
+>   => t a -> t b -> n -> Test (a -> b -> ListOf t a -> ListOf t b -> Bool)
+> _test_zipPad_length _ _ n =
+>   testName "length(zipPad(u,v)(x,y)) == max(length(x),length(y))" $
+>   \u v x y -> let
 >     lx = length x `withTypeOf` Nat n
 >   in
 >     (length (zipPad u v x y)) ==== (max lx (length y))
 > 
 > 
-> -- zipPad((a,b),c)(zipPad(a,b)(x,y),z)
-> --   == map(assocL)zipPad(a,(b,c))(x,zipPad(b,c)(y,z))
 > _test_zipPad_zipPad_left :: (List t, Equal a)
->   => t a -> a -> a -> a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
-> _test_zipPad_zipPad_left _ a b c x y z =
->   eq
+>   => t a -> Test (a -> a -> a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool)
+> _test_zipPad_zipPad_left _ =
+>   testName "zipPad((a,b),c)(zipPad(a,b)(x,y),z) == map(assocL)zipPad(a,(b,c))(x,zipPad(b,c)(y,z))" $
+>   \a b c x y z -> eq
 >     (zipPad (a,b) c (zipPad a b x y) z)
 >     (map assocL (zipPad a (b,c) x (zipPad b c y z)))
 > 
 > 
-> -- zipPad((a,b),c)(zipPad(a,b)(x,y),z)
-> --   == map(assocR)zipPad(a,(b,c))(x,zipPad(b,c)(y,z))
 > _test_zipPad_zipPad_right :: (List t, Equal a)
->   => t a -> a -> a -> a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
-> _test_zipPad_zipPad_right _ a b c x y z =
->   eq
+>   => t a -> Test (a -> a -> a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool)
+> _test_zipPad_zipPad_right _ =
+>   testName "zipPad((a,b),c)(zipPad(a,b)(x,y),z) == map(assocR)zipPad(a,(b,c))(x,zipPad(b,c)(y,z))" $
+>   \a b c x y z -> eq
 >     (zipPad a (b,c) x (zipPad b c y z))
 >     (map assocR (zipPad (a,b) c (zipPad a b x y) z))
 > 
 > 
-> -- zipPad'(x,y) == zipPad(x,y)
 > _test_zipPad_alt :: (List t, Equal a, Equal b)
->   => t a -> t b -> a -> b -> ListOf t a -> ListOf t b -> Bool
-> _test_zipPad_alt _ _ u v x y =
->   (zipPad' u v x y) ==== (zipPad u v x y)
+>   => t a -> t b -> Test (a -> b -> ListOf t a -> ListOf t b -> Bool)
+> _test_zipPad_alt _ _ =
+>   testName "zipPad'(x,y) == zipPad(x,y)" $
+>   \u v x y -> (zipPad' u v x y) ==== (zipPad u v x y)
 
 And the suite:
 

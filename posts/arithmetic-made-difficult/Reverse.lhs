@@ -413,28 +413,28 @@ Testing
 
 Here are our property tests.
 
-> -- snoc(a,cons(b,x)) == cons(b,snoc(a,x))
 > _test_snoc_cons_commute :: (List t, Equal a)
->   => t a -> a -> a -> ListOf t a -> Bool
-> _test_snoc_cons_commute _ a b x =
->   (snoc a (cons b x)) ==== (cons b (snoc a x))
+>   => t a -> Test (a -> a -> ListOf t a -> Bool)
+> _test_snoc_cons_commute _ =
+>   testName "snoc(a,cons(b,x)) == cons(b,snoc(a,x))" $
+>   \a b x -> (snoc a (cons b x)) ==== (cons b (snoc a x))
 > 
 > 
-> -- rev(cons(a,nil)) == cons(a,nil)
 > _test_rev_single :: (List t, Equal a)
->   => t a -> a -> Bool
-> _test_rev_single z a =
->   let
+>   => t a -> Test (a -> Bool)
+> _test_rev_single z =
+>   testName "rev(cons(a,nil)) == cons(a,nil)" $
+>   \a -> let
 >     nil' = nil `withTypeOf` (ListOf z)
 >   in
 >     (rev (cons a nil')) ==== (cons a nil')
 > 
 > 
-> -- rev(cons(a,cons(b,nil))) == cons(b,cons(a,nil))
 > _test_rev_double :: (List t, Equal a)
->   => t a -> a -> a -> Bool
-> _test_rev_double z a b =
->   let
+>   => t a -> Test (a -> a -> Bool)
+> _test_rev_double z =
+>   testName "rev(cons(a,cons(b,nil))) == cons(b,cons(a,nil))" $
+>   \a b -> let
 >     nil' = nil `withTypeOf` (ListOf z)
 >   in
 >     eq
@@ -442,32 +442,32 @@ Here are our property tests.
 >       (cons b (cons a nil'))
 > 
 > 
-> -- rev(snoc(a,x)) == cons(a,rev(x))
 > _test_rev_snoc :: (List t, Equal a)
->   => t a -> a -> a -> ListOf t a -> Bool
-> _test_rev_snoc _ a b x =
->   (rev (snoc a x)) ==== (cons a (rev x))
+>   => t a -> Test (a -> a -> ListOf t a -> Bool)
+> _test_rev_snoc _ =
+>   testName "rev(snoc(a,x)) == cons(a,rev(x))" $
+>   \a b x -> (rev (snoc a x)) ==== (cons a (rev x))
 > 
 > 
-> -- rev(rev(x)) == x
 > _test_rev_involution :: (List t, Equal a)
->   => t a -> ListOf t a -> Bool
-> _test_rev_involution _ x =
->   (rev (rev x)) ==== x
+>   => t a -> Test (ListOf t a -> Bool)
+> _test_rev_involution _ =
+>   testName "rev(rev(x)) == x" $
+>   \x -> (rev (rev x)) ==== x
 > 
 > 
-> -- isnil(rev(cons(a,x))) == false
 > _test_rev_isnil_cons :: (List t, Equal a)
->   => t a -> a -> ListOf t a -> Bool
-> _test_rev_isnil_cons _ a x =
->   (isNil (rev (cons a x))) ==== False
+>   => t a -> Test (a -> ListOf t a -> Bool)
+> _test_rev_isnil_cons _ =
+>   testName "isnil(rev(cons(a,x))) == false" $
+>   \a x -> (isNil (rev (cons a x))) ==== False
 > 
 > 
-> -- rev(x) == rev'(x)
 > _test_rev_alt :: (List t, Equal a)
->   => t a -> ListOf t a -> Bool
-> _test_rev_alt _ x =
->   (rev x) ==== (rev' x)
+>   => t a -> Test (ListOf t a -> Bool)
+> _test_rev_alt _ =
+>   testName "rev(x) == rev'(x)" $
+>   \x -> (rev x) ==== (rev' x)
 
 And the suite:
 

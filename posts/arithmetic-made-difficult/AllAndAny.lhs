@@ -413,89 +413,89 @@ Testing
 
 Here are our property tests for $\all$:
 
-> -- all(p,x) == all'(p,x)
 > _test_all_alt :: (List t, Equal a)
->   => t a -> (a -> Bool) -> ListOf t a -> Bool
-> _test_all_alt _ p x =
->   (all p x) ==== (all' p x)
+>   => t a -> Test ((a -> Bool) -> ListOf t a -> Bool)
+> _test_all_alt _ =
+>   testName "all(p,x) == all'(p,x)" $
+>   \p x -> (all p x) ==== (all' p x)
 > 
 > 
-> -- all(p,x) == foldr(true,and)(map(p)(x))
 > _test_all_mapfold :: (List t, Equal a)
->   => t a -> (a -> Bool) -> ListOf t a -> Bool
-> _test_all_mapfold _ p x =
->   (all p x) ==== (foldr True (&&&) (map p x))
+>   => t a -> Test ((a -> Bool) -> ListOf t a -> Bool)
+> _test_all_mapfold _ =
+>   testName "all(p,x) == foldr(true,and)(map(p)(x))" $
+>   \p x -> (all p x) ==== (foldr True (&&&) (map p x))
 > 
 > 
-> -- all(p,x) == not(any(not . p, x))
 > _test_all_not_any :: (List t, Equal a)
->   => t a -> (a -> Bool) -> ListOf t a -> Bool
-> _test_all_not_any _ p x =
->   (all p x) ==== (not (any (not . p) x))
+>   => t a -> Test ((a -> Bool) -> ListOf t a -> Bool)
+> _test_all_not_any _ =
+>   testName "all(p,x) == not(any(not . p, x))" $
+>   \p x -> (all p x) ==== (not (any (not . p) x))
 > 
 > 
-> -- all(const(true),x) == true
 > _test_all_const_true :: (List t, Equal a)
->   => t a -> ListOf t a -> Bool
-> _test_all_const_true _ x =
->   (all (const True) x) ==== True
+>   => t a -> Test (ListOf t a -> Bool)
+> _test_all_const_true _ =
+>   testName "all(const(true),x) == true" $
+>   \x -> (all (const True) x) ==== True
 > 
 > 
-> -- all(p,cat(x,y)) == all(p,x) && all(p,y)
 > _test_all_cat :: (List t, Equal a)
->   => t a -> (a -> Bool) -> ListOf t a -> ListOf t a -> Bool
-> _test_all_cat _ p x y =
->   (all p (cat x y)) ==== ((all p x) &&& (all p y))
+>   => t a -> Test ((a -> Bool) -> ListOf t a -> ListOf t a -> Bool)
+> _test_all_cat _ =
+>   testName "all(p,cat(x,y)) == all(p,x) && all(p,y)" $
+>   \p x y -> (all p (cat x y)) ==== ((all p x) &&& (all p y))
 > 
 > 
-> -- all(p,rev(x)) == all(p,x)
 > _test_all_rev :: (List t, Equal a)
->   => t a -> (a -> Bool) -> ListOf t a -> ListOf t a -> Bool
-> _test_all_rev _ p x y =
->   (all p (rev x)) ==== (all p x)
+>   => t a -> Test ((a -> Bool) -> ListOf t a -> ListOf t a -> Bool)
+> _test_all_rev _ =
+>   testName "all(p,rev(x)) == all(p,x)" $
+>   \p x y -> (all p (rev x)) ==== (all p x)
 
 Tests for $\any$:
 
-> -- any(p,x) == any'(p,x)
 > _test_any_alt :: (List t, Equal a)
->   => t a -> (a -> Bool) -> ListOf t a -> Bool
-> _test_any_alt _ p x =
->   (any p x) ==== (any' p x)
+>   => t a -> Test ((a -> Bool) -> ListOf t a -> Bool)
+> _test_any_alt _ =
+>   testName "any(p,x) == any'(p,x)" $
+>   \p x -> (any p x) ==== (any' p x)
 > 
 > 
-> -- any(p,x) == foldr(false,or)(map(p)(x))
 > _test_any_mapfold :: (List t, Equal a)
->   => t a -> (a -> Bool) -> ListOf t a -> Bool
-> _test_any_mapfold _ p x =
->   (any p x) ==== (foldr False (|||) (map p x))
+>   => t a -> Test ((a -> Bool) -> ListOf t a -> Bool)
+> _test_any_mapfold _ =
+>   testName "any(p,x) == foldr(false,or)(map(p)(x))" $
+>   \p x -> (any p x) ==== (foldr False (|||) (map p x))
 > 
 > 
-> -- any(p,x) == not(all(not . p, x))
 > _test_any_not_all :: (List t, Equal a)
->   => t a -> (a -> Bool) -> ListOf t a -> Bool
-> _test_any_not_all _ p x =
->   (any p x) ==== (not (all (not . p) x))
+>   => t a -> Test ((a -> Bool) -> ListOf t a -> Bool)
+> _test_any_not_all _ =
+>   testName "any(p,x) == not(all(not . p, x))" $
+>   \p x -> (any p x) ==== (not (all (not . p) x))
 > 
 > 
-> -- any(const(false),x) == false
 > _test_any_const_false :: (List t, Equal a)
->   => t a -> ListOf t a -> Bool
-> _test_any_const_false _ x =
->   (any (const False) x) ==== False
+>   => t a -> Test (ListOf t a -> Bool)
+> _test_any_const_false _ =
+>   testName "any(const(false),x) == false" $
+>   \x -> (any (const False) x) ==== False
 > 
 > 
-> -- any(p,cat(x,y)) == any(p,x) || any(p,y)
 > _test_any_cat :: (List t, Equal a)
->   => t a -> (a -> Bool) -> ListOf t a -> ListOf t a -> Bool
-> _test_any_cat _ p x y =
->   (any p (cat x y)) ==== ((any p x) ||| (any p y))
+>   => t a -> Test ((a -> Bool) -> ListOf t a -> ListOf t a -> Bool)
+> _test_any_cat _ =
+>   testName "any(p,cat(x,y)) == any(p,x) || any(p,y)" $
+>   \p x y -> (any p (cat x y)) ==== ((any p x) ||| (any p y))
 > 
 > 
-> -- any(p,rev(x)) == any(p,x)
 > _test_any_rev :: (List t, Equal a)
->   => t a -> (a -> Bool) -> ListOf t a -> ListOf t a -> Bool
-> _test_any_rev _ p x y =
->   (any p (rev x)) ==== (any p x)
+>   => t a -> Test ((a -> Bool) -> ListOf t a -> ListOf t a -> Bool)
+> _test_any_rev _ =
+>   testName "any(p,rev(x)) == any(p,x)" $
+>   \p x y -> (any p (rev x)) ==== (any p x)
 
 And the suite:
 

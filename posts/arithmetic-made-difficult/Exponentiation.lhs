@@ -173,46 +173,46 @@ Here's ``power``:
 
 Property tests:
 
-> -- power(a,0) == 1
 > _test_power_zero_right :: (Natural n)
->   => n -> Nat n -> Bool
-> _test_power_zero_right _ a =
->   (power a zero) ==== (next zero)
+>   => n -> Test (Nat n -> Bool)
+> _test_power_zero_right _ =
+>   testName "power(a,0) == 1" $
+>   \a -> (power a zero) ==== (next zero)
 > 
 > 
-> -- power(a,1) == a
 > _test_power_one_right :: (Natural n)
->   => n -> Nat n -> Bool
-> _test_power_one_right _ a =
->   (power a (next zero)) ==== a
+>   => n -> Test (Nat n -> Bool)
+> _test_power_one_right _ =
+>   testName "power(a,1) == a" $
+>   \a -> (power a (next zero)) ==== a
 > 
 > 
-> -- power(a,0) == 1
 > _test_power_zero_left :: (Natural n)
->   => n -> Nat n -> Bool
-> _test_power_zero_left _ a =
->   (power zero (next a)) ==== zero
+>   => n -> Test (Nat n -> Bool)
+> _test_power_zero_left _ =
+>   testName "power(a,0) == 1" $
+>   \a -> (power zero (next a)) ==== zero
 > 
 > 
-> -- power(a,plus(b,c)) == times(power(a,b),power(a,c))
 > _test_power_plus_right :: (Natural n)
->   => n -> Nat n -> Nat n -> Nat n -> Bool
-> _test_power_plus_right _ a b c =
->   (power a (plus b c)) ==== times (power a b) (power a c)
+>   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_power_plus_right _ =
+>   testName "power(a,plus(b,c)) == times(power(a,b),power(a,c))" $
+>   \a b c -> (power a (plus b c)) ==== times (power a b) (power a c)
 > 
 > 
-> -- power(a,times(b,c)) == power(power(a,b),c)
 > _test_power_times_right :: (Natural n)
->   => n -> Nat n -> Nat n -> Nat n -> Bool
-> _test_power_times_right _ a b c =
->   (power a (times b c)) ==== power (power a b) c
+>   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_power_times_right _ =
+>   testName "power(a,times(b,c)) == power(power(a,b),c)" $
+>   \a b c -> (power a (times b c)) ==== power (power a b) c
 > 
 > 
-> -- power(times(a,b),c) == times(power(a,c),power(b,c))
 > _test_power_times_left :: (Natural n)
->   => n -> Nat n -> Nat n -> Nat n -> Bool
-> _test_power_times_left _ a b c =
->   (power (times a b) c) ==== times (power a c) (power b c)
+>   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_power_times_left _ =
+>   testName "power(times(a,b),c) == times(power(a,c),power(b,c))" $
+>   \a b c -> (power (times a b) c) ==== times (power a c) (power b c)
 
 And the suite:
 

@@ -276,46 +276,46 @@ Testing
 
 Here are our property tests for $\cat$.
 
-> -- cat(nil,x) == x and cat(x,nil) == x
 > _test_cat_nil :: (List t, Equal a)
->   => t a -> ListOf t a -> Bool
-> _test_cat_nil _ a =
->   (a ==== cat nil a) &&& (a ==== cat a nil)
+>   => t a -> Test (ListOf t a -> Bool)
+> _test_cat_nil _ =
+>   testName "cat(nil,x) == x and cat(x,nil) == x" $
+>   \a -> (a ==== cat nil a) &&& (a ==== cat a nil)
 > 
 > 
-> -- cat(x,cons(a,y)) == cat(snoc(a,x),y)
 > _test_cat_cons_snoc :: (List t, Equal a)
->   => t a -> a -> ListOf t a -> ListOf t a -> Bool
-> _test_cat_cons_snoc _ a x y =
->   (cat x (cons a y)) ==== (cat (snoc a x) y)
+>   => t a -> Test (a -> ListOf t a -> ListOf t a -> Bool)
+> _test_cat_cons_snoc _ =
+>   testName "cat(x,cons(a,y)) == cat(snoc(a,x),y)" $
+>   \a x y -> (cat x (cons a y)) ==== (cat (snoc a x) y)
 > 
 > 
-> -- cons(a,cat(x,y)) == cat(cons(a,x),y)
 > _test_cat_cons :: (List t, Equal a)
->   => t a -> a -> ListOf t a -> ListOf t a -> Bool
-> _test_cat_cons _ a x y =
->   (cons a (cat x y)) ==== (cat (cons a x) y)
+>   => t a -> Test (a -> ListOf t a -> ListOf t a -> Bool)
+> _test_cat_cons _ =
+>   testName "cons(a,cat(x,y)) == cat(cons(a,x),y)" $
+>   \a x y -> (cons a (cat x y)) ==== (cat (cons a x) y)
 > 
 > 
-> -- snoc(a,cat(x,y)) == cat(x,snoc(a,y))
 > _test_cat_snoc :: (List t, Equal a)
->   => t a -> a -> ListOf t a -> ListOf t a -> Bool
-> _test_cat_snoc _ a x y =
->   (snoc a (cat x y)) ==== (cat x (snoc a y))
+>   => t a -> Test (a -> ListOf t a -> ListOf t a -> Bool)
+> _test_cat_snoc _ =
+>   testName "snoc(a,cat(x,y)) == cat(x,snoc(a,y))" $
+>   \a x y -> (snoc a (cat x y)) ==== (cat x (snoc a y))
 > 
 > 
-> -- cat(cat(x,y),z) == cat(x,cat(y,z))
 > _test_cat_associative :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
-> _test_cat_associative _ x y z =
->   (cat (cat x y) z) ==== (cat x (cat y z))
+>   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
+> _test_cat_associative _ =
+>   testName "cat(cat(x,y),z) == cat(x,cat(y,z))" $
+>   \x y z -> (cat (cat x y) z) ==== (cat x (cat y z))
 > 
 > 
-> -- rev(cat(x,y)) == cat(rev(y),rev(x))
 > _test_cat_rev :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> Bool
-> _test_cat_rev _ x y =
->   (rev (cat x y)) ==== (cat (rev y) (rev x))
+>   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+> _test_cat_rev _ =
+>   testName "rev(cat(x,y)) == cat(rev(y),rev(x))" $
+>   \x y -> (rev (cat x y)) ==== (cat (rev y) (rev x))
 
 And the suite:
 

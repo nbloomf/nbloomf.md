@@ -91,39 +91,39 @@ Here's ``plus``:
 
 We've proved a bunch of properties for ``plus``, but it's still a good idea to verify them. We can do this with ``QuickCheck``. First we express each property to be tested as a boolean function. Note that each one takes an "extra" argument; this is just to fix the type of the function being tested. (There may be a better way to do this.)
 
-> -- a == plus(a,0) and a == plus(0,a)
 > _test_plus_zero :: (Natural t)
->   => t -> Nat t -> Bool
-> _test_plus_zero _ a =
->   (a ==== plus a zero) &&& (a ==== plus zero a)
+>   => t -> Test (Nat t -> Bool)
+> _test_plus_zero _ =
+>   testName "a == plus(a,0) and a == plus(0,a)" $
+>   \a -> (a ==== plus a zero) &&& (a ==== plus zero a)
 > 
 > 
-> -- next(plus(a,b)) == plus(next(a),b)
 > _test_plus_next_left :: (Natural n)
->   => n -> Nat n -> Nat n -> Bool
-> _test_plus_next_left _ a b =
->   (next (plus a b)) ==== (plus (next a) b)
+>   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_plus_next_left _ =
+>   testName "next(plus(a,b)) == plus(next(a),b)" $
+>   \a b -> (next (plus a b)) ==== (plus (next a) b)
 > 
 > 
-> -- next(plus(a,b)) == plus(a,next(b))
 > _test_plus_next_right :: (Natural n)
->   => n -> Nat n -> Nat n -> Bool
-> _test_plus_next_right _ a b =
->   (next (plus a b)) ==== (plus a (next b))
->   
+>   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_plus_next_right _ =
+>   testName "next(plus(a,b)) == plus(a,next(b))" $
+>   \a b -> (next (plus a b)) ==== (plus a (next b))
 > 
-> -- plus(plus(a,b),c) == plus(a,plus(b,c))
+> 
 > _test_plus_associative :: (Natural n)
->   => n -> Nat n -> Nat n -> Nat n -> Bool
-> _test_plus_associative _ a b c =
->   (plus (plus a b) c) ==== (plus a (plus b c))
+>   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_plus_associative _ =
+>   testName "plus(plus(a,b),c) == plus(a,plus(b,c))" $
+>   \a b c -> (plus (plus a b) c) ==== (plus a (plus b c))
 > 
 > 
-> -- plus(a,b) == plus(b,a)
 > _test_plus_commutative :: (Natural n)
->   => n -> Nat n -> Nat n -> Bool
-> _test_plus_commutative _ a b =
->   (plus a b) ==== (plus b a)
+>   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_plus_commutative _ =
+>   testName "plus(a,b) == plus(b,a)" $
+>   \a b -> (plus a b) ==== (plus b a)
 
 We'll wrap all these tests behind a single function, ``_test_plus``, which takes the number of cases to check as an argument.
 

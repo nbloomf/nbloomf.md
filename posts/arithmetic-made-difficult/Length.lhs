@@ -254,83 +254,83 @@ Testing
 
 Here are our property tests for $\length$.
 
-> -- length(cons(a,x)) == length(cons(b,x))
 > _test_length_cons :: (List t, Equal a, Natural n)
->   => t a -> n -> a -> a -> ListOf t a -> Bool
-> _test_length_cons _ n a b x =
->   let
+>   => t a -> n -> Test (a -> a -> ListOf t a -> Bool)
+> _test_length_cons _ n =
+>   testName "length(cons(a,x)) == length(cons(b,x))" $
+>   \a b x -> let
 >     lcx = (length (cons a x)) `withTypeOf` Nat n
 >   in
 >     lcx ==== (length (cons b x))
 > 
 > 
-> -- length(cons(a,x)) == length(snoc(a,x))
 > _test_length_cons_snoc :: (List t, Equal a, Natural n)
->   => t a -> n -> a -> ListOf t a -> Bool
-> _test_length_cons_snoc _ n a x =
->   let
+>   => t a -> n -> Test (a -> ListOf t a -> Bool)
+> _test_length_cons_snoc _ n =
+>   testName "length(cons(a,x)) == length(snoc(a,x))" $
+>   \a x -> let
 >     lcx = (length (cons a x)) `withTypeOf` Nat n
 >   in
 >     lcx ==== (length (snoc a x))
 > 
 > 
-> -- length(cons(a,x)) == next(length(x))
 > _test_length_cons_next :: (List t, Equal a, Natural n)
->   => t a -> n -> a -> ListOf t a -> Bool
-> _test_length_cons_next _ n a x =
->   let
+>   => t a -> n -> Test (a -> ListOf t a -> Bool)
+> _test_length_cons_next _ n =
+>   testName "length(cons(a,x)) == next(length(x))" $
+>   \a x -> let
 >     lx = (length x) `withTypeOf` Nat n
 >   in
 >     (length (cons a x)) ==== next lx
 > 
 > 
-> -- length(cons(a,nil)) == next(zero)
 > _test_length_single :: (List t, Equal a, Natural n)
->   => t a -> n -> a -> Bool
-> _test_length_single z n a =
->   let
+>   => t a -> n -> Test (a -> Bool)
+> _test_length_single z n =
+>   testName "length(cons(a,nil)) == next(zero)" $
+>   \a -> let
 >     nil' = nil `withTypeOf` z
 >     one  = (next zero) `withTypeOf` Nat n
 >   in
 >     one ==== (length (cons a nil'))
 > 
 > 
-> -- length(cons(a,cons(b,nil))) == next(next(zero))
 > _test_length_double :: (List t, Equal a, Natural n)
->   => t a -> n -> a -> a -> Bool
-> _test_length_double z n a b =
->   let
+>   => t a -> n -> Test (a -> a -> Bool)
+> _test_length_double z n =
+>   testName "length(cons(a,cons(b,nil))) == next(next(zero))" $
+>   \a b -> let
 >     nil' = nil `withTypeOf` (ListOf z)
 >     two  = (next (next zero)) `withTypeOf` Nat n
 >   in
 >     two ==== (length (cons a (cons b nil')))
 > 
 > 
-> -- length(snoc(a,x)) == next(length(x))
 > _test_length_snoc_next :: (List t, Equal a, Natural n)
->   => t a -> n -> a -> ListOf t a -> Bool
-> _test_length_snoc_next _ n a x =
->   let
+>   => t a -> n -> Test (a -> ListOf t a -> Bool)
+> _test_length_snoc_next _ n =
+>   testName "length(snoc(a,x)) == next(length(x))" $
+>   \a x -> let
 >     nlx = (next (length x)) `withTypeOf` Nat n
 >   in
 >     nlx ==== (length (snoc a x))
 > 
 > 
-> -- length(rev(x)) == length(x)
 > _test_length_rev :: (List t, Equal a, Natural n)
->   => t a -> n -> ListOf t a -> Bool
-> _test_length_rev _ n x =
->   let
+>   => t a -> n -> Test (ListOf t a -> Bool)
+> _test_length_rev _ n =
+>   testName "length(rev(x)) == length(x)" $
+>   \x -> let
 >     lx = length x `withTypeOf` Nat n
 >   in
 >     lx ==== (length (rev x))
 > 
 > 
-> -- length(cat(x,y)) == plus(length(x),length(y))
 > _test_length_cat :: (List t, Equal a, Natural n)
->   => t a -> n -> ListOf t a -> ListOf t a -> Bool
-> _test_length_cat _ n x y =
->   let
+>   => t a -> n -> Test (ListOf t a -> ListOf t a -> Bool)
+> _test_length_cat _ n =
+>   testName "length(cat(x,y)) == plus(length(x),length(y))" $
+>   \x y -> let
 >     lxy = (length (cat x y)) `withTypeOf` Nat n
 >   in
 >     lxy ==== (plus (length x) (length y))

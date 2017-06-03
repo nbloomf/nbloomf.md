@@ -654,89 +654,89 @@ Testing
 
 Here are our property tests for $\lcp$:
 
-> -- lcp(x,y) == lcp'(x,y)
 > _test_lcp_alt :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> Bool
-> _test_lcp_alt _ x y =
->   (lcp x y) ==== (lcp' x y)
+>   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+> _test_lcp_alt _ =
+>   testName "lcp(x,y) == lcp'(x,y)" $
+>   \x y -> (lcp x y) ==== (lcp' x y)
 > 
 > 
-> -- lcp(x,x) == x
 > _test_lcp_idempotent :: (List t, Equal a)
->   => t a -> ListOf t a -> Bool
-> _test_lcp_idempotent _ x =
->   (lcp x x) ==== x
+>   => t a -> Test (ListOf t a -> Bool)
+> _test_lcp_idempotent _ =
+>   testName "lcp(x,x) == x" $
+>   \x -> (lcp x x) ==== x
 > 
 > 
-> -- lcp(x,y) == lcp(y,x)
 > _test_lcp_commutative :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> Bool
-> _test_lcp_commutative _ x y =
->   (lcp x y) ==== (lcp y x)
+>   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+> _test_lcp_commutative _ =
+>   testName "lcp(x,y) == lcp(y,x)" $
+>   \x y -> (lcp x y) ==== (lcp y x)
 > 
 > 
-> -- lcp(lcp(x,y),z) == lcp(x,lcp(y,z))
 > _test_lcp_associative :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
-> _test_lcp_associative _ x y z =
->   (lcp (lcp x y) z) ==== (lcp x (lcp y z))
+>   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
+> _test_lcp_associative _ =
+>   testName "lcp(lcp(x,y),z) == lcp(x,lcp(y,z))" $
+>   \x y z -> (lcp (lcp x y) z) ==== (lcp x (lcp y z))
 > 
 > 
-> -- cat(x,lcp(y,z)) == lcp(cat(x,y),cat(x,z))
 > _test_lcp_cat :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
-> _test_lcp_cat _ x y z =
->   (cat x (lcp y z)) ==== (lcp (cat x y) (cat x z))
+>   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
+> _test_lcp_cat _ =
+>   testName "cat(x,lcp(y,z)) == lcp(cat(x,y),cat(x,z))" $
+>   \x y z -> (cat x (lcp y z)) ==== (lcp (cat x y) (cat x z))
 > 
 > 
-> -- lcp(x,y) == x iff prefix(x,y)
 > _test_lcp_prefix :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> Bool
-> _test_lcp_prefix _ x y =
->   ((lcp x y) ==== x) ==== (prefix x y)
+>   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+> _test_lcp_prefix _ =
+>   testName "lcp(x,y) == x iff prefix(x,y)" $
+>   \x y -> ((lcp x y) ==== x) ==== (prefix x y)
 > 
 > 
-> -- zip(lcp(x,y),lcp(u,v)) == lcp(zip(x,u),zip(y,v))
 > _test_lcp_zip :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
-> _test_lcp_zip _ x y u v =
->   (zip (lcp x y) (lcp u v)) ==== (lcp (zip x u) (zip y v))
+>   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool)
+> _test_lcp_zip _ =
+>   testName "zip(lcp(x,y),lcp(u,v)) == lcp(zip(x,u),zip(y,v))" $
+>   \x y u v -> (zip (lcp x y) (lcp u v)) ==== (lcp (zip x u) (zip y v))
 
 Tests for $\lcs$:
 
-> -- lcs(x,x) == x
 > _test_lcs_idempotent :: (List t, Equal a)
->   => t a -> ListOf t a -> Bool
-> _test_lcs_idempotent _ x =
->   (lcs x x) ==== x
+>   => t a -> Test (ListOf t a -> Bool)
+> _test_lcs_idempotent _ =
+>   testName "lcs(x,x) == x" $
+>   \x -> (lcs x x) ==== x
 > 
 > 
-> -- lcs(x,y) == lcs(y,x)
 > _test_lcs_commutative :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> Bool
-> _test_lcs_commutative _ x y =
->   (lcs x y) ==== (lcs y x)
+>   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+> _test_lcs_commutative _ =
+>   testName "lcs(x,y) == lcs(y,x)" $
+>   \x y -> (lcs x y) ==== (lcs y x)
 > 
 > 
-> -- lcs(lcs(x,y),z) == lcs(x,lcs(y,z))
 > _test_lcs_associative :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
-> _test_lcs_associative _ x y z =
->   (lcs (lcs x y) z) ==== (lcs x (lcs y z))
+>   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
+> _test_lcs_associative _ =
+>   testName "lcs(lcs(x,y),z) == lcs(x,lcs(y,z))" $
+>   \x y z -> (lcs (lcs x y) z) ==== (lcs x (lcs y z))
 > 
 > 
-> -- cat(lcs(x,y),z) == lcs(cat(x,z),cat(y,z))
 > _test_lcs_cat :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool
-> _test_lcs_cat _ x y z =
->   (cat (lcs x y) z) ==== (lcs (cat x z) (cat y z))
+>   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
+> _test_lcs_cat _ =
+>   testName "cat(lcs(x,y),z) == lcs(cat(x,z),cat(y,z))" $
+>   \x y z -> (cat (lcs x y) z) ==== (lcs (cat x z) (cat y z))
 > 
 > 
-> -- lcs(x,y) == x iff suffix(x,y)
 > _test_lcs_suffix :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> Bool
-> _test_lcs_suffix _ x y =
->   ((lcs x y) ==== x) ==== (suffix x y)
+>   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+> _test_lcs_suffix _ =
+>   testName "lcs(x,y) == x <==> suffix(x,y)" $
+>   \x y -> ((lcs x y) ==== x) ==== (suffix x y)
 
 And the suite:
 
