@@ -29,6 +29,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Elt
 > import Count
 > import Repeat
+> import Sublist
 > 
 > import Prelude ()
 > import Test.QuickCheck hiding (choose)
@@ -95,7 +96,7 @@ Let $A$ be a set. For all $n \in \nats$, $a \in A$, and $x \in \lists{A}$ we hav
 
 1. $\select(n,\nil) = \bif{\iszero(n)}{\cons(\nil,\nil)}{\nil}$.
 2. $\select(\zero,\cons(a,x)) = \cons(\nil,\nil)$.
-3. $\select(\next(n),\cons(a,x)) = \cat(\map(\cons(a,-))(\select(n,x),\select(\next(n),x))$.
+3. $\select(\next(n),\cons(a,x)) = \cat(\map(\cons(a,-))(\select(n,x)),\select(\next(n),x))$.
 </p></div>
 
 <div class="proof"><p>
@@ -161,6 +162,8 @@ as needed.
 </p></div>
 </div>
 
+$\length$:
+
 <div class="result">
 <div class="thm"><p>
 Let $A$ be a set with $x \in \lists{A}$. For all $k \in \nats$, we have $$\length(\select(k,x)) = \nchoose(\length(x),k).$$
@@ -203,33 +206,93 @@ as needed.
 </p></div>
 </div>
 
+$\sublist$:
+
 <div class="result">
 <div class="thm"><p>
-
+Let $A$ be a set and let $x,y \in \lists{A}$. If $\sublist(x,y) = \btrue$, then $\sublist(\select(k,x),\select(k,y)) = \btrue$ for all $k \in \nats$.
 </p></div>
 
 <div class="proof"><p>
+We proceed by induction on $k$. For the base case $k = \zero$, suppose $\sublist(x,y) = \btrue$. Now
+$$\begin{eqnarray*}
+ &   & \sublist(\select(k,x),\select(k,y)) \\
+ & = & \sublist(\select(\zero,x),\select(\zero,y)) \\
+ & = & \sublist(\cons(\nil,\nil),\cons(\nil,\nil)) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the implication holds for some $k$. We now proceed by list induction on $y$. For the base case $y = \nil$, suppose $$\btrue = \sublist(x,y) = \sublist(x,\nil);$$ then we must have $x = \nil$. In this case we have
+$$\begin{eqnarray*}
+ &   & \sublist(\select(\next(k),x),\select(\next(k),y)) \\
+ & = & \sublist(\select(\next(k),\nil),\select(\next(k),\nil)) \\
+ & = & \sublist(\nil,\nil) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the implication holds for $\next(k)$ and all $x$ for some $y$, and let $b \in A$. Suppose further that $\sublist(x,\cons(b,y)) = \btrue$. We consider two possibilities for $x$. If $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \sublist(\select(\next(k),x),\select(\next(k),\cons(b,y))) \\
+ & = & \sublist(\select(\next(k),\nil),\select(\next(k),\cons(b,y))) \\
+ & = & \sublist(\nil,\select(\next(k),\cons(b,y))) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed. Suppose instead that $x = \cons(a,u)$. We have two possibilities. If $a \neq b$, then since $$\btrue = \sublist(x,\cons(b,y)) = \sublist(\cons(a,u),\cons(b,y))$$ we have $\btrue = \sublist(\cons(a,u),y) = \sublist(x,y)$. By the inductive hypothesis on $y$ we have $$\sublist(\select(\next(k),x),\select(\next(k),y)) = \btrue$$. Moreover, note that
+$$\begin{eqnarray*}
+ &   & \select(\next(k),\cons(b,y)) \\
+ & = & \cat(\map(\cons(b,-))(\select(k,y)),\select(\next(k),y))
+\end{eqnarray*}$$
+so that, in particular, $$\sublist(\select(\next(k),y),\select(\next(k),\cons(b,y))) = \btrue.$$ Since $\sublist$ is transitive, we have $$\sublist(\select(\next(k),x),\select(\next(k),\cons(b,y))) = \btrue$$ as needed.
 
+Suppose instead that $a = b$. Then since $$\btrue = \sublist(x,\cons(b,y)) = \sublist(\cons(a,u),\cons(b,y)),$$ in fact we have $\sublist(u,y) = \btrue$. Using the inductive hypothesis on $k$, we have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \sublist(u,y) \\
+ & = & \sublist(\select(k,u),\select(k,y)) \\
+ & = & \sublist(\map(\cons(a,-))(\select(k,u)),\map(\cons(a,-))(\select(k,y))) \\
+ & = & \sublist(H,K)
+\end{eqnarray*}$$
+and similarly using the inductive hypothesis on $y$ we have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \sublist(u,y) \\
+ & = & \sublist(\select(\next(k),u),\select(\next(k),y)) \\
+ & = & \sublist(P,Q).
+\end{eqnarray*}$$
+Now we have
+$$\begin{eqnarray*}
+ &   & \sublist(\select(\next(k),x),\select(\next(k),\cons(b,y))) \\
+ & = & \sublist(\select(\next(k),\cons(a,u)),\select(\next(k),\cons(b,y))) \\
+ & = & \sublist(\select(\next(k),\cons(a,u)),\select(\next(k),\cons(a,y))) \\
+ & = & \sublist(\cat(\map(\cons(a,-))(\select(k,u)),\select(\next(k),u)),\cat(\map(\cons(a,-))(\select(k,y)),\select(\next(k),y))) \\
+ & = & \sublist(\cat(H,P),\cat(K,Q)) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
 
 <div class="result">
 <div class="thm"><p>
-
+Let $A$ be a set with $x \in \lists{A}$ and $k \in \nats$. Then $$\all(\sublist(-,x),\select(k,x)).$$
 </p></div>
 
 <div class="proof"><p>
-
+We proceed by list induction on $x$. For the base case $x = \nil$, we consider two possibilities for $k$. If $k = \zero$, then
+$$\begin{eqnarray*}
+ &   & \all(\sublist(-,x),\select(k,x)) \\
+ & = & \all(\sublist(-,\nil),\select(\zero,\nil)) \\
+ & = & (@@@)
+\end{eqnarray*}$$
+(@@@)
 </p></div>
 </div>
 
 <div class="result">
 <div class="thm"><p>
-
+Let $A$ be a set with $x \in \lists{A}$ and $k \in \nats$. Then $$\all(\beq(k,\length(-)),\select(k,x)).$$
 </p></div>
 
 <div class="proof"><p>
-
+(@@@)
 </p></div>
 </div>
 
@@ -259,39 +322,62 @@ Here are our property tests for $\select$:
 > _test_select_zero :: (List t, Equal a, Natural n)
 >   => t a -> n -> ListOf t a -> Bool
 > _test_select_zero _ n x =
->    let
->      zero' = zero `withTypeOf` n
->    in
->      (select zero' x) ==== (cons nil nil)
+>   let
+>     zero' = zero `withTypeOf` n
+>   in
+>     (select zero' x) ==== (cons nil nil)
 > 
 > 
 > -- select(k,nil) == if k == 0 then cons(nil,nil) else nil
 > _test_select_nil :: (List t, Equal a, Natural n)
 >   => t a -> n -> Nat n -> Bool
 > _test_select_nil t _ k =
->    let
->      nil' = nil `withTypeOf` (ListOf t)
->    in
->      if isZero k
->        then (select k nil') ==== (cons nil nil)
->        else (select k nil') ==== nil
+>   let
+>     nil' = nil `withTypeOf` (ListOf t)
+>   in
+>     if isZero k
+>       then (select k nil') ==== (cons nil nil)
+>       else (select k nil') ==== nil
 > 
 > 
 > -- select(next(zero),x) == map(cons(-,nil))(x)
 > _test_select_one :: (List t, Equal a, Natural n)
 >   => t a -> n -> ListOf t a -> Bool
 > _test_select_one _ n x =
->    let
->      one' = (next zero) `withTypeOf` n
->    in
->      (select one' x) ==== (map (\a -> cons a nil) x)
+>   let
+>     one' = (next zero) `withTypeOf` n
+>   in
+>     (select one' x) ==== (map (\a -> cons a nil) x)
 > 
 > 
 > -- length(select(k,x)) == choose(length(x),k)
 > _test_select_length :: (List t, Equal a, Natural n)
 >   => t a -> n -> Nat n -> ListOf t a -> Bool
 > _test_select_length _ _ k x =
->    (length (select k x)) ==== (choose (length x) k)
+>   (length (select k x)) ==== (choose (length x) k)
+> 
+> 
+> -- sublist(x,y) == sublist(select(k,x),select(k,y))
+> _test_select_sublist :: (List t, Equal a, Natural n)
+>   => t a -> n -> Nat n -> ListOf t a -> ListOf t a -> Bool
+> _test_select_sublist _ _ k x y =
+>   if (sublist x y) ==== True
+>     then (sublist (select k x) (select k y)) ==== True
+>     else True
+> 
+> 
+> -- all(sublist(-,x),select(k,x))
+> _test_select_all_sublist :: (List t, Equal a, Natural n)
+>   => t a -> n -> Nat n -> ListOf t a -> Bool
+> _test_select_all_sublist _ _ k x =
+>   all (\u -> sublist u x) (select k x)
+> 
+> 
+> -- all(eq(k,length(-)),select(k,x))
+> _test_select_all_length :: (List t, Equal a, Natural n)
+>   => t a -> n -> Nat n -> ListOf t a -> Bool
+> _test_select_all_length _ _ k x =
+>   all (\u -> eq k (length u)) (select k x)
 
 And the suite:
 
@@ -314,6 +400,9 @@ And the suite:
 >   runTest args (_test_select_nil t n)
 >   runTest args (_test_select_one t n)
 >   runTest args (_test_select_length t n)
+>   runTest args (_test_select_sublist t n)
+>   runTest args (_test_select_all_sublist t n)
+>   runTest args (_test_select_all_length t n)
 
 And ``main``:
 

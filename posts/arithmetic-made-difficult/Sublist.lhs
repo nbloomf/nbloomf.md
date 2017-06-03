@@ -126,7 +126,7 @@ Another lemma. This one seems like it should be obvious, but the only proof I co
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set with $a \in A$ and $x,y \in \lists{A}$. Then we have the following.
+Let $A$ be a set with $a,b \in A$ and $x,y \in \lists{A}$. Then we have the following.
 
 1. If $\sublist(x,y) = \btrue$, then $\sublist(x,\cons(b,y)) = \btrue$.
 2. If $\sublist(\cons(a,x),y) = \btrue$, then $\sublist(x,y) = \btrue$.
@@ -184,7 +184,7 @@ Now $\sublist$ interacts with $\length$:
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set, with $x,y \in \lists{A}$. If $\sublist(x,y)$, then $\nleq(\length(x),\length(y))$.
+Let $A$ be a set, with $x,y \in \lists{A}$. If $\sublist(x,y) = \btrue$, then $\nleq(\length(x),\length(y))$.
 </p></div>
 
 <div class="proof"><p>
@@ -363,7 +363,7 @@ $$\begin{eqnarray*}
  & = & \sublist(\cons(b,u),\nil) \\
  & = & \isnil(\cons(b,u)) \\
  & = & \bfalse
-\end{eqnarray*}$
+\end{eqnarray*}$$
 as claimed.
 2. We proceed by list induction on $x$. For the base case $x = \nil$, note that $\sublist(x,y) = \btrue$. We show that $\sublist(\snoc(a,\nil),\snoc(a,y)) = \btrue$ by list induction on $y$. For the base case $y = \nil$, we have $$\sublist(\snoc(a,\nil),\snoc(a,\nil)) = \btrue$$ by reflexivity. For the inductive step (on $y$), suppose the equality holds for some $y$ and let $b \in A$. Now
 $$\begin{eqnarray*}
@@ -443,7 +443,7 @@ $$\begin{eqnarray*}
  & = & \sublist(\cat(x,\cons(a,u)),\cat(y,\cons(a,u)))
 \end{eqnarray*}$$
 as needed.
-3. If $\sublist(x,u) = \btrue$, then $\sublist(\cat(x,y),\cat(u,y)) = \btrue$. Similarly, if $\sublist(y,v) = \btrue$, then $\sublist(\cat(u,y),\cat(u,v)) = \btrue$. By transitivity, we have $$\sublist(\cat(x,y),cat(u,v)) = \btrue$.
+3. If $\sublist(x,u) = \btrue$, then $\sublist(\cat(x,y),\cat(u,y)) = \btrue$. Similarly, if $\sublist(y,v) = \btrue$, then $\sublist(\cat(u,y),\cat(u,v)) = \btrue$. By transitivity, we have $$\sublist(\cat(x,y),cat(u,v)) = \btrue$$ as claimed.
 </p></div>
 </div>
 
@@ -548,6 +548,160 @@ $$\begin{eqnarray*}
  & = & \bif{\beq(a,b)}{\sublist(w,y)}{\sublist(\cons(a,w),y)} \\
  & = & \sublist(\cons(a,w),\cons(b,y)) \\
  & = & \sublist(x,\cons(b,y))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
+More $\snoc$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $a \in A$ and $x,y \in \lists{A}$. Then we have the following.
+
+1. If $\sublist(x,y) = \btrue$, then $\sublist(x,\snoc(a,y)) = \btrue$.
+2. If $\sublist(\snoc(a,x),y) = \btrue$, then $\sublist(x,y) = \btrue$.
+</p></div>
+
+<div class="proof"><p>
+1. Suppose $\sublist(x,y) = \btrue$. Then we have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \sublist(x,y) \\
+ & = & \sublist(\rev(x),\rev(y)) \\
+ & = & \sublist(\rev(x),\cons(a,\rev(y))) \\
+ & = & \sublist(\rev(x),\rev(\snoc(a,y))) \\
+ & = & \sublist(x,\snoc(a,y))
+\end{eqnarray*}$$
+as claimed.
+2. Suppose $\sublist(\snoc(a,x),y) = \btrue$. Then we have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \sublist(\snoc(a,x),y) \\
+ & = & \sublist(\rev(\snoc(a,x)),\rev(y)) \\
+ & = & \sublist(\cons(a,\rev(x)),\rev(y)) \\
+ & = & \sublist(\rev(x),\rev(y)) \\
+ & = & \sublist(x,y)
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
+And again.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set, with $x,y,z \in \lists{A}$.
+
+1. If $\sublist(x,y) = \btrue$, then $\sublist(x,\cat(z,y)) = \btrue$.
+2. If $\sublist(x,y) = \btrue$, then $\sublist(x,\cat(y,z)) = \btrue$.
+3. If $\sublist(\cat(z,x),y) = \btrue$, then $\sublist(x,y) = \btrue$.
+4. If $\sublist(\cat(x,z),y) = \btrue$, then $\sublist(x,y) = \btrue$.
+</p></div>
+
+<div class="proof"><p>
+1. We proceed by list induction on $z$. For the base case $z = \nil$, suppose $\sublist(x,y) = \btrue$. Then
+$$\begin{eqnarray*}
+ &   & \sublist(x,\cat(z,y)) \\
+ & = & \sublist(x,\cat(\nil,y)) \\
+ & = & \sublist(x,y) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the implication holds for some $z$ and let $a \in A$. Suppose further that $\sublist(x,y) = \btrue$. Then we have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \sublist(x,y) \\
+ & = & \sublist(x,\cat(z,y)) \\
+ & = & \sublist(x,\cons(a,\cat(z,y))) \\
+ & = & \sublist(x,\cat(\cons(a,z),y))
+\end{eqnarray*}$$
+as needed.
+2. Suppose $\sublist(x,y) = \btrue$. Now
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \sublist(x,y) \\
+ & = & \sublist(\rev(x),\rev(y)) \\
+ & = & \sublist(\rev(x),\cat(\rev(z),\rev(y))) \\
+ & = & \sublist(\rev(x),\rev(\cat(y,z))) \\
+ & = & \sublist(x,\cat(y,z))
+\end{eqnarray*}$$
+as claimed.
+3. We proceed by list induction on $z$. For the base case $z = \nil$, suppose $\sublist(\cat(z,x),y) = \btrue$. Then we have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \sublist(\cat(z,x),y) \\
+ & = & \sublist(\cat(\nil,x),y) \\
+ & = & \sublist(x,y)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the implication holds for all $x$ and $y$ for some $z$ and let $a \in A$. Suppose further that $\sublist(\cat(\cons(a,z),x),y) = \btrue$. Then we have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \sublist(\cat(\cons(a,z),x),y) \\
+ & = & \sublist(\cons(a,\cat(z,x)),y) \\
+ & = & \sublist(\cat(z,x),y) \\
+ & = & \sublist(x,y)
+\end{eqnarray*}$$
+as needed.
+4. Suppose $\sublist(\cat(x,z),y) = \btrue$. Then we have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \sublist(\cat(x,z),y) \\
+ & = & \sublist(\rev(\cat(x,z)),\rev(y)) \\
+ & = & \sublist(\cat(\rev(z),\rev(x)),\rev(y)) \\
+ & = & \sublist(\rev(x),\rev(y)) \\
+ & = & \sublist(x,y)
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
+$\sublist$ and $\map$:
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ and $B$ be sets with $x,y \in \lists{A}$ and $f : A \rightarrow B$ injective. If $\sublist(x,y) = \btrue$, then $\sublist(\map(f)(x),\map(f)(y)) = \btrue$.
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $y$. For the base case $y = \nil$, suppose $\sublist(x,y) = \btrue$. Then in fact $x = \nil$. In this case we have
+$$\begin{eqnarray*}
+ &   & \sublist(\map(f)(x),\map(f)(y)) \\
+ & = & \sublist(\map(f)(\nil),\map(f)(\nil)) \\
+ & = & \sublist(\nil,\nil) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the implication holds for all $x$ for some $y$ and let $b \in A$. Suppose further that $\sublist(x,\cons(a,y)) = \btrue$. We have two possibilities for $x$. If $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \sublist(\map(f)(x),\map(f)(\cons(a,y))) \\
+ & = & \sublist(\map(f)(\nil),\map(f)(\cons(a,y))) \\
+ & = & \sublist(\nil,\map(f)(\cons(a,y))) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed. Suppose instead that $x = \cons(a,u)$. Note that if $f(a) = f(b)$ then $a = b$ (since $f$ is injective) and we have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \sublist(x,\cons(b,y)) \\
+ & = & \sublist(\cons(a,u),\cons(b,y)) \\
+ & = & \sublist(u,y),
+\end{eqnarray*}$$
+and if $f(a) \neq f(b)$, then $a \neq b$ (since $f$ is injective), and we have
+$$\begin{eqnarray*}
+ & = & \btrue \\
+ & = & \sublist(x,\cons(b,y)) \\
+ & = & \sublist(\cons(a,u),\cons(b,y)) \\
+ & = & \sublist(\cons(a,u),y) \\
+ & = & \sublist(x,y).
+\end{eqnarray*}$$
+In either case, using the inductive hypothesis we have
+$$\begin{eqnarray*}
+ &   & \sublist(\map(f)(x),\map(f)(\cons(b,y))) \\
+ & = & \sublist(\map(f)(\cons(a,u)),\map(f)(\cons(b,y))) \\
+ & = & \sublist(\cons(f(a),\map(f)(u)),\cons(f(b),\map(f)(y))) \\
+ & = & \bif{\beq(f(a),f(b))}{\sublist(\map(f)(u),\map(f)(y))}{\sublist(\cons(f(a),\map(f)(u)),\map(f)(y)} \\
+ & = & \bif{\beq(f(a),f(b))}{\sublist(\map(f)(u),\map(f)(y))}{\sublist(\map(f)(\cons(a,u)),\map(f)(y)} \\
+ & = & \bif{\beq(f(a),f(b))}{\sublist(\map(f)(u),\map(f)(y))}{\sublist(\map(f)(x),\map(f)(y)} \\
+ & = & \bif{\beq(f(a),f(b))}{\btrue}{\btrue} \\
+ & = & \btrue
 \end{eqnarray*}$$
 as needed.
 </p></div>
