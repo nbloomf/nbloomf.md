@@ -14,6 +14,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Tuples
 > import NaturalNumbers
 > import Plus
+> import LessThanOrEqualTo
 > 
 > import Lists
 > import Reverse
@@ -30,89 +31,88 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Count
 > import Repeat
 > import Sublist
+> import Select
 > 
 > import Prelude (uncurry)
 > import Test.QuickCheck
 > import Text.Show.Functions
 
-We'd like to also prove some properties for $\dedupeL$. The most important one -- and the reason for introducing ``dedupe`` -- is that $\dedupeL(x)$ should not have any duplicated items. We'll introduce a boolean function $\unique$ to detect whether or not this is the case. As usual, we'd like to define $\unique$ as a fold.
+Today we'll introduce a boolean function $\unique$ to detect whether or not a list has any duplicate items. As usual, we'd like to define $\unique$ as a fold. The signature needs to be $$\lists{A} \rightarrow \bool.$$ How can we do this? Intuitively, we might say
+
+1. $\nil$ is unique, and
+2. $\cons(a,x)$ is unique if $x$ is unique and $a$ does not appear in $x$.
+
+Note that $\unique$ will need to "have it's cake and eat it too"; that is, when testing $\cons(a,x)$ for uniqueness we have to check that $x$ is unique (eat the cake) *and* check that $a$ does not appear in $x$ (have the cake). We had a similar problem when we defined $\tails$; the solution there was to define $\tails(x)$ as a fold on $x$ that constructs a function which destructs $x$ again. Taking this tack, we will look for suitable $\varepsilon$ and $\varphi$ so that $$\unique(x) = \foldr{\varepsilon}{\varphi}(x)(x)$$ does what we want.
 
 <div class="result">
 <div class="defn"><p>
-Let $A$ be a set. Define $\varphi : A \times (\bool \times \lists{A}) \rightarrow \bool \times \lists{A}$ by $$\varphi(a,(p,x)) = \left\{ \begin{array}{ll} (\bfalse,\nil) & \mathrm{if}\ \elt(a,x) \\ (\btrue,\cons(a,x)) & \mathrm{otherwise}. \end{array}\right.$$ Now define $\unique : \lists{A} \rightarrow \bool$ by $$\unique(x) = \fst(\foldr{(\btrue,\nil)}{\varphi}(x)).$$
-
-In Haskell (we have to use the ``ScopedTypeVariables`` extension and provide some extra type signatures here to write this in the obvious way):
+Let $A$ be a set. Define $\varepsilon : \lists{A} \rightarrow \bool$ by $\varepsilon(x) = \btrue$, and define $\varphi : A \rightarrow \bool^{\lists{A}} \rightarrow 
 
 > unique :: forall t a. (List t, Equal a) => t a -> Bool
-> unique = fst . foldr (True, nil :: t a) phi
+> unique x = foldr epsilon phi x x
 >   where
->     phi :: (List t, Equal a) => a -> (Bool, t a) -> (Bool, t a)
->     phi a (p,x) = if elt a x
->       then (False, nil)
->       else (True,  cons a x)
+>     epsilon _ = True
+> 
+>     phi a f w = case listShape w of
+>       Nil      -> True
+>       Cons _ u -> and (all (\b -> not (eq a b)) u) (f u)
 
+</p></div>
+</div>
+
+The following result suggests an alternative implementation.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set.
+
+1. $\unique(\nil) = \btrue$.
+2. $\unique(\cons(a,x)) = \band(\all(\not(\beq(a,-)),x),\unique(x))$.
+</p></div>
+
+<div class="proof"><p>
+1. (@@@)
+2. (@@@)
 </p></div>
 </div>
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set. For all $x \in \lists{A}$, the following are equivalent.
-
-1. $\unique(x) = \btrue$.
-2. If $i,j \in \nats$ such that $\at(x,i), \at(x,j) \in A$ and $i \neq j$ then $\at(x,i) \neq \at(x,j)$.
+Let $A$ be a set with $x,y \in \lists{A}$. If $\sublist(x,y) = \btrue$ and $\unique(y) = \btrue$, then $\unique(x) = \btrue$.
 </p></div>
 
 <div class="proof"><p>
-We proceed by list induction on $x$. For the base case $x = \nil$, note that
-$$\begin{eqnarray*}
- &   & \unique(\nil) \\
- & = & \fst(\foldr{(\btrue,\nil)}{\varphi}(\nil)) \\
- & = & \fst(\btrue,\nil) \\
- & = & \btrue.
-\end{eqnarray*}$$
-Now note that $\at(\nil,i)$ is $\ast$ for all $i$, and thus when $x = \nil$ statement (2) is vacuously true. Thus (1) is equivalent to (2).
-
-For the inductive step, suppose the equivalence holds for some $x$ and let $a \in A$. (@@@)
+(@@@)
 </p></div>
 </div>
 
 <div class="result">
 <div class="thm"><p>
-
+Let $a,b \in \nats$. Then $\unique(\range(a,b)) = \btrue$.
 </p></div>
 
 <div class="proof"><p>
-
+(@@@)
 </p></div>
 </div>
 
 <div class="result">
 <div class="thm"><p>
-
+Let $A$ and $B$ be sets with $x \in \lists{A}$ and $f : A \rightarrow B$. If $f$ is injective and $\unique(x) = \btrue$, then $\unique(\map(f)(x)) = \btrue$.
 </p></div>
 
 <div class="proof"><p>
-
+(@@@)
 </p></div>
 </div>
 
 <div class="result">
 <div class="thm"><p>
-
+Let $A$ be a set. For all $x \in \lists{A}$ and $k \in \nats$ such that $k \neq \zero$ and $\nleq(\next(k),\length(x)) = \btrue$ we have $$\unique(x) = \all(\unique(-),\select(k,x)).$$
 </p></div>
 
 <div class="proof"><p>
-
-</p></div>
-</div>
-
-<div class="result">
-<div class="thm"><p>
-
-</p></div>
-
-<div class="proof"><p>
-
+(@@@)
 </p></div>
 </div>
 
@@ -122,15 +122,6 @@ For the inductive step, suppose the equivalence holds for some $x$ and let $a \i
 </p></div>
 
 <div class="proof"><p>
-
-</p></div>
-</div>
-
-<div class="result">
-<div class="defn"><p>
-Let $A$ be a set. Define $\dedupeL : \lists{A} \rightarrow \lists{A}$ by $$\dedupeL(x) = \rev(\dedupeR(\rev(x))).$$
-
-In Haskell:
 
 </p></div>
 </div>
@@ -151,11 +142,20 @@ Testing
 
 Here are our property tests for $\unique$:
 
-> -- unique(dedupeL(x)) == true
 > _test_unique_rev :: (List t, Equal a)
->   => t a -> ListOf t a -> Bool
-> _test_unique_rev _ x =
->    (unique x) ==== (unique (rev x))
+>   => t a -> Test (ListOf t a -> Bool)
+> _test_unique_rev _ =
+>   testName "unique(x) == unique(rev(x))" $
+>    \x -> (unique x) ==== (unique (rev x))
+> 
+> 
+> _test_unique_sublist :: (List t, Equal a)
+>   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+> _test_unique_sublist _ =
+>   testName "unique(x) & sublist(y,x) ==> unique(y)" $
+>    \x y -> if (unique x) &&& (sublist y x)
+>      then (unique y) ==== True
+>      else True
 
 And the suite:
 
@@ -163,8 +163,9 @@ And the suite:
 > _test_unique ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
->   ) => t a -> Int -> Int -> IO ()
-> _test_unique t maxSize numCases = do
+>   , TypeName n, Natural n, Show n, Arbitrary n
+>   ) => t a -> n -> Int -> Int -> IO ()
+> _test_unique t n maxSize numCases = do
 >   testLabel ("unique: " ++ typeName t)
 > 
 >   let
@@ -174,10 +175,11 @@ And the suite:
 >       }
 > 
 >   runTest args (_test_unique_rev t)
+>   runTest args (_test_unique_sublist t)
 
 And ``main``:
 
 > main_unique :: IO ()
 > main_unique = do
->   _test_unique (nil :: ConsList Bool)  20 100
->   _test_unique (nil :: ConsList Unary) 20 100
+>   _test_unique (nil :: ConsList Bool)  (zero :: Unary) 20 100
+>   _test_unique (nil :: ConsList Unary) (zero :: Unary) 20 100

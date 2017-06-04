@@ -6,7 +6,7 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > module Select
->   ( _test_select, main_select
+>   ( select, _test_select, main_select
 >   ) where
 > 
 > import Booleans

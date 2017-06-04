@@ -173,29 +173,29 @@ In Haskell:
 Testing
 -------
 
-Here are our property tests for $\dedupeL$, $\dedupeR$, and $\unique$:
+Here are our property tests for $\dedupeL$ and $\dedupeR$:
 
-> -- unique(dedupeL(x)) == true
 > _test_dedupeL_unique :: (List t, Equal a)
->   => t a -> ListOf t a -> Bool
-> _test_dedupeL_unique _ x =
->    (unique (dedupeL x)) ==== True
+>   => t a -> Test (ListOf t a -> Bool)
+> _test_dedupeL_unique _ =
+>   testName "unique(dedupeL(x)) == true" $
+>   \x -> (unique (dedupeL x)) ==== True
 > 
 > 
-> -- dedupeL(dedupeL(x)) == dedupeL(x)
 > _test_dedupeL_involution :: (List t, Equal a)
->   => t a -> ListOf t a -> Bool
-> _test_dedupeL_involution _ x =
->    (dedupeL (dedupeL x)) ==== (dedupeL x)
+>   => t a -> Test (ListOf t a -> Bool)
+> _test_dedupeL_involution _ =
+>   testName "dedupeL(dedupeL(x)) == dedupeL(x)" $
+>   \x -> (dedupeL (dedupeL x)) ==== (dedupeL x)
 > 
 > 
-> -- prefix(x,y) ==> prefix(dedupeL(x),dedupeL(y))
 > _test_dedupeL_prefix :: (List t, Equal a)
->   => t a -> ListOf t a -> ListOf t a -> Bool
-> _test_dedupeL_prefix _ x y =
->    if prefix x y
->      then prefix (dedupeL x) (dedupeL y)
->      else True
+>   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+> _test_dedupeL_prefix _ =
+>   testName "prefix(x,y) ==> prefix(dedupeL(x),dedupeL(y))" $
+>   \x y -> if prefix x y
+>     then prefix (dedupeL x) (dedupeL y)
+>     else True
 
 And the suite:
 

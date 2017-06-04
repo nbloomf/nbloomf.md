@@ -15,7 +15,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Bailout Recursion](/posts/arithmetic-made-difficult/BailoutRecursion.html)
     * [Mutating Recursion](/posts/arithmetic-made-difficult/MutatingRecursion.html)
     * [The Uniqueness of the Natural Numbers](/posts/arithmetic-made-difficult/NaturalNumbers.html)
-2. Basic
+2. Basics
     * [Addition](/posts/arithmetic-made-difficult/Plus.html)
     * [Multiplication](/posts/arithmetic-made-difficult/Times.html)
     * [Really Simple Equations](/posts/arithmetic-made-difficult/really-simple-equations.html)
