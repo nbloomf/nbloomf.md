@@ -5,7 +5,6 @@ date: 2017-05-26
 tags: arithmetic-made-difficult, literate-haskell
 ---
 
-> {-# LANGUAGE ScopedTypeVariables #-}
 > module Unique
 >   ( unique, _test_unique, main_unique
 >   ) where
@@ -100,6 +99,39 @@ In Haskell:
 >   Nil      -> True
 >   Cons a u -> and (all (not . eq a) u) (unique u)
 
+Special cases.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $a,b \in A$. Then we have the following.
+
+1. $\unique(\cons(a,\nil)) = \btrue$.
+2. $\unique(\cons(a,\cons(b,\nil))) = \bnot(\beq(a,b))$.
+</p></div>
+
+<div class="proof"><p>
+1. Note that
+$$\begin{eqnarray*}
+ &   & \unique(\cons(a,\nil)) \\
+ & = & \band(\all(\bnot(\beq(a,-)),\nil),\unique(\nil)) \\
+ & = & \band(\btrue,\btrue) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as claimed.
+2. Note that
+$$\begin{eqnarray*}
+ &   & \unique(\cons(a,\cons(b,\nil))) \\
+ & = & \band(\all(\bnot(\beq(a,-)),\cons(b,\nil)),\unique(\cons(b,\nil))) \\
+ & = & \band(\all(\bnot(\beq(a,-)),\cons(b,\nil)),\btrue) \\
+ & = & \all(\bnot(\beq(a,-)),\cons(b,\nil)) \\
+ & = & \band(\bnot(\beq(a,b)),\all(\bnot(\beq(a,-)),\nil)) \\
+ & = & \band(\bnot(\beq(a,b)),\btrue) \\
+ & = & \bnot(\beq(a,b))
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
 $\unique$ interacts with $\sublist$:
 
 <div class="result">
@@ -148,11 +180,46 @@ $\range$s are unique.
 
 <div class="result">
 <div class="thm"><p>
-Let $a,b \in \nats$. Then $\unique(\range(a,b)) = \btrue$.
+Let $a,b \in \nats$. We have the following.
+
+1. If $\nleq(k,a) = \btrue$ then $\all(\bnot(\beq(k,-)),\range(\next(a),b)) = \btrue$.
+2. $\unique(\range(a,b)) = \btrue$.
 </p></div>
 
 <div class="proof"><p>
-(@@@)
+1. We proceed by induction on $b$. For the base case $b = \zero$, we have
+$$\begin{eqnarray*}
+ &   & \all(\bnot(\beq(k,-)),\range(\next(a),b)) \\
+ & = & \all(\bnot(\beq(k,-)),\range(\next(a),\zero)) \\
+ & = & \all(\bnot(\beq(k,-)),\nil) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $k$ and $a$ for some $b$. Now let $a,k \in \nats$ with $\nleq(k,a) = \btrue$; now $\nleq(k,\next(a)) = \btrue$, and using the inductive hypothesis we have 
+$$\begin{eqnarray*}
+ &   & \all(\bnot(\beq(k,-)),\range(\next(a),\next(b))) \\
+ & = & \all(\bnot(\beq(k,-)),\cons(\next(a),\range(\next(\next(a))),b)) \\
+ & = & \band(\bnot(\beq(k,\next(a))),\all(\bnot(\beq(k,-)),\range(\next(\next(a)),b))) \\
+ & = & \band(\btrue,\btrue) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed.
+2. We proceed by induction on $b$. For the base case $b = \zero$, we have
+$$\begin{eqnarray*}
+ &   & \unique(\range(a,b)) \\
+ & = & \unique(\range(a,\zero)) \\
+ & = & \unique(\nil) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $a$ for some $b$. Using the inductive hypothesis and part (1), we have
+$$\begin{eqnarray*}
+ &   & \unique(\range(a,\next(b))) \\
+ & = & \unique(\cons(a,\range(\next(a),b))) \\
+ & = & \band(\all(\bnot(\beq(a,-)),\range(\next(a),b)),\unique(\range(\next(a),b))) \\
+ & = & \band(\all(\bnot(\beq(a,-)),\range(\next(a),b)),\btrue) \\
+ & = & \all(\bnot(\beq(a,-)),\range(\next(a),b)) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
 
@@ -190,11 +257,54 @@ $\unique$ and $\select$:
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set. For all $x \in \lists{A}$ we have $$\unique(x) = \all(\unique(-),\select(\next(\next(\zero)),x)).$$
+Let $A$ be a set with $a \in A$ and $x \in \lists{A}$. We have the following.
+
+1. $\all(\bnot(\beq(a,-)),x) = \all(\unique(-),\map(\cons(a,\cons(-,\nil)))(x))$.
+2. $\unique(x) = \all(\unique(-),\select(\next(\next(\zero)),x))$.
 </p></div>
 
 <div class="proof"><p>
-We proceed by list induction on $x$. For the base case $x = \nil$, (@@@)
+1. We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \all(\unique(-),\map(\cons(a,\cons(-,\nil)))(x)) \\
+ & = & \all(\unique(-),\map(\cons(a,\cons(-,\nil)))(\nil)) \\
+ & = & \all(\unique(-),\nil) \\
+ & = & \btrue \\
+ & = & \all(\bnot(\beq(a,-)),\nil) \\
+ & = & \all(\bnot(\beq(a,-)),x)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$ and let $b \in A$. Using the inductive hypothesis we have
+$$\begin{eqnarray*}
+ &   & \all(\unique(-),\map(\cons(a,\cons(-,\nil)))(\cons(b,x))) \\
+ & = & \all(\unique(-),\cons(\cons(a,\cons(b,\nil)),\map(\cons(a,\cons(-,\nil)))(x))) \\
+ & = & \band(\unique(\cons(a,\cons(b,\nil))),\all(\unique(-),\map(\cons(a,\cons(-,\nil)))(x))) \\
+ & = & \band(\unique(\cons(a,\cons(b,\nil))),\all(\bnot(\beq(a,-)),x)) \\
+ & = & \band(\bnot(\beq(a,b)),\all(\bnot(\beq(a,-)),x)) \\
+ & = & \all(\bnot(\beq(a,-)),\cons(b,x))
+\end{eqnarray*}$$
+as needed.
+2. We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \all(\unique(-),\select(\next(\next(\zero)),x)) \\
+ & = & \all(\unique(-),\select(\next(\next(\zero)),\nil)) \\
+ & = & \all(\unique(-),\nil) \\
+ & = & \btrue \\
+ & = & \unique(\nil) \\
+ & = & \unique (x)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Using the inductive hypothesis, we have
+$$\begin{eqnarray*}
+ &   & \all(\unique(-),\select(\next(\next(\zero)),\cons(a,x))) \\
+ & = & \all(\unique(-),\cat(\map(\cons(a,-))(\select(\next(\zero),x)),\select(\next(\next(\zero)),x))) \\
+ & = & \band(\all(\unique(-),\map(\cons(a,-))(\select(\next(\zero),x))),\all(\unique(-),\select(\next(\next(\zero)),x))) \\
+ & = & \band(\all(\unique(-),\map(\cons(a,-))(\select(\next(\zero),x))),\unique(x)) \\
+ & = & \band(\all(\unique(-),\map(\cons(a,-))(\map(\cons(-,\nil))(x))),\unique(x)) \\
+ & = & \band(\all(\unique(-),\map(\cons(a,-) \circ \cons(-,\nil))(x)),\unique(x)) \\
+ & = & \band(\all(\unique(-),\map(\cons(a,\cons(-,\nil)))(x)),\unique(x)) \\
+ & = & \band(\all(\bnot(\beq(a,-)),x),\unique(x)) \\
+ & = & \unique(\cons(a,x))
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
 
@@ -225,6 +335,16 @@ Here are our property tests for $\unique$:
 >    \x y -> if (unique x) &&& (sublist y x)
 >      then (unique y) ==== True
 >      else True
+> 
+> 
+> _test_unique_select_two :: (List t, Equal a, Natural n)
+>   => t a -> n -> Test (ListOf t a -> Bool)
+> _test_unique_select_two _ n =
+>   testName "unique(x) ==== unique(select(next(next(zero)),x))" $
+>    let
+>      two = next (next zero) `withTypeOf` n
+>    in
+>      \x -> (unique x) ==== (all unique (select two x))
 
 And the suite:
 
@@ -246,6 +366,7 @@ And the suite:
 >   runTest args (_test_unique_alt t)
 >   runTest args (_test_unique_rev t)
 >   runTest args (_test_unique_sublist t)
+>   runTest args (_test_unique_select_two t n)
 
 And ``main``:
 

@@ -54,7 +54,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Sublist](/posts/arithmetic-made-difficult/Sublist.html)
     * [Infix](/posts/arithmetic-made-difficult/Infix.html)
     * [Select](/posts/arithmetic-made-difficult/Select.html)
-    * -> [Unique](/posts/arithmetic-made-difficult/Unique.html)
+    * [Unique](/posts/arithmetic-made-difficult/Unique.html)
     * -> [Dedupe](/posts/arithmetic-made-difficult/Dedupe.html)
     * Take and Drop
     * Group
