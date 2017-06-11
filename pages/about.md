@@ -3,7 +3,7 @@ title: About
 author: nbloomf
 ---
 
-I am Nathan Bloomfield, currently between jobs.
+I am Nathan Bloomfield.
 
 I like to think about the (strange|beautiful) interaction between universal algebra and programming. Sometimes I write about that too.
 

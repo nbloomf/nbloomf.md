@@ -56,7 +56,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Select](/posts/arithmetic-made-difficult/Select.html)
     * [Unique](/posts/arithmetic-made-difficult/Unique.html)
     * [Delete](/posts/arithmetic-made-difficult/Delete.html)
-    * -> [Dedupe](/posts/arithmetic-made-difficult/Dedupe.html)
+    * [Dedupe](/posts/arithmetic-made-difficult/Dedupe.html)
     * Take and Drop
     * Group
     * Run Length Encode

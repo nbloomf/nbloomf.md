@@ -142,7 +142,22 @@ Let $A$ be a set with $x \in \lists{A}$. Then $\unique(\dedupeL(x)) = \btrue$.
 </p></div>
 
 <div class="proof"><p>
-(@@@)
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \unique(\dedupeL(\nil)) \\
+ & = & \unique(\nil) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Using the inductive hypothesis, we have $\unique(\dedupeL(x)) = \btrue$, so that $\unique(\delete(a,\dedupeL(x))) = \btrue$. Now
+$$\begin{eqnarray*}
+ &   & \unique(\dedupeL(\cons(a,x))) \\
+ & = & \unique(\cons(a,\delete(a,\dedupeL(x)))) \\
+ & = & \band(\all(\bnot(\beq(a,-)),\delete(a,\dedupeL(x))),\unique(\delete(a,\dedupeL(x)))) \\
+ & = & \band(\btrue,\unique(\delete(a,\dedupeL(x)))) \\
+ & = & \unique(\delete(a,\dedupeL(x))) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
 
@@ -154,7 +169,22 @@ Let $A$ be a set with $x,y \in \lists{A}$. If $\prefix(x,y) = \btrue$ then $\pre
 </p></div>
 
 <div class="proof"><p>
-(@@@)
+We proceed by list induction on $x$. For the base case $x = \nil$, note that $$\prefix(x,y) = \prefix(\nil,y) = \btrue$$ and
+$$\begin{eqnarray*}
+ &   & \prefix(\dedupeL(x),\dedupeL(y)) \\
+ & = & \prefix(\dedupeL(\nil),\dedupeL(y)) \\
+ & = & \prefix(\nil,\dedupeL(y)) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the implication holds for all $y$ for some $x$ and let $a \in A$. Suppose further that $\prefix(\cons(a,x),y) = \btrue$. Now we must have $y = \cons(a,u)$ where $\prefix(x,u) = \btrue$. Using the inductive hypothesis, we have $$\prefix(\dedupeL(x),\dedupeL(u)) = \btrue,$$ so that $$\prefix(\delete(a,\dedupeL(x)),\delete(a,\dedupeL(u))) = \btrue.$$ Now
+$$\begin{eqnarray*}
+ &   & \prefix(\dedupeL(\cons(a,x)),\dedupeL(y)) \\
+ & = & \prefix(\dedupeL(\cons(a,x)),\dedupeL(\cons(a,u))) \\
+ & = & \prefix(\cons(a,\delete(a,\dedupeL(x))),\cons(a,\delete(a,\dedupeL(u)))) \\
+ & = & \prefix(\delete(a,\dedupeL(x)),\delete(a,\dedupeL(u))) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
 
@@ -162,23 +192,69 @@ $\dedupeL$ fixes $\unique$s.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set and $x \in \lists{A}$. Then $\eq(x,\dedupeL(x)) = \unique(x)$.
+Let $A$ be a set and $x \in \lists{A}$. Then $\beq(x,\dedupeL(x)) = \unique(x)$.
 </p></div>
 
 <div class="proof"><p>
-(@@@)
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \beq(x,\dedupeL(x)) \\
+ & = & \beq(\nil,\dedupeL(\nil)) \\
+ & = & \beq(\nil,\nil) \\
+ & = & \btrue \\
+ & = & \unique(\nil) \\
+ & = & \unique(x)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$.
+$$\begin{eqnarray*}
+ &   & \beq(\cons(a,x),\dedupeL(\cons(a,x))) \\
+ & = & \beq(\cons(a,x),\cons(a,\delete(a,\dedupeL(x)))) \\
+ & = & \band(\beq(a,a),\beq(x,\delete(a,\dedupeL(x)))) \\
+ & = & \band(\btrue,\beq(x,\delete(a,\dedupeL(x)))) \\
+ & = & \beq(x,\delete(a,\dedupeL(x))) \\
+ & = & \beq(x,\dedupeL(\delete(a,x))) \\
+ & = & Q.
+\end{eqnarray*}$$
+We now consider two possibilities. If $\elt(a,x) = \bfalse$, then $$\beq(x,\delete(a,x)) = \bnot(\elt(a,x)) = \btrue,$$ and using the inductive hypothesis on $x$ we have
+$$\begin{eqnarray*}
+ &   & Q \\
+ & = & \beq(x,\dedupeL(x)) \\
+ & = & \unique(x) \\
+ & = & \band(\btrue,\unique(x)) \\
+ & = & \band(\bnot(\elt(a,x)),\unique(x)) \\
+ & = & \unique(\cons(a,x))
+\end{eqnarray*}$$
+as needed. Suppose instead that $\elt(a,x) = \btrue$. Note that
+$$\begin{eqnarray*}
+ &   & \elt(a,\dedupeL(\delete(a,x))) \\
+ & = & \elt(a,\delete(a,\dedupeL(x))) \\
+ & = & \bfalse,
+\end{eqnarray*}
+so that $\beq(x,\dedupeL(\delete(a,x))) = \bfalse. Now
+$$\begin{eqnarray*}
+ &   & Q \\
+ & = & \bfalse \\
+ & = & \band(\bfalse,\unique(x)) \\
+ & = & \band(\bnot(\elt(a,x)),\unique(x)) \\
+ & = & \unique(\cons(a,x))
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
+
+$\dedupeL$ is idempotent.
 
 <div class="result">
-<div class="thm"><p>
-
+<div class="corollary"><p>
+Let $A$ be a set and $x \in \lists{A}$. Then $\dedupeL(\dedupeL(x)) = \dedupeL(x)$.
 </p></div>
 
 <div class="proof"><p>
-
+Note that $\unique(\dedupeL(x)) = \btrue$, so that $\dedupeL(\dedupeL(x)) = \dedupeL(x)$ as claimed.
 </p></div>
 </div>
+
+Now for $\dedupeR$:
 
 <div class="result">
 <div class="defn"><p>
@@ -192,13 +268,76 @@ In Haskell:
 </p></div>
 </div>
 
+$\dedupeR$s are unique:
+
 <div class="result">
 <div class="thm"><p>
-
+Let $A$ be a set with $x \in \lists{A}$. Then $\unique(\dedupeR(x)) = \btrue$.
 </p></div>
 
 <div class="proof"><p>
+Note that
+$$\begin{eqnarray*}
+ &   & \unique(\dedupeR(x)) \\
+ & = & \unique(\rev(\dedupeL(\rev(x)))) \\
+ & = & \unique(\dedupeL(\rev(x))) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
 
+blah...
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set.
+
+1. $\dedupeR(\nil) = \nil$.
+2. $\dedupeR(\snoc(a,x)) = \snoc(a,\delete(a,\dedupeR(x)))$.
+</p></div>
+
+<div class="proof"><p>
+1. Note that
+$$\begin{eqnarray*}
+ &   & \dedupeR(\nil) \\
+ & = & \rev(\dedupeL(\rev(\nil))) \\
+ & = & \rev(\dedupeL(\nil)) \\
+ & = & \rev(\nil) \\
+ & = & \nil
+\end{eqnarray*}$$
+as needed.
+2. Note that
+$$\begin{eqnarray*}
+ &   & \dedupeR(\snoc(a,x)) \\
+ & = & \rev(\dedupeL(\rev(\snoc(a,x)))) \\
+ & = & \rev(\dedupeL(\cons(a,\rev(x)))) \\
+ & = & \rev(\cons(a,\delete(a,\dedupeL(\rev(x))))) \\
+ & = & \snoc(a,\rev(\delete(a,\dedupeL(\rev(x))))) \\
+ & = & \snoc(a,\delete(a,\rev(\dedupeL(\rev(x))))) \\
+ & = & \snoc(a,\delete(a,\dedupeR(x)))
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
+$\dedupeR$ is idempotent.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $x \in \lists{A}$. Then $\dedupeR(\dedupeR(x)) = \dedupeR(x)$.
+</p></div>
+
+<div class="proof"><p>
+Note that
+$$\begin{eqnarray*}
+ &   & \dedupeR \circ \dedupeR \\
+ & = & \rev \circ \dedupeL \circ \rev \circ \rev \circ \dedupeL \circ \rev \\
+ & = & \rev \circ \dedupeL \circ \dedupeL \circ \rev \\
+ & = & \rev \circ \dedupeL \circ \rev \\
+ & = & \dedupeR
+\end{eqnarray*}$$
+as claimed.
 </p></div>
 </div>
 
@@ -229,9 +368,9 @@ Here are our property tests for $\dedupeL$ and $\dedupeR$:
 >   \a x -> (dedupeL (delete a x)) ==== (delete a (dedupeL x))
 > 
 > 
-> _test_dedupeL_involution :: (List t, Equal a)
+> _test_dedupeL_idempotent :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> Bool)
-> _test_dedupeL_involution _ =
+> _test_dedupeL_idempotent _ =
 >   testName "dedupeL(dedupeL(x)) == dedupeL(x)" $
 >   \x -> (dedupeL (dedupeL x)) ==== (dedupeL x)
 > 
@@ -250,6 +389,20 @@ Here are our property tests for $\dedupeL$ and $\dedupeR$:
 >   \x y -> if prefix x y
 >     then prefix (dedupeL x) (dedupeL y)
 >     else True
+> 
+> 
+> _test_dedupeR_unique :: (List t, Equal a)
+>   => t a -> Test (ListOf t a -> Bool)
+> _test_dedupeR_unique _ =
+>   testName "unique(dedupeR(x)) == true" $
+>   \x -> (unique (dedupeR x)) ==== True
+> 
+> 
+> _test_dedupeR_idempotent :: (List t, Equal a)
+>   => t a -> Test (ListOf t a -> Bool)
+> _test_dedupeR_idempotent _ =
+>   testName "dedupeR(dedupeR(x)) == dedupeR(x)" $
+>   \x -> (dedupeR (dedupeR x)) ==== (dedupeR x)
 
 And the suite:
 
@@ -270,9 +423,12 @@ And the suite:
 >   runTest args (_test_dedupeL_alt t)
 >   runTest args (_test_dedupeL_unique t)
 >   runTest args (_test_dedupeL_delete t)
->   runTest args (_test_dedupeL_involution t)
+>   runTest args (_test_dedupeL_idempotent t)
 >   runTest args (_test_dedupeL_eq_unique t)
 >   runTest args (_test_dedupeL_prefix t)
+> 
+>   runTest args (_test_dedupeR_unique t)
+>   runTest args (_test_dedupeR_idempotent t)
 
 And ``main``:
 

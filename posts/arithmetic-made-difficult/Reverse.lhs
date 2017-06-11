@@ -248,6 +248,116 @@ as claimed.
 </p></div>
 </div>
 
+One more:
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $a,b \in A$ and $x,y \in \lists{A}$. Then $$\beq(\snoc(a,x),\snoc(b,y)) = \band(\beq(a,b),\beq(x,y)).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case, set $x = \nil$. We consider two possibilities for $y$. If $y = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \beq(\snoc(a,x),\snoc(b,y)) \\
+ & = & \beq(\snoc(a,\nil),\snoc(b,\nil)) \\
+ & = & \beq(\cons(a,\nil),\cons(b,\nil)) \\
+ & = & \band(\beq(a,b),\beq(\nil,\nil)) \\
+ & = & \band(\beq(a,b),\beq(x,y))
+\end{eqnarray*}$$
+as needed. If $y = \cons(c,u)$, we have
+$$\begin{eqnarray*}
+ &   & \beq(\snoc(a,x),\snoc(b,y)) \\
+ & = & \beq(\snoc(a,\nil),\snoc(b,\cons(c,u))) \\
+ & = & \beq(\cons(a,\nil),\cons(c,\snoc(b,u))) \\
+ & = & \band(\beq(a,c),\beq(\nil,\snoc(b,u))) \\
+ & = & \band(\beq(a,c),\bfalse) \\
+ & = & \bfalse \\
+ & = & \band(\beq(a,b),\bfalse) \\
+ & = & \band(\beq(a,b),\beq(\nil,\cons(c,u)) \\
+ & = & \band(\beq(a,b),\beq(x,y))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $a$, $b$, and $y$ for some $x$ and let $d \in A$. We again consider two possibilities for $y$. If $y = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \beq(\snoc(a,\cons(d,x)),\snoc(b,y)) \\
+ & = & \beq(\snoc(a,\cons(d,x)),\snoc(b,\nil)) \\
+ & = & \beq(\cons(d,\snoc(a,x)),\cons(b,\nil)) \\
+ & = & \band(\beq(d,b),\beq(\snoc(a,x),\nil)) \\
+ & = & \band(\beq(d,b),\bfalse) \\
+ & = & \bfalse \\
+ & = & \band(\beq(a,b),\bfalse) \\
+ & = & \band(\beq(a,b),\beq(\cons(d,x),\nil)) \\
+ & = & \band(\beq(a,b),\beq(\cons(d,x),y))
+\end{eqnarray*}$$
+as needed. Suppose instead that $y = \cons(c,u)$. Using the inductive hypothesis, we have
+$$\begin{eqnarray*}
+ &   & \beq(\snoc(a,\cons(d,x)),\snoc(b,y)) \\
+ & = & \beq(\snoc(a,\cons(d,x)),\snoc(b,\cons(c,u))) \\
+ & = & \beq(\cons(d,\snoc(a,x)),\cons(c,\snoc(b,u))) \\
+ & = & \band(\beq(d,c),\beq(\snoc(a,x),\snoc(b,u))) \\
+ & = & \band(\beq(d,c),\band(\beq(a,b),\beq(x,u))) \\
+ & = & \band(\beq(a,b),\band(\beq(d,c),\beq(x,u))) \\
+ & = & \band(\beq(a,b),\band(\cons(d,x),\cons(c,u)) \\
+ & = & \band(\beq(a,b),\band(\cons(d,x),y))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
+One more:
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $x,y \in \lists{A}$. Then we have the following.
+
+1. $\isnil(x) = \isnil(\rev(x))$.
+2. $\beq(x,y) = \beq(\rev(x),\rev(y))$.
+</p></div>
+
+<div class="proof"><p>
+1. We consider two possibilities. If $x = \nil$, we have $$x = \nil = \rev(\nil) = \rev(x),$$ so that $\isnil(x) = \isnil(\rev(x))$ as claimed. Suppose instead that $x = \cons(a,u)$ for some $u$; then $x = \snoc(b,v)$ for some $v$. Now we have
+$$\begin{eqnarray*}
+ &   & \isnil(x) \\
+ & = & \isnil(\cons(a,u)) \\
+ & = & \bfalse \\
+ & = & \isnil(\cons(b,\rev(v))) \\
+ & = & \isnil(\rev(\snoc(b,v))) \\
+ & = & \isnil(\rev(x))
+\end{eqnarray*}$$
+as claimed.
+2. We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \beq(x,y) \\
+ & = & \beq(\nil,y) \\
+ & = & \isnil(y) \\
+ & = & \isnil(\rev(y)) \\
+ & = & \beq(\nil,\rev(y)) \\
+ & = & \beq(\rev(\nil),\rev(y)) \\
+ & = & \beq(\rev(x),\rev(y))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $y$ for some $x$ and let $a \in A$. We consider two possibilities for $y$. If $y = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \beq(\cons(a,x),y) \\
+ & = & \beq(\cons(a,x),\nil) \\
+ & = & \isnil(\cons(a,x)) \\
+ & = & \isnil(\rev(\cons(a,x))) \\
+ & = & \beq(\rev(\cons(a,x)),\nil) \\
+ & = & \beq(\rev(\cons(a,x)),\rev(\nil)) \\
+ & = & \beq(\rev(\cons(a,x)),\rev(y))
+\end{eqnarray*}$$
+as needed. Suppose instead that $y = \cons(b,u)$. Using the inductive hypothsis, we have
+$$\begin{eqnarray*}
+ &   & \beq(\cons(a,x),y) \\
+ & = & \beq(\cons(a,x),\cons(b,u)) \\
+ & = & \band(\beq(a,b),\beq(x,u)) \\
+ & = & \band(\beq(a,b),\beq(\rev(x),\rev(u))) \\
+ & = & \beq(\snoc(a,\rev(x)),\snoc(b,\rev(u))) \\
+ & = & \beq(\rev(\cons(a,x)),\rev(\cons(b,u))) \\
+ & = & \beq(\rev(\cons(a,x)),\rev(y))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
 
 The Other Fold
 --------------

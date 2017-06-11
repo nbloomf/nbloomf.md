@@ -344,6 +344,18 @@ as needed.
 </p></div>
 </div>
 
+$\elt$ can detect when two lists are distinct:
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set, with $a \in A$ and $x,y \in \lists{A}$. If $\elt(a,x) \neq \elt(a,y)$, then $x \neq y$.
+</p></div>
+
+<div class="proof"><p>
+The contrapositive of this statement is trivial and kind of silly looking: If $x = y$, then $\elt(a,x) = \elt(a,y)$. But notice that this theorem gives us a simple way to detect when two lists are distinct from each other.
+</p></div>
+</div>
+
 
 Testing
 -------

@@ -69,6 +69,7 @@ Let $A$ be a set.
 
 1. $\unique(\nil) = \btrue$.
 2. $\unique(\cons(a,x)) = \band(\all(\bnot(\beq(a,-)),x),\unique(x))$.
+3. $\unique(\cons(a,x)) = \band(\bnot(\elt(a,x)),\unique(x))$.
 </p></div>
 
 <div class="proof"><p>
@@ -89,6 +90,13 @@ $$\begin{eqnarray*}
  & = & \band(\all(\bnot(\beq(a,-)),x),\unique(x))
 \end{eqnarray*}$$
 as claimed.
+3. Note that
+$$\begin{eqnarray*}
+ &   & \bnot(\elt(a,x)) \\
+ & = & \bnot(\any(\beq(a,-),x)) \\
+ & = & \all(\bnot(\beq(a,-)),x);
+\end{eqnarray*}$$
+the equality follows from (2).
 </p></div>
 </div>
 
@@ -301,6 +309,76 @@ $$\begin{eqnarray*}
  & = & \band(\all(\unique(-),\map(\cons(a,-))(\map(\cons(-,\nil))(x))),\unique(x)) \\
  & = & \band(\all(\unique(-),\map(\cons(a,-) \circ \cons(-,\nil))(x)),\unique(x)) \\
  & = & \band(\all(\unique(-),\map(\cons(a,\cons(-,\nil)))(x)),\unique(x)) \\
+ & = & \band(\all(\bnot(\beq(a,-)),x),\unique(x)) \\
+ & = & \unique(\cons(a,x))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
+$\unique$ and $\filter$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $x \in \lists{A}$ and $p : A \rightarrow \bool$. If $\unique(x) = \btrue$, then $\unique(\filter(p,x)) = \btrue$.
+</p></div>
+
+<div class="proof"><p>
+Note that $\sublist(\filter(p,x),x) = \btrue$; so we have $\unique(\filter(p,x)) = \btrue$ as claimed.
+</p></div>
+</div>
+
+$\unique$ and $\snoc$:
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $a \in A$ and $x \in \lists{A}$. Then $$\unique(\snoc(a,x)) = \band(\all(\bnot(\beq(a,-)),x),\unique(x)).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, note that
+$$\begin{eqnarray*}
+ &   & \unique(\snoc(a,x)) \\
+ & = & \unique(\snoc(a,\nil)) \\
+ & = & \unique(\cons(a,\nil)) \\
+ & = & \band(\all(\bnot(\beq(a,-)),\nil),\unique(\nil)) \\
+ & = & \band(\all(\bnot(\beq(a,-)),x),\unique(x))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$ and let $b \in A$. Using the inductive hypothesis, we have
+$$\begin{eqnarray*}
+ &   & \unique(\snoc(a,\cons(b,x))) \\
+ & = & \unique(\cons(b,\snoc(a,x))) \\
+ & = & \band(\all(\bnot(\beq(b,-)),\snoc(a,x)),\unique(\snoc(a,x))) \\
+ & = & \band(\band(\bnot(\beq(b,a)),\all(\bnot(\beq(b,-)),x)),\unique(\snoc(a,x))) \\
+ & = & \band(\band(\bnot(\beq(b,a)),\all(\bnot(\beq(b,-)),x)),\band(\all(\bnot(\beq(a,-)),x),\unique(x))) \\
+ & = & \band(\band(\bnot(\beq(a,b)),\all(\bnot(\beq(a,-)),x)),\band(\all(\bnot(\beq(b,-)),x),\unique(x))) \\
+ & = & \band(\band(\bnot(\beq(a,b)),\all(\bnot(\beq(a,-)),x)),\unique(\cons(b,x))) \\
+ & = & \band(\all(\bnot(\beq(a,-)),\cons(b,x)),\unique(\cons(b,x)))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
+$\unique$ and $\rev$:
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $x \in \lists{A}$. Then $\unique(x) = \unique(\rev(x))$.
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, note that
+$$\begin{eqnarray*}
+ &   & \unique(\rev(x)) \\
+ & = & \unique(\rev(\nil)) \\
+ & = & \unique(\nil) \\
+ & = & \unique(x)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
+$$\begin{eqnarray*}
+ &   & \unique(\rev(\cons(a,x))) \\
+ & = & \unique(\snoc(a,\rev(x))) \\
+ & = & \band(\all(\bnot(\beq(a,-)),\rev(x)),\unique(\rev(x))) \\
  & = & \band(\all(\bnot(\beq(a,-)),x),\unique(x)) \\
  & = & \unique(\cons(a,x))
 \end{eqnarray*}$$
