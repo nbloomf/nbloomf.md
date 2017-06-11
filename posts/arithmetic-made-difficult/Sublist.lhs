@@ -707,6 +707,40 @@ as needed.
 </p></div>
 </div>
 
+$\sublist$ and $\filter$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set, let $p : A \rightarrow \bool$, and let $x \in \lists{A}$. Then we have $$\sublist(\filter(p,x),x) = \btrue.$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \sublist(\filter(p,x),x) \\
+ & = & \sublist(\filter(p,\nil),\nil) \\
+ & = & \sublist(\nil,\nil) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $p$ for some $x$ and let $a \in A$. We consider two possibilities. If $p(a) = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \sublist(\filter(p,\cons(a,x)),\cons(a,x)) \\
+ & = & \sublist(\bif{p(a)}{\cons(a,\filter(p,x)}{\filter(p,x)},\cons(a,x)) \\
+ & = & \sublist(\cons(a,\filter(p,x)),\cons(a,x)) \\
+ & = & \sublist(\filter(p,x),x) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed. If $p(a) = \bfalse$, note that $$\sublist(\filter(p,x),x) = \btrue$, so that
+$$\begin{eqnarray*}
+ &   & \sublist(\filter(p,\cons(a,x)),\cons(a,x)) \\
+ & = & \sublist(\bif{p(a)}{\cons(a,\filter(p,x)}{\filter(p,x)},\cons(a,x)) \\
+ & = & \sublist(\filter(p,x),\cons(a,x)) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
 Finally, $\sublist$ interacts with $\any$ and $\all$.
 
 <div class="result">
@@ -744,6 +778,48 @@ $$\begin{eqnarray*}
  & = & \bnot(\all(\bnot \circ p,x)) \\
  & = & \bnot(\bnot(\any(p,x))) \\
  & = & \any(p,x)
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
+One more.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $x,y \in \lists{A}$. If $\sublist(x,y) = \btrue$, then $\beq(\cons(a,y),x) = \bfalse$.
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, note that $$\sublist(x,y) = \sublist(\nil,y) = \btrue$$ and
+$$\begin{eqnarray*}
+ &   & \beq(\cons(a,y),x) \\
+ & = & \beq(\cons(a,y),\nil) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the implication holds for all $a$ and $y$ for some $x$ and let $b \in A$. We now consider two possibilities for $y$. If $y = \nil$, note that $$\sublist(\cons(b,x),y) = \sublist(\cons(b,x),\nil) = \bfalse,$$ so the implication holds vacuously. Suppose instead that $y = \cons(c,w)$. Suppose further that $\sublist(\cons(b,x),y) = \btrue$. We consider two possibilities. If $a \neq b$, we have
+$$\begin{eqnarray*}
+ &   & \beq(\cons(a,y),\cons(b,w)) \\
+ & = & \beq(\cons(a,\cons(c,w)),\cons(b,x)) \\
+ & = & \band(\beq(a,b),\beq(\cons(c,w),x)) \\
+ & = & \band(\bfalse,\beq(\cons(c,w),x)) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as needed. Suppose instead that $a = b$. We now consider two possibilities. If $b = c$, then since $\sublist(\cons(b,x),\cons(c,w)) = \btrue$, we have $\sublist(x,w) = \btrue$. Using the inductive hypothesis on $x$ we have
+$$\begin{eqnarray*}
+ &   & \beq(\cons(a,\cons(c,w)),\cons(b,x)) \\
+ & = & \band(\beq(a,b),\beq(\cons(c,w),x)) \\
+ & = & \band(\btrue,\beq(\cons(c,w),x)) \\
+ & = & \beq(\cons(c,w),x) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as needed. Suppose instead that $b \neq c$. Now since $\sublist(\cons(b,x),\cons(c,w)) = \btrue$, we have $\sublist(\cons(b,x),w) = \btrue$, and thus $\sublist(x,w) = \btrue$. Using the inductive hypothesis on $x$, we have
+$$\begin{eqnarray*}
+ &   & \beq(\cons(a,\cons(c,w)),\cons(b,x)) \\
+ & = & \band(\beq(a,b),\beq(\cons(c,w),x)) \\
+ & = & \band(\btrue,\beq(\cons(c,w),x)) \\
+ & = & \beq(\cons(c,w),x) \\
+ & = & \bfalse
 \end{eqnarray*}$$
 as needed.
 </p></div>

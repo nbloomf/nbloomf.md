@@ -233,8 +233,8 @@ Next we nail down conditional expressions.
 <div class="defn"><p>
 Let $A$ be a set. We define a map $\bif : \bool \times A \times A \rightarrow A$ by
 $$\begin{eqnarray*}
-\bif(\btrue,u,v)  & = & u \\
-\bif(\bfalse,u,v) & = & v.
+\bif{\btrue}{u}{v}  & = & u \\
+\bif{\bfalse}{u}{v} & = & v.
 \end{eqnarray*}$$
 </p></div>
 </div>
@@ -247,25 +247,25 @@ In Haskell:
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ and $B$ be sets with $f : A \rightarrow B$ a map. For all $p \in \bool$ and $u,v \in A$, we have $$f(\bif(p,u,v)) = \bif(p,f(u),f(v)).$$
+Let $A$ and $B$ be sets with $f : A \rightarrow B$ a map. For all $p \in \bool$ and $u,v \in A$, we have $$f(\bif{p}{u}{v}) = \bif{p}{f(u)}{f(v)}.$$
 </p></div>
 
 <div class="proof"><p>
 If $p = \btrue$, we have
 $$\begin{eqnarray*}
- &   & f(\bif(p,u,v)) \\
- & = & f(\bif(\btrue,u,v)) \\
+ &   & f(\bif{p}{u}{v}) \\
+ & = & f(\bif{\btrue}{u}{v}) \\
  & = & f(u) \\
- & = & \bif(\btrue,f(u),f(v)) \\
- & = & \bif(p,f(u),f(v))
+ & = & \bif{\btrue}{f(u)}{f(v)} \\
+ & = & \bif{p}{f(u)}{f(v)}
 \end{eqnarray*}$$
 as claimed. If $p = \bfalse$, we have
 $$\begin{eqnarray*}
- &   & f(\bif(p,u,v)) \\
- & = & f(\bif(\bfalse,u,v)) \\
+ &   & f(\bif{p}{u}{v}) \\
+ & = & f(\bif{\bfalse}{u}{v}) \\
  & = & f(v) \\
- & = & \bif(\bfalse,f(u),f(v)) \\
- & = & \bif(p,f(u),f(v))
+ & = & \bif{\bfalse}{f(u)}{f(v)} \\
+ & = & \bif{p}{f(u)}{f(v)}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
@@ -324,6 +324,65 @@ $$\begin{eqnarray*}
  & = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
 \end{eqnarray*}$$
 as claimed.
+</p></div>
+</div>
+
+More stuff.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $p \in \bool$ and $a,b \in A$. We have $$\bif{\bnot(p)}{a}{b} = \bif{p}{b}{a}.$$
+</p></div>
+
+<div class="proof"><p>
+If $p = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \bif{\bnot(p)}{a}{b} \\
+ & = & \bif{\bnot(\btrue)}{a}{b} \\
+ & = & \bif{\bfalse}{a}{b} \\
+ & = & b \\
+ & = & \bif{\btrue}{b}{a} \\
+ & = & \bif{p}{b}{a},
+\end{eqnarray*}$$
+and if $p = \bfalse$, we have
+$$\begin{eqnarray*}
+ &   & \bif{\bnot(p)}{a}{b} \\
+ & = & \bif{\bnot(\bfalse)}{a}{b} \\
+ & = & \bif{\btrue}{a}{b} \\
+ & = & a \\
+ & = & \bif{\bfalse}{b}{a} \\
+ & = & \bif{p}{b}{a},
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
+More stuff.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $p \in \bool$ and $a,b,c \in A$. We have $$\bif{p}{\bif{p}{a}{b}}{c} = \bif{p}{a}{c}.$$
+</p></div>
+
+<div class="proof"><p>
+If $p = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \bif{p}{\bif{p}{a}{b}}{c} \\
+ & = & \bif{\btrue}{\bif{btrue}{a}{b}}{c} \\
+ & = & \bif{\btrue}{a}{b} \\
+ & = & a \\
+ & = & \bif{\btrue}{a}{c} \\
+ & = & \bif{p}{a}{c}
+\end{eqnarray*}$$
+as needed. If $p = \bfalse$, we have
+$$\begin{eqnarray*}
+ &   & \bif{p}{\bif{p}{a}{b}}{c} \\
+ & = & \bif{\bfalse}{\bif{bfalse}{a}{b}}{c} \\
+ & = & c \\
+ & = & \bif{\bfalse}{a}{c} \\
+ & = & \bif{p}{a}{c}
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
 

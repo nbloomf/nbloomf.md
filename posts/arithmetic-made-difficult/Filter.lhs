@@ -122,8 +122,8 @@ as claimed. For the inductive step, suppose the equality holds for some $x$ and 
 $$\begin{eqnarray*}
  &   & \all(p,\filter(p,\cons(a,x))) \\
  & = & \all(p,\cons(a,\filter(p,x))) \\
- & = & \and(p(a),\all(p,\filter(p,x))) \\
- & = & \and(\btrue,\btrue) \\
+ & = & \band(p(a),\all(p,\filter(p,x))) \\
+ & = & \band(\btrue,\btrue) \\
  & = & \btrue
 \end{eqnarray*}$$
 as claimed, while if $p(a) = \bfalse$, we have
@@ -263,6 +263,81 @@ as needed.
 </p></div>
 </div>
 
+And $\filter$ is idempotent.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $x \in \lists{A}$ we have $$\filter(p,\filter(p,x)) = \filter(p,x).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \filter(p,\filter(p,x)) \\
+ & = & \filter(p,\filter(p,\nil)) \\
+ & = & \filter(p,\nil) \\
+ & = & \nil \\
+ & = & x
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now we have
+$$\begin{eqnarray*}
+ &   & \filter(p,\filter(p,\cons(a,x))) \\
+ & = & \filter(p,\bif{p(a)}{\cons(a,\filter(p,x))}{\filter(p,x)}) \\
+ & = & \bif{p(a)}{\filter(p,\cons(a,\filter(p,x)))}{\filter(p,\filter(p,x))} \\
+ & = & \bif{p(a)}{\bif{p(a)}{\cons(a,\filter(p,x))}{\filter(p,x)}}{\filter(p,x)} \\
+ & = & \bif{p(a)}{\cons(a,\filter(p,x))}{\filter(p,x)} \\
+ & = & \filter(p,\cons(a,x))
+\end{eqnarray*}$$
+as needed
+</p></div>
+</div>
+
+One more.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set and $p : A \rightarrow \bool$ a predicate with $x \in \lists{A}$. We have $$\eq(x,\filter(p,x)) = \all(p,x).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \eq(x,\filter(p,x)) \\
+ & = & \eq(\nil,\filter(p,\nil)) \\
+ & = & \eq(\nil,\nil) \\
+ & = & \btrue \\
+ & = & \all(p,\nil) \\
+ & = & \all(p,x)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. We consider two possibilities. If $p(a) = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \eq(\cons(a,x),\filter(p,\cons(a,x)) \\
+ & = & \eq(\cons(a,x),\bif{p(a)}{\cons(a,\filter(p,x))}{\filter(p,x)}) \\
+ & = & \eq(\cons(a,x),\bif{\btrue}{\cons(a,\filter(p,x))}{\filter(p,x)}) \\
+ & = & \eq(\cons(a,x),\cons(a,\filter(p,x))) \\
+ & = & \band(\eq(a,a),\eq(x,\filter(p,x))) \\
+ & = & \band(\btrue,\eq(x,\filter(p,x))) \\
+ & = & \eq(x,\filter(p,x)) \\
+ & = & \all(p,x) \\
+ & = & \band(\btrue,\all(p,x)) \\
+ & = & \band(p(a),\all(p,x)) \\
+ & = & \all(p,\cons(a,x))
+\end{eqnarray*}$$
+as needed. Suppose instead that $p(a) = \bfalse$. Now $\sublist(\filter(p,x),x) = \btrue$, and using the inductive hypothesis we have
+$$\begin{eqnarray*}
+ &   & \eq(\cons(a,x),\filter(p,\cons(a,x)) \\
+ & = & \eq(\cons(a,x),\bif{p(a)}{\cons(a,\filter(p,x))}{\filter(p,x)}) \\
+ & = & \eq(\cons(a,x),\bif{\bfalse}{\cons(a,\filter(p,x))}{\filter(p,x)}) \\
+ & = & \eq(\cons(a,x),\filter(p,x)) \\
+ & = & \bfalse \\
+ & = & \band(\bfalse,\all(p,x)) \\
+ & = & \band(p(a),\all(p,x)) \\
+ & = & \all(p,\cons(a,x))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
 
 Testing
 -------
@@ -304,6 +379,13 @@ Here are our property tests for $\filter$:
 > _test_filter_cat _ =
 >   testName "filter(p,cat(x,y)) == cat(filter(p,x),filter(p,y))" $
 >   \p x y -> (filter p (cat x y)) ==== (cat (filter p x) (filter p y))
+> 
+> 
+> _test_filter_eq_all :: (List t, Equal a)
+>   => t a -> Test ((a -> Bool) -> ListOf t a -> Bool)
+> _test_filter_eq_all _ =
+>   testName "eq(x,filter(p,x)) == all(p,x)" $
+>   \p x -> (eq x (filter p x)) ==== (all p x)
 
 And the suite:
 
@@ -326,6 +408,7 @@ And the suite:
 >   runTest args (_test_filter_snoc t)
 >   runTest args (_test_filter_rev t)
 >   runTest args (_test_filter_cat t)
+>   runTest args (_test_filter_eq_all t)
 
 And ``main``:
 

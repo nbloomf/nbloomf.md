@@ -183,6 +183,11 @@ executable amd-unique
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is Unique.main_unique
 
+executable amd-delete
+  main-is:       Delete.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options:   -main-is Delete.main_delete
+
 executable amd-dedupe
   main-is:       Dedupe.lhs
   build-depends: base == 4.*, QuickCheck

@@ -1,11 +1,10 @@
 ---
 title: Dedupe
 author: nbloomf
-date: 2017-05-27
+date: 2017-05-28
 tags: arithmetic-made-difficult, literate-haskell
 ---
 
-> {-# LANGUAGE ScopedTypeVariables #-}
 > module Dedupe
 >   ( dedupeL, dedupeR, _test_dedupe, main_dedupe
 >   ) where
@@ -31,6 +30,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Repeat
 > import Select
 > import Unique
+> import Delete
 > 
 > import Prelude ()
 > import Test.QuickCheck
@@ -40,61 +40,133 @@ Today we'll define a function ``dedupe`` which removes any "duplicate" items in 
 
 We want to implement $\dedupeL$ as either a right fold or a left fold. But which one? Say our input list is $$x = \langle a, b, c \rangle.$$ Note that $\foldr{\varepsilon}{\varphi}(x)$ will expand into $$\varphi(a, \varphi(b, \varphi(c, \varepsilon))),$$ while $\foldl{\varepsilon}{\varphi}(x)$ will expand into $$\varphi(c, \varphi(b, \varphi(a, \varepsilon))).$$ Note that $\dedupeL$ has to process the entire input list, so both of these computations will evaluate completely from the inside out. So which one makes more sense, keeping in mind that $\dedupeL$ needs to detect the *first* appearance of each item?
 
-To my eye it seems that ``foldl`` is a natural choice here, since the accumulating parameter can keep track of whether a given item has been seen and $\varphi$ can use this information to decide whether each new item should be kept or not. The big remaining question is what exactly to do with the accumulating parameter. It should have type $\lists{A}$, and $\varphi$ will somehow add new items to it -- the two ways to do this are with $\cons$ and $\snoc$. $\snoc$ is certainly correct here, but much slower than $\cons$. The only problem is that $\cons$ will end up reversing the order of the input list -- not what we want. But this can be fixed by just putting the output through $\rev$.
-
 With this handwavy mess in mind, we define $\dedupeL$ as follows.
 
 <div class="result">
 <div class="defn"><p>
-Let $A$ be a set. Define $\varphi : A \times \lists{A} \rightarrow \lists{A}$ by $$\varphi(a,x) = \bif{\elt(a,x)}{x}{\cons(a,x)}.$$ Now define $\dedupeL : \lists{A} \rightarrow \lists{A}$ by $$\dedupeL(x) = \rev(\foldl{\nil}{\varphi}(x)).$$
+Let $A$ be a set. Define $\varphi : A \times \lists{A} \rightarrow \lists{A}$ by $$\varphi(a,x) = \cons(a,\delete(a,x)).$$ Now define $\dedupeL : \lists{A} \rightarrow \lists{A}$ by $$\dedupeL(x) = \foldr{\nil}{\varphi}(x).$$
 
 In Haskell:
 
 > dedupeL :: (List t, Equal a) => t a -> t a
-> dedupeL = rev . foldl nil phi
+> dedupeL = foldr nil phi
 >   where
->     phi a x = if elt a x then x else cons a x
+>     phi a x = cons a (delete a x)
 
 </p></div>
 </div>
 
+The following result suggests an alternative implementation.
+
 <div class="result">
 <div class="thm"><p>
+Let $A$ be a set.
 
+1. $\dedupeL(\nil) = \nil$.
+2. $\dedupeL(\cons(a,x)) = \cons(a,\delete(a,\dedupeL(x)))$.
 </p></div>
 
 <div class="proof"><p>
-
+1. Note that
+$$\begin{eqnarray*}
+ &   & \dedupeL(\nil) \\
+ & = & \foldr{\nil}{\varphi}(\nil) \\
+ & = & \nil
+\end{eqnarray*}$$
+as claimed.
+2. Note that
+$$\begin{eqnarray*}
+ &   & \dedupeL(\cons(a,x)) \\
+ & = & \foldr{\nil}{\varphi}(\cons(a,x)) \\
+ & = & \varphi(a,\foldr{\nil}{\varphi}(x)) \\
+ & = & \varphi(a,\dedupeL(x)) \\
+ & = & \cons(a,\delete(a,\dedupeL(x)))
+\end{eqnarray*}$$
+as claimed.
 </p></div>
 </div>
 
+In Haskell:
+
+> dedupeL' :: (List t, Equal a) => t a -> t a
+> dedupeL' x = case listShape x of
+>   Nil      -> nil
+>   Cons a u -> cons a (delete a (dedupeL' u))
+
+Now $\dedupeL$ and $\delete$ commute.
+
 <div class="result">
 <div class="thm"><p>
-
+Let $A$ be a set, with $a \in A$ and $x \in \lists{A}$. Then $$\delete(a,\dedupeL(x)) = \dedupeL(\delete(a,x)).$$
 </p></div>
 
 <div class="proof"><p>
-
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \delete(a,\dedupeL(\nil)) \\
+ & = & \delete(a,\nil) \\
+ & = & \nil \\
+ & = & \dedupeL(\nil) \\
+ & = & \dedupeL(\delete(a,\nil))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$ and let $b \in A$. We consider two possibilities. If $b = a$, we have
+$$\begin{eqnarray*}
+ &   & \delete(a,\dedupeL(\cons(b,x))) \\
+ & = & \delete(a,\cons(b,\delete(b,\dedupeL(x)))) \\
+ & = & \delete(a,\delete(b,\dedupeL(x))) \\
+ & = & \delete(a,\delete(a,\dedupeL(x))) \\
+ & = & \delete(a,\dedupeL(x)) \\
+ & = & \dedupeL(\delete(a,x)) \\
+ & = & \dedupeL(\delete(a,\cons(a,x))) \\
+ & = & \dedupeL(\delete(a,\cons(b,x)))
+\end{eqnarray*}$$
+as needed. Suppose instead that $b \neq a$. Now we have
+$$\begin{eqnarray*}
+ &   & \delete(a,\dedupeL(\cons(b,x))) \\
+ & = & \delete(a,\cons(b,\delete(b,\dedupeL(x)))) \\
+ & = & \cons(b,\delete(a,\delete(b,\dedupeL(x)))) \\
+ & = & \cons(b,\delete(b,\delete(a,\dedupeL(x)))) \\
+ & = & \cons(b,\delete(b,\dedupeL(\delete(a,x)))) \\
+ & = & \dedupeL(\cons(b,\delete(a,x))) \\
+ & = & \dedupeL(\delete(a,\cons(b,x)))
+\end{eqnarray*}$$
+as needed.
 </p></div>
 </div>
 
+$\dedupeL$s are $\unique$:
+
 <div class="result">
 <div class="thm"><p>
-
+Let $A$ be a set with $x \in \lists{A}$. Then $\unique(\dedupeL(x)) = \btrue$.
 </p></div>
 
 <div class="proof"><p>
-
+(@@@)
 </p></div>
 </div>
 
+$\dedupeL$ preserves $\prefix$:
+
 <div class="result">
 <div class="thm"><p>
-
+Let $A$ be a set with $x,y \in \lists{A}$. If $\prefix(x,y) = \btrue$ then $\prefix(\dedupeL(x),\dedupeL(y)) = \btrue$.
 </p></div>
 
 <div class="proof"><p>
+(@@@)
+</p></div>
+</div>
 
+$\dedupeL$ fixes $\unique$s.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set and $x \in \lists{A}$. Then $\eq(x,\dedupeL(x)) = \unique(x)$.
+</p></div>
+
+<div class="proof"><p>
+(@@@)
 </p></div>
 </div>
 
@@ -136,6 +208,13 @@ Testing
 
 Here are our property tests for $\dedupeL$ and $\dedupeR$:
 
+> _test_dedupeL_alt :: (List t, Equal a)
+>   => t a -> Test (ListOf t a -> Bool)
+> _test_dedupeL_alt _ =
+>   testName "dedupeL(x) == dedupeL'(x)" $
+>   \x -> (dedupeL x) ==== (dedupeL' x)
+> 
+> 
 > _test_dedupeL_unique :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> Bool)
 > _test_dedupeL_unique _ =
@@ -143,11 +222,25 @@ Here are our property tests for $\dedupeL$ and $\dedupeR$:
 >   \x -> (unique (dedupeL x)) ==== True
 > 
 > 
+> _test_dedupeL_delete :: (List t, Equal a)
+>   => t a -> Test (a -> ListOf t a -> Bool)
+> _test_dedupeL_delete _ =
+>   testName "dedupeL(delete(a,x)) == delete(a,dedupeL(x))" $
+>   \a x -> (dedupeL (delete a x)) ==== (delete a (dedupeL x))
+> 
+> 
 > _test_dedupeL_involution :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> Bool)
 > _test_dedupeL_involution _ =
 >   testName "dedupeL(dedupeL(x)) == dedupeL(x)" $
 >   \x -> (dedupeL (dedupeL x)) ==== (dedupeL x)
+> 
+> 
+> _test_dedupeL_eq_unique :: (List t, Equal a)
+>   => t a -> Test (ListOf t a -> Bool)
+> _test_dedupeL_eq_unique _ =
+>   testName "eq(x,dedupeL(x)) == unique(x)" $
+>   \x -> (eq x (dedupeL x)) ==== (unique x)
 > 
 > 
 > _test_dedupeL_prefix :: (List t, Equal a)
@@ -174,8 +267,11 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
+>   runTest args (_test_dedupeL_alt t)
 >   runTest args (_test_dedupeL_unique t)
+>   runTest args (_test_dedupeL_delete t)
 >   runTest args (_test_dedupeL_involution t)
+>   runTest args (_test_dedupeL_eq_unique t)
 >   runTest args (_test_dedupeL_prefix t)
 
 And ``main``:

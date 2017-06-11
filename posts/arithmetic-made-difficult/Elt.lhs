@@ -303,6 +303,47 @@ as claimed.
 </p></div>
 </div>
 
+$\elt$ is an $\any$:
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set, with $a \in A$ and $x \in \lists{A}$. Then $$\elt(a,x) = \any(\beq(a,-),x).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \elt(a,x) \\
+ & = & \elt(a,\nil) \\
+ & = & \bfalse \\
+ & = & \any(\beq(a,-),\nil) \\
+ & = & \any(\beq(a,-),x)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$ and let $b \in A$. We consider two possibilities. If $a = b$, we have
+$$\begin{eqnarray*}
+ &   & \elt(a,\cons(b,x)) \\
+ & = & \bif{\beq(a,b)}{\btrue}{\elt(a,x)} \\
+ & = & \bif{\btrue}{\btrue}{\elt(a,x)} \\
+ & = & \btrue \\
+ & = & \bor(\btrue,\any(\beq(a,-),x)) \\
+ & = & \bor(\beq(a,b),\any(\beq(a,-),x)) \\
+ & = & \any(\beq(a,-),\cons(b,x))
+\end{eqnarray*}$$
+as needed. If $a \neq b$, using the inductive hypothesis we have
+$$\begin{eqnarray*}
+ &   & \elt(a,\cons(b,x)) \\
+ & = & \bif{\beq(a,b)}{\btrue}{\elt(a,x)} \\
+ & = & \bif{\bfalse}{\btrue}{\elt(a,x)} \\
+ & = & \elt(a,x) \\
+ & = & \any(\beq(a,-),x) \\
+ & = & \bor(\bfalse,\any(\beq(a,-),x)) \\
+ & = & \bor(\beq(a,b),\any(\beq(a,-),x)) \\
+ & = & \any(\beq(a,-),\cons(b,x))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
 
 Testing
 -------

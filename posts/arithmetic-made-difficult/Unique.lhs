@@ -85,8 +85,8 @@ $$\begin{eqnarray*}
  &   & \unique(\cons(a,x)) \\
  & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\cons(a,x)) \\
  & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\cons(a,x)) \\
- & = & \band(\all(\not(\beq(a,-)),x),\foldr{\varepsilon}{\varphi}(x)(x)) \\
- & = & \band(\all(\not(\beq(a,-)),x),\unique(x))
+ & = & \band(\all(\bnot(\beq(a,-)),x),\foldr{\varepsilon}{\varphi}(x)(x)) \\
+ & = & \band(\all(\bnot(\beq(a,-)),x),\unique(x))
 \end{eqnarray*}$$
 as claimed.
 </p></div>

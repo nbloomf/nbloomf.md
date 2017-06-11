@@ -146,6 +146,26 @@ Here is a naive implementation of $\foldr{\ast}{\ast}$.
 
 Note that this definition is *not* tail recursive. This turns out not to be a huge problem in practice.
 
+Now $\nil$ is not equal to $\cons(-,-)$:
+
+<div class="result">
+<div class="thm">
+Let $A$ be a set with $a \in A$ and $x \in \lists{A}$. Then $\nil \neq \cons(a,x)$.
+</div>
+
+<div class="proof"><p>
+Suppose by way of contradiction that $\nil = \cons(a,x)$. Let $e = \btrue$ and define $\varphi : A \times \bool \rightarrow \bool$ by $\varphi(a,p) = \bfalse$. Then we have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \foldr{\btrue}{\varphi}(\nil) \\
+ & = & \foldr{\btrue}{\varphi}(\cons(a,x)} \\
+ & = & \varphi(a,\foldr{\btrue}{\varphi}(x)) \\
+ & = & \bfalse,
+\end{eqnarray*}$$
+a contradiction.
+</p></div>
+</div>
+
 Now $\lists{A}$ has an induction principle.
 
 <div class="result">
@@ -303,3 +323,15 @@ as claimed.
 >     (Nil,      Cons _ _) -> False
 >     (Cons _ _, Nil     ) -> False
 >     (Cons a u, Cons b v) -> (eq a b) &&& (eq u v)
+
+Another example:
+
+<div class="result">
+<div class="thm">
+Let $A$ be a set with $a \in A$ and $x \in \lists{A}$. Then $x \neq \cons(a,x)$.
+</div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have $\nil \neq \cons(a,\nil)$ as needed. For the inductive step, suppose the inequality holds for some $x$ and let $b \in A$. Suppose further by way of contradiction that $\cons(b,x) = \cons(a,\cons(b,x))$. Then we have $a = b$ and $x = \cons(b,x)$, a contradiction. So in fact $\cons(b,x) \neq \cons(a,\cons(b,x))$ as needed.
+</p></div>
+</div>
