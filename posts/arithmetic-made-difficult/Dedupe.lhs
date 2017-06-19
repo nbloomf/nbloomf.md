@@ -406,7 +406,7 @@ Here are our property tests for $\dedupeL$ and $\dedupeR$:
 
 And the suite:
 
-> -- run all tests for dedupe & unique
+> -- run all tests for dedupe
 > _test_dedupe ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t

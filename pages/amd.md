@@ -57,7 +57,9 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Unique](/posts/arithmetic-made-difficult/Unique.html)
     * [Delete](/posts/arithmetic-made-difficult/Delete.html)
     * [Dedupe](/posts/arithmetic-made-difficult/Dedupe.html)
-    * Take and Drop
+    * [Take and Drop](/posts/arithmetic-made-difficult/TakeAndDrop.html)
+    * TakeBut and DropBut
+    * TakeWhile and DropWhile
     * Group
     * Run Length Encode
     * First and Last

@@ -10,7 +10,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > {-# LANGUAGE ScopedTypeVariables #-}
 > module Lists
 >   ( List(..), ListShape(..), ListOf(..), ConsList()
->   , isNil, tail, foldr
+>   , isNil, tail, foldr, uncons
 >   ) where
 > 
 > import Booleans
@@ -272,6 +272,35 @@ is undecidable. But we can get around this with a simple wrapper type:
 >   arbitrary = do
 >     x <- arbitrary
 >     return (ListOf (fromConsList x))
+
+Recall that the "constructor" map $F(X) \rightarrow X$ of an initial $F$-algebra $X$ is an isomorphism, so it must have an inverse. What is this inverse for $\lists{A}$? The signature is $$f : \lists{A} \rightarrow \ast + A \times \lists{A}.$$ And we expect that
+$$\begin{eqnarray*}
+ &   & \ast \\
+ & = & (f \circ \theta)(\ast) \\
+ & = & f(\theta(\ast)) \\
+ & = & f(\nil),
+\end{eqnarray*}$$
+and similarly
+$$\begin{eqnarray*}
+ &   & (a,x) \\
+ & = & (f \circ \theta)(a,x) \\
+ & = & f(\theta(a,x)) \\
+ & = & f(\cons(a,x)).
+\end{eqnarray*}$$
+With this in mind, we will call this $f$ $\uncons$.
+
+<div class="result">
+<div class="defn">
+Let $A$ be a set. We define $$\uncons : \lists{A} \rightarrow \ast + A \times \lists{A}$$ by $$\uncons(x) = \left\{\begin{array}{ll} \ast & \mathrm{if}\ x = \nil \\ (a,u) & \mathrm{if}\ x = \cons(a,u). \end{array}\right.$$
+</div>
+</div>
+
+In Haskell:
+
+> uncons :: (List t) => t a -> Maybe (a, t a)
+> uncons x = case listShape x of
+>   Nil      -> Nothing
+>   Cons a u -> Just (a,u)
 
 
 Equality

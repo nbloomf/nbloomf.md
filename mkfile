@@ -124,7 +124,7 @@ sth-build:VQ:
 # arithmetic made difficult #
 #---------------------------#
 
-AMD_TOOLS = all-any at boolean cat choose coprime count dedupe delete div divalg elt filter gcd infix lcm lcp length leq map max-min minus nat plus power prefix prime range repeat rev select sublist tails-inits times tuple unique unzip zip
+AMD_TOOLS = all-any at boolean cat choose coprime count dedupe delete div divalg elt filter gcd infix lcm lcp length leq map max-min minus nat plus power prefix prime range repeat rev select sublist tails-inits take-drop times tuple unique unzip zip
 
 amd:VQ: amd-test
 

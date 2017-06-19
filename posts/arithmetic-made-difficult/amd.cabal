@@ -192,3 +192,8 @@ executable amd-dedupe
   main-is:       Dedupe.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is Dedupe.main_dedupe
+
+executable amd-take-drop
+  main-is:       TakeAndDrop.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options:   -main-is TakeAndDrop.main_take_drop

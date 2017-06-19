@@ -427,6 +427,25 @@ as claimed.
 </p></div>
 </div>
 
+$\suffix$ and $\cons$:
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $x \in \lists{A}$ and $a \in A$ we have $$\suffix(x,\cons(a,x)) = \btrue.$$
+</p></div>
+
+<div class="proof"><p>
+Note that
+$$\begin{eqnarray*}
+ &   & \suffix(x,\cons(a,x)) \\
+ & = & \suffix(x,\cons(a,\cat(\nil,x))) \\
+ & = & \suffix(x,\cat(\cons(a,\nil),x)) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
 $\suffix$ is a partial order:
 
 <div class="result">

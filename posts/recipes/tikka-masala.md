@@ -41,6 +41,10 @@ Chicken:
 2. Stir tomato sauce into the onion and spice mixture, bring to a boil, and reduce heat to low. Simmer sauce for 10 minutes, then mix in cream, paprika, and 1 tablespoon sugar. Bring sauce back to a simmer and cook, stirring often, until sauce is thickened, 10 to 15 minutes.
 3. Heat vegetable oil in a separate skillet over medium heat. Stir chicken into the hot oil, sprinkle with curry powder, and sear chicken until lightly browned but still pink inside, about 3 minutes; stir often. Transfer chicken and any pan juices into the sauce. Simmer chicken in sauce until no longer pink, about 30 minutes; adjust salt and sugar to taste.
 
-**Notes:** Be generous with the spices to your taste. :) I usually cook the chicken a bit longer than recommended before transferring to the sauce. The 30 minute simmer at the end is vital for sauce consistency. Serve over an aromatic rice like basmati. (By the way, why on earth does plain white rice even exist when literally anything else is so much better?)
+**Notes:**
 
-This recipe also works with firm tofu cut to quarter-inch cubes subbed for the chicken.
+* Be generous with the spices to your taste. :)
+* I usually cook the chicken a bit longer than recommended before transferring to the sauce.
+* The 30 minute simmer at the end is vital for sauce consistency. Also, I find that on my range the heat needs to be higher than "simmer".
+* Serve over an aromatic rice like basmati. (By the way, why on earth does plain white rice even exist when literally anything else is so much better?)
+* This recipe also works with firm tofu cut to quarter-inch cubes subbed for the chicken.
