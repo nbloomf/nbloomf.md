@@ -96,6 +96,7 @@ The ``matchLoneFiles`` rule handles standalone pages, like ``about`` and ``conta
 >     match names $ do
 >       route $ setExtension "html"
 >       compile $ pandocMathCompiler
+>         >>= applyShortcodes allServices
 >         >>= loadAndApplyTemplate
 >               "templates/default.html" postCtx
 >         >>= relativizeUrls

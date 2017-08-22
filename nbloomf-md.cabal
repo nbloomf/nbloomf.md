@@ -5,11 +5,14 @@ cabal-version: >= 1.10
 
 executable site
   main-is:
-    site.hs
+    site.lhs
   build-depends:
     base == 4.*,
     hakyll == 4.7.*,
-    hakyll-shortcode == 0.0.1
+    hakyll-shortcode == 0.0.2,
+    pandoc,
+    regex-compat,
+    containers
   ghc-options:
     -threaded
   default-language:

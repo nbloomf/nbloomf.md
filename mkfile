@@ -24,14 +24,14 @@ all:VQ: literate build watch
 #========#
 
 watch:VQ: site
-	echo 'view at localhost:8000' | doppler lightcyan
-	./site watch
+  echo 'view at localhost:8000' | doppler lightcyan
+  ./site watch
 
 build:VQ: site favicons winfiles
-	./site clean
-	./site build
-	cp -r _site/. ../nbloomf.github.io/
-	echo "nbloomf.github.io up to date" | doppler lightgreen
+  ./site clean
+  ./site build
+  cp -r _site/. ../nbloomf.github.io/
+  echo "nbloomf.github.io up to date" | doppler lightgreen
 
 site:Q: site.lhs
   echo 'Compiling site...' | doppler lightgreen
@@ -39,8 +39,8 @@ site:Q: site.lhs
   rm site.o site.hi
 
 check:VQ:
-	wget -r -nv --spider https://nbloomf.github.io
-	rm -r nbloomf.github.io
+  wget -r -nv --spider https://nbloomf.github.io
+  rm -r nbloomf.github.io
 
 
 
@@ -48,12 +48,12 @@ check:VQ:
 # generate favicons #
 #===================#
 
-favicons:VQ:                   \
-  raw/gfx/icon/favicon-32.png  \
-  raw/gfx/icon/favicon-57.png  \
-  raw/gfx/icon/favicon-114.png \
-  raw/gfx/icon/favicon-152.png
-	echo "favicons up to date" | doppler lightgreen
+favicons:VQ:                     \
+    raw/gfx/icon/favicon-32.png  \
+    raw/gfx/icon/favicon-57.png  \
+    raw/gfx/icon/favicon-114.png \
+    raw/gfx/icon/favicon-152.png
+  echo "favicons up to date" | doppler lightgreen
 
 raw/gfx/icon/favicon-32.png:Q: raw/gfx/icon/info.svg
   echo "generating favicon-32" | doppler lightblue

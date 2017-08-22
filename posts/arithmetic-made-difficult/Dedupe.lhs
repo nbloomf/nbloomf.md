@@ -229,8 +229,8 @@ $$\begin{eqnarray*}
  &   & \elt(a,\dedupeL(\delete(a,x))) \\
  & = & \elt(a,\delete(a,\dedupeL(x))) \\
  & = & \bfalse,
-\end{eqnarray*}
-so that $\beq(x,\dedupeL(\delete(a,x))) = \bfalse. Now
+\end{eqnarray*}$$
+so that $\beq(x,\dedupeL(\delete(a,x))) = \bfalse$. Now
 $$\begin{eqnarray*}
  &   & Q \\
  & = & \bfalse \\

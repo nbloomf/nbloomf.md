@@ -60,10 +60,12 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Take and Drop](/posts/arithmetic-made-difficult/TakeAndDrop.html)
     * TakeBut and DropBut
     * TakeWhile and DropWhile
-    * Group
-    * Run Length Encode
-    * First and Last
+    * ChunksOf and ChunksBy
     * Cycle
+    * InsertAt
+    * DeleteAt
+    * SwapAt
+    * Replace
 4. List of Arithmetics
     * [On Boring and Repetitive Proofs](/posts/arithmetic-made-difficult/on-boring-proofs.html)
     * Partial and Total Orders
@@ -71,13 +73,19 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * Insertion Sort
         * Merge Sort
         * Lex and Friends
+        * Chains
     * Semigroups and Monoids
+        * Sproduct
+        * Mproduct
     * Lattices
     * Semirings
-5. Fixed Radix Numeral Systems
+5. Topics on Lists
+    * Run Length Encoding
+    * Edit Distance
+6. Fixed Radix Numeral Systems
     * Carry
-6. Binary Trees
-7. Sequences
+7. Binary Trees
+8. Sequences
 
 > The old idea that there was no reasoning in Arithmetic is dead; the idea that the *general axioms* have no place in Arithmetic is no longer held by a progressive teacher... <cite>J.B.F. Showalter in "Arithmetic Made Easy", 1897</cite>
 
