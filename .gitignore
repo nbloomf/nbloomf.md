@@ -1,6 +1,8 @@
 nbloomf.github.io
 
+.DS_Store
 *.draft
+*.stack-work/
 
 _*
 

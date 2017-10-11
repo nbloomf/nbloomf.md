@@ -12,31 +12,38 @@ executable amd-tuple
   main-is:       Tuples.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is Tuples.main_tuple
+  other-modules: Booleans
 
 executable amd-nat
   main-is:       NaturalNumbers.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is NaturalNumbers.main_nat
+  other-modules: Booleans
 
 executable amd-plus
   main-is:       Plus.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is Plus.main_plus
+  other-modules: Booleans, NaturalNumbers, Unary
 
 executable amd-times
   main-is:       Times.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is Times.main_times
+  other-modules: Booleans, NaturalNumbers, Unary, Plus
 
 executable amd-minus
   main-is:       Minus.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is Minus.main_minus
+  other-modules: Booleans, NaturalNumbers, Unary, Plus, Times
 
 executable amd-leq
   main-is:       LessThanOrEqualTo.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is LessThanOrEqualTo.main_leq
+  other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
+                 Minus
 
 executable amd-max-min
   main-is:       MaxAndMin.lhs

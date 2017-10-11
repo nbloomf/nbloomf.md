@@ -29,6 +29,7 @@ watch:VQ: site
 
 build:VQ: site favicons winfiles
   ./site clean
+  export LANG=C
   ./site build
   cp -r _site/. ../nbloomf.github.io/
   echo "nbloomf.github.io up to date" | doppler lightgreen

@@ -15,6 +15,8 @@ As usual, we start with some imports.
 > import System.Environment (getArgs, getProgName)
 > import System.Exit (exitSuccess, exitFailure)
 > import System.IO (hPutStrLn, stderr)
+> import Control.Applicative (Applicative(..))
+> import Control.Monad (liftM, ap)
 > import Data.List (unfoldr, isPrefixOf)
 
 We will separate the ``print`` example program in *Software Tools* into several utilities. I don't have access to a real line printer (are these even made anymore? I can't find any info) so I'll start by building a "virtual" line printer. A line printer consumes lines of text and prints them onto paper one by one. Our virtual line printer should do the same, or something like it -- consume lines of text and convert them to a format that can be sent to a real printer.
@@ -270,6 +272,14 @@ We'd like to expose a small number of primitive commands that the printer accept
 >       foo st1 = do
 >         (y,st2) <- runLP x st1
 >         runLP (f y) st2
+> 
+> -- (necessary)
+> instance Applicative LinePrinter where
+>   pure = return
+>   (<*>) = ap
+> 
+> instance Functor LinePrinter where
+>   fmap = liftM
 
 Now the printer interface we expose is a small number of monadic functions. For instance, ``lpPutStr`` prints a string at the current line.
 
