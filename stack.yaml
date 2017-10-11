@@ -1,0 +1,16 @@
+resolver: lts-5.18
+
+packages:
+- .
+- posts/arithmetic-made-difficult
+- posts/software-tools-in-haskell
+
+# Dependency packages to be pulled from upstream that are not in the resolver
+extra-deps:
+- hakyll-shortcode-0.0.2
+
+# Override default flag values for local packages and extra-deps
+flags: {}
+
+# Extra package databases containing global packages
+extra-package-dbs: []
