@@ -2,6 +2,14 @@
 title: Projects
 ---
 
+* [**Machine Learning Notes**](/pages/ml.html)
+
+    Just like it says on the tin.
+
+* [**wordcereal**](https://github.com/nbloomf/wordcereal)
+
+    A word list for encoding bits as grammatically correct sentences.
+
 * [**hakyll-shortcode**](https://github.com/nbloomf/hakyll-shortcode)
 
     WordPress-style shortcodes for [Hakyll](https://jaspervdj.be/hakyll/). (Side note: why are so many of my projects in Haskell? I should branch out...)

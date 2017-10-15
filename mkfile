@@ -36,8 +36,8 @@ build:VQ: site favicons winfiles
 
 site:Q: site.lhs
   echo 'Compiling site...' | doppler lightgreen
-  ghc --make -threaded site.lhs
-  rm site.o site.hi
+  stack build
+  cp .stack-work/dist/x86_64-osx/Cabal-1.22.5.0/build/site/site site
 
 check:VQ:
   wget -r -nv --spider https://nbloomf.github.io

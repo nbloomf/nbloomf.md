@@ -18,7 +18,7 @@ executable amd-nat
   main-is:       NaturalNumbers.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is NaturalNumbers.main_nat
-  other-modules: Booleans
+  other-modules: Booleans, Unary
 
 executable amd-plus
   main-is:       Plus.lhs
@@ -49,26 +49,38 @@ executable amd-max-min
   main-is:       MaxAndMin.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is MaxAndMin.main_max_min
+  other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
+                 Minus, LessThanOrEqualTo
 
 executable amd-divalg
   main-is:       DivisionAlgorithm.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is DivisionAlgorithm.main_divalg
+  other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
+                 Minus, LessThanOrEqualTo
 
 executable amd-div
   main-is:       Divides.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is Divides.main_div
+  other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
+                 Minus, LessThanOrEqualTo, DivisionAlgorithm
 
 executable amd-gcd
   main-is:       GreatestCommonDivisor.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is GreatestCommonDivisor.main_gcd
+  other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
+                 Minus, LessThanOrEqualTo, DivisionAlgorithm,
+                 Divides
 
 executable amd-coprime
   main-is:       CoprimeTo.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is CoprimeTo.main_coprime
+  other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
+                 Minus, LessThanOrEqualTo, DivisionAlgorithm,
+                 Divides, GreatestCommonDivisor
 
 executable amd-lcm
   main-is:       LeastCommonMultiple.lhs

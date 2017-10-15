@@ -122,15 +122,14 @@ Timeline
 
 Here's an approximate calendar of the whole process from "application sent" to "first day on the job", reconstructed from email and Slack logs.
 
--------------------------------------
+------------------------------------------------------------------------
 Date        Event
------       ------
+-----       -------------------------------------------
 2016-06-30  Emailed resume.
 
 2016-08-05  First contact! Scheduled the first interview with a hiring engineer.
 
-2016-08-11  Initial interview, conducted in Slack. Received instructions for a
-            short coding test in PHP.
+2016-08-11  Initial interview, conducted in Slack. Received instructions for a short coding test in PHP.
 
 2016-08-16  Finished the coding test.
 
@@ -140,13 +139,11 @@ Date        Event
 
 2017-02-10  Had the Matt Chat and received a formal job offer! This was a Friday.
 
-2017-02-13  Formally accepted the offer! This was the following Monday; I took
-            the weekend to think because this move is such a big one.
+2017-02-13  Formally accepted the offer! This was the following Monday; I took the weekend to think because this move is such a big one.
 
 2017-03-13  Met with my new teammates at the Merchant Risk Council conference.
 
-2017-06-05  First official day on the job! The big delay here was so I could
-            finish out my contract at my old job.
--------------------------------------
+2017-06-05  First official day on the job! The big delay here was so I could finish out my contract at my old job.
+------------------------------------------------------------------------
 
 By the way, [we're hiring](https://automattic.com/work-with-us/)!

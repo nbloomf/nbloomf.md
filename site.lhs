@@ -130,6 +130,8 @@ The ``matchPosts`` rule is a little different from the others we've seen so far.
 >                 "templates/amd.html")
 >             , ("project-euler",
 >                 "templates/project-euler-solutions.html")
+>             , ("ml",
+>                 "templates/ml.html")
 >             ]
 >       >>= loadAndApplyTemplate
 >             "templates/post.html" ctx
