@@ -10,6 +10,9 @@ First some boilerplate.
 > module Indices where
 > 
 > import Data.List
+> import Test.QuickCheck
+> import Test.QuickCheck.Test
+> import System.Exit
 
 This post is just some preliminary ideas about tensors - nothing learning-specific yet.
 
@@ -168,14 +171,18 @@ Next we'd like to be able to construct a list of all the indices compatible with
 
 The number of different indices for a given size should be equal to the size's dimension. This suggests a simple test.
 
-> test_index_count :: Size -> Bool
-> test_index_count s =
->   if (dimOf s) == (fromIntegral $ length $ indicesOf s)
->     then True
->     else error "uh oh"
+> _test_index_count :: Test (Size -> Bool)
+> _test_index_count =
+>   testName "_test_index_count" $
+>   \s ->
+>     if (dimOf s) == (fromIntegral $ length $ indicesOf s)
+>       then True
+>       else error "uh oh"
 > 
-> test_indices_distinct :: Size -> Bool
-> test_indices_distinct s = (indicesOf s) == (nub $ indicesOf s)
+> _test_indices_distinct :: Test (Size -> Bool)
+> _test_indices_distinct =
+>   testName "_test_indices_distinct" $
+>   \s -> (indicesOf s) == (nub $ indicesOf s)
 
 In later posts, $s \in \mathbb{S}$ will represent the size (and shape) of a vector space consisting of tensors, which itself has vector space dimension $D(s)$. But it will sometimes be convenient to think of these tensors canonically as $D(s)$-dimensional vectors. To do this, we'll set up a bijection between the indices of a given size $s$ and the natural numbers less than $D(s)$. I'll call the function from indices to numbers "flatten", since it turns a complicated thing into a one-dimensional thing, and call the inverse "buildup".
 
@@ -203,10 +210,86 @@ In later posts, $s \in \mathbb{S}$ will represent the size (and shape) of a vect
 
 Now ``flatten`` and ``buildup`` should be inverses of each other, which we can test.
 
-> test_position_index :: Size -> Bool
-> test_position_index s = let ks = [0..((dimOf s) - 1)] in
->   ks == map (flatten s . buildup s) ks
+> _test_position_index :: Test (Size -> Bool)
+> _test_position_index =
+>   testName "_test_position_index" $
+>   \s ->
+>     let ks = [0..((dimOf s) - 1)]
+>     in ks == map (flatten s . buildup s) ks
 
 To wrap up, in this post we defined two algebraic types, ``Size`` and ``Index``, to represent the sizes and indices of multidimensional arrays, and two functions, ``flatten`` and ``buildup``, that canonically map the indices of a given size to a 0-indexed list of natural numbers.
 
 In the next post, we'll use ``Size`` and ``Index`` to define and manipulate multidimensional arrays.
+
+
+Tests
+-----
+
+Math heavy code is well suited to automated tests, so we'll write some along the way. I'm using the ``QuickCheck`` library, which is tailored for property-based testing.
+
+> type Test prop = (String, prop)
+> 
+> testName :: String -> prop -> Test prop
+> testName name prop = (name, prop)
+> 
+> runTest :: Testable prop => Args -> Test prop -> IO ()
+> runTest args (name, prop) = do
+>   putStrLn ("\x1b[1;34m" ++ name ++ "\x1b[0;39;49m")
+>   result <- quickCheckWithResult args prop
+>   if isSuccess result
+>     then return ()
+>     else putStrLn (show result) >> exitFailure
+> 
+> testLabel :: String -> IO ()
+> testLabel msg = putStrLn ("\x1b[1;32m" ++ msg ++ "\x1b[0;39;49m")
+
+To write QuickCheck tests for a given type it needs to be an instance of ``Arbitrary``, which provides two basic functions: ``arbitrary``, which generates a "random" element of the type, and ``shrink``, which takes an element and makes it "smaller" in some way. Defining these functions for a given type may be ugly, but only has to be done once.
+
+> instance Arbitrary Size where
+>   arbitrary = sized arbSize
+> 
+>   shrink s = case s of
+>     Size 0 -> []
+>     Size k -> [Size (k-1)]
+>     u :+ v -> [u, v]
+>     u :* v -> [u, v]
+> 
+> arbSize :: Int -> Gen Size
+> arbSize 0 = do
+>   k <- choose (0,5)
+>   return (Size k)
+> arbSize n = do
+>   switch <- arbitrary :: Gen Int
+>   m <- choose (1,n)
+>   case switch `mod` 4 of
+>     0 -> do
+>       u <- arbSize $ (n-1) `rem` m
+>       v <- arbSize $ (n-1) `rem` m
+>       return (u :* v)
+>     1 -> do
+>       u <- arbSize $ (n-1) `rem` m
+>       v <- arbSize $ (n-1) `rem` m
+>       return (u :+ v)
+>     _ -> do
+>       k <- choose (0,5)
+>       return (Size k)
+
+Now we can wrap up our tests in a little suite, ``_test_index``. The arguments for this function are (1) the number of test cases to generate and (2) how big they should be.
+
+> -- run all tests for Size and Index
+> _test_index :: Int -> Int -> IO ()
+> _test_index num size = do
+>   testLabel "Index"
+> 
+>   let
+>     args = stdArgs
+>       { maxSuccess = num
+>       , maxSize = size
+>       }
+> 
+>   runTest args _test_index_count
+>   runTest args _test_indices_distinct
+>   runTest args _test_position_index
+> 
+> main_index :: IO ()
+> main_index = _test_index 200 10
