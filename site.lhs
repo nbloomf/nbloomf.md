@@ -38,7 +38,7 @@ The Main Function
 Hakyll is a declarative DSL for building static websites. A typical Hakyll program is of the following form:
 ```haskell
 main :: IO ()
-main = hakyll rules
+main = hakyllWith rules
 
 rules :: Rules ()
 rules = undefined
@@ -46,7 +46,7 @@ rules = undefined
 where ``Rules`` is a special monad for turning source files into web pages. Come to think of it, Hakyll feels a lot like ``make``. The examples in the Hakyll docs typically define an element of ``Rules`` using one giant ``do`` block, maybe with smaller ``do`` blocks nested in it. I'm not a big fan of this style. Personally I prefer smaller functions with good names and explicit type signatures, so instead I will break up the rules into separate functions. Here's my ``main``:
 
 > main :: IO ()
-> main = hakyll $ do
+> main = hakyllWith config $ do
 >   matchRawFiles
 >   matchCssFiles
 >   matchLoneFiles
@@ -60,6 +60,12 @@ where ``Rules`` is a special monad for turning source files into web pages. Come
 >   tags <- buildTags "posts/**" (fromCapture "tag/*.html")
 >   matchPosts tags
 >   createTagPages tags
+> 
+> 
+> config :: Configuration
+> config = defaultConfiguration
+>   { previewPort = 31337
+>   }
 
 
 The Rules

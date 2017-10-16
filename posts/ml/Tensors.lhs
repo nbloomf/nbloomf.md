@@ -334,6 +334,8 @@ This method for displaying tensors is not perfect, but it has the advantage of b
 Tests
 -----
 
+In future posts we'll be writing tests involving tensors, so I'll put an ``Arbitrary`` instance here.
+
 > instance (Arbitrary r) => Arbitrary (Tensor r) where
 >   arbitrary = arbitrary >>= arbTensor
 > 

@@ -532,7 +532,7 @@ One of our main uses for ``Bool`` will be checking the results of tests, so this
 >     else putStrLn (show result) >> exitFailure
 > 
 > testLabel :: String -> IO ()
-> testLabel msg = putStrLn ("\x1b[1;32m" ++ msg ++ "\x1b[0;39;49m")
+> testLabel msg = putStrLn ("\n\x1b[1;32m" ++ msg ++ "\x1b[0;39;49m")
 > 
 > withTypeOf :: a -> a -> a
 > withTypeOf x _ = x

@@ -28,6 +28,21 @@ In the last post we defined a ``Tensor`` data type and a bunch of operations on 
 >   (u,v) <- arbitrary
 >   arbTensor (u :* v)
 
+> arbTensorPairSameSize :: (Arbitrary r) => r -> Gen (Tensor r, Tensor r)
+> arbTensorPairSameSize _ = do
+>   u <- arbitrary
+>   a <- arbTensor u
+>   b <- arbTensor u
+>   return (a,b)
+
+> _test_same_size_op_comm
+>   :: (Eq r, Num r, Show r, Arbitrary r)
+>   => r -> (Tensor r -> Tensor r -> Tensor r) -> Test Property
+> _test_same_size_op_comm r op =
+>   testName "_test_same_size_op_comm" $
+>     forAll (arbTensorPairSameSize r) $
+>     \(a,b) -> (op a b) == (op b a)
+
 > _test_comm_sum
 >   :: (Eq r, Show r, Arbitrary r) => r -> Test Property
 > _test_comm_sum r =
@@ -66,10 +81,12 @@ In the last post we defined a ``Tensor`` data type and a bunch of operations on 
 >       (u,v,w) <- arbitrary
 >       arbTensor (u :+ (v :+ w))
 
-> -- run all tests for Size and Index
-> _test_tensor :: (Eq r, Show r, Arbitrary r) => r -> Int -> Int -> IO ()
+> -- test suite for Tensor
+> _test_tensor
+>   :: (Num r, Eq r, Show r, Arbitrary r, TypeName r)
+>   => r -> Int -> Int -> IO ()
 > _test_tensor r num size = do
->   testLabel "Tensor"
+>   testLabel ("Tensor " ++ typeName r)
 > 
 >   let
 >     args = stdArgs
@@ -77,6 +94,8 @@ In the last post we defined a ``Tensor`` data type and a bunch of operations on 
 >       , maxSize = size
 >       }
 > 
+>   runTest args (_test_same_size_op_comm r (.+))
+>   runTest args (_test_same_size_op_comm r (.*))
 >   runTest args (_test_comm_sum r)
 >   runTest args (_test_comm_prod r)
 >   runTest args (_test_assocL_assocR_sum r)
@@ -84,5 +103,5 @@ In the last post we defined a ``Tensor`` data type and a bunch of operations on 
 > 
 > main_tensor :: IO ()
 > main_tensor = do
->   _test_tensor False 200 10
 >   _test_tensor (0::Int) 200 10
+>   _test_tensor (0::Double) 200 10

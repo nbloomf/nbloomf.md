@@ -241,7 +241,14 @@ Math heavy code is well suited to automated tests, so we'll write some along the
 >     else putStrLn (show result) >> exitFailure
 > 
 > testLabel :: String -> IO ()
-> testLabel msg = putStrLn ("\x1b[1;32m" ++ msg ++ "\x1b[0;39;49m")
+> testLabel msg = putStrLn ("\n\x1b[1;32m" ++ msg ++ "\x1b[0;39;49m")
+> 
+> class TypeName t where
+>   typeName :: t -> String
+> 
+> instance TypeName Int     where typeName _ = "Int"
+> instance TypeName Integer where typeName _ = "Integer"
+> instance TypeName Double  where typeName _ = "Double"
 
 To write QuickCheck tests for a given type it needs to be an instance of ``Arbitrary``, which provides two basic functions: ``arbitrary``, which generates a "random" element of the type, and ``shrink``, which takes an element and makes it "smaller" in some way. Defining these functions for a given type may be ugly, but only has to be done once.
 
