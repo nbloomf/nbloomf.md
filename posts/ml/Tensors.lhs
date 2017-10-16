@@ -160,7 +160,15 @@ In math notation, if $A,B \in \mathbb{R}^s$, $$\mathsf{dot}(A,B) = \sum_{i \in s
 Structural Arithmetic
 ---------------------
 
-Next we'll define some structural operators on tensors; these are functions that manipulate the size of a tensor, or combine tensors into more complicated ones, or extract subparts. First are the projection operators, which take a tensor in $\mathbb{R}^{s \otimes t}$ and fix one of the index components. In the usual matrix language, projection would extract one row or one column of a matrix. There are two of these, with the following signature.
+Now we'll define some structural operators on tensors; these are functions that manipulate the size of a tensor, or combine tensors into more complicated ones, or extract subparts.
+
+> oplus :: Tensor r -> Tensor r -> Tensor r
+> oplus a@(T u _) b@(T v _) = tensor (u :+ v) $
+>   \k -> case k of
+>     L i -> a `at` i
+>     R j -> b `at` j
+
+Next we have projection operators, which take a tensor in $\mathbb{R}^{s \otimes t}$ and fix one of the index components. In the usual matrix language, projection would extract one row or one column of a matrix. There are two of these, with the following signature.
 
 > projR, projL :: Index -> Tensor r -> Tensor r
 
@@ -200,7 +208,7 @@ Now $\mathbb{R}^{u \otimes v}$ and $\mathbb{R}^{v \otimes u}$ are not equal, but
 > 
 > comm _ = error "comm"
 
-Similarly, $\mathbb{R}^{u \otimes (v \otimes w)}$ and $\mathbb{R}^{(u \otimes v) \otimes w}$ are canonically isomorphic.
+Similarly, $\mathbb{R}^{u \otimes (v \otimes w)}$ and $\mathbb{R}^{(u \otimes v) \otimes w}$ are canonically isomorphic, and likewise for $\oplus$.
 
 > assocL, assocR :: Tensor r -> Tensor r
 > 
@@ -294,6 +302,16 @@ We give ``unDistL`` and ``unDistR`` symbolic synonyms, meant to evoke what they 
 >     w = case common [ size $ f (projR i a) | i <- indicesOf u ] of
 >       Just k -> k
 >       Nothing -> error "mapR"
+> 
+> mapR f a@(T (u :+ v) _) =
+>   let
+>     m = f (termR a)
+>     w = size m
+>   in
+>     tensor (w :+ v) $
+>       \k -> case k of
+>         R i -> m `at` i
+>         L i -> a `at` (L i)
 
 
 Pretty Printing
@@ -343,3 +361,6 @@ In future posts we'll be writing tests involving tensors, so I'll put an ``Arbit
 > arbTensor s = do
 >   as <- vectorOf (fromIntegral $ dimOf s) arbitrary
 >   return $ tensor s (\i -> as !! (fromIntegral $ flatten s i))
+> 
+> arbMatrix :: (Arbitrary r) => Integer -> Integer -> Gen (Tensor r)
+> arbMatrix r c = arbTensor ((Size r) :* (Size c))
