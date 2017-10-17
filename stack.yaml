@@ -2,8 +2,10 @@ resolver: lts-5.18
 
 packages:
 - .
+- posts/munge
 - posts/arithmetic-made-difficult
 - posts/software-tools-in-haskell
+- posts/project-euler
 - posts/ml
 
 # Dependency packages to be pulled from upstream that are not in the resolver

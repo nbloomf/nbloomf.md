@@ -1,0 +1,34 @@
+name:          munge
+version:       0.1.0.0
+build-type:    Simple
+cabal-version: >= 1.10
+
+executable doppler
+  main-is:          Doppler.lhs
+  build-depends:    base == 4.*
+  ghc-options:      -main-is Doppler.main
+  default-language: Haskell2010
+
+executable indent
+  main-is:          Indent.lhs
+  build-depends:    base == 4.*
+  ghc-options:      -main-is Indent.main
+  default-language: Haskell2010
+
+executable dedent
+  main-is:          Dedent.lhs
+  build-depends:    base == 4.*
+  ghc-options:      -main-is Dedent.main
+  default-language: Haskell2010
+
+executable crunch
+  main-is:          Crunch.lhs
+  build-depends:    base == 4.*
+  ghc-options:      -main-is Crunch.main
+  default-language: Haskell2010
+
+executable align
+  main-is:          Align.lhs
+  build-depends:    base == 4.*
+  ghc-options:      -main-is Align.main
+  default-language: Haskell2010

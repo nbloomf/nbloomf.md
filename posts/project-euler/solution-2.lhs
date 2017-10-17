@@ -5,9 +5,12 @@ date: 2017-03-06
 tags: project-euler, literate-haskell
 ---
 
-First, some imports.
+First some boilerplate.
 
+> module ProjectEuler002 where
+> 
 > import Data.Ratio
+> import System.Exit
 
 [Problem 2](https://projecteuler.net/problem=2) from Project Euler:
 
@@ -218,3 +221,10 @@ So the final answer is:
 
 > pe2 :: Integer
 > pe2 = pe2''' 4000000
+> 
+> main :: IO ()
+> main = do
+>   let success = all test [1..1000]
+>   if success
+>     then putStrLn $ show pe2
+>     else exitFailure

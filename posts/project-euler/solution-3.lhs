@@ -5,6 +5,10 @@ date: 2017-03-07
 tags: project-euler, literate-haskell
 ---
 
+First some boilerplate.
+
+> module ProjectEuler003 where
+
 [Problem 3](https://projecteuler.net/problem=3) from Project Euler:
 
 <div class="problem">
@@ -70,3 +74,6 @@ So the final answer is:
 
 > pe3 :: Integer
 > pe3 = pe3' 600851475143
+> 
+> main :: IO ()
+> main = putStrLn $ show pe3

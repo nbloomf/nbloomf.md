@@ -5,6 +5,10 @@ date: 2017-03-10
 tags: project-euler, literate-haskell
 ---
 
+First some boilerplate.
+
+> module ProjectEuler005 where
+
 [Problem 5](https://projecteuler.net/problem=5) from Project Euler:
 
 <div class="problem">
@@ -79,3 +83,6 @@ Anyway, the final answer is:
 
 > pe5 :: Integer
 > pe5 = lcms [1..20]
+> 
+> main :: IO ()
+> main = putStrLn $ show pe5

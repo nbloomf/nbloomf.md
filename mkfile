@@ -11,9 +11,6 @@ targets:VQ:
   echo '  literate : compile literate posts'        | doppler lightcyan
   echo '  favicons : generate favicons'             | doppler lightcyan
   echo '  winfiles : convert raw file line endings' | doppler lightcyan
-  echo 'test'                                       | doppler lightgreen
-  echo '  amd-test : run amd tests'                 | doppler lightcyan
-  echo '  sth-test : run sth tests'                 | doppler lightcyan
 
 all:VQ: literate build watch
 
@@ -24,8 +21,8 @@ all:VQ: literate build watch
 #========#
 
 watch:VQ: site
-  echo 'view at localhost:8000' | doppler lightcyan
-  ./site watch
+  echo 'view at localhost:31337' | doppler lightcyan
+  site watch
 
 build:VQ: site favicons winfiles
   ./site clean
@@ -34,10 +31,9 @@ build:VQ: site favicons winfiles
   cp -r _site/. ../nbloomf.github.io/
   echo "nbloomf.github.io up to date" | doppler lightgreen
 
-site:Q: site.lhs
+site:Q:
   echo 'Compiling site...' | doppler lightgreen
-  stack build
-  cp .stack-work/dist/x86_64-osx/Cabal-1.22.5.0/build/site/site site
+  stack install
 
 check:VQ:
   wget -r -nv --spider https://nbloomf.github.io
@@ -84,63 +80,3 @@ winfiles:Q: `{find raw/tex/win/ -type f}
 raw/tex/win/%:Q: raw/tex/unix/%
   echo "converting $prereq" | doppler lightblue
   cat $prereq | awk '{ sub("$$", "\r"); print }' > $target
-
-
-
-#========================#
-# compile literate posts #
-#========================#
-
-literate:V: sth amd
-
-literate-test:V: sth-test amd-test
-
-
-#---------------------------#
-# software tools in haskell #
-#---------------------------#
-
-STH_TOOLS = archive bubble charcombine charfullwidth charreplace compare compress concat copy count crypt detab echo entab escape examine expand getlines glyphcount import linenumber noop overstrike paginate pslineprint sentcount tail translit unescape wordcount wye
-
-sth:VQ: sth-test
-
-sth-test:VQ: sth-exe
-  echo "testing sth..." | doppler lightblue
-  (shelltest --color --execdir test/sth -- --threads=16)
-
-sth-exe:VQ: ${STH_TOOLS:%=_bin/sth/sth-%}
-
-_bin/sth/(.+):QR: posts/software-tools-in-haskell/dist/build/\1/\1
-  echo "copying $stem1" | doppler lightcyan
-  cp posts/software-tools-in-haskell/dist/build/$stem1/$stem1 $target
-
-posts/software-tools-in-haskell/dist/%:VQ: sth-build
-
-sth-build:VQ:
-  echo "building sth..." | doppler lightblue
-  (cd posts/software-tools-in-haskell; cabal install)
-
-
-#---------------------------#
-# arithmetic made difficult #
-#---------------------------#
-
-AMD_TOOLS = all-any at boolean cat choose coprime count dedupe delete div divalg elt filter gcd infix lcm lcp length leq map max-min minus nat plus power prefix prime range repeat rev select sublist tails-inits take-drop times tuple unique unzip zip
-
-amd:VQ: amd-test
-
-amd-test:VQ: amd-exe
-  echo "testing amd..." | doppler lightblue
-  (shelltest --color --execdir test/amd -- --threads=16)
-
-amd-exe:VQ: ${AMD_TOOLS:%=_bin/amd/amd-%}
-
-_bin/amd/(.+):QR: posts/arithmetic-made-difficult/dist/build/\1/\1
-  echo "copying $stem1" | doppler lightcyan
-  cp posts/arithmetic-made-difficult/dist/build/$stem1/$stem1 $target
-
-posts/arithmetic-made-difficult/dist/%:VQ: amd-build
-
-amd-build:VQ:
-  echo "building amd..." | doppler lightblue
-  (cd posts/arithmetic-made-difficult; cabal install)

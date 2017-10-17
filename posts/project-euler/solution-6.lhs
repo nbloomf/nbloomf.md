@@ -5,6 +5,12 @@ date: 2017-03-11
 tags: project-euler, literate-haskell
 ---
 
+First some boilerplate.
+
+> module ProjectEuler006 where
+> 
+> import System.Exit
+
 [Problem 6](https://projecteuler.net/problem=6) from Project Euler:
 
 <div class="problem">
@@ -148,3 +154,13 @@ So the answer is:
 
 > pe6 :: Integer
 > pe6 = pe6'' 100
+> 
+> main :: IO ()
+> main = do
+>   let
+>     success = and
+>       [ all test_sum_square [1..1000]
+>       ]
+>   if success
+>     then putStrLn $ show pe6
+>     else exitFailure

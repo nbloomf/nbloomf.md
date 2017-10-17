@@ -76,6 +76,8 @@ We have a few operations with signature $\mathbb{R}^s \rightarrow \mathbb{R}^s \
 Structural Arithmetic Tests
 ---------------------------
 
+We can extract the terms from an ``oplus``.
+
 > _test_termL_oplus
 >   :: (Eq r, Show r, Arbitrary r)
 >   => r -> Test Property
@@ -92,6 +94,8 @@ Structural Arithmetic Tests
 >     forAll (arbTensorPair r) $
 >     \(a,b) -> b == termR (oplus a b)
 
+The ``comm`` operator is an involution on both sum and product type tensors.
+
 > _test_comm_sum
 >   :: (Eq r, Show r, Arbitrary r)
 >   => r -> Test Property
@@ -107,6 +111,8 @@ Structural Arithmetic Tests
 >   testName "(:*) comm . comm == id" $
 >     forAll (arbTensorProd r) $
 >     \m -> comm (comm m) == m
+
+The ``assocL`` and ``assocR`` operators are mutual inverses on both sum and product tensors of the appropriate shape.
 
 > _test_assocL_assocR_sum
 >   :: (Eq r, Show r, Arbitrary r)
@@ -135,7 +141,7 @@ Structural Arithmetic Tests
 >     arbTripleSumR _ = do
 >       (u,v,w) <- arbitrary
 >       arbTensor (u :+ (v :+ w))
-
+> 
 > _test_assocL_assocR_prod
 >   :: (Eq r, Show r, Arbitrary r)
 >   => r -> Test Property
@@ -180,10 +186,13 @@ The Test Suite
 >       , maxSize = size
 >       }
 > 
->   runTest args (_test_termL_oplus r)
->   runTest args (_test_termR_oplus r)
+>   -- vector
 >   runTest args (_test_same_size_op_comm "(.+)" r (.+))
 >   runTest args (_test_same_size_op_comm "(.*)" r (.*))
+> 
+>   -- structure
+>   runTest args (_test_termL_oplus r)
+>   runTest args (_test_termR_oplus r)
 >   runTest args (_test_comm_sum r)
 >   runTest args (_test_comm_prod r)
 >   runTest args (_test_assocL_assocR_sum r)

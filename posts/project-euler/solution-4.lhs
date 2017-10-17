@@ -5,10 +5,13 @@ date: 2017-03-08
 tags: project-euler, literate-haskell
 ---
 
-First, some imports.
+First some boilerplate.
 
+> module ProjectEuler004 where
+> 
 > import Data.List
 > import Data.Maybe
+> import System.Exit
 
 [Problem 4](https://projecteuler.net/problem=4) from Project Euler:
 
@@ -379,3 +382,15 @@ Anyway, the final answer is:
 
 > pe4 :: Integer
 > pe4 = let (_,_,x) = pe4'' 3 in x
+> 
+> main :: IO ()
+> main = do
+>   let
+>     success = and
+>       [ all test_digits [1..1000000]
+>       , and [ test_abc t m | t <- [1..10], m <- [1..10] ]
+>       , all test_floor_sqrt [1..10000]
+>       ]
+>   if success
+>     then putStrLn $ show pe4
+>     else exitFailure

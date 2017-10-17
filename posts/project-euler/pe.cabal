@@ -1,0 +1,101 @@
+name:          pe
+version:       0.1.0.0
+build-type:    Simple
+cabal-version: >= 1.10
+
+executable pe001
+  main-is:          solution-1.lhs
+  build-depends:    base == 4.*
+  ghc-options:      -main-is ProjectEuler001.main
+  default-language: Haskell2010
+
+test-suite pe001-test
+  type:             exitcode-stdio-1.0
+  main-is:          solution-1.lhs
+  build-depends:    base == 4.*
+  ghc-options:      -main-is ProjectEuler001.main
+  default-language: Haskell2010
+
+
+executable pe002
+  main-is:          solution-2.lhs
+  build-depends:    base == 4.*
+  ghc-options:      -main-is ProjectEuler002.main
+  default-language: Haskell2010
+
+test-suite pe002-test
+  type:             exitcode-stdio-1.0
+  main-is:          solution-2.lhs
+  build-depends:    base == 4.*
+  ghc-options:      -main-is ProjectEuler002.main
+  default-language: Haskell2010
+
+
+executable pe003
+  main-is:          solution-3.lhs
+  build-depends:    base == 4.*
+  ghc-options:      -main-is ProjectEuler003.main
+  default-language: Haskell2010
+
+test-suite pe003-test
+  type:             exitcode-stdio-1.0
+  main-is:          solution-3.lhs
+  build-depends:    base == 4.*
+  ghc-options:      -main-is ProjectEuler003.main
+  default-language: Haskell2010
+
+
+executable pe004
+  main-is:          solution-4.lhs
+  build-depends:    base == 4.*
+  ghc-options:      -main-is ProjectEuler004.main
+  default-language: Haskell2010
+
+test-suite pe004-test
+  type:             exitcode-stdio-1.0
+  main-is:          solution-4.lhs
+  build-depends:    base == 4.*
+  ghc-options:      -main-is ProjectEuler004.main
+  default-language: Haskell2010
+
+
+executable pe005
+  main-is:          solution-5.lhs
+  build-depends:    base == 4.*
+  ghc-options:      -main-is ProjectEuler005.main
+  default-language: Haskell2010
+
+test-suite pe005-test
+  type:             exitcode-stdio-1.0
+  main-is:          solution-5.lhs
+  build-depends:    base == 4.*
+  ghc-options:      -main-is ProjectEuler005.main
+  default-language: Haskell2010
+
+
+executable pe006
+  main-is:          solution-6.lhs
+  build-depends:    base == 4.*
+  ghc-options:      -main-is ProjectEuler006.main
+  default-language: Haskell2010
+
+test-suite pe006-test
+  type:             exitcode-stdio-1.0
+  main-is:          solution-6.lhs
+  build-depends:    base == 4.*
+  ghc-options:      -main-is ProjectEuler006.main
+  default-language: Haskell2010
+
+
+executable pe007
+  main-is:          solution-7.lhs
+  build-depends:    base == 4.*
+  ghc-options:      -main-is ProjectEuler007.main
+  default-language: Haskell2010
+
+test-suite pe007-test
+  type:             exitcode-stdio-1.0
+  main-is:          solution-7.lhs
+  build-depends:    base == 4.*
+  ghc-options:      -main-is ProjectEuler007.main
+  default-language: Haskell2010

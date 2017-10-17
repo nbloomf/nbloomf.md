@@ -225,7 +225,9 @@ In the next post, we'll use ``Size`` and ``Index`` to define and manipulate mult
 Tests
 -----
 
-Math heavy code is well suited to automated tests, so we'll write some along the way. I'm using the ``QuickCheck`` library, which is tailored for property-based testing.
+Math heavy code is well suited to automated tests, so we'll write some along the way using the ``QuickCheck`` library.
+
+First off, we won't be needing the full complexity of QuickCheck, so here are some helper functions to make the tests a little simpler to write.
 
 > type Test prop = (String, prop)
 > 

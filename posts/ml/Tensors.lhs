@@ -262,6 +262,8 @@ Recall that the $\otimes$ operator in $\mathbb{S}$ does not really distribute ov
 
 We give ``unDistL`` and ``unDistR`` symbolic synonyms, meant to evoke what they do on matrices. ``unDistL`` concatenates matrices vertically, and ``unDistR`` concatenates them horizontally.
 
+The tensor generalization of matrix multiplication is sometimes called <em>contraction</em>. I'll do the worst possible thing here by using the word "contraction" to refer only to matrix multiplication.
+
 > contract :: (Num r) => Tensor r -> Tensor r -> Tensor r
 > contract a@(T (m :* n) _) b@(T (u :* v) _) =
 >   if u == n
@@ -271,21 +273,10 @@ We give ``unDistL`` and ``unDistR`` symbolic synonyms, meant to evoke what they 
 >     else error "inner sizes must match."
 > contract _ _ = error "contraction expects matrices with product sizes."
 
-> common :: (Eq a) => [a] -> Maybe a
-> common []     = Nothing
-> common (x:xs) = if not $ any (/= x) xs
->   then Just x
->   else Nothing
+The last "structural" operations on tensors (at least for now) will be a kind of "map" on sum tensors and a "fold" on product tensors. For sum sizes:
 
-> mapL :: (Tensor r -> Tensor r) -> Tensor r -> Tensor r
-> mapL f a@(T (u :* v) _) = tensor (w :* v) $
->   \(i :& j) -> f (projL j a) `at` i
->   where
->     w = case common [ size $ f (projL j a) | j <- indicesOf v ] of
->       Just k -> k
->       Nothing -> error "mapL"
-> 
-> mapL f a@(T (u :+ v) _) =
+> mapTermL :: (Tensor r -> Tensor r) -> Tensor r -> Tensor r
+> mapTermL f a@(T (u :+ v) _) =
 >   let
 >     m = f (termL a)
 >     w = size m
@@ -294,16 +285,10 @@ We give ``unDistL`` and ``unDistR`` symbolic synonyms, meant to evoke what they 
 >       \k -> case k of
 >         L i -> m `at` i
 >         R i -> a `at` (R i)
-
-> mapR :: (Tensor r -> Tensor r) -> Tensor r -> Tensor r
-> mapR f a@(T (u :* v) _) = tensor (u :* w) $
->   \(i :& j) -> f (projR i a) `at` j
->   where
->     w = case common [ size $ f (projR i a) | i <- indicesOf u ] of
->       Just k -> k
->       Nothing -> error "mapR"
+> mapTermL _ _ = error "mapTermL: tensor argument must have sum shape"
 > 
-> mapR f a@(T (u :+ v) _) =
+> mapTermR :: (Tensor r -> Tensor r) -> Tensor r -> Tensor r
+> mapTermR f a@(T (u :+ v) _) =
 >   let
 >     m = f (termR a)
 >     w = size m
@@ -312,6 +297,47 @@ We give ``unDistL`` and ``unDistR`` symbolic synonyms, meant to evoke what they 
 >       \k -> case k of
 >         R i -> m `at` i
 >         L i -> a `at` (L i)
+> mapTermR _ _ = error "mapTermR: tensor argument must have sum shape"
+
+And for product sizes:
+
+> foldFactorL :: (Tensor r -> Tensor r) -> Tensor r -> Tensor r
+> foldFactorL f a@(T (u :* v) _) = tensor (w :* v) $
+>   \(i :& j) -> f (projL j a) `at` i
+>   where
+>     w = case common [ size $ f (projL j a) | j <- indicesOf v ] of
+>       Just k -> k
+>       Nothing -> error "foldFactorL: function must be well-defined on size"
+> foldFactorL _ _ = error "foldFactorL: tensor argument must have product shape"
+> 
+> foldFactorR :: (Tensor r -> Tensor r) -> Tensor r -> Tensor r
+> foldFactorR f a@(T (u :* v) _) = tensor (u :* w) $
+>   \(i :& j) -> f (projR i a) `at` j
+>   where
+>     w = case common [ size $ f (projR i a) | i <- indicesOf u ] of
+>       Just k -> k
+>       Nothing -> error "foldFactorR: function must be well-defined on size"
+> foldFactorR _ _ = error "foldFactorR: tensor argument must have product shape"
+> 
+> common :: (Eq a) => [a] -> Maybe a
+> common []     = Nothing
+> common (x:xs) = if not $ any (/= x) xs
+>   then Just x
+>   else Nothing
+
+As an example, given a matrix we can use the ``foldFactor`` operators to sum the rows or columns.
+
+> sumRows, sumCols :: (Num r) => Tensor r -> Tensor r
+> sumRows = foldFactorR (cell . esum)
+> sumCols = foldFactorL (cell . esum)
+
+Note that ``mapTerm`` and ``foldFactor`` can be nested to manipulate more complicated tensor sizes. For example,
+
+```haskell
+foldFactorR (foldFactorR (cell . esum))
+```
+
+takes a "three dimensional" tensor and sums along one of the dimensions.
 
 
 Pretty Printing

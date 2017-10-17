@@ -5,6 +5,12 @@ date: 2017-03-05
 tags: project-euler, literate-haskell
 ---
 
+First some boilerplate.
+
+> module ProjectEuler001 where
+> 
+> import System.Exit
+
 [Problem 1](https://projecteuler.net/problem=1) from Project Euler:
 
 <div class="problem">
@@ -110,3 +116,10 @@ So it is with confidence we say that ``pe1'`` and ``pe1''`` are the same functio
 
 > pe1 :: Integer
 > pe1 = pe1'' 1000
+> 
+> main :: IO ()
+> main = do
+>   let success = all test_pe1 [1..1500]
+>   if success
+>     then putStrLn $ show pe1
+>     else exitFailure
