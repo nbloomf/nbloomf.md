@@ -161,7 +161,9 @@ Now given an index and a size, it may or may not make sense to talk about an ent
 > _ `isIndexOf` _
 >   = False
 
-Next we'd like to be able to construct a list of all the indices compatible with a given size; this is what ``indicesOf`` does. I'm going to play a little fast and loose with the proof, because laziness.
+From now on, if $s$ is a size, I'll also use $s$ to denote the set of indices compatible with $s$. So for example, if $s = 5$, we might say somthing like $$\sum_{i \in s} f(i)$$ without ambiguity.
+
+We'd like to be able to construct $s$ as a list; this is what ``indicesOf`` does. I'm going to play a little fast and loose with the proof because laziness.
 
 > indicesOf :: Size -> [Index]
 > indicesOf x = case x of
@@ -210,8 +212,8 @@ In later posts, $s \in \mathbb{S}$ will represent the size (and shape) of a vect
 
 Now ``flatten`` and ``buildup`` should be inverses of each other, which we can test.
 
-> _test_position_index :: Test (Size -> Bool)
-> _test_position_index =
+> _test_flatten_buildup :: Test (Size -> Bool)
+> _test_flatten_buildup =
 >   testName "_test_position_index" $
 >   \s ->
 >     let ks = [0..((dimOf s) - 1)]
@@ -298,7 +300,7 @@ Now we can wrap up our tests in a little suite, ``_test_index``. The arguments f
 > 
 >   runTest args _test_index_count
 >   runTest args _test_indices_distinct
->   runTest args _test_position_index
+>   runTest args _test_flatten_buildup
 > 
 > main_index :: IO ()
 > main_index = _test_index 200 10

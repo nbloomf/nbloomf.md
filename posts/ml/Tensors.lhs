@@ -15,28 +15,28 @@ First some boilerplate.
 > 
 > import Indices
 
-In the last post, we defined two algebras whose elements represent the possible sizes of multidimensional arrays and possible indices into multidimensional arrays, respectively. We did this in such a way that the possible indices into an array with (vector space) dimension $k$ can be mapped to $\{0,1, \ldots, k-1\}$ in a canonical way. With this in hand, we can define a <em>tensor</em> of size $s \in \mathbb{S}$ as a mapping from the indices of $s$ to $\mathbb{R}$. And thanks to the canonical mapping, we can implement our tensors in memory using a linear array. In math notation, we will identify each $s \in \mathbb{S}$ with it's indices, and think of tensors as elements of $\mathbb{R}^s$ (that is, functions from indices to real numbers).
+In the last post, we defined two algebras whose elements represent the possible sizes of multidimensional arrays and possible indices into multidimensional arrays, respectively. We did this in such a way that the possible indices into an array with (vector space) dimension $k$ can be mapped to $\{0,1, \ldots, k-1\}$ in a canonical way. With this in hand, we can define a <em>tensor</em> of size $s \in \mathbb{S}$ as a mapping from the indices of $s$ to $\mathbb{R}$. And thanks to the canonical mapping to integers, we can implement our tensors in memory using a linear array. In math notation, we will identify each $s \in \mathbb{S}$ with it's indices, and think of tensors as elements of $\mathbb{R}^s$ (that is, functions from indices to real numbers).
 
 > data Tensor r = T
 >   { size :: Size
 >   , elts :: (Array Integer r)
 >   } deriving Eq
 
-To retrieve the entry of a tensor at a given index, we evaluate the tensor as a function. We'll call this special case of function application ``at``. So in math notation, we'd write $\mathsf{at}(A,i) = A(i)$ or $A_i$.
-
-> at :: Tensor r -> Index -> r
-> at (T s a) t = if t `isIndexOf` s
->   then a ! (flatten s t)
->   else error "incompatible index"
-
-We'll also define some helper functions to make building tensors more convenient. First, one allowing us to specify a size and a map from indices to $\mathbb{R}$s. (This is really the only constructor we need.) In math notation, $\mathsf{tensor}$ is like defining a tensor $M$ by saying $A \in \mathbb{R}^s$ and $A(i) = f(i)$ for some function $f$.
+A tensor "is" a map from indices to $\mathbb{R}$s. The ``tensor`` function lets us build a tensor by supplying this map.
 
 > tensor :: Size -> (Index -> r) -> Tensor r
 > tensor s f = T s (array (0,(dimOf s)-1) entries)
 >   where
 >     entries = [(flatten s t, f t) | t <- indicesOf s]
 
-For instance, a <em>uniform</em> tensor has the same value at each index.
+To retrieve the entry of a tensor at a given index, we evaluate the tensor as a function. We'll call this ``at``. So in math notation, we'd write $\mathsf{at}(A,i) = A(i)$ or $A_i$.
+
+> at :: Tensor r -> Index -> r
+> at (T s a) t = if t `isIndexOf` s
+>   then a ! (flatten s t)
+>   else error "incompatible index"
+
+We'll also define some helper functions to make building tensors more convenient. For instance, a <em>uniform</em> tensor has the same value at each index.
 
 > uniform :: Size -> r -> Tensor r
 > uniform s x = tensor s (\_ -> x)
@@ -45,10 +45,17 @@ For instance, a <em>uniform</em> tensor has the same value at each index.
 > ones s = uniform s 1
 > zeros s = uniform s 0
 
-While we're at it, the identity matrix:
+The simplest possible (nontrivial) tensor has size 1; we will call these <em>cells</em>.
 
-> idMat :: (Num r) => Size -> Tensor r
-> idMat n = tensor (n :* n) (\ (i :& j) -> if i==j then 1 else 0)
+> cell :: r -> Tensor r
+> cell r = tensor 1 (\_ -> r)
+
+We'll also provide a simple way to construct vectors with natural number size.
+
+> vec :: [r] -> Tensor r
+> vec xs = tensor k (\(Index i) -> xs !! (fromIntegral i))
+>   where
+>     k = Size $ fromIntegral $ length xs
 
 The downside of defining our tensors recursively is that it's less clear what the index of a given entry is. To help out with this, we'll define two helpers: ``indexOf``, that defines a tensor of a given size whose entries are equal to their indices, and ``orderOf``, that shows how the entries of a tensor are linearized internally.
 
@@ -58,7 +65,7 @@ The downside of defining our tensors recursively is that it's less clear what th
 > orderOf :: Size -> Tensor Integer
 > orderOf s = tensor s (flatten s)
 
-For example, here are three different views of a size $3 \otimes 3$ tensor.
+This works because we can pass ``tensor`` <em>any</em> function on indices. For example, here are three different views of a size $3 \otimes 3$ tensor.
 
 ```haskell
 $> ones (3*3)
@@ -75,7 +82,7 @@ $> orderOf (3*3)
 2 5 8
 ```
 
-With ``tensor`` and ``at`` we can manipulate tensors in more interesting ways. ``pointwise`` applies a given function to each entry of a tensor.
+With ``tensor`` and ``at`` we can manipulate and combine tensors in more interesting ways. For instance, ``pointwise`` applies a given function to each entry of a tensor.
 
 > pointwise :: (r -> s) -> Tensor r -> Tensor s
 > pointwise f a@(T u _) = tensor u (\i -> f (a`at`i))
@@ -88,32 +95,20 @@ In math notation, $$\mathsf{pointwise}(f)(A)_i = f(A_i).$$ And ``pointwise`` gen
 >     then tensor u (\i -> f (a`at`i) (b`at`i))
 >     else error "pointwise2 requires tensors of the same size."
 
-In math notation, $\mathsf{pointwise2}(f)(A)(B)_i = f(A_i,B_i)$.
+In math notation, $$\mathsf{pointwise2}(f)(A)(B)_i = f(A_i,B_i).$$
 
-We'd also like to extract all entries from a tensor as a list.
+It will sometimes be handy to extract all entries from a tensor as a list.
 
 > entries :: Tensor r -> [r]
 > entries a@(T s _) = [ a`at`i | i <- indicesOf s ]
 
-And with the list of entries in hand, we can fold them.
-
-> tfold :: (r -> r -> r) -> Tensor r -> r
-> tfold f t = case entries t of
->   [] -> error "tfold: empty tensor"
->   xs -> foldr1 f xs
-
-For instance, we can use ``tfold`` to find the sum or max of the entries of a tensor.
+For instance we can find the sum or max of the entries of a tensor.
 
 > esum :: (Num r) => Tensor r -> r
-> esum = tfold (+)
+> esum = sum . entries
 > 
 > emax :: (Ord r) => Tensor r -> r
-> emax = tfold max
-
-I'll wrap up with a constructor for the size 1 tensor.
-
-> cell :: r -> Tensor r
-> cell r = tensor 1 (\_ -> r)
+> emax = maximum . entries
 
 
 Vector Arithmetic
@@ -133,11 +128,6 @@ Tensors are vectors, so they should have the usual vector operations of plus, ne
 > (.@) :: (Num r) => r -> Tensor r -> Tensor r
 > r .@ a = pointwise (r*) a
 
-While we're at it, a summation operator for tensors.
-
-> tsum :: (Num r, Foldable t) => t (Tensor r) -> Tensor r
-> tsum = foldr1 (.+)
-
 The Hadamard or entrywise product is also handy.
 
 > (.*) :: (Num r) => Tensor r -> Tensor r -> Tensor r
@@ -149,7 +139,7 @@ Thinking of tensors as vectors, we can dot them together in the usual way.
 > dot a@(T u _) b@(T v _) =
 >   if u == v
 >     then sum [ (a`at`i)*(b`at`i) | i <- indicesOf u ]
->     else error "tensors must have the same size."
+>     else error "dot: tensors must have the same size."
 
 In math notation, if $A,B \in \mathbb{R}^s$, $$\mathsf{dot}(A,B) = \sum_{i \in s} A_i B_i.$$ The 'dot square' of a tensor will also be handy later.
 
@@ -160,13 +150,21 @@ In math notation, if $A,B \in \mathbb{R}^s$, $$\mathsf{dot}(A,B) = \sum_{i \in s
 Structural Arithmetic
 ---------------------
 
-Now we'll define some structural operators on tensors; these are functions that manipulate the size of a tensor, or combine tensors into more complicated ones, or extract subparts.
+Now we'll define some structural operators on tensors; these are functions that manipulate the size of a tensor, or combine tensors into more complicated ones, or extract subparts. First is ``oplus``, which constructs a tensor with sum shape.
 
 > oplus :: Tensor r -> Tensor r -> Tensor r
 > oplus a@(T u _) b@(T v _) = tensor (u :+ v) $
 >   \k -> case k of
 >     L i -> a `at` i
 >     R j -> b `at` j
+
+In a rough and handwavy way, if $a \in \mathbb{R}^u$ and $b \in \mathbb{R}^v$, then $$a \oplus b \in \mathbb{R}^u \oplus \mathbb{R}^v \cong \mathbb{R}^{u \oplus v},$$ and $\oplus$ is the operator that achieves this isomorphism.
+
+This function ``otimes`` is called the <em>dyadic</em> or <em>outer product</em>.
+
+> otimes :: (Num r) => Tensor r -> Tensor r -> Tensor r
+> otimes a@(T u _) b@(T v _) = tensor (u :* v) $
+>   \(i :& j) -> (a `at` i) * (b `at` j)
 
 Next we have projection operators, which take a tensor in $\mathbb{R}^{s \otimes t}$ and fix one of the index components. In the usual matrix language, projection would extract one row or one column of a matrix. There are two of these, with the following signature.
 
@@ -262,17 +260,6 @@ Recall that the $\otimes$ operator in $\mathbb{S}$ does not really distribute ov
 
 We give ``unDistL`` and ``unDistR`` symbolic synonyms, meant to evoke what they do on matrices. ``unDistL`` concatenates matrices vertically, and ``unDistR`` concatenates them horizontally.
 
-The tensor generalization of matrix multiplication is sometimes called <em>contraction</em>. I'll do the worst possible thing here by using the word "contraction" to refer only to matrix multiplication.
-
-> contract :: (Num r) => Tensor r -> Tensor r -> Tensor r
-> contract a@(T (m :* n) _) b@(T (u :* v) _) =
->   if u == n
->     then tensor (m*v)
->       (\ (i :& j) -> sum
->         [ (a`at`(i :& k))*(b`at`(k :& j)) | k <- indicesOf n ])
->     else error "inner sizes must match."
-> contract _ _ = error "contraction expects matrices with product sizes."
-
 The last "structural" operations on tensors (at least for now) will be a kind of "map" on sum tensors and a "fold" on product tensors. For sum sizes:
 
 > mapTermL :: (Tensor r -> Tensor r) -> Tensor r -> Tensor r
@@ -338,6 +325,26 @@ foldFactorR (foldFactorR (cell . esum))
 ```
 
 takes a "three dimensional" tensor and sums along one of the dimensions.
+
+
+Matrix Operations
+-----------------
+
+Now for a couple of matrix-specific operations. First the identity matrix.
+
+> idMat :: (Num r) => Size -> Tensor r
+> idMat n = tensor (n :* n) (\ (i :& j) -> if i==j then 1 else 0)
+
+The tensor generalization of matrix multiplication is sometimes called <em>contraction</em>. I'll do the worst possible thing here by using the word "contraction" to refer only to matrix multiplication.
+
+> contract :: (Num r) => Tensor r -> Tensor r -> Tensor r
+> contract a@(T (m :* n) _) b@(T (u :* v) _) =
+>   if u == n
+>     then tensor (m*v)
+>       (\ (i :& j) -> sum
+>         [ (a`at`(i :& k))*(b`at`(k :& j)) | k <- indicesOf n ])
+>     else error "inner sizes must match."
+> contract _ _ = error "contraction expects matrices with product sizes."
 
 
 Pretty Printing
