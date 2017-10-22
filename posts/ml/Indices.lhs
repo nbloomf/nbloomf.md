@@ -236,13 +236,17 @@ First off, we won't be needing the full complexity of QuickCheck, so here are so
 > testName :: String -> prop -> Test prop
 > testName name prop = (name, prop)
 > 
-> runTest :: Testable prop => Args -> Test prop -> IO ()
+> runTest, skipTest :: Testable prop => Args -> Test prop -> IO ()
 > runTest args (name, prop) = do
 >   putStrLn ("\x1b[1;34m" ++ name ++ "\x1b[0;39;49m")
 >   result <- quickCheckWithResult args prop
 >   if isSuccess result
 >     then return ()
 >     else putStrLn (show result) >> exitFailure
+> 
+> -- when testing tests
+> skipTest _ (name, _) =
+>   putStrLn ("\x1b[1;33mskipped: " ++ name ++ "\x1b[0;39;49m")
 > 
 > testLabel :: String -> IO ()
 > testLabel msg = putStrLn ("\n\x1b[1;32m" ++ msg ++ "\x1b[0;39;49m")
@@ -253,6 +257,11 @@ First off, we won't be needing the full complexity of QuickCheck, so here are so
 > instance TypeName Int     where typeName _ = "Int"
 > instance TypeName Integer where typeName _ = "Integer"
 > instance TypeName Double  where typeName _ = "Double"
+> 
+> verboseTest :: (Testable prop) => Test prop -> IO ()
+> verboseTest (name, p) = do
+>   putStrLn name
+>   verboseCheck p
 
 To write QuickCheck tests for a given type it needs to be an instance of ``Arbitrary``, which provides two basic functions: ``arbitrary``, which generates a "random" element of the type, and ``shrink``, which takes an element and makes it "smaller" in some way. Defining these functions for a given type may be ugly, but only has to be done once.
 
@@ -260,14 +269,13 @@ To write QuickCheck tests for a given type it needs to be an instance of ``Arbit
 >   arbitrary = sized arbSize
 > 
 >   shrink s = case s of
->     Size 0 -> []
->     Size k -> [Size (k-1)]
+>     Size k -> if k <= 0 then [] else [Size (k-1)]
 >     u :+ v -> [u, v]
 >     u :* v -> [u, v]
 > 
 > arbSize :: Int -> Gen Size
 > arbSize 0 = do
->   k <- choose (0,5)
+>   k <- choose (0,3)
 >   return (Size k)
 > arbSize n = do
 >   switch <- arbitrary :: Gen Int
@@ -290,7 +298,7 @@ Now we can wrap up our tests in a little suite, ``_test_index``. The arguments f
 > -- run all tests for Size and Index
 > _test_index :: Int -> Int -> IO ()
 > _test_index num size = do
->   testLabel "Index"
+>   testLabel "Size and Index"
 > 
 >   let
 >     args = stdArgs
@@ -303,4 +311,4 @@ Now we can wrap up our tests in a little suite, ``_test_index``. The arguments f
 >   runTest args _test_flatten_buildup
 > 
 > main_index :: IO ()
-> main_index = _test_index 200 10
+> main_index = _test_index 200 20

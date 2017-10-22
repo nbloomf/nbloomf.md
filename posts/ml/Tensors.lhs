@@ -1,26 +1,37 @@
 ---
 title: Tensors
 author: nbloomf
-date: 2017-10-13
+date: 2017-10-14
 tags: ml, literate-haskell
 ---
 
 First some boilerplate.
 
+> {-# LANGUAGE LambdaCase #-}
 > module Tensors where
 > 
 > import Data.Array
+> import Data.Foldable
+> import Control.Applicative
 > import Text.PrettyPrint
 > import Test.QuickCheck
 > 
 > import Indices
+> import IndexIsos
 
-In the last post, we defined two algebras whose elements represent the possible sizes of multidimensional arrays and possible indices into multidimensional arrays, respectively. We did this in such a way that the possible indices into an array with (vector space) dimension $k$ can be mapped to $\{0,1, \ldots, k-1\}$ in a canonical way. With this in hand, we can define a <em>tensor</em> of size $s \in \mathbb{S}$ as a mapping from the indices of $s$ to $\mathbb{R}$. And thanks to the canonical mapping to integers, we can implement our tensors in memory using a linear array. In math notation, we will identify each $s \in \mathbb{S}$ with it's indices, and think of tensors as elements of $\mathbb{R}^s$ (that is, functions from indices to real numbers).
+In the last post, we defined two algebras whose elements represent the possible sizes of multidimensional arrays and possible indices into multidimensional arrays, respectively. We did this in such a way that the possible indices into an array with (vector space) dimension $k$ can be mapped to $\{0,1, \ldots, k-1\}$ in a canonical way. With this in hand, we can define a <em>tensor</em> of size $s \in \mathbb{S}$ as a mapping from the indices of $s$ to $\mathbb{R}$. And thanks to the canonical mapping to integers, we can implement our tensors in memory using a linear array. In math notation, we will identify each $s \in \mathbb{S}$ with its indices, and think of tensors as elements of $\mathbb{R}^s$ (that is, functions from indices to real numbers).
 
 > data Tensor r = T
 >   { size :: Size
 >   , elts :: (Array Integer r)
->   } deriving Eq
+>   }
+
+We'll say that two tensors are <em>strictly equal</em>, denoted ``$==``, if they have the same sizes and the same entries at each index.
+
+> ($==) :: (Eq r) => Tensor r -> Tensor r -> Bool
+> a@(T u x) $== b@(T v y) = (u == v) && (x == y)
+
+(Strict equality is too, well, <em>strict</em>. We'll nail down the real equality on tensors in a moment.)
 
 A tensor "is" a map from indices to $\mathbb{R}$s. The ``tensor`` function lets us build a tensor by supplying this map.
 
@@ -36,6 +47,14 @@ To retrieve the entry of a tensor at a given index, we evaluate the tensor as a 
 >   then a ! (flatten s t)
 >   else error "incompatible index"
 
+So ``tensor`` and ``at`` obey the following identities:
+
+```haskell
+a@(T u _) == tensor u (\i -> a`at`i)
+
+(tensor u f) `at` i == f i
+```
+
 We'll also define some helper functions to make building tensors more convenient. For instance, a <em>uniform</em> tensor has the same value at each index.
 
 > uniform :: Size -> r -> Tensor r
@@ -44,6 +63,22 @@ We'll also define some helper functions to make building tensors more convenient
 > ones, zeros :: (Num r) => Size -> Tensor r
 > ones s = uniform s 1
 > zeros s = uniform s 0
+
+We can use ``at`` and the canonical isomorphism on index sets to define equality for tensors.
+
+> instance (Eq r) => Eq (Tensor r) where
+>   a@(T u _) == b@(T v _) = if u ~= v
+>     then all (\i -> (a`at`i) == (b`at`(mapIndex u v i))) (indicesOf u)
+>     else False
+
+We'll see the reason for this weak equality in a bit. But for now, note that the following two tensors are <em>equal</em>, but not <em>strictly equal</em>.
+
+```haskell
+x = ones (2*(2*2)) :: Tensor Int
+y = ones ((2*2)*2) :: Tensor Int
+```
+
+More generally, strict equality implies equality, but not vice versa.
 
 The simplest possible (nontrivial) tensor has size 1; we will call these <em>cells</em>.
 
@@ -82,33 +117,190 @@ $> orderOf (3*3)
 2 5 8
 ```
 
-With ``tensor`` and ``at`` we can manipulate and combine tensors in more interesting ways. For instance, ``pointwise`` applies a given function to each entry of a tensor.
 
-> pointwise :: (r -> s) -> Tensor r -> Tensor s
-> pointwise f a@(T u _) = tensor u (\i -> f (a`at`i))
+Tensor as a Functor
+-------------------
 
-In math notation, $$\mathsf{pointwise}(f)(A)_i = f(A_i).$$ And ``pointwise`` generalizes; ``pointwise2`` applies a function of two arguments two the entries of two tensors.
+One of the first questions we ask about type constructors is whether they are naturally members of any interesting classes. It's not too surprising that ``Tensor`` is a functor, where ``fmap`` is "pointwise" function application.
 
-> pointwise2 :: (r -> s -> t) -> Tensor r -> Tensor s -> Tensor t
-> pointwise2 f a@(T u _) b@(T v _) =
->   if u == v
->     then tensor u (\i -> f (a`at`i) (b`at`i))
->     else error "pointwise2 requires tensors of the same size."
+> instance Functor Tensor where
+>   fmap f a@(T u _) = tensor u (\i -> f (a`at`i))
 
-In math notation, $$\mathsf{pointwise2}(f)(A)(B)_i = f(A_i,B_i).$$
+To verify the functor laws, we make sure that ``fmap id == id``. (Remember that ``$==`` means strict equality.)
 
-It will sometimes be handy to extract all entries from a tensor as a list.
+```haskell
+    fmap id a
+$== fmap id a@(T u _)
+$== tensor u (\i -> id (a`at`i))
+$== tensor u (\i -> a`at`i)
+$== a
+```
 
-> entries :: Tensor r -> [r]
-> entries a@(T s _) = [ a`at`i | i <- indicesOf s ]
+and that ``fmap (g . f) == fmap g . fmap f``.
 
-For instance we can find the sum or max of the entries of a tensor.
+```haskell
+    fmap g (fmap f a)
+$== fmap g (fmap f a@(T u _))
+$== fmap g (tensor u (\i -> f (a`at`i)))
+$== tensor u (\i -> g ((tensor u (\j -> f (a`at`j))) `at` i))
+$== tensor u (\i -> g (f (a`at`i)))
+$== tensor u (\i -> (g . f) (a`at`i))
+$== fmap (g . f) a
+```
 
-> esum :: (Num r) => Tensor r -> r
-> esum = sum . entries
+We can also define a ``Foldable`` instance for tensors, using the canonical order on indices.
+
+> instance Foldable Tensor where
+>   foldMap f a@(T u _)
+>     = foldMap f [ a`at`i | i <- indicesOf u ]
+
+From here we can immediately take the ``sum`` and ``maximum`` of a tensor. We'll also define a kind of ``zip`` for tensors of equivalent size; I had trouble finding a good general class for zippable functors in the libraries.
+
+> tzip :: Tensor a -> Tensor b -> Tensor (a,b)
+> tzip a@(T u _) b@(T v _) = if u ~= v
+>   then tensor u (\i -> (a`at`i, b`at`(mapIndex u v i)))
+>   else error "zip: tensors must have equivalent size"
 > 
-> emax :: (Ord r) => Tensor r -> r
-> emax = maximum . entries
+> tzipWith :: (a -> b -> c) -> Tensor a -> Tensor b -> Tensor c
+> tzipWith f a b = fmap (uncurry f) $ tzip a b
+
+``Tensor`` is also applicative. (Making this work is the main motivation for defining equality the way we did.)
+
+> instance Applicative Tensor where
+>   pure = cell
+> 
+>   a@(T u _) <*> b@(T v _) = tensor (u :* v) $
+>     \(i :& j) -> (a `at` i) (b `at` j)
+
+We need to see that this implementation satisfies the applicative laws. First the identity law:
+
+``pure id <*> a == a`` for all ``a``
+
+```haskell
+    pure id <*> a
+$== cell id <*> a@(T u _)
+$== (tensor 1 (const id)) <*> a@(T u _)
+$== tensor (1 :* u) (\(i :& j) -> id (a`at`j))
+$== tensor (1 :* u) (\(i :& j) -> a`at`j)
+ == tensor u (\j -> a`at`j)
+$== a
+```
+
+Next we establish the composition law:
+
+``pure (.) <*> a <*> b <*> c == a <*> (b <*> c)``.
+
+```haskell
+    pure (.) <*> a <*> b <*> c
+$== tensor 1 (const (.)) <*> a@(T u _) <*> b <*> c
+$== tensor (1 :* u) (\(i :& j) -> (.) (a`at`j)) <*> b@(T v _) <*> c
+$== tensor ((1 :* u) :* v) (\((i :& j) :& k) -> (a`at`j) . (b`at`k)) <*> c@(T w _)
+$== tensor (((1 :* u) :* v) :* w) (\(((i :& j) :& k) :& l) -> (a`at`j) . (b`at`k) $ (c`at`l))
+ == tensor (u :* (v :* w)) (\(j :& (k :& l)) -> (a`at`j) $ (b`at`k) (c`at`l))
+$== a <*> tensor (v :* w) (\(k :& l) -> (b`at`k) (c`at`l))
+$== a <*> (b <*> c)
+```
+
+The homomorphism law:
+
+``pure f <*> pure x == pure (f x)``
+
+```haskell
+    pure f <*> pure x
+$== tensor 1 (const f) <*> tensor 1 (const x)
+$== tensor (1 :* 1) (\(i :& j) -> f x)
+ == tensor 1 (\_ -> f x)
+$== pure (f x)
+```
+
+And the interchange law:
+
+``a <*> pure x = pure ($ x) <*> a``
+
+```haskell
+    a <*> pure x
+$== a@(T u _) <*> tensor 1 (const x)
+$== tensor (u :* 1) (\(i :& j) -> (a`at`i) x)
+ == tensor (1 :* u) (\(j :& i) -> ($ x) (a`at`i))
+$== tensor 1 (const ($ x)) <*> a@(T u _)
+$== pure ($ x) <*> a
+```
+
+It may seem like overkill to go to the trouble of defining equality the way we did just to make ``Tensor`` an applicative functor, and it is -- we won't need the applicativeness much. But there's a payoff: the outer product of tensors is defined in terms of ``<*>``.
+
+While we're at it, ``Tensor`` is also ``Alternative``.
+
+> instance Alternative Tensor where
+>   empty = tensor 0 (\_ -> undefined)
+> 
+>   a@(T u _) <|> b@(T v _) = tensor (u :+ v) $
+>     \case
+>       L i -> a `at` i
+>       R j -> b `at` j
+
+We should also verify the ``Alternative`` laws. First the monoid laws that everyone agrees ``Alternatives`` should satisfy. Left identity:
+
+``empty <|> a == a``
+
+```haskell
+    empty <|> a
+$== tensor 0 (const undefined) <|> a@(T u _)
+$== tensor (0 :+ u) (\case L i -> undefined; R j -> a`at`j)
+ == tensor u (\j -> a`at`j)
+$== a
+```
+
+Right identity:
+
+``a <|> empty == a``
+
+```haskell
+    a <|> empty
+$== a@(T u _) <|> tensor 0 (const undefined)
+$== tensor (u :+ 0) (\case L i -> a`at`i; R j -> undefined)
+ == tensor u (\i -> a`at`i)
+$== a
+```
+
+Associativity:
+
+``(a <|> b) <|> c == a <|> (b <|> c)``
+
+```haskell
+    (a <|> b) <|> c
+$== (a@(T u _) <|> b@(T v _)) <|> c
+$== (tensor (u :+ v) (\case L i -> a`at`i; R j -> b`at`j)) <|> c@(T w _)
+$== tensor ((u :+ v) :+ w) (\case L l -> (case l of L i -> a`at`i; R j -> b`at`j)); R k -> c`at`k)
+$== tensor ((u :+ v) :+ w) (\case L (L i) -> a`at`i; L (R j) -> b`at`j; R k -> c`at`k)
+ == tensor (u :+ (v :+ w)) (\case L i -> a`at`i; R (L j) -> b`at`j; R (R k) -> c`at`k)
+$== tensor (u :+ (v :+ w)) (\case L i -> a`at`i; R l -> (case l of L j -> b`at`j; R k -> c`at`k))
+$== a <|> tensor (v :+ w) (\case L j -> b`at`j; R m -> c`at`m)
+$== a <|> (b <|> c)
+```
+
+And some of the laws that only hold for some ``Applicative`` instances (including this one). Left zero:
+
+``empty <*> a == empty``
+
+```haskell
+    empty <*> a
+$== tensor 0 (const undefined) <*> a@(T u _)
+$== tensor (0 :* u) (\(i :& j) -> undefined (a `at` j))
+ == tensor 0 (\_ -> undefined)
+$== empty
+```
+
+Right zero:
+
+``a <*> empty == empty``
+
+```haskell
+    a <*> empty
+$== a@(T u _) <*> tensor 0 (const undefined)
+$== tensor (u :* 0) (\(i :& j) -> (a`at`i) undefined)
+ == tensor 0 (\_ -> undefined)
+$== empty
+```
 
 
 Vector Arithmetic
@@ -117,29 +309,26 @@ Vector Arithmetic
 Tensors are vectors, so they should have the usual vector operations of plus, negate, and scale.
 
 > (.+) :: (Num r) => Tensor r -> Tensor r -> Tensor r
-> (.+) = pointwise2 (+)
+> (.+) = tzipWith (+)
 > 
 > neg :: (Num r) => Tensor r -> Tensor r
-> neg = pointwise negate
+> neg = fmap negate
 > 
 > (.-) :: (Num r) => Tensor r -> Tensor r -> Tensor r
 > a .- b = a .+ (neg b)
 > 
 > (.@) :: (Num r) => r -> Tensor r -> Tensor r
-> r .@ a = pointwise (r*) a
+> r .@ a = fmap (r*) a
 
 The Hadamard or entrywise product is also handy.
 
 > (.*) :: (Num r) => Tensor r -> Tensor r -> Tensor r
-> (.*) = pointwise2 (*)
+> (.*) = tzipWith (*)
 
 Thinking of tensors as vectors, we can dot them together in the usual way.
 
 > dot :: (Num r) => Tensor r -> Tensor r -> r
-> dot a@(T u _) b@(T v _) =
->   if u == v
->     then sum [ (a`at`i)*(b`at`i) | i <- indicesOf u ]
->     else error "dot: tensors must have the same size."
+> dot a b = sum $ a .* b
 
 In math notation, if $A,B \in \mathbb{R}^s$, $$\mathsf{dot}(A,B) = \sum_{i \in s} A_i B_i.$$ The 'dot square' of a tensor will also be handy later.
 
@@ -152,19 +341,19 @@ Structural Arithmetic
 
 Now we'll define some structural operators on tensors; these are functions that manipulate the size of a tensor, or combine tensors into more complicated ones, or extract subparts. First is ``oplus``, which constructs a tensor with sum shape.
 
-> oplus :: Tensor r -> Tensor r -> Tensor r
-> oplus a@(T u _) b@(T v _) = tensor (u :+ v) $
->   \k -> case k of
->     L i -> a `at` i
->     R j -> b `at` j
+> oplus, (⊕) :: Tensor r -> Tensor r -> Tensor r
+> oplus = (<|>)
+> 
+> (⊕) = oplus
 
 In a rough and handwavy way, if $a \in \mathbb{R}^u$ and $b \in \mathbb{R}^v$, then $$a \oplus b \in \mathbb{R}^u \oplus \mathbb{R}^v \cong \mathbb{R}^{u \oplus v},$$ and $\oplus$ is the operator that achieves this isomorphism.
 
 This function ``otimes`` is called the <em>dyadic</em> or <em>outer product</em>.
 
-> otimes :: (Num r) => Tensor r -> Tensor r -> Tensor r
-> otimes a@(T u _) b@(T v _) = tensor (u :* v) $
->   \(i :& j) -> (a `at` i) * (b `at` j)
+> otimes, (⊗) :: (Num r) => Tensor r -> Tensor r -> Tensor r
+> otimes a b = (*) <$> a <*> b -- omg
+> 
+> (⊗) = otimes
 
 Next we have projection operators, which take a tensor in $\mathbb{R}^{s \otimes t}$ and fix one of the index components. In the usual matrix language, projection would extract one row or one column of a matrix. There are two of these, with the following signature.
 
@@ -174,11 +363,13 @@ In math notation we have $\mathsf{projR} : s \rightarrow \mathbb{R}^{t \otimes s
 
 > projR i a@(T (u :* v) _) = if (i `isIndexOf` u)
 >   then tensor v (\j -> a `at` (i :& j))
->   else error "in projR: index and size not compatible."
+>   else error "projR: index and size not compatible."
+> projR _ _ = error "projR: tensor argument must have product shape"
 > 
 > projL j a@(T (u :* v) _) = if (j `isIndexOf` v)
 >   then tensor u (\i -> a `at` (i :& j))
->   else error "in projL: index and size not compatible."
+>   else error "projL: index and size not compatible."
+> projL _ _ = error "projL: tensor argument must have product shape"
 
 Similarly, we can extract "terms" from a summand tensor using functions with the following signature.
 
@@ -188,11 +379,13 @@ In math notation we have $\mathsf{termL} : \mathbb{R}^{s \oplus t} \rightarrow \
 
 > termL a@(T (u :+ _) _) =
 >   tensor u (\i -> a `at` (L i))
+> termL _ = error "termL: argument must have sum shape"
 > 
 > termR a@(T (_ :+ v) _) =
 >   tensor v (\j -> a `at` (R j))
+> termR _ = error "termR: argument must have sum shape"
 
-Now $\mathbb{R}^{u \otimes v}$ and $\mathbb{R}^{v \otimes u}$ are not equal, but they are canonically isomorphic; likewise $\mathbb{R}^{u \oplus v}$ and $\mathbb{R}^{v \oplus u}$.
+Now $\mathbb{R}^{u \otimes v}$ and $\mathbb{R}^{v \otimes u}$ are not equal, but they are canonically isomorphic; likewise $\mathbb{R}^{u \oplus v}$ and $\mathbb{R}^{v \oplus u}$. ``comm`` achieves this.
 
 > comm :: Tensor r -> Tensor r
 > 
@@ -219,7 +412,7 @@ Similarly, $\mathbb{R}^{u \otimes (v \otimes w)}$ and $\mathbb{R}^{(u \otimes v)
 >     L (R i) -> a `at` R (L i)
 >     R i     -> a `at` R (R i)
 > 
-> assocL _ = error "assocL"
+> assocL _ = error "assocL: argument has wrong shape"
 > 
 > assocR a@(T ((u :* v) :* w) _) = tensor (u :* (v :* w)) $
 >   \(i :& (j :& k)) -> a `at` ((i :& j) :& k)
@@ -230,7 +423,7 @@ Similarly, $\mathbb{R}^{u \otimes (v \otimes w)}$ and $\mathbb{R}^{(u \otimes v)
 >     R (L i) -> a `at` L (R i)
 >     L i     -> a `at` L (L i)
 > 
-> assocR _ = error "assocR"
+> assocR _ = error "assocR: argument has wrong shape"
 
 Recall that the $\otimes$ operator in $\mathbb{S}$ does not really distribute over $\oplus$, so for example $a \otimes (b \oplus c)$ and $(a \otimes b) \oplus (a \otimes c)$ are distinct tensor sizes, and meanwhile we have $$\mathbb{R}^{(a \otimes b) \oplus (a \otimes c)} \cong \mathbb{R}^{a \otimes b} \times \mathbb{R}^{a \otimes c}.$$ We'll define a couple of operators to canonically "undistribute" $\otimes$ over $\oplus$.
 
@@ -315,13 +508,13 @@ And for product sizes:
 As an example, given a matrix we can use the ``foldFactor`` operators to sum the rows or columns.
 
 > sumRows, sumCols :: (Num r) => Tensor r -> Tensor r
-> sumRows = foldFactorR (cell . esum)
-> sumCols = foldFactorL (cell . esum)
+> sumRows = foldFactorR (cell . sum)
+> sumCols = foldFactorL (cell . sum)
 
 Note that ``mapTerm`` and ``foldFactor`` can be nested to manipulate more complicated tensor sizes. For example,
 
 ```haskell
-foldFactorR (foldFactorR (cell . esum))
+foldFactorR (foldFactorR (cell . sum))
 ```
 
 takes a "three dimensional" tensor and sums along one of the dimensions.
@@ -345,6 +538,26 @@ The tensor generalization of matrix multiplication is sometimes called <em>contr
 >         [ (a`at`(i :& k))*(b`at`(k :& j)) | k <- indicesOf n ])
 >     else error "inner sizes must match."
 > contract _ _ = error "contraction expects matrices with product sizes."
+
+``contract`` is a generalized matrix multiplication, but it's a little too general. For instance, in linear algebra we sometimes like to multiply an $m \times n$ matrix by an $n$ vector to get an $m$ vector; but using contraction this only really works if we think of the input vector as an $n \times 1$ matrix and the output as a $m \times 1$ matrix. We'll fix this by defining a specialized version of ``contract`` called ``collapse``. If $a \in \mathbb{R}^{m \otimes n}$ and $b \in \mathbb{R}^n$, then $$\mathsf{collapse}(a,b)_i = \sum_{k \in m} a_{i \& k} b_k.$$
+
+> collapse :: (Num r) => Tensor r -> Tensor r -> Tensor r
+> collapse a@(T (m :* n) _) b@(T u _) =
+>   if u == n
+>     then tensor m
+>       (\i -> sum
+>         [ (a`at`(i :& k))*(b`at`k) | k <- indicesOf n ])
+>     else error "collapse: inner sizes must match."
+> collapse _ _ = error "collapse: sizes of wrong shape."
+
+> collapseL :: (Num r) => Tensor r -> Tensor r -> Tensor r
+> collapseL a@(T u _) b@(T (n :* m) _) =
+>   if u == n
+>     then tensor m
+>       (\i -> sum
+>         [ (a`at`k)*(b`at`(k :& i)) | k <- indicesOf n ])
+>     else error "collapseL: inner sizes must match."
+> collapseL _ _ = error "collapse: sizes of wrong shape."
 
 
 Pretty Printing
@@ -370,10 +583,11 @@ To actually show the tensor, we show the entries (pointwise) and pad to the maxi
 > instance (Show r) => Show (Tensor r) where
 >   show a =
 >     let
->       cellWidth = maximum $ map (length . show) $ entries a
->       m = pointwise (padLeft cellWidth . show) a
+>       cellWidth = maximum $ fmap (length . show) a
+>       m = fmap (padLeft cellWidth . show) a
 >     in
->       render $ toDoc m
+>       ":" ++ (show $ size m) ++ ":\n" ++
+>       (render $ toDoc m)
 >     where
 >       -- left-pad a string with spaces to a given length
 >       padLeft :: Int -> String -> String
@@ -389,6 +603,22 @@ In future posts we'll be writing tests involving tensors, so I'll put an ``Arbit
 
 > instance (Arbitrary r) => Arbitrary (Tensor r) where
 >   arbitrary = arbitrary >>= arbTensor
+> 
+>   shrink a@(T u _) = case u of
+>     Size k ->
+>       if k <= 0
+>         then []
+>         else
+>           [ tensor (Size $ k-1) (\i -> a`at`i)
+>           , uniform (Size $ k-1) (a`at`0)
+>           ]
+> 
+>     _ :+ _ -> concat
+>       [ [ h <|> k | h <- shrink $ termL a, k <- shrink $ termR a ]
+>       , [ termL a, termR a ]
+>       ]
+> 
+>     _ -> []
 > 
 > arbTensor :: (Arbitrary r) => Size -> Gen (Tensor r)
 > arbTensor s = do
