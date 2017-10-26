@@ -7,12 +7,12 @@ tags: ml, literate-haskell
 
 First some boilerplate.
 
+> {-# LANGUAGE LambdaCase #-}
 > module Indices where
 > 
 > import Data.List
 > import Test.QuickCheck
 > import Test.QuickCheck.Test
-> import System.Exit
 
 This post is just some preliminary ideas about tensors - nothing learning-specific yet.
 
@@ -45,10 +45,15 @@ So the elements of $\mathbb{S}$ look like unevaluated arithmetic expressions wit
 >   deriving Eq
 > 
 > instance Show Size where
->   show x = case x of
->     Size k -> show k
->     a :+ b -> concat ["(", show a, " + ", show b, ")"]
->     a :* b -> concat ["(", show a, " x ", show b, ")"]
+>   show =
+>     let
+>       p x = if ' ' `elem` x
+>         then "(" ++ x ++ ")" else x
+>     in
+>       \case
+>         Size k -> show k
+>         a :+ b -> concat [p $ show a, " + ", p $ show b]
+>         a :* b -> concat [p $ show a, " x ", p $ show b]
 > 
 > -- so we can define them with numeric literals
 > instance Num Size where
@@ -88,19 +93,19 @@ Again, we can implement these in code in the usual way.
 >   deriving Eq
 > 
 > instance Show Shape where
->   show x = case x of
+>   show = \case
 >     HAtom      -> "*"
 >     HPlus  a b -> concat ["(", show a, " + ", show b, ")"]
 >     HTimes a b -> concat ["(", show a, " x ", show b, ")"]
 > 
 > shapeOf :: Size -> Shape
-> shapeOf x = case x of
+> shapeOf = \case
 >   Size _ -> HAtom
 >   a :+ b -> HPlus  (shapeOf a) (shapeOf b)
 >   a :* b -> HTimes (shapeOf a) (shapeOf b)
 > 
 > dimOf :: Size -> Integer
-> dimOf x = case x of
+> dimOf = \case
 >   Size k -> k
 >   a :+ b -> (dimOf a) + (dimOf b)
 >   a :* b -> (dimOf a) * (dimOf b)
@@ -133,7 +138,7 @@ Again, since $\mathbb{I}$ is a free algebra we can represent it as an algebraic 
 >   deriving Eq
 > 
 > instance Show Index where
->   show x = case x of
+>   show = \case
 >     Index k -> show k
 >     L a     -> "l(" ++ show a ++ ")"
 >     R b     -> "r(" ++ show b ++ ")"
@@ -166,7 +171,7 @@ From now on, if $s$ is a size, I'll also use $s$ to denote the set of indices co
 We'd like to be able to construct $s$ as a list; this is what ``indicesOf`` does. I'm going to play a little fast and loose with the proof because laziness.
 
 > indicesOf :: Size -> [Index]
-> indicesOf x = case x of
+> indicesOf = \case
 >   Size k -> map Index [0..(k-1)]
 >   a :+ b -> map L (indicesOf a) ++ map R (indicesOf b)
 >   a :* b -> [ u :& v | v <- indicesOf b, u <- indicesOf a ]
@@ -242,7 +247,7 @@ First off, we won't be needing the full complexity of QuickCheck, so here are so
 >   result <- quickCheckWithResult args prop
 >   if isSuccess result
 >     then return ()
->     else putStrLn (show result) >> exitFailure
+>     else putStrLn (show result)
 > 
 > -- when testing tests
 > skipTest _ (name, _) =
@@ -262,35 +267,59 @@ First off, we won't be needing the full complexity of QuickCheck, so here are so
 > verboseTest (name, p) = do
 >   putStrLn name
 >   verboseCheck p
+> 
+> withTypeOf :: a -> a -> ()
+> withTypeOf _ _ = ()
+> 
+> forAll2 :: (Show a, Show b, Testable prop)
+>   => Gen a -> Gen b -> (a -> b -> prop) -> Property
+> forAll2 ga gb f = forAll genPair (uncurry f)
+>   where
+>     genPair = do
+>       x <- ga
+>       y <- gb
+>       return (x,y)
+> 
+> forAll3 :: (Show a, Show b, Show c, Testable prop)
+>   => Gen a -> Gen b -> Gen c -> (a -> b -> c -> prop) -> Property
+> forAll3 ga gb gc f = forAll genTriple g
+>   where
+>     genTriple = do
+>       x <- ga
+>       y <- gb
+>       z <- gc
+>       return (x,y,z)
+> 
+>     g (x,y,z) = f x y z
 
 To write QuickCheck tests for a given type it needs to be an instance of ``Arbitrary``, which provides two basic functions: ``arbitrary``, which generates a "random" element of the type, and ``shrink``, which takes an element and makes it "smaller" in some way. Defining these functions for a given type may be ugly, but only has to be done once.
 
 > instance Arbitrary Size where
 >   arbitrary = sized arbSize
 > 
->   shrink s = case s of
+>   shrink = \case
 >     Size k -> if k <= 0 then [] else [Size (k-1)]
 >     u :+ v -> [u, v]
 >     u :* v -> [u, v]
 > 
 > arbSize :: Int -> Gen Size
 > arbSize 0 = do
->   k <- choose (0,3)
+>   k <- elements [0,1,1,2,2,2,2]
 >   return (Size k)
 > arbSize n = do
 >   switch <- arbitrary :: Gen Int
 >   m <- choose (1,n)
->   case switch `mod` 4 of
+>   case switch `mod` 5 of
 >     0 -> do
->       u <- arbSize $ (n-1) `rem` m
->       v <- arbSize $ (n-1) `rem` m
+>       u <- arbSize $ n-1
+>       v <- arbSize $ n-1
 >       return (u :* v)
 >     1 -> do
->       u <- arbSize $ (n-1) `rem` m
->       v <- arbSize $ (n-1) `rem` m
+>       u <- arbSize $ n-1
+>       v <- arbSize $ n-1
 >       return (u :+ v)
 >     _ -> do
->       k <- choose (0,5)
+>       k <- elements [0,1,2]
 >       return (Size k)
 
 Now we can wrap up our tests in a little suite, ``_test_index``. The arguments for this function are (1) the number of test cases to generate and (2) how big they should be.

@@ -7,9 +7,8 @@ tags: ml, literate-haskell
 
 First some boilerplate.
 
-> module IndexIsos (
->   (~=), mapIndex, opsTo, main_index_isos
-> ) where
+> {-# LANGUAGE LambdaCase #-}
+> module IndexIsos where
 > 
 > import Data.List
 > import Test.QuickCheck
@@ -46,6 +45,9 @@ Now two sizes are equivalent if they have the same canonical form.
 
 > class Equiv t where
 >   (~=) :: t -> t -> Bool
+> 
+>   (~/=) :: t -> t -> Bool
+>   a ~/= b = not (a ~= b)
 > 
 > instance Equiv Size where
 >   u ~= v = (canon u) == (canon v)
@@ -198,7 +200,7 @@ In practice we'll be applying lists of ``Op``s, which can be done with ``foldr``
 Each ``Op`` has an inverse which undoes it.
 
 > invertOp :: Op -> Op
-> invertOp x = case x of
+> invertOp = \case
 >   PlusComm       -> PlusComm
 >   PlusAssocL     -> PlusAssocR
 >   PlusAssocR     -> PlusAssocL
@@ -262,7 +264,7 @@ A ``Size`` is <em>expanded</em> if no sum node appears below a product node. We 
 >       _ -> error $ "isExpanded (unreachable): " ++ show s
 > 
 > isProduct :: Size -> Bool
-> isProduct s = case s of
+> isProduct = \case
 >   Size _ -> True
 >   a :+ b -> False
 >   a :* b -> (isProduct a) && (isProduct b)
@@ -330,7 +332,7 @@ Prune
 A ``Size`` is <em>pruned</em> if it does not feature a "plus zero", "times one", or "times zero". We can detect this with ``isPruned``.
 
 > isPruned :: Size -> Bool
-> isPruned s = case s of
+> isPruned = \case
 >   Size k -> True
 >   a :+ b ->
 >     if a == 0 || b == 0
@@ -396,13 +398,13 @@ Unbalance
 A ``Size`` is <em>unbalanced</em> if no sum node appears in the left subtree of another sum node, and no product node appears in the left subtree of another product node. We can detect this with the predicate ``isUnbalanced``.
 
 > isUnbalanced :: Size -> Bool
-> isUnbalanced s = case s of
+> isUnbalanced = \case
 >   Size k -> True
 >   u :+ v -> (isUnbalancedProduct u) && (isUnbalanced v)
 >   u -> isUnbalancedProduct u
 > 
 > isUnbalancedProduct :: Size -> Bool
-> isUnbalancedProduct s = case s of
+> isUnbalancedProduct = \case
 >   Size k -> True
 >   (Size k) :* v -> isUnbalancedProduct v
 >   _ -> False
@@ -411,9 +413,9 @@ Now ``unbalance u`` takes an expanded and pruned ``Size`` and finds an equivalen
 
 > -- assumes isExpanded u == True
 > unbalance :: Size -> (Size, [Op])
-> unbalance s = case s of
->   Size k -> (s, [])
->   (Size k) :* (Size l) -> (s, [])
+> unbalance = \case
+>   Size k -> (Size k, [])
+>   (Size k) :* (Size l) -> ((Size k) :* (Size l), [])
 >   (Size k) :* b ->
 >     let
 >       (v, vOps') = unbalance b
@@ -471,7 +473,7 @@ An unbalanced ``size`` is <em>arranged</em> if its terms are sorted by the grade
 
 > -- assumes isUnbalanced s == True
 > isArranged :: Size -> Bool
-> isArranged s = case s of
+> isArranged = \case
 >   a :+ b ->
 >     (glexleq a (minterm b)) && (isArranged b)
 >   _ -> True
@@ -486,13 +488,12 @@ An unbalanced ``size`` is <em>arranged</em> if its terms are sorted by the grade
 >   _ -> error "glexleq: only works on unbalanced products"
 > 
 > minterm :: Size -> Size
-> minterm s = case s of
->   Size k -> Size k
->   _ :* _ -> s
+> minterm = \case
 >   a :+ (b :+ c) ->
 >     let m = minterm (b :+ c) in
 >     if glexleq a m then a else m
 >   a :+ b -> if glexleq a b then a else b
+>   s -> s
 
 Now ``arrange u`` takes an expanded, pruned, and unbalanced ``Size`` and finds an equivalent expanded, pruned, unbalanced, and arranged ``Size``, with a witness to their equivalence.
 
@@ -584,7 +585,7 @@ And now we can find a seqence of operations between any two equivalent sizes, by
 >         then simp as bs
 >         else (reverse (a:as)) ++ (b:bs)
 >     in
->       simp (reverse uOps) (invertOps vOps)  -- uOps ++ (invertOps vOps)
+>       simp (reverse uOps) (invertOps vOps)
 >   else error "sizes not canonically isomorphic"
 
 

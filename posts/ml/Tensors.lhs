@@ -8,18 +8,20 @@ tags: ml, literate-haskell
 First some boilerplate.
 
 > {-# LANGUAGE LambdaCase #-}
+> {-# LANGUAGE MultiParamTypeClasses #-}
+> {-# LANGUAGE FlexibleInstances #-}
 > module Tensors where
 > 
 > import Data.Array
 > import Data.Foldable
 > import Control.Applicative
-> import Text.PrettyPrint
+> import Text.PrettyPrint (Doc(), hsep, vcat, text, ($$), render)
 > import Test.QuickCheck
 > 
 > import Indices
 > import IndexIsos
 
-In the last post, we defined two algebras whose elements represent the possible sizes of multidimensional arrays and possible indices into multidimensional arrays, respectively. We did this in such a way that the possible indices into an array with (vector space) dimension $k$ can be mapped to $\{0,1, \ldots, k-1\}$ in a canonical way. With this in hand, we can define a <em>tensor</em> of size $s \in \mathbb{S}$ as a mapping from the indices of $s$ to $\mathbb{R}$. And thanks to the canonical mapping to integers, we can implement our tensors in memory using a linear array. In math notation, we will identify each $s \in \mathbb{S}$ with its indices, and think of tensors as elements of $\mathbb{R}^s$ (that is, functions from indices to real numbers).
+[Earlier](/posts/ml/Indices.html), we defined two algebras whose elements represent the possible sizes of multidimensional arrays and possible indices into multidimensional arrays, respectively. We did this in such a way that the possible indices into an array with (vector space) dimension $k$ can be mapped to $\{0,1, \ldots, k-1\}$ in a canonical way. With this in hand, we can define a <em>tensor</em> of size $s \in \mathbb{S}$ as a mapping from the indices of $s$ to $\mathbb{R}$. And thanks to the canonical mapping to integers, we can implement our tensors in memory using a linear array. In math notation, we will identify each $s \in \mathbb{S}$ with its indices, and think of tensors as elements of $\mathbb{R}^s$ (that is, functions from indices to real numbers).
 
 > data Tensor r = T
 >   { size :: Size
@@ -193,10 +195,16 @@ Next we establish the composition law:
 ```haskell
     pure (.) <*> a <*> b <*> c
 $== tensor 1 (const (.)) <*> a@(T u _) <*> b <*> c
-$== tensor (1 :* u) (\(i :& j) -> (.) (a`at`j)) <*> b@(T v _) <*> c
-$== tensor ((1 :* u) :* v) (\((i :& j) :& k) -> (a`at`j) . (b`at`k)) <*> c@(T w _)
-$== tensor (((1 :* u) :* v) :* w) (\(((i :& j) :& k) :& l) -> (a`at`j) . (b`at`k) $ (c`at`l))
- == tensor (u :* (v :* w)) (\(j :& (k :& l)) -> (a`at`j) $ (b`at`k) (c`at`l))
+$== tensor (1 :* u) (\(i :& j) -> (.) (a`at`j))
+      <*> b@(T v _) <*> c
+$== tensor ((1 :* u) :* v)
+      (\((i :& j) :& k) -> (a`at`j) . (b`at`k))
+      <*> c@(T w _)
+$== tensor (((1 :* u) :* v) :* w)
+      (\(((i :& j) :& k) :& l) ->
+        (a`at`j) . (b`at`k) $ (c`at`l))
+ == tensor (u :* (v :* w))
+      (\(j :& (k :& l)) -> (a`at`j) $ (b`at`k) (c`at`l))
 $== a <*> tensor (v :* w) (\(k :& l) -> (b`at`k) (c`at`l))
 $== a <*> (b <*> c)
 ```
@@ -269,12 +277,37 @@ Associativity:
 ```haskell
     (a <|> b) <|> c
 $== (a@(T u _) <|> b@(T v _)) <|> c
-$== (tensor (u :+ v) (\case L i -> a`at`i; R j -> b`at`j)) <|> c@(T w _)
-$== tensor ((u :+ v) :+ w) (\case L l -> (case l of L i -> a`at`i; R j -> b`at`j)); R k -> c`at`k)
-$== tensor ((u :+ v) :+ w) (\case L (L i) -> a`at`i; L (R j) -> b`at`j; R k -> c`at`k)
- == tensor (u :+ (v :+ w)) (\case L i -> a`at`i; R (L j) -> b`at`j; R (R k) -> c`at`k)
-$== tensor (u :+ (v :+ w)) (\case L i -> a`at`i; R l -> (case l of L j -> b`at`j; R k -> c`at`k))
-$== a <|> tensor (v :+ w) (\case L j -> b`at`j; R m -> c`at`m)
+$== (tensor (u :+ v)
+      (\case
+        L i -> a`at`i
+        R j -> b`at`j
+      )) <|> c@(T w _)
+$== tensor ((u :+ v) :+ w)
+      (\case
+        L l -> case l of
+          L i -> a`at`i
+          R j -> b`at`j
+        R k -> c`at`k)
+$== tensor ((u :+ v) :+ w)
+      (\case
+        L (L i) -> a`at`i
+        L (R j) -> b`at`j
+        R k -> c`at`k)
+ == tensor (u :+ (v :+ w))
+      (\case
+        L i -> a`at`i
+        R (L j) -> b`at`j
+        R (R k) -> c`at`k)
+$== tensor (u :+ (v :+ w))
+      (\case
+        L i -> a`at`i
+        R l -> case l of
+          L j -> b`at`j
+          R k -> c`at`k))
+$== a <|> tensor (v :+ w)
+      (\case
+        L j -> b`at`j
+        R m -> c`at`m)
 $== a <|> (b <|> c)
 ```
 
@@ -306,19 +339,25 @@ $== empty
 Vector Arithmetic
 -----------------
 
+> class Scalable t where
+>   (.@) :: (Num r) => r -> t r -> t r
+> 
+> instance Scalable Tensor where
+>   r .@ a = fmap (r*) a
+
 Tensors are vectors, so they should have the usual vector operations of plus, negate, and scale.
 
 > (.+) :: (Num r) => Tensor r -> Tensor r -> Tensor r
-> (.+) = tzipWith (+)
+> a .+ b
+>   | size a ~= 0 = b
+>   | size b ~= 0 = a
+>   | otherwise   = tzipWith (+) a b
 > 
 > neg :: (Num r) => Tensor r -> Tensor r
 > neg = fmap negate
 > 
 > (.-) :: (Num r) => Tensor r -> Tensor r -> Tensor r
 > a .- b = a .+ (neg b)
-> 
-> (.@) :: (Num r) => r -> Tensor r -> Tensor r
-> r .@ a = fmap (r*) a
 
 The Hadamard or entrywise product is also handy.
 
@@ -335,11 +374,7 @@ In math notation, if $A,B \in \mathbb{R}^s$, $$\mathsf{dot}(A,B) = \sum_{i \in s
 > normSquared :: (Num r) => Tensor r -> r
 > normSquared a = dot a a
 
-
-Structural Arithmetic
----------------------
-
-Now we'll define some structural operators on tensors; these are functions that manipulate the size of a tensor, or combine tensors into more complicated ones, or extract subparts. First is ``oplus``, which constructs a tensor with sum shape.
+We also have some tensor-centric operations. First is ``oplus``, which constructs a tensor with sum shape.
 
 > oplus, (⊕) :: Tensor r -> Tensor r -> Tensor r
 > oplus = (<|>)
@@ -351,77 +386,79 @@ In a rough and handwavy way, if $a \in \mathbb{R}^u$ and $b \in \mathbb{R}^v$, t
 This function ``otimes`` is called the <em>dyadic</em> or <em>outer product</em>.
 
 > otimes, (⊗) :: (Num r) => Tensor r -> Tensor r -> Tensor r
-> otimes a b = (*) <$> a <*> b -- omg
+> otimes = liftA2 (*) -- omg
 > 
 > (⊗) = otimes
+
+
+Structural Arithmetic
+---------------------
+
+Now we'll define some structural operators on tensors; these are functions that manipulate the size of a tensor, or combine tensors into more complicated ones, or extract subparts. These are mostly based on ``extract``, which defines a new tensor in terms of an existing one.
+
+> extract :: Size -> (Index -> Index) -> Tensor r -> Tensor r
+> extract u f a = tensor u (\i -> a`at`(f i))
+
+For example, we can extract "terms" from a summand tensor using ``extract`` like so.
+
+> termL, termR :: Tensor r -> Tensor r
+> 
+> termL a@(T (u :+ _) _) = extract u L a
+> termL _ = error "termL: argument must have sum shape"
+> 
+> termR a@(T (_ :+ v) _) = extract v R a
+> termR _ = error "termR: argument must have sum shape"
+
+In math notation we have $\mathsf{termL} : \mathbb{R}^{s \oplus t} \rightarrow \mathbb{R}^s$ given by $\mathsf{termL}(A)_i = A_{\mathsf{l}(i)}$, and $\mathsf{termR}$ is similar.
 
 Next we have projection operators, which take a tensor in $\mathbb{R}^{s \otimes t}$ and fix one of the index components. In the usual matrix language, projection would extract one row or one column of a matrix. There are two of these, with the following signature.
 
 > projR, projL :: Index -> Tensor r -> Tensor r
-
-In math notation we have $\mathsf{projR} : s \rightarrow \mathbb{R}^{t \otimes s} \rightarrow \mathbb{R}^t$ given by $\mathsf{projL}(i,A)_j = A_{i \& j}$, and $\mathsf{projL}$ is similar.
-
+> 
 > projR i a@(T (u :* v) _) = if (i `isIndexOf` u)
->   then tensor v (\j -> a `at` (i :& j))
+>   then extract v (i :&) a
 >   else error "projR: index and size not compatible."
 > projR _ _ = error "projR: tensor argument must have product shape"
 > 
 > projL j a@(T (u :* v) _) = if (j `isIndexOf` v)
->   then tensor u (\i -> a `at` (i :& j))
+>   then extract u (:& j) a
 >   else error "projL: index and size not compatible."
 > projL _ _ = error "projL: tensor argument must have product shape"
 
-Similarly, we can extract "terms" from a summand tensor using functions with the following signature.
-
-> termL, termR :: Tensor r -> Tensor r
-
-In math notation we have $\mathsf{termL} : \mathbb{R}^{s \oplus t} \rightarrow \mathbb{R}^s$ given by $\mathsf{termL}(A)_i = A_{\mathsf{l}(i)}$, and $\mathsf{termR}$ is similar.
-
-> termL a@(T (u :+ _) _) =
->   tensor u (\i -> a `at` (L i))
-> termL _ = error "termL: argument must have sum shape"
-> 
-> termR a@(T (_ :+ v) _) =
->   tensor v (\j -> a `at` (R j))
-> termR _ = error "termR: argument must have sum shape"
+In math notation we have $\mathsf{projR} : s \rightarrow \mathbb{R}^{t \otimes s} \rightarrow \mathbb{R}^t$ given by $\mathsf{projL}(i,A)_j = A_{i \& j}$, and $\mathsf{projL}$ is similar.
 
 Now $\mathbb{R}^{u \otimes v}$ and $\mathbb{R}^{v \otimes u}$ are not equal, but they are canonically isomorphic; likewise $\mathbb{R}^{u \oplus v}$ and $\mathbb{R}^{v \oplus u}$. ``comm`` achieves this.
 
 > comm :: Tensor r -> Tensor r
 > 
-> comm a@(T (u :* v) _) = tensor (v :* u) $
->   \(j :& i) -> a `at` (i :& j)
+> comm a@(T (u :* v) _) =
+>   extract (v :* u) f a
+>   where
+>     f (j :& i) = (i :& j)
 > 
-> comm a@(T (u :+ v) _) = tensor (v :+ u) $
->   \k -> case k of
->     L i -> a `at` R i
->     R i -> a `at` L i
+> comm a@(T (u :+ v) _) =
+>   extract (v :+ u) (opIndex PlusComm) a
 > 
-> comm _ = error "comm"
+> comm _ = error "comm: wrong shape"
 
 Similarly, $\mathbb{R}^{u \otimes (v \otimes w)}$ and $\mathbb{R}^{(u \otimes v) \otimes w}$ are canonically isomorphic, and likewise for $\oplus$.
 
 > assocL, assocR :: Tensor r -> Tensor r
 > 
-> assocL a@(T (u :* (v :* w)) _) = tensor ((u :* v) :* w) $
->   \((i :& j) :& k) -> a `at` (i :& (j :& k))
+> assocL a@(T (u :* (v :* w)) _) =
+>   extract ((u :* v) :* w) (opIndex TimesAssocR) a
 > 
-> assocL a@(T (u :+ (v :+ w)) _) = tensor ((u :+ v) :+ w) $
->   \k -> case k of
->     L (L i) -> a `at` L i
->     L (R i) -> a `at` R (L i)
->     R i     -> a `at` R (R i)
+> assocL a@(T (u :+ (v :+ w)) _) =
+>   extract ((u :+ v) :+ w) (opIndex PlusAssocR) a
 > 
 > assocL _ = error "assocL: argument has wrong shape"
 > 
-> assocR a@(T ((u :* v) :* w) _) = tensor (u :* (v :* w)) $
->   \(i :& (j :& k)) -> a `at` ((i :& j) :& k)
 > 
-> assocR a@(T ((u :+ v) :+ w) _) = tensor (u :+ (v :+ w)) $
->   \k -> case k of
->     R (R i) -> a `at` R i
->     R (L i) -> a `at` L (R i)
->     L i     -> a `at` L (L i)
+> assocR a@(T ((u :* v) :* w) _) =
+>   extract (u :* (v :* w)) (opIndex TimesAssocL) a
+> 
+> assocR a@(T ((u :+ v) :+ w) _) =
+>   extract (u :+ (v :+ w)) (opIndex PlusAssocL) a
 > 
 > assocR _ = error "assocR: argument has wrong shape"
 
@@ -430,24 +467,17 @@ Recall that the $\otimes$ operator in $\mathbb{S}$ does not really distribute ov
 > unDistL, (~-~) :: Tensor r -> Tensor r -> Tensor r
 > unDistL a@(T (u :* h) _) b@(T (v :* k) _) =
 >   if h == k
->     then tensor ((u :+ v) :* k)
->       (\ (t :& k) -> case t of
->         L i -> a `at` (i :& k)
->         R j -> b `at` (j :& k)
->       )
->     else error "size mismatch"
+>     then extract ((u :+ v) :* k) (opIndex DistL) a
+>     else error "unDistL: size mismatch"
 > 
 > (~-~) = unDistL
+> 
 > 
 > unDistR, (~|~) :: Tensor r -> Tensor r -> Tensor r
 > unDistR a@(T (h :* u) _) b@(T (k :* v) _) =
 >   if h == k
->     then tensor (k :* (u :+ v))
->       (\ (k :& t) -> case t of
->         L i -> a `at` (k :& i)
->         R j -> b `at` (k :& j)
->       )
->     else error "size mismatch"
+>     then extract (k :* (u :+ v)) (opIndex DistR) a
+>     else error "unDistR: size mismatch"
 > 
 > (~|~) = unDistR
 
@@ -456,28 +486,10 @@ We give ``unDistL`` and ``unDistR`` symbolic synonyms, meant to evoke what they 
 The last "structural" operations on tensors (at least for now) will be a kind of "map" on sum tensors and a "fold" on product tensors. For sum sizes:
 
 > mapTermL :: (Tensor r -> Tensor r) -> Tensor r -> Tensor r
-> mapTermL f a@(T (u :+ v) _) =
->   let
->     m = f (termL a)
->     w = size m
->   in
->     tensor (w :+ v) $
->       \k -> case k of
->         L i -> m `at` i
->         R i -> a `at` (R i)
-> mapTermL _ _ = error "mapTermL: tensor argument must have sum shape"
+> mapTermL f a = (f $ termL a) <|> (termR a)
 > 
 > mapTermR :: (Tensor r -> Tensor r) -> Tensor r -> Tensor r
-> mapTermR f a@(T (u :+ v) _) =
->   let
->     m = f (termR a)
->     w = size m
->   in
->     tensor (w :+ v) $
->       \k -> case k of
->         R i -> m `at` i
->         L i -> a `at` (L i)
-> mapTermR _ _ = error "mapTermR: tensor argument must have sum shape"
+> mapTermR f a = (termL a) <|> (f $ termR a)
 
 And for product sizes:
 
@@ -527,6 +539,10 @@ Now for a couple of matrix-specific operations. First the identity matrix.
 
 > idMat :: (Num r) => Size -> Tensor r
 > idMat n = tensor (n :* n) (\ (i :& j) -> if i==j then 1 else 0)
+
+> diag :: (Num r) => Tensor r -> Tensor r
+> diag a@(T u _) = tensor (u :* u) $
+>   \(i :& j) -> if i == j then a`at`i else 0
 
 The tensor generalization of matrix multiplication is sometimes called <em>contraction</em>. I'll do the worst possible thing here by using the word "contraction" to refer only to matrix multiplication.
 

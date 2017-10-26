@@ -21,6 +21,8 @@ In this post we'll give a more specific definition for supervised learning model
 
 First some boilerplate.
 
+
+
 > {-# LANGUAGE ScopedTypeVariables #-}
 > module SupervisedModels where
 > 
@@ -28,6 +30,7 @@ First some boilerplate.
 > import Tensors
 > import Gradients
 
+> {-
 
 Models
 ------
@@ -59,11 +62,12 @@ For example, one of the simplest possible models is a linear transformation or, 
 >         b = termR theta
 >       in (contract m x) .+ b
 > 
->   , flipGrad = \x _ -> tensor (to :* (to :* from)) $
->       \(t :& (k :& h)) ->
->         if t == k
->           then x `at` h
->           else 0
+>   , flipGrad = \x _ ->
+>       tensor (to :* (to :* from)) $
+>         \(t :& (k :& h)) ->
+>           if t == k
+>             then x `at` h
+>             else 0
 >   }
 
 (Again, ignore the ``regularized`` field for now.) We computed that gradient in the last post.
@@ -155,6 +159,6 @@ And now to train the model on a given training set, we simply optimize the cost 
 > func :: [(Tensor r, Tensor r)] -> Model r -> CostFunction r -> Tensor r
 > func trainingData model = undefined
 
-
+> -}
 
 

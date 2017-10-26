@@ -322,4 +322,4 @@ The Test Suite
 > 
 > main_tensor :: IO ()
 > main_tensor = do
->   _test_tensor (0::Int) 100 10
+>   _test_tensor (0::Int) 100 3
