@@ -242,10 +242,10 @@ Later we'll want to test assertions like "applying these operations to $u$ resul
 
 Ok! To find the sequence of ``Op``s needed to put a ``Size`` in canonical form, we'll break the usual college algebra procedure into phases.
 
-1. "Expand" the size using the distributive identities over and over, so that all the plus nodes appear toward the root and all the times notes appear toward the leaves. (If any times node appears above a plus node, we can use distributivity to switch them.)
-2. "Prune" the size by eliminating any instances of "plus zero", "times one", or "times zero". Pruning an expanded tree gives another expanded tree.
-3. "Unbalance" the size by pushing all nested sizes to the right using the associative identities. Unbalancing a pruned and expanded tree gives another pruned and expanded tree.
-4. "Arrange" the summands in graded lex order using associativity and commutativity.
+1. *Expand* the size using the distributive identities over and over, so that all the plus nodes appear toward the root and all the times notes appear toward the leaves. (If any times node appears above a plus node, we can use distributivity to switch them.)
+2. *Prune* the size by eliminating any instances of "plus zero", "times one", or "times zero". Pruning an expanded tree gives another expanded tree.
+3. *Unbalance* the size by pushing all nested sizes to the right using the associative identities. Unbalancing a pruned and expanded tree gives another pruned and expanded tree.
+4. *Arrange* the summands in graded lex order using associativity and commutativity.
 
 Doing all four steps in order, and keeping track of which identities we use, gives a canonical form as well as a recipe for how to get there.
 

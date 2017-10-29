@@ -10,7 +10,10 @@ library
     Indices
     IndexIsos
     Tensors
+    TensorFunctions
     Gradients
+    GradientChecking
+    GradientDescent
     SupervisedModels
     Test.Tensors
   build-depends:
@@ -67,10 +70,10 @@ test-suite ml-tensor
     IndexIsos
     Tensors
 
-test-suite ml-gradients
+test-suite ml-gradient_checking
   type:             exitcode-stdio-1.0
-  main-is:          Gradients.lhs
-  ghc-options:      -main-is Gradients.main_gradients
+  main-is:          GradientChecking.lhs
+  ghc-options:      -main-is GradientChecking.main_gradient_checking
   default-language: Haskell2010
   build-depends:
     base >= 4.0 && < 5.0,
@@ -81,4 +84,25 @@ test-suite ml-gradients
   other-modules:
     Indices,
     IndexIsos,
-    Tensors
+    Tensors,
+    TensorFunctions,
+    Gradients
+
+test-suite ml-gradient_descent
+  type:             exitcode-stdio-1.0
+  main-is:          GradientDescent.lhs
+  ghc-options:      -main-is GradientDescent.main_gradient_descent
+  default-language: Haskell2010
+  build-depends:
+    base >= 4.0 && < 5.0,
+    QuickCheck >= 2.8.1 && < 3.0.0,
+    ad >= 4.3.4 && < 5.0.0,
+    pretty >= 1.1.2.0 && < 2.0.0.0,
+    array >= 0.5.1 && < 0.6.0
+  other-modules:
+    Indices,
+    IndexIsos,
+    Tensors,
+    TensorFunctions,
+    Gradients,
+    GradientChecking

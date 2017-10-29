@@ -1,7 +1,7 @@
 ---
 title: Supervised Learning Models
 author: nbloomf
-date: 2017-10-18
+date: 2017-10-20
 tags: ml, literate-haskell
 ---
 

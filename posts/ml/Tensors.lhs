@@ -8,14 +8,12 @@ tags: ml, literate-haskell
 First some boilerplate.
 
 > {-# LANGUAGE LambdaCase #-}
-> {-# LANGUAGE MultiParamTypeClasses #-}
-> {-# LANGUAGE FlexibleInstances #-}
 > module Tensors where
 > 
 > import Data.Array
 > import Data.Foldable
 > import Control.Applicative
-> import Text.PrettyPrint (Doc(), hsep, vcat, text, ($$), render)
+> import qualified Text.PrettyPrint as PP
 > import Test.QuickCheck
 > 
 > import Indices
@@ -87,12 +85,22 @@ The simplest possible (nontrivial) tensor has size 1; we will call these <em>cel
 > cell :: r -> Tensor r
 > cell r = tensor 1 (\_ -> r)
 
-We'll also provide a simple way to construct vectors with natural number size.
+We'll also provide a simple way to construct vectors and matrices with natural number size.
 
 > vec :: [r] -> Tensor r
 > vec xs = tensor k (\(Index i) -> xs !! (fromIntegral i))
 >   where
 >     k = Size $ fromIntegral $ length xs
+> 
+> mat :: [[r]] -> Tensor r
+> mat []   = tensor 0 (const undefined)
+> mat [[]] = tensor 0 (const undefined)
+> mat xss  = tensor (r :* c) $
+>   \((Index i) :& (Index j))
+>     -> (xss !! (fromIntegral i)) !! (fromIntegral j)
+>   where
+>     r = Size $ fromIntegral $ length xss
+>     c = Size $ fromIntegral $ length $ head xss
 
 The downside of defining our tensors recursively is that it's less clear what the index of a given entry is. To help out with this, we'll define two helpers: ``indexOf``, that defines a tensor of a given size whose entries are equal to their indices, and ``orderOf``, that shows how the entries of a tensor are linearized internally.
 
@@ -118,6 +126,8 @@ $> orderOf (3*3)
 1 4 7
 2 5 8
 ```
+
+Try using ``indexOf`` on more complicated sizes.
 
 
 Tensor as a Functor
@@ -339,30 +349,34 @@ $== empty
 Vector Arithmetic
 -----------------
 
-> class Scalable t where
+Tensors are vectors, so they should have the usual vector operations of plus, negate, and scale. Other vector spaces will show up later, so we'll define these operations with a class.
+
+> class Vector t where
 >   (.@) :: (Num r) => r -> t r -> t r
+>   (.+) :: (Num r) => t r -> t r -> t r
+>   neg :: (Num r) => t r -> t r
 > 
-> instance Scalable Tensor where
+>   (.-) :: (Num r) => t r -> t r -> t r
+>   a .- b = a .+ (neg b)
+> 
+> 
+> instance Vector Tensor where
 >   r .@ a = fmap (r*) a
-
-Tensors are vectors, so they should have the usual vector operations of plus, negate, and scale.
-
-> (.+) :: (Num r) => Tensor r -> Tensor r -> Tensor r
-> a .+ b
->   | size a ~= 0 = b
->   | size b ~= 0 = a
->   | otherwise   = tzipWith (+) a b
 > 
-> neg :: (Num r) => Tensor r -> Tensor r
-> neg = fmap negate
+>   a .+ b
+>     | size a ~= 0 = b
+>     | size b ~= 0 = a
+>     | otherwise   = tzipWith (+) a b
 > 
-> (.-) :: (Num r) => Tensor r -> Tensor r -> Tensor r
-> a .- b = a .+ (neg b)
+>   neg = fmap negate
 
-The Hadamard or entrywise product is also handy.
+The Hadamard or entrywise product is also handy. While we're at it, entrywise quotients.
 
 > (.*) :: (Num r) => Tensor r -> Tensor r -> Tensor r
 > (.*) = tzipWith (*)
+> 
+> (./) :: (Num r, Fractional r) => Tensor r -> Tensor r -> Tensor r
+> (./) = tzipWith (/)
 
 Thinking of tensors as vectors, we can dot them together in the usual way.
 
@@ -462,74 +476,26 @@ Similarly, $\mathbb{R}^{u \otimes (v \otimes w)}$ and $\mathbb{R}^{(u \otimes v)
 > 
 > assocR _ = error "assocR: argument has wrong shape"
 
-Recall that the $\otimes$ operator in $\mathbb{S}$ does not really distribute over $\oplus$, so for example $a \otimes (b \oplus c)$ and $(a \otimes b) \oplus (a \otimes c)$ are distinct tensor sizes, and meanwhile we have $$\mathbb{R}^{(a \otimes b) \oplus (a \otimes c)} \cong \mathbb{R}^{a \otimes b} \times \mathbb{R}^{a \otimes c}.$$ We'll define a couple of operators to canonically "undistribute" $\otimes$ over $\oplus$.
+We also have $$\mathbb{R}^{(a \otimes b) \oplus (a \otimes c)} \cong \mathbb{R}^{a \otimes b} \times \mathbb{R}^{a \otimes c}.$$ We'll define a couple of operators to canonically "undistribute" $\otimes$ over $\oplus$.
 
-> unDistL, (~-~) :: Tensor r -> Tensor r -> Tensor r
-> unDistL a@(T (u :* h) _) b@(T (v :* k) _) =
+> vcat, (~-~) :: Tensor r -> Tensor r -> Tensor r
+> vcat a@(T (u :* h) _) b@(T (v :* k) _) =
 >   if h == k
->     then extract ((u :+ v) :* k) (opIndex DistL) a
->     else error "unDistL: size mismatch"
+>     then extract ((u :+ v) :* k) (opIndex DistR) (oplus a b)
+>     else error "vcat: size mismatch"
 > 
-> (~-~) = unDistL
+> (~-~) = vcat
 > 
 > 
-> unDistR, (~|~) :: Tensor r -> Tensor r -> Tensor r
-> unDistR a@(T (h :* u) _) b@(T (k :* v) _) =
+> hcat, (~|~) :: Tensor r -> Tensor r -> Tensor r
+> hcat a@(T (h :* u) _) b@(T (k :* v) _) =
 >   if h == k
->     then extract (k :* (u :+ v)) (opIndex DistR) a
->     else error "unDistR: size mismatch"
+>     then extract (k :* (u :+ v)) (opIndex DistL) (oplus a b)
+>     else error "hcat: size mismatch"
 > 
-> (~|~) = unDistR
+> (~|~) = hcat
 
-We give ``unDistL`` and ``unDistR`` symbolic synonyms, meant to evoke what they do on matrices. ``unDistL`` concatenates matrices vertically, and ``unDistR`` concatenates them horizontally.
-
-The last "structural" operations on tensors (at least for now) will be a kind of "map" on sum tensors and a "fold" on product tensors. For sum sizes:
-
-> mapTermL :: (Tensor r -> Tensor r) -> Tensor r -> Tensor r
-> mapTermL f a = (f $ termL a) <|> (termR a)
-> 
-> mapTermR :: (Tensor r -> Tensor r) -> Tensor r -> Tensor r
-> mapTermR f a = (termL a) <|> (f $ termR a)
-
-And for product sizes:
-
-> foldFactorL :: (Tensor r -> Tensor r) -> Tensor r -> Tensor r
-> foldFactorL f a@(T (u :* v) _) = tensor (w :* v) $
->   \(i :& j) -> f (projL j a) `at` i
->   where
->     w = case common [ size $ f (projL j a) | j <- indicesOf v ] of
->       Just k -> k
->       Nothing -> error "foldFactorL: function must be well-defined on size"
-> foldFactorL _ _ = error "foldFactorL: tensor argument must have product shape"
-> 
-> foldFactorR :: (Tensor r -> Tensor r) -> Tensor r -> Tensor r
-> foldFactorR f a@(T (u :* v) _) = tensor (u :* w) $
->   \(i :& j) -> f (projR i a) `at` j
->   where
->     w = case common [ size $ f (projR i a) | i <- indicesOf u ] of
->       Just k -> k
->       Nothing -> error "foldFactorR: function must be well-defined on size"
-> foldFactorR _ _ = error "foldFactorR: tensor argument must have product shape"
-> 
-> common :: (Eq a) => [a] -> Maybe a
-> common []     = Nothing
-> common (x:xs) = if not $ any (/= x) xs
->   then Just x
->   else Nothing
-
-As an example, given a matrix we can use the ``foldFactor`` operators to sum the rows or columns.
-
-> sumRows, sumCols :: (Num r) => Tensor r -> Tensor r
-> sumRows = foldFactorR (cell . sum)
-> sumCols = foldFactorL (cell . sum)
-
-Note that ``mapTerm`` and ``foldFactor`` can be nested to manipulate more complicated tensor sizes. For example,
-
-```haskell
-foldFactorR (foldFactorR (cell . sum))
-```
-
-takes a "three dimensional" tensor and sums along one of the dimensions.
+We give ``vcat`` and ``hcat`` symbolic synonyms, meant to evoke what they do on matrices. ``vcat`` concatenates matrices vertically, and ``hcat`` concatenates them horizontally.
 
 
 Matrix Operations
@@ -538,42 +504,47 @@ Matrix Operations
 Now for a couple of matrix-specific operations. First the identity matrix.
 
 > idMat :: (Num r) => Size -> Tensor r
-> idMat n = tensor (n :* n) (\ (i :& j) -> if i==j then 1 else 0)
+> idMat n = tensor (n :* n) (\ (i :& j) -> kronecker i j)
+
+where ``kronecker`` representes the Kronecker delta function $$\delta_{i,j} = \left\{ \begin{array}{ll} 1 & \mathrm{if}\ i = j \\ 0 & \mathrm{otherwise}. \end{array} \right.$$
+
+> kronecker :: (Eq a, Num r) => a -> a -> r
+> kronecker x y = if x == y then 1 else 0
+
+And we can "diagonalize" any tensor.
 
 > diag :: (Num r) => Tensor r -> Tensor r
 > diag a@(T u _) = tensor (u :* u) $
->   \(i :& j) -> if i == j then a`at`i else 0
+>   \(i :& j) -> (kronecker i j) * (a`at`i)
 
-The tensor generalization of matrix multiplication is sometimes called <em>contraction</em>. I'll do the worst possible thing here by using the word "contraction" to refer only to matrix multiplication.
+The tensor generalization of matrix multiplication is sometimes called <em>contraction</em>. We'll mostly be interested in plain matrix multiplication. We'll define it as a matrix-matrix operation, a matrix-vector operation, and a vector-matrix operation using slightly different symbols. Surely this won't come back to haunt us.
 
-> contract :: (Num r) => Tensor r -> Tensor r -> Tensor r
-> contract a@(T (m :* n) _) b@(T (u :* v) _) =
+> (***) :: (Num r) => Tensor r -> Tensor r -> Tensor r
+> a@(T (m :* n) _) *** b@(T (u :* v) _) =
 >   if u == n
 >     then tensor (m*v)
 >       (\ (i :& j) -> sum
 >         [ (a`at`(i :& k))*(b`at`(k :& j)) | k <- indicesOf n ])
->     else error "inner sizes must match."
-> contract _ _ = error "contraction expects matrices with product sizes."
-
-``contract`` is a generalized matrix multiplication, but it's a little too general. For instance, in linear algebra we sometimes like to multiply an $m \times n$ matrix by an $n$ vector to get an $m$ vector; but using contraction this only really works if we think of the input vector as an $n \times 1$ matrix and the output as a $m \times 1$ matrix. We'll fix this by defining a specialized version of ``contract`` called ``collapse``. If $a \in \mathbb{R}^{m \otimes n}$ and $b \in \mathbb{R}^n$, then $$\mathsf{collapse}(a,b)_i = \sum_{k \in m} a_{i \& k} b_k.$$
-
-> collapse :: (Num r) => Tensor r -> Tensor r -> Tensor r
-> collapse a@(T (m :* n) _) b@(T u _) =
+>     else error "(***): inner sizes must match."
+> _ *** _ = error "(***): expected mat/mat."
+> 
+> (**>) :: (Num r) => Tensor r -> Tensor r -> Tensor r
+> a@(T (m :* n) _) **> b@(T u _) =
 >   if u == n
 >     then tensor m
 >       (\i -> sum
 >         [ (a`at`(i :& k))*(b`at`k) | k <- indicesOf n ])
->     else error "collapse: inner sizes must match."
-> collapse _ _ = error "collapse: sizes of wrong shape."
-
-> collapseL :: (Num r) => Tensor r -> Tensor r -> Tensor r
-> collapseL a@(T u _) b@(T (n :* m) _) =
+>     else error "(**>): inner sizes must match."
+> _ **> _ = error "(**>): expected mat/vec."
+> 
+> (<**) :: (Num r) => Tensor r -> Tensor r -> Tensor r
+> a@(T u _) <** b@(T (n :* m) _) =
 >   if u == n
 >     then tensor m
 >       (\i -> sum
 >         [ (a`at`k)*(b`at`(k :& i)) | k <- indicesOf n ])
->     else error "collapseL: inner sizes must match."
-> collapseL _ _ = error "collapse: sizes of wrong shape."
+>     else error "(<**): inner sizes must match."
+> _ <** _ = error "(<**): expected vec/mat."
 
 
 Pretty Printing
@@ -583,14 +554,14 @@ We'll end this post with the ``Show`` instance for tensors; we'll build it on to
 
 First we convert a tensor of strings to a ``Doc`` (in the pretty printer parlance), doing more or less the obvious thing.
 
-> toDoc :: Tensor String -> Doc
+> toDoc :: Tensor String -> PP.Doc
 > toDoc a@(T s _) =
 >   case s of
->     Size k -> hsep $ map text [ a`at`i | i <- indicesOf s ]
->     u :+ v -> (toDoc $ termL a) $$ (toDoc $ termR a)
->     u :* v -> vcat [
->                 hsep [
->                   text $ a `at` (i :& j)
+>     Size k -> PP.hsep $ map PP.text [ a`at`i | i <- indicesOf s ]
+>     u :+ v -> (toDoc $ termL a) PP.$$ (toDoc $ termR a)
+>     u :* v -> PP.vcat [
+>                 PP.hsep [
+>                   PP.text $ a `at` (i :& j)
 >                 | j <- indicesOf v ]
 >               | i <- indicesOf u ]
 
@@ -602,14 +573,13 @@ To actually show the tensor, we show the entries (pointwise) and pad to the maxi
 >       cellWidth = maximum $ fmap (length . show) a
 >       m = fmap (padLeft cellWidth . show) a
 >     in
->       ":" ++ (show $ size m) ++ ":\n" ++
->       (render $ toDoc m)
+>       PP.render $ toDoc m
 >     where
 >       -- left-pad a string with spaces to a given length
 >       padLeft :: Int -> String -> String
 >       padLeft k = reverse . take k . (++ (repeat ' ')) . reverse
 
-This method for displaying tensors is not perfect, but it has the advantage of being simple and doing mostly the right thing in the most common cases of $k$ and $m \otimes n$ tensors (i.e. matrices). Apropos of nothing: further support for this method is that tensors with shape $k_1 \oplus k_2 \oplus \cdots \oplus k_n$ look like [Young tableaux](https://en.wikipedia.org/wiki/Young_tableau).
+This method for displaying tensors is not perfect, but it has the advantage of being simple and doing mostly the right thing in the most common cases of $k$ and $m \otimes n$ tensors (i.e. vectors and matrices). Apropos of nothing: further support for this method is that tensors with shape $k_1 \oplus k_2 \oplus \cdots \oplus k_n$ look like [Young tableaux](https://en.wikipedia.org/wiki/Young_tableau).
 
 
 Tests
@@ -618,7 +588,7 @@ Tests
 In future posts we'll be writing tests involving tensors, so I'll put an ``Arbitrary`` instance here.
 
 > instance (Arbitrary r) => Arbitrary (Tensor r) where
->   arbitrary = arbitrary >>= arbTensor
+>   arbitrary = arbitrary >>= (arbTensorOf undefined)
 > 
 >   shrink a@(T u _) = case u of
 >     Size k ->
@@ -636,10 +606,7 @@ In future posts we'll be writing tests involving tensors, so I'll put an ``Arbit
 > 
 >     _ -> []
 > 
-> arbTensor :: (Arbitrary r) => Size -> Gen (Tensor r)
-> arbTensor s = do
+> arbTensorOf :: (Arbitrary r) => r -> Size -> Gen (Tensor r)
+> arbTensorOf _ s = do
 >   as <- vectorOf (fromIntegral $ dimOf s) arbitrary
 >   return $ tensor s (\i -> as !! (fromIntegral $ flatten s i))
-> 
-> arbMatrix :: (Arbitrary r) => Integer -> Integer -> Gen (Tensor r)
-> arbMatrix r c = arbTensor ((Size r) :* (Size c))

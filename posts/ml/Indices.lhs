@@ -1,5 +1,5 @@
 ---
-title: Indices
+title: Sizes and Indices
 author: nbloomf
 date: 2017-10-12
 tags: ml, literate-haskell
@@ -13,6 +13,7 @@ First some boilerplate.
 > import Data.List
 > import Test.QuickCheck
 > import Test.QuickCheck.Test
+> import System.Exit
 
 This post is just some preliminary ideas about tensors - nothing learning-specific yet.
 
@@ -62,9 +63,10 @@ So the elements of $\mathbb{S}$ look like unevaluated arithmetic expressions wit
 >     else error "sizes cannot be negative."
 >   (+) = (:+)
 >   (*) = (:*)
->   abs = id
->   signum = undefined
->   negate = error "sizes cannot be negative."
+> 
+>   abs    = error "Size Num instance: abs makes no sense."
+>   signum = error "Size Num instance: signum makes no sense."
+>   negate = error "Size Num instance: negate makes no sense."
 
 If you're following along with GHCi, try defining some ``Size``s. (The ``Num`` instance is just there to make the notation less awkward.)
 
@@ -124,7 +126,7 @@ Putting this together, we will define an algebra of indices like so.
 
 <div class="result">
 <div class="defn">
-<p>We denote by $\mathbb{I}$ the free algebra over $\mathbb{N}$ with two function symbols of arity 1 and one of arity 2, denoted $\mathsf{l}$, $\mathsf{r}$, and $\&$. Elements of $\mathbb{I}$ are called <em>indices</em>, and we'll sometimes refer to $\mathbb{I}$ as the <em>algebra of indices</em>.</p>
+<p>We denote by $\mathbb{I}$ the free algebra over $\mathbb{N}$ with two function symbols of arity 1 and one of arity 2, denoted $\mathsf{L}$, $\mathsf{R}$, and $\&$. Elements of $\mathbb{I}$ are called <em>indices</em>, and we'll sometimes refer to $\mathbb{I}$ as the <em>algebra of indices</em>.</p>
 </div>
 </div>
 
@@ -137,20 +139,23 @@ Again, since $\mathbb{I}$ is a free algebra we can represent it as an algebraic 
 >   | Index :& Index
 >   deriving Eq
 > 
+> 
 > instance Show Index where
 >   show = \case
 >     Index k -> show k
->     L a     -> "l(" ++ show a ++ ")"
->     R b     -> "r(" ++ show b ++ ")"
+>     L a     -> "L(" ++ show a ++ ")"
+>     R b     -> "R(" ++ show b ++ ")"
 >     a :& b  -> concat ["(", show a, ",", show b, ")"]
+> 
 > 
 > instance Num Index where
 >   fromInteger = Index
->   (+) = undefined
->   (*) = undefined
->   negate = undefined
->   abs = undefined
->   signum = undefined
+> 
+>   (+)    = error "Index Num instance: (+) does not make sense"
+>   (*)    = error "Index Num instance: (*) does not make sense"
+>   negate = error "Index Num instance: negate does not make sense"
+>   abs    = error "Index Num instance: abs does not make sense"
+>   signum = error "Index Num instance: signum does not make sense"
 
 Now given an index and a size, it may or may not make sense to talk about an entry at the index in a structure of the given size -- like asking for the item at index 10 in an array of length 5. To capture this, we define a <em>compatibility relation</em> to detect when an index can be used on a given size.
 
@@ -176,19 +181,17 @@ We'd like to be able to construct $s$ as a list; this is what ``indicesOf`` does
 >   a :+ b -> map L (indicesOf a) ++ map R (indicesOf b)
 >   a :* b -> [ u :& v | v <- indicesOf b, u <- indicesOf a ]
 
-The number of different indices for a given size should be equal to the size's dimension. This suggests a simple test.
+The number of different indices for a given size should be equal to the size's dimension. This suggests a simple test: the length of the index list is the dimension, and all entries of the index list are distinct.
 
 > _test_index_count :: Test (Size -> Bool)
 > _test_index_count =
->   testName "_test_index_count" $
+>   testName "dimOf s == length $ indicesOf s" $
 >   \s ->
->     if (dimOf s) == (fromIntegral $ length $ indicesOf s)
->       then True
->       else error "uh oh"
+>     (dimOf s) == (fromIntegral $ length $ indicesOf s)
 > 
 > _test_indices_distinct :: Test (Size -> Bool)
 > _test_indices_distinct =
->   testName "_test_indices_distinct" $
+>   testName "indicesOf s all distinct" $
 >   \s -> (indicesOf s) == (nub $ indicesOf s)
 
 In later posts, $s \in \mathbb{S}$ will represent the size (and shape) of a vector space consisting of tensors, which itself has vector space dimension $D(s)$. But it will sometimes be convenient to think of these tensors canonically as $D(s)$-dimensional vectors. To do this, we'll set up a bijection between the indices of a given size $s$ and the natural numbers less than $D(s)$. I'll call the function from indices to numbers "flatten", since it turns a complicated thing into a one-dimensional thing, and call the inverse "buildup".
@@ -202,6 +205,7 @@ In later posts, $s \in \mathbb{S}$ will represent the size (and shape) of a vect
 >   = (dimOf a) + (flatten b v)
 > flatten (a :* b) (u :& v)
 >   = (flatten a u) + (flatten b v)*(dimOf a)
+> 
 > 
 > buildup :: Size -> Integer -> Index
 > buildup (Size k) t
@@ -219,10 +223,17 @@ Now ``flatten`` and ``buildup`` should be inverses of each other, which we can t
 
 > _test_flatten_buildup :: Test (Size -> Bool)
 > _test_flatten_buildup =
->   testName "_test_position_index" $
+>   testName "flatten s . buildup s == id" $
 >   \s ->
 >     let ks = [0..((dimOf s) - 1)]
 >     in ks == map (flatten s . buildup s) ks
+> 
+> _test_buildup_flatten :: Test (Size -> Bool)
+> _test_buildup_flatten =
+>   testName "buildup s . flatten s == id" $
+>   \s ->
+>     let ks = indicesOf s
+>     in ks == map (buildup s . flatten s) ks
 
 To wrap up, in this post we defined two algebraic types, ``Size`` and ``Index``, to represent the sizes and indices of multidimensional arrays, and two functions, ``flatten`` and ``buildup``, that canonically map the indices of a given size to a 0-indexed list of natural numbers.
 
@@ -247,7 +258,7 @@ First off, we won't be needing the full complexity of QuickCheck, so here are so
 >   result <- quickCheckWithResult args prop
 >   if isSuccess result
 >     then return ()
->     else putStrLn (show result)
+>     else (putStrLn (show result)) >> exitFailure
 > 
 > -- when testing tests
 > skipTest _ (name, _) =
@@ -262,14 +273,6 @@ First off, we won't be needing the full complexity of QuickCheck, so here are so
 > instance TypeName Int     where typeName _ = "Int"
 > instance TypeName Integer where typeName _ = "Integer"
 > instance TypeName Double  where typeName _ = "Double"
-> 
-> verboseTest :: (Testable prop) => Test prop -> IO ()
-> verboseTest (name, p) = do
->   putStrLn name
->   verboseCheck p
-> 
-> withTypeOf :: a -> a -> ()
-> withTypeOf _ _ = ()
 > 
 > forAll2 :: (Show a, Show b, Testable prop)
 >   => Gen a -> Gen b -> (a -> b -> prop) -> Property
@@ -338,6 +341,7 @@ Now we can wrap up our tests in a little suite, ``_test_index``. The arguments f
 >   runTest args _test_index_count
 >   runTest args _test_indices_distinct
 >   runTest args _test_flatten_buildup
+>   runTest args _test_buildup_flatten
 > 
 > main_index :: IO ()
 > main_index = _test_index 200 20
