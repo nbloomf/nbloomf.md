@@ -21,144 +21,378 @@ In this post we'll give a more specific definition for supervised learning model
 
 First some boilerplate.
 
-
-
-> {-# LANGUAGE ScopedTypeVariables #-}
+> {-# LANGUAGE LambdaCase #-}
 > module SupervisedModels where
 > 
+> import Test.QuickCheck
+> import Test.QuickCheck.Test
+> 
 > import Indices
+> import IndexIsos
 > import Tensors
+> import TensorFunctions
 > import Gradients
+> import GradientChecking
+> import GradientDescent
 
-> {-
+Formally, a <em>supervised learning model</em> is a function on tensors which takes a tensor parameter -- that is, a function with a signature like $$M : \mathbb{R}^\Theta \rightarrow \mathbb{R}^u \rightarrow \mathbb{R}^v.$$ We'll think of this function as having signature $$M : \mathbb{R}^{\Theta \oplus u} \rightarrow \mathbb{R}^v.$$ To represent a model like this, we will keep track of the sizes of the parameter ($\Theta$), input ($u$), and output ($v$) tensors as well as the mapping ($M$). We'll also keep track of a list of indices for the so-called <em>regularized</em> parameters (more on these later). Finally, we'll also keep track of the gradient of the mapping.
 
-Models
-------
-
-Formally, a <em>supervised learning model</em> is a function on tensors which takes a tensor parameter -- that is, a function with a signature like $$M : \mathbb{R}^\Theta \rightarrow \mathbb{R}^u \rightarrow \mathbb{R}^v.$$ To represent a model like this, we will keep track of the sizes of the parameter ($\Theta$), input ($u$), and output ($v$) tensors as well as the mapping ($M$). We'll also keep track of a list of indices for the so-called <em>regularized</em> parameters (more on these later). Finally, for reasons we'll see later, we'll also keep track of the gradient of the mapping as a function of its parameter; that is, $\nabla(M(-)(x))(\theta)$.
-
-> data Model r = M
->   { paramSize   :: Size
->   , inputSize   :: Size
->   , outputSize  :: Size
->   , regularized :: [Index]
->   , function    :: Tensor r -> Tensor r -> Tensor r
->   , flipGrad    :: Tensor r -> Tensor r -> Tensor r
+> data SupervisedModel r = SM
+>   { smParamSize  :: Size
+>   , smInputSize  :: Size
+>   , smOutputSize :: Size
+>   , smRegularize :: [Index]
+>   , smFunction   :: Function r
+>   , smGradient   :: Function r
 >   }
 
-For example, one of the simplest possible models is a linear transformation or, more generally, an affine transformation. Recall that a linear transformation is a map $\mathbb{R}^u \rightarrow \mathbb{R}^v$, where $u$ and $v$ are natural numbers, which we can implement using matrix multiplication (mumble after choosing a basis mumble), and an affine transformation is a linear transformation plus a constant. So in this case our model $M$ looks like $$M(A)(x) = Ax + b,$$ where $A$ is a $v \times u$ matrix and $b$ is a $v$ vector. Or, using our tensor language:
+Importantly, with a parameter and input tensor in hand, our model can make a prediction.
 
-> affineModel :: (Num r) => Size -> Size -> Model r
-> affineModel from to = M
->   { paramSize   = (to :* from) :+ to
->   , inputSize   = from
->   , outputSize  = to
+> predictSM :: SupervisedModel r -> Tensor r -> Tensor r -> Tensor r
+> predictSM model theta x = (smFunction model) $@ (theta `oplus` x)
 > 
->   , regularized = map L $ indicesOf (to :* from)
+> gradientSM :: SupervisedModel r -> Tensor r -> Tensor r -> Tensor r
+> gradientSM model theta x = (smGradient model) $@ (theta `oplus` x)
+
+For example, one of the simplest possible models is a linear transformation or, more generally, an affine transformation. Recall that a linear transformation is a map $\mathbb{R}^u \rightarrow \mathbb{R}^v$, where $u$ and $v$ are natural numbers, which we can implement using matrix multiplication (mumble after choosing a basis mumble), and an affine transformation is a linear transformation plus a constant. So in this case our model $M$ looks like $$M((A \oplus b) \oplus x) = Ax + b,$$ where $A$ is a $v \times u$ matrix and $b$ is a $v$ vector. Or, using our tensor language, using the gradient of $MV + B$ we computed earlier:
+
+> affineSM :: (Num r) => Size -> Size -> SupervisedModel r
+> affineSM from to = SM
+>   { smParamSize   = (to :* from) :+ to
+>   , smInputSize   = from
+>   , smOutputSize  = to
 > 
->   , function = \theta x ->
->       let
->         m = termL theta
->         b = termR theta
->       in (contract m x) .+ b
+>   , smRegularize  = map L $ indicesOf (to :* from)
 > 
->   , flipGrad = \x _ ->
->       tensor (to :* (to :* from)) $
->         \(t :& (k :& h)) ->
->           if t == k
->             then x `at` h
->             else 0
+>   , smFunction = F
+>       { dom = ((to :* from) :+ to) :+ from
+>       , cod = to
+>       , fun = \x ->
+>           let
+>             m = termL (termL x)
+>             b = termR (termL x)
+>             v = termR x
+>           in
+>             (m **> v) .+ b
+>       }
+> 
+>   , smGradient = F
+>       { dom = ((to :* from) :+ to) :+ from
+>       , cod = to :* (((to :* from) :+ to) :+ from)
+>       , fun = \x ->
+>           let
+>             m = termL (termL x)
+>             b = termR (termL x)
+>             v = termR x
+>           in
+>             tensor (to :* (((to :* from) :+ to) :+ from)) $
+>               \case
+>                 k :& (L (L (i :& j))) ->
+>                   if i == k then v `at` j else 0
+>                 k :& (L (R s)) ->
+>                   if s == k then 1 else 0
+>                 k :& (R t) ->
+>                   m `at` (k :& t)
+>       }
 >   }
+> 
+> -- type-fixed version for testing
+> affineSMOf :: (Num r) => r -> Size -> Size -> SupervisedModel r
+> affineSMOf _ u v = affineSM u v
 
-(Again, ignore the ``regularized`` field for now.) We computed that gradient in the last post.
+(Again, ignore the ``smRegularize`` parameter for now.)
 
-So our model takes a parameter and returns a function that makes predictions. To <em>train</em> the model, we first choose some method, called a <em>cost function</em>, for measuring how bad its predictions are for a given parameter; generally a function from $\mathbb{R}^\Theta$ to $\mathbb{R}$. There are many possible choices for the cost function, so we'll make it a type synonym. A cost function should take (1) a set of training examples $\{x_i,y_i\}_{i \in T} \subseteq \mathbb{R}^u \times \mathbb{R}^v$, (2) a model $M$, and (3) a parameter $\theta \in \mathbb{R}^\Theta$, and return a measure of how badly $M$ performs on the $(x_i,y_i)$ under $\theta$.
+The most important constraint that a ``SupervisedModel`` should satisfy is that ``smGradient`` be the gradient of ``smFunction``. We can check this using both the numerical and dual number strategies because why not.
+
+> _test_affine_model_numerical_gradient
+>   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Show r, Arbitrary r)
+>   => r -> Test (Size -> Size -> Property)
+> _test_affine_model_numerical_gradient r =
+>   testName "affine model numerical gradient check" $
+>   \u v -> (u ~/= 0) && (v ~/= 0) ==>
+>     _test_functions_equal MaxAbsDiff (10**(-6))
+>       (approxGrad (10**(-5)) $ smFunction $ affineSMOf r u v)
+>       (smGradient $ affineSMOf r u v)
+> 
+> _test_affine_model_dual_gradient
+>   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Show r, Arbitrary r)
+>   => r -> Test (Size -> Size -> Property)
+> _test_affine_model_dual_gradient r =
+>   testName "affine model dual gradient check" $
+>   \u v -> (u ~/= 0) && (v ~/= 0) ==>
+>     _test_functions_equal MaxAbsDiff (10**(-6))
+>       (dualGrad $ smFunction $ affineSMOf (toDual r) u v)
+>       (smGradient $ affineSMOf r u v)
+
+
+Training
+--------
+
+So our model takes a parameter and returns a function that makes predictions. To <em>train</em> the model, we first choose some method, called a <em>cost function</em>, for measuring how bad its predictions are for a given parameter; generally a function from $\mathbb{R}^\Theta$ to $\mathbb{R}$. There are many possible choices for the cost function, so we'll represent them with a type. Generally the cost function will depend on the model being used, and should take (1) a set of training examples $\{x_i,y_i\}_{i \in T} \subseteq \mathbb{R}^u \times \mathbb{R}^v$ and (2) a parameter $\theta \in \mathbb{R}^\Theta$, and return a measure of how badly $M$ performs on the $(x_i,y_i)$ under $\theta$. We'll also keep track of the gradient of the cost function.
 
 > data CostFunction r = CF
->   { cost     :: Model r -> [(Tensor r, Tensor r)] -> Tensor r -> r
->   , costGrad :: Model r -> [(Tensor r, Tensor r)] -> Tensor r -> Tensor r
+>   { cfFunction 
+>       :: [(Tensor r, Tensor r)] -> Function r
+>   , cfGradient
+>       :: [(Tensor r, Tensor r)] -> Function r
 >   }
 
-One simple but useful cost function is the sum-squared-error function. If our training set is $\{(x_i,y_i\}_{i=1}^m$, the sum-squared-error cost function is given by $$\mathsf{cost}(\theta) = \frac{1}{2m} \sum_{i=1}^m ||f(\theta)(x_i) - y_i||^2,$$ where $||\ast||^2$ is the dot square of a tensor. In code:
+One simple but useful cost function is the sum-squared-error function. If our training set is $\{(x_i,y_i\}_{i=1}^m$, the sum-squared-error cost function is given by $$\mathsf{cost}(\theta) = \frac{1}{2m} \sum_{i=1}^m ||f(\theta \oplus x_i) - y_i||^2,$$ where $||\ast||^2$ is the dot square of a tensor. In code:
 
-> sumSquaredError :: (Num r, Real r, Fractional r) => CostFunction r
-> sumSquaredError = CF
->   { cost = \model trainingData parameters ->
->       let
->         m = fromIntegral $ length trainingData
->         f = function model
->         k (x,y) = normSquared ((f parameters x) .- y)
->       in
->         (sum $ map k trainingData) / (2*m)
+> sumSquaredError
+>   :: (Num r, Fractional r, Real r)
+>   => SupervisedModel r -> CostFunction r
+> sumSquaredError model = CF
+>   { cfFunction = \examples -> F
+>       { dom = smParamSize model
+>       , cod = 1
+>       , fun = \theta ->
+>           let
+>             m = fromIntegral $ length examples
+>             f = smFunction model
+>             ns (x,y) = normSquared (((f $@ (theta `oplus` x)) .- y))
+>           in
+>             cell $ (sum $ map ns examples) / (2*m)
+>       }
 > 
->   , costGrad = \model trainingData parameters ->
->       let
->         m = fromIntegral $ length trainingData
->         f = function model
->         g = flipGrad model
->         k (x,y) = ((f parameters x) .- y) `collapseL` (g x parameters)
->       in
->         (1/m) .@ (foldr1 (.+) $ map k trainingData)
+>   , cfGradient = \examples -> F
+>       { dom = smParamSize model
+>       , cod = smParamSize model
+>       , fun = \theta ->
+>           let
+>             m = fromIntegral $ length examples
+>             f = smFunction model
+>             g = smGradient model
+>             gr (x,y) =
+>               ((f $@ (theta `oplus` x)) .- y)
+>                 <** (g $@ (theta `oplus` x))  -- vector-matrix product
+>           in
+>             termL $ (1/m) .@ (vsum $ map gr examples)
+>       }
 >   }
 
-Why is this useful? There are good theoretical reasons, which I do not totally understand. But on a practical level sum squared error is simple and differentiable (useful in a moment) and intuitively a good measure of "closeness". All terms in the sum are positive, and each term contributes less to the sum when $f(\theta)(x_i)$ (the prediction) and $y_i$ (the actual observation) are close.
+Why is this useful? There are good theoretical reasons which I do not totally understand. But on a practical level sum squared error is simple and nicely differentiable and intuitively a good measure of "closeness". All terms in the sum are positive, and each term contributes less to the sum when $f(\theta \oplus x_i)$ (the prediction) and $y_i$ (the actual observation) are close.
 
-Then we choose a method to minimize the cost function, which takes the size of the input and output tensors as parameters because reasons.
+We should test that the sum squared error cost function gradient is reasonable.
 
-> type Optimizer r
->   = Size -> Size -> (Tensor r -> r) -> (Tensor r -> Tensor r) -> Tensor r
+> _test_affine_model_sum_squared_error_numerical_gradient
+>   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Real r, Show r, Arbitrary r)
+>   => r -> Test (Size -> Size -> Int -> Property)
+> _test_affine_model_sum_squared_error_numerical_gradient r =
+>   testName "affine model sum squared error numerical gradient check" $
+>   \u v k -> (u ~/= 0) && (v ~/= 0) && (k /= 0) ==>
+>     forAll (vectorOf k $ pairOf (arbTensorOf r u) (arbTensorOf r v)) $
+>       \xs -> (xs /= []) ==>
+>         _test_functions_equal MaxRelDiff (10**(-2))
+>           (approxGrad (10**(-4)) $ cfFunction (sumSquaredError $ affineSMOf r u v) xs)
+>           (cfGradient (sumSquaredError $ affineSMOf r u v) xs)
+> 
+> _test_affine_model_sum_squared_error_dual_gradient
+>   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Real r, Show r, Arbitrary r)
+>   => r -> Test (Size -> Size -> Int -> Property)
+> _test_affine_model_sum_squared_error_dual_gradient r =
+>   testName "affine model sum squared error dual gradient check" $
+>   \u v k -> (u ~/= 0) && (v ~/= 0) && (k /= 0) ==>
+>     forAll (vectorOf k $ pairOf (arbTensorOf r u) (arbTensorOf r v)) $
+>       \xs -> (xs /= []) ==>
+>         _test_functions_equal MaxAbsDiff (10**(-6))
+>           (dualGrad $ cfFunction (sumSquaredError $ affineSMOf (toDual r) u v)
+>             (map (\(h,k) -> (fmap toDual h, fmap toDual k)) xs))
+>           (cfGradient (sumSquaredError $ affineSMOf r u v) xs)
 
-And now to train the model on a given training set, we simply optimize the cost function. 
+With a cost function in hand, we can use gradient descent to minimize it. ``smSimpleTrain`` takes a cost function, a list of example data, an initial guess, and a learning rate, and attempts to minimize the cost function.
 
-> train
->   :: Model r
->   -> CostFunction r
->   -> Optimizer r
+> smSimpleTrain
+>   :: (Eq r, Ord r, Num r, Fractional r, Floating r)
+>   => CostFunction r
 >   -> [(Tensor r, Tensor r)]
 >   -> Tensor r
-> train model cf optimize trainingData
->   = optimize (inputSize model) (outputSize model) ((cost cf) model trainingData) ((costGrad cf) model trainingData)
+>   -> r
+>   -> Tensor r
+> smSimpleTrain cost examples x0 lr =
+>   gradDesc (cfGradient cost $ examples) x0 x0
+>     (maxAbsDiffLessThan (10**(-15)))
+>     (fixedLearningRate lr)
+
+As a smell test we can try to learn a known function. We'll do this by hand with a couple of examples and then generalize to a test.
+
+First, consider a training set with two examples, each of which is a pair of size 1 tensors -- in other words, two ordered pairs of real numbers $(x_1,y_1)$ and $(x_2,y_2)$. For simplicity let's say they are $(1,1)$ and $(2,2)$.
+
+> smell_test_data_1 :: (Num r) => [(Tensor r, Tensor r)]
+> smell_test_data_1 =
+>   [ (cell 1, cell 1)
+>   , (cell 2, cell 2)
+>   ]
+
+An affine model compatible with these data must have signature $$f : \mathbb{R}^{((1 \otimes 1) \oplus 1) \oplus 1} -> \mathbb{R}^1$$ and looks something like $$f((m \oplus b) \oplus x) = mx + b,$$ where $m$ and $b$ are the trainable parameters. In this case the test data can be fit exactly (which is not normally desirable, but we're just testing here) with the parameters $m = 1$ and $b = 0$.
+
+> smell_test_model_1 :: (Num r) => SupervisedModel r
+> smell_test_model_1 = affineSM 1 1
+
+And we can train this model to find a locally optimal value for the parameter tensor:
+
+> smell_test_theta_1
+>   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Real r)
+>   => Tensor r
+> smell_test_theta_1 = smSimpleTrain
+>   (sumSquaredError smell_test_model_1)
+>   smell_test_data_1
+>   (zeros $ smParamSize $ smell_test_model_1)
+>   0.15
+
+Sure enough, we have
+
+```haskell
+$> smell_test_theta_1
+   0.9999999999999443
+9.036826666597734e-14
+```
+
+which is pretty close to $m = 1$ and $b = 0$. Moreover, we can use this ``theta`` to make predictions.
+
+> smell_test_predict_1
+>   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Real r)
+>   => Tensor r -> Tensor r
+> smell_test_predict_1 x =
+>   predictSM smell_test_model_1 smell_test_theta_1 x
+
+with:
+
+```haskell
+$> smell_test_predict_1 (cell 1)
+1.0000000000000346
+$> smell_test_predict_1 (cell 2)
+1.999999999999979
+$> smell_test_predict_1 (cell 150)
+149.99999999999173
+```
+
+Woo! It doesn't not work. :)
+
+While we're at it, here's a slightly more complicated example.
+
+> smell_test_data_2 :: (Num r) => [(Tensor r, Tensor r)]
+> smell_test_data_2 =
+>   [ (vec [0,1,2], cell 1)
+>   , (vec [2,4,1], cell 2)
+>   , (vec [3,2,2], cell 0)
+>   , (vec [2,1,0], cell 2)
+>   ]
+> 
+> smell_test_model_2 :: (Num r) => SupervisedModel r
+> smell_test_model_2 = affineSM 3 1
+> 
+> smell_test_theta_2
+>   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Real r)
+>   => Tensor r
+> smell_test_theta_2 = smSimpleTrain
+>   (sumSquaredError smell_test_model_2)
+>   smell_test_data_2
+>   (zeros $ smParamSize $ smell_test_model_2)
+>   0.15
+> 
+> smell_test_predict_2
+>   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Real r)
+>   => Tensor r -> Tensor r
+> smell_test_predict_2 x =
+>   predictSM smell_test_model_2 smell_test_theta_2 x
 
 
- > gradientDescent :: (Num r) => r -> Tensor r -> (Tensor r -> Tensor r -> Bool) -> Optimizer r
- > gradientDescent rate init stop inSize outSize f =
- >   gradDesc init (step init)
- >     where
- >       step :: Tensor r -> Tensor r
- >       step theta = theta -- .- (rate .@ (gradT inSize f theta))
- > 
- >       gradDesc :: (Num r) => Tensor r -> Tensor r -> Tensor r
- >       gradDesc last next = if True == stop last next
- >         then next
- >         else gradDesc next (step next)
+Regularization
+--------------
 
-> compose :: Model r -> Model r -> Model r
-> compose mB mA =
->   if (inputSize mB) == (outputSize mA)
->     then M
->       { paramSize   = (paramSize mB) :+ (paramSize mA)
->       , inputSize   = inputSize mA
->       , outputSize  = outputSize mB
->       , regularized = (map L $ regularized mB) ++ (map R $ regularized mA)
->       , function    = \p -> (function mB (termL p)) . (function mA (termR p))
->       , flipGrad    = undefined
+So training a model boils down to finding a parameter $\theta$ that minimizes the cost function. It turns out that we sometimes have occasion to want additional constraints on the parameters; say, by preferring that they not be too large. For example, at the moment we only know how to deal with linear and affine models, but even these can model nonlinear functions if we introduce new inputs to represent nonlinear combinations of the old inputs. If we have a data set that naturally has one input, $x$, we could try to learn a function of $x$ like $$f(m,b,x) = mx + b$$ or we could learn a function of $x$ and $x^2$ like $$f(a,m,b,x) = ax^2 + mx + b,$$ or a function of $\sqrt{x}$, or $\log(x)$, or any number of other possibilities. This opens a wide range of more interesting nonlinear functions, but also increases the risk of overfitting. To prevent this, we can penalize parameters which are large in absolute value -- doing so helps because when data is fit "unnaturally" by a complex nonlinear function the coefficients tend to be large. We can do this by adding the square of each parameter to the cost function. Of course we don't necessarily want to penalize *all* parameters; for instance, in the affine model the offset parameters $B$ have no effect on any polynomial inputs we introduce.
+
+> regularize
+>   :: (Num r, Fractional r, Real r)
+>   => r -> SupervisedModel r -> CostFunction r -> CostFunction r
+> regularize lambda model cost = CF
+>   { cfFunction = \examples -> F
+>       { dom = smParamSize model
+>       , cod = 1
+>       , fun = \theta ->
+>           let
+>             reg = sum [ (theta `at` i)^2 | i <- smRegularize model ]
+>             m = fromIntegral $ length $ smRegularize model
+>           in
+>             (cfFunction cost examples $@ theta)
+>               .+ (cell $ lambda * reg / m)
 >       }
->     else error "size mismatch."
-
-> regularize :: (Real r, Fractional r) => r -> CostFunction r -> CostFunction r
-> regularize lambda f = CF
->   { cost = \model trainingData parameters ->
->       let
->         reg = sum [ (parameters `at` i)^2 | i <- regularized model ]
->         m = fromIntegral $ length $ regularized model
->       in
->         ((cost f) model trainingData parameters) + (lambda * reg / m)
->   , costGrad = undefined
+> 
+>   , cfGradient = \examples -> F
+>       { dom = smParamSize model
+>       , cod = smParamSize model
+>       , fun = \theta ->
+>           let
+>             m = fromIntegral $ length $ smRegularize model
+>             rg = tensor (smParamSize model) $
+>               \i -> if i `elem` smRegularize model
+>                 then 2 * lambda * (theta`at`i) / m
+>                 else 0
+>           in
+>             (cfGradient cost examples $@ theta) .+ rg
+>       }
 >   }
 
-> func :: [(Tensor r, Tensor r)] -> Model r -> CostFunction r -> Tensor r
-> func trainingData model = undefined
+We should test that the regularized sum squared error cost function gradient is reasonable for affine models.
 
-> -}
+> _test_affine_model_regularized_sum_squared_error_numerical_gradient
+>   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Real r, Show r, Arbitrary r)
+>   => r -> Test (Size -> Size -> Int -> Property)
+> _test_affine_model_regularized_sum_squared_error_numerical_gradient r =
+>   testName "affine model regularized sum squared error numerical gradient check" $
+>   \u v k -> (u ~/= 0) && (v ~/= 0) && (k /= 0) ==>
+>     forAll (vectorOf k $ pairOf (arbTensorOf r u) (arbTensorOf r v)) $
+>       \xs lam -> (xs /= []) ==>
+>         let
+>           m = affineSMOf r u v
+>         in
+>           _test_functions_equal MaxRelDiff (10**(-1))
+>             (approxGrad (10**(-4)) $ cfFunction (regularize (abs lam) m $ sumSquaredError m) xs)
+>             (cfGradient (regularize (abs lam) m $ sumSquaredError m) xs)
+> 
+> _test_affine_model_regularized_sum_squared_error_dual_gradient
+>   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Real r, Show r, Arbitrary r)
+>   => r -> Test (Size -> Size -> Int -> Property)
+> _test_affine_model_regularized_sum_squared_error_dual_gradient r =
+>   testName "affine model regularized sum squared error dual gradient check" $
+>   \u v k -> (u ~/= 0) && (v ~/= 0) && (k /= 0) ==>
+>     forAll (vectorOf k $ pairOf (arbTensorOf r u) (arbTensorOf r v)) $
+>       \xs lam -> (xs /= []) ==>
+>         let
+>           m1 = affineSMOf (toDual r) u v
+>           m2 = affineSMOf r u v
+>         in
+>           _test_functions_equal MaxAbsDiff (10**(-6))
+>             (dualGrad $ cfFunction (regularize (toDual $ abs lam) m1 $ sumSquaredError m1)
+>               (map (\(h,k) -> (fmap toDual h, fmap toDual k)) xs))
+>             (cfGradient (regularize (abs lam) m2 $ sumSquaredError m2) xs)
 
 
+Test Suite
+----------
+
+> _test_supervised_models
+>   :: (Show r, Fractional r, Ord r, Num r, Floating r, Real r, Arbitrary r)
+>   => r -> Int -> Int -> IO ()
+> _test_supervised_models r num size = do
+>   testLabel "Supervised Models"
+> 
+>   let
+>     args = stdArgs
+>       { maxSuccess = num
+>       , maxSize = size
+>       }
+> 
+>   runTest args (_test_affine_model_dual_gradient r)
+>   runTest args (_test_affine_model_numerical_gradient r)
+> 
+>   runTest args (_test_affine_model_sum_squared_error_dual_gradient r)
+>   runTest args (_test_affine_model_sum_squared_error_numerical_gradient r)
+> 
+>   runTest args (_test_affine_model_regularized_sum_squared_error_dual_gradient r)
+>   runTest args (_test_affine_model_regularized_sum_squared_error_numerical_gradient r)
+> 
+> 
+> main_supervised_models :: IO ()
+> main_supervised_models = _test_supervised_models (0 :: Double) 30 3

@@ -274,6 +274,12 @@ First off, we won't be needing the full complexity of QuickCheck, so here are so
 > instance TypeName Integer where typeName _ = "Integer"
 > instance TypeName Double  where typeName _ = "Double"
 > 
+> pairOf :: (Monad m) => m a -> m b -> m (a,b)
+> pairOf ma mb = do
+>   x <- ma
+>   y <- mb
+>   return (x,y)
+> 
 > forAll2 :: (Show a, Show b, Testable prop)
 >   => Gen a -> Gen b -> (a -> b -> prop) -> Property
 > forAll2 ga gb f = forAll genPair (uncurry f)

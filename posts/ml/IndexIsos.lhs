@@ -33,8 +33,8 @@ This is more or less the algorithm for putting a polynomial in canonical form fr
 
 > canon :: Size -> [[Integer]]
 > canon (Size k) = case k of
->   0 -> [   ]
->   1 -> [[ ]]
+>   0 -> [   ] -- empty sum
+>   1 -> [[ ]] -- empty product
 >   _ -> [[k]]
 > canon (u :+ v) =
 >   sort $ (canon u) ++ (canon v)
@@ -245,7 +245,7 @@ Ok! To find the sequence of ``Op``s needed to put a ``Size`` in canonical form, 
 1. *Expand* the size using the distributive identities over and over, so that all the plus nodes appear toward the root and all the times notes appear toward the leaves. (If any times node appears above a plus node, we can use distributivity to switch them.)
 2. *Prune* the size by eliminating any instances of "plus zero", "times one", or "times zero". Pruning an expanded tree gives another expanded tree.
 3. *Unbalance* the size by pushing all nested sizes to the right using the associative identities. Unbalancing a pruned and expanded tree gives another pruned and expanded tree.
-4. *Arrange* the summands in graded lex order using associativity and commutativity.
+4. *Arrange* the summands in lex order using associativity and commutativity.
 
 Doing all four steps in order, and keeping track of which identities we use, gives a canonical form as well as a recipe for how to get there.
 
@@ -469,7 +469,7 @@ We can test that, after expanding, pruning, and unbalancing, we get an equivalen
 Arrange
 -------
 
-An unbalanced ``size`` is <em>arranged</em> if its terms are sorted by the graded lexicographic order. We can detect this with ``isArranged``.
+An unbalanced ``size`` is <em>arranged</em> if its terms are sorted by the lexicographic order. We can detect this with ``isArranged``.
 
 > -- assumes isUnbalanced s == True
 > isArranged :: Size -> Bool

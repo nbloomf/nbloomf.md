@@ -74,11 +74,14 @@ Carries out gradient descent for 100 steps with learning rate 0.5. A more practi
 >   :: (Eq r, Ord r, Num r, Fractional r)
 >   => r -> Tensor r -> Tensor r -> Maybe (Tensor r)
 > maxAbsDiffLessThan eps x y =
->   if (distanceBy MaxAbsDiff x y) < eps
->     then Nothing
->     else Just x
+>   let
+>     del = distanceBy MaxAbsDiff x y
+>   in
+>     if del < eps
+>       then Nothing
+>       else Just x
 
-As a really simple example, fix a vector $v \in \mathbb{R}^s$ and consider the function $f : \mathbb{R}^s \rightarrow \mathbb{R}^s$ given by $$f(x)_i = (x_i - v_i)^2.$$ This is a quadratic in each coordinate with minimum at $x_i = v_i$. Moreover this function is convex, so that minimum is unique, and gradient descent should find it regardless of the initial guess.
+As a really simple example, fix a vector $v \in \mathbb{R}^s$ and consider the function $f : \mathbb{R}^s \rightarrow \mathbb{R}^s$ given by $$f(x)_i = (x_i - v_i)^2.$$ This is quadratic in each coordinate with minimum at $x_i = v_i$. Moreover this function is convex, so that minimum is unique, and gradient descent should find it regardless of the initial guess.
 
 > _test_grad_desc_line
 >   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Show r, Arbitrary r)

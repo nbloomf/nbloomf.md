@@ -42,10 +42,19 @@ A tensor "is" a map from indices to $\mathbb{R}$s. The ``tensor`` function lets 
 
 To retrieve the entry of a tensor at a given index, we evaluate the tensor as a function. We'll call this ``at``. So in math notation, we'd write $\mathsf{at}(A,i) = A(i)$ or $A_i$.
 
-> at :: Tensor r -> Index -> r
-> at (T s a) t = if t `isIndexOf` s
+We're actually going to define two slightly different versions of ``at``. The first works only on nonzero sizes, but for all entry types. The second treats the size zero vector as if it has entry 0 at every possible index, but of course only makes sense for numeric entry types. (Looking ahead, there's a good reason for doing this, having to do with dual numbers and automatic differentiation.)
+
+> at' :: Tensor r -> Index -> r
+> at' (T s a) t = if t `isIndexOf` s
 >   then a ! (flatten s t)
->   else error "incompatible index"
+>   else error $ "at: incompatible index " ++ show t
+>     ++ " for size " ++ show s
+> 
+> at :: (Num r) => Tensor r -> Index -> r
+> at a t =
+>   if (size a) ~= 0
+>     then 0
+>     else a `at'` t
 
 So ``tensor`` and ``at`` obey the following identities:
 
@@ -64,11 +73,13 @@ We'll also define some helper functions to make building tensors more convenient
 > ones s = uniform s 1
 > zeros s = uniform s 0
 
+We'll use the notation $\mathsf{Zero}_s$ to denote the zero tensor of size $s$.
+
 We can use ``at`` and the canonical isomorphism on index sets to define equality for tensors.
 
 > instance (Eq r) => Eq (Tensor r) where
 >   a@(T u _) == b@(T v _) = if u ~= v
->     then all (\i -> (a`at`i) == (b`at`(mapIndex u v i))) (indicesOf u)
+>     then all (\i -> (a`at'`i) == (b`at'`(mapIndex u v i))) (indicesOf u)
 >     else False
 
 We'll see the reason for this weak equality in a bit. But for now, note that the following two tensors are <em>equal</em>, but not <em>strictly equal</em>.
@@ -136,7 +147,7 @@ Tensor as a Functor
 One of the first questions we ask about type constructors is whether they are naturally members of any interesting classes. It's not too surprising that ``Tensor`` is a functor, where ``fmap`` is "pointwise" function application.
 
 > instance Functor Tensor where
->   fmap f a@(T u _) = tensor u (\i -> f (a`at`i))
+>   fmap f a@(T u _) = tensor u (\i -> f (a`at'`i))
 
 To verify the functor laws, we make sure that ``fmap id == id``. (Remember that ``$==`` means strict equality.)
 
@@ -164,13 +175,13 @@ We can also define a ``Foldable`` instance for tensors, using the canonical orde
 
 > instance Foldable Tensor where
 >   foldMap f a@(T u _)
->     = foldMap f [ a`at`i | i <- indicesOf u ]
+>     = foldMap f [ a`at'`i | i <- indicesOf u ]
 
 From here we can immediately take the ``sum`` and ``maximum`` of a tensor. We'll also define a kind of ``zip`` for tensors of equivalent size; I had trouble finding a good general class for zippable functors in the libraries.
 
 > tzip :: Tensor a -> Tensor b -> Tensor (a,b)
 > tzip a@(T u _) b@(T v _) = if u ~= v
->   then tensor u (\i -> (a`at`i, b`at`(mapIndex u v i)))
+>   then tensor u (\i -> (a`at'`i, b`at'`(mapIndex u v i)))
 >   else error "zip: tensors must have equivalent size"
 > 
 > tzipWith :: (a -> b -> c) -> Tensor a -> Tensor b -> Tensor c
@@ -182,7 +193,7 @@ From here we can immediately take the ``sum`` and ``maximum`` of a tensor. We'll
 >   pure = cell
 > 
 >   a@(T u _) <*> b@(T v _) = tensor (u :* v) $
->     \(i :& j) -> (a `at` i) (b `at` j)
+>     \(i :& j) -> (a `at'` i) (b `at'` j)
 
 We need to see that this implementation satisfies the applicative laws. First the identity law:
 
@@ -253,8 +264,8 @@ While we're at it, ``Tensor`` is also ``Alternative``.
 > 
 >   a@(T u _) <|> b@(T v _) = tensor (u :+ v) $
 >     \case
->       L i -> a `at` i
->       R j -> b `at` j
+>       L i -> a `at'` i
+>       R j -> b `at'` j
 
 We should also verify the ``Alternative`` laws. First the monoid laws that everyone agrees ``Alternatives`` should satisfy. Left identity:
 
@@ -359,6 +370,9 @@ Tensors are vectors, so they should have the usual vector operations of plus, ne
 >   (.-) :: (Num r) => t r -> t r -> t r
 >   a .- b = a .+ (neg b)
 > 
+>   vsum :: (Num r) => [t r] -> t r
+>   vsum = foldr1 (.+)
+> 
 > 
 > instance Vector Tensor where
 >   r .@ a = fmap (r*) a
@@ -411,7 +425,7 @@ Structural Arithmetic
 Now we'll define some structural operators on tensors; these are functions that manipulate the size of a tensor, or combine tensors into more complicated ones, or extract subparts. These are mostly based on ``extract``, which defines a new tensor in terms of an existing one.
 
 > extract :: Size -> (Index -> Index) -> Tensor r -> Tensor r
-> extract u f a = tensor u (\i -> a`at`(f i))
+> extract u f a = tensor u (\i -> a `at'` (f i))
 
 For example, we can extract "terms" from a summand tensor using ``extract`` like so.
 
@@ -483,6 +497,8 @@ We also have $$\mathbb{R}^{(a \otimes b) \oplus (a \otimes c)} \cong \mathbb{R}^
 >   if h == k
 >     then extract ((u :+ v) :* k) (opIndex DistR) (oplus a b)
 >     else error "vcat: size mismatch"
+> vcat a b = error $ "vcat: sizes with wrong shape: " ++ show (size a)
+>   ++ " and " ++ show (size b)
 > 
 > (~-~) = vcat
 > 
@@ -557,11 +573,11 @@ First we convert a tensor of strings to a ``Doc`` (in the pretty printer parlanc
 > toDoc :: Tensor String -> PP.Doc
 > toDoc a@(T s _) =
 >   case s of
->     Size k -> PP.hsep $ map PP.text [ a`at`i | i <- indicesOf s ]
+>     Size k -> PP.hsep $ map PP.text [ a`at'`i | i <- indicesOf s ]
 >     u :+ v -> (toDoc $ termL a) PP.$$ (toDoc $ termR a)
 >     u :* v -> PP.vcat [
 >                 PP.hsep [
->                   PP.text $ a `at` (i :& j)
+>                   PP.text $ a `at'` (i :& j)
 >                 | j <- indicesOf v ]
 >               | i <- indicesOf u ]
 
@@ -595,8 +611,8 @@ In future posts we'll be writing tests involving tensors, so I'll put an ``Arbit
 >       if k <= 0
 >         then []
 >         else
->           [ tensor (Size $ k-1) (\i -> a`at`i)
->           , uniform (Size $ k-1) (a`at`0)
+>           [ tensor (Size $ k-1) (\i -> a`at'`i)
+>           , uniform (Size $ k-1) (a`at'`0)
 >           ]
 > 
 >     _ :+ _ -> concat

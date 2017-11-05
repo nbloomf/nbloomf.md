@@ -99,6 +99,119 @@ Fix $V \in \mathbb{R}^H$ and $B \in \mathbb{R}^K$, and define $f : \mathbb{R}^{K
 </div>
 </div>
 
+We can take this one step further. An expression like $MV + B$ can be thought of as a function of $M$, $V$, and $B$ simultaneously; define $$f : \mathbb{R}^{((K \otimes H) \oplus K) \oplus H} \rightarrow \mathbb{R}^k$$ by $$f((M \oplus B) \oplus V) = MV + B.$$ Then $$\nabla(f) : \mathbb{R}^{((K \otimes H) \oplus K) \oplus H} \rightarrow \mathbb{R}^{K \otimes (((K \otimes H) \oplus K) \oplus H)}.$$ We can compute this gradient one component at a time by breaking it into cases. Note that the components of $\nabla(f)(X)$ come in three flavors: $k \& \mathsf{L}\mathsf{L}(i \& j)$ where $k,i \in K$ and $j \in H$, $k \& \mathsf{L}\mathsf{R}(s)$ where $k,s \in K$, and $k \& \mathsf{R}(t)$ where $k \in K$ and $t \in H$. We consider each case in turn.
+
+First, at $k \& \mathsf{L}\mathsf{L}(i \& j)$ when $i \neq k$:
+
+$$\begin{eqnarray*}
+ &   & (\nabla f)((M \oplus B) \oplus V)_{k \& \mathsf{L}\mathsf{L}(i \& j)} \\
+ & = & D(f(w_{\mathsf{L}\mathsf{L}(i \& j), (M \oplus B) \oplus V}(x))_k)(((M \oplus B) \oplus V)_{\mathsf{L}\mathsf{L}(i \& j)}) \\
+ & = & D(f((w_{i \& j, M}(x) \oplus B) \oplus V)_k)(M_{i \& j}) \\
+ & = & D((w_{i \& j, M}(x)V + B)_k)(M_{i \& j}) \\
+ & = & D((w_{i \& j, M}(x)V)_k + B_k)(M_{i \& j}) \\
+ & = & D\left(\sum_{h \in H} w_{i \& j, M}(x)_{k \& h} V_h\right)(M_{i,j}) \\
+ & = & D\left(\sum_{h \in H} M_{k \& h} V_h\right)(M_{i,j}) \\
+ & = & 0
+\end{eqnarray*}$$
+
+Next, at $k \& \mathsf{L}\mathsf{L}(i \& j)$ when $i = k$:
+
+$$\begin{eqnarray*}
+ &   & (\nabla f)((M \oplus B) \oplus V)_{k \& \mathsf{L}\mathsf{L}(i \& j)} \\
+ & = & D(f(w_{\mathsf{L}\mathsf{L}(i \& j), (M \oplus B) \oplus V}(x))_k)(((M \oplus B) \oplus V)_{\mathsf{L}\mathsf{L}(i \& j)}) \\
+ & = & D(f((w_{i \& j, M}(x) \oplus B) \oplus V)_k)(M_{i \& j}) \\
+ & = & D((w_{i \& j, M}(x)V + B)_k)(M_{i \& j}) \\
+ & = & D((w_{i \& j, M}(x)V)_k + B_k)(M_{i \& j}) \\
+ & = & D\left(\sum_{h \in H} w_{i \& j, M}(x)_{k \& h} V_h\right)(M_{i,j}) \\
+ & = & D\left(xV_j + \sum_{h \in H, h \neq j} w_{i \& j, M}(x)_{k \& h} V_h\right)(M_{i,j}) \\
+ & = & D(xV_j)(M_{i,j}) \\
+ & = & \overline{V_j}(M_{i,j}) \\
+ & = & V_j
+\end{eqnarray*}$$
+
+Now at $k \& \mathsf{L}\mathsf{R}(s)$ if $s \neq k$:
+
+$$\begin{eqnarray*}
+ &   & (\nabla f)((M \oplus B) \oplus V)_{k \& \mathsf{L}\mathsf{R}(s)} \\
+ & = & D(f(w_{\mathsf{L}\mathsf{R}(s), (M \oplus B) \oplus V}(x))_k)(((M \oplus B) \oplus V)_{\mathsf{L}\mathsf{R}(s)}) \\
+ & = & D(f((M \oplus w_{s, B}(x)) \oplus V)_k)(B_s) \\
+ & = & D((MV + w_{s,B}(x))_k)(B_s) \\
+ & = & D((MV)_k + w_{s,B}(x)_k)(B_s) \\
+ & = & D(w_{s,B}(x)_k)(B_s) \\
+ & = & D(B_k)(B_s) \\
+ & = & 0
+\end{eqnarray*}$$
+
+and at $k \& \mathsf{L}\mathsf{R}(s)$ if $s = k$:
+
+$$\begin{eqnarray*}
+ &   & (\nabla f)((M \oplus B) \oplus V)_{k \& \mathsf{L}\mathsf{R}(s)} \\
+ & = & D(f(w_{\mathsf{L}\mathsf{R}(s), (M \oplus B) \oplus V}(x))_k)(((M \oplus B) \oplus V)_{\mathsf{L}\mathsf{R}(s)}) \\
+ & = & D(f((M \oplus w_{s, B}(x)) \oplus V)_k)(B_s) \\
+ & = & D((MV + w_{s,B}(x))_k)(B_s) \\
+ & = & D((MV)_k + w_{s,B}(x)_k)(B_s) \\
+ & = & D(w_{s,B}(x)_k)(B_s) \\
+ & = & D(x)(B_s) \\
+ & = & \overline{1}(B_s) \\
+ & = & 1
+\end{eqnarray*}$$
+
+Finally, at $k \& \mathsf{R}(t)$:
+
+$$\begin{eqnarray*}
+ &   & (\nabla f)((M \oplus B) \oplus V)_{k \& \mathsf{R}(t)} \\
+ & = & D(f(w_{\mathsf{R}(t), (M \oplus B) \oplus V}(x))_k)(((M \oplus B) \oplus V)_{\mathsf{R}(t)}) \\
+ & = & D(f((M \oplus B) \oplus w_{t,V}(x))_k)(V_t) \\
+ & = & D((Mw_{t,V}(x) + B)_k)(V_t) \\
+ & = & D((Mw_{t,V}(x))_k + B_k)(V_t) \\
+ & = & D((Mw_{t,v}(x))_k)(V_t) \\
+ & = & D\left( \sum_{h \in H} M_{k \& h} w_{t,V}(x)_h \right)(V_t) \\
+ & = & D\left( M_{k,t}x + \sum_{h \in H, h \neq t} M_{k \& h} V_h \right)(V_t) \\
+ & = & D(M_{k,t}x)(V_t) \\
+ & = & \overline{M_{k,t}}(V_t) \\
+ & = & M_{k,t}.
+\end{eqnarray*}$$
+
+That's a mouthful. :) Anyway, we'll use this hideous gradient later.
+
+Another useful gradient is that for a direct sum function. Let $u$ and $v$ be sizes, and let $B \in \mathbb{R}^v$ be fixed. We can define a map $f : \mathbb{R}^u \rightarrow \mathbb{R}^{u \oplus v}$ by $$f(A) = A \oplus B.$$ Now the gradient of $f$ has signature $$\nabla f : \mathbb{R}^u \rightarrow \mathbb{R}^{(u \oplus v) \otimes u},$$ and we can calculate its value at a given index. Note that the indices of $(\nabla f)(V)$ come in two flavors: $\mathsf{L}(i) \& k$ where $i, k \in u$, and $\mathsf{R}(j) \& k$ where $k \in u$ and $j \in v$.
+
+At $\mathsf{L}(i) \& k$ with $i \neq k$, we have
+
+$$\begin{eqnarray*}
+ &   & \nabla(f)(V)_{\mathsf{L}(i) \& k} \\
+ & = & D(f(w_{k,V}(x))_{\mathsf{L}(i)})(V_k) \\
+ & = & D((w_{k,V}(x) \oplus B)_{\mathsf{L}(i)})(V_k) \\
+ & = & D(w_{k,V}(x)_i)(V_k) \\
+ & = & D(V_i)(V_k) \\
+ & = & \overline{0}(V_k) \\
+ & = & 0
+\end{eqnarray*}$$
+
+while at $\mathsf{L}(i) \& k$ with $i = k$, we have
+
+$$\begin{eqnarray*}
+ &   & \nabla(f)(V)_{\mathsf{L}(i) \& k} \\
+ & = & D(f(w_{k,V}(x))_{\mathsf{L}(i)})(V_k) \\
+ & = & D((w_{k,V}(x) \oplus B)_{\mathsf{L}(i)})(V_k) \\
+ & = & D(w_{k,V}(x)_i)(V_k) \\
+ & = & D(x)(V_k) \\
+ & = & \overline{1}(V_k) \\
+ & = & 1.
+\end{eqnarray*}$$
+
+And at $\mathsf{R}(j) \& k$, we have
+
+$$\begin{eqnarray*}
+ &   & \nabla(f)(V)_{\mathsf{R}(j) \& k} \\
+ & = & D(f(w_{k,V}(x))_{\mathsf{R}(j)})(V_k) \\
+ & = & D((w_{k,V}(x) \oplus B)_{\mathsf{R}(j)})(V_k) \\
+ & = & D(B_j)(V_k) \\
+ & = & \overline{0}(V_k) \\
+ & = & 0.
+\end{eqnarray*}$$
+
+Putting this together, we have $$\nabla(- \oplus B)(V) = \mathsf{vcat}(\mathsf{Id}(u), \mathsf{Z}(v \otimes u)).$$ Similarly, $$\nabla(A \oplus -)(V) = \mathsf{vcat}(\mathsf{Z}(v \otimes u), \mathsf{Id}(u)).$$
 
 Linearity and the Chain Rule
 ----------------------------

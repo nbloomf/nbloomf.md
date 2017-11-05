@@ -12,6 +12,7 @@ First some boilerplate.
 > import Control.Applicative
 > import Test.QuickCheck
 > import Test.QuickCheck.Test
+> import Debug.Trace
 > 
 > import Indices
 > import IndexIsos
@@ -28,11 +29,13 @@ Ostensibly a "tensor function" is just a function with signature ``Tensor r -> T
 > -- apply
 > ($@) :: Function r -> Tensor r -> Tensor r
 > f $@ v = if (size v) /= dom f
->   then error "($@): domain mismatch"
+>   then error $ "($@): domain mismatch: got " ++ show (size v)
+>     ++ " but expected " ++ show (dom f)
 >   else let w = (fun f) v in
->     if (size w) /= cod f
->       then error "($@): codomain mismatch"
->       else w
+>     if (size w) == cod f
+>       then w
+>       else error $ "($@): codomain mismatch: got " ++ show (size w)
+>         ++ " but expected " ++ show (cod f)
 > 
 > -- compose
 > ($.) :: Function r -> Function r -> Function r
@@ -43,7 +46,8 @@ Ostensibly a "tensor function" is just a function with signature ``Tensor r -> T
 >       , cod = cod g
 >       , fun = \v -> g $@ (f $@ v)
 >       }
->     else error "($.): domain/codomain mismatch"
+>     else
+>       error "($.): domain/codomain mismatch"
 > 
 > infixr 0 $@
 > infixr 9 $.
@@ -119,6 +123,22 @@ We can also build a small library of functions in this style.
 >   , fun = \v -> cell $ f v
 >   }
 
+And direct summing:
+
+> dSumR :: Size -> Tensor r -> Function r
+> dSumR u a@(T v _) = F
+>   { dom = u
+>   , cod = u :+ v
+>   , fun = \x -> x `oplus` a
+>   }
+> 
+> dSumL :: Size -> Tensor r -> Function r
+> dSumL u a@(T v _) = F
+>   { dom = u
+>   , cod = v :+ u
+>   , fun = \x -> a `oplus` x
+>   }
+
 
 Algebra of Functions
 --------------------
@@ -161,7 +181,7 @@ And mapping into products.
 >   { dom = u :* (dom f)
 >   , cod = u :* (cod f)
 >   , fun = \a -> tensor (u :* (cod f)) $
->       \(i :& j) -> (f $@ projR i a) `at` j
+>       \(i :& j) -> (f $@ projR i a) `at'` j
 >   }
 > 
 > mapL :: Size -> Function r -> Function r
@@ -169,7 +189,7 @@ And mapping into products.
 >   { dom = (dom f) :* u
 >   , cod = (cod f) :* u
 >   , fun = \a -> tensor ((cod f) :* u) $
->       \(i :& j) -> (f $@ projL j a) `at` i
+>       \(i :& j) -> (f $@ projL j a) `at'` i
 >   }
 
 As an example, given a matrix we can use the ``map*`` operators to sum or maximum of the rows or columns of a product-shaped tensor.

@@ -49,7 +49,7 @@ Of course the gradient is a bunch of pointwise univariate derivatives, so we can
 >           \(j :& i) -> diffquo (g i j) (v`at`i) eps
 >   }
 >   where
->     inj :: Index -> Tensor r -> r -> Tensor r
+>     inj :: (Num r) => Index -> Tensor r -> r -> Tensor r
 >     inj k a@(T u _) x = tensor u $
 >       \i -> if i == k then x else a`at`i
 
@@ -97,13 +97,13 @@ And a helper test for function equality:
 For example, the gradient of scalar multiplication should be a scalar multiple of the "identity" tensor; the following test verifies this.
 
 > _test_numerical_scalar_gradient
->   :: (Eq r, Num r, Ord r, Fractional r, Show r, Arbitrary r)
+>   :: (Eq r, Num r, Ord r, Fractional r, Floating r, Show r, Arbitrary r)
 >   => r -> Test (Size -> r -> Property)
 > 
 > _test_numerical_scalar_gradient _ =
 >   testName "numerical scalar gradient" $
 >   \u k -> u ~/= 0 ==> 
->     _test_functions_equal MaxAbsDiff (10^^(-6))
+>     _test_functions_equal MaxAbsDiff (10**(-6))
 >       (approxGrad (10^^(-6)) $ scalarF u k)
 >       (constF u (k .@ (idMat u)))
 
@@ -151,6 +151,32 @@ Pointwise functions (parameterized on the metric):
 >       (approxGrad (10^^(-4)) $ pointwiseF u p)
 >       (diagF u $. (pointwiseF u q))
 
+The gradient of direct summing is constant.
+
+> _test_numerical_direct_sum_left_gradient
+>   :: (Eq r, Num r, Ord r, Fractional r, Show r, Arbitrary r)
+>   => r -> Test (Size -> Size -> Property)
+> _test_numerical_direct_sum_left_gradient r =
+>   testName "direct sum on left numerical gradient" $
+>   \u v -> (u ~/= 0) && (v ~/= 0) ==>
+>     forAll (arbTensorOf r v) $
+>       \m ->
+>         _test_functions_equal MaxAbsDiff (10^^(-2))
+>           (approxGrad (10^^(-6)) $ dSumL u m)
+>           (constF u $ (zeros $ v :* u) ~-~ (idMat u))
+> 
+> _test_numerical_direct_sum_right_gradient
+>   :: (Eq r, Num r, Ord r, Fractional r, Show r, Arbitrary r)
+>   => r -> Test (Size -> Size -> Property)
+> _test_numerical_direct_sum_right_gradient r =
+>   testName "direct sum on right numerical gradient" $
+>   \u v -> (u ~/= 0) && (v ~/= 0) ==>
+>     forAll (arbTensorOf r v) $
+>       \m ->
+>         _test_functions_equal MaxAbsDiff (10^^(-2))
+>           (approxGrad (10^^(-6)) $ dSumR u m)
+>           (constF u $ (idMat u) ~-~ (zeros $ v :* u))
+
 
 Dual Numbers
 ------------
@@ -171,7 +197,7 @@ Remember that the gradient of a tensor function is again a tensor. So rather tha
 > unDual :: Dual r -> r
 > unDual (D x _) = x
 
-Thinking of a tensor as a "variable", we dualize by embedding each corrdinate with its partial derivative.
+Thinking of a tensor as a "variable", we dualize by embedding each coordinate with its partial derivative.
 
 > dualize :: (Num r) => Tensor r -> Tensor (Dual r)
 > dualize a@(T u _) = tensor u (\i -> var u i (a`at`i))
@@ -253,6 +279,9 @@ Now we define arithmetic on dual numbers in a way that essentially encodes the c
 > 
 >   logBase (D x _) (D y dy) = D (logBase x y)
 >     ((1/(log x)**2) .@ ((((log y)/x) .@ dy) .- (((log x)/y) .@ dy)))
+> 
+> instance (Real r) => Real (Dual r) where
+>   toRational (D x _) = toRational x
 
 Now we can automatically take a tensor function on (tensors of) dual numbers, and find its gradient as a function on (tensors of) ordinary numbers.
 
@@ -342,6 +371,32 @@ And we can compare an alleged gradient function against the automatically comput
 >     _test_functions_equal metric (10^^(-6))
 >       (dualGrad $ pointwiseF u p)
 >       (diagF u $. (pointwiseF u q))
+> 
+> 
+> _test_dual_direct_sum_left_gradient
+>   :: (Eq r, Num r, Ord r, Fractional r, Show r, Arbitrary r)
+>   => r -> Test (Size -> Size -> Property)
+> _test_dual_direct_sum_left_gradient r =
+>   testName "direct sum on left dual gradient" $
+>   \u v -> (u ~/= 0) && (v ~/= 0) ==>
+>     forAll (arbTensorOf r v) $
+>       \m ->
+>         _test_functions_equal MaxAbsDiff (10^^(-5))
+>           (dualGrad $ dSumL u (fmap toDual m))
+>           (constF u $ (zeros $ v :* u) ~-~ (idMat u))
+> 
+> 
+> _test_dual_direct_sum_right_gradient
+>   :: (Eq r, Num r, Ord r, Fractional r, Show r, Arbitrary r)
+>   => r -> Test (Size -> Size -> Property)
+> _test_dual_direct_sum_right_gradient r =
+>   testName "direct sum on right dual gradient" $
+>   \u v -> (u ~/= 0) && (v ~/= 0) ==>
+>     forAll (arbTensorOf r v) $
+>       \m ->
+>         _test_functions_equal MaxAbsDiff (10^^(-5))
+>           (dualGrad $ dSumR u (fmap toDual m))
+>           (constF u $ (idMat u) ~-~ (zeros $ v :* u))
 
 
 Test Suite
@@ -359,19 +414,6 @@ Test Suite
 >       , maxSize = size
 >       }
 > 
->   testLabel "Numerical"
->   runTest args (_test_numerical_scalar_gradient r)
->   runTest args (_test_numerical_linear_gradient r)
->   runTest args (_test_numerical_affine_gradient r)
->   runTest args (_test_numerical_pointwise_gradient_by MaxAbsDiff
->                  "^2"  r (^2) (*2))
->   runTest args (_test_numerical_pointwise_gradient_by MaxAbsDiff
->                  "sin" r sin cos)
->   runTest args (_test_numerical_pointwise_gradient_by MaxAbsDiff
->                  "cos" r cos (negate . sin))
->   runTest args (_test_numerical_pointwise_gradient_by MaxRelDiff
->                  "exp" r exp exp)
-> 
 >   testLabel "Dual"
 >   runTest args (_test_dual_scalar_gradient r)
 >   runTest args (_test_dual_linear_gradient r)
@@ -384,6 +426,23 @@ Test Suite
 >                  "cos" r cos (negate . sin))
 >   runTest args (_test_dual_pointwise_gradient_by MaxAbsDiff
 >                  "exp" r exp exp)
+>   runTest args (_test_dual_direct_sum_left_gradient r)
+>   runTest args (_test_dual_direct_sum_right_gradient r)
+> 
+>   testLabel "Numerical"
+>   runTest args (_test_numerical_scalar_gradient r)
+>   runTest args (_test_numerical_linear_gradient r)
+>   runTest args (_test_numerical_affine_gradient r)
+>   runTest args (_test_numerical_pointwise_gradient_by MaxAbsDiff
+>                  "^2"  r (^2) (*2))
+>   runTest args (_test_numerical_pointwise_gradient_by MaxAbsDiff
+>                  "sin" r sin cos)
+>   runTest args (_test_numerical_pointwise_gradient_by MaxAbsDiff
+>                  "cos" r cos (negate . sin))
+>   runTest args (_test_numerical_pointwise_gradient_by MaxRelDiff
+>                  "exp" r exp exp)
+>   runTest args (_test_numerical_direct_sum_left_gradient r)
+>   runTest args (_test_numerical_direct_sum_right_gradient r)
 > 
 > main_gradient_checking :: IO ()
 > main_gradient_checking = _test_gradient_checking (0 :: Double) 100 3
