@@ -194,7 +194,7 @@ The number of different indices for a given size should be equal to the size's d
 >   testName "indicesOf s all distinct" $
 >   \s -> (indicesOf s) == (nub $ indicesOf s)
 
-In later posts, $s \in \mathbb{S}$ will represent the size (and shape) of a vector space consisting of tensors, which itself has vector space dimension $D(s)$. But it will sometimes be convenient to think of these tensors canonically as $D(s)$-dimensional vectors. To do this, we'll set up a bijection between the indices of a given size $s$ and the natural numbers less than $D(s)$. I'll call the function from indices to numbers "flatten", since it turns a complicated thing into a one-dimensional thing, and call the inverse "buildup".
+In later posts, $s \in \mathbb{S}$ will represent the size (and shape) of the elements in a vector space consisting of tensors, which itself has vector space dimension $D(s)$. But it will sometimes be convenient to think of these tensors canonically as $D(s)$-dimensional vectors. To do this, we'll set up a bijection between the indices of a given size $s$ and the natural numbers less than $D(s)$. I'll call the function from indices to numbers "flatten", since it turns a complicated thing into a one-dimensional thing, and call the inverse "buildup".
 
 > flatten :: Size -> Index -> Integer
 > flatten (Size k) (Index t)

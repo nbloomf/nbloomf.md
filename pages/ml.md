@@ -4,7 +4,9 @@ title: Machine Learning
 
 I am trying to learn more about this hip "Machine Learning" thing the kids are all talking about. I'm the type that learns best about a thing by writing, so that's what this is.
 
-The posts in this series are literate Haskell, and by the end comprise a basic library for describing and (*slowly*) training basic neural networks. Everything is from scratch on base Haskell 2010, and the only external dependency is QuickCheck (for tests). The point here is to understand the math, and no effort is put into speed.
+The posts in this series are literate Haskell, and by the end comprise a crude library for constructing and (*slowly*) training basic neural networks. Everything is from scratch on Haskell 2010, and the only external dependency is QuickCheck (for tests). The point here is to understand the math, and no effort is put into speed.
+
+Fair warning: this is pretty hideous. :)
 
 1. [Prologue](/posts/ml/prologue.html)
 2. Tensors

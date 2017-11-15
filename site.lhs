@@ -127,6 +127,8 @@ The ``matchPosts`` rule is a little different from the others we've seen so far.
 >
 >     compile $ pandocMathCompiler
 >       >>= applyShortcodes allServices
+>       >>= loadAndApplyTemplate
+>             "templates/hr.html" ctx
 >       >>= applyTagTemplates ctx
 >             [ ("literate-haskell",
 >                 "templates/literate-haskell.html")

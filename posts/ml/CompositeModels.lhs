@@ -60,6 +60,8 @@ $$\begin{eqnarray*}
  & = & \left( \underbrace{(\nabla g)(M \oplus f(N \oplus V))}_{C \otimes (\Phi \oplus B)} \cdot \underbrace{\mathsf{vcat}(\mathsf{Z}_{\Phi \otimes B}, \mathsf{Id}_{B})}_{(\Phi \oplus B) \otimes B} \cdot \underbrace{(\nabla f)(N \oplus V)}_{B \otimes (\Theta \oplus A)} \cdot \underbrace{\mathsf{vcat}(\mathsf{Id}_{\Theta}, \mathsf{Z}_{A \otimes \Theta})}_{(\Theta \oplus A) \otimes \Theta} \right)_{c \& \theta} \\
 \end{eqnarray*}$$
 
+(I've included the size of each factor as a smell test.)
+
 At $c \& \mathsf{R}a$, we have
 
 $$\begin{eqnarray*}
@@ -75,7 +77,11 @@ $$\begin{eqnarray*}
  & = & \left( \underbrace{(\nabla g)(M \oplus f(N \oplus V))}_{C \otimes (\Phi \oplus B)} \cdot \underbrace{\mathsf{vcat}(\mathsf{Z}_{\Phi \otimes B}, \mathsf{Id}_B)}_{(\Phi \oplus B) \otimes B} \cdot \underbrace{(\nabla f)(N \oplus V)}_{B \otimes (\Theta \oplus A)} \cdot \underbrace{\mathsf{vcat}(\mathsf{Z}_{\Theta \otimes A},\mathsf{Id}_{A})}_{(\Theta \oplus A) \otimes A} \right)_{c \& a} \\
 \end{eqnarray*}$$
 
-> (>>>) :: (Num r) => SupervisedModel r -> SupervisedModel r -> SupervisedModel r
+With this gradient in hand, we can compose two models together like so.
+
+> (>>>)
+>   :: (Num r)
+>   => SupervisedModel r -> SupervisedModel r -> SupervisedModel r
 > f >>> g =
 >   let
 >     theta = smParamSize f
@@ -95,7 +101,8 @@ $$\begin{eqnarray*}
 >         { smParamSize = phi :+ theta
 >         , smInputSize = a
 >         , smOutputSize = c
->         , smRegularize = (map L $ smRegularize f) ++ (map R $ smRegularize g)
+>         , smRegularize =
+>             (map L $ smRegularize f) ++ (map R $ smRegularize g)
 > 
 >         , smFunction = F
 >             { dom = (phi :+ theta) :+ a
@@ -146,18 +153,26 @@ $$\begin{eqnarray*}
 >         }
 >       else error "(>>>): inner dimensions must match"
 
+And we can test the gradient of the composite of two affine models.
+
 > _test_compose_affine_model_dual_gradient
->   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Show r, Arbitrary r)
+>   :: (Eq r, Ord r, Num r, Fractional r,
+>       Floating r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Size -> Size -> Property)
 > _test_compose_affine_model_dual_gradient r =
 >   testName "compose affine model dual gradient check" $
 >   \u v w -> (u ~/= 0) && (v ~/= 0) && (w ~/= 0) ==>
 >     _test_functions_equal MaxAbsDiff (10**(-6))
->       (dualGrad $ smFunction $ ((affineSMOf (toDual r) u v)) >>> (affineSMOf (toDual r) v w))
+>       (dualGrad $ smFunction $
+>         ((affineSMOf (toDual r) u v)) >>> (affineSMOf (toDual r) v w))
 >       (smGradient $ (affineSMOf r u v) >>> (affineSMOf r v w))
+
+At this point we can describe affine models of arbitrary size, and compose models together. But the composite of two affine models is again affine. To introduce some nonlinearity (nonaffinity?) we can use the logistic function.
 
 > logistic :: (Num r, Fractional r, Floating r) => r -> r
 > logistic x = 1 / (1 + (exp (negate x)))
+
+And applying this function pointwise:
 
 > logisticSM :: (Num r, Fractional r, Floating r) => Size -> SupervisedModel r
 > logisticSM u = SM
@@ -175,13 +190,16 @@ $$\begin{eqnarray*}
 >       { dom = 0 :+ u
 >       , cod = u :* (0 :+ u)
 >       , fun = \v -> tensor (u :* (0 :+ u)) $
->           \(i :& (R j)) -> (kronecker i j) * (logistic $ (termR v)`at`i) * (1 - (logistic $ (termR v)`at`i))
+>           \(i :& (R j)) -> (kronecker i j) *
+>             (logistic $ (termR v)`at`i) * (1 - (logistic $ (termR v)`at`i))
 >       }
 >   }
 > 
 > -- type fixed for testing
 > logisticSMOf :: (Num r, Fractional r, Floating r) => r -> Size -> SupervisedModel r
 > logisticSMOf _ = logisticSM
+
+We can now test the composite of two logistic models, and of an affine followed by a logistic.
 
 > _test_compose_logistic_model_dual_gradient
 >   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Show r, Arbitrary r)
@@ -192,7 +210,8 @@ $$\begin{eqnarray*}
 >     _test_functions_equal MaxAbsDiff (10**(-6))
 >       (dualGrad $ smFunction $ ((logisticSMOf (toDual r) u)) >>> (logisticSMOf (toDual r) u))
 >       (smGradient $ (logisticSMOf r u) >>> (logisticSMOf r u))
-
+> 
+> 
 > _test_compose_affine_logistic_model_dual_gradient
 >   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Size -> Property)
@@ -203,12 +222,43 @@ $$\begin{eqnarray*}
 >       (dualGrad $ smFunction $ ((affineSMOf (toDual r) u v)) >>> (logisticSMOf (toDual r) v))
 >       (smGradient $ (affineSMOf r u v) >>> (logisticSMOf r v))
 
+The logistic function maps $\mathbb{R}$ to the interval $(0,1)$, which is handy for training classification functions. But our sum squared error cost function is less good at training models which end with a logistic layer, precisely because the predictions and example outputs are constrained to $(0,1)$. Instead, we can use the logistic error function $$\mathsf{cost}(\theta) = \frac{1}{m} \sum_{i = 1}^m \left( -y_i \log(f(\theta \oplus x_i)) - (1 - y_i) \log(1 - f(\theta \oplus x_i)) \right),$$ where $m$ is the number of training examples, $(x_i,y_i)$ is the $i$th training example, and $f$ is the function being trained. In this case the $y$ must have size 1 and have the value 0 or 1.
+
+> logisticError
+>   :: (Num r, Fractional r, Floating r, Real r)
+>   => SupervisedModel r -> CostFunction r
+> logisticError model = CF
+>   { cfFunction = \examples -> F
+>       { dom = smParamSize model
+>       , cod = 1
+>       , fun = \theta ->
+>           let
+>             m = fromIntegral $ length examples
+>             f = smFunction model
+>             lg (x,y) = (((neg y) .* (fmap log (f $@ (theta `oplus` x))))
+>               .- (((cell 1) .- y) .* ((cell 1) .- (fmap log (f $@ (theta `oplus` x)))))) `at` 1
+>           in
+>             cell $ (sum $ map lg examples) / m
+>       }
+> 
+>   , cfGradient = \examples -> F
+>       { dom = smParamSize model
+>       , cod = 1 :* (smParamSize model)
+>       , fun = \theta ->
+>           let
+>             m = fromIntegral $ length examples
+>           in
+>             undefined
+>       }
+>   }
+
 
 Tests
 -----
 
 > _test_composite_models
->   :: (Show r, Fractional r, Ord r, Num r, Floating r, Real r, Arbitrary r)
+>   :: (Show r, Fractional r, Ord r, Num r,
+>       Floating r, Real r, Arbitrary r)
 >   => r -> Int -> Int -> IO ()
 > _test_composite_models r num size = do
 >   testLabel "Composite Models"

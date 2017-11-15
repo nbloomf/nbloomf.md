@@ -175,28 +175,32 @@ Why is this useful? There are good theoretical reasons which I do not totally un
 
 We should test that the sum squared error cost function gradient is reasonable.
 
-> _test_affine_model_sum_squared_error_numerical_gradient
->   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Real r, Show r, Arbitrary r)
+> _test_affine_model_sse_numerical_gradient
+>   :: (Eq r, Ord r, Num r, Fractional r,
+>        Floating r, Real r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Size -> Int -> Property)
-> _test_affine_model_sum_squared_error_numerical_gradient r =
+> _test_affine_model_sse_numerical_gradient r =
 >   testName "affine model sum squared error numerical gradient check" $
 >   \u v k -> (u ~/= 0) && (v ~/= 0) && (k /= 0) ==>
 >     forAll (vectorOf k $ pairOf (arbTensorOf r u) (arbTensorOf r v)) $
 >       \xs -> (xs /= []) ==>
 >         _test_functions_equal MaxRelDiff (10**(-2))
->           (approxGrad (10**(-4)) $ cfFunction (sumSquaredError $ affineSMOf r u v) xs)
+>           (approxGrad (10**(-4)) $
+>             cfFunction (sumSquaredError $ affineSMOf r u v) xs)
 >           (cfGradient (sumSquaredError $ affineSMOf r u v) xs)
 > 
-> _test_affine_model_sum_squared_error_dual_gradient
->   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Real r, Show r, Arbitrary r)
+> _test_affine_model_sse_dual_gradient
+>   :: (Eq r, Ord r, Num r, Fractional r,
+>        Floating r, Real r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Size -> Int -> Property)
-> _test_affine_model_sum_squared_error_dual_gradient r =
+> _test_affine_model_sse_dual_gradient r =
 >   testName "affine model sum squared error dual gradient check" $
 >   \u v k -> (u ~/= 0) && (v ~/= 0) && (k /= 0) ==>
 >     forAll (vectorOf k $ pairOf (arbTensorOf r u) (arbTensorOf r v)) $
 >       \xs -> (xs /= []) ==>
 >         _test_functions_equal MaxAbsDiff (10**(-6))
->           (dualGrad $ cfFunction (sumSquaredError $ affineSMOf (toDual r) u v)
+>           (dualGrad $ cfFunction
+>             (sumSquaredError $ affineSMOf (toDual r) u v)
 >             (map (\(h,k) -> (fmap toDual h, fmap toDual k)) xs))
 >           (cfGradient (sumSquaredError $ affineSMOf r u v) xs)
 
@@ -224,7 +228,7 @@ First, consider a training set with two examples, each of which is a pair of siz
 >   , (cell 2, cell 2)
 >   ]
 
-An affine model compatible with these data must have signature $$f : \mathbb{R}^{((1 \otimes 1) \oplus 1) \oplus 1} -> \mathbb{R}^1$$ and looks something like $$f((m \oplus b) \oplus x) = mx + b,$$ where $m$ and $b$ are the trainable parameters. In this case the test data can be fit exactly (which is not normally desirable, but we're just testing here) with the parameters $m = 1$ and $b = 0$.
+An affine model compatible with these data must have signature $$f : \mathbb{R}^{((1 \otimes 1) \oplus 1) \oplus 1} \rightarrow \mathbb{R}^1$$ and looks something like $$f((m \oplus b) \oplus x) = mx + b,$$ where $m$ and $b$ are the trainable parameters. In this case the test data can be fit exactly (which is not normally desirable, but we're just testing here) with the parameters $m = 1$ and $b = 0$.
 
 > smell_test_model_1 :: (Num r) => SupervisedModel r
 > smell_test_model_1 = affineSM 1 1
@@ -336,11 +340,12 @@ So training a model boils down to finding a parameter $\theta$ that minimizes th
 
 We should test that the regularized sum squared error cost function gradient is reasonable for affine models.
 
-> _test_affine_model_regularized_sum_squared_error_numerical_gradient
->   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Real r, Show r, Arbitrary r)
+> _test_affine_model_regularized_sse_numerical_gradient
+>   :: (Eq r, Ord r, Num r, Fractional r,
+>        Floating r, Real r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Size -> Int -> Property)
-> _test_affine_model_regularized_sum_squared_error_numerical_gradient r =
->   testName "affine model regularized sum squared error numerical gradient check" $
+> _test_affine_model_regularized_sse_numerical_gradient r =
+>   testName "affine model regularized sse numerical gradient check" $
 >   \u v k -> (u ~/= 0) && (v ~/= 0) && (k /= 0) ==>
 >     forAll (vectorOf k $ pairOf (arbTensorOf r u) (arbTensorOf r v)) $
 >       \xs lam -> (xs /= []) ==>
@@ -348,14 +353,16 @@ We should test that the regularized sum squared error cost function gradient is 
 >           m = affineSMOf r u v
 >         in
 >           _test_functions_equal MaxRelDiff (10**(-1))
->             (approxGrad (10**(-4)) $ cfFunction (regularize (abs lam) m $ sumSquaredError m) xs)
+>             (approxGrad (10**(-4)) $
+>               cfFunction (regularize (abs lam) m $ sumSquaredError m) xs)
 >             (cfGradient (regularize (abs lam) m $ sumSquaredError m) xs)
 > 
-> _test_affine_model_regularized_sum_squared_error_dual_gradient
->   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Real r, Show r, Arbitrary r)
+> _test_affine_model_regularized_sse_dual_gradient
+>   :: (Eq r, Ord r, Num r, Fractional r,
+>        Floating r, Real r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Size -> Int -> Property)
-> _test_affine_model_regularized_sum_squared_error_dual_gradient r =
->   testName "affine model regularized sum squared error dual gradient check" $
+> _test_affine_model_regularized_sse_dual_gradient r =
+>   testName "affine model regularized sse dual gradient check" $
 >   \u v k -> (u ~/= 0) && (v ~/= 0) && (k /= 0) ==>
 >     forAll (vectorOf k $ pairOf (arbTensorOf r u) (arbTensorOf r v)) $
 >       \xs lam -> (xs /= []) ==>
@@ -364,16 +371,19 @@ We should test that the regularized sum squared error cost function gradient is 
 >           m2 = affineSMOf r u v
 >         in
 >           _test_functions_equal MaxAbsDiff (10**(-6))
->             (dualGrad $ cfFunction (regularize (toDual $ abs lam) m1 $ sumSquaredError m1)
+>             (dualGrad $ cfFunction
+>               (regularize (toDual $ abs lam) m1 $ sumSquaredError m1)
 >               (map (\(h,k) -> (fmap toDual h, fmap toDual k)) xs))
->             (cfGradient (regularize (abs lam) m2 $ sumSquaredError m2) xs)
+>             (cfGradient
+>               (regularize (abs lam) m2 $ sumSquaredError m2) xs)
 
 
 Test Suite
 ----------
 
 > _test_supervised_models
->   :: (Show r, Fractional r, Ord r, Num r, Floating r, Real r, Arbitrary r)
+>   :: (Show r, Fractional r, Ord r, Num r,
+>        Floating r, Real r, Arbitrary r)
 >   => r -> Int -> Int -> IO ()
 > _test_supervised_models r num size = do
 >   testLabel "Supervised Models"
@@ -387,11 +397,11 @@ Test Suite
 >   runTest args (_test_affine_model_dual_gradient r)
 >   runTest args (_test_affine_model_numerical_gradient r)
 > 
->   runTest args (_test_affine_model_sum_squared_error_dual_gradient r)
->   runTest args (_test_affine_model_sum_squared_error_numerical_gradient r)
+>   runTest args (_test_affine_model_sse_dual_gradient r)
+>   runTest args (_test_affine_model_sse_numerical_gradient r)
 > 
->   runTest args (_test_affine_model_regularized_sum_squared_error_dual_gradient r)
->   runTest args (_test_affine_model_regularized_sum_squared_error_numerical_gradient r)
+>   runTest args (_test_affine_model_regularized_sse_dual_gradient r)
+>   runTest args (_test_affine_model_regularized_sse_numerical_gradient r)
 > 
 > 
 > main_supervised_models :: IO ()

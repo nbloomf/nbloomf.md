@@ -62,7 +62,6 @@ We can also build a small library of functions in this style.
 >   , fun = \_ -> a
 >   }
 > 
-> 
 > -- identity function
 > idF :: Size -> Function r
 > idF u = F

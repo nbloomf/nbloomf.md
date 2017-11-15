@@ -65,6 +65,10 @@ div.four-oh-four {
   font-style: italic;
 }
 
+div.figure {
+  text-align: center;
+}
+
 .invisible {
   display: none;
 }
