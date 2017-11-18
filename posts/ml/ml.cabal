@@ -20,7 +20,6 @@ library
   build-depends:
     base >= 4.0 && < 5.0,
     array >= 0.5.1 && < 0.6.0,
-    ad >= 4.3.4 && < 5.0.0,
     pretty >= 1.1.2.0 && < 2.0.0.0,
     QuickCheck >= 2.8.1 && < 3.0.0,
     keys >= 3.11 && < 4.0
@@ -33,7 +32,6 @@ test-suite ml-index
   build-depends:
     base >= 4.0 && < 5.0,
     QuickCheck >= 2.8.1 && < 3.0.0,
-    ad >= 4.3.4 && < 5.0.0,
     pretty >= 1.1.2.0 && < 2.0.0.0,
     array >= 0.5.1 && < 0.6.0
   other-modules:
@@ -48,7 +46,6 @@ test-suite ml-index-isos
   build-depends:
     base >= 4.0 && < 5.0,
     QuickCheck >= 2.8.1 && < 3.0.0,
-    ad >= 4.3.4 && < 5.0.0,
     pretty >= 1.1.2.0 && < 2.0.0.0,
     array >= 0.5.1 && < 0.6.0
   other-modules:
@@ -63,7 +60,6 @@ test-suite ml-tensor
   build-depends:
     base >= 4.0 && < 5.0,
     array >= 0.5.1 && < 0.6.0,
-    ad >= 4.3.4 && < 5.0.0,
     pretty >= 1.1.2.0 && < 2.0.0.0,
     QuickCheck >= 2.8.1 && < 3.0.0
   other-modules:
@@ -79,7 +75,6 @@ test-suite ml-gradient_checking
   build-depends:
     base >= 4.0 && < 5.0,
     QuickCheck >= 2.8.1 && < 3.0.0,
-    ad >= 4.3.4 && < 5.0.0,
     pretty >= 1.1.2.0 && < 2.0.0.0,
     array >= 0.5.1 && < 0.6.0
   other-modules:
@@ -97,7 +92,6 @@ test-suite ml-gradient_descent
   build-depends:
     base >= 4.0 && < 5.0,
     QuickCheck >= 2.8.1 && < 3.0.0,
-    ad >= 4.3.4 && < 5.0.0,
     pretty >= 1.1.2.0 && < 2.0.0.0,
     array >= 0.5.1 && < 0.6.0
   other-modules:
@@ -116,7 +110,6 @@ test-suite ml-supervised-models
   build-depends:
     base >= 4.0 && < 5.0,
     QuickCheck >= 2.8.1 && < 3.0.0,
-    ad >= 4.3.4 && < 5.0.0,
     pretty >= 1.1.2.0 && < 2.0.0.0,
     array >= 0.5.1 && < 0.6.0
   other-modules:
@@ -136,7 +129,6 @@ test-suite ml-composite-models
   build-depends:
     base >= 4.0 && < 5.0,
     QuickCheck >= 2.8.1 && < 3.0.0,
-    ad >= 4.3.4 && < 5.0.0,
     pretty >= 1.1.2.0 && < 2.0.0.0,
     array >= 0.5.1 && < 0.6.0
   other-modules:

@@ -11,7 +11,6 @@ packages:
 # Dependency packages to be pulled from upstream that are not in the resolver
 extra-deps:
 - hakyll-shortcode-0.0.2
-- ad-4.3.4
 - cabal-doctest-1.0.2
 
 # Override default flag values for local packages and extra-deps
