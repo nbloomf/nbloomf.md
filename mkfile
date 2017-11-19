@@ -1,18 +1,15 @@
 MKSHELL=/bin/bash
 
-PATH = `{pwd}/_bin/sth:`{pwd}/_bin/amd:$PATH
-
 targets:VQ:
-  echo 'compile'                                    | doppler lightgreen
-  echo '  all      : everything'                    | doppler lightcyan
-  echo '  watch    : serve pages at localhost:8000' | doppler lightcyan
-  echo '  build    : generate nbloomf.github.io'    | doppler lightcyan
-  echo '  site     : compile site'                  | doppler lightcyan
-  echo '  literate : compile literate posts'        | doppler lightcyan
-  echo '  favicons : generate favicons'             | doppler lightcyan
-  echo '  winfiles : convert raw file line endings' | doppler lightcyan
+  echo 'targets'                                     | doppler lightgreen
+  echo '  all      : everything'                     | doppler lightcyan
+  echo '  watch    : serve pages at localhost:31337' | doppler lightcyan
+  echo '  build    : generate nbloomf.github.io'     | doppler lightcyan
+  echo '  site     : compile site executable'        | doppler lightcyan
+  echo '  favicons : generate favicons'              | doppler lightcyan
+  echo '  winfiles : convert raw file line endings'  | doppler lightcyan
 
-all:VQ: literate build watch
+all:VQ: build watch install test
 
 
 
@@ -33,11 +30,20 @@ build:VQ: site favicons winfiles
 
 site:Q:
   echo 'Compiling site...' | doppler lightgreen
-  stack install
+  stack install nbloomf-md
 
 check:VQ:
   wget -r -nv --spider https://nbloomf.github.io
   rm -r nbloomf.github.io
+
+
+
+install:VQ:
+  stack install
+
+test:VQ:
+  shelltest test/ --color --threads=16 --execdir
+  stack test
 
 
 
