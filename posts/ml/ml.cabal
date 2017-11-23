@@ -67,7 +67,7 @@ test-suite ml-tensor
     IndexIsos
     Tensors
 
-test-suite ml-gradient_checking
+test-suite ml-gradient-checking
   type:             exitcode-stdio-1.0
   main-is:          GradientChecking.lhs
   ghc-options:      -main-is GradientChecking.main_gradient_checking
@@ -84,7 +84,7 @@ test-suite ml-gradient_checking
     TensorFunctions,
     Gradients
 
-test-suite ml-gradient_descent
+test-suite ml-gradient-descent
   type:             exitcode-stdio-1.0
   main-is:          GradientDescent.lhs
   ghc-options:      -main-is GradientDescent.main_gradient_descent

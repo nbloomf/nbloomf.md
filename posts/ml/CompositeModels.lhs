@@ -113,7 +113,7 @@ With this gradient in hand, we can compose two models together like so.
 >                   n = termR $ termL x
 >                   v = termR x
 >                 in
->                   gFun $@ (m `oplus` (fFun $@ (n `oplus` v)))
+>                   gFun $@ (m ⊕ (fFun $@ (n ⊕ v)))
 >             }
 > 
 >         , smGradient = F
@@ -125,30 +125,29 @@ With this gradient in hand, we can compose two models together like so.
 >                   n = termR $ termL x
 >                   v = termR x
 >                 in
->                   tensor (c :* ((phi :+ theta) :+ a)) $
->                     \case
->                       k :& (L (L p)) ->
->                         let
->                           mH = gGrad $@ (m `oplus` (fFun $@ (n `oplus` v)))
->                           mK = (idMat phi) `vcat` (zeros $ b :* phi)
->                         in
->                           (mH *** mK) `at` (k :& p)
->                       k :& (L (R t)) ->
->                         let
->                           mH = gGrad $@ (m `oplus` (fFun $@ (n `oplus` v)))
->                           mK = (zeros $ phi :* b) `vcat` (idMat b)
->                           mL = fGrad $@ (n `oplus` v)
->                           mM = (idMat theta) `vcat` (zeros $ a :* theta)
->                         in
->                           (mH *** mK *** mL *** mM) `at` (k :& t)
->                       k :& (R i) ->
->                         let
->                           mH = gGrad $@ (m `oplus` (fFun $@ (n `oplus` v)))
->                           mK = (zeros $ phi :* b) `vcat` (idMat b)
->                           mL = fGrad $@ (n `oplus` v)
->                           mM = (zeros $ theta :* a) `vcat` (idMat a)
->                         in
->                           (mH *** mK *** mL *** mM) `at` (k :& i)
+>                   tensor (c :* ((phi :+ theta) :+ a)) $ \case
+>                     k :& (L (L p)) ->
+>                       let
+>                         mH = gGrad $@ (m ⊕ (fFun $@ (n ⊕ v)))
+>                         mK = (idMat phi) `vcat` (zeros $ b :* phi)
+>                       in
+>                         (mH *** mK) `at` (k :& p)
+>                     k :& (L (R t)) ->
+>                       let
+>                         mH = gGrad $@ (m ⊕ (fFun $@ (n ⊕ v)))
+>                         mK = (zeros $ phi :* b) `vcat` (idMat b)
+>                         mL = fGrad $@ (n ⊕ v)
+>                         mM = (idMat theta) `vcat` (zeros $ a :* theta)
+>                       in
+>                         (mH *** mK *** mL *** mM) `at` (k :& t)
+>                     k :& (R i) ->
+>                       let
+>                         mH = gGrad $@ (m ⊕ (fFun $@ (n ⊕ v)))
+>                         mK = (zeros $ phi :* b) `vcat` (idMat b)
+>                         mL = fGrad $@ (n ⊕ v)
+>                         mM = (zeros $ theta :* a) `vcat` (idMat a)
+>                       in
+>                         (mH *** mK *** mL *** mM) `at` (k :& i)
 >             }
 >         }
 >       else error "(>>>): inner dimensions must match"
@@ -174,7 +173,8 @@ At this point we can describe affine models of arbitrary size, and compose model
 
 And applying this function pointwise:
 
-> logisticSM :: (Num r, Fractional r, Floating r) => Size -> SupervisedModel r
+> logisticSM
+>   :: (Num r, Fractional r, Floating r) => Size -> SupervisedModel r
 > logisticSM u = SM
 >   { smParamSize = 0
 >   , smInputSize = u
@@ -191,12 +191,14 @@ And applying this function pointwise:
 >       , cod = u :* (0 :+ u)
 >       , fun = \v -> tensor (u :* (0 :+ u)) $
 >           \(i :& (R j)) -> (kronecker i j) *
->             (logistic $ (termR v)`at`i) * (1 - (logistic $ (termR v)`at`i))
+>             (logistic $ (termR v)`at`i) *
+>             (1 - (logistic $ (termR v)`at`i))
 >       }
 >   }
 > 
 > -- type fixed for testing
-> logisticSMOf :: (Num r, Fractional r, Floating r) => r -> Size -> SupervisedModel r
+> logisticSMOf
+>   :: (Num r, Fractional r, Floating r) => r -> Size -> SupervisedModel r
 > logisticSMOf _ = logisticSM
 
 We can now test the composite of two logistic models, and of an affine followed by a logistic.
@@ -208,8 +210,10 @@ We can now test the composite of two logistic models, and of an affine followed 
 >   testName "compose logistic model dual gradient check" $
 >   \u -> (u ~/= 0) ==>
 >     _test_functions_equal MaxAbsDiff (10**(-6))
->       (dualGrad $ smFunction $ ((logisticSMOf (toDual r) u)) >>> (logisticSMOf (toDual r) u))
->       (smGradient $ (logisticSMOf r u) >>> (logisticSMOf r u))
+>       (dualGrad $ smFunction $
+>         ((logisticSMOf (toDual r) u)) >>> (logisticSMOf (toDual r) u))
+>       (smGradient $
+>         (logisticSMOf r u) >>> (logisticSMOf r u))
 > 
 > 
 > _test_compose_affine_logistic_model_dual_gradient
@@ -219,7 +223,8 @@ We can now test the composite of two logistic models, and of an affine followed 
 >   testName "compose affine logistic model dual gradient check" $
 >   \u v -> (u ~/= 0) && (v ~/= 0) ==>
 >     _test_functions_equal MaxAbsDiff (10**(-6))
->       (dualGrad $ smFunction $ ((affineSMOf (toDual r) u v)) >>> (logisticSMOf (toDual r) v))
+>       (dualGrad $ smFunction $
+>         ((affineSMOf (toDual r) u v)) >>> (logisticSMOf (toDual r) v))
 >       (smGradient $ (affineSMOf r u v) >>> (logisticSMOf r v))
 
 The logistic function maps $\mathbb{R}$ to the interval $(0,1)$, which is handy for training classification functions. But our sum squared error cost function is less good at training models which end with a logistic layer, precisely because the predictions and example outputs are constrained to $(0,1)$. Instead, we can use the logistic error function $$\mathsf{cost}(\theta) = \frac{1}{m} \sum_{i = 1}^m \left( -y_i \log(f(\theta \oplus x_i)) - (1 - y_i) \log(1 - f(\theta \oplus x_i)) \right),$$ where $m$ is the number of training examples, $(x_i,y_i)$ is the $i$th training example, and $f$ is the function being trained. In this case the $y$ must have size 1 and have the value 0 or 1.
@@ -235,8 +240,8 @@ The logistic function maps $\mathbb{R}$ to the interval $(0,1)$, which is handy 
 >           let
 >             m = fromIntegral $ length examples
 >             f = smFunction model
->             lg (x,y) = (((neg y) .* (fmap log (f $@ (theta `oplus` x))))
->               .- (((cell 1) .- y) .* ((cell 1) .- (fmap log (f $@ (theta `oplus` x)))))) `at` 1
+>             lg (x,y) = (((neg y) .* (fmap log (f $@ (theta ⊕ x))))
+>               .- (((cell 1) .- y) .* ((cell 1) .- (fmap log (f $@ (theta ⊕ x)))))) `at` 1
 >           in
 >             cell $ (sum $ map lg examples) / m
 >       }

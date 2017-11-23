@@ -145,7 +145,7 @@ Repeat counts are encoded in base 86 for space efficiency. (Counts up to 85 need
 > 
 >     swap (x,y) = (y,x)
 
-It will be difficult to test ``compress`` until we've also written its companion, [``expand``](/posts/2016-02-24-software-tools-in-haskell-expand.html).
+It will be difficult to test ``compress`` until we've also written its companion, [``expand``](/posts/software-tools-in-haskell/expand.html).
 
 
 Old stuff
