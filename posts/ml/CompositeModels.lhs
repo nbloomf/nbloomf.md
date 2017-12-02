@@ -298,7 +298,8 @@ And a quick test for the logistic error gradient:
 >           (dualGrad $ cfFunction
 >             (logisticError $ affineSMOf (toDual r) u 1 >>> logisticSM 1)
 >             (map (\(h,k) -> (fmap toDual h, fmap toDual k)) xs))
->           (cfGradient (logisticError $ affineSMOf r u 1 >>> logisticSM 1) xs)
+>           (cfGradient
+>             (logisticError $ affineSMOf r u 1 >>> logisticSM 1) xs)
 
 
 Tests
