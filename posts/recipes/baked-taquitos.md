@@ -14,17 +14,17 @@ A family favorite. (Well, Stacie and I like them. The kids, not so much yet.) Th
 **Ingredients:**
 
 * 2 tablespoons vegetable oil (plus extra)
-* 1 1/4 pound extra lean ground beef
-* 1/2 medium white onion
+* 1 ¼ pound extra lean ground beef
+* ½ medium white onion
 * 1 teaspoon cumin
 * 1 teaspoon ground coriander
-* 1/2 teaspoon chili powder
-* 1/2 teaspoon onion powder
-* 1/2 teaspoon cayenne pepper
-* 1/2 teaspoon salt (plus extra)
-* 1/4 teaspoon ground black pepper
+* ½ teaspoon chili powder
+* ½ teaspoon onion powder
+* ½ teaspoon cayenne pepper
+* ½ teaspoon salt (plus extra)
+* ¼ teaspoon ground black pepper
 * 1 clove garlic
-* 3/4 cup grated cheddar or jack cheese
+* ¾ cup grated cheddar or jack cheese
 * 12 extra large corn tortillas (or small, your choice)
 
 **Directions:**

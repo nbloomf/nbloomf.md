@@ -16,16 +16,16 @@ Adapted from Jaques Torres.
 **Ingredients:**
 
 * 2 cups minus 2 tablespoons (8.5 oz) cake flour
-* 1 2/3 cups (8.5 oz) bread flour
-* 1 1/4 teaspoons baking soda
-* 1 1/2 teaspoons baking powder
-* 1 1/2 teaspoons coarse salt
-* 2 1/2 sticks (1 1/4 cups) unsalted butter
-* 1 1/4 cups (10 oz) light brown sugar
+* 1 ⅔ cups (8.5 oz) bread flour
+* 1 ¼ teaspoons baking soda
+* 1 ½ teaspoons baking powder
+* 1 ½ teaspoons coarse salt
+* 2 ½ sticks (1 ¼ cups) unsalted butter
+* 1 ¼ cups (10 oz) light brown sugar
 * 1 cup plus 2 tablespoons (8 oz) granulated sugar
 * 2 large eggs
 * 2 teaspoons natural vanilla extract
-* 1 1/4 pounds bittersweet chocolate disks or fèves, at least 60 percent cacao content
+* 1 ¼ pounds bittersweet chocolate disks or fèves, at least 60 percent cacao content
 * Sea salt
 
 **Directions:**

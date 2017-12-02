@@ -22,8 +22,8 @@ Sauce:
 * 1 teaspoon salt
 * 1 teaspoon ground ginger
 * 1 teaspoon cayenne pepper
-* 1/2 teaspoon ground cinnamon
-* 1/4 teaspoon ground turmeric
+* ½ teaspoon ground cinnamon
+* ¼ teaspoon ground turmeric
 * 1 (14 ounce) can tomato sauce
 * 1 cup heavy whipping cream
 * 2 teaspoons paprika
