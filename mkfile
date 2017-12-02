@@ -18,6 +18,7 @@ all:VQ: build watch install test
 #========#
 
 watch:VQ: site
+  export LANG=C
   echo 'view at localhost:31337' | doppler lightcyan
   site watch
 

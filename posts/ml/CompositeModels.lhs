@@ -8,6 +8,7 @@ tags: ml, literate-haskell
 Boilerplate.
 
 > {-# LANGUAGE LambdaCase #-}
+> {-# LANGUAGE ScopedTypeVariables #-}
 > module CompositeModels where
 > 
 > import Control.Applicative
@@ -227,7 +228,19 @@ We can now test the composite of two logistic models, and of an affine followed 
 >         ((affineSMOf (toDual r) u v)) >>> (logisticSMOf (toDual r) v))
 >       (smGradient $ (affineSMOf r u v) >>> (logisticSMOf r v))
 
-The logistic function maps $\mathbb{R}$ to the interval $(0,1)$, which is handy for training classification functions. But our sum squared error cost function is less good at training models which end with a logistic layer, precisely because the predictions and example outputs are constrained to $(0,1)$. Instead, we can use the logistic error function $$\mathsf{cost}(\theta) = \frac{1}{m} \sum_{i = 1}^m \left( -y_i \log(f(\theta \oplus x_i)) - (1 - y_i) \log(1 - f(\theta \oplus x_i)) \right),$$ where $m$ is the number of training examples, $(x_i,y_i)$ is the $i$th training example, and $f$ is the function being trained. In this case the $y$ must have size 1 and have the value 0 or 1.
+The logistic function maps $\mathbb{R}$ to the interval $(0,1)$, which is handy for training classification functions. But our sum squared error cost function is less good at training models which end with a logistic layer, precisely because the predictions and example outputs are constrained to $(0,1)$. Instead, we can use the logistic error function. If $f : \mathbb{R}^{\Theta \oplus A} \rightarrow \mathbb{R}^1$, then the logistic cost function $\mathsf{cost} : \mathbb{R}^\Theta \rightarrow \mathbb{R}$ is given by $$\mathsf{cost}(\theta) = \frac{1}{m} \sum_{i = 1}^m \left( -y_i \ln(f(\theta \oplus x_i)) - (1 - y_i) \ln(1 - f(\theta \oplus x_i)) \right),$$ where $m$ is the number of training examples, $(x_i,y_i)$ is the $i$th training example, and $f$ is the function being trained. In this case the $y$ must have size 1 and have the value 0 or 1. The gradient of logistic cost has signature $$\mathbb{R}^\Theta \rightarrow \mathbb{R}^{1 \otimes \Theta},$$ and the value of this gradient at $i \in \Theta$ is
+
+$$\begin{eqnarray*}
+ &   & \nabla(\mathsf{cost})(\theta)_{0 \& i} \\
+ & = & D(\mathsf{cost}(w_{i,\theta}(x))_0)(\theta_i) \\
+ & = & D\left(\frac{1}{m} \sum_{k = 1}^m \left( -y_k \ln(f(w_{i,\theta}(x) \oplus x_k)) - (1 - y_k) \ln(1 - f(w_{i,\theta}(x) \oplus x_k)) \right)\right)(\theta_i) \\
+ & = & \frac{1}{m} \sum_{k = 1}^m \left( -y_k D(\ln(f(w_{i,\theta}(x) \oplus x_k)))(\theta_i) - (1 - y_k) D(\ln(1 - f(w_{i,\theta}(x) \oplus x_k)))(\theta_i) \right) \\
+ & = & \frac{1}{m} \sum_{k = 1}^m \left( -y_k \frac{D(f(w_{i,\theta}(x) \oplus x_k))(\theta_i)}{(f(w_{i,\theta}(x) \oplus x_k))(\theta_i)} - (1 - y_k) \frac{D(1 - f(w_{i,\theta}(x) \oplus x_k))(\theta_i)}{(1 - f(w_{i,\theta}(x) \oplus x_k))(\theta_i)} \right) \\
+ & = & \frac{1}{m} \sum_{k = 1}^m \left( -y_k \frac{D(f(w_{i,\theta}(x) \oplus x_k))(\theta_i)}{f(\theta \oplus x_k)} - (1 - y_k) \frac{1 - D(f(w_{i,\theta}(x) \oplus x_k))(\theta_i)}{1 - f(\theta \oplus x_k)} \right) \\
+ & = & \frac{1}{m} \sum_{k = 1}^m \left( -y_k \frac{\nabla(f(- \oplus x_k))(\theta)_{0 \& i}}{f(\theta \oplus x_k)} - (1 - y_k) \frac{1 - \nabla(f(- \oplus x_k))(\theta)_{0 \& i}}{1 - f(\theta \oplus x_k)} \right) \\
+ & = & \frac{1}{m} \sum_{k = 1}^m \left( -y_k \frac{\left(\nabla(f)(\theta \oplus x_k) \cdot \mathsf{vcat}(\mathsf{Id}_{\Theta},\mathsf{Z}_{A \otimes \Theta})\right)_{0 \& i}}{f(\theta \oplus x_k)} \right. \\
+ &   & \left. \qquad\qquad\qquad\qquad\qquad - (1 - y_k) \frac{1 - \left(\nabla(f)(\theta \oplus x_k) \cdot \mathsf{vcat}(\mathsf{Id}_{\Theta}, Z_{A \otimes \Theta})\right)_{0 \& i}}{1 - f(\theta \oplus x_k)} \right) \\
+\end{eqnarray*}$$
 
 > logisticError
 >   :: (Num r, Fractional r, Floating r, Real r)
@@ -241,7 +254,8 @@ The logistic function maps $\mathbb{R}$ to the interval $(0,1)$, which is handy 
 >             m = fromIntegral $ length examples
 >             f = smFunction model
 >             lg (x,y) = (((neg y) .* (fmap log (f $@ (theta ⊕ x))))
->               .- (((cell 1) .- y) .* ((cell 1) .- (fmap log (f $@ (theta ⊕ x)))))) `at` 1
+>               .- (((cell 1) .- y) .* ((cell 1)
+>                 .- (fmap log (f $@ (theta ⊕ x)))))) `at` 0
 >           in
 >             cell $ (sum $ map lg examples) / m
 >       }
@@ -252,10 +266,39 @@ The logistic function maps $\mathbb{R}$ to the interval $(0,1)$, which is handy 
 >       , fun = \theta ->
 >           let
 >             m = fromIntegral $ length examples
+>             f = smFunction model
+>             gf = smGradient model
+>             a = smInputSize model
+>             t = smParamSize model
+>             q = (idMat t) `vcat` (zeros $ a :* t)
+>             gr (x,y) = tensor (1 :* t) $ \(_ :& i) ->
+>                  (((negate (y`at`0))
+>                  * (((gf $@ (theta ⊕ x)) *** q)`at`(0 :& i))
+>                  / ((f $@ (theta ⊕ x))`at`0)))
+>                  - ((1 - (y`at`0))
+>                  * (1 - (((gf $@ (theta ⊕ x)) *** q)`at`(0 :& i)))
+>                  / (1 - ((f $@ (theta ⊕ x))`at`0)))
 >           in
->             undefined
+>             (1/m) .@ (vsum $ map gr examples)
 >       }
 >   }
+
+And a quick test for the logistic error gradient:
+
+> _test_logistic_model_lge_dual_gradient
+>   :: (Eq r, Ord r, Num r, Fractional r,
+>        Floating r, Real r, Show r, Arbitrary r)
+>   => r -> Test (Size -> Int -> Property)
+> _test_logistic_model_lge_dual_gradient r =
+>   testName "logistic model logistic error dual gradient check" $
+>   \u k -> (u ~/= 0) && (k /= 0) ==>
+>     forAll (vectorOf k $ pairOf (arbTensorOf r u) (arbTensorOf r 1)) $
+>       \xs -> (xs /= []) ==>
+>         _test_functions_equal MaxAbsDiff (10**(-6))
+>           (dualGrad $ cfFunction
+>             (logisticError $ affineSMOf (toDual r) u 1 >>> logisticSM 1)
+>             (map (\(h,k) -> (fmap toDual h, fmap toDual k)) xs))
+>           (cfGradient (logisticError $ affineSMOf r u 1 >>> logisticSM 1) xs)
 
 
 Tests
@@ -277,6 +320,8 @@ Tests
 >   runTest args (_test_compose_logistic_model_dual_gradient r)
 >   runTest args (_test_compose_affine_model_dual_gradient r)
 >   runTest args (_test_compose_affine_logistic_model_dual_gradient r)
+> 
+>   runTest args (_test_logistic_model_lge_dual_gradient r)
 > 
 > 
 > main_composite_models :: IO ()
