@@ -29,7 +29,7 @@ A family favorite. (Well, Stacie and I like them. The kids, not so much yet.) Th
 
 **Directions:**
 
-1. Preheat oven to 450 degrees F.
+1. Preheat oven to 450°F.
 2. Heat the vegetable oil in a large sauté pan over medium high heat. Add ground beef and break up a bit with a wooden spoon. Finely chop onion and add to the ground beef. Add cumin, coriander, onion powder, cayenne pepper, chili powder, salt, and black pepper.
 3. Brown the beef mixture for about 6 minutes. Mince and add garlic during the last two minutes of cooking. Remove beef from the heat.
 4. Heat the tortillas in the microwave for about 30 seconds with a wet towel to soften.
