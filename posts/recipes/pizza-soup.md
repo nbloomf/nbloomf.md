@@ -17,7 +17,7 @@ This recipe is taken from [Holly Grainger](http://www.holleygrainger.com/kid-fri
 * 1 tbsp. minced garlic
 * 1 small onion, chopped
 * 1 bell pepper, chopped
-* ½ lb. cooked italian chicken sausage links
+* ½ lb. cooked Italian chicken sausage links
 * 2 tsp. basil
 * 1 tsp oregano
 * 32 fl. oz. low-sodium vegetable broth
