@@ -11,7 +11,7 @@ This post is literate Haskell; you can copy and paste the contents to a module o
 > {-# LANGUAGE FunctionalDependencies #-}
 > {-# LANGUAGE FlexibleInstances #-}
 > 
-> module Sheet where
+> module LoebSheets where
 > 
 > import Data.Monoid
 > import Control.Applicative
@@ -68,11 +68,6 @@ For example, here's an implementation for [``ZipLists``](https://hackage.haskell
 >   (ZipList as) `at` n = as !! (n-1)
 > 
 >   addresses as = const <$> (ZipList [1..]) <*> as
->
-> 
-> -- my copy of base doesn't have this (?)
-> instance (Show a) => Show (ZipList a) where
->   show = show . getZipList
 
 And finally, the ``loeb`` function with appropriate changes. I've renamed it to ``eval``, because (1) that name is suggestive of what the function does and (2) the type isn't Löb's Theorem anymore! The ``eval'`` version is tweaked from Piponi's ``loeb``, and ``eval`` is cribbed from Foner's fixpoint-based version of ``loeb``.
 
@@ -91,8 +86,8 @@ The type of ``eval`` looks like the statement $$\square(Q \rightarrow (\square P
 
 Now to use ``eval``, our "spreadsheet" will consist of functions that take both an address and a spreadsheet. This ``Num`` instance for functions will be handy:
 
-> instance Show (x -> a)
-> instance Eq (x -> a)
+> instance Show (x -> a) where show = undefined
+> instance Eq (x -> a) where (==) = undefined
 > 
 > instance (Num a, Eq a) => Num (x -> a) where
 >   fromInteger = const . fromInteger
@@ -274,3 +269,8 @@ Note that ``crefAbs`` and ``crefRel`` look a lot like ``refAbs`` and ``refRel``,
 I don't quite have the motivation to turn this into an actual GUI-driven spreadsheet, so I'll leave that part as an exercise. :)
 
 But I am curious -- are there any other interesting applicative functors with addresses? Can oddly "shaped" spreadsheets do interesting things that array shaped ones can't?
+
+I'll end with a trivial ``main`` so this module can be typechecked as a test.
+
+> main :: IO ()
+> main = putStrLn "ok"

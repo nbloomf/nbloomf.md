@@ -598,3 +598,6 @@ We can think of a *strategy* here as a mapping ``[Play] -> Deal Play`` that take
 > randomStrategy = lift . choice
 
 Anyway, if you've followed along in GHCi, you can try writing different strategy -- maybe maximize the rank of the five-card hand, or try to favor pushes if no hand beats a majority, or minimize the sum of the ranks of the five-card and two-card hands, or something else. Have fun. :)
+
+> main :: IO ()
+> main = putStrLn "ok"
