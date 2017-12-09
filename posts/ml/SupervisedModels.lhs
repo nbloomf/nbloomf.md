@@ -105,7 +105,7 @@ For example, one of the simplest possible models is a linear transformation or, 
 The most important constraint that a ``SupervisedModel`` should satisfy is that ``smGradient`` be the gradient of ``smFunction``. We can check this using both the numerical and dual number strategies because why not.
 
 > _test_affine_model_numerical_gradient
->   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Show r, Arbitrary r)
+>   :: (Eq r, Ord r, Num r, Fractional r, Floating r, RealFloat r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Size -> Property)
 > _test_affine_model_numerical_gradient r =
 >   testName "affine model numerical gradient check" $
@@ -115,7 +115,7 @@ The most important constraint that a ``SupervisedModel`` should satisfy is that 
 >       (smGradient $ affineSMOf r u v)
 > 
 > _test_affine_model_dual_gradient
->   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Show r, Arbitrary r)
+>   :: (Eq r, Ord r, Num r, Fractional r, Floating r, RealFloat r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Size -> Property)
 > _test_affine_model_dual_gradient r =
 >   testName "affine model dual gradient check" $
@@ -176,7 +176,7 @@ Why is this useful? There are good theoretical reasons which I do not totally un
 We should test that the sum squared error cost function gradient is reasonable.
 
 > _test_affine_model_sse_numerical_gradient
->   :: (Eq r, Ord r, Num r, Fractional r,
+>   :: (Eq r, Ord r, Num r, Fractional r, RealFloat r,
 >        Floating r, Real r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Size -> Int -> Property)
 > _test_affine_model_sse_numerical_gradient r =
@@ -190,7 +190,7 @@ We should test that the sum squared error cost function gradient is reasonable.
 >           (cfGradient (sumSquaredError $ affineSMOf r u v) xs)
 > 
 > _test_affine_model_sse_dual_gradient
->   :: (Eq r, Ord r, Num r, Fractional r,
+>   :: (Eq r, Ord r, Num r, Fractional r, RealFloat r,
 >        Floating r, Real r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Size -> Int -> Property)
 > _test_affine_model_sse_dual_gradient r =
@@ -207,7 +207,7 @@ We should test that the sum squared error cost function gradient is reasonable.
 With a cost function in hand, we can use gradient descent to minimize it. ``smSimpleTrain`` takes a cost function, a list of example data, an initial guess, and a learning rate, and attempts to minimize the cost function.
 
 > smSimpleTrain
->   :: (Eq r, Ord r, Num r, Fractional r, Floating r)
+>   :: (Eq r, Ord r, Num r, Fractional r, RealFloat r, Floating r)
 >   => CostFunction r
 >   -> [(Tensor r, Tensor r)]
 >   -> Tensor r
@@ -236,7 +236,7 @@ An affine model compatible with these data must have signature $$f : \mathbb{R}^
 And we can train this model to find a locally optimal value for the parameter tensor:
 
 > smell_test_theta_1
->   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Real r)
+>   :: (Eq r, Ord r, Num r, Fractional r, Floating r, RealFloat r, Real r)
 >   => Tensor r
 > smell_test_theta_1 = smSimpleTrain
 >   (sumSquaredError smell_test_model_1)
@@ -255,7 +255,7 @@ $> smell_test_theta_1
 which is pretty close to $m = 1$ and $b = 0$. Moreover, we can use this ``theta`` to make predictions.
 
 > smell_test_predict_1
->   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Real r)
+>   :: (Eq r, Ord r, Num r, Fractional r, Floating r, RealFloat r, Real r)
 >   => Tensor r -> Tensor r
 > smell_test_predict_1 x =
 >   predictSM smell_test_model_1 smell_test_theta_1 x
@@ -287,7 +287,7 @@ While we're at it, here's a slightly more complicated example.
 > smell_test_model_2 = affineSM 3 1
 > 
 > smell_test_theta_2
->   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Real r)
+>   :: (Eq r, Ord r, Num r, Fractional r, Floating r, RealFloat r, Real r)
 >   => Tensor r
 > smell_test_theta_2 = smSimpleTrain
 >   (sumSquaredError smell_test_model_2)
@@ -296,7 +296,7 @@ While we're at it, here's a slightly more complicated example.
 >   0.15
 > 
 > smell_test_predict_2
->   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Real r)
+>   :: (Eq r, Ord r, Num r, Fractional r, Floating r, RealFloat r, Real r)
 >   => Tensor r -> Tensor r
 > smell_test_predict_2 x =
 >   predictSM smell_test_model_2 smell_test_theta_2 x
@@ -341,7 +341,7 @@ So training a model boils down to finding a parameter $\theta$ that minimizes th
 We should test that the regularized sum squared error cost function gradient is reasonable for affine models.
 
 > _test_affine_model_regularized_sse_numerical_gradient
->   :: (Eq r, Ord r, Num r, Fractional r,
+>   :: (Eq r, Ord r, Num r, Fractional r, RealFloat r,
 >        Floating r, Real r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Size -> Int -> Property)
 > _test_affine_model_regularized_sse_numerical_gradient r =
@@ -358,7 +358,7 @@ We should test that the regularized sum squared error cost function gradient is 
 >             (cfGradient (regularize (abs lam) m $ sumSquaredError m) xs)
 > 
 > _test_affine_model_regularized_sse_dual_gradient
->   :: (Eq r, Ord r, Num r, Fractional r,
+>   :: (Eq r, Ord r, Num r, Fractional r, RealFloat r,
 >        Floating r, Real r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Size -> Int -> Property)
 > _test_affine_model_regularized_sse_dual_gradient r =
@@ -382,7 +382,7 @@ Test Suite
 ----------
 
 > _test_supervised_models
->   :: (Show r, Fractional r, Ord r, Num r,
+>   :: (Show r, Fractional r, Ord r, Num r, RealFloat r,
 >        Floating r, Real r, Arbitrary r)
 >   => r -> Int -> Int -> IO ()
 > _test_supervised_models r num size = do

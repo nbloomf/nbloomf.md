@@ -75,29 +75,48 @@ If we have some other function that claims to compute the gradient, a decent rea
 > 
 > 
 > distanceBy
->   :: (Num r, Ord r, Fractional r)
+>   :: (Num r, Ord r, Fractional r, RealFloat r)
 >   => Metric -> Tensor r -> Tensor r -> r
 > 
-> distanceBy m a b = case m of
+> distanceBy m a b = if a==b then 0 else case m of
 >   MaxAbsDiff -> maximum $ tzipWith f a b
->     where f x y = abs (x - y)
+>     where
+>       f x y = if isNaN x || isNaN y
+>         then 0
+>         else abs (x - y)
+> 
 > 
 >   MaxRelDiff -> maximum $ tzipWith f a b
->     where f x y = abs $ (x - y) / (max x y)
+>     where
+>       f x y = if isNaN x || isNaN y
+>         then 0
+>         else abs $ (x - y) / (max x y)
 
 And a helper test for function equality:
 
 > _test_functions_equal
->   :: (Eq r, Ord r, Num r, Fractional r, Show r, Arbitrary r)
+>   :: (Eq r, Ord r, Num r, Fractional r, RealFloat r, Show r, Arbitrary r)
 >   => Metric -> r -> Function r -> Function r -> Property
 > _test_functions_equal metric eps f g =
 >   forAll (arbTensorOf eps (dom f)) $
->     \v -> distanceBy metric (f $@ v) (g $@ v) < eps
+>     \v ->
+>       let
+>         a = f $@ v
+>         b = g $@ v
+>       in
+>         if distanceBy metric a b < eps
+>           then True
+>           else error $ concat
+>             -- helps with debugging
+>             [ "Functions not equal at\n" ++ show v ++ "\n"
+>             , "values are\n" ++ show a ++ "\nand\n" ++ show b
+>             , "\nthere."
+>             ]
 
 For example, the gradient of scalar multiplication should be a scalar multiple of the "identity" tensor; the following test verifies this.
 
 > _test_numerical_scalar_gradient
->   :: (Eq r, Num r, Ord r, Fractional r, Floating r, Show r, Arbitrary r)
+>   :: (Eq r, Num r, Ord r, Fractional r, Floating r, RealFloat r, Show r, Arbitrary r)
 >   => r -> Test (Size -> r -> Property)
 > 
 > _test_numerical_scalar_gradient _ =
@@ -110,7 +129,7 @@ For example, the gradient of scalar multiplication should be a scalar multiple o
 More generally, the gradient of a "linear" tensor function is a constant.
 
 > _test_numerical_linear_gradient
->   :: (Eq r, Ord r, Num r, Fractional r, Show r, Arbitrary r)
+>   :: (Eq r, Ord r, Num r, Fractional r, RealFloat r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Size -> Property)
 > 
 > _test_numerical_linear_gradient r =
@@ -125,7 +144,7 @@ More generally, the gradient of a "linear" tensor function is a constant.
 Yet more generally still, the gradient of an "affine" tensor function is a constant.
 
 > _test_numerical_affine_gradient
->   :: (Eq r, Ord r, Num r, Fractional r, Show r, Arbitrary r)
+>   :: (Eq r, Ord r, Num r, Fractional r, RealFloat r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Size -> Property)
 > 
 > _test_numerical_affine_gradient r =
@@ -140,7 +159,7 @@ Yet more generally still, the gradient of an "affine" tensor function is a const
 Pointwise functions (parameterized on the metric):
 
 > _test_numerical_pointwise_gradient_by
->   :: (Eq r, Num r, Ord r, Fractional r, Show r, Arbitrary r)
+>   :: (Eq r, Num r, Ord r, Fractional r, RealFloat r, Show r, Arbitrary r)
 >   => Metric -> String -> r -> (r -> r) -> (r -> r)
 >   -> Test (Size -> Property)
 > 
@@ -154,7 +173,7 @@ Pointwise functions (parameterized on the metric):
 The gradient of direct summing is constant.
 
 > _test_numerical_direct_sum_left_gradient
->   :: (Eq r, Num r, Ord r, Fractional r, Show r, Arbitrary r)
+>   :: (Eq r, Num r, Ord r, Fractional r, RealFloat r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Size -> Property)
 > _test_numerical_direct_sum_left_gradient r =
 >   testName "direct sum on left numerical gradient" $
@@ -166,7 +185,7 @@ The gradient of direct summing is constant.
 >           (constF u $ (zeros $ v :* u) ~-~ (idMat u))
 > 
 > _test_numerical_direct_sum_right_gradient
->   :: (Eq r, Num r, Ord r, Fractional r, Show r, Arbitrary r)
+>   :: (Eq r, Num r, Ord r, Fractional r, RealFloat r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Size -> Property)
 > _test_numerical_direct_sum_right_gradient r =
 >   testName "direct sum on right numerical gradient" $
@@ -323,7 +342,7 @@ We need an ``Arbitrary`` instance for dual numbers:
 And we can compare an alleged gradient function against the automatically computed gradient.
 
 > _test_dual_scalar_gradient
->   :: (Eq r, Num r, Ord r, Fractional r, Show r, Arbitrary r)
+>   :: (Eq r, Num r, Ord r, Fractional r, RealFloat r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Dual r -> Property)
 > _test_dual_scalar_gradient _ =
 >   testName "dual scalar gradient" $
@@ -334,7 +353,7 @@ And we can compare an alleged gradient function against the automatically comput
 > 
 > 
 > _test_dual_linear_gradient
->   :: (Eq r, Ord r, Num r, Fractional r, Show r, Arbitrary r)
+>   :: (Eq r, Ord r, Num r, Fractional r, RealFloat r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Size -> Property)
 > _test_dual_linear_gradient r =
 >   testName "dual linear gradient" $
@@ -347,7 +366,7 @@ And we can compare an alleged gradient function against the automatically comput
 > 
 > 
 > _test_dual_affine_gradient
->   :: (Eq r, Ord r, Num r, Fractional r, Show r, Arbitrary r)
+>   :: (Eq r, Ord r, Num r, Fractional r, RealFloat r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Size -> Property)
 > _test_dual_affine_gradient r =
 >   testName "dual affine gradient" $
@@ -362,7 +381,7 @@ And we can compare an alleged gradient function against the automatically comput
 > 
 > 
 > _test_dual_pointwise_gradient_by
->   :: (Eq r, Num r, Ord r, Fractional r, Show r, Arbitrary r)
+>   :: (Eq r, Num r, Ord r, Fractional r, RealFloat r, Show r, Arbitrary r)
 >   => Metric -> String -> r -> (Dual r -> Dual r) -> (r -> r)
 >   -> Test (Size -> Property)
 > _test_dual_pointwise_gradient_by metric name r p q =
@@ -374,7 +393,7 @@ And we can compare an alleged gradient function against the automatically comput
 > 
 > 
 > _test_dual_direct_sum_left_gradient
->   :: (Eq r, Num r, Ord r, Fractional r, Show r, Arbitrary r)
+>   :: (Eq r, Num r, Ord r, Fractional r, RealFloat r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Size -> Property)
 > _test_dual_direct_sum_left_gradient r =
 >   testName "direct sum on left dual gradient" $
@@ -387,7 +406,7 @@ And we can compare an alleged gradient function against the automatically comput
 > 
 > 
 > _test_dual_direct_sum_right_gradient
->   :: (Eq r, Num r, Ord r, Fractional r, Show r, Arbitrary r)
+>   :: (Eq r, Num r, Ord r, Fractional r, RealFloat r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Size -> Property)
 > _test_dual_direct_sum_right_gradient r =
 >   testName "direct sum on right dual gradient" $
@@ -403,7 +422,7 @@ Test Suite
 ----------
 
 > _test_gradient_checking
->   :: (Show r, Fractional r, Ord r, Num r, Floating r, Arbitrary r)
+>   :: (Show r, Fractional r, RealFloat r, Ord r, Num r, Floating r, Arbitrary r)
 >   => r -> Int -> Int -> IO ()
 > _test_gradient_checking r num size = do
 >   testLabel "Gradient"

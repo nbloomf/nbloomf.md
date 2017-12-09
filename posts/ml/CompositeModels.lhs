@@ -156,7 +156,7 @@ With this gradient in hand, we can compose two models together like so.
 And we can test the gradient of the composite of two affine models.
 
 > _test_compose_affine_model_dual_gradient
->   :: (Eq r, Ord r, Num r, Fractional r,
+>   :: (Eq r, Ord r, Num r, Fractional r, RealFloat r,
 >       Floating r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Size -> Size -> Property)
 > _test_compose_affine_model_dual_gradient r =
@@ -205,7 +205,7 @@ And applying this function pointwise:
 We can now test the composite of two logistic models, and of an affine followed by a logistic.
 
 > _test_compose_logistic_model_dual_gradient
->   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Show r, Arbitrary r)
+>   :: (Eq r, Ord r, Num r, Fractional r, Floating r, RealFloat r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Property)
 > _test_compose_logistic_model_dual_gradient r =
 >   testName "compose logistic model dual gradient check" $
@@ -218,7 +218,7 @@ We can now test the composite of two logistic models, and of an affine followed 
 > 
 > 
 > _test_compose_affine_logistic_model_dual_gradient
->   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Show r, Arbitrary r)
+>   :: (Eq r, Ord r, Num r, Fractional r, Floating r, RealFloat r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Size -> Property)
 > _test_compose_affine_logistic_model_dual_gradient r =
 >   testName "compose affine logistic model dual gradient check" $
@@ -236,10 +236,11 @@ $$\begin{eqnarray*}
  & = & D\left(\frac{1}{m} \sum_{k = 1}^m \left( -y_k \ln(f(w_{i,\theta}(x) \oplus x_k)) - (1 - y_k) \ln(1 - f(w_{i,\theta}(x) \oplus x_k)) \right)\right)(\theta_i) \\
  & = & \frac{1}{m} \sum_{k = 1}^m \left( -y_k D(\ln(f(w_{i,\theta}(x) \oplus x_k)))(\theta_i) - (1 - y_k) D(\ln(1 - f(w_{i,\theta}(x) \oplus x_k)))(\theta_i) \right) \\
  & = & \frac{1}{m} \sum_{k = 1}^m \left( -y_k \frac{D(f(w_{i,\theta}(x) \oplus x_k))(\theta_i)}{(f(w_{i,\theta}(x) \oplus x_k))(\theta_i)} - (1 - y_k) \frac{D(1 - f(w_{i,\theta}(x) \oplus x_k))(\theta_i)}{(1 - f(w_{i,\theta}(x) \oplus x_k))(\theta_i)} \right) \\
- & = & \frac{1}{m} \sum_{k = 1}^m \left( -y_k \frac{D(f(w_{i,\theta}(x) \oplus x_k))(\theta_i)}{f(\theta \oplus x_k)} - (1 - y_k) \frac{1 - D(f(w_{i,\theta}(x) \oplus x_k))(\theta_i)}{1 - f(\theta \oplus x_k)} \right) \\
- & = & \frac{1}{m} \sum_{k = 1}^m \left( -y_k \frac{\nabla(f(- \oplus x_k))(\theta)_{0 \& i}}{f(\theta \oplus x_k)} - (1 - y_k) \frac{1 - \nabla(f(- \oplus x_k))(\theta)_{0 \& i}}{1 - f(\theta \oplus x_k)} \right) \\
- & = & \frac{1}{m} \sum_{k = 1}^m \left( -y_k \frac{\left(\nabla(f)(\theta \oplus x_k) \cdot \mathsf{vcat}(\mathsf{Id}_{\Theta},\mathsf{Z}_{A \otimes \Theta})\right)_{0 \& i}}{f(\theta \oplus x_k)} \right. \\
- &   & \left. \qquad\qquad\qquad\qquad\qquad - (1 - y_k) \frac{1 - \left(\nabla(f)(\theta \oplus x_k) \cdot \mathsf{vcat}(\mathsf{Id}_{\Theta}, Z_{A \otimes \Theta})\right)_{0 \& i}}{1 - f(\theta \oplus x_k)} \right) \\
+ & = & \frac{1}{m} \sum_{k = 1}^m \left( -y_k \frac{D(f(w_{i,\theta}(x) \oplus x_k))(\theta_i)}{f(\theta \oplus x_k)} - (1 - y_k) \frac{- D(f(w_{i,\theta}(x) \oplus x_k))(\theta_i)}{1 - f(\theta \oplus x_k)} \right) \\
+ & = & \frac{1}{m} \sum_{k = 1}^m \left( -y_k \frac{\nabla(f(- \oplus x_k))(\theta)_{0 \& i}}{f(\theta \oplus x_k)} - (1 - y_k) \frac{- \nabla(f(- \oplus x_k))(\theta)_{0 \& i}}{1 - f(\theta \oplus x_k)} \right) \\
+ & = & \frac{1}{m} \sum_{k = 1}^m \left( -y_k \frac{\nabla(f(- \oplus x_k))(\theta)_{0 \& i}}{f(\theta \oplus x_k)} + (1 - y_k) \frac{\nabla(f(- \oplus x_k))(\theta)_{0 \& i}}{1 - f(\theta \oplus x_k)} \right) \\
+ & = & \frac{1}{m} \sum_{k = 1}^m \nabla(f(- \oplus x_k))(\theta)_{0 \& i} \left( \frac{1 - y_k}{1 - f(\theta \oplus x_k)} - \frac{y_k}{f(\theta \oplus x_k)} \right) \\
+ & = & \frac{1}{m} \sum_{k = 1}^m \left(\nabla(f)(\theta \oplus x_k) \cdot \mathsf{vcat}(\mathsf{Id}_{\Theta},\mathsf{Z}_{A \otimes \Theta})\right)_{0 \& i} \left( \frac{1 - y_k}{1 - f(\theta \oplus x_k)} - \frac{y_k}{f(\theta \oplus x_k)} \right)
 \end{eqnarray*}$$
 
 > logisticError
@@ -253,9 +254,9 @@ $$\begin{eqnarray*}
 >           let
 >             m = fromIntegral $ length examples
 >             f = smFunction model
->             lg (x,y) = (((neg y) .* (fmap log (f $@ (theta ⊕ x))))
->               .- (((cell 1) .- y) .* ((cell 1)
->                 .- (fmap log (f $@ (theta ⊕ x)))))) `at` 0
+>             lg (x,y) =
+>               ((negate (y`at`0)) * (log $ (f $@ (theta ⊕ x))`at`0))
+>               - ((1 - (y`at`0)) * (1 - (log $ (f $@ (theta ⊕ x))`at`0)))
 >           in
 >             cell $ (sum $ map lg examples) / m
 >       }
@@ -276,7 +277,7 @@ $$\begin{eqnarray*}
 >                  * (((gf $@ (theta ⊕ x)) *** q)`at`(0 :& i))
 >                  / ((f $@ (theta ⊕ x))`at`0)))
 >                  - ((1 - (y`at`0))
->                  * (1 - (((gf $@ (theta ⊕ x)) *** q)`at`(0 :& i)))
+>                  * (negate (((gf $@ (theta ⊕ x)) *** q)`at`(0 :& i)))
 >                  / (1 - ((f $@ (theta ⊕ x))`at`0)))
 >           in
 >             (1/m) .@ (vsum $ map gr examples)
@@ -286,27 +287,27 @@ $$\begin{eqnarray*}
 And a quick test for the logistic error gradient:
 
 > _test_logistic_model_lge_dual_gradient
->   :: (Eq r, Ord r, Num r, Fractional r,
+>   :: (Eq r, Ord r, Num r, Fractional r, RealFloat r,
 >        Floating r, Real r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Int -> Property)
 > _test_logistic_model_lge_dual_gradient r =
 >   testName "logistic model logistic error dual gradient check" $
 >   \u k -> (u ~/= 0) && (k /= 0) ==>
->     forAll (vectorOf k $ pairOf (arbTensorOf r u) (arbTensorOf r 1)) $
+>     forAll (vectorOf k $ pairOf (arbTensorOf r u) (arbBinaryTensorOf r 1)) $
 >       \xs -> (xs /= []) ==>
->         _test_functions_equal MaxAbsDiff (10**(-6))
+>         _test_functions_equal MaxRelDiff (10**(-6))
 >           (dualGrad $ cfFunction
 >             (logisticError $ affineSMOf (toDual r) u 1 >>> logisticSM 1)
->             (map (\(h,k) -> (fmap toDual h, fmap toDual k)) xs))
+>             (map (\(h,k) -> (fmap toDual h, fmap toDual k)) [head xs]))
 >           (cfGradient
->             (logisticError $ affineSMOf r u 1 >>> logisticSM 1) xs)
+>             (logisticError $ affineSMOf r u 1 >>> logisticSM 1) [head xs])
 
 
 Tests
 -----
 
 > _test_composite_models
->   :: (Show r, Fractional r, Ord r, Num r,
+>   :: (Show r, Fractional r, Ord r, Num r, RealFloat r,
 >       Floating r, Real r, Arbitrary r)
 >   => r -> Int -> Int -> IO ()
 > _test_composite_models r num size = do

@@ -626,3 +626,8 @@ In future posts we'll be writing tests involving tensors, so I'll put an ``Arbit
 > arbTensorOf _ s = do
 >   as <- vectorOf (fromIntegral $ dimOf s) arbitrary
 >   return $ tensor s (\i -> as !! (fromIntegral $ flatten s i))
+> 
+> arbBinaryTensorOf :: (Arbitrary r, Num r) => r -> Size -> Gen (Tensor r)
+> arbBinaryTensorOf _ s = do
+>   as <- vectorOf (fromIntegral $ dimOf s) $ elements [0,1]
+>   return $ tensor s (\i -> as !! (fromIntegral $ flatten s i))

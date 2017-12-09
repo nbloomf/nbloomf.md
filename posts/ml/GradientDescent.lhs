@@ -71,7 +71,7 @@ gradDesc f 0 v (fixedNumSteps 100) (fixedLearningRate 0.5)
 Carries out gradient descent for 100 steps with learning rate 0.5. A more practical update function keeps track of the last iteration and stops when the difference between it and the current value is less than some threshold.
 
 > maxAbsDiffLessThan
->   :: (Eq r, Ord r, Num r, Fractional r)
+>   :: (Eq r, Ord r, Num r, Fractional r, RealFloat r)
 >   => r -> Tensor r -> Tensor r -> Maybe (Tensor r)
 > maxAbsDiffLessThan eps x y =
 >   let
@@ -84,7 +84,7 @@ Carries out gradient descent for 100 steps with learning rate 0.5. A more practi
 As a really simple example, fix a vector $v \in \mathbb{R}^s$ and consider the function $f : \mathbb{R}^s \rightarrow \mathbb{R}^s$ given by $$f(x)_i = (x_i - v_i)^2.$$ This is quadratic in each coordinate with minimum at $x_i = v_i$. Moreover this function is convex, so that minimum is unique, and gradient descent should find it regardless of the initial guess.
 
 > _test_grad_desc_line
->   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Show r, Arbitrary r)
+>   :: (Eq r, Ord r, Num r, Fractional r, Floating r, RealFloat r, Show r, Arbitrary r)
 >   => r -> Test (Size -> Property)
 > _test_grad_desc_line r =
 >   testName "grad desc line" $
@@ -104,7 +104,7 @@ Tests
 -----
 
 > _test_gradient_descent
->   :: (Eq r, Ord r, Num r, Fractional r, Floating r, Show r, Arbitrary r)
+>   :: (Eq r, Ord r, Num r, Fractional r, Floating r, RealFloat r, Show r, Arbitrary r)
 >   => r -> Int -> Int -> IO ()
 > _test_gradient_descent r num size = do
 >   testLabel "Gradient Descent"
