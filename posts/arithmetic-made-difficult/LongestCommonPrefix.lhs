@@ -77,7 +77,7 @@ Let $A$ be a set with $x,y \in \lists{A}$ and $a,b \in A$. Then we have the foll
 
 1. $\lcp(\nil,y) = \nil$.
 2. $\lcp(x,\nil) = \nil$.
-3. $$\lcp(\cons(a,x),\cons(b,y)) = \left\{ \begin{array}{ll} \cons(a,\lcp(x,y)) & \mathrm{if} a = b \\ \nil & \mathrm{otherwise}. \end{array} \right.$$
+3. $$\lcp(\cons(a,x),\cons(b,y)) = \left\{ \begin{array}{ll} \cons(a,\lcp(x,y)) & \mathrm{if}\ a = b \\ \nil & \mathrm{otherwise}. \end{array} \right.$$
 </p></div>
 
 <div class="proof"><p>

@@ -730,7 +730,7 @@ $$\begin{eqnarray*}
  & = & \sublist(\filter(p,x),x) \\
  & = & \btrue
 \end{eqnarray*}$$
-as needed. If $p(a) = \bfalse$, note that $$\sublist(\filter(p,x),x) = \btrue$, so that
+as needed. If $p(a) = \bfalse$, note that $$\sublist(\filter(p,x),x) = \btrue,$$ so that
 $$\begin{eqnarray*}
  &   & \sublist(\filter(p,\cons(a,x)),\cons(a,x)) \\
  & = & \sublist(\bif{p(a)}{\cons(a,\filter(p,x)}{\filter(p,x)},\cons(a,x)) \\

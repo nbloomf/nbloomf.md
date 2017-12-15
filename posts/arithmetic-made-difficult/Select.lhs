@@ -235,7 +235,7 @@ $$\begin{eqnarray*}
  & = & \sublist(\nil,\select(\next(k),\cons(b,y))) \\
  & = & \btrue
 \end{eqnarray*}$$
-as needed. Suppose instead that $x = \cons(a,u)$. We have two possibilities. If $a \neq b$, then since $$\btrue = \sublist(x,\cons(b,y)) = \sublist(\cons(a,u),\cons(b,y))$$ we have $\btrue = \sublist(\cons(a,u),y) = \sublist(x,y)$. By the inductive hypothesis on $y$ we have $$\sublist(\select(\next(k),x),\select(\next(k),y)) = \btrue$$. Moreover, note that
+as needed. Suppose instead that $x = \cons(a,u)$. We have two possibilities. If $a \neq b$, then since $$\btrue = \sublist(x,\cons(b,y)) = \sublist(\cons(a,u),\cons(b,y))$$ we have $\btrue = \sublist(\cons(a,u),y) = \sublist(x,y)$. By the inductive hypothesis on $y$ we have $$\sublist(\select(\next(k),x),\select(\next(k),y)) = \btrue.$$ Moreover, note that
 $$\begin{eqnarray*}
  &   & \select(\next(k),\cons(b,y)) \\
  & = & \cat(\map(\cons(b,-))(\select(k,y)),\select(\next(k),y))

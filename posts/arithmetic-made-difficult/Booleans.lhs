@@ -231,7 +231,7 @@ Next we nail down conditional expressions.
 
 <div class="result">
 <div class="defn"><p>
-Let $A$ be a set. We define a map $\bif : \bool \times A \times A \rightarrow A$ by
+Let $A$ be a set. We define a map $\mathsf{if} : \bool \times A \times A \rightarrow A$ by
 $$\begin{eqnarray*}
 \bif{\btrue}{u}{v}  & = & u \\
 \bif{\bfalse}{u}{v} & = & v.

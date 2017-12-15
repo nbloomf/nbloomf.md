@@ -124,7 +124,7 @@ $$\begin{eqnarray*}
  & = & \next(\foldr{\zero}{\varphi}(\rev(x))) \\
  & = & \next(\foldl{\zero}{\varphi}(x)) \\
  & = & \next(\length(x)) \\
- & = & \next(\foldl{\zero}{\varphi}(x))
+ & = & \next(\foldl{\zero}{\varphi}(x)) \\
  & = & \varphi(a,\foldr{\zero}{\varphi}(x)) \\
  & = & \foldr{\zero}{\varphi}(\cons(a,x))
 \end{eqnarray*}$$

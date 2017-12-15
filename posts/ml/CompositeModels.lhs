@@ -258,7 +258,7 @@ $$\begin{eqnarray*}
 >               ((negate (y`at`0)) * (log $ (f $@ (theta ⊕ x))`at`0))
 >               - ((1 - (y`at`0)) * (1 - (log $ (f $@ (theta ⊕ x))`at`0)))
 >           in
->             cell $ (sum $ map lg examples) / m
+>             (1/m) .@ (cell $ sum $ map lg examples)
 >       }
 > 
 >   , cfGradient = \examples -> F
@@ -273,12 +273,11 @@ $$\begin{eqnarray*}
 >             t = smParamSize model
 >             q = (idMat t) `vcat` (zeros $ a :* t)
 >             gr (x,y) = tensor (1 :* t) $ \(_ :& i) ->
->                  (((negate (y`at`0))
->                  * (((gf $@ (theta ⊕ x)) *** q)`at`(0 :& i))
->                  / ((f $@ (theta ⊕ x))`at`0)))
->                  - ((1 - (y`at`0))
->                  * (negate (((gf $@ (theta ⊕ x)) *** q)`at`(0 :& i)))
->                  / (1 - ((f $@ (theta ⊕ x))`at`0)))
+>                  (((gf $@ (theta ⊕ x)) *** q)`at`(0 :& i))
+>                  *
+>                  (((1 - (y`at`0)) / (1 - ((f $@ (theta ⊕ x))`at`0)))
+>                    -
+>                  ((y`at`0) / ((f $@ (theta ⊕ x))`at`0)))
 >           in
 >             (1/m) .@ (vsum $ map gr examples)
 >       }
@@ -295,12 +294,44 @@ And a quick test for the logistic error gradient:
 >   \u k -> (u ~/= 0) && (k /= 0) ==>
 >     forAll (vectorOf k $ pairOf (arbTensorOf r u) (arbBinaryTensorOf r 1)) $
 >       \xs -> (xs /= []) ==>
->         _test_functions_equal MaxRelDiff (10**(-6))
+>         _test_functions_equal MaxAbsDiff (10**(-4))
+>           (dualGrad $ cfFunction
+>             (logisticError $ logisticSMOf (toDual r) 1)
+>             (map (\(x0,y0) -> (fmap toDual x0, fmap toDual y0)) xs))
+>           (cfGradient
+>             (logisticError $ logisticSMOf r 1) xs)
+> 
+> _test_linear_model_lge_dual_gradient
+>   :: (Eq r, Ord r, Num r, Fractional r, RealFloat r,
+>        Floating r, Real r, Show r, Arbitrary r)
+>   => r -> Test (Size -> Int -> Property)
+> _test_linear_model_lge_dual_gradient r =
+>   testName "linear model logistic error dual gradient check" $
+>   \u k -> (u ~/= 0) && (k /= 0) ==>
+>     forAll (vectorOf k $ pairOf (arbTensorOf r u) (arbBinaryTensorOf r 1)) $
+>       \xs -> (xs /= []) ==>
+>         _test_functions_equal MaxAbsDiff (10**(-4))
+>           (dualGrad $ cfFunction
+>             (logisticError $ affineSMOf (toDual r) u 1)
+>             (map (\(x0,y0) -> (fmap toDual x0, fmap toDual y0)) xs))
+>           (cfGradient
+>             (logisticError $ affineSMOf r u 1) xs)
+> 
+> _test_loglinear_model_lge_dual_gradient
+>   :: (Eq r, Ord r, Num r, Fractional r, RealFloat r,
+>        Floating r, Real r, Show r, Arbitrary r)
+>   => r -> Test (Size -> Int -> Property)
+> _test_loglinear_model_lge_dual_gradient r =
+>   testName "loglinear model logistic error dual gradient check" $
+>   \u k -> (u ~/= 0) && (k /= 0) ==>
+>     forAll (vectorOf k $ pairOf (arbTensorOf r u) (arbBinaryTensorOf r 1)) $
+>       \xs -> (xs /= []) ==>
+>         _test_functions_equal MaxAbsDiff (10**(-4))
 >           (dualGrad $ cfFunction
 >             (logisticError $ affineSMOf (toDual r) u 1 >>> logisticSM 1)
->             (map (\(h,k) -> (fmap toDual h, fmap toDual k)) [head xs]))
+>             (map (\(x0,y0) -> (fmap toDual x0, fmap toDual y0)) xs))
 >           (cfGradient
->             (logisticError $ affineSMOf r u 1 >>> logisticSM 1) [head xs])
+>             (logisticError $ affineSMOf r u 1 >>> logisticSM 1) xs)
 
 
 Tests
@@ -324,6 +355,8 @@ Tests
 >   runTest args (_test_compose_affine_logistic_model_dual_gradient r)
 > 
 >   runTest args (_test_logistic_model_lge_dual_gradient r)
+>   chattyTest args (_test_linear_model_lge_dual_gradient r)
+>   chattyTest args (_test_loglinear_model_lge_dual_gradient r)
 > 
 > 
 > main_composite_models :: IO ()

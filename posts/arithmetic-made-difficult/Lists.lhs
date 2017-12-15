@@ -158,7 +158,7 @@ Suppose by way of contradiction that $\nil = \cons(a,x)$. Let $e = \btrue$ and d
 $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \foldr{\btrue}{\varphi}(\nil) \\
- & = & \foldr{\btrue}{\varphi}(\cons(a,x)} \\
+ & = & \foldr{\btrue}{\varphi}(\cons(a,x)) \\
  & = & \varphi(a,\foldr{\btrue}{\varphi}(x)) \\
  & = & \bfalse,
 \end{eqnarray*}$$
@@ -213,7 +213,14 @@ Let $A$ be a set. Define $\varphi : A \times (\lists{A} \times \lists{A}) \right
 </div>
 
 <div class="proof"><p>
-1. 
+1. We have
+$$\begin{eqnarray*}
+ &   & \tail(\nil) \\
+ & = & \fst(\foldr{(\nil,\nil)}{\varphi}(\nil)) \\
+ & = & \fst(\nil,\nil) \\
+ & = & \nil
+\end{eqnarray*}$$
+as claimed.
 2. We proceed by list induction on $x$. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \foldr{(\nil,\nil)}{\varphi}(\cons(a,\nil)) \\
@@ -239,6 +246,8 @@ $$\begin{eqnarray*}
 as claimed.
 </p></div>
 </div>
+
+We could define tail in terms of foldr, but the theorem suggests another way.
 
 > tail :: (List t) => t a -> t a
 > tail x = case listShape x of

@@ -296,28 +296,28 @@ One more.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set and $p : A \rightarrow \bool$ a predicate with $x \in \lists{A}$. We have $$\eq(x,\filter(p,x)) = \all(p,x).$$
+Let $A$ be a set and $p : A \rightarrow \bool$ a predicate with $x \in \lists{A}$. We have $$\beq(x,\filter(p,x)) = \all(p,x).$$
 </p></div>
 
 <div class="proof"><p>
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \eq(x,\filter(p,x)) \\
- & = & \eq(\nil,\filter(p,\nil)) \\
- & = & \eq(\nil,\nil) \\
+ &   & \beq(x,\filter(p,x)) \\
+ & = & \beq(\nil,\filter(p,\nil)) \\
+ & = & \beq(\nil,\nil) \\
  & = & \btrue \\
  & = & \all(p,\nil) \\
  & = & \all(p,x)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. We consider two possibilities. If $p(a) = \btrue$, we have
 $$\begin{eqnarray*}
- &   & \eq(\cons(a,x),\filter(p,\cons(a,x)) \\
- & = & \eq(\cons(a,x),\bif{p(a)}{\cons(a,\filter(p,x))}{\filter(p,x)}) \\
- & = & \eq(\cons(a,x),\bif{\btrue}{\cons(a,\filter(p,x))}{\filter(p,x)}) \\
- & = & \eq(\cons(a,x),\cons(a,\filter(p,x))) \\
- & = & \band(\eq(a,a),\eq(x,\filter(p,x))) \\
- & = & \band(\btrue,\eq(x,\filter(p,x))) \\
- & = & \eq(x,\filter(p,x)) \\
+ &   & \beq(\cons(a,x),\filter(p,\cons(a,x)) \\
+ & = & \beq(\cons(a,x),\bif{p(a)}{\cons(a,\filter(p,x))}{\filter(p,x)}) \\
+ & = & \beq(\cons(a,x),\bif{\btrue}{\cons(a,\filter(p,x))}{\filter(p,x)}) \\
+ & = & \beq(\cons(a,x),\cons(a,\filter(p,x))) \\
+ & = & \band(\beq(a,a),\beq(x,\filter(p,x))) \\
+ & = & \band(\btrue,\beq(x,\filter(p,x))) \\
+ & = & \beq(x,\filter(p,x)) \\
  & = & \all(p,x) \\
  & = & \band(\btrue,\all(p,x)) \\
  & = & \band(p(a),\all(p,x)) \\
@@ -325,10 +325,10 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed. Suppose instead that $p(a) = \bfalse$. Now $\sublist(\filter(p,x),x) = \btrue$, and using the inductive hypothesis we have
 $$\begin{eqnarray*}
- &   & \eq(\cons(a,x),\filter(p,\cons(a,x)) \\
- & = & \eq(\cons(a,x),\bif{p(a)}{\cons(a,\filter(p,x))}{\filter(p,x)}) \\
- & = & \eq(\cons(a,x),\bif{\bfalse}{\cons(a,\filter(p,x))}{\filter(p,x)}) \\
- & = & \eq(\cons(a,x),\filter(p,x)) \\
+ &   & \beq(\cons(a,x),\filter(p,\cons(a,x)) \\
+ & = & \beq(\cons(a,x),\bif{p(a)}{\cons(a,\filter(p,x))}{\filter(p,x)}) \\
+ & = & \beq(\cons(a,x),\bif{\bfalse}{\cons(a,\filter(p,x))}{\filter(p,x)}) \\
+ & = & \beq(\cons(a,x),\filter(p,x)) \\
  & = & \bfalse \\
  & = & \band(\bfalse,\all(p,x)) \\
  & = & \band(p(a),\all(p,x)) \\

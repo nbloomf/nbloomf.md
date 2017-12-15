@@ -252,13 +252,20 @@ First off, we won't be needing the full complexity of QuickCheck, so here are so
 > testName :: String -> prop -> Test prop
 > testName name prop = (name, prop)
 > 
-> runTest, skipTest :: Testable prop => Args -> Test prop -> IO ()
+> runTest, chattyTest, skipTest :: Testable prop => Args -> Test prop -> IO ()
 > runTest args (name, prop) = do
 >   putStrLn ("\x1b[1;34m" ++ name ++ "\x1b[0;39;49m")
 >   result <- quickCheckWithResult args prop
 >   if isSuccess result
 >     then return ()
 >     else (putStrLn (show result)) >> exitFailure
+> 
+> chattyTest args (name, prop) = do
+>   putStrLn ("\x1b[1;35m" ++ name ++ "\x1b[0;39;49m")
+>   result <- verboseCheckWithResult args prop
+>   if isSuccess result
+>     then return ()
+>     else (putStrLn (show result))
 > 
 > -- when testing tests
 > skipTest _ (name, _) =
