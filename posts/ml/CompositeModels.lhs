@@ -355,8 +355,8 @@ Tests
 >   runTest args (_test_compose_affine_logistic_model_dual_gradient r)
 > 
 >   runTest args (_test_logistic_model_lge_dual_gradient r)
->   chattyTest args (_test_linear_model_lge_dual_gradient r)
->   chattyTest args (_test_loglinear_model_lge_dual_gradient r)
+>   skipTest args (_test_linear_model_lge_dual_gradient r)
+>   skipTest args (_test_loglinear_model_lge_dual_gradient r)
 > 
 > 
 > main_composite_models :: IO ()

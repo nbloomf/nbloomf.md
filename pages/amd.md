@@ -58,7 +58,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Delete](/posts/arithmetic-made-difficult/Delete.html)
     * [Dedupe](/posts/arithmetic-made-difficult/Dedupe.html)
     * [Take and Drop](/posts/arithmetic-made-difficult/TakeAndDrop.html)
-    * TakeBut and DropBut
+    * [TakeBut and DropBut](/posts/arithmetic-made-difficult/TakeButAndDropBut.html)
     * TakeWhile and DropWhile
     * ChunksOf and ChunksBy
     * Cycle

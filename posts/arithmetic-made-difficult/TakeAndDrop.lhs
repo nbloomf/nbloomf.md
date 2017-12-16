@@ -44,6 +44,9 @@ Today we'll define two functions, $\take$ and $\drop$, that split a list at a gi
 
 <div class="result">
 <div class="defn"><p>
+Let $A$ be a set. Define $f : \lists{A} \rightarrow \ast + \lists{A} \times A$ by $$f(x) = \left\{ \begin{array}{ll} \ast & \mathrm{if}\ x = \nil \\ (b,a) & \mathrm{if}\ x = \cons(a,b) \end{array}. \right.$$ We then define $$\take : \nats \times \lists{A} \rightarrow \lists{A}$$ by $$\take(k,x) = \unfoldN(f,k,x).$$
+
+In Haskell:
 
 > take :: (Natural k, List t) => k -> t a -> t a
 > take = unfoldN f

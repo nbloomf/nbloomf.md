@@ -384,3 +384,16 @@ test-suite amd-take-drop
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Delete,
                  Dedupe, Choose, Sublist, Unique
+
+test-suite amd-takebut-dropbut
+  type:          exitcode-stdio-1.0
+  main-is:       TakeButAndDropBut.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options:   -main-is TakeAndDrop.main_take_drop
+  other-modules: Booleans, Lists, NaturalNumbers, Unary,
+                 Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
+                 Times, At, Map, UnfoldN, MaxAndMin, Range,
+                 Tuples, Length, Zip, AllAndAny, Filter,
+                 LongestCommonPrefix, TailsAndInits, Elt,
+                 Count, Prefix, Repeat, Select, Delete,
+                 Dedupe, Choose, Sublist, Unique, TakeAndDrop
