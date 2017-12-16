@@ -1,7 +1,7 @@
 ---
 title: TakeBut and DropBut
 author: nbloomf
-date: 2017-05-29
+date: 2017-12-15
 tags: arithmetic-made-difficult, literate-haskell
 ---
 
