@@ -346,7 +346,7 @@ as needed.
 Testing
 -------
 
-Here are our property tests for $\dedupeL$ and $\dedupeR$:
+Here are our property tests for $\delete$:
 
 > _test_delete_elt :: (List t, Equal a)
 >   => t a -> Test (a -> ListOf t a -> Bool)
