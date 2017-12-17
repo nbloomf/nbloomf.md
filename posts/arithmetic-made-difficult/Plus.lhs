@@ -33,6 +33,42 @@ With this in mind, we define a binary operation $\nplus$ on $\nats$ as follows.
 <div class="result">
 <div class="defn"><p>
 Let $\mu : \nats \times \nats \times \nats \rightarrow \nats$ be given by $\mu(k,a,b) = \next(b)$. We then define $\nplus : \nats \times \nats \rightarrow \nats$ by $$\nplus = \simprec{\id}{\mu}.$$
+
+In Haskell:
+
+> plus :: (Natural t) => t -> t -> t
+> plus = simpleRec id mu
+>   where mu _ _ b = next b
+
+</p></div>
+</div>
+
+Since $\nplus$ is defined in terms of simple recursion, it is the unique solution to a set of functional equations.
+
+<div class="result">
+<div class="thm"><p>
+$\nplus$ is the unique map $f : \nats \times \nats \rightarrow \nats$ with the property that for all $a,b \in \nats$, we have $$\left\{ \begin{array}{l} f(\zero,b) = b \\ f(\next(a),b) = \next(f(a,b)). \end{array} \right.$$
+</p></div>
+
+<div class="proof"><p>
+That $\nplus$ is a solution falls out of the definition; note that
+$$\begin{eqnarray*}
+ &   & \nplus(\zero,b) \\
+ & = & \simprec{\id}{\mu}(\zero,b) \\
+ & = & \id(b) \\
+ & = & b
+\end{eqnarray*}$$
+and
+$$\begin{eqnarray*}
+ &   & \nplus(\next(a),b) \\
+ & = & \simprec{\id}{\mu}(\next(a),b) \\
+ & = & \mu(a,b,\simprec{\id}{\mu}(a,b)) \\
+ & = & \mu(a,b,\nplus(a,b)) \\
+ & = & \next(\nplus(a,b)).
+\end{eqnarray*}$$
+as claimed.
+
+To see uniqueness, note that under these conditions we have $$f = \simprec{\id}{\mu} = \nplus$$ as claimed.
 </p></div>
 </div>
 
@@ -42,8 +78,8 @@ Showing that $\nplus$ has the familiar properties of addition then comes down to
 <div class="thm">
 The following hold for all natural numbers $a$, $b$, and $c$.
 
-1. $\nplus(\zero,a) = a = \nplus(a,\zero)$.
-2. $\nplus(\next(a),b) = \next(\nplus(a,b)) = \nplus(a,\next(b))$.
+1. $\nplus(a,\zero) = a$.
+2. $\nplus(a,\next(b)) = \next(\nplus(a,b))$.
 3. $\nplus(\nplus(a,b),c) = \nplus(a,\nplus(b,c))$.
 4. $\nplus(a,b) = \nplus(b,a)$.
 5. If $\nplus(c,a) = \nplus(c,b)$ then $a = b$.
@@ -51,7 +87,7 @@ The following hold for all natural numbers $a$, $b$, and $c$.
 </div>
 
 <div class="proof"><p>
-1. Note that $$\nplus(\zero,a) = \simprec{\id}{\mu}(\zero,a) = \id(a) = a.$$ We show the second equality by induction on $a$. For the base case, we have $\nplus(\zero,\zero) = \zero$ by the first equality. For the inductive step, suppose we have $\nplus(a,\zero) = a$ for some $a$. Then
+1. We proceed by induction on $a$. For the base case, we have $\nplus(\zero,\zero) = \zero$ by the first equality. For the inductive step, suppose we have $\nplus(a,\zero) = a$ for some $a$. Then
 $$\begin{eqnarray*}
  &   & \nplus(\next(a),\zero) \\
  & = & \simprec{\id}{\mu}(\next(a),\zero) \\
@@ -61,17 +97,41 @@ $$\begin{eqnarray*}
  & = & \next(a)
 \end{eqnarray*}$$
 as needed.
-2. Note that
+2. We proceed by induction on $a$. For the base case, note that
+$$\begin{eqnarray*}
+ &   & \nplus(\zero,\next(b)) \\
+ & = & \simprec{\id}{\mu}(\zero,\next(b)) \\
+ & = & \id(\next(b)) \\
+ & = & \next(b).
+\end{eqnarray*}$$
+For the inductive step, suppose we have $\next(\nplus(a,b)) = \nplus(a,\next(b))$ for some $a$. Then
+$$\begin{eqnarray*}
+ &   & \nplus(\next(a),\next(b)) \\
+ & = & \simprec{\id}{\mu}(\next(a),\next(b)) \\
+ & = & \mu(a,\next(b),\simprec{\id}{\mu}(a, \next(b))) \\
+ & = & \mu(a,\next(b),\nplus(a,\next(b))) \\
+ & = & \mu(a,\next(b),\next(\nplus(a,b))) \\
+ & = & \next(\next(\nplus(a,b))) \\
+ & = & \next(\nplus(\next(a),b))
+\end{eqnarray*}$$
+as needed.
+3. We will show this by induction on $a$. For the base case, note that $$\nplus(\nplus(\zero,b),c) = \nplus(b,c) = \nplus(\zero,\nplus(b,c)).$$ For the inductive step, suppose the result holds for some $a$. Then
+$$\begin{eqnarray*}
+ &   & \nplus(\nplus(\next(a),b),c) \\
+ & = & \nplus(\next(\nplus(a,b)),c) \\
+ & = & \next(\nplus(\nplus(a,b),c)) \\
+ & = & \next(\nplus(a,\nplus(b,c))) \\
+ & = & \nplus(\next(a),\nplus(b,c))
+\end{eqnarray*}$$
+as needed.
+4. We proceed by induction on $a$. For the base case, note that $$\nplus(\zero,b) = b = \nplus(b,\zero).$$ For the inductive step, suppose the result holds for some $a$. Then we have
 $$\begin{eqnarray*}
  &   & \nplus(\next(a),b) \\
- & = & \simprec{\id}{\mu}(\next(a),b) \\
- & = & \mu(a,b,\simprec{\id}{\mu}(a,b)) \\
- & = & \mu(a,b,\nplus(a,b)) \\
- & = & \next(\nplus(a,b)).
+ & = & \next(\nplus(a,b)) \\
+ & = & \next(\nplus(b,a)) \\
+ & = & \nplus(b,\next(a))
 \end{eqnarray*}$$
-We show the second equality by induction on $a$. For the base case, note that $$\begin{eqnarray*} & & \nplus(\zero,\next(b)) \\ & = & \simprec{\id}{\mu}(\zero,\next(b)) \\ & = & \id(\next(b)) \\ & = & \next(b). \end{eqnarray*}$$ For the inductive step, suppose we have $\next(\nplus(a,b)) = \nplus(a,\next(b))$ for some $a$. Then $$\begin{eqnarray*} & & \nplus(\next(a),\next(b)) \\ & = & \simprec{\id}{\mu}(\next(a),\next(b)) \\ & = & \mu(a, \next(b), \simprec{\id}{\mu}(a, \next(b))) \\ & = & \mu(a, \next(b), \nplus(a, \next(b))) \\ & = & \mu(a, \next(b), \next(\nplus(a,b))) \\ & = & \next(\next(\nplus(a,b))) \\ & = & \next(\nplus(\next(a),b)) \end{eqnarray*}$$ as needed.
-3. We will show this by induction on $a$. For the base case, note that $$\nplus(\nplus(\zero,b),c) = \nplus(b,c) = \nplus(\zero,\nplus(b,c)).$$ For the inductive step, suppose the result holds for some $a$. Then $$\begin{eqnarray*} & & \nplus(\nplus(\next(a),b),c) \\ & = & \nplus(\next(\nplus(a,b)),c) \\ & = & \next(\nplus(\nplus(a,b),c)) \\ & = & \next(\nplus(a, \nplus(b,c))) \\ & = & \nplus(\next(a), \nplus(b,c)) \end{eqnarray*}$$ as needed.
-4. We proceed by induction on $a$. For the base case, note that $$\nplus(\zero,b) = b = \nplus(b,\zero).$$ For the inductive step, suppose the result holds for some $a$. Then we have $$\begin{eqnarray*} & & \nplus(\next(a),b) \\ & = & \next(\nplus(a,b)) \\ & = & \next(\nplus(b,a)) \\ & = & \nplus(b, \next(a))\end{eqnarray*}$$ as needed.
+as needed.
 5. We proceed by induction on $c$. For the base case, note that if $\nplus(\zero,a) = \nplus(\zero,b)$, then we have $$a = \nplus(\zero,a) = \nplus(\zero,b) = b.$$ For the inductive step, suppose the result holds for some $c$. Now if $$\nplus(\next(c),a)) = \nplus(\next(c),b),$$ then $$\next(\nplus(c,a)) = \next(\nplus(c,b))$$ so that $$\nplus(c,a) = \nplus(c,b)$$ and thus $a = b$ as needed.
 6. Follows from (5) and (4).
 </p></div>
@@ -80,14 +140,8 @@ We show the second equality by induction on $a$. For the base case, note that $$
 Of course we will eventually prefer to say $a + b$ instead of $\nplus(a,b)$. But we'll avoid the more familiar notation until we're convinced that $\nplus$ really does act just like the familiar $+$, since familiar notation can easily lull us into using theorems we haven't proven yet.
 
 
-Implementation and Testing
---------------------------
-
-Here's ``plus``:
-
-> plus :: (Natural t) => t -> t -> t
-> plus = simpleRec id mu
->   where mu _ _ b = next b
+Testing
+-------
 
 We've proved a bunch of properties for ``plus``, but it's still a good idea to verify them. We can do this with ``QuickCheck``. First we express each property to be tested as a boolean function. Note that each one takes an "extra" argument; this is just to fix the type of the function being tested. (There may be a better way to do this.)
 

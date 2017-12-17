@@ -191,6 +191,27 @@ as claimed.
 </p></div>
 </div>
 
+$\dropBut$ is idempotent:
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $k \in \nats$ and $x \in \lists{A}$, we have $$\dropBut(k,\dropBut(k,x)) = \dropBut(k,x).$$
+</p></div>
+
+<div class="proof"><p>
+Note that
+$$\begin{eqnarray*}
+ &   & \dropBut(k,\dropBut(k,x)) \\
+ & = & \dropBut(k,\rev(\take(k,\rev(x)))) \\
+ & = & \rev(\take(k,\rev(\rev(\take(k,\rev(x)))))) \\
+ & = & \rev(\take(k,\take(k,\rev(x)))) \\
+ & = & \rev(\take(k,\rev(x))) \\
+ & = & \dropBut(k,x)
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+</div>
+
 Finally, $\takeBut$ and $\dropBut$ give a kind of $\cat$-factorization.
 
 <div class="result">
@@ -230,6 +251,13 @@ And for $\dropBut$:
 > _test_dropBut_suffix _ _ =
 >   testName "suffix(dropBut(k,x),x) == true" $
 >   \k x -> suffix (dropBut k x) x ==== True
+> 
+> 
+> _test_dropBut_idempotent :: (List t, Equal a, Natural k)
+>   => t a -> k -> Test (Nat k -> ListOf t a -> Bool)
+> _test_dropBut_idempotent _ _ =
+>   testName "dropBut(k,dropBut(k,x)) == dropBut(k,x)" $
+>   \k x -> (dropBut k (dropBut k x)) ==== (dropBut k x)
 
 And for both:
 
@@ -259,6 +287,7 @@ And the suite:
 >   runTest args (_test_takeBut_prefix t k)
 > 
 >   runTest args (_test_dropBut_suffix t k)
+>   runTest args (_test_dropBut_idempotent t k)
 > 
 >   runTest args (_test_takeBut_dropBut_cat t k)
 

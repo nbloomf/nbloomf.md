@@ -282,6 +282,43 @@ as needed.
 </p></div>
 </div>
 
+And $\take$ is idempotent.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $k \in \nats$ and $x \in \list{A}$, we have $$\take(k,\take(k,x)) = \take(k,x).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by induction on $k$. For the base case $k = \zero$, we have
+$$\begin{eqnarray*}
+ &   & \take(k,\take(k,x)) \\
+ & = & \take(\zero,\take(k,x)) \\
+ & = & \nil \\
+ & = & \take(\zero,x) \\
+ & = & \take(k,x)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $x$ for some $k$. We now consider two possibilities. If $x = \nil$, then
+$$\begin{eqnarray*}
+ &   & \take(\next(k),\take(\next(k),x)) \\
+ & = & \take(\next(k),\take(\next(k),\nil)) \\
+ & = & \take(\next(k),\nil) \\
+ & = & \take(\next(k),x)
+\end{eqnarray*}$$
+as needed. If $x = \cons(a,u)$, we have
+$$\begin{eqnarray*}
+ &   & \take(\next(k),\take(\next(k),x)) \\
+ & = & \take(\next(k),\take(\next(k),\cons(a,u))) \\
+ & = & \take(\next(k),\cons(a,\take(k,u))) \\
+ & = & \cons(a,\take(k,\take(k,u))) \\
+ & = & \cons(a,\take(k,u)) \\
+ & = & \take(\next(k),\cons(a,u)) \\
+ & = & \take(\next(k),x)
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
 Now for $\drop$. For this function, $\unfoldN$ doesn't have quite the right shape; fundamentally $\unfoldN$ "builds up" a list from the iterated images of a function, but $\drop$ needs to "tear down" a list, with it's natural number argument acting as a countdown. One of our other $\nats$ recursion operators will work for this -- we'll use bailout recursion for efficiency.
 
 <div class="result">
@@ -442,6 +479,13 @@ Here are our property tests for $\take$:
 > _test_take_length _ _ =
 >   testName "length(take(k,x)) == min(k,length(x))" $
 >   \k x -> length (take k x) ==== min k (length x)
+> 
+> 
+> _test_take_idempotent :: (List t, Equal a, Natural k)
+>   => t a -> k -> Test (Nat k -> ListOf t a -> Bool)
+> _test_take_idempotent _ _ =
+>   testName "take(k,(take(k,x)) == take(k,take(k,x))" $
+>   \k x -> take k (take k x) ==== (take k x)
 
 And for $\drop$:
 
@@ -486,6 +530,7 @@ And the suite:
 >   runTest args (_test_take_alt t k)
 >   runTest args (_test_take_prefix t k)
 >   runTest args (_test_take_length t k)
+>   runTest args (_test_take_idempotent t k)
 > 
 >   runTest args (_test_drop_alt t k)
 >   runTest args (_test_drop_suffix t k)

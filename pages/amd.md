@@ -59,7 +59,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * [Dedupe](/posts/arithmetic-made-difficult/Dedupe.html)
     * [Take and Drop](/posts/arithmetic-made-difficult/TakeAndDrop.html)
     * [TakeBut and DropBut](/posts/arithmetic-made-difficult/TakeButAndDropBut.html)
-    * TakeWhile and DropWhile
+    * [TakeWhile and DropWhile](/posts/arithmetic-made-difficult/TakeWhileAndDropWhile.html)
     * ChunksOf and ChunksBy
     * Cycle
     * InsertAt

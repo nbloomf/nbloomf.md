@@ -137,6 +137,8 @@ And finally, a more concrete description of the universal algebra from $\lists{A
 </p></div>
 </div>
 
+It's handy to remember that this theorems says not only that foldr exists, but that it is unique -- in some sense foldr gives the unique solution to a system of functional equations. This gives us a strategy for showing that two programs are equivalent. If one is defined as a fold, and both programs satisfy the universal property, then they have to be equal. This is nice for showing, for instance, that a *slow but obviously correct* program is equivalent to a *fast but not obviously correct* one.
+
 Here is a naive implementation of $\foldr{\ast}{\ast}$.
 
 > foldr :: (List t) => b -> (a -> b -> b) -> t a -> b

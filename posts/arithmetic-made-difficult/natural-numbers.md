@@ -130,3 +130,13 @@ But Why?
 --------
 
 As we'll see, the function $\natrec{\ast}{\ast}$ essentially characterizes the natural numbers just like the Peano axioms do, albeit in a slightly goofy and hard-to-get-used-to way. So if $\natrec{\ast}{\ast}$ and Peano are equivalent, why bother with the added abstraction? Well, if we define our arithmetic purely in terms of $\natrec{\ast}{\ast}$, and then find a concrete representation of $\natrec{\ast}{\ast}$ in software, then suddenly all of our proofs become executable. And by wrapping up recursion behind a small number of "recursion patterns", those proofs can be easier to find and reason about.
+
+But wait, there's more! The "uniqueness" part of natural recursion is also handy. To be a little more explicit, it says the following.
+
+<div class="result">
+<div class="thm">
+Let $(A,e,\varphi)$ be an inductive set. If $f : \nats \rightarrow A$ has the property that $f(\zero) = e$ and $f(\next(k)) = \varphi(f(k))$ for all $k \in \nats$, then $f = \natrec{e}{\varphi}$.
+</div>
+</div>
+
+This is a nice pre-packaged proof that two functions are equal. We can use it, for instance, to show that an obviously correct but slow program is equivalent to a fast but not obviously correct one.

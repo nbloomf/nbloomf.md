@@ -31,29 +31,46 @@ In Haskell:
 </p></div>
 </div>
 
+Because $\cat$ is defined in terms of fold, it is the unique solution to a system of functional equations.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. Then $\cat$ is the unique mapping $f : \lists{A} \times \lists{A} \rightarrow \lists{A}$ with the property that for all $a \in A$ and $x,y \in \lists{A}$ we have $$\left\{ \begin{array}{l} f(\nil,y) = y \\ f(\cons(a,x),y) = \cons(a,f(x,y)). \end{array} \right.$$
+</p></div>
+
+<div class="proof"><p>
+To see that $\cat$ is a solution, note that
+$$\begin{eqnarray*}
+ &   & \cat(\nil,y) \\
+ & = & \foldr{y}{\cons}(\nil) \\
+ & = & y
+\end{eqnarray*}$$
+and
+$$\begin{eqnarray*}
+ &   & \cat(\cons(a,x),y) \\
+ & = & \foldr{y}{\cons}(\cons(a,x)) \\
+ & = & \cons(a,\foldr{y}{\cons}(x)) \\
+ & = & \cons(a,\cat(x,y))
+\end{eqnarray*}$$
+as claimed.
+
+To see uniqueness, note that under these conditions we have $$f(x,y) = \foldr{y}{\cons}(x) = \cat(x,y)$$ as claimed.
+</p></div>
+</div>
+
 Note that $\cat$ works a lot like $\snoc$; it marches down the list $x$ until it reaches the end, and then sticks $y$ there. In some ways, $\cat$ is like $\nplus$ for lists, and $\nil$ is the $\zero$.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set. For all $x \in \lists{A}$, we have
-
-1. $\cat(x,\nil) = x$.
-2. $\cat(\nil,x) = x$.
+Let $A$ be a set. For all $x \in \lists{A}$, we have $\cat(x,\nil) = x$.
 </p></div>
 
 <div class="proof"><p>
-1. Note that
+Note that
 $$\begin{eqnarray*}
  &   & \cat(x,\nil) \\
  & = & \foldr{\nil}{\cons}(x) \\
  & = & \id(x) \\
- & = & x
-\end{eqnarray*}$$
-as claimed.
-2. We have
-$$\begin{eqnarray*}
- &   & \cat(\nil,x) \\
- & = & \foldr{x}{\cons}(\nil) \\
  & = & x
 \end{eqnarray*}$$
 as claimed.
@@ -67,8 +84,7 @@ $\cat$ interacts with $\cons$ and $\snoc$:
 Let $A$ be a set. The following hold for all $a \in A$ and $x,y \in \lists{A}$.
 
 1. $\cat(x,\cons(a,y)) = \cat(\snoc(a,x),y)$.
-2. $\cons(a,\cat(x,y)) = \cat(\cons(a,x),y)$.
-3. $\snoc(a,\cat(x,y)) = \cat(x,\snoc(a,y))$.
+2. $\snoc(a,\cat(x,y)) = \cat(x,\snoc(a,y))$.
 </p></div>
 
 <div class="proof"><p>
@@ -81,21 +97,6 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 2. We proceed by list induction on $y$. For the base case $y = \nil$ we have
-$$\begin{eqnarray*}
- &   & \cons(a,\cat(x,\nil)) \\
- & = & \cons(a,x) \\
- & = & \cat(\cons(a,x),\nil)
-\end{eqnarray*}$$
-as claimed. For the inductive step, suppose the equality holds for some $y \in \lists{A}$, and let $b \in A$. Now
-$$\begin{eqnarray*}
- &   & \cons(a,\cat(x,\cons(b,y))) \\
- & = & \cons(a,\cat(\snoc(b,x),y)) \\
- & = & \cat(\cons(a,\snoc(b,x)),y) \\
- & = & \cat(\snoc(b,\cons(a,x)),y) \\
- & = & \cat(\cons(a,x),\cons(b,y))
-\end{eqnarray*}$$
-as needed.
-3. We proceed by list induction on $y$. For the base case $y = \nil$ we have
 $$\begin{eqnarray*}
  &   & \snoc(a,\cat(x,\nil)) \\
  & = & \snoc(a,x) \\

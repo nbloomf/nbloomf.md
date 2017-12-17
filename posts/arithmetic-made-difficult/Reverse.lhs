@@ -40,33 +40,21 @@ In Haskell:
 </p></div>
 </div>
 
-Special cases:
+Because $\snoc$ is defined directly as a fold, it is the unique solution to a system of functional equations.
 
 <div class="result">
-<div class="lemma"><p>
-Let $A$ be a set. For all $a \in A$ we have $$\snoc(a,\nil) = \cons(a,\nil).$$
+<div class="thm"><p>
+Let $A$ be a set. Then $\snoc$ is the unique function $f : A \times \lists{A} \rightarrow \lists{A}$ with the property that for all $a,b \in A$ and $x \in \lists{A}$ we have $$\left\{ \begin{array}{ll} f(a,\nil) = \cons(a,\nil) \\ f(a,\cons(b,x)) = \cons(b,f(a,x)). \end{array} \right.$$
 </p></div>
 
 <div class="proof"><p>
-Note that
+That $\snoc$ is a solution of this system falls out of the definition; note that
 $$\begin{eqnarray*}
  &   & \snoc(a,\nil) \\
  & = & \foldr{\cons(a,\nil)}{\cons}(\nil) \\
  & = & \cons(a,\nil)
 \end{eqnarray*}$$
-by the universal property of $\foldr{\ast}{\ast}$.
-</p></div>
-</div>
-
-Now $\snoc$ and $\cons$ commute in an appropriate sense:
-
-<div class="result">
-<div class="thm"><p>
-Let $A$ be a set with $a,b \in A$, and let $x \in \lists{A}$. Then $$\snoc(a,\cons(b,x)) = \cons(b,\snoc(a,x)).$$
-</p></div>
-
-<div class="proof"><p>
-Falls out of $\foldr{\ast}{\ast}$: we have
+and
 $$\begin{eqnarray*}
  &   & \snoc(a,\cons(b,x)) \\
  & = & \foldr{\cons(a,\nil)}{\cons}(\cons(b,x)) \\
@@ -74,10 +62,12 @@ $$\begin{eqnarray*}
  & = & \cons(b,\snoc(a,x))
 \end{eqnarray*}$$
 as claimed.
+
+To see uniqueness, note that for any such $f$ we have $$f = \foldr{\cons(a,\nil)}{\cons} = \snoc$$ as claimed.
 </p></div>
 </div>
 
-And $\snoc$ interacts with $\foldr{\ast}{\ast}$.
+Now $\snoc$ interacts with $\foldr{\ast}{\ast}$.
 
 <div class="result">
 <div class="lemma"><p>
@@ -119,20 +109,45 @@ In Haskell:
 </p></div>
 </div>
 
+Again, because $\rev$ is defined as a fold, it is the unique solution to a system of functional equations.
+
+<div class="result">
+<div class="defn"><p>
+Let $A$ be a set. Then $\rev$ is the unique function $f : \lists{A} \rightarrow \lists{A}$ having the property that for all $a \in A$ and $x \in \lists{A}$ we have $$\left\{ \begin{array}{ll} f(\nil) = \nil \\ f(\cons(a,x)) = \snoc(a,f(x)). \end{array} \right.$$
+</p></div>
+
+<div class="proof"><p>
+That $\rev$ is a solution to this system falls out of the definition; note that
+$$\begin{eqnarray*}
+ &   & \rev(\nil) \\
+ & = & \foldr{\nil}{\snoc}(\nil) \\
+ & = & \nil
+\end{eqnarray*}$$
+and
+$$\begin{eqnarray*}
+ &   & \rev(\cons(a,x)) \\
+ & = & \foldr{\nil}{\snoc}(\cons(a,x)) \\
+ & = & \snoc(a,\foldr{\nil}{\snoc}(x)) \\
+ & = & \snoc(a,\rev(x))
+\end{eqnarray*}$$
+as claimed.
+
+To see uniqueness, note that under these conditions we have $$f = \foldr{\nil}{\snoc} = \rev$$ as claimed.
+</p></div>
+</div>
+
 Special cases:
 
 <div class="result">
 <div class="lemma"><p>
 Let $A$ be a set. For all $a,b \in A$ we have the following.
 
-1. $\rev(\nil) = \nil$.
-2. $\rev(\cons(a,\nil)) = \cons(a,\nil)$.
-3. $\rev(\cons(a,\cons(b,\nil))) = \cons(b,\cons(a,\nil))$.
+1. $\rev(\cons(a,\nil)) = \cons(a,\nil)$.
+2. $\rev(\cons(a,\cons(b,\nil))) = \cons(b,\cons(a,\nil))$.
 </p></div>
 
 <div class="proof"><p>
-1. Follows from the universal property of $\foldr{\ast}{\ast}$.
-2. Note that
+1. Note that
 $$\begin{eqnarray*}
  &   & \rev(\cons(a,\nil)) \\
  & = & \foldr{\nil}{\snoc}(\cons(a,\nil)) \\
@@ -141,7 +156,7 @@ $$\begin{eqnarray*}
  & = & \cons(a,\nil)
 \end{eqnarray*}$$
 as claimed.
-3. Note that
+2. Note that
 $$\begin{eqnarray*}
  &   & \rev(\cons(a,\cons(b,\nil))) \\
  & = & \foldr{\nil}{\snoc}(\cons(a,\cons(b,\nil))) \\
