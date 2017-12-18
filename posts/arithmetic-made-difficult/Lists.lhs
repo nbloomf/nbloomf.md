@@ -10,7 +10,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > {-# LANGUAGE ScopedTypeVariables #-}
 > module Lists
 >   ( List(..), ListShape(..), ListOf(..), ConsList()
->   , isNil, tail, foldr, uncons
+>   , isNil, tail, foldr, dfoldr, uncons
 >   ) where
 > 
 > import Booleans
@@ -31,7 +31,11 @@ The names *nil* and *cons* come from the Lisp programming language, where they w
 
 <div class="result">
 <div class="thm"><p>
-If $x \in \lists{A}$, then either $x = \nil$ or $x = \cons(a,y)$ for some $a \in A$ and $y \in \lists{A}$.
+(List case analysis.) Every element of $\lists{A}$ is equal to either $\nil$ or to $\cons(a,x)$ for some $a \in A$ and $x \in \lists{A}$. Moreover, no element of $\lists{A}$ is equal to *both* $\nil$ and $\cons(a,x)$ for any $a \in A$ and $x \in \lists{A}$.
+</p></div>
+
+<div class="proof"><p>
+Both statements follow from the isomorphism-ness of the algebra map $$\nil + \cons : 1 + \lists{A} \rightarrow \lists{A};$$ existence because the map is surjective, and uniqueness because it is injective.
 </p></div>
 </div>
 
@@ -133,7 +137,7 @@ And finally, a more concrete description of the universal algebra from $\lists{A
 
 <div class="result">
 <div class="thm"><p>
-(Fold.) Let $A$ be a set, and let $(B,e,\varphi)$ be an $A$-inductive set. Then there is a unique map $\Theta : \lists{A} \rightarrow B$ such that $$\Theta(\nil) = e$$ and $$\Theta(\cons(a,x)) = \varphi(a,\Theta(x)).$$ We denote this unique $\Theta$ by $\foldr{e}{\varphi}$.
+(Fold.) Let $A$ be a set, and let $(B,e,\varphi)$ be an $A$-inductive set. Then there is a unique map $\Theta : \lists{A} \rightarrow B$ which solves the system of functional equations $$\left\{ \begin{array}{l} \Theta(\nil) = e \\ \Theta(\cons(a,x)) = \varphi(a,\Theta(x)). \end{array} \right.$$ We denote this unique $\Theta$ by $\foldr{e}{\varphi}$.
 </p></div>
 </div>
 
@@ -193,13 +197,94 @@ Let $A$ be a set. Then we have $$\foldr{\nil}{\cons}(x) = x$$ for all $x \in \li
 </div>
 
 <div class="proof"><p>
-We proceed by list induction on $x$. For the base case $x = \nil$, we have $$\foldr{\nil}{\cons}(\nil) = nil$$ as claimed. For the inductive step, suppose the equality holds for some $x \in \lists{A}$, and let $a \in A$. Now
+We proceed by list induction on $x$. For the base case $x = \nil$, we have $$\foldr{\nil}{\cons}(\nil) = \nil$$ as claimed. For the inductive step, suppose the equality holds for some $x \in \lists{A}$, and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \foldr{\nil}{\cons}(\cons(a,x)) \\
  & = & \cons(a,\foldr{\nil}{\cons}(x)) \\
  & = & \cons(a,x)
 \end{eqnarray*}$$
 as claimed.
+</p></div>
+</div>
+
+Now $\foldr{\ast}{\ast}$ will be useful for defining functions with signatures like $\lists{A} \rightarrow B$. As was the case with $\nats$, though, some specializations of $\foldr{\ast}{\ast}$ show up often enough to warrant their own name. The next theorem defines one of these.
+
+<div class="result">
+<div class="thm">
+Let $A$, $B$, and $C$ be sets, and suppose we have mappings $$\begin{array}{l} \delta : \lists{B} \rightarrow C \\ \psi : A \times C \rightarrow C \\ \chi : A \times B \times C \times C \rightarrow C. \end{array}$$ There is a unique solution $\Omega : \lists{A} \times \lists{B} \rightarrow C$ to the following system of functional equations for all $a \in A$, $b \in B$, $x \in \lists{A}$, and $y \in \lists{B}$.
+$$\left\{\begin{array}{l}
+ \Omega(\nil,y) = \delta(y) \\
+ \Omega(\cons(a,x),\nil) = \psi(a,\Omega(x,\nil)) \\
+ \Omega(\cons(a,x),\cons(b,y)) = \chi(a,b,\Omega(x,y),\Omega(x,\cons(b,y)))
+\end{array}\right.$$
+We denote this $\Omega$ by $\dfoldr{\delta}{\psi}{\chi}$.
+
+In Haskell:
+
+> dfoldr :: (List t)
+>   => (t b -> c)
+>   -> (a -> c -> c)
+>   -> (a -> b -> c -> c -> c)
+>   -> t a -> t b -> c
+> dfoldr delta psi chi = foldr delta phi
+>   where
+>     phi a f w = case listShape w of
+>       Nil      -> psi a (f nil)
+>       Cons b y -> chi a b (f y) (f (cons b y))
+
+</div>
+
+<div class="proof"><p>
+Define a map $\varphi : A \times C^{\lists{B}} \rightarrow C^{\lists{B}}$ casewise by
+$$\left\{\begin{array}{l}
+ \varphi(a,g)(\nil) = \psi(a,g(\nil)) \\
+ \varphi(a,g)(\cons(b,v)) = \chi(a,b,g(v),g(\cons(b,v))).
+\end{array}\right.$$
+We claim the unique solution $\Omega : \lists{A} \times \lists{B} \rightarrow C$ is given by $$\Omega(x,y) = \foldr{\delta}{\varphi}(x)(y).$$ First we show that $\Omega$ is actually a solution. To this end let $a \in A$, $b \in B$, $x \in \lists{A}$, and $y \in \lists{B}$, and note that
+$$\begin{eqnarray*}
+ &   & \Omega(\nil,y) \\
+ & = & \foldr{\delta}{\varphi}(\nil)(y) \\
+ & = & \delta(y),
+\end{eqnarray*}$$
+and
+$$\begin{eqnarray*}
+ &   & \Omega(\cons(a,x),\nil) \\
+ & = & \foldr{\delta}{\varphi}(\cons(a,x))(\nil) \\
+ & = & \varphi(a,\foldr{\delta}{\varphi}(x))(\nil) \\
+ & = & \psi(a,\foldr{\delta}{\varphi}(x)(\nil)) \\
+ & = & \psi(a,\Omega(x,\nil)),
+\end{eqnarray*}$$
+and
+$$\begin{eqnarray*}
+ &   & \Omega(\cons(a,x),\cons(b,y)) \\
+ & = & \foldr{\delta}{\varphi}(\cons(a,x))(\cons(b,y)) \\
+ & = & \varphi(a,\foldr{\delta}{\varphi}(x))(\cons(b,y)) \\
+ & = & \chi(a,b,\foldr{\delta}{\varphi}(x)(y),\foldr{\delta}{\varphi}(x)(\cons(b,y))) \\
+ & = & \chi(a,b,\Omega(x,y),\Omega(x,\cons(b,y)))
+\end{eqnarray*}$$
+as needed. To see uniqueness, suppose $f$ is a solution to the system; we claim that $f(x,y) = \foldr{\delta}{\varphi}(x)(y)$ for all $x,y \in \lists{A}$, and show this by list induction on $x$. For the base case $x = \nil$, for all $y \in \lists{B}$ we have
+$$\begin{eqnarray*}
+ &   & f(\nil,y) \\
+ & = & \delta(y) \\
+ & = & \foldr{\delta}{\varphi}(\nil)(y)
+\end{eqnarray*}$$
+as claimed. For the inductive step, suppose the equality holds for all $w \in \lists{B}$ for some $x \in \lists{A}$, and let $a \in A$. We consider two possibilities for $w$. If $w = \nil$, we have
+$$\begin{eqnarray*}
+ &   & f(\cons(a,x),\nil) \\
+ & = & \psi(a,f(x,\nil)) \\
+ & = & \psi(a,\foldr{\delta}{\varphi}(x)(\nil)) \\
+ & = & \varphi(a,\foldr{\delta}{\varphi}(x))(\nil) \\
+ & = & \foldr{\delta}{\varphi}(\cons(a,x))(\nil)
+\end{eqnarray*}$$
+as claimed. If $w = \cons(b,y)$, we instead have
+$$\begin{eqnarray*}
+ &   & f(\cons(a,x),\cons(b,y)) \\
+ & = & \chi(a,b,f(x,y),f(x,\cons(b,y))) \\
+ & = & \chi(a,b,\foldr{\delta}{\varphi}(x)(y),\foldr{\delta}{\varphi}(x)(\cons(b,y))) \\
+ & = & \varphi(a,\foldr{\delta}{\varphi}(x))(\cons(b,y)) \\
+ & = & \foldr{\delta}{\varphi}(\cons(a,x))(\cons(b,y)) \\
+\end{eqnarray*}$$
+as claimed. By induction, we thus have $$f(x,y) = \foldr{\delta}{\varphi}(x)(y) = \Omega(x,y).$$
 </p></div>
 </div>
 

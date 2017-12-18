@@ -286,7 +286,7 @@ And $\take$ is idempotent.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set. For all $k \in \nats$ and $x \in \list{A}$, we have $$\take(k,\take(k,x)) = \take(k,x).$$
+Let $A$ be a set. For all $k \in \nats$ and $x \in \lists{A}$, we have $$\take(k,\take(k,x)) = \take(k,x).$$
 </p></div>
 
 <div class="proof"><p>
