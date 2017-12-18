@@ -8,64 +8,72 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
 1. First Steps
     * [Booleans](/posts/arithmetic-made-difficult/Booleans.html)
     * [Tuples](/posts/arithmetic-made-difficult/Tuples.html)
-    * [Natural Numbers](/posts/arithmetic-made-difficult/natural-numbers.html)
-    * [From Arrows to Programs](/posts/arithmetic-made-difficult/Unary.html)
-    * [Simple Recursion](/posts/arithmetic-made-difficult/SimpleRecursion.html)
-    * [Variations on Peano](/posts/arithmetic-made-difficult/variations-on-peano.html)
-    * [Bailout Recursion](/posts/arithmetic-made-difficult/BailoutRecursion.html)
-    * [Mutating Recursion](/posts/arithmetic-made-difficult/MutatingRecursion.html)
-    * [The Uniqueness of the Natural Numbers](/posts/arithmetic-made-difficult/NaturalNumbers.html)
-2. Basics
-    * [Addition](/posts/arithmetic-made-difficult/Plus.html)
-    * [Multiplication](/posts/arithmetic-made-difficult/Times.html)
-    * [Really Simple Equations](/posts/arithmetic-made-difficult/really-simple-equations.html)
-    * [Subtraction](/posts/arithmetic-made-difficult/Minus.html)
-    * [Less Than or Equal To](/posts/arithmetic-made-difficult/LessThanOrEqualTo.html)
-    * [Strong Induction](/posts/arithmetic-made-difficult/strong-induction.html)
-    * [Max and Min](/posts/arithmetic-made-difficult/MaxAndMin.html)
-    * [The Division Algorithm](/posts/arithmetic-made-difficult/DivisionAlgorithm.html)
-    * [Divides](/posts/arithmetic-made-difficult/Divides.html)
-    * [Greatest Common Divisor](/posts/arithmetic-made-difficult/GreatestCommonDivisor.html)
-    * [Coprime To](/posts/arithmetic-made-difficult/CoprimeTo.html)
-    * [Least Common Multiple](/posts/arithmetic-made-difficult/LeastCommonMultiple.html)
-    * [Primes](/posts/arithmetic-made-difficult/IsPrime.html)
-    * [Exponentiation](/posts/arithmetic-made-difficult/Exponentiation.html)
-    * [Choose](/posts/arithmetic-made-difficult/Choose.html)
-3. Arithmetic of Lists
-    * [Iterative Sets Redux](/posts/arithmetic-made-difficult/iterative-sets-redux.html)
-    * [Lists](/posts/arithmetic-made-difficult/Lists.html)
-    * [Reverse](/posts/arithmetic-made-difficult/Reverse.html)
-    * [Cat](/posts/arithmetic-made-difficult/Cat.html)
-    * [Length](/posts/arithmetic-made-difficult/Length.html)
-    * [At](/posts/arithmetic-made-difficult/At.html)
-    * [Map](/posts/arithmetic-made-difficult/Map.html)
-    * [UnfoldN](/posts/arithmetic-made-difficult/UnfoldN.html)
-    * [Range](/posts/arithmetic-made-difficult/Range.html)
-    * [Zip and ZipPad](/posts/arithmetic-made-difficult/Zip.html)
-    * [Unzip](/posts/arithmetic-made-difficult/Unzip.html)
-    * [Prefix and Suffix](/posts/arithmetic-made-difficult/Prefix.html)
-    * [Longest Common Prefix](/posts/arithmetic-made-difficult/LongestCommonPrefix.html)
-    * [All and Any](/posts/arithmetic-made-difficult/AllAndAny.html)
-    * [Tails and Inits](/posts/arithmetic-made-difficult/TailsAndInits.html)
-    * [Filter](/posts/arithmetic-made-difficult/Filter.html)
-    * [Elt](/posts/arithmetic-made-difficult/Elt.html)
-    * [Count](/posts/arithmetic-made-difficult/Count.html)
-    * [Repeat](/posts/arithmetic-made-difficult/Repeat.html)
-    * [Sublist](/posts/arithmetic-made-difficult/Sublist.html)
-    * [Infix](/posts/arithmetic-made-difficult/Infix.html)
-    * [Select](/posts/arithmetic-made-difficult/Select.html)
-    * [Unique](/posts/arithmetic-made-difficult/Unique.html)
-    * [Delete](/posts/arithmetic-made-difficult/Delete.html)
-    * [Dedupe](/posts/arithmetic-made-difficult/Dedupe.html)
-    * [Take and Drop](/posts/arithmetic-made-difficult/TakeAndDrop.html)
-    * [TakeBut and DropBut](/posts/arithmetic-made-difficult/TakeButAndDropBut.html)
-    * [TakeWhile and DropWhile](/posts/arithmetic-made-difficult/TakeWhileAndDropWhile.html)
-    * ChunksOf and ChunksBy
-    * Cycle
-    * InsertAt
-    * DeleteAt
-    * SwapAt
-    * Replace
+2. $\mathbb{N}$
+    * Type
+        * [Natural Numbers](/posts/arithmetic-made-difficult/natural-numbers.html)
+        * [From Arrows to Programs](/posts/arithmetic-made-difficult/Unary.html)
+        * [Simple Recursion](/posts/arithmetic-made-difficult/SimpleRecursion.html)
+        * [Variations on Peano](/posts/arithmetic-made-difficult/variations-on-peano.html)
+        * [The Uniqueness of the Natural Numbers](/posts/arithmetic-made-difficult/NaturalNumbers.html)
+    * Recursion Operators
+        * [Bailout Recursion](/posts/arithmetic-made-difficult/BailoutRecursion.html)
+        * [Mutating Recursion](/posts/arithmetic-made-difficult/MutatingRecursion.html)
+    * Arithmetic of Natural Numbers
+        * [Addition](/posts/arithmetic-made-difficult/Plus.html)
+        * [Multiplication](/posts/arithmetic-made-difficult/Times.html)
+        * [Really Simple Equations](/posts/arithmetic-made-difficult/really-simple-equations.html)
+        * [Subtraction](/posts/arithmetic-made-difficult/Minus.html)
+        * [Less Than or Equal To](/posts/arithmetic-made-difficult/LessThanOrEqualTo.html)
+        * [Strong Induction](/posts/arithmetic-made-difficult/strong-induction.html)
+        * [Max and Min](/posts/arithmetic-made-difficult/MaxAndMin.html)
+        * [The Division Algorithm](/posts/arithmetic-made-difficult/DivisionAlgorithm.html)
+        * [Divides](/posts/arithmetic-made-difficult/Divides.html)
+        * [Greatest Common Divisor](/posts/arithmetic-made-difficult/GreatestCommonDivisor.html)
+        * [Coprime To](/posts/arithmetic-made-difficult/CoprimeTo.html)
+        * [Least Common Multiple](/posts/arithmetic-made-difficult/LeastCommonMultiple.html)
+        * [Primes](/posts/arithmetic-made-difficult/IsPrime.html)
+        * [Exponentiation](/posts/arithmetic-made-difficult/Exponentiation.html)
+        * [Choose](/posts/arithmetic-made-difficult/Choose.html)
+3. $\mathsf{Lists}(A)$
+    * Type
+        * [Iterative Sets Redux](/posts/arithmetic-made-difficult/iterative-sets-redux.html)
+        * [Lists](/posts/arithmetic-made-difficult/Lists.html)
+    * Recursion Operators
+        * Double Fold
+        * Consuming Fold
+    * Arithmetic of Lists
+        * [Reverse](/posts/arithmetic-made-difficult/Reverse.html)
+        * [Cat](/posts/arithmetic-made-difficult/Cat.html)
+        * [Length](/posts/arithmetic-made-difficult/Length.html)
+        * [At](/posts/arithmetic-made-difficult/At.html)
+        * [Map](/posts/arithmetic-made-difficult/Map.html)
+        * [UnfoldN](/posts/arithmetic-made-difficult/UnfoldN.html)
+        * [Range](/posts/arithmetic-made-difficult/Range.html)
+        * [Zip and ZipPad](/posts/arithmetic-made-difficult/Zip.html)
+        * [Unzip](/posts/arithmetic-made-difficult/Unzip.html)
+        * [Prefix and Suffix](/posts/arithmetic-made-difficult/Prefix.html)
+        * [Longest Common Prefix](/posts/arithmetic-made-difficult/LongestCommonPrefix.html)
+        * [All and Any](/posts/arithmetic-made-difficult/AllAndAny.html)
+        * [Tails and Inits](/posts/arithmetic-made-difficult/TailsAndInits.html)
+        * [Filter](/posts/arithmetic-made-difficult/Filter.html)
+        * [Elt](/posts/arithmetic-made-difficult/Elt.html)
+        * [Count](/posts/arithmetic-made-difficult/Count.html)
+        * [Repeat](/posts/arithmetic-made-difficult/Repeat.html)
+        * [Sublist](/posts/arithmetic-made-difficult/Sublist.html)
+        * [Infix](/posts/arithmetic-made-difficult/Infix.html)
+        * [Select](/posts/arithmetic-made-difficult/Select.html)
+        * [Unique](/posts/arithmetic-made-difficult/Unique.html)
+        * [Delete](/posts/arithmetic-made-difficult/Delete.html)
+        * [Dedupe](/posts/arithmetic-made-difficult/Dedupe.html)
+        * [Take and Drop](/posts/arithmetic-made-difficult/TakeAndDrop.html)
+        * [TakeBut and DropBut](/posts/arithmetic-made-difficult/TakeButAndDropBut.html)
+        * [TakeWhile and DropWhile](/posts/arithmetic-made-difficult/TakeWhileAndDropWhile.html)
+        * ChunksOf and ChunksBy
+        * Cycle
+        * InsertAt
+        * DeleteAt
+        * SwapAt
+        * Replace
 4. List of Arithmetics
     * [On Boring and Repetitive Proofs](/posts/arithmetic-made-difficult/on-boring-proofs.html)
     * Partial and Total Orders
