@@ -16,7 +16,8 @@ tags: arithmetic-made-difficult, literate-haskell
 > 
 > import Unary
 > 
-> import Prelude(Show(..), IO, Bool(..), Integer, Int, return, sequence_, (.))
+> import Prelude(Show(..), IO, Bool(..),
+>   Integer, Int, return, sequence_, (.))
 > import Test.QuickCheck
 
 We have assumed the existence of a set $\nats$ such that there is a unique inductive set homomorphism from $\nats$ to any other inductive set. But it turns out that this set is not *unique* with this property; any other inductive set which is *isomorphic* to $\nats$ enjoys it as well.

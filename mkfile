@@ -87,3 +87,18 @@ winfiles:Q: `{find raw/tex/win -type f}
 raw/tex/win/%:VQ: raw/tex/unix/%
   echo "converting $prereq" | doppler lightblue
   cat $prereq | awk '{sub("$","\r\n"); printf("%s",$0);}' > $target
+
+
+
+#=========#
+# writing #
+#=========#
+
+blankpost:VQ:
+  echo '---'
+  echo 'title: '
+  echo 'author: nbloomf'
+  echo 'date:' `date +%F`
+  echo 'tags: '
+  echo '---'
+  echo

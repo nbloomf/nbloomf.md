@@ -135,7 +135,11 @@ But wait, there's more! The "uniqueness" part of natural recursion is also handy
 
 <div class="result">
 <div class="thm">
-Let $(A,e,\varphi)$ be an inductive set. If $f : \nats \rightarrow A$ has the property that $f(\zero) = e$ and $f(\next(k)) = \varphi(f(k))$ for all $k \in \nats$, then $f = \natrec{e}{\varphi}$.
+Let $(A,e,\varphi)$ be an inductive set. Then $\natrec{e}{\varphi}$ is the unique solution $f : \nats \rightarrow A$ to the following system of functional equations for all $k \in \nats$:
+$$\left\{\begin{array}{l}
+ f(\zero) = e \\
+ f(\next(k)) = \varphi(f(k))
+\end{array}\right.$$
 </div>
 </div>
 

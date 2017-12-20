@@ -12,16 +12,17 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * Type
         * [Natural Numbers](/posts/arithmetic-made-difficult/natural-numbers.html)
         * [From Arrows to Programs](/posts/arithmetic-made-difficult/Unary.html)
-        * [Simple Recursion](/posts/arithmetic-made-difficult/SimpleRecursion.html)
         * [Variations on Peano](/posts/arithmetic-made-difficult/variations-on-peano.html)
         * [The Uniqueness of the Natural Numbers](/posts/arithmetic-made-difficult/NaturalNumbers.html)
     * Recursion Operators
+        * [Simple Recursion](/posts/arithmetic-made-difficult/SimpleRecursion.html)
         * [Bailout Recursion](/posts/arithmetic-made-difficult/BailoutRecursion.html)
         * [Mutating Recursion](/posts/arithmetic-made-difficult/MutatingRecursion.html)
     * Arithmetic of Natural Numbers
         * [Addition](/posts/arithmetic-made-difficult/Plus.html)
         * [Multiplication](/posts/arithmetic-made-difficult/Times.html)
         * [Really Simple Equations](/posts/arithmetic-made-difficult/really-simple-equations.html)
+        * Equality
         * [Subtraction](/posts/arithmetic-made-difficult/Minus.html)
         * [Less Than or Equal To](/posts/arithmetic-made-difficult/LessThanOrEqualTo.html)
         * [Strong Induction](/posts/arithmetic-made-difficult/strong-induction.html)
