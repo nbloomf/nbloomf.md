@@ -25,33 +25,35 @@ test-suite amd-tuple
   ghc-options:   -main-is Tuples.main_tuple
   other-modules: Booleans
 
-test-suite amd-nat
+test-suite amd-equals
   type:          exitcode-stdio-1.0
-  main-is:       NaturalNumbers.lhs
+  main-is:       Equals.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is NaturalNumbers.main_nat
-  other-modules: Booleans, Unary
+  ghc-options:   -main-is Equals.main_eq
+  other-modules: Booleans, NaturalNumbers, BailoutRecursion, Unary
 
 test-suite amd-plus
   type:          exitcode-stdio-1.0
   main-is:       Plus.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is Plus.main_plus
-  other-modules: Booleans, NaturalNumbers, Unary
+  other-modules: Booleans, NaturalNumbers, Unary, SimpleRecursion,
+                 Equals, BailoutRecursion
 
 test-suite amd-times
   type:          exitcode-stdio-1.0
   main-is:       Times.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is Times.main_times
-  other-modules: Booleans, NaturalNumbers, Unary, Plus
+  other-modules: Booleans, NaturalNumbers, Unary, Plus, SimpleRecursion
 
 test-suite amd-minus
   type:          exitcode-stdio-1.0
   main-is:       Minus.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is Minus.main_minus
-  other-modules: Booleans, NaturalNumbers, Unary, Plus, Times
+  other-modules: Booleans, NaturalNumbers, Unary, Plus, Times, SimpleRecursion,
+                 Equals, BailoutRecursion
 
 test-suite amd-leq
   type:          exitcode-stdio-1.0
@@ -59,7 +61,7 @@ test-suite amd-leq
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is LessThanOrEqualTo.main_leq
   other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
-                 Minus
+                 Minus, SimpleRecursion, Equals, BailoutRecursion
 
 test-suite amd-max-min
   type:          exitcode-stdio-1.0
@@ -67,7 +69,8 @@ test-suite amd-max-min
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is MaxAndMin.main_max_min
   other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
-                 Minus, LessThanOrEqualTo
+                 Minus, LessThanOrEqualTo, SimpleRecursion,
+                 Equals, BailoutRecursion
 
 test-suite amd-divalg
   type:          exitcode-stdio-1.0
@@ -75,7 +78,8 @@ test-suite amd-divalg
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is DivisionAlgorithm.main_divalg
   other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
-                 Minus, LessThanOrEqualTo
+                 Minus, LessThanOrEqualTo, SimpleRecursion, Equals,
+                 BailoutRecursion
 
 test-suite amd-div
   type:          exitcode-stdio-1.0
@@ -83,7 +87,8 @@ test-suite amd-div
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is Divides.main_div
   other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
-                 Minus, LessThanOrEqualTo, DivisionAlgorithm
+                 Minus, LessThanOrEqualTo, DivisionAlgorithm,
+                 SimpleRecursion, Equals, BailoutRecursion
 
 test-suite amd-gcd
   type:          exitcode-stdio-1.0
@@ -92,7 +97,7 @@ test-suite amd-gcd
   ghc-options:   -main-is GreatestCommonDivisor.main_gcd
   other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
                  Minus, LessThanOrEqualTo, DivisionAlgorithm,
-                 Divides
+                 Divides, SimpleRecursion, Equals, BailoutRecursion
 
 test-suite amd-coprime
   type:          exitcode-stdio-1.0
@@ -101,7 +106,8 @@ test-suite amd-coprime
   ghc-options:   -main-is CoprimeTo.main_coprime
   other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
                  Minus, LessThanOrEqualTo, DivisionAlgorithm,
-                 Divides, GreatestCommonDivisor
+                 Divides, GreatestCommonDivisor, SimpleRecursion,
+                 BailoutRecursion, Equals
 
 test-suite amd-lcm
   type:          exitcode-stdio-1.0
@@ -110,7 +116,8 @@ test-suite amd-lcm
   ghc-options:   -main-is LeastCommonMultiple.main_lcm
   other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
                  Minus, LessThanOrEqualTo, DivisionAlgorithm,
-                 Divides, GreatestCommonDivisor, CoprimeTo
+                 Divides, GreatestCommonDivisor, CoprimeTo,
+                 SimpleRecursion, Equals, BailoutRecursion
 
 test-suite amd-prime
   type:          exitcode-stdio-1.0
@@ -120,7 +127,8 @@ test-suite amd-prime
   other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
                  Minus, LessThanOrEqualTo, DivisionAlgorithm,
                  Divides, GreatestCommonDivisor, CoprimeTo,
-                 LeastCommonMultiple
+                 LeastCommonMultiple, Equals, SimpleRecursion,
+                 BailoutRecursion
 
 test-suite amd-power
   type:          exitcode-stdio-1.0
@@ -130,7 +138,8 @@ test-suite amd-power
   other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
                  Minus, LessThanOrEqualTo, DivisionAlgorithm,
                  Divides, GreatestCommonDivisor, CoprimeTo,
-                 LeastCommonMultiple
+                 LeastCommonMultiple, SimpleRecursion, Equals,
+                 BailoutRecursion
 
 test-suite amd-choose
   type:          exitcode-stdio-1.0
@@ -138,7 +147,8 @@ test-suite amd-choose
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is Choose.main_choose
   other-modules: Booleans, LessThanOrEqualTo, Minus, Plus,
-                 NaturalNumbers, Times, Unary
+                 NaturalNumbers, Times, Unary, SimpleRecursion,
+                 BailoutRecursion, Equals
 
 test-suite amd-rev
   type:          exitcode-stdio-1.0
@@ -161,7 +171,8 @@ test-suite amd-length
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is Length.main_length
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
-                 Reverse, Cat, Plus
+                 Reverse, Cat, Plus, SimpleRecursion, Equals,
+                 BailoutRecursion
 
 test-suite amd-at
   type:          exitcode-stdio-1.0
@@ -170,7 +181,8 @@ test-suite amd-at
   ghc-options:   -main-is At.main_at
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
-                 Times, Length
+                 Times, Length, SimpleRecursion, BailoutRecursion,
+                 Equals
 
 test-suite amd-map
   type:          exitcode-stdio-1.0
@@ -179,7 +191,8 @@ test-suite amd-map
   ghc-options:   -main-is Map.main_map
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
-                 Times, At, Length
+                 Times, At, Length, SimpleRecursion, Equals,
+                 BailoutRecursion
 
 test-suite amd-range
   type:          exitcode-stdio-1.0
@@ -188,7 +201,8 @@ test-suite amd-range
   ghc-options:   -main-is Range.main_range
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
-                 Times, At, Map, UnfoldN, Length
+                 Times, At, Map, UnfoldN, Length, Equals,
+                 SimpleRecursion, BailoutRecursion
 
 test-suite amd-zip
   type:          exitcode-stdio-1.0
@@ -218,7 +232,8 @@ test-suite amd-prefix
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
-                 Tuples, Length, Zip
+                 Tuples, Length, Zip, Equals, SimpleRecursion,
+                 BailoutRecursion
 
 test-suite amd-lcp
   type:          exitcode-stdio-1.0
@@ -228,7 +243,8 @@ test-suite amd-lcp
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
-                 Tuples, Length, Zip, Prefix
+                 Tuples, Length, Zip, Prefix, SimpleRecursion,
+                 Equals, BailoutRecursion
 
 test-suite amd-all-any
   type:          exitcode-stdio-1.0
@@ -238,7 +254,8 @@ test-suite amd-all-any
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
-                 Tuples, Length, Zip, Prefix
+                 Tuples, Length, Zip, Prefix, SimpleRecursion,
+                 BailoutRecursion, Equals
 
 test-suite amd-tails-inits
   type:          exitcode-stdio-1.0
@@ -249,7 +266,8 @@ test-suite amd-tails-inits
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Prefix,
-                 LongestCommonPrefix
+                 LongestCommonPrefix, Equals, SimpleRecursion,
+                 BailoutRecursion
 
 test-suite amd-filter
   type:          exitcode-stdio-1.0
@@ -260,7 +278,8 @@ test-suite amd-filter
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Prefix,
-                 LongestCommonPrefix, TailsAndInits
+                 LongestCommonPrefix, TailsAndInits, SimpleRecursion,
+                 Equals, BailoutRecursion
 
 test-suite amd-elt
   type:          exitcode-stdio-1.0
@@ -271,7 +290,8 @@ test-suite amd-elt
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Filter
-                 LongestCommonPrefix, TailsAndInits, Prefix
+                 LongestCommonPrefix, TailsAndInits, Prefix,
+                 SimpleRecursion, Equals, BailoutRecursion
 
 test-suite amd-count
   type:          exitcode-stdio-1.0
@@ -283,7 +303,7 @@ test-suite amd-count
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
-                 Prefix
+                 Prefix, SimpleRecursion, Equals, BailoutRecursion
 
 test-suite amd-repeat
   type:          exitcode-stdio-1.0
@@ -295,7 +315,7 @@ test-suite amd-repeat
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
-                 Count, Prefix
+                 Count, Prefix, Equals, SimpleRecursion, BailoutRecursion
 
 test-suite amd-sublist
   type:          exitcode-stdio-1.0
@@ -307,7 +327,8 @@ test-suite amd-sublist
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
-                 Count, Prefix, Repeat
+                 Count, Prefix, Repeat, Equals, SimpleRecursion
+                 BailoutRecursion
 
 test-suite amd-infix
   type:          exitcode-stdio-1.0
@@ -319,7 +340,8 @@ test-suite amd-infix
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
-                 Count, Prefix, Repeat, Sublist
+                 Count, Prefix, Repeat, Sublist, SimpleRecursion,
+                 Equals, BailoutRecursion
 
 test-suite amd-select
   type:          exitcode-stdio-1.0
@@ -331,7 +353,8 @@ test-suite amd-select
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
-                 Count, Prefix, Repeat, Choose, Sublist
+                 Count, Prefix, Repeat, Choose, Sublist,
+                 Equals, SimpleRecursion, BailoutRecursion
 
 test-suite amd-unique
   type:          exitcode-stdio-1.0
@@ -357,7 +380,8 @@ test-suite amd-delete
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Choose,
-                 Sublist, Unique
+                 Sublist, Unique, SimpleRecursion, Equals,
+                 BailoutRecursion
 
 test-suite amd-dedupe
   type:          exitcode-stdio-1.0
@@ -370,7 +394,8 @@ test-suite amd-dedupe
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Delete,
-                 Choose, Sublist, Unique
+                 Choose, Sublist, Unique, SimpleRecursion,
+                 BailoutRecursion, Equals
 
 test-suite amd-take-drop
   type:          exitcode-stdio-1.0
@@ -383,7 +408,8 @@ test-suite amd-take-drop
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Delete,
-                 Dedupe, Choose, Sublist, Unique
+                 Dedupe, Choose, Sublist, Unique, Equals,
+                 SimpleRecursion, BailoutRecursion
 
 test-suite amd-takebut-dropbut
   type:          exitcode-stdio-1.0
@@ -396,7 +422,8 @@ test-suite amd-takebut-dropbut
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Delete,
-                 Dedupe, Choose, Sublist, Unique, TakeAndDrop
+                 Dedupe, Choose, Sublist, Unique, TakeAndDrop,
+                 Equals, SimpleRecursion, BailoutRecursion
 
 test-suite amd-takewhile-dropwhile
   type:          exitcode-stdio-1.0
@@ -409,4 +436,5 @@ test-suite amd-takewhile-dropwhile
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Delete,
-                 Dedupe, Choose, Sublist, Unique
+                 Dedupe, Choose, Sublist, Unique, Equals,
+                 SimpleRecursion, BailoutRecursion

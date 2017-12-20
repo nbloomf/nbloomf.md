@@ -7,10 +7,10 @@ tags: arithmetic-made-difficult, literate-haskell
 
 > {-# LANGUAGE BangPatterns #-}
 > module SimpleRecursion
->   ( simpRec
+>   ( simpleRec
 >   ) where
 > 
-> import Nat
+> import NaturalNumbers
 
 So far we've defined the natural numbers as an iterative set with a special *universal property*, which was encapsulated in the existence of a simple recursion operator $\natrec{\ast}{\ast}$. Anything we will wish to do with the natural numbers can be done using this operator alone. However, in practice, it will be handy to define synonyms for some more complicated recursive functions; the first of these is *simple recursion with a parameter*.
 
@@ -108,28 +108,33 @@ Implementation
 
 As we did with $\natrec{\ast}{\ast}$, we'd like to implement $\simprec{\ast}{\ast}$ in software. There are a couple of ways to go about this.
 
+> simpleRec'', simpleRec', simpleRec :: (Natural n)
+>   => (a -> b)
+>   -> (n -> a -> b -> b)
+>   -> n
+>   -> a
+>   -> b
+
 There's the naive way:
 
-> simpRec'' :: (a -> b) -> (Nat -> a -> b -> b) -> Nat -> a -> b
-> simpRec'' phi _   Z    a = phi a
-> simpRec'' phi mu (N n) a = mu n a $ simpRec'' phi mu n a
+> simpleRec'' phi mu n a = case natShape n of
+>   Zero   -> phi a
+>   Next k -> mu k a $ simpleRec'' phi mu k a
 
 There's the definition from the proof:
 
-> simpRec' :: (a -> b) -> (Nat -> a -> b -> b) -> Nat -> a -> b
-> simpRec' phi mu n a =
->   let t (m,h) = (N m, \x -> mu m x (h x))
->   in snd (natRec (Z,phi) t n) $ a
+> simpleRec' phi mu n a =
+>   let t (m,h) = (next m, \x -> mu m x (h x))
+>   in snd (naturalRec (zero,phi) t n) $ a
 
 And the tail recursive strategy:
 
-> simpRec :: (a -> b) -> (Nat -> a -> b -> b) -> Nat -> a -> b
-> simpRec phi mu n a =
+> simpleRec phi mu n a =
 >   let
->     tau !x h m = case m of
->       Z   -> x
->       N k -> tau (mu h a x) (N h) k
->   in tau (phi a) Z n
+>     tau !x h m = case natShape m of
+>       Zero   -> x
+>       Next k -> tau (mu h a x) (next h) k
+>   in tau (phi a) zero n
 
 Some simple testing again shows that the tail recursive form is more efficient -- both of the other forms run out of space on medium-sized numbers. All we need to do is verify that the efficient ``simpRec`` is equivalent to the inefficient, but obviously correct, ``simpRec''``. We will (eventually) do this by induction.
 

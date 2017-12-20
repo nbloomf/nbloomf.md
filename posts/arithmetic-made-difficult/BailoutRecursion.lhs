@@ -7,10 +7,10 @@ tags: arithmetic-made-difficult, literate-haskell
 
 > {-# LANGUAGE BangPatterns #-}
 > module BailoutRecursion
->   ( bailRec
+>   ( bailoutRec
 >   ) where
 > 
-> import Unary
+> import NaturalNumbers
 
 So far we have defined two special *recursion operators*, $\natrec{\ast}{\ast}$ and $\simprec{\ast}{\ast}$. These act like program skeletons: fill in the slots with functions of the right signatures and get a computable function out. In this post we'll define one more operator, which we will call *bailout recursion*.
 
@@ -123,23 +123,23 @@ Implementation
 
 As we did with $\natrec{\ast}{\ast}$ and $\simprec{\ast}{\ast}$, we'd like to implement $\bailrec{\ast}{\ast}{\ast}{\ast}$ in software. There are a couple of ways to go about this. First, the signature.
 
-> bailRec, bailRec'
->   :: (a -> b)
->   -> (Unary -> a -> Bool)
->   -> (Unary -> a -> b)
->   -> (Unary -> a -> a)
->   -> Unary
+> bailoutRec, bailoutRec' :: (Natural n)
+>   => (a -> b)
+>   -> (n -> a -> Bool)
+>   -> (n -> a -> b)
+>   -> (n -> a -> a)
+>   -> n
 >   -> a
 >   -> b
 
 There's the naive way:
 
-> bailRec phi beta psi omega =
+> bailoutRec phi beta psi omega =
 >   let
->     theta n a = case n of
->       Z -> phi a
+>     theta n a = case natShape n of
+>       Zero -> phi a
 >
->       N m ->
+>       Next m ->
 >         if beta m a
 >           then psi m a
 >           else theta m (omega m a)
@@ -148,16 +148,16 @@ There's the naive way:
 
 And there's the definition from the proof:
 
-> bailRec' phi beta psi omega = \n a ->
+> bailoutRec' phi beta psi omega = \n a ->
 >   let
 >     w m h x =
 >       if beta m x
 >         then psi m x
 >         else h $ omega m x
 >  
->     t (m,h) = (N m, w m h)
+>     t (m,h) = (next m, w m h)
 > 
->   in snd (natRec (Z, phi) t n) $ a
+>   in snd (naturalRec (zero, phi) t n) $ a
 
 Unlike simple recursion, the naive implementation of bailout recursion is already tail recursive.
 

@@ -11,6 +11,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > 
 > import Booleans
 > import NaturalNumbers
+> import BailoutRecursion
 > import Plus
 > import Minus
 > import LessThanOrEqualTo

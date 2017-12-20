@@ -11,6 +11,8 @@ tags: arithmetic-made-difficult, literate-haskell
 >
 > import Booleans
 > import NaturalNumbers
+> import SimpleRecursion
+> import Equals
 > 
 > import Prelude (id)
 > import Test.QuickCheck

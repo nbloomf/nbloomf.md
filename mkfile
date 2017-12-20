@@ -1,13 +1,14 @@
 MKSHELL=/bin/bash
 
 targets:VQ:
-  echo 'targets'                                     | doppler lightgreen
-  echo '  all      : everything'                     | doppler lightcyan
-  echo '  watch    : serve pages at localhost:31337' | doppler lightcyan
-  echo '  build    : generate nbloomf.github.io'     | doppler lightcyan
-  echo '  site     : compile site executable'        | doppler lightcyan
-  echo '  favicons : generate favicons'              | doppler lightcyan
-  echo '  winfiles : convert raw file line endings'  | doppler lightcyan
+  echo 'targets'                                      | doppler lightgreen
+  echo '  all       : everything'                     | doppler lightcyan
+  echo '  watch     : serve pages at localhost:31337' | doppler lightcyan
+  echo '  build     : generate nbloomf.github.io'     | doppler lightcyan
+  echo '  site      : compile site executable'        | doppler lightcyan
+  echo '  favicons  : generate favicons'              | doppler lightcyan
+  echo '  winfiles  : convert raw file line endings'  | doppler lightcyan
+  echo '  blankpost : echo empty post template'       | doppler lightcyan
 
 all:VQ: build watch install test
 

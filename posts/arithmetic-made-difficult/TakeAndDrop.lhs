@@ -12,6 +12,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Booleans
 > import Tuples
 > import NaturalNumbers
+> import BailoutRecursion
 > import Plus
 > import MaxAndMin
 > 
