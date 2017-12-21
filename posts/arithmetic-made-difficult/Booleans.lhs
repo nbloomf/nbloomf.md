@@ -400,7 +400,7 @@ In Haskell:
 </p></div>
 </div>
 
-Now $\bif{}{}{}$ also satisfies some useful properties; for instance, it interacts with not in the first argument:
+Now $\bif{\ast}{\ast}{\ast}$ also satisfies some useful properties; for instance, it interacts with not in the first argument:
 
 <div class="result">
 <div class="thm"><p><a name="thm-ifnot" />
@@ -427,6 +427,15 @@ $$\begin{eqnarray*}
  & = & \bif{p}{b}{a},
 \end{eqnarray*}$$
 as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_if_not :: (Equal a) => a -> Test (Bool -> a -> a -> Bool)
+> _test_if_not _ =
+>   testName "if(not(p),a,b) == if(p,b,a)" $
+>   \p a b -> eq (ifThenElse (not p) a b) (ifThenElse p b a)
+
 </p></div>
 </div>
 
@@ -455,6 +464,16 @@ $$\begin{eqnarray*}
  & = & \bif{p}{f(u)}{f(v)}
 \end{eqnarray*}$$
 as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_if_func :: (Equal a)
+>   => a -> Test ((a -> a) -> Bool -> a -> a -> Bool)
+> _test_if_func _ =
+>   testName "f(if(p,a,b)) == if(p,f(a),f(b))" $
+>   \f p a b -> eq (f (ifThenElse p a b)) (ifThenElse p (f a) (f b))
+
 </p></div>
 </div>
 
@@ -512,34 +531,75 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_if_nest :: (Equal a)
+>   => a -> Test (Bool -> Bool -> a -> a -> a -> a -> Bool)
+> _test_if_nest _ =
+>   testName "if(p,if(q,a,b),if(q,c,d)) == if(q,if(p,a,c),if(p,b,d))" $
+>   \p q a b c d ->
+>     eq
+>       (ifThenElse p (ifThenElse q a b) (ifThenElse q c d))
+>       (ifThenElse q (ifThenElse p a c) (ifThenElse p b d))
+
+</p></div>
 </div>
 
 Nested ifs on the same boolean can be pruned.
 
 <div class="result">
-<div class="thm"><p>
-Let $A$ be a set with $p \in \bool$ and $a,b,c \in A$. We have $$\bif{p}{\bif{p}{a}{b}}{c} = \bif{p}{a}{c}.$$
+<div class="thm"><p><a name="thm-ifprune" />
+Let $A$ be a set with $p \in \bool$ and $a,b,c \in A$. We have the following.
+
+1. $\bif{p}{\bif{p}{a}{b}}{c} = \bif{p}{a}{c}$
+2. $\bif{p}{a}{\bif{p}{b}{c}} = \bif{p}{a}{c}$
 </p></div>
 
 <div class="proof"><p>
-If $p = \btrue$, we have
+1. If $p = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bif{p}{\bif{p}{a}{b}}{c} \\
- & = & \bif{\btrue}{\bif{btrue}{a}{b}}{c} \\
- & = & \bif{\btrue}{a}{b} \\
- & = & a \\
- & = & \bif{\btrue}{a}{c} \\
+ & = & \bif{p}{\bif{\btrue}{a}{b}}{c} \\
  & = & \bif{p}{a}{c}
 \end{eqnarray*}$$
 as needed. If $p = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bif{p}{\bif{p}{a}{b}}{c} \\
- & = & \bif{\bfalse}{\bif{bfalse}{a}{b}}{c} \\
+ & = & \bif{\bfalse}{\bif{\bfalse}{a}{b}}{c} \\
  & = & c \\
  & = & \bif{\bfalse}{a}{c} \\
  & = & \bif{p}{a}{c}
 \end{eqnarray*}$$
 as needed.
+2. If $p = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \bif{p}{a}{\bif{p}{b}{c}} \\
+ & = & \bif{\btrue}{a}{\bif{p}{b}{c}} \\
+ & = & a \\
+ & = & \bif{\btrue}{a}{c} \\
+ & = & \bif{p}{a}{c}
+\end{eqnarray*}$$
+as claimed, and if $p = \bfalse$, we have
+$$\begin{eqnarray*}
+ &   & \bif{p}{a}{\bif{p}{b}{c}} \\
+ & = & \bif{p}{a}{\bif{\bfalse}{b}{c}} \\
+ & = & \bif{p}{a}{c}
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_if_prune :: (Equal a)
+>   => a -> Test (Bool -> a -> a -> a -> Bool)
+> _test_if_prune _ =
+>   testName "if(p,if(p,a,b),c) == if(p,a,c) == if(p,a,if(p,b,c))" $
+>   \p a b c ->
+>     and
+>       (eq (ifThenElse p (ifThenElse p a b) c) (ifThenElse p a c))
+>       (eq (ifThenElse p a (ifThenElse p b c)) (ifThenElse p a c))
+
 </p></div>
 </div>
 
@@ -551,6 +611,9 @@ Now that we've algebraified truth values, we will also algebraify equality. Typi
 
 > class Equal a where
 >   eq :: a -> a -> Bool
+> 
+>   neq :: a -> a -> Bool
+>   neq x y = not (eq x y)
 
 (Why not use the built in `Eq` class? No good reason.) For example, here is the ``Equal`` instance for ``Bool``:
 
@@ -603,8 +666,9 @@ One of our main uses for ``Bool`` will be checking the results of tests, so this
 And the suite:
 
 > -- run all tests for booleans
-> _test_boolean :: Int -> Int -> IO ()
-> _test_boolean size num = do
+> _test_boolean :: (Equal a, Arbitrary a, CoArbitrary a, Show a)
+>   => a -> Int -> Int -> IO ()
+> _test_boolean x size num = do
 >   testLabel "Bool"
 > 
 >   let
@@ -631,8 +695,13 @@ And the suite:
 >   runTest args _test_not_or
 >   runTest args _test_and_or
 >   runTest args _test_or_and
+> 
+>   runTest args (_test_if_not x)
+>   runTest args (_test_if_func x)
+>   runTest args (_test_if_nest x)
+>   runTest args (_test_if_prune x)
 
 And ``main``:
 
 > main_boolean :: IO ()
-> main_boolean = _test_boolean 20 100
+> main_boolean = _test_boolean True 20 100
