@@ -63,7 +63,7 @@ We can translate $\elt$ to Haskell directly as follows:
 > elt' :: (List t, Equal a) => a -> t a -> Bool
 > elt' a = foldr False (phi a)
 >   where
->     phi a b p = if a ==== b then True else p
+>     phi a b p = if eq a b then True else p
 
 The next result suggests a more straightforward implementation.
 
@@ -100,7 +100,7 @@ In Haskell:
 > elt :: (List t, Equal a) => a -> t a -> Bool
 > elt a x = case listShape x of
 >   Nil      -> False
->   Cons b w -> if a ==== b
+>   Cons b w -> if eq a b
 >     then True
 >     else elt a w
 
@@ -366,7 +366,7 @@ Here are our property tests for $\elt$:
 >   => t a -> Test (a -> ListOf t a -> Bool)
 > _test_elt_alt _ =
 >   testName "elt'(a,x) == elt(a,x)" $
->   \a x -> (elt a x) ==== (elt' a x)
+>   \a x -> eq (elt a x) (elt' a x)
 > 
 > 
 > _test_elt_nil :: (List t, Equal a)
@@ -376,42 +376,42 @@ Here are our property tests for $\elt$:
 >   \a -> let
 >     nil' = nil `withTypeOf` x
 >   in
->     (elt a nil') ==== False
+>     eq (elt a nil') False
 > 
 > 
 > _test_elt_cat :: (List t, Equal a)
 >   => t a -> Test (a -> ListOf t a -> ListOf t a -> Bool)
 > _test_elt_cat _ =
 >   testName "elt(a,cat(x,y)) == or(elt(a,x),elt(a,y))" $
->   \a x y -> (elt a (cat x y)) ==== ((elt a x) ||| (elt a y))
+>   \a x y -> eq (elt a (cat x y)) (or (elt a x) (elt a y))
 > 
 > 
 > _test_elt_rev :: (List t, Equal a)
 >   => t a -> Test (a -> ListOf t a -> Bool)
 > _test_elt_rev _ =
 >   testName "elt(a,x) == elt(a,rev(x))" $
->   \a x -> (elt a x) ==== (elt a (rev x))
+>   \a x -> eq (elt a x) (elt a (rev x))
 > 
 > 
 > _test_elt_tails :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
 > _test_elt_tails _ =
 >   testName "elt(y,tails(x)) == suffix(y,x)" $
->   \x y -> (elt y (tails x)) ==== (suffix y x)
+>   \x y -> eq (elt y (tails x)) (suffix y x)
 > 
 > 
 > _test_elt_inits :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
 > _test_elt_inits _ =
 >   testName "elt(y,inits(x)) == prefix(y,x)" $
->   \x y -> (elt y (inits x)) ==== (prefix y x)
+>   \x y -> eq (elt y (inits x)) (prefix y x)
 > 
 > 
 > _test_elt_filter_eq :: (List t, Equal a)
 >   => t a -> Test (a -> ListOf t a -> Bool)
 > _test_elt_filter_eq _ =
 >   testName "elt(a,filter(eq(a,-),x)) == false" $
->   \a x -> (elt a (filter (not . eq a) x)) ==== False
+>   \a x -> eq (elt a (filter (not . eq a) x)) False
 
 And the suite:
 

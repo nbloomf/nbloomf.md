@@ -399,14 +399,14 @@ Here are our property tests for $\infix$:
 >   => t a -> Test (ListOf t a -> Bool)
 > _test_infix_nil_left _ =
 >   testName "infix(nil,x) == true" $
->   \x -> (isInfix nil x) ==== True
+>   \x -> eq (isInfix nil x) True
 > 
 > 
 > _test_infix_nil_right :: (List t, Equal a)
 >   => t a -> Test (a -> ListOf t a -> Bool)
 > _test_infix_nil_right _ =
 >   testName "infix(cons(a,x),nil) == false" $
->   \a x -> (isInfix (cons a x) nil) ==== False
+>   \a x -> eq (isInfix (cons a x) nil) False
 > 
 > 
 > _test_infix_cat_right :: (List t, Equal a)
@@ -436,7 +436,7 @@ Here are our property tests for $\infix$:
 >   => t a -> Test (a -> ListOf t a -> Bool)
 > _test_infix_snoc_nil _ =
 >   testName "infix(snoc(a,x),nil) == false" $
->   \a x -> (isInfix (snoc a x) nil) ==== False
+>   \a x -> eq (isInfix (snoc a x) nil) False
 > 
 > 
 > _test_infix_snoc :: (List t, Equal a)
@@ -452,7 +452,7 @@ Here are our property tests for $\infix$:
 >   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
 > _test_infix_rev _ =
 >   testName "infix(rev(x),rev(y)) == infix(x,y)" $
->   \x y -> (isInfix (rev x) (rev y)) ==== (isInfix x y)
+>   \x y -> eq (isInfix (rev x) (rev y)) (isInfix x y)
 > 
 > 
 > _test_infix_cat :: (List t, Equal a)
@@ -466,15 +466,15 @@ Here are our property tests for $\infix$:
 >   => t a -> Test (ListOf t a -> Bool)
 > _test_infix_reflexive _ =
 >   testName "infix(x,x) == true" $
->   \x -> (isInfix x x) ==== True
+>   \x -> eq (isInfix x x) True
 > 
 > 
 > _test_infix_symmetric :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
 > _test_infix_symmetric _ =
 >   testName "infix(x,y) & infix(y,x) ==> eq(x,y)" $
->   \x y -> if (isInfix x y) &&& (isInfix y x)
->     then x ==== y
+>   \x y -> if and (isInfix x y) (isInfix y x)
+>     then eq x y
 >     else True
 > 
 > 
@@ -482,7 +482,7 @@ Here are our property tests for $\infix$:
 >   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
 > _test_infix_transitive _ =
 >   testName "infix(x,y) & infix(y,z) ==> sublist(x,z)" $
->   \x y z -> if (isInfix x y) &&& (isInfix y z)
+>   \x y z -> if and (isInfix x y) (isInfix y z)
 >     then isInfix x z
 >     else True
 > 

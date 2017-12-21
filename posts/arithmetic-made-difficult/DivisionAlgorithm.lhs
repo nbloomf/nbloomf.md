@@ -149,7 +149,7 @@ Here's ``divalg``, ``quo``, and ``rem``:
 > divalg = simpleRec phi mu
 >   where
 >     phi _ = (zero, zero)
->     mu _ b (q,r) = if Nat b ==== Nat (next r)
+>     mu _ b (q,r) = if eq (Nat b) (Nat (next r))
 >       then (next q, zero)
 >       else (q, next r)
 > 
@@ -168,7 +168,7 @@ Property tests:
 > _test_divalg_equality _ =
 >   testName "a == plus(times(q,b),r) where (q,r) = divalg(a,b)" $
 >   \a b -> let (q,r) = divalg a b in
->   a ==== plus (times q b) r
+>   eq a (plus (times q b) r)
 > 
 > 
 > _test_divalg_inequality :: (Natural n)
@@ -183,21 +183,21 @@ Property tests:
 >   => n -> Test (Nat n -> Bool)
 > _test_divalg_zero_left _ =
 >   testName "divalg(0,a) = (0,0)" $
->   \a -> (divalg zero a) ==== (zero, zero)
+>   \a -> eq (divalg zero a) (zero, zero)
 > 
 > 
 > _test_divalg_zero_right :: (Natural n)
 >   => n -> Test (Nat n -> Bool)
 > _test_divalg_zero_right _ =
 >   testName "divalg(a,0) = (0,a)" $
->   \a -> (divalg a zero) ==== (zero, a)
+>   \a -> eq (divalg a zero) (zero, a)
 > 
 > 
 > _test_divalg_one_right :: (Natural n)
 >   => n -> Test (Nat n -> Bool)
 > _test_divalg_one_right _ =
 >   testName "divalg(a,next(0)) = (a,0)" $
->   \a -> (divalg a (next zero)) ==== (a, zero)
+>   \a -> eq (divalg a (next zero)) (a, zero)
 > 
 > 
 > _test_divalg_leq :: (Natural n)
@@ -205,7 +205,7 @@ Property tests:
 > _test_divalg_leq _ =
 >   testName "if leq(a,b) then divalg(a,next(b)) = (0,a)" $
 >   \a b -> if leq a b
->     then (divalg a (next b)) ==== (zero, a)
+>     then eq (divalg a (next b)) (zero, a)
 >     else True
 > 
 > 
@@ -213,7 +213,7 @@ Property tests:
 >   => n -> Test (Nat n -> Nat n -> Bool)
 > _test_divalg_times_left _ =
 >   testName "quo(times(a,next(b)),next(b)) = a" $
->   \a b -> (quo (times a (next b)) (next b)) ==== a
+>   \a b -> eq (quo (times a (next b)) (next b)) a
 > 
 > 
 > _test_divalg_quo :: (Natural n)
@@ -221,7 +221,7 @@ Property tests:
 > _test_divalg_quo _ =
 >   testName "quo(a,b) = q where (q,_) = divalg(a,b)" $
 >   \a b -> let (q,_) = divalg a b in
->   q ==== quo a b
+>   eq q (quo a b)
 > 
 > 
 > _test_divalg_rem :: (Natural n)
@@ -229,7 +229,7 @@ Property tests:
 > _test_divalg_rem _ =
 >   testName "rem(a,b) = r where (_,r) = divalg(a,b)" $
 >   \a b -> let (_,r) = divalg a b in
->   r ==== rem a b
+>   eq r (rem a b)
 
 And the suite:
 

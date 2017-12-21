@@ -396,33 +396,33 @@ Here are our property tests for $\unique$:
 >   => t a -> Test (ListOf t a -> Bool)
 > _test_unique_alt _ =
 >   testName "unique'(x) == unique(x)" $
->    \x -> (unique x) ==== (unique' x)
+>    \x -> eq (unique x) (unique' x)
 > 
 > 
 > _test_unique_rev :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> Bool)
 > _test_unique_rev _ =
 >   testName "unique(x) == unique(rev(x))" $
->    \x -> (unique x) ==== (unique (rev x))
+>    \x -> eq (unique x) (unique (rev x))
 > 
 > 
 > _test_unique_sublist :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
 > _test_unique_sublist _ =
 >   testName "unique(x) & sublist(y,x) ==> unique(y)" $
->    \x y -> if (unique x) &&& (sublist y x)
->      then (unique y) ==== True
+>    \x y -> if and (unique x) (sublist y x)
+>      then eq (unique y) True
 >      else True
 > 
 > 
 > _test_unique_select_two :: (List t, Equal a, Natural n)
 >   => t a -> n -> Test (ListOf t a -> Bool)
 > _test_unique_select_two _ n =
->   testName "unique(x) ==== unique(select(next(next(zero)),x))" $
+>   testName "unique(x) == unique(select(next(next(zero)),x))" $
 >    let
 >      two = next (next zero) `withTypeOf` n
 >    in
->      \x -> (unique x) ==== (all unique (select two x))
+>      \x -> eq (unique x) (all unique (select two x))
 
 And the suite:
 

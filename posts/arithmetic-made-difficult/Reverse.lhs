@@ -542,7 +542,7 @@ Here are our property tests.
 >   => t a -> Test (a -> a -> ListOf t a -> Bool)
 > _test_snoc_cons_commute _ =
 >   testName "snoc(a,cons(b,x)) == cons(b,snoc(a,x))" $
->   \a b x -> (snoc a (cons b x)) ==== (cons b (snoc a x))
+>   \a b x -> eq (snoc a (cons b x)) (cons b (snoc a x))
 > 
 > 
 > _test_rev_single :: (List t, Equal a)
@@ -552,7 +552,7 @@ Here are our property tests.
 >   \a -> let
 >     nil' = nil `withTypeOf` (ListOf z)
 >   in
->     (rev (cons a nil')) ==== (cons a nil')
+>     eq (rev (cons a nil')) (cons a nil')
 > 
 > 
 > _test_rev_double :: (List t, Equal a)
@@ -571,28 +571,28 @@ Here are our property tests.
 >   => t a -> Test (a -> a -> ListOf t a -> Bool)
 > _test_rev_snoc _ =
 >   testName "rev(snoc(a,x)) == cons(a,rev(x))" $
->   \a b x -> (rev (snoc a x)) ==== (cons a (rev x))
+>   \a b x -> eq (rev (snoc a x)) (cons a (rev x))
 > 
 > 
 > _test_rev_involution :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> Bool)
 > _test_rev_involution _ =
 >   testName "rev(rev(x)) == x" $
->   \x -> (rev (rev x)) ==== x
+>   \x -> eq (rev (rev x)) x
 > 
 > 
 > _test_rev_isnil_cons :: (List t, Equal a)
 >   => t a -> Test (a -> ListOf t a -> Bool)
 > _test_rev_isnil_cons _ =
 >   testName "isnil(rev(cons(a,x))) == false" $
->   \a x -> (isNil (rev (cons a x))) ==== False
+>   \a x -> eq (isNil (rev (cons a x))) False
 > 
 > 
 > _test_rev_alt :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> Bool)
 > _test_rev_alt _ =
 >   testName "rev(x) == rev'(x)" $
->   \x -> (rev x) ==== (rev' x)
+>   \x -> eq (rev x) (rev' x)
 
 And the suite:
 

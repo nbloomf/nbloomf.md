@@ -45,7 +45,8 @@ test-suite amd-times
   main-is:       Times.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options:   -main-is Times.main_times
-  other-modules: Booleans, NaturalNumbers, Unary, Plus, SimpleRecursion
+  other-modules: Booleans, NaturalNumbers, Unary, Plus, SimpleRecursion,
+                 Equals, BailoutRecursion
 
 test-suite amd-minus
   type:          exitcode-stdio-1.0
@@ -148,7 +149,7 @@ test-suite amd-choose
   ghc-options:   -main-is Choose.main_choose
   other-modules: Booleans, LessThanOrEqualTo, Minus, Plus,
                  NaturalNumbers, Times, Unary, SimpleRecursion,
-                 BailoutRecursion, Equals
+                 BailoutRecursion, Equals, MutatingRecursion
 
 test-suite amd-rev
   type:          exitcode-stdio-1.0
@@ -212,7 +213,7 @@ test-suite amd-zip
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
-                 Tuples, Length
+                 Tuples, Length, Equals, BailoutRecursion, SimpleRecursion
 
 test-suite amd-unzip
   type:          exitcode-stdio-1.0
@@ -222,7 +223,8 @@ test-suite amd-unzip
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
-                 Tuples, Length, Zip
+                 Tuples, Length, Zip, SimpleRecursion, Equals,
+                 BailoutRecursion
 
 test-suite amd-prefix
   type:          exitcode-stdio-1.0
@@ -354,7 +356,8 @@ test-suite amd-select
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Choose, Sublist,
-                 Equals, SimpleRecursion, BailoutRecursion
+                 Equals, SimpleRecursion, BailoutRecursion,
+                 MutatingRecursion
 
 test-suite amd-unique
   type:          exitcode-stdio-1.0
@@ -367,7 +370,8 @@ test-suite amd-unique
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Choose,
-                 Sublist
+                 Sublist, SimpleRecursion, Equals, BailoutRecursion,
+                 MutatingRecursion
 
 test-suite amd-delete
   type:          exitcode-stdio-1.0
@@ -381,7 +385,7 @@ test-suite amd-delete
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Choose,
                  Sublist, Unique, SimpleRecursion, Equals,
-                 BailoutRecursion
+                 BailoutRecursion, MutatingRecursion
 
 test-suite amd-dedupe
   type:          exitcode-stdio-1.0
@@ -395,7 +399,7 @@ test-suite amd-dedupe
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Delete,
                  Choose, Sublist, Unique, SimpleRecursion,
-                 BailoutRecursion, Equals
+                 BailoutRecursion, Equals, MutatingRecursion
 
 test-suite amd-take-drop
   type:          exitcode-stdio-1.0
@@ -409,7 +413,7 @@ test-suite amd-take-drop
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Delete,
                  Dedupe, Choose, Sublist, Unique, Equals,
-                 SimpleRecursion, BailoutRecursion
+                 SimpleRecursion, BailoutRecursion, MutatingRecursion
 
 test-suite amd-takebut-dropbut
   type:          exitcode-stdio-1.0
@@ -423,7 +427,7 @@ test-suite amd-takebut-dropbut
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Delete,
                  Dedupe, Choose, Sublist, Unique, TakeAndDrop,
-                 Equals, SimpleRecursion, BailoutRecursion
+                 Equals, SimpleRecursion, BailoutRecursion, MutatingRecursion
 
 test-suite amd-takewhile-dropwhile
   type:          exitcode-stdio-1.0
@@ -437,4 +441,4 @@ test-suite amd-takewhile-dropwhile
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Delete,
                  Dedupe, Choose, Sublist, Unique, Equals,
-                 SimpleRecursion, BailoutRecursion
+                 SimpleRecursion, BailoutRecursion, MutatingRecursion

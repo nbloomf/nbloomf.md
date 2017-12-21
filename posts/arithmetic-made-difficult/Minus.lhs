@@ -209,28 +209,28 @@ And some properties. Some of these are less nice because ``minus`` returns a ``M
 >   => n -> Test (Nat n -> Nat n -> Bool)
 > _test_minus_next _ =
 >   testName "minus(next(a),next(b)) == minus(a,b)" $
->   \a b -> (minus (next a) (next b)) ==== (minus a b)
+>   \a b -> eq (minus (next a) (next b)) (minus a b)
 > 
 > 
 > _test_minus_zero_left :: (Natural n)
 >   => n -> Test (Nat n -> Bool)
 > _test_minus_zero_left _ =
 >   testName "minus(0,next(a)) == *" $
->   \a -> (minus zero (next a)) ==== Nothing
+>   \a -> eq (minus zero (next a)) Nothing
 > 
 > 
 > _test_minus_zero_right :: (Natural n)
 >   => n -> Test (Nat n -> Bool)
 > _test_minus_zero_right _ =
 >   testName "minus(a,0) == a" $
->   \a -> (minus a zero) ==== Just a
+>   \a -> eq (minus a zero) (Just a)
 > 
 > 
 > _test_minus_plus :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Bool)
 > _test_minus_plus _ =
 >   testName "minus(plus(a,b),b) == a" $
->   \a b -> (minus (plus a b) b) ==== Just a
+>   \a b -> eq (minus (plus a b) b) (Just a)
 > 
 > 
 > _test_minus_next_left :: (Natural n)
@@ -238,7 +238,7 @@ And some properties. Some of these are less nice because ``minus`` returns a ``M
 > _test_minus_next_left _ =
 >   testName "minus(b,a) == c ==> minus(next(b),a) == next(c)" $
 >   \a b -> case minus b a of
->     Just c  -> (minus (next b) a) ==== Just (next c)
+>     Just c  -> eq (minus (next b) a) (Just (next c))
 >     Nothing -> True
 > 
 > 
@@ -247,7 +247,7 @@ And some properties. Some of these are less nice because ``minus`` returns a ``M
 > _test_minus_swap _ =
 >   testName "minus(b,a) == c ==> minus(b,c) == a" $
 >   \a b -> case minus b a of
->     Just c  -> minus b c ==== Just a
+>     Just c  -> eq (minus b c) (Just a)
 >     Nothing -> True
 
 And a suite:

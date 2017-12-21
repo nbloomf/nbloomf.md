@@ -61,7 +61,7 @@ Let's give ``Natural`` a test drive. :) Here's a test of one simple property of 
 > -- eq(a,a) == True
 > _test_eq_reflexive :: (Natural n) => n -> Nat n -> Bool
 > _test_eq_reflexive _ a =
->   (eq a a) ==== True
+>   eq (eq a a) True
 
 And a test wrapper:
 

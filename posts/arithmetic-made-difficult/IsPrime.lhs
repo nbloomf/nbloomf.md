@@ -177,7 +177,7 @@ Here's ``mindiv`` and ``prime``:
 > prime :: (Natural n, Equal n) => n -> Bool
 > prime a = if leq a (next zero)
 >   then False
->   else a ==== mindiv a
+>   else eq a (mindiv a)
 
 Property tests:
 
@@ -185,16 +185,16 @@ Property tests:
 >   => n -> Test (Nat n -> Bool)
 > _test_mindiv_div _ =
 >   testName "div(mindiv(a),a) == true" $
->   \a -> (div (mindiv a) a) ==== True
+>   \a -> eq (div (mindiv a) a) True
 > 
 > 
 > _test_prime_mindiv :: (Natural n)
 >   => n -> Test (Nat n -> Bool)
 > _test_prime_mindiv _ =
 >   testName "prime(mindiv(a)) == true" $
->   \a -> if (a ==== zero) ||| (a ==== next zero)
+>   \a -> if or (eq a zero) (eq a (next zero))
 >     then True
->     else (prime (mindiv a)) ==== True
+>     else eq (prime (mindiv a)) True
 
 And the suite:
 

@@ -151,35 +151,35 @@ We've proved a bunch of properties for ``plus``, but it's still a good idea to v
 >   => t -> Test (Nat t -> Bool)
 > _test_plus_zero _ =
 >   testName "a == plus(a,0) and a == plus(0,a)" $
->   \a -> (a ==== plus a zero) &&& (a ==== plus zero a)
+>   \a -> and (eq a (plus a zero)) (eq a (plus zero a))
 > 
 > 
 > _test_plus_next_left :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Bool)
 > _test_plus_next_left _ =
 >   testName "next(plus(a,b)) == plus(next(a),b)" $
->   \a b -> (next (plus a b)) ==== (plus (next a) b)
+>   \a b -> eq (next (plus a b)) (plus (next a) b)
 > 
 > 
 > _test_plus_next_right :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Bool)
 > _test_plus_next_right _ =
 >   testName "next(plus(a,b)) == plus(a,next(b))" $
->   \a b -> (next (plus a b)) ==== (plus a (next b))
+>   \a b -> eq (next (plus a b)) (plus a (next b))
 > 
 > 
 > _test_plus_associative :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
 > _test_plus_associative _ =
 >   testName "plus(plus(a,b),c) == plus(a,plus(b,c))" $
->   \a b c -> (plus (plus a b) c) ==== (plus a (plus b c))
+>   \a b c -> eq (plus (plus a b) c) (plus a (plus b c))
 > 
 > 
 > _test_plus_commutative :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Bool)
 > _test_plus_commutative _ =
 >   testName "plus(a,b) == plus(b,a)" $
->   \a b -> (plus a b) ==== (plus b a)
+>   \a b -> eq (plus a b) (plus b a)
 
 We'll wrap all these tests behind a single function, ``_test_plus``, which takes the number of cases to check as an argument.
 

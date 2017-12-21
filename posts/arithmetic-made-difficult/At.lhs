@@ -92,7 +92,7 @@ In Haskell:
 > at x k = bailoutRec phi beta psi omega k x
 >   where
 >     phi   _   = Nothing
->     beta  k x = isZero k ||| isNil x
+>     beta  k x = or (isZero k) (isNil x)
 >     psi   _ x = head x
 >     omega _ x = tail x
 
@@ -521,7 +521,7 @@ Here are our property tests for $\at$.
 >   \m -> let
 >     nil' = nil `withTypeOf` z
 >   in
->     (at nil' m) ==== Nothing
+>     eq (at nil' m) Nothing
 > 
 > 
 > _test_at_single :: (List t, Equal a, Natural n)
@@ -532,7 +532,7 @@ Here are our property tests for $\at$.
 >     nil'  = nil  `withTypeOf` z
 >     zero' = zero `withTypeOf` n
 >   in
->     (at (cons a nil') (next zero')) ==== Just a
+>     eq (at (cons a nil') (next zero')) (Just a)
 > 
 > 
 > _test_at_double :: (List t, Equal a, Natural n)
@@ -543,14 +543,14 @@ Here are our property tests for $\at$.
 >     nil'  = nil  `withTypeOf` z
 >     zero' = zero `withTypeOf` n
 >   in
->     (at (cons a (cons b nil')) (next (next zero'))) ==== Just b
+>     eq (at (cons a (cons b nil')) (next (next zero'))) (Just b)
 > 
 > 
 > _test_at_next_next_cons :: (List t, Equal a, Natural n)
 >   => t a -> n -> Test (ListOf t a -> a -> Nat n -> Bool)
 > _test_at_next_next_cons z _ =
 >   testName "at(cons(a,x),next(next(k))) == at(x,next(k))" $
->   \x a k -> (at (cons a x) (next (next k))) ==== (at x (next k))
+>   \x a k -> eq (at (cons a x) (next (next k))) (at x (next k))
 > 
 > 
 > _test_at_length_rev :: (List t, Equal a, Natural n)
@@ -560,7 +560,7 @@ Here are our property tests for $\at$.
 >   \x -> let
 >     lx = length x `withTypeOf` n
 >   in
->     (at x lx) ==== (head (rev x))
+>     eq (at x lx) (head (rev x))
 > 
 > 
 > _test_at_range :: (List t, Equal a, Natural n)
@@ -570,11 +570,11 @@ Here are our property tests for $\at$.
 >   \x k -> let
 >     lx = length x `withTypeOf` Nat n
 >   in
->     if (not (isZero k)) &&& (leq k lx)
+>     if and (not (isZero k)) (leq k lx)
 >       then case at x k of
 >         Just _  -> True
 >         Nothing -> False
->       else (at x k) ==== Nothing
+>       else eq (at x k) Nothing
 > 
 > 
 > _test_at_snoc :: (List t, Equal a, Natural n)
@@ -585,7 +585,7 @@ Here are our property tests for $\at$.
 >     lx = length x `withTypeOf` Nat n
 >   in
 >     if leq k lx
->       then (at (snoc a x) k) ==== (at x k)
+>       then eq (at (snoc a x) k) (at x k)
 >       else True
 > 
 > 
@@ -597,7 +597,7 @@ Here are our property tests for $\at$.
 >     lx = length x `withTypeOf` Nat n
 >   in
 >     if leq k lx
->       then (at (cat x y) k) ==== (at x k)
+>       then eq (at (cat x y) k) (at x k)
 >       else True
 > 
 > 
@@ -612,7 +612,7 @@ Here are our property tests for $\at$.
 >       then True
 >       else
 >         let Just m = minus k lx in
->         (at (cat x y) k) ==== (at y m)
+>         eq (at (cat x y) k) (at y m)
 > 
 > 
 > _test_at_rev :: (List t, Equal a, Natural n)
@@ -623,7 +623,7 @@ Here are our property tests for $\at$.
 >     lx = (length x) `withTypeOf` n
 >   in
 >     case minus (next (length x)) u of
->       Just v  -> (at x u) ==== (at (rev x) v)
+>       Just v  -> eq (at x u) (at (rev x) v)
 >       Nothing -> True
 
 And the suite:

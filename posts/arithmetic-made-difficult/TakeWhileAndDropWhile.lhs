@@ -73,7 +73,7 @@ In Haskell:
 > takeWhile' :: (List t) => (a -> Bool) -> t a -> t a
 > takeWhile' p = foldr nil phi
 >   where
->     phi a x = if (p a) ==== True
+>     phi a x = if eq (p a) True
 >       then cons a x
 >       else nil
 
@@ -113,7 +113,7 @@ In Haskell:
 > takeWhile :: (List t) => (a -> Bool) -> t a -> t a
 > takeWhile p z = case listShape z of
 >   Nil      -> nil
->   Cons a x -> if p a ==== True
+>   Cons a x -> if eq (p a) True
 >     then cons a (takeWhile p x)
 >     else nil
 
@@ -253,7 +253,7 @@ In Haskell:
 > dropWhile', dropWhile :: (List t) => (a -> Bool) -> t a -> t a
 > dropWhile' p x = foldr id phi x x
 >   where
->     phi a f x = if (p a) ==== True
+>     phi a f x = if eq (p a) True
 >       then f (tail x)
 >       else x
 > 
@@ -352,21 +352,21 @@ Here are our property tests for $\takeWhile$:
 >   => t a -> Test ((a -> Bool) -> ListOf t a -> Bool)
 > _test_takeWhile_alt _ =
 >   testName "takeWhile(p,x) == takeWhile'(p,x)" $
->   \p x -> (takeWhile p x) ==== (takeWhile' p x)
+>   \p x -> eq (takeWhile p x) (takeWhile' p x)
 > 
 > 
 > _test_takeWhile_prefix :: (List t, Equal a)
 >   => t a -> Test ((a -> Bool) -> ListOf t a -> Bool)
 > _test_takeWhile_prefix _ =
 >   testName "prefix(takeWhile(p,x),x) == true" $
->   \p x -> prefix (takeWhile p x) x ==== True
+>   \p x -> eq (prefix (takeWhile p x) x) True
 > 
 > 
 > _test_takeWhile_idempotent :: (List t, Equal a)
 >   => t a -> Test ((a -> Bool) -> ListOf t a -> Bool)
 > _test_takeWhile_idempotent _ =
 >   testName "takeWhile(p,takeWhile(p,x)) == takeWhile(p,x)" $
->   \p x -> (takeWhile p (takeWhile p x)) ==== (takeWhile p x)
+>   \p x -> eq (takeWhile p (takeWhile p x)) (takeWhile p x)
 > 
 > 
 > _test_takeWhile_commutes :: (List t, Equal a)
@@ -374,7 +374,7 @@ Here are our property tests for $\takeWhile$:
 > _test_takeWhile_commutes _ =
 >   testName "takeWhile(p,takeWhile(q,x)) == takeWhile(q,takeWhile(p,x))" $
 >   \p q x ->
->     (takeWhile p (takeWhile q x)) ==== (takeWhile q (takeWhile p x))
+>     eq (takeWhile p (takeWhile q x)) (takeWhile q (takeWhile p x))
 
 And for $\dropBut$:
 
@@ -382,7 +382,7 @@ And for $\dropBut$:
  >   => t a -> k -> Test (Nat k -> ListOf t a -> Bool)
  > _test_dropWhile_suffix _ _ =
  >   testName "suffix(dropBut(k,x),x) == true" $
- >   \k x -> suffix (dropBut k x) x ==== True
+ >   \k x -> eq (suffix (dropBut k x) x) True
 
 And for both:
 
@@ -390,7 +390,7 @@ And for both:
  >   => t a -> k -> Test (Nat k -> ListOf t a -> Bool)
  > _test_takeWhile_dropWhile_cat _ _ =
  >   testName "cat(takeBut(k,x),dropBut(k,x)) == x" $
- >   \k x -> (cat (takeBut k x) (dropBut k x)) ==== x
+ >   \k x -> eq (cat (takeBut k x) (dropBut k x)) x
 
 And the suite:
 

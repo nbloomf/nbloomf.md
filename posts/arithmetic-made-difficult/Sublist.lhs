@@ -835,14 +835,14 @@ Here are our property tests for $\sublist$:
 >   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
 > _test_sublist_alt _ =
 >   testName "sublist'(x,y) == sublist(x,y)" $
->   \x y -> (sublist' x y) ==== (sublist x y)
+>   \x y -> eq (sublist' x y) (sublist x y)
 > 
 > 
 > _test_sublist_cons :: (List t, Equal a)
 >   => t a -> Test (a -> ListOf t a -> ListOf t a -> Bool)
 > _test_sublist_cons _ =
 >   testName "sublist(x,y) == sublist(cons(a,x),cons(a,y))" $
->   \a x y -> (sublist (cons a x) (cons a y)) ==== (sublist x y)
+>   \a x y -> eq (sublist (cons a x) (cons a y)) (sublist x y)
 > 
 > 
 > _test_sublist_cons_left :: (List t, Equal a)
@@ -867,21 +867,21 @@ Here are our property tests for $\sublist$:
 >   => t a -> Test (ListOf t a -> Bool)
 > _test_sublist_reflexive _ =
 >   testName "sublist(x,x) == true" $
->   \x -> (sublist x x) ==== True
+>   \x -> eq (sublist x x) True
 > 
 > 
 > _test_sublist_antisymmetric :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
 > _test_sublist_antisymmetric _ =
 >   testName "sublist(x,y) & sublist(y,x) ==> eq(x,y)" $
->   \x y -> ((sublist x y) &&& (sublist y x)) ==== (eq x y)
+>   \x y -> eq (and (sublist x y) (sublist y x)) (eq x y)
 > 
 > 
 > _test_sublist_transitive :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
 > _test_sublist_transitive _ =
 >   testName "sublist(x,y) & sublist(y,z) ==> sublist(x,z)" $
->   \x y z -> if (sublist x y) &&& (sublist y z)
+>   \x y z -> if and (sublist x y) (sublist y z)
 >     then sublist x z
 >     else True
 > 
@@ -890,14 +890,14 @@ Here are our property tests for $\sublist$:
 >   => t a -> Test (a -> ListOf t a -> Bool)
 > _test_sublist_snoc_nil _ =
 >   testName "sublist(snoc(a,x),nil) == false" $
->   \a x -> (sublist (snoc a x) nil) ==== False
+>   \a x -> eq (sublist (snoc a x) nil) False
 > 
 > 
 > _test_sublist_rev :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
 > _test_sublist_rev _ =
 >   testName "sublist(x,y) == sublist(rev(x),rev(y))" $
->   \x y -> (sublist x y) ==== (sublist (rev x) (rev y))
+>   \x y -> eq (sublist x y) (sublist (rev x) (rev y))
 > 
 > 
 > _test_sublist_cat_left :: (List t, Equal a)
@@ -922,7 +922,7 @@ Here are our property tests for $\sublist$:
 >   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool)
 > _test_sublist_cat _ =
 >   testName "sublist(x,y) & sublist(u,v) ==> sublist(cat(x,u),cat(y,v))" $
->   \x y u v -> if (sublist x y) &&& (sublist u v)
+>   \x y u v -> if and (sublist x y) (sublist u v)
 >     then sublist (cat x u) (cat y v)
 >     else True
 

@@ -159,6 +159,15 @@ div.result div.proof p:first-child:before {
   font-style: italic;
 }
 
+div.result div.test p:first-child:before {
+  content: "Test:\0000a0";
+  font-style: italic;
+}
+
+div.result div.proof li {
+  margin-bottom: 12pt;
+}
+
 span.math.display {
   display: block;
   width: 100%;

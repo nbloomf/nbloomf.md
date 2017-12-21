@@ -652,7 +652,7 @@ Here are our property tests for $\zip$ and $\zipPad$.
 >   => t a -> t b -> Test (ListOf t a -> ListOf t b -> Bool)
 > _test_zip_swap _ _ =
 >   testName "map(swap)(zip(x,y)) == zip(y,x)" $
->   \x y -> (map swap (zip x y)) ==== (zip y x)
+>   \x y -> eq (map swap (zip x y)) (zip y x)
 > 
 > 
 > _test_zip_length :: (List t, Equal a, Equal b, Natural n)
@@ -662,35 +662,35 @@ Here are our property tests for $\zip$ and $\zipPad$.
 >   \x y -> let
 >     lx = length x `withTypeOf` Nat n
 >   in
->     (length (zip x y)) ==== (min lx (length y))
+>     eq (length (zip x y)) (min lx (length y))
 > 
 > 
 > _test_zip_zip_left :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
 > _test_zip_zip_left _ =
 >   testName "zip(zip(x,y),z) == map(assocL)zip(x,zip(y,z))" $
->   \x y z -> (zip (zip x y) z) ==== map assocL (zip x (zip y z))
+>   \x y z -> eq (zip (zip x y) z) (map assocL (zip x (zip y z)))
 > 
 > 
 > _test_zip_zip_right :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
 > _test_zip_zip_right _ =
 >   testName "zip(zip(x,y),z) == map(assocR)zip(x,zip(y,z))" $
->   \x y z -> (zip x (zip y z)) ==== map assocR (zip (zip x y) z)
+>   \x y z -> eq (zip x (zip y z)) (map assocR (zip (zip x y) z))
 > 
 > 
 > _test_zip_alt :: (List t, Equal a, Equal b)
 >   => t a -> t b -> Test (ListOf t a -> ListOf t b -> Bool)
 > _test_zip_alt _ _ =
 >   testName "zip'(x,y) == zip(x,y)" $
->   \x y -> (zip' x y) ==== (zip x y)
+>   \x y -> eq (zip' x y) (zip x y)
 > 
 > 
 > _test_zipPad_swap :: (List t, Equal a, Equal b)
 >   => t a -> t b -> Test (a -> b -> ListOf t a -> ListOf t b -> Bool)
 > _test_zipPad_swap _ _ =
 >   testName "map(swap)(zipPad(u,v)(x,y)) == zipPad(v,u)(y,x)" $
->   \u v x y -> (map swap (zipPad u v x y)) ==== (zipPad v u y x)
+>   \u v x y -> eq (map swap (zipPad u v x y)) (zipPad v u y x)
 > 
 > 
 > _test_zipPad_length :: (List t, Equal a, Equal b, Natural n)
@@ -700,7 +700,7 @@ Here are our property tests for $\zip$ and $\zipPad$.
 >   \u v x y -> let
 >     lx = length x `withTypeOf` Nat n
 >   in
->     (length (zipPad u v x y)) ==== (max lx (length y))
+>     eq (length (zipPad u v x y)) (max lx (length y))
 > 
 > 
 > _test_zipPad_zipPad_left :: (List t, Equal a)
@@ -725,7 +725,7 @@ Here are our property tests for $\zip$ and $\zipPad$.
 >   => t a -> t b -> Test (a -> b -> ListOf t a -> ListOf t b -> Bool)
 > _test_zipPad_alt _ _ =
 >   testName "zipPad'(x,y) == zipPad(x,y)" $
->   \u v x y -> (zipPad' u v x y) ==== (zipPad u v x y)
+>   \u v x y -> eq (zipPad' u v x y) (zipPad u v x y)
 
 And the suite:
 

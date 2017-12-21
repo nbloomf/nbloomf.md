@@ -12,6 +12,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >
 > import Booleans
 > import NaturalNumbers
+> import MutatingRecursion
 > import Plus
 > import LessThanOrEqualTo
 > 
@@ -234,7 +235,7 @@ Property tests:
 >   => n -> Test (Nat n -> Nat n -> Bool)
 > _test_choose_alt _ =
 >   testName "choose(n,k) == choose'(n,k)" $
->   \n k -> (choose n k) ==== (choose' n k)
+>   \n k -> eq (choose n k) (choose' n k)
 > 
 > 
 > _test_choose_zero_left :: (Natural n)
@@ -242,22 +243,22 @@ Property tests:
 > _test_choose_zero_left _ =
 >   testName "choose(0,k) == if k==0 then 0 else 1" $
 >   \k -> if isZero k
->     then (choose zero k) ==== (next zero)
->     else (choose zero k) ==== (zero)
+>     then eq (choose zero k) (next zero)
+>     else eq (choose zero k) zero
 > 
 > 
 > _test_choose_zero_right :: (Natural n)
 >   => n -> Test (Nat n -> Bool)
 > _test_choose_zero_right _ =
 >   testName "choose(n,0) == 1" $
->   \n -> (choose n zero) ==== (next zero)
+>   \n -> eq (choose n zero) (next zero)
 > 
 > 
 > _test_choose_equal_args :: (Natural n)
 >   => n -> Test (Nat n -> Bool)
 > _test_choose_equal_args _ =
 >   testName "choose(n,n) == 1" $
->   \n -> (choose n n) ==== (next zero)
+>   \n -> eq (choose n n) (next zero)
 > 
 > 
 > _test_choose_plus_plus :: (Natural n)
@@ -274,7 +275,7 @@ Property tests:
 > _test_choose_big_k _ =
 >   testName "leq(next(n),k) ==> choose(n,k) == 0" $
 >   \n k -> if leq (next n) k
->     then (choose n k) ==== zero
+>     then eq (choose n k) zero
 >     else True
 > 
 > 
@@ -282,7 +283,7 @@ Property tests:
 >   => n -> Test (Nat n -> Nat n -> Bool)
 > _test_choose_plus _ =
 >   testName "choose(plus(a,b),a) == choose(plus(a,b),b)" $
->   \a b -> (choose (plus a b) a) ==== (choose (plus a b) b)
+>   \a b -> eq (choose (plus a b) a) (choose (plus a b) b)
 
 And the suite:
 

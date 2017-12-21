@@ -180,7 +180,7 @@ Property tests:
 >   => n -> Test (Nat n -> Bool)
 > _test_div_zero_right _ =
 >   testName "div(a,0) == true" $
->   \a -> (div a zero) ==== True
+>   \a -> eq (div a zero) True
 > 
 > 
 > _test_div_one_left :: (Natural n)
@@ -194,7 +194,7 @@ Property tests:
 >   => n -> Test (Nat n -> Bool)
 > _test_div_reflexive _ =
 >   testName "div(a,a) == true" $
->   \a -> (div a a) ==== True
+>   \a -> eq (div a a) True
 > 
 > 
 > _test_div_times :: (Natural n)

@@ -178,42 +178,42 @@ Property tests:
 >   => n -> Test (Nat n -> Bool)
 > _test_power_zero_right _ =
 >   testName "power(a,0) == 1" $
->   \a -> (power a zero) ==== (next zero)
+>   \a -> eq (power a zero) (next zero)
 > 
 > 
 > _test_power_one_right :: (Natural n)
 >   => n -> Test (Nat n -> Bool)
 > _test_power_one_right _ =
 >   testName "power(a,1) == a" $
->   \a -> (power a (next zero)) ==== a
+>   \a -> eq (power a (next zero)) a
 > 
 > 
 > _test_power_zero_left :: (Natural n)
 >   => n -> Test (Nat n -> Bool)
 > _test_power_zero_left _ =
 >   testName "power(a,0) == 1" $
->   \a -> (power zero (next a)) ==== zero
+>   \a -> eq (power zero (next a)) zero
 > 
 > 
 > _test_power_plus_right :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
 > _test_power_plus_right _ =
 >   testName "power(a,plus(b,c)) == times(power(a,b),power(a,c))" $
->   \a b c -> (power a (plus b c)) ==== times (power a b) (power a c)
+>   \a b c -> eq (power a (plus b c)) (times (power a b) (power a c))
 > 
 > 
 > _test_power_times_right :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
 > _test_power_times_right _ =
 >   testName "power(a,times(b,c)) == power(power(a,b),c)" $
->   \a b c -> (power a (times b c)) ==== power (power a b) c
+>   \a b c -> eq (power a (times b c)) (power (power a b) c)
 > 
 > 
 > _test_power_times_left :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
 > _test_power_times_left _ =
 >   testName "power(times(a,b),c) == times(power(a,c),power(b,c))" $
->   \a b c -> (power (times a b) c) ==== times (power a c) (power b c)
+>   \a b c -> eq (power (times a b) c) (times (power a c) (power b c))
 
 And the suite:
 

@@ -367,63 +367,63 @@ Property tests for ``lcm``:
 >   => n -> Test (Nat n -> Bool)
 > _test_lcm_zero _ =
 >   testName "lcm(a,0) == 0 and lcm(0,a) == 0" $
->   \a -> (zero ==== lcm a zero) &&& (zero ==== lcm zero a)
+>   \a -> and (eq zero (lcm a zero)) (eq zero (lcm zero a))
 > 
 > 
 > _test_lcm_one :: (Natural n)
 >   => n -> Test (Nat n -> Bool)
 > _test_lcm_one _ =
 >   testName "lcm(a,next(0)) == a and lcm(next(0),a) == a" $
->   \a -> (a ==== lcm a (next zero)) &&& (a ==== lcm (next zero) a)
+>   \a -> and (eq a (lcm a (next zero))) (eq a (lcm (next zero) a))
 > 
 > 
 > _test_lcm_div_args :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Bool)
 > _test_lcm_div_args _ =
 >   testName "div(a,lcm(a,b)) and div(b,lcm(a,b))" $
->   \a b -> (div a (lcm a b)) &&& (div b (lcm a b))
+>   \a b -> and (div a (lcm a b)) (div b (lcm a b))
 > 
 > 
 > _test_lcm_idempotent :: (Natural n)
 >   => n -> Test (Nat n -> Bool)
 > _test_lcm_idempotent _ =
 >   testName "lcm(a,a) == a" $
->   \a -> (lcm a a) ==== a
+>   \a -> eq (lcm a a) a
 > 
 > 
 > _test_lcm_commutative :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Bool)
 > _test_lcm_commutative _ =
 >   testName "lcm(a,b) == lcm(b,a)" $
->   \a b -> (lcm a b) ==== (lcm b a)
+>   \a b -> eq (lcm a b) (lcm b a)
 > 
 > 
 > _test_lcm_associative :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
 > _test_lcm_associative _ =
 >   testName "lcm(lcm(a,b),c) == lcm(a,lcm(b,c))" $
->   \a b c -> (lcm (lcm a b) c) ==== (lcm a (lcm b c))
+>   \a b c -> eq (lcm (lcm a b) c) (lcm a (lcm b c))
 > 
 > 
 > _test_lcm_distributive_times :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
 > _test_lcm_distributive_times _ =
 >   testName "lcm(times(c,a),times(c,b)) == times(c,lcm(a,b))" $
->   \a b c -> (lcm (times c a) (times c b)) ==== (times c (lcm a b))
+>   \a b c -> eq (lcm (times c a) (times c b)) (times c (lcm a b))
 > 
 > 
 > _test_lcm_distributive_gcd :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
 > _test_lcm_distributive_gcd _ =
 >   testName "lcm(gcd(c,a),gcd(c,b)) == gcd(c,lcm(a,b))" $
->   \a b c -> (lcm (gcd c a) (gcd c b)) ==== (gcd c (lcm a b))
+>   \a b c -> eq (lcm (gcd c a) (gcd c b)) (gcd c (lcm a b))
 > 
 > 
 > _test_gcd_distributive_lcm :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
 > _test_gcd_distributive_lcm _ =
 >   testName "gcd(lcm(c,a),lcm(c,b)) == lcm(c,gcd(a,b))" $
->   \a b c -> (gcd (lcm c a) (lcm c b)) ==== (lcm c (gcd a b))
+>   \a b c -> eq (gcd (lcm c a) (lcm c b)) (lcm c (gcd a b))
 
 And the suite:
 

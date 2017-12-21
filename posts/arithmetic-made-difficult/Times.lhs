@@ -80,70 +80,70 @@ As with $\nplus$, it's a good idea to test the properties of $\ntimes$.
 >   => n -> Test (Nat n -> Bool)
 > _test_times_zero_left _ =
 >   testName "0 == times(0,a)" $
->   \a -> zero ==== times zero a
+>   \a -> eq zero (times zero a)
 > 
 > 
 > _test_times_zero_right :: (Natural n)
 >   => n -> Test (Nat n -> Bool)
 > _test_times_zero_right _ =
 >   testName "0 == times(a,0)" $
->   \a -> zero ==== times a zero
+>   \a -> eq zero (times a zero)
 > 
 > 
 > _test_times_one_left :: (Natural n)
 >   => n -> Test (Nat n -> Bool)
 > _test_times_one_left _ =
 >   testName "a == times(1,a)" $
->   \a -> a ==== times (next zero) a
+>   \a -> eq a (times (next zero) a)
 > 
 > 
 > _test_times_one_right :: (Natural n)
 >   => n -> Test (Nat n -> Bool)
 > _test_times_one_right _ =
 >   testName "a == times(a,1)" $
->   \a -> a ==== times a (next zero)
+>   \a -> eq a (times a (next zero))
 > 
 > 
 > _test_times_next_left :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Bool)
 > _test_times_next_left _ =
 >   testName "times(next(a),b) == plus(times(a,b),b)" $
->   \a b -> (times (next a) b) ==== (plus (times a b) b)
+>   \a b -> eq (times (next a) b) (plus (times a b) b)
 > 
 > 
 > _test_times_next_right :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Bool)
 > _test_times_next_right _ =
 >   testName "times(a,next(b)) == plus(times(a,b),a)" $
->   \a b -> (times a (next b)) ==== (plus (times a b) a)
+>   \a b -> eq (times a (next b)) (plus (times a b) a)
 > 
 > 
 > _test_times_commutative :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Bool)
 > _test_times_commutative _ =
 >   testName "times(a,b) == times(b,a)" $
->   \a b -> (times a b) ==== (times b a)
+>   \a b -> eq (times a b) (times b a)
 > 
 > 
 > _test_times_distributive_left :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
 > _test_times_distributive_left _ =
 >   testName "times(a,plus(b,c)) == plus(times(a,b),times(a,c))" $
->   \a b c -> (times a (plus b c)) ==== (plus (times a b) (times a c))
+>   \a b c -> eq (times a (plus b c)) (plus (times a b) (times a c))
 > 
 > 
 > _test_times_distributive_right :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
 > _test_times_distributive_right _ =
 >   testName "times(plus(a,b),c) == plus(times(a,c),times(b,c))" $
->   \a b c -> (times (plus a b) c) ==== (plus (times a c) (times b c))
+>   \a b c -> eq (times (plus a b) c) (plus (times a c) (times b c))
 > 
 > 
 > _test_times_associative :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
 > _test_times_associative _ =
 >   testName "times(times(a,b),c) == times(a,times(b,c))" $
->   \a b c -> (times (times a b) c) ==== (times a (times b c))
+>   \a b c -> eq (times (times a b) c) (times a (times b c))
 
 And one function to rule them all:
 

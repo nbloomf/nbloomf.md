@@ -238,7 +238,7 @@ Here are our property tests for $\range$.
 >     x = (range a (next b)) `withTypeOf` ListOf (map Nat t)
 >     y = (cons a (range (next a) b))
 >   in
->     x ==== y
+>     eq x y
 > 
 > 
 > _test_range_next_snoc :: (List t, Natural n)
@@ -249,7 +249,7 @@ Here are our property tests for $\range$.
 >     x = (range a (next b)) `withTypeOf` ListOf (map Nat t)
 >     y = (snoc (plus a b) (range a b))
 >   in
->     x ==== y
+>     eq x y
 > 
 > 
 > _test_range_plus_right :: (List t, Natural n)
@@ -260,7 +260,7 @@ Here are our property tests for $\range$.
 >     x = (range a (plus b c)) `withTypeOf` ListOf (map Nat t)
 >     y = (cat (range a b) (range (plus a b) c))
 >   in
->     x ==== y
+>     eq x y
 > 
 > 
 > _test_range_next_left :: (List t, Natural n)
@@ -271,7 +271,7 @@ Here are our property tests for $\range$.
 >     x = (range (next a) b) `withTypeOf` ListOf (map Nat t)
 >     y = (map next (range a b))
 >   in
->     x ==== y
+>     eq x y
 > 
 > 
 > _test_range_plus_left :: (List t, Natural n)
@@ -282,7 +282,7 @@ Here are our property tests for $\range$.
 >     x = (range (plus a b) c) `withTypeOf` ListOf (map Nat t)
 >     y = (map (plus a) (range b c))
 >   in
->     x ==== y
+>     eq x y
 
 And the suite:
 

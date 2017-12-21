@@ -197,14 +197,14 @@ Here are our property tests for $\unzip$.
 >   => t a -> t b -> Test (ListOf t (a,b) -> Bool)
 > _test_unzip_zip _ _ =
 >   testName "zip(unzip(x)) == x" $
->   \x -> ((uncurry zip) (unzip x)) ==== x
+>   \x -> eq ((uncurry zip) (unzip x)) x
 > 
 > 
 > _test_unzip_swap :: (List t, Equal a, Equal b)
 >   => t a -> t b -> Test (ListOf t (a,b) -> Bool)
 > _test_unzip_swap _ _ =
 >   testName "swap(unzip(x)) == unzip(map(swap)(x))" $
->   \x -> (unzip (map swap x)) ==== (swap (unzip x))
+>   \x -> eq (unzip (map swap x)) (swap (unzip x))
 
 And the suite:
 

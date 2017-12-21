@@ -242,7 +242,7 @@ Here are our property tests for $\takeBut$:
 >   => t a -> k -> Test (Nat k -> ListOf t a -> Bool)
 > _test_takeBut_prefix _ _ =
 >   testName "prefix(takeBut(k,x),x) == true" $
->   \k x -> prefix (takeBut k x) x ==== True
+>   \k x -> eq (prefix (takeBut k x) x) True
 
 And for $\dropBut$:
 
@@ -250,14 +250,14 @@ And for $\dropBut$:
 >   => t a -> k -> Test (Nat k -> ListOf t a -> Bool)
 > _test_dropBut_suffix _ _ =
 >   testName "suffix(dropBut(k,x),x) == true" $
->   \k x -> suffix (dropBut k x) x ==== True
+>   \k x -> eq (suffix (dropBut k x) x) True
 > 
 > 
 > _test_dropBut_idempotent :: (List t, Equal a, Natural k)
 >   => t a -> k -> Test (Nat k -> ListOf t a -> Bool)
 > _test_dropBut_idempotent _ _ =
 >   testName "dropBut(k,dropBut(k,x)) == dropBut(k,x)" $
->   \k x -> (dropBut k (dropBut k x)) ==== (dropBut k x)
+>   \k x -> eq (dropBut k (dropBut k x)) (dropBut k x)
 
 And for both:
 
@@ -265,7 +265,7 @@ And for both:
 >   => t a -> k -> Test (Nat k -> ListOf t a -> Bool)
 > _test_takeBut_dropBut_cat _ _ =
 >   testName "cat(takeBut(k,x),dropBut(k,x)) == x" $
->   \k x -> (cat (takeBut k x) (dropBut k x)) ==== x
+>   \k x -> eq (cat (takeBut k x) (dropBut k x)) x
 
 And the suite:
 

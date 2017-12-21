@@ -8,7 +8,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > {-# LANGUAGE BangPatterns #-}
 > module NaturalNumbers
 >   ( Natural(..), NatShape(..), Nat(..), Unary()
->   , isZero, prev, naturalRec, mutatingRec
+>   , isZero, prev, naturalRec
 >   ) where
 > 
 > import Booleans
@@ -84,22 +84,7 @@ And note that natural, simple, and primitive recursion can be written against th
 >       Zero   -> x
 >       Next m -> tau (phi x) m
 >   in tau e n
-> 
-> 
-> mutatingRec :: (Natural n)
->   => (a -> b)
->   -> (a -> a)
->   -> (a -> (a -> b) -> b)
->   -> n
->   -> a
->   -> b
-> mutatingRec phi omega chi =
->   let
->     theta n a = case natShape n of
->       Zero   -> phi a
->       Next m -> chi (omega a) (theta m)
-> 
->   in theta
+
 
 From now on we'll use the ``Natural`` interface with ``naturalRec``, ``simpleRec``, ``bailoutRec``, and ``mutatingRec`` instead of ``Unary``.
 

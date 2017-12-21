@@ -80,7 +80,7 @@ Implementation and Testing
 Here's ``coprime``:
 
 > coprime :: (Natural n, Equal n) => n -> n -> Bool
-> coprime a b = (next zero) ==== (gcd a b)
+> coprime a b = eq (next zero) (gcd a b)
 
 Property tests:
 
@@ -93,7 +93,7 @@ Property tests:
 >     b = next y
 >     u = quo a (gcd a b)
 >     v = quo b (gcd a b)
->   in (coprime u v) ==== True
+>   in eq (coprime u v) True
 
 And the suite:
 

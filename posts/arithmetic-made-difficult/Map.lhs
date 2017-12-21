@@ -261,21 +261,21 @@ Here are our property tests for $\map$.
 >   => t a -> Test (ListOf t a -> Bool)
 > _test_map_id _ =
 >   testName "map(id)(x) == x" $
->   \x -> (map id x) ==== x
+>   \x -> eq (map id x) x
 >
 > 
 > _test_map_cat :: (List t, Equal a)
 >   => t a -> Test ((a -> a) -> ListOf t a -> ListOf t a -> Bool)
 > _test_map_cat _ =
 >   testName "map(f)(cat(x,y)) == cat(map(f)(x),map(f)(y))" $
->   \f x y -> (map f (cat x y)) ==== (cat (map f x) (map f y))
+>   \f x y -> eq (map f (cat x y)) (cat (map f x) (map f y))
 >
 > 
 > _test_map_rev :: (List t, Equal a)
 >   => t a -> Test ((a -> a) -> ListOf t a -> Bool)
 > _test_map_rev _ =
 >   testName "map(f)(rev(x)) == rev(map(f)(x))" $
->   \f x -> (map f (rev x)) ==== (rev (map f x))
+>   \f x -> eq (map f (rev x)) (rev (map f x))
 
 And the suite:
 

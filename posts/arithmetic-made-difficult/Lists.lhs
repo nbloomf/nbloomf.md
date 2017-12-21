@@ -447,7 +447,7 @@ as claimed.
 >     (Nil,      Nil     ) -> True
 >     (Nil,      Cons _ _) -> False
 >     (Cons _ _, Nil     ) -> False
->     (Cons a u, Cons b v) -> (eq a b) &&& (eq u v)
+>     (Cons a u, Cons b v) -> and (eq a b) (eq u v)
 
 Another example:
 

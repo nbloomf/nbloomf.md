@@ -261,7 +261,7 @@ Here are our property tests for $\length$.
 >   \a b x -> let
 >     lcx = (length (cons a x)) `withTypeOf` Nat n
 >   in
->     lcx ==== (length (cons b x))
+>     eq lcx (length (cons b x))
 > 
 > 
 > _test_length_cons_snoc :: (List t, Equal a, Natural n)
@@ -271,7 +271,7 @@ Here are our property tests for $\length$.
 >   \a x -> let
 >     lcx = (length (cons a x)) `withTypeOf` Nat n
 >   in
->     lcx ==== (length (snoc a x))
+>     eq lcx (length (snoc a x))
 > 
 > 
 > _test_length_cons_next :: (List t, Equal a, Natural n)
@@ -281,7 +281,7 @@ Here are our property tests for $\length$.
 >   \a x -> let
 >     lx = (length x) `withTypeOf` Nat n
 >   in
->     (length (cons a x)) ==== next lx
+>     eq (length (cons a x)) (next lx)
 > 
 > 
 > _test_length_single :: (List t, Equal a, Natural n)
@@ -292,7 +292,7 @@ Here are our property tests for $\length$.
 >     nil' = nil `withTypeOf` z
 >     one  = (next zero) `withTypeOf` Nat n
 >   in
->     one ==== (length (cons a nil'))
+>     eq one (length (cons a nil'))
 > 
 > 
 > _test_length_double :: (List t, Equal a, Natural n)
@@ -303,7 +303,7 @@ Here are our property tests for $\length$.
 >     nil' = nil `withTypeOf` (ListOf z)
 >     two  = (next (next zero)) `withTypeOf` Nat n
 >   in
->     two ==== (length (cons a (cons b nil')))
+>     eq two (length (cons a (cons b nil')))
 > 
 > 
 > _test_length_snoc_next :: (List t, Equal a, Natural n)
@@ -313,7 +313,7 @@ Here are our property tests for $\length$.
 >   \a x -> let
 >     nlx = (next (length x)) `withTypeOf` Nat n
 >   in
->     nlx ==== (length (snoc a x))
+>     eq nlx (length (snoc a x))
 > 
 > 
 > _test_length_rev :: (List t, Equal a, Natural n)
@@ -323,7 +323,7 @@ Here are our property tests for $\length$.
 >   \x -> let
 >     lx = length x `withTypeOf` Nat n
 >   in
->     lx ==== (length (rev x))
+>     eq lx (length (rev x))
 > 
 > 
 > _test_length_cat :: (List t, Equal a, Natural n)
@@ -333,7 +333,7 @@ Here are our property tests for $\length$.
 >   \x y -> let
 >     lxy = (length (cat x y)) `withTypeOf` Nat n
 >   in
->     lxy ==== (plus (length x) (length y))
+>     eq lxy (plus (length x) (length y))
 
 And the suite:
 

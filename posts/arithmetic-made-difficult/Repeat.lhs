@@ -224,7 +224,7 @@ Here are our property tests for $\repeat$:
 >  \k a -> let
 >    rna = repeat k a `withTypeOf` ListOf t
 >  in
->    (repeat' k a) ==== rna
+>    eq (repeat' k a) rna
 > 
 > 
 > _test_repeat_length :: (List t, Equal a, Natural n)
@@ -234,7 +234,7 @@ Here are our property tests for $\repeat$:
 >  \k a -> let
 >    rka = repeat k a `withTypeOf` ListOf t
 >  in
->    (length rka) ==== k
+>    eq (length rka) k
 > 
 > 
 > _test_repeat_map :: (List t, Equal a, Equal b, Natural n)
@@ -244,7 +244,7 @@ Here are our property tests for $\repeat$:
 >  \f k a -> let
 >    rka = repeat k a `withTypeOf` ListOf t
 >  in
->    (repeat k (f a)) ==== (map f rka)
+>    eq (repeat k (f a)) (map f rka)
 > 
 > 
 > _test_repeat_plus :: (List t, Equal a, Natural n)
@@ -254,7 +254,7 @@ Here are our property tests for $\repeat$:
 >  \m n a -> let
 >    rma = repeat m a `withTypeOf` ListOf t
 >  in
->    (repeat (plus m n) a) ==== (cat rma (repeat n a))
+>    eq (repeat (plus m n) a) (cat rma (repeat n a))
 > 
 > 
 > _test_repeat_snoc :: (List t, Equal a, Natural n)
@@ -264,7 +264,7 @@ Here are our property tests for $\repeat$:
 >  \n a -> let
 >    rna = repeat n a `withTypeOf` ListOf t
 >  in
->    (snoc a rna) ==== (repeat (next n) a)
+>    eq (snoc a rna) (repeat (next n) a)
 > 
 > 
 > _test_repeat_rev :: (List t, Equal a, Natural n)
@@ -274,7 +274,7 @@ Here are our property tests for $\repeat$:
 >  \n a -> let
 >    rna = repeat n a `withTypeOf` ListOf t
 >  in
->    (rev rna) ==== rna
+>    eq (rev rna) rna
 
 And the suite:
 

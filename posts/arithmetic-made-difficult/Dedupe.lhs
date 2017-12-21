@@ -351,35 +351,35 @@ Here are our property tests for $\dedupeL$ and $\dedupeR$:
 >   => t a -> Test (ListOf t a -> Bool)
 > _test_dedupeL_alt _ =
 >   testName "dedupeL(x) == dedupeL'(x)" $
->   \x -> (dedupeL x) ==== (dedupeL' x)
+>   \x -> eq (dedupeL x) (dedupeL' x)
 > 
 > 
 > _test_dedupeL_unique :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> Bool)
 > _test_dedupeL_unique _ =
 >   testName "unique(dedupeL(x)) == true" $
->   \x -> (unique (dedupeL x)) ==== True
+>   \x -> eq (unique (dedupeL x)) True
 > 
 > 
 > _test_dedupeL_delete :: (List t, Equal a)
 >   => t a -> Test (a -> ListOf t a -> Bool)
 > _test_dedupeL_delete _ =
 >   testName "dedupeL(delete(a,x)) == delete(a,dedupeL(x))" $
->   \a x -> (dedupeL (delete a x)) ==== (delete a (dedupeL x))
+>   \a x -> eq (dedupeL (delete a x)) (delete a (dedupeL x))
 > 
 > 
 > _test_dedupeL_idempotent :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> Bool)
 > _test_dedupeL_idempotent _ =
 >   testName "dedupeL(dedupeL(x)) == dedupeL(x)" $
->   \x -> (dedupeL (dedupeL x)) ==== (dedupeL x)
+>   \x -> eq (dedupeL (dedupeL x)) (dedupeL x)
 > 
 > 
 > _test_dedupeL_eq_unique :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> Bool)
 > _test_dedupeL_eq_unique _ =
 >   testName "eq(x,dedupeL(x)) == unique(x)" $
->   \x -> (eq x (dedupeL x)) ==== (unique x)
+>   \x -> eq (eq x (dedupeL x)) (unique x)
 > 
 > 
 > _test_dedupeL_prefix :: (List t, Equal a)
@@ -395,14 +395,14 @@ Here are our property tests for $\dedupeL$ and $\dedupeR$:
 >   => t a -> Test (ListOf t a -> Bool)
 > _test_dedupeR_unique _ =
 >   testName "unique(dedupeR(x)) == true" $
->   \x -> (unique (dedupeR x)) ==== True
+>   \x -> eq (unique (dedupeR x)) True
 > 
 > 
 > _test_dedupeR_idempotent :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> Bool)
 > _test_dedupeR_idempotent _ =
 >   testName "dedupeR(dedupeR(x)) == dedupeR(x)" $
->   \x -> (dedupeR (dedupeR x)) ==== (dedupeR x)
+>   \x -> eq (dedupeR (dedupeR x)) (dedupeR x)
 
 And the suite:
 

@@ -381,63 +381,63 @@ Property tests for ``gcd``:
 >   => n -> Test (Nat n -> Bool)
 > _test_gcd_zero _ =
 >   testName "gcd(a,0) == a and gcd(0,a) == a" $
->   \a -> (a ==== gcd a zero) &&& (a ==== gcd zero a)
+>   \a -> and (eq a (gcd a zero)) (eq a (gcd zero a))
 > 
 > 
 > _test_gcd_one_right :: (Natural n)
 >   => n -> Test (Nat n -> Bool)
 > _test_gcd_one_right _ =
 >   testName "gcd(a,next(0)) == next(0)" $
->   \a -> (next zero) ==== gcd a (next zero)
+>   \a -> eq (next zero) (gcd a (next zero))
 > 
 > 
 > _test_gcd_one_left :: (Natural n)
 >   => n -> Test (Nat n -> Bool)
 > _test_gcd_one_left _ =
 >   testName "gcd(next(0),a) == next(0)" $
->   \a -> (next zero) ==== gcd (next zero) a
+>   \a -> eq (next zero) (gcd (next zero) a)
 > 
 > 
 > _test_gcd_rem :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Bool)
 > _test_gcd_rem _ =
 >   testName "gcd(a,b) == gcd(b,rem(a,b))" $
->   \a b -> (gcd a b) ==== (gcd b (rem a b))
+>   \a b -> eq (gcd a b) (gcd b (rem a b))
 > 
 > 
 > _test_gcd_commutative :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Bool)
 > _test_gcd_commutative _ =
 >   testName "gcd(a,b) == gcd(b,a)" $
->   \a b -> (gcd a b) ==== (gcd b a)
+>   \a b -> eq (gcd a b) (gcd b a)
 > 
 > 
 > _test_gcd_div_args :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Bool)
 > _test_gcd_div_args _ =
 >   testName "div(gcd(a,b),a) and div(gcd(a,b),b)" $
->   \a b -> (div (gcd a b) a) &&& (div (gcd a b) b)
+>   \a b -> and (div (gcd a b) a) (div (gcd a b) b)
 > 
 > 
 > _test_gcd_idempotent :: (Natural n)
 >   => n -> Test (Nat n -> Bool)
 > _test_gcd_idempotent _ =
 >   testName "gcd(a,a) = a" $
->   \a -> (gcd a a) ==== a
+>   \a -> eq (gcd a a) a
 > 
 > 
 > _test_gcd_associative :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
 > _test_gcd_associative _ =
 >   testName "gcd(gcd(a,b),c) == gcd(a,gcd(b,c))" $
->   \a b c -> (gcd (gcd a b) c) ==== (gcd a (gcd b c))
+>   \a b c -> eq (gcd (gcd a b) c) (gcd a (gcd b c))
 > 
 > 
 > _test_gcd_distributive_times :: (Natural n)
 >   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
 > _test_gcd_distributive_times _ =
 >   testName "times(gcd(a,b),c) == gcd(times(a,c),times(b,c))" $
->   \a b c -> (times (gcd a b) c) ==== (gcd (times a c) (times b c))
+>   \a b c -> eq (times (gcd a b) c) (gcd (times a c) (times b c))
 
 And the suite:
 

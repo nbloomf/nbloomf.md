@@ -352,7 +352,7 @@ Here are our property tests for $\delete$:
 >   => t a -> Test (a -> ListOf t a -> Bool)
 > _test_delete_elt _ =
 >   testName "eq(x,delete(a,x)) == not(elt(a,x))" $
->   \a x -> (eq x (delete a x)) ==== not (elt a x)
+>   \a x -> eq (eq x (delete a x)) (not (elt a x))
 
 And the suite:
 

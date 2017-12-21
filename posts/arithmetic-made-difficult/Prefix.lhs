@@ -67,7 +67,7 @@ We can translate this definition directly to Haskell:
 > 
 >     phi a f w = case listShape w of
 >       Nil      -> False
->       Cons b u -> if a ==== b
+>       Cons b u -> if eq a b
 >         then f u
 >         else False
 
@@ -125,7 +125,7 @@ In Haskell:
 >   Nil      -> True
 >   Cons a x -> case listShape v of
 >     Nil      -> False
->     Cons b y -> if a ==== b
+>     Cons b y -> if eq a b
 >       then prefix x y
 >       else False
 
@@ -605,7 +605,7 @@ Here are our property tests for $\prefix$ and $\suffix$.
 >   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
 > _test_prefix_transitive _ =
 >   testName "prefix(x,y) & prefix(y,z) ==> prefix(x,z)" $
->   \x y z -> if (prefix x y) &&& (prefix y z)
+>   \x y z -> if and (prefix x y) (prefix y z)
 >     then prefix x z
 >     else True
 > 
@@ -614,7 +614,7 @@ Here are our property tests for $\prefix$ and $\suffix$.
 >   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool)
 > _test_prefix_zip _ =
 >   testName "prefix(x,y) & prefix(u,v) ==> prefix(zip(x,u),zip(y,v))" $
->   \x y u v -> if (prefix x y) &&& (prefix u v)
+>   \x y u v -> if and (prefix x y) (prefix u v)
 >     then prefix (zip x u) (zip y v)
 >     else True
 
@@ -624,21 +624,21 @@ Tests for $\suffix$:
 >   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
 > _test_suffix_cat _ =
 >   testName "suffix(y,cat(x,y)) == true" $
->   \x y -> (suffix y (cat x y)) ==== True
+>   \x y -> eq (suffix y (cat x y)) True
 > 
 > 
 > _test_suffix_reflexive :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> Bool)
 > _test_suffix_reflexive _ =
 >   testName "suffix(x,x) == true" $
->   \x -> (suffix x x) ==== True
+>   \x -> eq (suffix x x) True
 > 
 > 
 > _test_suffix_transitive :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
 > _test_suffix_transitive _ =
 >   testName "suffix(x,y) & suffix(y,z) ==> suffix(x,z)" $
->   \x y z -> if (suffix x y) &&& (suffix y z)
+>   \x y z -> if and (suffix x y) (suffix y z)
 >     then suffix x z
 >     else True
 

@@ -390,14 +390,14 @@ Here are our property tests for $\tails$ and $\inits$:
 >   => t a -> Test (ListOf t a -> Bool)
 > _test_tails_alt _ =
 >   testName "tails(x) == tails'(x)" $
->   \x -> (tails x) ==== (tails' x)
+>   \x -> eq (tails x) (tails' x)
 > 
 > 
 > _test_tails_map :: (List t, Equal a)
 >   => t a -> Test ((a -> a) -> ListOf t a -> Bool)
 > _test_tails_map _ =
 >   testName "tails(map(f)(x)) == map(map(f))(tails(x))" $
->   \f x -> (tails (map f x)) ==== (map (map f) (tails x))
+>   \f x -> eq (tails (map f x)) (map (map f) (tails x))
 > 
 > 
 > _test_tails_length :: (List t, Equal a, Natural n)
@@ -407,28 +407,28 @@ Here are our property tests for $\tails$ and $\inits$:
 >   \x -> let
 >     lx = length x `withTypeOf` Nat n
 >   in
->     (length (tails x)) ==== (next lx)
+>     eq (length (tails x)) (next lx)
 > 
 > 
 > _test_tails_snoc :: (List t, Equal a)
 >   => t a -> Test (a -> ListOf t a -> Bool)
 > _test_tails_snoc _ =
 >   testName "tails(snoc(a,x)) == snoc(nil,map(snoc(a,-))(tails(x)))" $
->   \a x -> (tails (snoc a x)) ==== (snoc nil (map (snoc a) (tails x)))
+>   \a x -> eq (tails (snoc a x)) (snoc nil (map (snoc a) (tails x)))
 > 
 > 
 > _test_tails_lcs :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
 > _test_tails_lcs _ =
 >   testName "tails(lcs(x,y)) == lcs(tails(x),tails(y))" $
->   \x y -> (tails (lcs x y)) ==== (lcs (tails x) (tails y))
+>   \x y -> eq (tails (lcs x y)) (lcs (tails x) (tails y))
 > 
 > 
 > _test_inits_map :: (List t, Equal a)
 >   => t a -> Test ((a -> a) -> ListOf t a -> Bool)
 > _test_inits_map _ =
 >   testName "inits(map(f)(x)) == map(map(f))(inits(x))" $
->   \f x -> (inits (map f x)) ==== (map (map f) (inits x))
+>   \f x -> eq (inits (map f x)) (map (map f) (inits x))
 > 
 > 
 > _test_inits_length :: (List t, Equal a, Natural n)
@@ -438,14 +438,14 @@ Here are our property tests for $\tails$ and $\inits$:
 >   \x -> let
 >     lx = length x `withTypeOf` Nat n
 >   in
->     (length (inits x)) ==== (next lx)
+>     eq (length (inits x)) (next lx)
 > 
 > 
 > _test_inits_lcp :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
 > _test_inits_lcp _ =
 >   testName "inits(lcp(x,y)) == lcp(inits(x),inits(y))" $
->   \x y -> (inits (lcp x y)) ==== (lcp (inits x) (inits y))
+>   \x y -> eq (inits (lcp x y)) (lcp (inits x) (inits y))
 
 And the suite:
 

@@ -382,7 +382,7 @@ Here are our property tests for $\select$:
 >   \x -> let
 >     zero' = zero `withTypeOf` n
 >   in
->     (select zero' x) ==== (cons nil nil)
+>     eq (select zero' x) (cons nil nil)
 > 
 > 
 > _test_select_nil :: (List t, Equal a, Natural n)
@@ -393,8 +393,8 @@ Here are our property tests for $\select$:
 >     nil' = nil `withTypeOf` (ListOf t)
 >   in
 >     if isZero k
->       then (select k nil') ==== (cons nil nil)
->       else (select k nil') ==== nil
+>       then eq (select k nil') (cons nil nil)
+>       else eq (select k nil') nil
 > 
 > 
 > _test_select_one :: (List t, Equal a, Natural n)
@@ -404,22 +404,22 @@ Here are our property tests for $\select$:
 >   \x -> let
 >     one' = (next zero) `withTypeOf` n
 >   in
->     (select one' x) ==== (map (\a -> cons a nil) x)
+>     eq (select one' x) (map (\a -> cons a nil) x)
 > 
 > 
 > _test_select_length :: (List t, Equal a, Natural n)
 >   => t a -> n -> Test (Nat n -> ListOf t a -> Bool)
 > _test_select_length _ _ =
 >   testName "length(select(k,x)) == choose(length(x),k)" $
->   \k x -> (length (select k x)) ==== (choose (length x) k)
+>   \k x -> eq (length (select k x)) (choose (length x) k)
 > 
 > 
 > _test_select_sublist :: (List t, Equal a, Natural n)
 >   => t a -> n -> Test (Nat n -> ListOf t a -> ListOf t a -> Bool)
 > _test_select_sublist _ _ =
 >   testName "sublist(x,y) == sublist(select(k,x),select(k,y))" $
->   \k x y -> if (sublist x y) ==== True
->     then (sublist (select k x) (select k y)) ==== True
+>   \k x y -> if eq (sublist x y) True
+>     then eq (sublist (select k x) (select k y)) True
 >     else True
 > 
 > 
