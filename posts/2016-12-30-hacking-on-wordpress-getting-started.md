@@ -1,5 +1,5 @@
 ---
-title: Hacking on WordPress: Getting Started
+title: "Hacking on WordPress: Getting Started"
 author: nbloomf
 date: 2016-12-30
 tags: wordpress

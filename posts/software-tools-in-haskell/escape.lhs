@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: escape
+title: "Software Tools in Haskell: escape"
 subtitle: replace strange chars on stdin with escape sequences
 date: 2016-02-22
 author: nbloomf

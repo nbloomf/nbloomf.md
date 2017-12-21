@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: paginate
+title: "Software Tools in Haskell: paginate"
 subtitle: format lines with page numbers and headers
 date: 2016-03-06
 author: nbloomf

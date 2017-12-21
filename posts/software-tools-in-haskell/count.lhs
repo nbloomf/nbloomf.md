@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: count
+title: "Software Tools in Haskell: count"
 subtitle: count lines or chars on stdin
 author: nbloomf
 date: 2016-02-11

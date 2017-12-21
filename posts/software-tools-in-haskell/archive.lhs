@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: archive
+title: "Software Tools in Haskell: archive"
 subtitle: bundle text files
 date: 2016-03-08
 author: nbloomf

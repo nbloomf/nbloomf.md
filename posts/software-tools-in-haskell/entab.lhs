@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: entab
+title: "Software Tools in Haskell: entab"
 subtitle: replace spaces on stdin with tabs
 date: 2016-02-18
 author: nbloomf

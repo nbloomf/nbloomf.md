@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: copy
+title: "Software Tools in Haskell: copy"
 subtitle: copy characters from stdin to stdout
 author: nbloomf
 date: 2016-02-10

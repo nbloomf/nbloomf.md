@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: charcombine
+title: "Software Tools in Haskell: charcombine"
 subtitle: replace chars on stdin with precomposed equivalents
 date: 2016-02-16
 author: nbloomf

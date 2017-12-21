@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: glyphcount
+title: "Software Tools in Haskell: glyphcount"
 subtitle: count glyphs on stdin
 date: 2016-02-14
 author: nbloomf

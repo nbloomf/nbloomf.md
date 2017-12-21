@@ -3,6 +3,7 @@ title: Tuples
 author: nbloomf
 date: 2014-04-02
 tags: arithmetic-made-difficult, literate-haskell
+slug: tuples
 ---
 
 > module Tuples

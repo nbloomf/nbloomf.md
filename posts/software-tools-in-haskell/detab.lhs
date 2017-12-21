@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: detab
+title: "Software Tools in Haskell: detab"
 subtitle: replace tabs on stdin with spaces
 date: 2016-02-15
 author: nbloomf

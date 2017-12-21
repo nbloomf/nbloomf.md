@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: echo
+title: "Software Tools in Haskell: echo"
 subtitle: write arguments to stdout
 date: 2016-02-19
 author: nbloomf

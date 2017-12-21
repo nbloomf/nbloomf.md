@@ -1,5 +1,5 @@
 ---
-title: Machine Learning: Prologue
+title: "Machine Learning: Prologue"
 author: nbloomf
 date: 2017-10-11
 tags: ml

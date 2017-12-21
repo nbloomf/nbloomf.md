@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: charreplace
+title: "Software Tools in Haskell: charreplace"
 subtitle: replace chars by strings on stdin
 date: 2016-02-27
 author: nbloomf

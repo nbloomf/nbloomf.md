@@ -3,6 +3,7 @@ title: Booleans
 author: nbloomf
 date: 2014-04-01
 tags: arithmetic-made-difficult, literate-haskell
+slug: booleans
 ---
 
 > module Booleans

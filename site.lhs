@@ -20,10 +20,11 @@ As usual we begin with some pragmas and imports, to be used later. The ``Overloa
 >
 > import Hakyll
 > import Hakyll.Shortcode
-> import Control.Monad
+> import Control.Monad (foldM)
 > import Data.Monoid (mconcat)
+> import Data.List.Utils (replace)
+> import Data.Maybe (catMaybes)
 > import qualified Data.Set as S (fromList, union)
-> import Text.Regex (subRegex, mkRegex)
 > import Text.Pandoc.Options 
 >   ( Extension(..)
 >   , writerExtensions
@@ -38,7 +39,7 @@ The Main Function
 Hakyll is a declarative DSL for building static websites. A typical Hakyll program is of the following form:
 ```haskell
 main :: IO ()
-main = hakyllWith rules
+main = hakyllWith config rules
 
 rules :: Rules ()
 rules = undefined
@@ -46,7 +47,21 @@ rules = undefined
 where ``Rules`` is a special monad for turning source files into web pages. Come to think of it, Hakyll feels a lot like ``make``. The examples in the Hakyll docs typically define an element of ``Rules`` using one giant ``do`` block, maybe with smaller ``do`` blocks nested in it. I'm not a big fan of this style. Personally I prefer smaller functions with good names and explicit type signatures, so instead I will break up the rules into separate functions. Here's my ``main``:
 
 > main :: IO ()
-> main = hakyllWith config $ do
+> main = hakyllWith config siteRules
+>   where
+>     config :: Configuration
+>     config = defaultConfiguration
+>       { previewPort = 31337
+>       }
+> 
+> 
+> siteRules :: Rules ()
+> siteRules = do
+>   -- gather up context
+>   slugs <- getSlugs "posts/**"
+>   tags <- buildTags "posts/**" (fromCapture "tag/*.html")
+> 
+>   -- convert from source
 >   matchRawFiles
 >   matchCssFiles
 >   matchLoneFiles
@@ -54,18 +69,12 @@ where ``Rules`` is a special monad for turning source files into web pages. Come
 >   matchClasses
 >   matchProjectPages
 >   matchTemplates
+>   matchPosts tags slugs
+> 
+>   -- create from context
 >   createBlogArchive
 >   create404
->
->   tags <- buildTags "posts/**" (fromCapture "tag/*.html")
->   matchPosts tags
 >   createTagPages tags
-> 
-> 
-> config :: Configuration
-> config = defaultConfiguration
->   { previewPort = 31337
->   }
 
 
 The Rules
@@ -101,31 +110,36 @@ The ``matchLoneFiles`` rule handles standalone pages, like ``about`` and ``conta
 >   in
 >     match names $ do
 >       route $ setExtension "html"
->       compile $ pandocMathCompiler
+>       compile $ getResourceBody
+>         >>= pandocStringCompiler
 >         >>= applyShortcodes allServices
 >         >>= loadAndApplyTemplate
 >               "templates/default.html" postCtx
 >         >>= relativizeUrls
-
+> 
+> 
 > matchPages :: Rules ()
 > matchPages = do
 >   match "pages/**" $ do
 >     route $ setExtension "html"
->     compile $ pandocMathCompiler
+>     compile $ getResourceBody
+>       >>= pandocStringCompiler
 >       >>= loadAndApplyTemplate
 >             "templates/default.html" postCtx
 >       >>= relativizeUrls
 
 The ``matchPosts`` rule is a little different from the others we've seen so far. It handles blog posts. But instead of listing out the source files by name, we capture them in a glob: ``"posts/*"``. These work similarly to shell globs but (as usual) have their own quirks; see the [documentation](https://jaspervdj.be/hakyll/reference/Hakyll-Core-Identifier-Pattern.html) for details.
 
-> matchPosts :: Tags -> Rules ()
-> matchPosts tags = do
+> matchPosts :: Tags -> [(String, String)] -> Rules ()
+> matchPosts tags slugs = do
 >   match (anyPattern ["posts/**.md", "posts/**.lhs"]) $ do
 >     route $ setExtension "html"
 >
 >     let ctx = postWithTagsCtx tags
 >
->     compile $ pandocMathCompiler
+>     compile $ getResourceBody
+>       >>= expandSlugs slugs
+>       >>= pandocStringCompiler
 >       >>= applyShortcodes allServices
 >       >>= loadAndApplyTemplate
 >             "templates/hr.html" ctx
@@ -168,7 +182,8 @@ The ``matchClasses`` rule is similar to ``matchPosts``; it handles the source fi
 > matchClasses :: Rules ()
 > matchClasses = match "classes/**" $ do
 >   route $ setExtension "html"
->   compile $ pandocMathCompiler
+>   compile $ getResourceBody
+>     >>= pandocStringCompiler
 >     >>= applyShortcodes allServices
 >     >>= loadAndApplyTemplate
 >           "templates/default.html" postCtx
@@ -180,7 +195,8 @@ The ``matchProjectPages`` rule is also similar to ``matchPosts``; these rules ar
 > matchProjectPages = do
 >   match "pages/sth/tool/*" $ do
 >     route $ setExtension "html"
->     compile $ pandocMathCompiler
+>     compile $ getResourceBody
+>       >>= pandocStringCompiler
 >       >>= loadAndApplyTemplate
 >             "templates/sth-tools.html" defaultContext
 >       >>= loadAndApplyTemplate
@@ -287,21 +303,23 @@ Compilers
 >   , postCtx
 >   ]
 >
-> pandocMathCompiler :: Compiler (Item String)
-> pandocMathCompiler = pandocCompilerWith defaultHakyllReaderOptions customWriterOptions
->   where
->     customWriterOptions = defaultHakyllWriterOptions 
->       { writerExtensions = S.union
->           (writerExtensions defaultHakyllWriterOptions)
->           (S.fromList
->              [ Ext_tex_math_dollars
->              , Ext_tex_math_double_backslash
->              , Ext_latex_macros
->              , Ext_grid_tables
->              ])
+> pandocStringCompiler :: Item String -> Compiler (Item String)
+> pandocStringCompiler text = do
+>   pandoc <- readPandocWith defaultHakyllReaderOptions text
+>   return $ writePandocWith customWriterOptions pandoc
+> 
+> customWriterOptions = defaultHakyllWriterOptions 
+>   { writerExtensions = S.union
+>       (writerExtensions defaultHakyllWriterOptions)
+>       (S.fromList
+>          [ Ext_tex_math_dollars
+>          , Ext_tex_math_double_backslash
+>          , Ext_latex_macros
+>          , Ext_grid_tables
+>          ])
 >
->       , writerHTMLMathMethod = MathJax ""
->       }
+>   , writerHTMLMathMethod = MathJax ""
+>   }
 
 
 Helpers
@@ -310,3 +328,40 @@ Helpers
 > anyPattern :: [Pattern] -> Pattern
 > anyPattern = foldl1 (.||.)
 
+Apply an arbitrary ``String -> String`` function in a compiler; handy for experimenting.
+
+> mapText :: (Monad m, Functor f)
+>   => (String -> String) -> f String -> m (f String)
+> mapText f text = return $ fmap f text
+
+The next few functions give us cheap cross references. If a post has ``slug: FOO`` metafield, then ``@FOO@`` expands to the post's URL. For example, ``@FOO@#name`` expands to the URL of a named anchor. If this expansion is done before pandoc does it's magic, we can use it in links
+
+    [like this](@FOO@#name)
+
+> -- get the (slug, url) pairs for a given pattern
+> getSlugs :: (MonadMetadata m) => Pattern -> m [(String, String)]
+> getSlugs pattern = getMatches pattern >>= (fmap catMaybes . mapM getSlug)
+>   where
+>     getSlug :: MonadMetadata m => Identifier -> m (Maybe (String,String))
+>     getSlug identifier = do
+>       metadata <- getMetadata identifier
+>       case lookupString "slug" metadata of
+>         Nothing -> return Nothing
+>         Just x  -> return $ Just (x, makeURL identifier)
+> 
+>     makeURL :: Identifier -> String
+>     makeURL =
+>       replace ".md" ".html" . replace ".lhs" ".html" . toUrl . toFilePath
+> 
+> 
+> -- expand the slugs
+> expandSlugs
+>   :: (Functor f, Monad m)
+>   => [(String, String)] -> f String -> m (f String)
+> expandSlugs slugs = mapText expandAll
+>   where
+>     expandAll :: String -> String
+>     expandAll text = foldr expandOne text slugs
+> 
+>     expandOne :: (String, String) -> String -> String
+>     expandOne (slug,url) text = replace ("@" ++ slug ++ "@") url text

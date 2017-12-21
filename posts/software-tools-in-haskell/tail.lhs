@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: tail
+title: "Software Tools in Haskell: tail"
 subtitle: get the last k lines or chars from stdin
 date: 2016-02-28
 author: nbloomf

@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: wye
+title: "Software Tools in Haskell: wye"
 subtitle: write stdin to files and stdout
 date: 2016-03-04
 author: nbloomf

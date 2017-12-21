@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: noop
+title: "Software Tools in Haskell: noop"
 subtitle: exit successfully
 author: nbloomf
 date: 2016-02-08

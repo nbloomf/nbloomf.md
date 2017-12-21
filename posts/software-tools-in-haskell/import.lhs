@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: import
+title: "Software Tools in Haskell: import"
 subtitle: splice contents of a file into stdin
 date: 2016-03-02
 author: nbloomf

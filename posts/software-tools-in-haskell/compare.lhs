@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: compare
+title: "Software Tools in Haskell: compare"
 subtitle: find the first position where two text streams differ
 date: 2016-03-01
 author: nbloomf

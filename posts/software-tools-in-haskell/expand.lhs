@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: expand
+title: "Software Tools in Haskell: expand"
 subtitle: uncompress text on stdin (run length encoding)
 author: nbloomf
 date: 2016-02-24

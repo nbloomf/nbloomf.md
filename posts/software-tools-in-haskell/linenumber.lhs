@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: line number
+title: "Software Tools in Haskell: line number"
 subtitle: number lines on stdin
 date: 2016-03-09
 author: nbloomf

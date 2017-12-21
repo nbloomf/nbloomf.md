@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: translit
+title: "Software Tools in Haskell: translit"
 subtitle: transliterate or remove chars on stdin
 date: 2016-02-26
 author: nbloomf

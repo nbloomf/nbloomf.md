@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: charfullwidth
+title: "Software Tools in Haskell: charfullwidth"
 subtitle: replace chars with fullwidth equivalents
 date: 2016-02-17
 author: nbloomf

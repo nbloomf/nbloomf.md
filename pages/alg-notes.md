@@ -1,5 +1,5 @@
 ---
-title: Algebra Party Time: Rings Edition
+title: "Algebra Party Time: Rings Edition"
 author: nbloomf
 ---
 

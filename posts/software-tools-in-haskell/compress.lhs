@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: compress
+title: "Software Tools in Haskell: compress"
 subtitle: compress text on stdin (run length encoding)
 date: 2016-02-23
 author: nbloomf

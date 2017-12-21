@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: crypt
+title: "Software Tools in Haskell: crypt"
 subtitle: xor stdin with a list of keys
 date: 2016-02-25
 author: nbloomf

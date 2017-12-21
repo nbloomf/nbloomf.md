@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: On Formats
+title: "Software Tools in Haskell: On Formats"
 author: nbloomf
 ---
 

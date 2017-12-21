@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: getlines
+title: "Software Tools in Haskell: getlines"
 subtitle: extract lines from stdin by index
 date: 2016-02-29
 author: nbloomf

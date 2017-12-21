@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: overstrike
+title: "Software Tools in Haskell: overstrike"
 subtitle: interpret backspaces on stdin
 date: 2016-02-20
 author: nbloomf

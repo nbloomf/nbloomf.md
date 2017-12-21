@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: concat
+title: "Software Tools in Haskell: concat"
 subtitle: concatenate files
 date: 2016-03-03
 author: nbloomf

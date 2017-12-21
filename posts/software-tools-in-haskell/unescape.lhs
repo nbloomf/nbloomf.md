@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: unescape
+title: "Software Tools in Haskell: unescape"
 subtitle: interpret C and ASCII escape codes on stdin
 date: 2016-02-21
 author: nbloomf

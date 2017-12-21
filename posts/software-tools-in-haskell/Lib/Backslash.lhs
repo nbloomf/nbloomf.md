@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: Escape Codes
+title: "Software Tools in Haskell: Escape Codes"
 date: 2016-02-20
 author: nbloomf
 tags: software-tools-in-haskell, literate-haskell

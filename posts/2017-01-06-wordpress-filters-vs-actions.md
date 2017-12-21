@@ -1,5 +1,5 @@
 ---
-title: WordPress: Filters vs. Actions
+title: "WordPress: Filters vs. Actions"
 author: nbloomf
 date: 2017-01-06
 tags: wordpress

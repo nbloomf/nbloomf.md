@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: wordcount
+title: "Software Tools in Haskell: wordcount"
 subtitle: count words on stdin
 date: 2016-02-12
 author: nbloomf

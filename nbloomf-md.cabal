@@ -12,7 +12,8 @@ executable site
     hakyll-shortcode == 0.0.2,
     pandoc,
     regex-compat,
-    containers
+    containers,
+    MissingH
   ghc-options:
     -threaded
   default-language:

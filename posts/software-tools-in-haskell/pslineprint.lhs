@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: pslineprint
+title: "Software Tools in Haskell: pslineprint"
 subtitle: print lines to postscript
 date: 2016-03-05
 author: nbloomf

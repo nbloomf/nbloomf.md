@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: bubble
+title: "Software Tools in Haskell: bubble"
 subtitle: (bubble)sort lines on stdin
 date: 2016-03-10
 author: nbloomf

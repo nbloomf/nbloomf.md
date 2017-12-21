@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: examine
+title: "Software Tools in Haskell: examine"
 subtitle: interactively view a file
 date: 2016-03-07
 author: nbloomf

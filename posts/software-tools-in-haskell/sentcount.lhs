@@ -1,5 +1,5 @@
 ---
-title: Software Tools in Haskell: sentcount
+title: "Software Tools in Haskell: sentcount"
 subtitle: count sentences on stdin
 date: 2016-02-13
 author: nbloomf
