@@ -7,7 +7,7 @@ slug: tuples
 ---
 
 > module Tuples
->   ( fst, snd, dup, tswap, pair, assocL, assocR
+>   ( fst, snd, dup, tswap, tpair, tassocL, tassocR
 >   , _test_tuple, main_tuple
 >   ) where
 > 
@@ -188,8 +188,8 @@ Let $A$, $B$, $U$, and $V$ be sets. We define $\tPair : U^A \times V^B \rightarr
 
 In Haskell:
 
-> pair :: (a -> u) -> (b -> v) -> (a,b) -> (u,v)
-> pair f g = dup (f . fst) (g . snd)
+> tpair :: (a -> u) -> (b -> v) -> (a,b) -> (u,v)
+> tpair f g = dup (f . fst) (g . snd)
 
 </p></div>
 </div>
@@ -228,22 +228,22 @@ as claimed.
 
 <div class="test"><p>
 
-> _test_pair_apply :: (Equal a, Equal b)
+> _test_tpair_apply :: (Equal a, Equal b)
 >   => a -> b -> Test ((a -> a) -> (b -> b) -> (a,b) -> Bool)
-> _test_pair_apply _ _ =
->   testName "pair(f,g)(a,b) == (f(a),g(b))" $
->   \f g (a,b) -> eq (pair f g (a,b)) (f a, g b)
+> _test_tpair_apply _ _ =
+>   testName "tpair(f,g)(a,b) == (f(a),g(b))" $
+>   \f g (a,b) -> eq (tpair f g (a,b)) (f a, g b)
 > 
 > 
-> _test_pair_pair :: (Equal a, Equal b)
+> _test_tpair_tpair :: (Equal a, Equal b)
 >   => a -> b
 >   -> Test ((a -> a) -> (b -> b) -> (a -> a) -> (b -> b) -> (a,b) -> Bool)
-> _test_pair_pair _ _ =
->   testName "pair(f,g) o pair(h,k) == pair(f o h, g o k)" $
+> _test_tpair_tpair _ _ =
+>   testName "tpair(f,g) . tpair(h,k) == tpair(f . h, g . k)" $
 >   \f g h k x ->
 >     eq
->       (pair f g (pair h k x))
->       (pair (f . h) (g . k) x)
+>       (tpair f g (tpair h k x))
+>       (tpair (f . h) (g . k) x)
 
 </p></div>
 </div>
@@ -256,11 +256,11 @@ Let $A$, $B$, and $C$ be sets. We define $\tAssocL : A \times (B \times C) \righ
 
 In Haskell:
 
-> assocL :: (a,(b,c)) -> ((a,b),c)
-> assocL = dup (dup fst (fst . snd)) (snd . snd)
+> tassocL :: (a,(b,c)) -> ((a,b),c)
+> tassocL = dup (dup fst (fst . snd)) (snd . snd)
 > 
-> assocR :: ((a,b),c) -> (a,(b,c))
-> assocR = dup (fst . fst) (dup (snd . fst) snd)
+> tassocR :: ((a,b),c) -> (a,(b,c))
+> tassocR = dup (fst . fst) (dup (snd . fst) snd)
 
 </div>
 </div>
@@ -318,32 +318,32 @@ as claimed.
 
 <div class="test"><p>
 
-> _test_assocL_entries :: (Equal a, Equal b, Equal c)
+> _test_tassocL_entries :: (Equal a, Equal b, Equal c)
 >   => a -> b -> c -> Test (a -> b -> c -> Bool)
-> _test_assocL_entries _ _ _ =
->   testName "assocL(a,(b,c)) == ((a,b),c)" $
->   \a b c -> eq (assocL (a,(b,c))) ((a,b),c)
+> _test_tassocL_entries _ _ _ =
+>   testName "tassocL(a,(b,c)) == ((a,b),c)" $
+>   \a b c -> eq (tassocL (a,(b,c))) ((a,b),c)
 > 
 > 
-> _test_assocR_entries :: (Equal a, Equal b, Equal c)
+> _test_tassocR_entries :: (Equal a, Equal b, Equal c)
 >   => a -> b -> c -> Test (a -> b -> c -> Bool)
-> _test_assocR_entries _ _ _ =
->   testName "assocR((a,b),c) == (a,(b,c))" $
->   \a b c -> eq (assocR ((a,b),c)) (a,(b,c))
+> _test_tassocR_entries _ _ _ =
+>   testName "tassocR((a,b),c) == (a,(b,c))" $
+>   \a b c -> eq (tassocR ((a,b),c)) (a,(b,c))
 > 
 > 
-> _test_assocL_assocR :: (Equal a, Equal b, Equal c)
+> _test_tassocL_tassocR :: (Equal a, Equal b, Equal c)
 >   => a -> b -> c -> Test (((a,b),c) -> Bool)
-> _test_assocL_assocR _ _ _ =
->   testName "assocL . assocR == id" $
->   \x -> eq (assocL (assocR x)) x
+> _test_tassocL_tassocR _ _ _ =
+>   testName "tassocL . tassocR == id" $
+>   \x -> eq (tassocL (tassocR x)) x
 > 
 > 
-> _test_assocR_assocL :: (Equal a, Equal b, Equal c)
+> _test_tassocR_tassocL :: (Equal a, Equal b, Equal c)
 >   => a -> b -> c -> Test ((a,(b,c)) -> Bool)
-> _test_assocR_assocL _ _ _ =
->   testName "assocR . assocL == id" $
->   \x -> eq (assocR (assocL x)) x
+> _test_tassocR_tassocL _ _ _ =
+>   testName "tassocR . tassocL == id" $
+>   \x -> eq (tassocR (tassocL x)) x
 
 </p></div>
 </div>
@@ -374,13 +374,13 @@ The suite:
 >   runTest args (_test_tswap_entries a b)
 >   runTest args (_test_tswap_tswap a b)
 > 
->   runTest args (_test_pair_apply a b)
->   runTest args (_test_pair_pair a b)
+>   runTest args (_test_tpair_apply a b)
+>   runTest args (_test_tpair_tpair a b)
 > 
->   runTest args (_test_assocL_entries a b c)
->   runTest args (_test_assocR_entries a b c)
->   runTest args (_test_assocL_assocR a b c)
->   runTest args (_test_assocR_assocL a b c)
+>   runTest args (_test_tassocL_entries a b c)
+>   runTest args (_test_tassocR_entries a b c)
+>   runTest args (_test_tassocL_tassocR a b c)
+>   runTest args (_test_tassocR_tassocL a b c)
 
 
 And ``main``:

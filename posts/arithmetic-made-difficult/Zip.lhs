@@ -668,15 +668,15 @@ Here are our property tests for $\zip$ and $\zipPad$.
 > _test_zip_zip_left :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
 > _test_zip_zip_left _ =
->   testName "zip(zip(x,y),z) == map(assocL)zip(x,zip(y,z))" $
->   \x y z -> eq (zip (zip x y) z) (map assocL (zip x (zip y z)))
+>   testName "zip(zip(x,y),z) == map(tassocL)zip(x,zip(y,z))" $
+>   \x y z -> eq (zip (zip x y) z) (map tassocL (zip x (zip y z)))
 > 
 > 
 > _test_zip_zip_right :: (List t, Equal a)
 >   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
 > _test_zip_zip_right _ =
->   testName "zip(zip(x,y),z) == map(assocR)zip(x,zip(y,z))" $
->   \x y z -> eq (zip x (zip y z)) (map assocR (zip (zip x y) z))
+>   testName "zip(zip(x,y),z) == map(tassocR)zip(x,zip(y,z))" $
+>   \x y z -> eq (zip x (zip y z)) (map tassocR (zip (zip x y) z))
 > 
 > 
 > _test_zip_alt :: (List t, Equal a, Equal b)
@@ -706,19 +706,19 @@ Here are our property tests for $\zip$ and $\zipPad$.
 > _test_zipPad_zipPad_left :: (List t, Equal a)
 >   => t a -> Test (a -> a -> a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool)
 > _test_zipPad_zipPad_left _ =
->   testName "zipPad((a,b),c)(zipPad(a,b)(x,y),z) == map(assocL)zipPad(a,(b,c))(x,zipPad(b,c)(y,z))" $
+>   testName "zipPad((a,b),c)(zipPad(a,b)(x,y),z) == map(tassocL)zipPad(a,(b,c))(x,zipPad(b,c)(y,z))" $
 >   \a b c x y z -> eq
 >     (zipPad (a,b) c (zipPad a b x y) z)
->     (map assocL (zipPad a (b,c) x (zipPad b c y z)))
+>     (map tassocL (zipPad a (b,c) x (zipPad b c y z)))
 > 
 > 
 > _test_zipPad_zipPad_right :: (List t, Equal a)
 >   => t a -> Test (a -> a -> a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool)
 > _test_zipPad_zipPad_right _ =
->   testName "zipPad((a,b),c)(zipPad(a,b)(x,y),z) == map(assocR)zipPad(a,(b,c))(x,zipPad(b,c)(y,z))" $
+>   testName "zipPad((a,b),c)(zipPad(a,b)(x,y),z) == map(tassocR)zipPad(a,(b,c))(x,zipPad(b,c)(y,z))" $
 >   \a b c x y z -> eq
 >     (zipPad a (b,c) x (zipPad b c y z))
->     (map assocR (zipPad (a,b) c (zipPad a b x y) z))
+>     (map tassocR (zipPad (a,b) c (zipPad a b x y) z))
 > 
 > 
 > _test_zipPad_alt :: (List t, Equal a, Equal b)
