@@ -205,27 +205,27 @@ as needed.
 
 <div class="test"><p>
 
-> _test_swap_lft :: (Equal a, Equal b)
+> _test_uswap_lft :: (Equal a, Equal b)
 >   => a -> b -> Test (a -> Bool)
-> _test_swap_lft _ y =
->   testName "swap(left(a)) == right(a)" $
+> _test_uswap_lft _ y =
+>   testName "uswap(left(a)) == right(a)" $
 >   \a -> eq
 >     (uswap (lft a))
 >     ((rgt a) `withTypeOf` (lft y))
 > 
 > 
-> _test_swap_rgt :: (Equal a, Equal b)
+> _test_uswap_rgt :: (Equal a, Equal b)
 >   => a -> b -> Test (b -> Bool)
-> _test_swap_rgt x _ =
->   testName "swap(right(a)) == left(a)" $
+> _test_uswap_rgt x _ =
+>   testName "uswap(right(a)) == left(a)" $
 >   \b -> eq
 >     (uswap (rgt b))
 >     ((lft b) `withTypeOf` (rgt x))
 > 
 > 
-> _test_swap_swap :: (Equal a, Equal b)
+> _test_uswap_uswap :: (Equal a, Equal b)
 >   => a -> b -> Test (Either a b -> Bool)
-> _test_swap_swap _ _ =
+> _test_uswap_uswap _ _ =
 >   testName "swap(swap(x)) == x" $
 >   \x -> eq (uswap (uswap x)) x
 
@@ -295,29 +295,29 @@ as needed.
 
 <div class="test"><p>
 
-> _test_pair_lft :: (Equal a, Equal b)
+> _test_upair_lft :: (Equal a, Equal b)
 >   => a -> b -> Test ((a -> a) -> (b -> b) -> a -> Bool)
-> _test_pair_lft _ y =
+> _test_upair_lft _ y =
 >   testName "upair(f,g)(lft(a)) == lft(f(a))" $
 >   \f g a -> eq
 >     (upair f g ((lft a) `withTypeOf` (rgt y)))
 >     ((lft (f a)) `withTypeOf` (rgt y))
 > 
 > 
-> _test_pair_rgt :: (Equal a, Equal b)
+> _test_upair_rgt :: (Equal a, Equal b)
 >   => a -> b -> Test ((a -> a) -> (b -> b) -> b -> Bool)
-> _test_pair_rgt x _ =
+> _test_upair_rgt x _ =
 >   testName "upair(f,g)(rgt(b)) == rgt(g(b))" $
 >   \f g b -> eq
 >     (upair f g ((rgt b) `withTypeOf` (lft x)))
 >     ((rgt (g b)) `withTypeOf` (lft x))
 > 
 > 
-> _test_pair_pair :: (Equal a, Equal b)
+> _test_upair_upair :: (Equal a, Equal b)
 >   => a -> b
 >   -> Test ((a -> a) -> (b -> b) -> (a -> a) -> (b -> b)
 >       -> Either a b -> Bool)
-> _test_pair_pair _ _ =
+> _test_upair_upair _ _ =
 >   testName "upair(f,g) . upair(h,k) == upair(f . h, g . k)" $
 >   \f g h k x ->
 >     eq
@@ -562,13 +562,13 @@ The suite:
 > 
 >   runTest args (_test_either_lft_rgt a b)
 > 
->   runTest args (_test_swap_lft a b)
->   runTest args (_test_swap_rgt a b)
->   runTest args (_test_swap_swap a b)
+>   runTest args (_test_uswap_lft a b)
+>   runTest args (_test_uswap_rgt a b)
+>   runTest args (_test_uswap_uswap a b)
 > 
->   runTest args (_test_pair_lft a b)
->   runTest args (_test_pair_rgt a b)
->   runTest args (_test_pair_pair a b)
+>   runTest args (_test_upair_lft a b)
+>   runTest args (_test_upair_rgt a b)
+>   runTest args (_test_upair_upair a b)
 > 
 >   runTest args (_test_uassocL_lft a b c)
 >   runTest args (_test_uassocL_rgt_lft a b c)
