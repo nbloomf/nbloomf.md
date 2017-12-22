@@ -200,11 +200,11 @@ Here are our property tests for $\unzip$.
 >   \x -> eq ((uncurry zip) (unzip x)) x
 > 
 > 
-> _test_unzip_swap :: (List t, Equal a, Equal b)
+> _test_unzip_tswap :: (List t, Equal a, Equal b)
 >   => t a -> t b -> Test (ListOf t (a,b) -> Bool)
-> _test_unzip_swap _ _ =
->   testName "swap(unzip(x)) == unzip(map(swap)(x))" $
->   \x -> eq (unzip (map swap x)) (swap (unzip x))
+> _test_unzip_tswap _ _ =
+>   testName "tswap(unzip(x)) == unzip(map(tswap)(x))" $
+>   \x -> eq (unzip (map tswap x)) (tswap (unzip x))
 
 And the suite:
 
@@ -224,7 +224,7 @@ And the suite:
 >       }
 > 
 >   runTest args (_test_unzip_zip t u)
->   runTest args (_test_unzip_swap t u)
+>   runTest args (_test_unzip_tswap t u)
 
 And ``main``:
 

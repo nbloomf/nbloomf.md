@@ -8,7 +8,7 @@ slug: disjoint-unions
 
 > {-# LANGUAGE ScopedTypeVariables #-}
 > module DisjointUnions
->   ( lft, rgt, either, uswap, upair
+>   ( lft, rgt, either, uswap, upair , uassocL, uassocR
 >   , _test_disjoint_union, main_disjoint_union
 >   ) where
 > 
@@ -315,13 +315,226 @@ as needed.
 > 
 > _test_pair_pair :: (Equal a, Equal b)
 >   => a -> b
->   -> Test ((a -> a) -> (b -> b) -> (a -> a) -> (b -> b) -> Either a b -> Bool)
+>   -> Test ((a -> a) -> (b -> b) -> (a -> a) -> (b -> b)
+>       -> Either a b -> Bool)
 > _test_pair_pair _ _ =
 >   testName "upair(f,g) . upair(h,k) == upair(f . h, g . k)" $
 >   \f g h k x ->
 >     eq
 >       (upair f g (upair h k x))
 >       (upair (f . h) (g . k) x)
+
+</p></div>
+</div>
+
+Finally, note that although as sets $A + (B + C)$ and $(A + B) + C$ cannot possibly be equal to each other in general, they are naturally isomorphic via $\uAssocL$ and $\uAssocR$.
+
+<div class="result">
+<div class="defn">
+Let $A$, $B$, and $C$ be sets. We define $\uAssocL : A + (B + C) \rightarrow (A + B) + C$ by $$\uAssocL = \either(\lft \circ \lft, \either(\lft \circ \rgt, \rgt))$$ and define $\uAssocR : (A + B) + C \rightarrow A + (B + C)$ by $$\uAssocR = \either(\either(\lft,\rgt \circ \lft),\rgt \circ \rgt).$$
+
+In Haskell:
+
+> uassocL :: Either a (Either b c) -> Either (Either a b) c
+> uassocL = either (lft . lft) (either (lft . rgt) rgt)
+> 
+> uassocR :: Either (Either a b) c -> Either a (Either b c)
+> uassocR = either (either lft (rgt . lft)) (rgt . rgt)
+
+</div>
+</div>
+
+Now $\uAssocL$ and $\uAssocR$ have some nice properties.
+
+<div class="result">
+<div class="thm"><p>
+The following hold whenever everything has the appropriate type.
+
+1. $\uAssocL(\lft(a)) = \lft(\lft(a))$.
+2. $\uAssocL(\rgt(\lft(b))) = \lft(\rgt(b))$.
+3. $\uAssocL(\rgt(\rgt(c))) = \rgt(c)$.
+4. $\uAssocR(\lft(\lft(a))) = \lft(a)$.
+5. $\uAssocR(\lft(\rgt(b))) = \rgt(\lft(b))$.
+6. $\uAssocR(\rgt(c)) = \rgt(\rgt(c))$.
+7. $\uAssocR \circ \uAssocL = \id_{A + (B + C)}$.
+8. $\uAssocL \circ \uAssocR = \id_{(A + B) + C}$.
+</p></div>
+
+<div class="proof"><p>
+1. We have
+$$\begin{eqnarray*}
+ &   & \uAssocL(\lft(a)) \\
+ & = & \either(\lft \circ \lft, \either(\lft \circ \rgt, \rgt))(\lft(a)) \\
+ & = & (\lft \circ \lft)(a) \\
+ & = & \lft(\lft(a))
+\end{eqnarray*}$$
+as claimed.
+2. We have
+$$\begin{eqnarray*}
+ &   & \uAssocL(\rgt(\lft(b))) \\
+ & = & \either(\lft \circ \lft, \either(\lft \circ \rgt, \rgt))(\rgt(\lft(b))) \\
+ & = & \either(\lft \circ \rgt, \rgt)(\lft(b)) \\
+ & = & (\lft \circ \rgt)(b) \\
+ & = & \lft(\rgt(b))
+\end{eqnarray*}$$
+as claimed.
+3. We have
+$$\begin{eqnarray*}
+ &   & \uAssocL(\rgt(\rgt(c))) \\
+ & = & \either(\lft \circ \lft, \either(\lft \circ \rgt, \rgt))(\rgt(\rgt(c))) \\
+ & = & \either(\lft \circ \rgt, \rgt)(\rgt(c)) \\
+ & = & \rgt(c)
+\end{eqnarray*}$$
+as claimed.
+4. We have
+$$\begin{eqnarray*}
+ &   & \uAssocR(\lft(\lft(a))) \\
+ & = & \either(\either(\lft,\rgt \circ \lft),\rgt \circ \rgt)(\lft(\lft(a))) \\
+ & = & \either(\lft,\rgt \circ \lft)(\lft(a)) \\
+ & = & \lft(a)
+\end{eqnarray*}$$
+as claimed.
+5. We have
+$$\begin{eqnarray*}
+ &   & \uAssocR(\lft(\rgt(b))) \\
+ & = & \either(\either(\lft,\rgt \circ \lft),\rgt \circ \rgt)(\lft(\rgt(b))) \\
+ & = & \either(\lft,\rgt \circ \lft)(\rgt(b)) \\
+ & = & (\rgt \circ \lft)(b) \\
+ & = & \rgt(\lft(b))
+\end{eqnarray*}$$
+as claimed.
+6. We have
+$$\begin{eqnarray*}
+ &   & \uAssocR(\rgt(c)) \\
+ & = & \either(\either(\lft,\rgt \circ \lft),\rgt \circ \rgt)(\rgt(c)) \\
+ & = & (\rgt \circ \rgt)(c) \\
+ & = & \rgt(\rgt(c))
+\end{eqnarray*}$$
+as claimed.
+7. If $x \in A + (B + C)$, we have three possibilities. If $x = \lft(a)$, note that
+$$\begin{eqnarray*}
+ &   & (\uAssocR \circ \uAssocL)(x) \\
+ & = & \uAssocR(\uAssocL(\lft(a))) \\
+ & = & \uAssocR(\lft(\lft(a))) \\
+ & = & \lft(a) \\
+ & = & x;
+\end{eqnarray*}$$
+if $x = \rgt(\lft(b))$, note that
+$$\begin{eqnarray*}
+ &   & (\uAssocR \circ \uAssocL)(x) \\
+ & = & \uAssocR(\uAssocL(\rgt(\lft(b)))) \\
+ & = & \uAssocR(\lft(\rgt(b))) \\
+ & = & \rgt(\lft(b)) \\
+ & = & x;
+\end{eqnarray*}$$
+and if $x = \rgt(\rgt(c))$, note that
+$$\begin{eqnarray*}
+ &   & (\uAssocR \circ \uAssocL)(x) \\
+ & = & \uAssocR(\uAssocL(\rgt(\rgt(c)))) \\
+ & = & \uAssocR(\rgt(c)) \\
+ & = & \rgt(\rgt(c)) \\
+ & = & x,
+\end{eqnarray*}$$
+as needed.
+8. If $x \in (A + B) + C$, we have three possibilities. If $x = \lft(\lft(a))$, note that
+$$\begin{eqnarray*}
+ &   & (\uAssocL \circ \uAssocR)(x) \\
+ & = & \uAssocL(\uAssocR(\lft(\lft(a)))) \\
+ & = & \uAssocL(\lft(a)) \\
+ & = & \lft(\lft(a)) \\
+ & = & x;
+\end{eqnarray*}$$
+if $x = \lft(\rgt(b))$, note that
+$$\begin{eqnarray*}
+ &   & (\uAssocL \circ \uAssocR)(x) \\
+ & = & \uAssocL(\uAssocR(\lft(\rgt(b)))) \\
+ & = & \uAssocL(\rgt(\lft(b))) \\
+ & = & \lft(\rgt(b)) \\
+ & = & x;
+\end{eqnarray*}$$
+and if $x = \rgt(c)$, note that
+$$\begin{eqnarray*}
+ &   & (\uAssocL \circ \uAssocR)(x) \\
+ & = & \uAssocL(\uAssocR(\rgt(c))) \\
+ & = & \uAssocL(\rgt(\rgt(c))) \\
+ & = & \rgt(c) \\
+ & = & x,
+\end{eqnarray*}$$
+as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_uassocL_lft :: (Equal a, Equal b, Equal c)
+>   => a -> b -> c -> Test (a -> Bool)
+> _test_uassocL_lft _ y z =
+>   testName "uassocL(lft(a)) == lft(lft(a))" $
+>   \a ->
+>     let w = (lft y) `withTypeOf` (rgt z)
+>     in eq
+>       (uassocL ((lft a) `withTypeOf` (rgt w)))
+>       (lft (lft a))
+> 
+> 
+> _test_uassocL_rgt_lft :: (Equal a, Equal b, Equal c)
+>   => a -> b -> c -> Test (b -> Bool)
+> _test_uassocL_rgt_lft x _ z =
+>   testName "uassocL(rgt(lft(b))) == lft(rgt(b))" $
+>   \b -> eq
+>     (uassocL ((rgt ((lft b) `withTypeOf` (rgt z)) `withTypeOf` (lft x))))
+>     (lft (rgt b))
+> 
+> 
+> _test_uassocL_rgt_rgt :: (Equal a, Equal b, Equal c)
+>   => a -> b -> c -> Test (c -> Bool)
+> _test_uassocL_rgt_rgt x y _ =
+>   testName "uassocL(rgt(rgt(c))) == rgt(c)" $
+>   \c -> eq
+>     (uassocL ((rgt ((rgt c) `withTypeOf` (lft y)) `withTypeOf` (lft x))))
+>     (rgt c)
+> 
+> 
+> _test_uassocR_lft_lft :: (Equal a, Equal b, Equal c)
+>   => a -> b -> c -> Test (a -> Bool)
+> _test_uassocR_lft_lft _ y z =
+>   testName "uassocR(lft(lft(a))) == lft(a)" $
+>   \a -> eq
+>     (uassocR ((lft ((lft a) `withTypeOf` (rgt y)) `withTypeOf` (rgt z))))
+>     (lft a)
+> 
+> 
+> _test_uassocR_lft_rgt :: (Equal a, Equal b, Equal c)
+>   => a -> b -> c -> Test (b -> Bool)
+> _test_uassocR_lft_rgt x _ z =
+>   testName "uassocR(lft(rgt(b))) == rgt(lft(b))" $
+>   \b -> eq
+>     (uassocR ((lft ((rgt b) `withTypeOf` (lft x)) `withTypeOf` (rgt z))))
+>     (rgt (lft b))
+> 
+> 
+> _test_uassocR_rgt :: (Equal a, Equal b, Equal c)
+>   => a -> b -> c -> Test (c -> Bool)
+> _test_uassocR_rgt x y _ =
+>   testName "uassocR(rgt(c)) == rgt(rgt(c))" $
+>   \c ->
+>     let w = (lft x) `withTypeOf` (rgt y)
+>     in eq
+>       (uassocR ((rgt c) `withTypeOf` (lft w)))
+>       (rgt (rgt c))
+> 
+> 
+> _test_uassocR_uassocL :: (Equal a, Equal b, Equal c)
+>   => a -> b -> c -> Test (Either a (Either b c) -> Bool)
+> _test_uassocR_uassocL _ _ _ =
+>   testName "uassocR . uassocL == id" $
+>   \x -> eq (uassocR (uassocL x)) x
+> 
+> 
+> _test_uassocL_uassocR :: (Equal a, Equal b, Equal c)
+>   => a -> b -> c -> Test (Either (Either a b) c -> Bool)
+> _test_uassocL_uassocR _ _ _ =
+>   testName "uassocL . uassocR == id" $
+>   \x -> eq (uassocL (uassocR x)) x
 
 </p></div>
 </div>
@@ -348,12 +561,23 @@ The suite:
 >       }
 > 
 >   runTest args (_test_either_lft_rgt a b)
+> 
 >   runTest args (_test_swap_lft a b)
 >   runTest args (_test_swap_rgt a b)
 >   runTest args (_test_swap_swap a b)
+> 
 >   runTest args (_test_pair_lft a b)
 >   runTest args (_test_pair_rgt a b)
 >   runTest args (_test_pair_pair a b)
+> 
+>   runTest args (_test_uassocL_lft a b c)
+>   runTest args (_test_uassocL_rgt_lft a b c)
+>   runTest args (_test_uassocL_rgt_rgt a b c)
+>   runTest args (_test_uassocR_lft_lft a b c)
+>   runTest args (_test_uassocR_lft_rgt a b c)
+>   runTest args (_test_uassocR_rgt a b c)
+>   runTest args (_test_uassocR_uassocL a b c)
+>   runTest args (_test_uassocL_uassocR a b c)
 
 
 And ``main``:

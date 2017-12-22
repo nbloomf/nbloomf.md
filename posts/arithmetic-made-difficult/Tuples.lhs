@@ -7,7 +7,7 @@ slug: tuples
 ---
 
 > module Tuples
->   ( fst, snd, dup, swap, pair, assocL, assocR
+>   ( fst, snd, dup, tswap, pair, assocL, assocR
 >   , _test_tuple, main_tuple
 >   ) where
 > 
@@ -128,8 +128,8 @@ Let $A$ and $B$ be sets. We define $\tSwap : A \times B \rightarrow B \times A$ 
 
 In Haskell,
 
-> swap :: (a,b) -> (b,a)
-> swap = dup snd fst
+> tswap :: (a,b) -> (b,a)
+> tswap = dup snd fst
 
 </p></div>
 </div>
@@ -164,18 +164,18 @@ as claimed.
 
 <div class="test"><p>
 
-> _test_swap_entries :: (Equal a, Equal b)
+> _test_tswap_entries :: (Equal a, Equal b)
 >   => a -> b -> Test ((a,b) -> Bool)
-> _test_swap_entries _ _ =
->   testName "swap(a,b) == (b,a)" $
->   \(a,b) -> eq (swap (a,b)) (b,a)
+> _test_tswap_entries _ _ =
+>   testName "tswap(a,b) == (b,a)" $
+>   \(a,b) -> eq (tswap (a,b)) (b,a)
 > 
 > 
-> _test_swap_swap :: (Equal a, Equal b)
+> _test_tswap_tswap :: (Equal a, Equal b)
 >   => a -> b -> Test ((a,b) -> Bool)
-> _test_swap_swap _ _ =
->   testName "swap(swap(x)) == x" $
->   \x -> eq (dup snd fst (dup snd fst x)) x
+> _test_tswap_tswap _ _ =
+>   testName "tswap(tswap(x)) == x" $
+>   \x -> eq (tswap (tswap x)) x
 
 </p></div>
 </div>
@@ -251,12 +251,21 @@ as claimed.
 Finally, note that although as sets $A \times (B \times C)$ and $(A \times B) \times C$ cannot possibly be equal to each other in general, they are naturally isomorphic via $\tAssocL$ and $\tAssocR$.
 
 <div class="result">
-<div class="defn"><p>
+<div class="defn">
 Let $A$, $B$, and $C$ be sets. We define $\tAssocL : A \times (B \times C) \rightarrow (A \times B) \times C$ by $$\tAssocL = \dup(\dup(\fst, \fst \circ \snd), \snd \circ \snd)$$ and define $\tAssocR : (A \times B) \times C \rightarrow A \times (B \times C)$ by $$\tAssocR = \dup(\fst \circ \fst, \dup(\snd \circ \fst, \snd)).$$
-</p></div>
+
+In Haskell:
+
+> assocL :: (a,(b,c)) -> ((a,b),c)
+> assocL = dup (dup fst (fst . snd)) (snd . snd)
+> 
+> assocR :: ((a,b),c) -> (a,(b,c))
+> assocR = dup (fst . fst) (dup (snd . fst) snd)
+
+</div>
 </div>
 
-Now $\tAssocL$ and $\tAssocR$ have some properties:
+Now $\tAssocL$ and $\tAssocR$ have some nice properties.
 
 <div class="result">
 <div class="thm"><p>
@@ -339,28 +348,6 @@ as claimed.
 </p></div>
 </div>
 
-The previous result suggests more straightforward implementations of $\tAssocL$ and $\tAssocR$.
-
-> assocL :: (a,(b,c)) -> ((a,b),c)
-> assocL (a,(b,c)) = ((a,b),c)
-> 
-> assocR :: ((a,b),c) -> (a,(b,c))
-> assocR ((a,b),c) = (a,(b,c))
-> 
-> 
-> _test_assocL_alt :: (Equal a, Equal b, Equal c)
->   => a -> b -> c -> Test ((a,(b,c)) -> Bool)
-> _test_assocL_alt _ _ _ =
->   testName "assocL == dup(dup(fst, fst o snd), snd o snd)" $
->   \x -> eq (assocL x) (dup (dup fst (fst . snd)) (snd . snd) x)
-> 
-> 
-> _test_assocR_alt :: (Equal a, Equal b, Equal c)
->   => a -> b -> c -> Test (((a,b),c) -> Bool)
-> _test_assocR_alt _ _ _ =
->   testName "assocR == dup(fst o fst, dup(snd o fst, snd))" $
->   \x -> eq (assocR x) (dup (fst . fst) (dup (snd . fst) snd) x)
-
 
 Testing
 -------
@@ -383,16 +370,17 @@ The suite:
 >       }
 > 
 >   runTest args (_test_dup_fst_snd a b)
->   runTest args (_test_swap_entries a b)
->   runTest args (_test_swap_swap a b)
+> 
+>   runTest args (_test_tswap_entries a b)
+>   runTest args (_test_tswap_tswap a b)
+> 
 >   runTest args (_test_pair_apply a b)
 >   runTest args (_test_pair_pair a b)
+> 
 >   runTest args (_test_assocL_entries a b c)
 >   runTest args (_test_assocR_entries a b c)
 >   runTest args (_test_assocL_assocR a b c)
 >   runTest args (_test_assocR_assocL a b c)
->   runTest args (_test_assocL_alt a b c)
->   runTest args (_test_assocR_alt a b c)
 
 
 And ``main``:

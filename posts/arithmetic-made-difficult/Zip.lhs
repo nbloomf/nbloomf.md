@@ -648,11 +648,11 @@ Testing
 
 Here are our property tests for $\zip$ and $\zipPad$.
 
-> _test_zip_swap :: (List t, Equal a, Equal b)
+> _test_zip_tswap :: (List t, Equal a, Equal b)
 >   => t a -> t b -> Test (ListOf t a -> ListOf t b -> Bool)
-> _test_zip_swap _ _ =
->   testName "map(swap)(zip(x,y)) == zip(y,x)" $
->   \x y -> eq (map swap (zip x y)) (zip y x)
+> _test_zip_tswap _ _ =
+>   testName "map(tswap)(zip(x,y)) == zip(y,x)" $
+>   \x y -> eq (map tswap (zip x y)) (zip y x)
 > 
 > 
 > _test_zip_length :: (List t, Equal a, Equal b, Natural n)
@@ -686,11 +686,11 @@ Here are our property tests for $\zip$ and $\zipPad$.
 >   \x y -> eq (zip' x y) (zip x y)
 > 
 > 
-> _test_zipPad_swap :: (List t, Equal a, Equal b)
+> _test_zipPad_tswap :: (List t, Equal a, Equal b)
 >   => t a -> t b -> Test (a -> b -> ListOf t a -> ListOf t b -> Bool)
-> _test_zipPad_swap _ _ =
->   testName "map(swap)(zipPad(u,v)(x,y)) == zipPad(v,u)(y,x)" $
->   \u v x y -> eq (map swap (zipPad u v x y)) (zipPad v u y x)
+> _test_zipPad_tswap _ _ =
+>   testName "map(tswap)(zipPad(u,v)(x,y)) == zipPad(v,u)(y,x)" $
+>   \u v x y -> eq (map tswap (zipPad u v x y)) (zipPad v u y x)
 > 
 > 
 > _test_zipPad_length :: (List t, Equal a, Equal b, Natural n)
@@ -745,13 +745,13 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_zip_swap t u)
+>   runTest args (_test_zip_tswap t u)
 >   runTest args (_test_zip_length t u n)
 >   runTest args (_test_zip_zip_left t)
 >   runTest args (_test_zip_zip_right t)
 >   runTest args (_test_zip_alt t u)
 > 
->   runTest args (_test_zipPad_swap t u)
+>   runTest args (_test_zipPad_tswap t u)
 >   runTest args (_test_zipPad_length t u n)
 >   runTest args (_test_zipPad_zipPad_left t)
 >   runTest args (_test_zipPad_zipPad_right t)

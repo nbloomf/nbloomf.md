@@ -40,6 +40,8 @@ test-suite amd-disjoint-union
   other-modules:
     Booleans
 
+
+
 test-suite amd-equals
   type:          exitcode-stdio-1.0
   main-is:       Equals.lhs
