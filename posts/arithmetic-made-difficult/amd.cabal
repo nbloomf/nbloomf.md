@@ -10,7 +10,11 @@ library
     Booleans,
     Tuples,
     DisjointUnions,
-    Unary
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    MutatingRecursion
   build-depends:
     base == 4.*,
     QuickCheck

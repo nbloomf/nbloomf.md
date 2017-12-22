@@ -3,6 +3,7 @@ title: From Arrows to Programs
 author: nbloomf
 date: 2014-05-07
 tags: arithmetic-made-difficult, literate-haskell
+slug: unary
 ---
 
 > {-# LANGUAGE BangPatterns #-}
@@ -10,80 +11,234 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( Unary(Z,N), mkUnary, natRec
 >   ) where
 > 
+> import Prelude (Integer, (-), (<=))
+> import Test.QuickCheck.Modifiers (NonNegative(..))
 > import Booleans
-> 
-> import Prelude(Show(..), Bool(..), Integer, (-), (<=), return, (.))
-> import Test.QuickCheck
 
-A nice consequence of wrapping up recursion in the $\natrec{\ast}{\ast}$ function is that it allows us to write programs, independent of any implementation, and prove things about them. We'll see lots of examples of this, but first we need to establish a structural result:
-
-1. Every natural number is either $\zero$ or of the form $\next(m)$ for some natural number $m$,
-2. No natural number is both $\zero$ and $\next(m)$ for some $m$, and
-3. If $\next(n) = \next(m)$, then $n = m$.
-
-We prove these in turn.
+A nice consequence of wrapping up recursion in the $\natrec{\ast}{\ast}$ function is that it allows us to write programs, independent of any implementation, and prove things about them. We'll see lots of examples of this, but first we need to establish some structural results.
 
 <div class="result">
-<div class="lemma">
-<p>If $n \in \mathbb{N}$, then either $n = \zero$ or $n = \next(m)$ for some $m$.</p>
-</div>
-
-<div class="proof">
-Suppose to the contrary that there is an element $s \in \nats$, not equal to $\zero$, which is not of the form $\next(m)$ for some $m$. Note that $\bool$, with the distinguished element $\btrue$ and the constant function $\const(\btrue) : \bool \rightarrow \bool$, is an iterative set. Let $\Theta$ denote the unique iterative homomorphism $\natrec{\btrue}{\const(\btrue)} : \nats \rightarrow \bool$.
-
-Now we define another mapping $\Psi : \nats \rightarrow \bool$ as follows: $$\Psi(x) = \left\{ \begin{array}{ll} \Theta(x) & \mathrm{if}\ x \neq s \\ \bnot(\Theta(x)) & \mathrm{if}\ x = s \end{array} \right.$$ We claim that $\Psi$ is an iterative homomorphism. To see this, note that $$\Psi(\zero) = \Theta(\zero) = \btrue$$ (since $\zero \neq s$) and that if $x \in \nats$,
-$$\begin{eqnarray*}
- &   & \Psi(\next(x)) \\
- & = & \Theta(\next(x)) \\ 
- & = & (\const\ \btrue)(\Theta(x)) \\
- & = & \btrue \\
- & = & (\const\ \btrue)(\Psi(x))
-\end{eqnarray*}$$
-(since $\next(x) \neq s$). That is, $\Psi$ is an iterative homomorphism from $(\nats, \zero, \next)$ to $(\bool, \btrue, \const(\btrue))$, and since $\Theta$ is unique, we have $\Psi = \Theta$. But this implies that $\Theta(s) = \Psi(s) = \bnot(\Theta(s))$, which is absurd.
+<div class="defn">
+Let $1 = \{\ast\}$, and define $\varphi : 1 + \nats \rightarrow 1 + \nats$ by $$\varphi = \rgt \circ \either(\const(\zero),\next).$$ In this post we consider $$(1 + \nats, \lft(\ast), \varphi)$$ as an inductive set.
 </div>
 </div>
 
-Next:
-
-<div class="result">
-<div class="thm"><p>
-There is not a natural number $m$ such that $\zero = \next(m)$.
-</p></div>
-
-<div class="proof">
-Suppose to the contrary that $\next(m) = \zero$. Let $\const(\bfalse)$ be the constant false map on $\bool$, and note that $(\bool, \btrue, \const(\bfalse))$ is an iterative set. Let $\Theta$ denote the unique iterative homomorphism $\natrec{\btrue}{\const(\bfalse)} : \nats \rightarrow \bool$.
-
-We thus have $$\btrue = \Theta(\zero) = \Theta(\next(m)) = (\const(\bfalse))(\Theta(m)) = \bfalse,$$ which is absurd.
-</div>
-</div>
-
-Finally:
-
-(@@@)
-
-In fact we can define a recursive function which detects whether a natural number is zero or not.
+It turns out that $1 + \nats$ is isomorphic to $\nats$, and the map that achieves this is useful.
 
 <div class="result">
 <div class="thm">
-Define $\varphi : \nats \rightarrow \bool$ by $\varphi(n) = \bfalse$, and define $\iszero : \nats \rightarrow \bool$ by $$\iszero = \natrec{\btrue}{\varphi}.$$ Then $$\iszero(n) = \left\{ \begin{array}{ll} \btrue & \mathrm{if}\ n = \zero \\ \bfalse & \mathrm{otherwise}. \end{array} \right.$$
+The natural recursion map $\Theta : \nats \rightarrow 1 + \nats$ is an isomorphism; in particular, the inverse of $\Theta$ is $$\Omega = \either(\const(\zero),\next).$$ We denote this $\Theta$ by $\unnext$.
 </div>
 
-<div class="proof">
-Certainly
+<div class="proof"><p>
+We need to show two results: first that $\Omega$ is an inductive set homomorphism, and second that $\Omega$ and $\Theta$ are mutual inverses. To the first point, note that
+$$\begin{eqnarray*}
+ &   & \Omega(\lft(\ast)) \\
+ & = & \either(\const(\zero),\id)(\lft(\ast)) \\
+ & = & \const(\zero)(\ast) \\
+ & = & \zero
+\end{eqnarray*}$$
+and if $x \in 1 + \nats$, we have two possibilities. If $x = \lft(\ast)$, we have
+$$\begin{eqnarray*}
+ &   & \Omega(\varphi(\lft(\ast))) \\
+ & = & \Omega((\rgt \circ \either(\const(\zero),\next))(\lft(\ast))) \\
+ & = & \Omega(\rgt(\either(\const(\zero),\next)(\lft(\ast)))) \\
+ & = & \Omega(\rgt(\const(\zero)(\ast))) \\
+ & = & \Omega(\rgt(\zero)) \\
+ & = & \either(\const(\zero),\next)(\rgt(\zero)) \\
+ & = & \next(\zero) \\
+ & = & \next(\Omega(\lft(\ast)))
+\end{eqnarray*}$$
+and if $x = \rgt(n)$, with $n \in \nats$, we have
+$$\begin{eqnarray*}
+ &   & \Omega(\varphi(\rgt(n))) \\
+ & = & \Omega((\rgt \circ \either(\const(\zero),\next))(\rgt(n))) \\
+ & = & \Omega(\rgt(\either(\const(\zero),\next)(\rgt(n)))) \\
+ & = & \Omega(\rgt(\next(n))) \\
+ & = & \either(\const(\zero),\next)(\rgt(\next(n))) \\
+ & = & \next(\next(n)) \\
+ & = & \next(\either(\const(\zero),\next)(\rgt(n))) \\
+ & = & \next(\Omega(\rgt(n)))
+\end{eqnarray*}$$
+as needed.
+
+Next to see that $\Omega$ and $\Theta$ are mutual inverses. First we show that $(\Omega \circ \Theta)(n) = \id(n)$ for all $n \in \nats$, proceeding by induction. For the base case $n = \zero$ we have
+$$\begin{eqnarray*}
+ &   & (\Omega \circ \Theta)(n) \\
+ & = & \Omega(\Theta(\zero)) \\
+ & = & \either(\const(\zero),\next)(\natrec{\lft(\ast)}{\varphi}(\zero)) \\
+ & = & \either(\const(\zero),\next)(\lft(\ast)) \\
+ & = & \const(\zero)(\ast) \\
+ & = & \zero \\
+ & = & n,
+\end{eqnarray*}$$
+and if the equality holds for $n$, we have
+$$\begin{eqnarray*}
+ &   & (\Omega \circ \Theta)(\next(n)) \\
+ & = & \Omega(\Theta(\next(n))) \\
+ & = & \either(\const(\zero),\next)(\natrec{\lft(\ast)}{\varphi}(\next(n))) \\
+ & = & \either(\const(\zero),\next)(\varphi(\natrec{\lft(\ast)}{\varphi}(n))) \\
+ & = & \either(\const(\zero),\next)(\varphi(\Theta(n))) \\
+ & = & \either(\const(\zero),\next)((\rgt \circ \either(\const(\zero),\next))(\Theta(n))) \\
+ & = & \either(\const(\zero),\next)(\rgt(\either(\const(\zero),\next)(\Theta(n)))) \\
+ & = & \next(\either(\const(\zero),\next)(\Theta(n))) \\
+ & = & \next(\Omega(\Theta(n))) \\
+ & = & \next((\Omega \circ \Theta)(n)) \\
+ & = & \next(n)
+\end{eqnarray*}$$
+as needed. Now to see that $\Theta \circ \Omega = \id$, we consider two possibilities. First note that
+$$\begin{eqnarray*}
+ &   & (\Theta \circ \Omega)(\lft(\ast)) \\
+ & = & \Theta(\Omega(\lft(\ast))) \\
+ & = & \Theta(\either(\const(\zero),\next)(\lft(\ast))) \\
+ & = & \Theta(\const(\zero)(\ast)) \\
+ & = & \Theta(\zero) \\
+ & = & \lft(\ast).
+\end{eqnarray*}$$
+To see that $(\Theta \circ \Omega)(\rgt(n)) = \rgt(n)$ for all $n \in \nats$, we proceed by induction. For the base case $n = \zero$ we have
+$$\begin{eqnarray*}
+ &   & (\Theta \circ \Omega)(\rgt(n)) \\
+ & = & \Theta(\Omega(\rgt(\zero))) \\
+ & = & \Theta(\either(\const(\zero),\next)(\rgt(\zero))) \\
+ & = & \Theta(\next(\zero)) \\
+ & = & \natrec{\lft(\ast)}{\varphi}(\next(\zero)) \\
+ & = & \varphi(\natrec{\lft(\ast)}{\varphi}(\zero)) \\
+ & = & \varphi(\lft(\ast)) \\
+ & = & (\rgt \circ \either(\const(\zero),\next))(\lft(\ast)) \\
+ & = & \rgt(\either(\const(\zero),\next)(\lft(\ast))) \\
+ & = & \rgt(\const(\zero)(\ast)) \\
+ & = & \rgt(\zero) \\
+ & = & \rgt(n)
+\end{eqnarray*}$$
+as needed. For the inductive step, if the equality holds for some $n$, we have
+$$\begin{eqnarray*}
+ &   & (\Theta \circ \Omega)(\rgt(\next(n))) \\
+ & = & \Theta(\Omega(\rgt(\next(n)))) \\
+ & = & \Theta(\either(\const(\zero),\next)(\rgt(\next(n)))) \\
+ & = & \Theta(\next(\next(n))) \\
+ & = & \natrec{\lft(\ast)}{\varphi}(\next(\next(n))) \\
+ & = & \varphi(\natrec{\lft(\ast)}{\varphi}(\next(n))) \\
+ & = & \varphi(\Theta(\next(n))) \\
+ & = & \varphi(\Theta(\either(\const(\zero),\next)(\rgt(n)))) \\
+ & = & \varphi((\Theta \circ \Omega)(\rgt(n))) \\
+ & = & \varphi(\rgt(n)) \\
+ & = & (\rgt \circ \either(\const(\zero),\next))(\rgt(n)) \\
+ & = & \rgt(\either(\const(\zero),\next)(\rgt(n))) \\
+ & = & \rgt(\next(n))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
+From $\unnext$ we define two helper functions.
+
+<div class="result">
+<div class="defn">
+We define $\prev : \nats \rightarrow \nats$ by $$\prev = \either(\const(\zero),\id) \circ \unnext$$ and $\iszero : \nats \rightarrow \bool$ by $$\iszero = \either(\const(\btrue),\const(\bfalse)) \circ \unnext.$$
+</div>
+</div>
+
+Now $\unnext$, $\prev$, and $\iszero$ have some useful properties.
+
+<div class="result">
+<div class="thm"><p>
+1. $\unnext(\zero) = \lft(\ast)$.
+2. $\unnext(\next(n)) = \rgt(n)$.
+3. $\prev(\zero) = \zero$.
+4. $\prev(\next(n)) = n$.
+5. $\iszero(\zero) = \btrue$.
+6. $\iszero(\next(n)) = \bfalse$.
+</p></div>
+
+<div class="proof"><p>
+1. Note that
+$$\begin{eqnarray*}
+ &   & \unnext(\zero) \\
+ & = & \natrec{\lft(\ast)}{\varphi}(\zero) \\
+ & = & \lft(\ast)
+\end{eqnarray*}$$
+as claimed.
+2. Letting $\Omega$ be the inverse of $\unnext$, we have
+$$\begin{eqnarray*}
+ &   & \unnext(\next(n)) \\
+ & = & \unnext(\either(\const(\zero),\next)(\rgt(n))) \\
+ & = & \unnext(\Omega(\rgt(n))) \\
+ & = & (\unnext \circ \Omega)(\rgt(n)) \\
+ & = & \rgt(n)
+\end{eqnarray*}$$
+as claimed.
+3. We have
+$$\begin{eqnarray*}
+ &   & \prev(\zero) \\
+ & = & (\either(\const(\zero),\id) \circ \unnext)(\zero) \\
+ & = & \either(\const(\zero),\id)(\unnext(\zero)) \\
+ & = & \either(\const(\zero),\id)(\lft(\ast)) \\
+ & = & \const(\zero)(\ast) \\
+ & = & \zero
+\end{eqnarray*}$$
+as claimed.
+4. We have
+$$\begin{eqnarray*}
+ &   & \prev(\next(n)) \\
+ & = & (\either(\const(\zero),\id) \circ \unnext)(\next(n)) \\
+ & = & \either(\const(\zero),\id)(\unnext(\next(n))) \\
+ & = & \either(\const(\zero),\id)(\rgt(n)) \\
+ & = & \id(n) \\
+ & = & n
+\end{eqnarray*}$$
+as claimed.
+5. We have
 $$\begin{eqnarray*}
  &   & \iszero(\zero) \\
- & = & \natrec{\btrue}{\varphi}(\zero) \\
- & = & \btrue.
+ & = & (\either(\const(\btrue),\const(\bfalse)) \circ \unnext)(\zero) \\
+ & = & \either(\const(\btrue),\const(\bfalse))(\unnext(\zero)) \\
+ & = & \either(\const(\btrue),\const(\bfalse))(\lft(\ast)) \\
+ & = & \const(\btrue)(\ast) \\
+ & = & \btrue
 \end{eqnarray*}$$
-And if $n = \next(m)$ for some $m$, then we have
+as claimed.
+6. We have
 $$\begin{eqnarray*}
- &   & \iszero(\next(m)) \\
- & = & \natrec{\btrue}{\varphi}(\next(m)) \\
- & = & \varphi(\natrec{\btrue}{\varphi}(m)) \\
+ &   & \iszero(\next(n)) \\
+ & = & (\either(\const(\btrue),\const(\bfalse)) \circ \unnext)(\next(n)) \\
+ & = & \either(\const(\btrue),\const(\bfalse))(\unnext(\next(n))) \\
+ & = & \either(\const(\btrue),\const(\bfalse))(\rgt(n)) \\
+ & = & \const(\bfalse)(n) \\
  & = & \bfalse
 \end{eqnarray*}$$
 as claimed.
+</p></div>
 </div>
+
+We're now ready to finish off the Peano axioms.
+
+<div class="result">
+<div class="thm">
+1. Every natural number is either $\zero$ or of the form $\next(m)$ for some natural number $m$,
+2. No natural number is both $\zero$ and $\next(m)$ for some $m$, and
+3. $\next(n) = \next(m)$ if and only if $n = m$.
+</div>
+
+<div class="proof"><p>
+1. Let $n \in \nats$ and let $\Omega$ be the inverse of $\unnext$. Consider $\unnext(n) \in 1 + \nats$; we have either $\unnext(n) = \lft(\ast)$ or $\unnext(n) = \rgt(m)$ for some $m \in \nats$. In the first case we have
+$$\begin{eqnarray*}
+ &   & n \\
+ & = & \Omega(\unnext(n)) \\
+ & = & \Omega(\lft(\ast)) \\
+ & = & \const(\zero)(\ast) \\
+ & = & \zero,
+\end{eqnarray*}$$
+and in the second case we have
+$$\begin{eqnarray*}
+ &   & n \\
+ & = & \Omega(\unnext(n)) \\
+ & = & \Omega(\rgt(m)) \\
+ & = & \next(m)
+\end{eqnarray*}$$
+as claimed.
+2. If $\zero = \next(n)$, we have $$\btrue = \iszero(\zero) = \iszero(\next(n)) = \bfalse,$$ which is absurd.
+3. The "if" part is trivial. To see the "only if" part, suppose we have $\next(n) = \next(m)$; then $$n = \prev(\next(n)) = \prev(\next(m)) = m$$ as claimed.
+</p></div>
 </div>
 
 Establishing that every natural number is either $\zero$ or of the form $\next(m)$ for some $m$ also justifies our use of the following Haskell type to model the natural numbers.

@@ -13,7 +13,6 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * Type
         * [Natural Numbers](/posts/arithmetic-made-difficult/natural-numbers.html)
         * [From Arrows to Programs](/posts/arithmetic-made-difficult/Unary.html)
-        * [Variations on Peano](/posts/arithmetic-made-difficult/variations-on-peano.html)
         * [The Uniqueness of the Natural Numbers](/posts/arithmetic-made-difficult/NaturalNumbers.html)
     * Recursion Operators
         * [Simple Recursion](/posts/arithmetic-made-difficult/SimpleRecursion.html)

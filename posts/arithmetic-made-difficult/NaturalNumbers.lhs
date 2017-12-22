@@ -18,7 +18,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   Integer, Int, return, sequence_, (.))
 > import Test.QuickCheck
 
-We have assumed the existence of a set $\nats$ such that there is a unique inductive set homomorphism from $\nats$ to any other inductive set. But it turns out that this set is not *unique* with this property; any other inductive set which is *isomorphic* to $\nats$ enjoys it as well.
+We have assumed the existence of a set $\nats$ such that there is a unique inductive set homomorphism from $\nats$ to any other inductive set. But it turns out that this set is not *unique* with this property; any other inductive set which is *isomorphic* to $\nats$ enjoys it as well. In fact we've already seen one such set, namely $1 + \nats$.
 
 Here's a handwavy proof. Let $(A,\varphi,e)$ be an inductive set, and suppose the unique map $\theta : \nats \rightarrow A$ is bijective. Then there is a unique inductive set homomorphism $\omega : A \rightarrow \nats$; namely, $\omega = \theta^{-1}$. Now any homomorphism from $A$ factors through the (unique) map $\omega$.
 
@@ -46,7 +46,7 @@ Now every inductive set isomorphic to $\nats$ is characterized by (1) its zero e
 >     Zero   -> Zero
 >     Next k -> Next (fromUnary k)
 
-And some helpers:
+Our helpers $\iszero$ and $\prev$ can be written against this interface:
 
 > isZero :: (Natural n) => n -> Bool
 > isZero m = case natShape m of
@@ -58,7 +58,18 @@ And some helpers:
 >   Zero   -> zero
 >   Next k -> k
 
-Here's the ``Natural`` instance for ``Unary``:
+As can the natural recursion operator $\natrec{\ast}{\ast}$.
+
+> naturalRec :: (Natural n)
+>   => a -> (a -> a) -> n -> a
+> naturalRec e phi n =
+>   let
+>     tau !x k = case natShape k of
+>       Zero   -> x
+>       Next m -> tau (phi x) m
+>   in tau e n
+
+From now on we'll write programs against the ``Natural`` interface with ``naturalRec`` instead of ``Unary`` specifically. Of course, ``Unary`` is an instance of ``Natural``:
 
 > instance Natural Unary where
 >   toUnary   x = x
@@ -72,20 +83,6 @@ Here's the ``Natural`` instance for ``Unary``:
 >     N k -> Next k
 > 
 >   natural = mkUnary
-
-And note that natural, simple, and primitive recursion can be written against the ``Natural`` interface.
-
-> naturalRec :: (Natural n)
->   => a -> (a -> a) -> n -> a
-> naturalRec e phi n =
->   let
->     tau !x k = case natShape k of
->       Zero   -> x
->       Next m -> tau (phi x) m
->   in tau e n
-
-
-From now on we'll use the ``Natural`` interface with ``naturalRec``, ``simpleRec``, ``bailoutRec``, and ``mutatingRec`` instead of ``Unary``.
 
 There is one bit of Haskell wierdness we have to deal with. We can define an ``Equal`` instance against the ``Natural`` interface (as we'll see), but the instance declaration
 

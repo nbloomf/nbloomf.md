@@ -7,21 +7,26 @@ slug: booleans
 ---
 
 > module Booleans
->   ( Show(..), String, (++), Int, IO, Maybe(..), (.), id, ($), Either(..)
->   , Arbitrary, CoArbitrary, maxSuccess, maxSize, stdArgs
->   , Test, runTest, testName, testLabel, withTypeOf, TypeName(..)
-> 
->   , Bool(..), not, and, or, ifThenElse
+>   ( Bool(..), not, and, or, ifThenElse
 >   , Equal, eq
 >   , _test_boolean, main_boolean
+> 
+>   , Test, runTest, testName, testLabel, withTypeOf, TypeName(..)
+> 
+>   , module Prelude
+>   , module Test.QuickCheck
+>   , module Test.QuickCheck.Test
 >   ) where
 > 
 > import Prelude
 >   ( Show(show), IO, Bool(..), Int, Maybe(..), Either(..), id
->   , putStrLn, (>>), return, (++), String, (.), ($)
+>   , putStrLn, (>>), return, (++), String, (.), ($), Integer
 >   )
 > import Test.QuickCheck
-> import Test.QuickCheck.Test
+>   ( Testable(..), Args(..), Arbitrary(..), CoArbitrary(..)
+>   , quickCheckWithResult, stdArgs, variant
+>   )
+> import Test.QuickCheck.Test (isSuccess)
 > import Text.Show.Functions
 > import System.Exit
 
