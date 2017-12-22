@@ -119,32 +119,32 @@ as needed.
 
 (Note that the reverse composition $\unzip(\zip(x,y)) = (x,y),$ although it makes sense type-wise, does not hold for all $x$ and $y$ since $\zip$ truncates its longer argument.)
 
-$\unzip$ interacts with $\swap$:
+$\unzip$ interacts with $\tSwap$:
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ and $B$ be sets and $x \in \lists{A \times B}$. Then we have $$\swap(\unzip(x)) = \unzip(\map(\swap)(x)).$$
+Let $A$ and $B$ be sets and $x \in \lists{A \times B}$. Then we have $$\tSwap(\unzip(x)) = \unzip(\map(\tSwap)(x)).$$
 </p></div>
 
 <div class="proof"><p>
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \swap(\unzip(x)) \\
- & = & \swap(\unzip(\nil)) \\
- & = & \swap(\nil,\nil) \\
+ &   & \tSwap(\unzip(x)) \\
+ & = & \tSwap(\unzip(\nil)) \\
+ & = & \tSwap(\nil,\nil) \\
  & = & (\nil,\nil) \\
  & = & \unzip(\nil) \\
- & = & \unzip(\map(\swap)(\nil)) \\
- & = & \unzip(\map(\swap)(x))
+ & = & \unzip(\map(\tSwap)(\nil)) \\
+ & = & \unzip(\map(\tSwap)(x))
 \end{eqnarray*}$$
-as needed. For the inductive step, suppose the equality holds for some $x$, and let $(a,b) \in A \times B$. Suppose $(u,v) = \unzip(x)$; by the inductive hypothesis we have $(v,u) = \unzip(\map(\swap)(x))$. Now
+as needed. For the inductive step, suppose the equality holds for some $x$, and let $(a,b) \in A \times B$. Suppose $(u,v) = \unzip(x)$; by the inductive hypothesis we have $(v,u) = \unzip(\map(\tSwap)(x))$. Now
 $$\begin{eqnarray*}
- &   & \unzip(\map(\swap)(\cons((a,b),x))) \\
- & = & \unzip(\cons(\swap(a,b),\map(\swap)(x))) \\
- & = & \unzip(\cons((b,a),\map(\swap)(x))) \\
+ &   & \unzip(\map(\tSwap)(\cons((a,b),x))) \\
+ & = & \unzip(\cons(\tSwap(a,b),\map(\tSwap)(x))) \\
+ & = & \unzip(\cons((b,a),\map(\tSwap)(x))) \\
  & = & (\cons(b,v),\cons(a,u)) \\
- & = & \swap(\cons(a,u),\cons(b,v)) \\
- & = & \swap(\unzip(\cons((a,b),x)))
+ & = & \tSwap(\cons(a,u),\cons(b,v)) \\
+ & = & \tSwap(\unzip(\cons((a,b),x)))
 \end{eqnarray*}$$
 as claimed.
 </p></div>
@@ -154,34 +154,34 @@ One more.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$, $B$, $U$, and $V$ be sets, with $f : A \rightarrow U$ and $g : B \rightarrow V$. For all $x \in \lists{A \times B}$ we have $$\unzip(\map(\pair(f,g))(x)) = \pair(\map(f),\map(g))(\unzip(x)).$$
+Let $A$, $B$, $U$, and $V$ be sets, with $f : A \rightarrow U$ and $g : B \rightarrow V$. For all $x \in \lists{A \times B}$ we have $$\unzip(\map(\tPair(f,g))(x)) = \tPair(\map(f),\map(g))(\unzip(x)).$$
 </p></div>
 
 <div class="proof"><p>
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \unzip(\map(\pair(f,g))(\nil)) \\
+ &   & \unzip(\map(\tPair(f,g))(\nil)) \\
  & = & \unzip(\nil) \\
  & = & (\nil,\nil) \\
  & = & (\map(f)(\nil),\map(g)(\nil)) \\
- & = & \pair(\map(f),\map(g))(\nil,\nil) \\
- & = & \pair(\map(f),\map(g))(\unzip(\nil))
+ & = & \tPair(\map(f),\map(g))(\nil,\nil) \\
+ & = & \tPair(\map(f),\map(g))(\unzip(\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $(a,b) \in A \times B$. Say $(u,v) = \unzip(x)$. Letting $\varphi$ be as in the definition of $\unzip$ and using the inductive hypothesis, we have
 $$\begin{eqnarray*}
- &   & \pair(\map(f),\map(g))(\unzip(\cons((a,b),x))) \\
- & = & \pair(\map(f),\map(g))(\cons(a,u),\cons(b,v)) \\
+ &   & \tPair(\map(f),\map(g))(\unzip(\cons((a,b),x))) \\
+ & = & \tPair(\map(f),\map(g))(\cons(a,u),\cons(b,v)) \\
  & = & (\map(f)(\cons(a,u)),\map(g)(\cons(b,v))) \\
  & = & (\cons(f(a),\map(f)(u)),\cons(g(b),\map(g)(v))) \\
  & = & \varphi((f(a),g(b)),(\map(f)(u),\map(g)(v))) \\
- & = & \varphi((f(a),g(b)),\pair(\map(f),\map(g))(u,v)) \\
- & = & \varphi((f(a),g(b)),\pair(\map(f),\map(g))(\unzip(x))) \\
- & = & \varphi((f(a),g(b)),\unzip(\map(\pair(f,g))(x))) \\
- & = & \varphi(\pair(f,g)(a,b),\unzip(\map(\pair(f,g))(x))) \\
- & = & \varphi(\pair(f,g)(a,b),\foldr{(\nil,\nil)}{\varphi}(\map(\pair(f,g))(x))) \\
- & = & \foldr{(\nil,\nil)}{\varphi}(\cons(\pair(f,g)(a,b),\map(\pair(f,g))(x))) \\
- & = & \foldr{(\nil,\nil)}{\varphi}(\map(\pair(f,g))(\cons((a,b),x))) \\
- & = & \unzip(\map(\pair(f,g))(\cons((a,b),x)))
+ & = & \varphi((f(a),g(b)),\tPair(\map(f),\map(g))(u,v)) \\
+ & = & \varphi((f(a),g(b)),\tPair(\map(f),\map(g))(\unzip(x))) \\
+ & = & \varphi((f(a),g(b)),\unzip(\map(\tPair(f,g))(x))) \\
+ & = & \varphi(\tPair(f,g)(a,b),\unzip(\map(\tPair(f,g))(x))) \\
+ & = & \varphi(\tPair(f,g)(a,b),\foldr{(\nil,\nil)}{\varphi}(\map(\tPair(f,g))(x))) \\
+ & = & \foldr{(\nil,\nil)}{\varphi}(\cons(\tPair(f,g)(a,b),\map(\tPair(f,g))(x))) \\
+ & = & \foldr{(\nil,\nil)}{\varphi}(\map(\tPair(f,g))(\cons((a,b),x))) \\
+ & = & \unzip(\map(\tPair(f,g))(\cons((a,b),x)))
 \end{eqnarray*}$$
 as needed.
 </p></div>

@@ -65,7 +65,7 @@ where ``Rules`` is a special monad for turning source files into web pages. Come
 >   matchRawFiles
 >   matchCssFiles
 >   matchLoneFiles
->   matchPages
+>   matchPages slugs
 >   matchClasses
 >   matchProjectPages
 >   matchTemplates
@@ -118,11 +118,12 @@ The ``matchLoneFiles`` rule handles standalone pages, like ``about`` and ``conta
 >         >>= relativizeUrls
 > 
 > 
-> matchPages :: Rules ()
-> matchPages = do
+> matchPages :: [(String, String)] -> Rules ()
+> matchPages slugs = do
 >   match "pages/**" $ do
 >     route $ setExtension "html"
 >     compile $ getResourceBody
+>       >>= expandSlugs slugs
 >       >>= pandocStringCompiler
 >       >>= loadAndApplyTemplate
 >             "templates/default.html" postCtx

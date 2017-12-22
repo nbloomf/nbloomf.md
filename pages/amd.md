@@ -8,6 +8,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
 1. First Steps
     * [Booleans](/posts/arithmetic-made-difficult/Booleans.html)
     * [Tuples](/posts/arithmetic-made-difficult/Tuples.html)
+    * [Disjoint Unions](/posts/arithmetic-made-difficult/DisjointUnions.html)
 2. $\mathbb{N}$
     * Type
         * [Natural Numbers](/posts/arithmetic-made-difficult/natural-numbers.html)
@@ -75,6 +76,9 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * DeleteAt
         * SwapAt
         * Replace
+    * Topics on Lists
+        * Run Length Encoding
+        * Edit Distance
 4. List of Arithmetics
     * [On Boring and Repetitive Proofs](/posts/arithmetic-made-difficult/on-boring-proofs.html)
     * Partial and Total Orders
@@ -88,13 +92,10 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * Mproduct
     * Lattices
     * Semirings
-5. Topics on Lists
-    * Run Length Encoding
-    * Edit Distance
-6. Fixed Radix Numeral Systems
+5. Fixed Radix Numeral Systems
     * Carry
-7. Binary Trees
-8. Sequences
+6. Binary Trees
+7. Sequences
 
 > The old idea that there was no reasoning in Arithmetic is dead; the idea that the *general axioms* have no place in Arithmetic is no longer held by a progressive teacher... <cite>J.B.F. Showalter in "Arithmetic Made Easy", 1897</cite>
 

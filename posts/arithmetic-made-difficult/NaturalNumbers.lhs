@@ -12,7 +12,6 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ) where
 > 
 > import Booleans
-> 
 > import Unary
 > 
 > import Prelude(Show(..), IO, Bool(..),

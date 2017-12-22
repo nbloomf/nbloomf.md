@@ -15,7 +15,13 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Prelude(Show(..), Bool(..), Integer, (-), (<=), return, (.))
 > import Test.QuickCheck
 
-A nice consequence of wrapping up recursion in the $\natrec{\ast}{\ast}$ function is that it allows us to write programs, independent of any implementation, and prove things about them. We'll see lots of examples of this, but first we need to establish a structural result: every natural number is either $\zero$ or of the form $\next(m)$ for some natural number $m$.
+A nice consequence of wrapping up recursion in the $\natrec{\ast}{\ast}$ function is that it allows us to write programs, independent of any implementation, and prove things about them. We'll see lots of examples of this, but first we need to establish a structural result:
+
+1. Every natural number is either $\zero$ or of the form $\next(m)$ for some natural number $m$,
+2. No natural number is both $\zero$ and $\next(m)$ for some $m$, and
+3. If $\next(n) = \next(m)$, then $n = m$.
+
+We prove these in turn.
 
 <div class="result">
 <div class="lemma">
@@ -36,6 +42,24 @@ $$\begin{eqnarray*}
 (since $\next(x) \neq s$). That is, $\Psi$ is an iterative homomorphism from $(\nats, \zero, \next)$ to $(\bool, \btrue, \const(\btrue))$, and since $\Theta$ is unique, we have $\Psi = \Theta$. But this implies that $\Theta(s) = \Psi(s) = \bnot(\Theta(s))$, which is absurd.
 </div>
 </div>
+
+Next:
+
+<div class="result">
+<div class="thm"><p>
+There is not a natural number $m$ such that $\zero = \next(m)$.
+</p></div>
+
+<div class="proof">
+Suppose to the contrary that $\next(m) = \zero$. Let $\const(\bfalse)$ be the constant false map on $\bool$, and note that $(\bool, \btrue, \const(\bfalse))$ is an iterative set. Let $\Theta$ denote the unique iterative homomorphism $\natrec{\btrue}{\const(\bfalse)} : \nats \rightarrow \bool$.
+
+We thus have $$\btrue = \Theta(\zero) = \Theta(\next(m)) = (\const(\bfalse))(\Theta(m)) = \bfalse,$$ which is absurd.
+</div>
+</div>
+
+Finally:
+
+(@@@)
 
 In fact we can define a recursive function which detects whether a natural number is zero or not.
 
@@ -207,5 +231,5 @@ Along the way we'll be writing some proofs involving ``Nat``s, but it is also us
 We can try out this instance with the following command.
 
 ```haskell
-$> generate (arbitrary :: Gen Nat)
+$> generate (arbitrary :: Gen Unary)
 ```

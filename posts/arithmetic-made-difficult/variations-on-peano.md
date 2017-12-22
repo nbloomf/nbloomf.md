@@ -5,24 +5,6 @@ date: 2014-05-20
 tags: arithmetic-made-difficult
 ---
 
-Before we get too far along, lets show that our natural numbers satisfy the remaining two traditional Peano axioms. (We established the induction principle.)
-
-First, zero is not the successor of any natural number:
-
-<div class="result">
-<div class="thm"><p>
-There is not a natural number $m$ such that $\zero = \next(m)$.
-</p></div>
-
-<div class="proof">
-Suppose to the contrary that $\next(m) = \zero$. Let $\const(\bfalse)$ be the constant false map on $\bool$, and note that $(\bool, \btrue, \const(\bfalse))$ is an iterative set. Let $\Theta$ denote the unique iterative homomorphism $\natrec{\btrue}{\const(\bfalse)} : \nats \rightarrow \bool$.
-
-We thus have $$\btrue = \Theta(\zero) = \Theta(\next(m)) = (\const(\bfalse))(\Theta(m)) = \bfalse,$$ which is absurd.
-</div>
-</div>
-
-(There was nothing preventing us from giving this proof shortly after the definition of $\nats$.)
-
 The remaining Peano axiom says that if $\next(a) = \next(b)$, then $a = b$; that is, the mapping $\next$ is injective. Before showing this, we make a definition.
 
 <div class="result">

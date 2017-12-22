@@ -11,30 +11,77 @@ slug: tuples
 >   , _test_tuple, main_tuple
 >   ) where
 > 
+> import Prelude ()
 > import Booleans
-> 
-> import Prelude(Show, Int, IO, (.))
-> import Test.QuickCheck
-> import Text.Show.Functions
 
-Today we'll establish some basic utility functions on *tuples*. First, recall some definitions.
+Today we'll establish a few basic utility functions on *tuples*. First, recall some definitions.
 
 <div class="result">
-<div class="defn"><p>
+<div class="defn">
 Let $A$ and $B$ be sets. There is a set $A \times B$ together with two functions $\fst : A \times B \rightarrow A$ and $\snd : A \times B \rightarrow B$ having the property that if $X$ is a set and $\sigma : X \rightarrow A$ and $\tau : X \rightarrow B$ functions then there is a unique map $\Theta : X \rightarrow A \times B$ such that $\fst \circ \Theta = \sigma$ and $\snd \circ \Theta = \tau$. That is, there is a unique $\Theta$ such that the following diagram commutes.
 
 $$\require{AMScd}
 \begin{CD}
-X @= X @= X\\
+X @= X @= X \\
 @V{\sigma}VV @VV{\Theta}V @VV{\tau}V \\
 A @<<{\fst}< A \times B @>>{\snd}> B
 \end{CD}$$
 
 We will denote this unique $\Theta : X \rightarrow A \times B$ by $\dup(\sigma,\tau)$.
+
+More concretely, if $f : X \rightarrow A \times B$ such that $\fst(f(x)) = \sigma(x)$ and $\snd(f(x)) = \tau(x)$ for all $x \in X$, then $f = \dup(\sigma,\tau)$.
+</div>
+</div>
+
+Now $A \times B$ uniquely represents all possible pairs of elements of $A$ and $B$ in a precise sense.
+
+<div class="result">
+<div class="thm">
+Let $A$ and $B$ be sets.
+
+1. If $a \in A$ and $b \in B$, then there exists $w \in A \times B$ such that $\fst(w) = a$ and $\snd(w) = b$.
+2. If $x,y \in A \times B$ such that $\fst(x) = \fst(y)$ and $\snd(x) = \snd(y)$, then $x = y$.
+</div>
+
+<div class="proof"><p>
+1. Let $a \in A$ and $b \in B$. Define $\sigma : \{\ast\} \rightarrow A$ by $\sigma(\ast) = a$, and $\tau : \{\ast\} \rightarrow B$ by $\tau(\ast) = b$. Let $\Theta = \dup(\sigma,\tau)$, and consider $w = \Theta(\ast) \in A \times B$. In particular, note that
+$$\begin{eqnarray*}
+ &   & \fst(w) \\
+ & = & \fst(\Theta(\ast)) \\
+ & = & (\fst \circ \Theta)(\ast) \\
+ & = & \sigma(\ast) \\
+ & = & a
+\end{eqnarray*}$$
+and
+$$\begin{eqnarray*}
+ &   & \snd(w) \\
+ & = & \snd(\Theta(\ast)) \\
+ & = & (\snd \circ \Theta)(\ast) \\
+ & = & \tau(\ast) \\
+ & = & b
+\end{eqnarray*}$$
+as needed.
+2. Say $a = \fst(x) = \fst(y)$ and $b = \snd(x) = \snd(y)$. Define $\sigma : \{\ast\} \rightarrow A$ by $\sigma(\ast) = a$, and $\tau : \{\ast\} \rightarrow B$ by $\tau(\ast) = b$. Now consider $f,g : \{\ast\} \rightarrow A \times B$ given by $f(\ast) = x$ and $g(\ast) = y$. Note that
+$$\begin{eqnarray*}
+ &   & \fst(f(\ast)) \\
+ & = & \fst(x) \\
+ & = & a \\
+ & = & \fst(y) \\
+ & = & \fst(g(\ast))
+\end{eqnarray*}$$
+and
+$$\begin{eqnarray*}
+ &   & \snd(f(\ast)) \\
+ & = & \snd(x) \\
+ & = & b \\
+ & = & \snd(y) \\
+ & = & \snd(g(\ast)).
+\end{eqnarray*}$$
+In particular, we have $$f = \dup(\sigma,\tau) = g$$ and thus $$x = f(\ast) = g(\ast) = y$$ as claimed.
 </p></div>
 </div>
 
-In Haskell we model $A \times B$ with the tuple type ``(a,b)``.
+In Haskell we can model $A \times B$ with the tuple type ``(a,b)``, and the maps in the universal property like so.
 
 > fst :: (a,b) -> a
 > fst (a,_) = a
@@ -45,9 +92,11 @@ In Haskell we model $A \times B$ with the tuple type ``(a,b)``.
 > dup :: (x -> a) -> (x -> b) -> x -> (a,b)
 > dup f g x = (f x, g x)
 
+For example, $\id_{A \times B}$ is a $\dup$.
+
 <div class="result">
 <div class="thm"><p>
-Provided the types match up, we have $$\dup(\fst,\snd) = \id.$$
+Provided the types match up, we have $$\dup(\fst,\snd) = \id_{A \times B}.$$
 </p></div>
 
 <div class="proof"><p>
@@ -59,28 +108,46 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_dup_fst_snd :: (Equal a, Equal b)
+>   => a -> b -> Test ((a,b) -> Bool)
+> _test_dup_fst_snd _ _ =
+>   testName "dup(fst,snd) == id" $
+>   \x -> eq (dup fst snd x) x
+
+</p></div>
 </div>
 
-Now $\swap$ reverses the entries of a tuple:
+We define $\tSwap$ on tuples like so.
 
 <div class="result">
 <div class="defn"><p>
-Let $A$ and $B$ be sets. We define $\swap : A \times B \rightarrow B \times A$ by $$\swap = \dup(\snd,\fst).$$
+Let $A$ and $B$ be sets. We define $\tSwap : A \times B \rightarrow B \times A$ by $$\tSwap = \dup(\snd,\fst).$$
+
+In Haskell,
+
+> swap :: (a,b) -> (b,a)
+> swap = dup snd fst
+
 </p></div>
 </div>
+
+Elements of $A \times B$ act like "ordered pairs", and $\tSwap$ effectively reverses the order of the pair.
 
 <div class="result">
 <div class="thm"><p>
 Let $A$ and $B$ be sets. Then we have the following.
 
-1. $\swap(a,b) = (b,a)$.
-2. $\swap \circ \swap = \id$.
+1. $\tSwap(a,b) = (b,a)$.
+2. $\tSwap(\tSwap(a,b)) = (a,b)$.
 </p></div>
 
 <div class="proof"><p>
 1. Note that
 $$\begin{eqnarray*}
- &   & \swap(a,b) \\
+ &   & \tSwap(a,b) \\
  & = & \dup(\snd,\fst)(a,b) \\
  & = & (\snd(a,b),\fst(a,b)) \\
  & = & (b,a)
@@ -88,41 +155,59 @@ $$\begin{eqnarray*}
 as claimed.
 2. Note that for all $(a,b) \in A \times B$ we have
 $$\begin{eqnarray*}
- &   & (\swap \circ \swap)(a,b) \\
- & = & \swap(\swap(a,b)) \\
- & = & \swap(b,a) \\
- & = & (a,b) \\
- & = & \id(a,b)
+ &   & \tSwap(\tSwap(a,b)) \\
+ & = & \tSwap(b,a) \\
+ & = & (a,b)
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_swap_entries :: (Equal a, Equal b)
+>   => a -> b -> Test ((a,b) -> Bool)
+> _test_swap_entries _ _ =
+>   testName "swap(a,b) == (b,a)" $
+>   \(a,b) -> eq (swap (a,b)) (b,a)
+> 
+> 
+> _test_swap_swap :: (Equal a, Equal b)
+>   => a -> b -> Test ((a,b) -> Bool)
+> _test_swap_swap _ _ =
+>   testName "swap(swap(x)) == x" $
+>   \x -> eq (dup snd fst (dup snd fst x)) x
+
+</p></div>
 </div>
 
-The previous result suggests a more straightforward definition for $\swap$.
-
-> swap :: (a,b) -> (b,a)
-> swap (a,b) = (b,a)
-
-Next, the utility $\pair$ facilitates defining functions from one tuple to another.
+Next, the utility $\tPair$ facilitates defining functions from one tuple to another.
 
 <div class="result">
 <div class="defn"><p>
-Let $A$, $B$, $U$, and $V$ be sets. We define $\pair : U^A \times V^B \rightarrow (U \times V)^{A \times B}$ by $$\pair(f,g) = \dup(f \circ \fst, g \circ \snd).$$
+Let $A$, $B$, $U$, and $V$ be sets. We define $\tPair : U^A \times V^B \rightarrow (U \times V)^{A \times B}$ by $$\tPair(f,g) = \dup(f \circ \fst, g \circ \snd).$$
+
+In Haskell:
+
+> pair :: (a -> u) -> (b -> v) -> (a,b) -> (u,v)
+> pair f g = dup (f . fst) (g . snd)
+
 </p></div>
 </div>
 
-<div class="result">
-<div class="thm"><p>
-The following hold whenever everything has the appropriate type.
+$\tPair$ has some nice properties.
 
-1. $\pair(f,g)(a,b) = (f(a),g(b))$.
-2. $\pair(f,g) \circ \pair(h,k) = \pair(f \circ h, g \circ k)$.
-</p></div>
+<div class="result">
+<div class="thm">
+For all $f$, $g$, $h$, $k$, $a$, and $b$ we have the following.
+
+1. $\tPair(f,g)(a,b) = (f(a),g(b))$.
+2. $\tPair(f,g) \circ \tPair(h,k) = \tPair(f \circ h, g \circ k)$.
+</div>
 
 <div class="proof"><p>
 1. Note that
 $$\begin{eqnarray*}
- &   & \pair(f,g)(a,b) \\
+ &   & \tPair(f,g)(a,b) \\
  & = & \dup(f \circ \fst, g \circ \snd)(a,b) \\
  & = & ((f \circ \fst)(a,b),(g \circ \snd)(a,b)) \\
  & = & (f(\fst(a,b)),g(\snd(a,b))) \\
@@ -131,46 +216,62 @@ $$\begin{eqnarray*}
 as claimed.
 2. Note that for all $(a,b)$ we have
 $$\begin{eqnarray*}
- &   & (\pair(f,g) \circ \pair(h,k))(a,b) \\
- & = & \pair(f,g)(\pair(h,k)(a,b)) \\
- & = & \pair(f,g)(h(a),k(b)) \\
+ &   & (\tPair(f,g) \circ \tPair(h,k))(a,b) \\
+ & = & \tPair(f,g)(\tPair(h,k)(a,b)) \\
+ & = & \tPair(f,g)(h(a),k(b)) \\
  & = & (f(h(a)),g(k(b))) \\
  & = & ((f \circ h)(a),(g \circ k)(b)) \\
- & = & \pair(f \circ h, g \circ k)(a,b)
+ & = & \tPair(f \circ h, g \circ k)(a,b)
 \end{eqnarray*}$$
 as claimed.
 </p></div>
-</div>
 
-The previous result suggests a more straightforward implementation of $\pair$:
+<div class="test"><p>
 
-> pair :: (a -> u) -> (b -> v) -> (a,b) -> (u,v)
-> pair f g (a,b) = (f a, g b)
+> _test_pair_apply :: (Equal a, Equal b)
+>   => a -> b -> Test ((a -> a) -> (b -> b) -> (a,b) -> Bool)
+> _test_pair_apply _ _ =
+>   testName "pair(f,g)(a,b) == (f(a),g(b))" $
+>   \f g (a,b) -> eq (pair f g (a,b)) (f a, g b)
+> 
+> 
+> _test_pair_pair :: (Equal a, Equal b)
+>   => a -> b
+>   -> Test ((a -> a) -> (b -> b) -> (a -> a) -> (b -> b) -> (a,b) -> Bool)
+> _test_pair_pair _ _ =
+>   testName "pair(f,g) o pair(h,k) == pair(f o h, g o k)" $
+>   \f g h k x ->
+>     eq
+>       (pair f g (pair h k x))
+>       (pair (f . h) (g . k) x)
 
-Finally, note that although as sets $A \times (B \times C)$ and $(A \times B) \times C$ cannot possibly be equal to each other in general, they are naturally isomorphic.
-
-<div class="result">
-<div class="defn"><p>
-Let $A$, $B$, and $C$ be sets. We define $\assocL : A \times (B \times C) \rightarrow (A \times B) \times C$ by $$\assocL = \dup(\dup(\fst, \fst \circ \snd), \snd \circ \snd)$$ and define $\assocR : (A \times B) \times C \rightarrow A \times (B \times C)$ by $$\assocR = \dup(\fst \circ \fst, \dup(\snd \circ \fst, \snd)).$$
 </p></div>
 </div>
 
-Now $\assocL$ and $\assocR$ have some properties:
+Finally, note that although as sets $A \times (B \times C)$ and $(A \times B) \times C$ cannot possibly be equal to each other in general, they are naturally isomorphic via $\tAssocL$ and $\tAssocR$.
+
+<div class="result">
+<div class="defn"><p>
+Let $A$, $B$, and $C$ be sets. We define $\tAssocL : A \times (B \times C) \rightarrow (A \times B) \times C$ by $$\tAssocL = \dup(\dup(\fst, \fst \circ \snd), \snd \circ \snd)$$ and define $\tAssocR : (A \times B) \times C \rightarrow A \times (B \times C)$ by $$\tAssocR = \dup(\fst \circ \fst, \dup(\snd \circ \fst, \snd)).$$
+</p></div>
+</div>
+
+Now $\tAssocL$ and $\tAssocR$ have some properties:
 
 <div class="result">
 <div class="thm"><p>
 The following hold whenever everything has the appropriate type.
 
-1. $\assocL(a,(b,c)) = ((a,b),c)$.
-2. $\assocR((a,b),c) = (a,(b,c))$.
-3. $\assocR \circ \assocL = \id$.
-4. $\assocL \circ \assocR = \id$.
+1. $\tAssocL(a,(b,c)) = ((a,b),c)$.
+2. $\tAssocR((a,b),c) = (a,(b,c))$.
+3. $\tAssocR \circ \tAssocL = \id$.
+4. $\tAssocL \circ \tAssocR = \id$.
 </p></div>
 
 <div class="proof"><p>
 1. Note that
 $$\begin{eqnarray*}
- &   & \assocL(a,(b,c)) \\
+ &   & \tAssocL(a,(b,c)) \\
  & = & \dup(\dup(\fst, \fst \circ \snd),\snd \circ \snd)(a,(b,c)) \\
  & = & (\dup(\fst,\fst \circ \snd)(a,(b,c)),(\snd \circ \snd)(a,(b,c))) \\
  & = & ((\fst(a,(b,c)),\fst(\snd(a,(b,c)))),\snd(\snd(a,(b,c)))) \\
@@ -180,7 +281,7 @@ $$\begin{eqnarray*}
 as claimed.
 2. Note that
 $$\begin{eqnarray*}
- &   & \assocR((a,b),c) \\
+ &   & \tAssocR((a,b),c) \\
  & = & \dup(\fst \circ \fst, \dup(\snd \circ \fst, \snd))((a,b),c) \\
  & = & (\fst(\fst((a,b),c)),\dup(\snd \circ \fst, \snd)((a,b),c)) \\
  & = & (\fst(a,b),(\snd(\fst((a,b),c)),\snd((a,b),c))) \\
@@ -190,70 +291,61 @@ $$\begin{eqnarray*}
 as claimed.
 3. Note that
 $$\begin{eqnarray*}
- &   & (\assocR \circ \assocL)(a,(b,c)) \\
- & = & \assocR(\assocL(a,(b,c))) \\
- & = & \assocR((a,b),c) \\
+ &   & (\tAssocR \circ \tAssocL)(a,(b,c)) \\
+ & = & \tAssocR(\tAssocL(a,(b,c))) \\
+ & = & \tAssocR((a,b),c) \\
  & = & (a,(b,c))
 \end{eqnarray*}$$
 as claimed.
 4. Note that
 $$\begin{eqnarray*}
- &   & (\assocL \circ \assocR)((a,b),c) \\
- & = & \assocL(\assocR((a,b),c)) \\
- & = & \assocL(a,(b,c)) \\
+ &   & (\tAssocL \circ \tAssocR)((a,b),c) \\
+ & = & \tAssocL(\tAssocR((a,b),c)) \\
+ & = & \tAssocL(a,(b,c)) \\
  & = & ((a,b),c)
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_assocL_entries :: (Equal a, Equal b, Equal c)
+>   => a -> b -> c -> Test (a -> b -> c -> Bool)
+> _test_assocL_entries _ _ _ =
+>   testName "assocL(a,(b,c)) == ((a,b),c)" $
+>   \a b c -> eq (assocL (a,(b,c))) ((a,b),c)
+> 
+> 
+> _test_assocR_entries :: (Equal a, Equal b, Equal c)
+>   => a -> b -> c -> Test (a -> b -> c -> Bool)
+> _test_assocR_entries _ _ _ =
+>   testName "assocR((a,b),c) == (a,(b,c))" $
+>   \a b c -> eq (assocR ((a,b),c)) (a,(b,c))
+> 
+> 
+> _test_assocL_assocR :: (Equal a, Equal b, Equal c)
+>   => a -> b -> c -> Test (((a,b),c) -> Bool)
+> _test_assocL_assocR _ _ _ =
+>   testName "assocL . assocR == id" $
+>   \x -> eq (assocL (assocR x)) x
+> 
+> 
+> _test_assocR_assocL :: (Equal a, Equal b, Equal c)
+>   => a -> b -> c -> Test ((a,(b,c)) -> Bool)
+> _test_assocR_assocL _ _ _ =
+>   testName "assocR . assocL == id" $
+>   \x -> eq (assocR (assocL x)) x
+
+</p></div>
 </div>
 
-The previous result suggests more straightforward implementations of $\assocL$ and $\assocR$.
+The previous result suggests more straightforward implementations of $\tAssocL$ and $\tAssocR$.
 
 > assocL :: (a,(b,c)) -> ((a,b),c)
 > assocL (a,(b,c)) = ((a,b),c)
 > 
 > assocR :: ((a,b),c) -> (a,(b,c))
 > assocR ((a,b),c) = (a,(b,c))
-
-
-Testing
--------
-
-Here are our property tests for $\bnot$:
-
-> _test_dup_fst_snd :: (Equal a, Equal b)
->   => a -> b -> Test ((a,b) -> Bool)
-> _test_dup_fst_snd _ _ =
->   testName "dup(fst(x),snd(x)) == x" $
->   \x -> eq (dup fst snd x) x
-> 
-> 
-> _test_dup_snd_fst :: (Equal a, Equal b)
->   => a -> b -> Test ((a,b) -> Bool)
-> _test_dup_snd_fst _ _ =
->   testName "dup(snd(x),fst(x)) == swap(x)" $
->   \x -> eq (dup snd fst x) (swap x)
-> 
-> 
-> _test_swap_swap :: (Equal a, Equal b)
->   => a -> b -> Test ((a,b) -> Bool)
-> _test_swap_swap _ _ =
->   testName "swap(swap(x)) == x" $
->   \x -> eq (swap (swap x)) x
-> 
-> 
-> _test_pair_apply :: (Equal a, Equal b)
->   => a -> b -> Test ((a -> a) -> (b -> b) -> (a,b) -> Bool)
-> _test_pair_apply _ _ =
->   testName "pair(f,g)(a,b) == (f(a),g(b))" $
->   \f g (a,b) -> eq (pair f g (a,b)) (f a, g b)
-> 
-> 
-> _test_pair_pair :: (Equal a, Equal b)
->   => a -> b -> Test ((a -> a) -> (b -> b) -> (a -> a) -> (b -> b) -> (a,b) -> Bool)
-> _test_pair_pair _ _ =
->   testName "pair(f,g) o pair(h,k) == pair(f o h, g o k)" $
->   \f g h k (a,b) -> eq (pair f g (pair h k (a,b))) (pair (f . h) (g . k) (a,b))
 > 
 > 
 > _test_assocL_alt :: (Equal a, Equal b, Equal c)
@@ -268,26 +360,22 @@ Here are our property tests for $\bnot$:
 > _test_assocR_alt _ _ _ =
 >   testName "assocR == dup(fst o fst, dup(snd o fst, snd))" $
 >   \x -> eq (assocR x) (dup (fst . fst) (dup (snd . fst) snd) x)
-> 
-> 
-> _test_assocL_assocR :: (Equal a, Equal b, Equal c)
->   => a -> b -> c -> Test (((a,b),c) -> Bool)
-> _test_assocL_assocR _ _ _ =
->   testName "assocL o assocR == id" $
->   \x -> eq (assocL (assocR x)) x
-> 
-> 
-> _test_assocR_assocL :: (Equal a, Equal b, Equal c)
->   => a -> b -> c -> Test ((a,(b,c)) -> Bool)
-> _test_assocR_assocL _ _ _ =
->   testName "assocR o assocL == id" $
->   \x -> eq (assocR (assocL x)) x
 
-And the suite:
 
-> -- run all tests for tuples
-> _test_tuple :: (Show a, Show b, Show c, Equal a, Equal b, Equal c, Arbitrary a, Arbitrary b, Arbitrary c, CoArbitrary a, CoArbitrary b) => a -> b -> c -> Int -> Int -> IO ()
+Testing
+-------
+
+The suite:
+
+> _test_tuple
+>   :: ( Show a, Show b, Show c
+>      , Equal a, Equal b, Equal c
+>      , Arbitrary a, Arbitrary b, Arbitrary c
+>      , CoArbitrary a, CoArbitrary b )
+>   => a -> b -> c -> Int -> Int -> IO ()
 > _test_tuple a b c size num = do
+>   testLabel "Tuple"
+> 
 >   let
 >     args = stdArgs
 >       { maxSuccess = num
@@ -295,14 +383,16 @@ And the suite:
 >       }
 > 
 >   runTest args (_test_dup_fst_snd a b)
->   runTest args (_test_dup_snd_fst a b)
+>   runTest args (_test_swap_entries a b)
 >   runTest args (_test_swap_swap a b)
 >   runTest args (_test_pair_apply a b)
 >   runTest args (_test_pair_pair a b)
->   runTest args (_test_assocL_alt a b c)
->   runTest args (_test_assocR_alt a b c)
+>   runTest args (_test_assocL_entries a b c)
+>   runTest args (_test_assocR_entries a b c)
 >   runTest args (_test_assocL_assocR a b c)
 >   runTest args (_test_assocR_assocL a b c)
+>   runTest args (_test_assocL_alt a b c)
+>   runTest args (_test_assocR_alt a b c)
 
 
 And ``main``:

@@ -7,15 +7,17 @@ slug: booleans
 ---
 
 > module Booleans
->   ( Bool(..), not, and, or, ifThenElse
->   , Equal, eq
+>   ( Show(..), String, (++), Int, IO, Maybe(..), (.), id, ($), Either(..)
+>   , Arbitrary, CoArbitrary, maxSuccess, maxSize, stdArgs
 >   , Test, runTest, testName, testLabel, withTypeOf, TypeName(..)
->   , Show(..), String, (++), Int, IO, Maybe(..), (.), id, ($)
+> 
+>   , Bool(..), not, and, or, ifThenElse
+>   , Equal, eq
 >   , _test_boolean, main_boolean
 >   ) where
 > 
 > import Prelude
->   ( Show(show), IO, Bool(..), Int, Maybe(..), id
+>   ( Show(show), IO, Bool(..), Int, Maybe(..), Either(..), id
 >   , putStrLn, (>>), return, (++), String, (.), ($)
 >   )
 > import Test.QuickCheck
@@ -631,6 +633,12 @@ Now that we've algebraified truth values, we will also algebraify equality. Typi
 > 
 > instance (Equal a, Equal b) => Equal (a,b) where
 >   eq (a1,b1) (a2,b2) = and (eq a1 a2) (eq b1 b2)
+> 
+> instance (Equal a, Equal b) => Equal (Either a b) where
+>   eq (Left a1)  (Left a2)  = eq a1 a2
+>   eq (Left a1)  (Right b2) = False
+>   eq (Right b1) (Left a2)  = False
+>   eq (Right b1) (Right b2) = eq b1 b2
 
 
 Testing

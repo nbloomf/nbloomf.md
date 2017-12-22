@@ -134,38 +134,38 @@ In Haskell:
 >     Nil       -> nil
 >     Cons b bs -> cons (a,b) (zip as bs)
 
-Now $\map(\swap) \circ \zip = \zip \circ \swap$:
+Now $\map(\tSwap) \circ \zip = \zip \circ \tSwap$:
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ and $B$ be sets. Then for all $x \in \lists{A}$ and $y \in \lists{B}$ we have $$\map(\swap)(\zip(x,y)) = \zip(y,x).$$
+Let $A$ and $B$ be sets. Then for all $x \in \lists{A}$ and $y \in \lists{B}$ we have $$\map(\tSwap)(\zip(x,y)) = \zip(y,x).$$
 </p></div>
 
 <div class="proof"><p>
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \map(\swap)(\zip(x,y)) \\
- & = & \map(\swap)(\zip(\nil,y)) \\
- & = & \map(\swap)(\nil) \\
+ &   & \map(\tSwap)(\zip(x,y)) \\
+ & = & \map(\tSwap)(\zip(\nil,y)) \\
+ & = & \map(\tSwap)(\nil) \\
  & = & \nil \\
  & = & \zip(y,\nil) \\
  & = & \zip(y,x)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $y \in \lists{B}$ for some $x \in \lists{A}$, and let $a \in A$. Now we consider two possibilities for $y$. If $y = \nil$, we have
 $$\begin{eqnarray*}
- &   & \map(\swap)(\zip(\cons(a,x),y)) \\
- & = & \map(\swap)(\zip(\cons(a,x),\nil)) \\
- & = & \map(\swap)(\nil) \\
+ &   & \map(\tSwap)(\zip(\cons(a,x),y)) \\
+ & = & \map(\tSwap)(\zip(\cons(a,x),\nil)) \\
+ & = & \map(\tSwap)(\nil) \\
  & = & \nil \\
  & = & \zip(\nil,\cons(a,x)) \\
  & = & \zip(y,\cons(a,x))
 \end{eqnarray*}$$
 as needed. If $y = \cons(b,z)$, using the induction hypotheses, we have
 $$\begin{eqnarray*}
- &   & \map(\swap)(\zip(\cons(a,x),y)) \\
- & = & \map(\swap)(\zip(\cons(a,x),\cons(b,z))) \\
- & = & \map(\swap)(\cons((a,b),\zip(x,z))) \\
- & = & \cons(\swap(a,b),\map(\swap)(\zip(x,z))) \\
+ &   & \map(\tSwap)(\zip(\cons(a,x),y)) \\
+ & = & \map(\tSwap)(\zip(\cons(a,x),\cons(b,z))) \\
+ & = & \map(\tSwap)(\cons((a,b),\zip(x,z))) \\
+ & = & \cons(\tSwap(a,b),\map(\tSwap)(\zip(x,z))) \\
  & = & \cons((b,a),\zip(z,x)) \\
  & = & \zip(\cons(b,z),\cons(a,x)) \\
  & = & \zip(y,\cons(a,x))
@@ -174,19 +174,19 @@ as needed.
 </p></div>
 </div>
 
-And $\map(\pair(f,g)) \circ \zip = \zip \circ \pair(\map(f),\map(g))$:
+And $\map(\tPair(f,g)) \circ \zip = \zip \circ \tPair(\map(f),\map(g))$:
 
 <div class="result">
 <div class="thm"><p>
-Let $A$, $B$, $U$, and $V$ be sets, with functions $f : A \rightarrow U$ and $g : B \rightarrow V$. Then for all $x \in \lists{A}$ and $y \in \lists{B}$, we have $$\map(\pair(f,g))(\zip(x,y)) = \zip(\map(f)(x),\map(g)(y)).$$
+Let $A$, $B$, $U$, and $V$ be sets, with functions $f : A \rightarrow U$ and $g : B \rightarrow V$. Then for all $x \in \lists{A}$ and $y \in \lists{B}$, we have $$\map(\tPair(f,g))(\zip(x,y)) = \zip(\map(f)(x),\map(g)(y)).$$
 </p></div>
 
 <div class="proof"><p>
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \map(\pair(f,g))(\zip(x,y)) \\
- & = & \map(\pair(f,g))(\zip(\nil,y)) \\
- & = & \map(\pair(f,g))(\nil) \\
+ &   & \map(\tPair(f,g))(\zip(x,y)) \\
+ & = & \map(\tPair(f,g))(\zip(\nil,y)) \\
+ & = & \map(\tPair(f,g))(\nil) \\
  & = & \nil \\
  & = & \zip(\nil,\map(g)(y)) \\
  & = & \zip(\map(f)(\nil),\map(g)(y)) \\
@@ -194,9 +194,9 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the result holds for all $y$ for some $x \in \lists{A}$, and let $a \in A$. We now consider two possibilities for $y$. If $y = \nil$, we have
 $$\begin{eqnarray*}
- &   & \map(\pair(f,g))(\zip(\cons(a,x),y)) \\
- & = & \map(\pair(f,g))(\zip(\cons(a,x),\nil)) \\
- & = & \map(\pair(f,g))(\nil) \\
+ &   & \map(\tPair(f,g))(\zip(\cons(a,x),y)) \\
+ & = & \map(\tPair(f,g))(\zip(\cons(a,x),\nil)) \\
+ & = & \map(\tPair(f,g))(\nil) \\
  & = & \nil \\
  & = & \zip(\map(f)(\cons(a,x)),\nil) \\
  & = & \zip(\map(f)(\cons(a,x)),\map(g)(\nil)) \\
@@ -204,11 +204,11 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed. If $y = \cons(b,z)$, using the inductive hypothesis we have
 $$\begin{eqnarray*}
- &   & \map(\pair(f,g))(\zip(\cons(a,x),y)) \\
- & = & \map(\pair(f,g))(\zip(\cons(a,x),\cons(b,z))) \\
- & = & \map(\pair(f,g))(\cons((a,b),\zip(x,z))) \\
- & = & \cons(\pair(f,g)(a,b),\map(\pair(f,g))(\zip(x,z))) \\
- & = & \cons(\pair(f,g)(a,b),\zip(\map(f)(x),\map(g)(z))) \\
+ &   & \map(\tPair(f,g))(\zip(\cons(a,x),y)) \\
+ & = & \map(\tPair(f,g))(\zip(\cons(a,x),\cons(b,z))) \\
+ & = & \map(\tPair(f,g))(\cons((a,b),\zip(x,z))) \\
+ & = & \cons(\tPair(f,g)(a,b),\map(\tPair(f,g))(\zip(x,z))) \\
+ & = & \cons(\tPair(f,g)(a,b),\zip(\map(f)(x),\map(g)(z))) \\
  & = & \cons((f(a),g(b)),\zip(\map(f)(x),\map(g)(z))) \\
  & = & \zip(\cons(f(a),\map(f)(x)),\cons(g(b),\map(g)(z))) \\
  & = & \zip(\map(f)(\cons(a,x)),\map(g)(\cons(b,z))) \\
@@ -267,8 +267,8 @@ $\zip$ is kind of associative:
 <div class="thm"><p>
 Let $A$, $B$, and $C$ be sets, with $x \in \lists{A}$, $y \in \lists{B}$, and $z \in \lists{C}$. Then the following hold.
 
-1. $\zip(\zip(x,y),z) = \map(\assocL)(\zip(x,\zip(y,z)))$.
-2. $\zip(x,\zip(y,z)) = \map(\assocR)(\zip(\zip(x,y),z))$.
+1. $\zip(\zip(x,y),z) = \map(\tAssocL)(\zip(x,\zip(y,z)))$.
+2. $\zip(x,\zip(y,z)) = \map(\tAssocR)(\zip(\zip(x,y),z))$.
 </p></div>
 
 <div class="proof"><p>
@@ -278,8 +278,8 @@ $$\begin{eqnarray*}
  & = & \zip(\zip(\nil,y),z) \\
  & = & \zip(\nil,z) \\
  & = & \nil \\
- & = & \map(\assocL)(\nil) \\
- & = & \map(\assocL)(\zip(\nil,\zip(y,z)))
+ & = & \map(\tAssocL)(\nil) \\
+ & = & \map(\tAssocL)(\zip(\nil,\zip(y,z)))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$, and let $a \in A$. If $y = \nil$, we have
 $$\begin{eqnarray*}
@@ -287,19 +287,19 @@ $$\begin{eqnarray*}
  & = & \zip(\zip(\cons(a,x),\nil),z) \\
  & = & \zip(\nil,z) \\
  & = & \nil \\
- & = & \map(\assocL)(\nil) \\
- & = & \map(\assocL)(\zip(\cons(a,x),\nil)) \\
- & = & \map(\assocL)(\zip(\cons(a,x),\zip(\nil,z))) \\
- & = & \map(\assocL)(\zip(\cons(a,x),\zip(y,z)))
+ & = & \map(\tAssocL)(\nil) \\
+ & = & \map(\tAssocL)(\zip(\cons(a,x),\nil)) \\
+ & = & \map(\tAssocL)(\zip(\cons(a,x),\zip(\nil,z))) \\
+ & = & \map(\tAssocL)(\zip(\cons(a,x),\zip(y,z)))
 \end{eqnarray*}$$
 as claimed. Similarly, if $z = \nil$, we have
 $$\begin{eqnarray*}
  &   & \zip(\zip(\cons(a,x),y),z) \\
  & = & \zip(\zip(\cons(a,x),y),\nil) \\
  & = & \nil \\
- & = & \map(\assocL)(\nil) \\
- & = & \map(\assocL)(\zip(\cons(a,x),\nil)) \\
- & = & \map(\assocL)(\zip(\cons(a,x),\zip(y,z)))
+ & = & \map(\tAssocL)(\nil) \\
+ & = & \map(\tAssocL)(\zip(\cons(a,x),\nil)) \\
+ & = & \map(\tAssocL)(\zip(\cons(a,x),\zip(y,z)))
 \end{eqnarray*}$$
 as claimed. Suppose then that $y = \cons(b,u)$ and $z = \cons(c,v)$. Using the inductive hypothesis, we have
 $$\begin{eqnarray*}
@@ -307,11 +307,11 @@ $$\begin{eqnarray*}
  & = & \zip(\zip(\cons(a,x),\cons(b,u)),\cons(c,v)) \\
  & = & \zip(\cons((a,b),\zip(x,u)),\cons(c,v)) \\
  & = & \cons(((a,b),c),\zip(\zip(x,u),v)) \\
- & = & \cons(\assocL(a,(b,c)),\map(\assocL)(\zip(x,\zip(u,v)))) \\
- & = & \map(\assocL)(\cons((a,(b,c)),\zip(x,\zip(u,v)))) \\
- & = & \map(\assocL)(\zip(\cons(a,x),\cons((b,c),\zip(u,v)))) \\
- & = & \map(\assocL)(\zip(\cons(a,x),\zip(\cons(b,u),\cons(c,v)))) \\
- & = & \map(\assocL)(\zip(\cons(a,x),\zip(y,z))) \\
+ & = & \cons(\tAssocL(a,(b,c)),\map(\tAssocL)(\zip(x,\zip(u,v)))) \\
+ & = & \map(\tAssocL)(\cons((a,(b,c)),\zip(x,\zip(u,v)))) \\
+ & = & \map(\tAssocL)(\zip(\cons(a,x),\cons((b,c),\zip(u,v)))) \\
+ & = & \map(\tAssocL)(\zip(\cons(a,x),\zip(\cons(b,u),\cons(c,v)))) \\
+ & = & \map(\tAssocL)(\zip(\cons(a,x),\zip(y,z))) \\
 \end{eqnarray*}$$
 as claimed.
 2. We have
@@ -319,9 +319,9 @@ $$\begin{eqnarray*}
  &   & \zip(x,\zip(y,z)) \\
  & = & \id(\zip(x,\zip(y,z))) \\
  & = & \map(\id)(\zip(x,\zip(y,z))) \\
- & = & \map(\assocR \circ \assocL)(\zip(x,\zip(y,z))) \\
- & = & \map(\assocR)(\map(\assocL)(\zip(x,\zip(y,z)))) \\
- & = & \map(\assocR)(\zip(\zip(x,y),z)) 
+ & = & \map(\tAssocR \circ \tAssocL)(\zip(x,\zip(y,z))) \\
+ & = & \map(\tAssocR)(\map(\tAssocL)(\zip(x,\zip(y,z)))) \\
+ & = & \map(\tAssocR)(\zip(\zip(x,y),z)) 
 \end{eqnarray*}$$
 as claimed.
 </p></div>
@@ -437,38 +437,38 @@ Now $\zipPad$ satisfies several properties analogous to those of $\zip$.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ and $B$ be sets. Then for all $\alpha \in A$, $\beta \in B$, $x \in \lists{A}$, and $y \in \lists{B}$ we have $$\map(\swap)(\zipPad(\alpha,\beta)(x,y)) = \zipPad(\beta,\alpha)(y,x).$$
+Let $A$ and $B$ be sets. Then for all $\alpha \in A$, $\beta \in B$, $x \in \lists{A}$, and $y \in \lists{B}$ we have $$\map(\tSwap)(\zipPad(\alpha,\beta)(x,y)) = \zipPad(\beta,\alpha)(y,x).$$
 </p></div>
 
 <div class="proof"><p>
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \map(\swap)(\zipPad(\alpha,\beta)(x,y)) \\
- & = & \map(\swap)(\zipPad(\alpha,\beta)(\nil,y)) \\
- & = & \map(\swap)(\map((\alpha,-))(y)) \\
- & = & (\map(\swap) \circ \map((\alpha,-)))(y) \\
- & = & \map(\swap \circ (\alpha,-))(y) \\
+ &   & \map(\tSwap)(\zipPad(\alpha,\beta)(x,y)) \\
+ & = & \map(\tSwap)(\zipPad(\alpha,\beta)(\nil,y)) \\
+ & = & \map(\tSwap)(\map((\alpha,-))(y)) \\
+ & = & (\map(\tSwap) \circ \map((\alpha,-)))(y) \\
+ & = & \map(\tSwap \circ (\alpha,-))(y) \\
  & = & \map((-,\alpha))(y) \\
  & = & \zipPad(\beta,\alpha)(y,\nil) \\
  & = & \zipPad(\beta,\alpha)(y,x)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now we consider two cases for $y$; either $y = \nil$ or $y = \cons(b,w)$. If $y = \nil$, we have
 $$\begin{eqnarray*}
- &   & \map(\swap)(\zipPad(\alpha,\beta)(\cons(a,x),y)) \\
- & = & \map(\swap)(\zipPad(\alpha,\beta)(\cons(a,x),\nil)) \\
- & = & \map(\swap)(\map((-,\beta))(\cons(a,x))) \\
- & = & (\map(\swap) \circ \map((-,\beta)))(\cons(a,x)) \\
- & = & \map(\swap \circ (-,\beta))(\cons(a,x)) \\
+ &   & \map(\tSwap)(\zipPad(\alpha,\beta)(\cons(a,x),y)) \\
+ & = & \map(\tSwap)(\zipPad(\alpha,\beta)(\cons(a,x),\nil)) \\
+ & = & \map(\tSwap)(\map((-,\beta))(\cons(a,x))) \\
+ & = & (\map(\tSwap) \circ \map((-,\beta)))(\cons(a,x)) \\
+ & = & \map(\tSwap \circ (-,\beta))(\cons(a,x)) \\
  & = & \map((\beta,-))(\cons(a,x)) \\
  & = & \zipPad(\alpha,\beta)(\nil,\cons(a,x)) \\
  & = & \zipPad(\alpha,\beta)(y,\cons(a,x))
 \end{eqnarray*}$$
 as needed. Finally, suppose $y = \cons(b,w)$. Then we have
 $$\begin{eqnarray*}
- &   & \map(\swap)(\zipPad(\alpha,\beta)(\cons(a,x),y)) \\
- & = & \map(\swap)(\zipPad(\alpha,\beta)(\cons(a,x),\cons(b,w))) \\
- & = & \map(\swap)(\cons((a,b),\zipPad(\alpha,\beta)(x,w)) \\
- & = & \cons(\swap((a,b)),\map(\swap)(\zipPad(\alpha,\beta)(x,w))) \\
+ &   & \map(\tSwap)(\zipPad(\alpha,\beta)(\cons(a,x),y)) \\
+ & = & \map(\tSwap)(\zipPad(\alpha,\beta)(\cons(a,x),\cons(b,w))) \\
+ & = & \map(\tSwap)(\cons((a,b),\zipPad(\alpha,\beta)(x,w)) \\
+ & = & \cons(\tSwap((a,b)),\map(\tSwap)(\zipPad(\alpha,\beta)(x,w))) \\
  & = & \cons((b,a),\zipPad(\beta,\alpha)(w,x)) \\
  & = & \zipPad(\beta,\alpha)(\cons(b,w),\cons(a,x)) \\
  & = & \zipPad(\beta,\alpha)(y,\cons(a,x)) \\
@@ -481,17 +481,17 @@ and...
 
 <div class="result">
 <div class="thm"><p>
-Let $A$, $B$, $U$, and $V$ be sets, with functions $f : A \rightarrow U$ and $g : B \rightarrow V$. Then for all $\alpha \in A$, $\beta \in B$, $x \in \lists{A}$, and $y \in \lists{B}$, we have $$\map(\pair(f,g))(\zipPad(\alpha,\beta)(x,y)) = \zipPad(f(\alpha),g(\beta))(\map(f)(x),\map(g)(y)).$$
+Let $A$, $B$, $U$, and $V$ be sets, with functions $f : A \rightarrow U$ and $g : B \rightarrow V$. Then for all $\alpha \in A$, $\beta \in B$, $x \in \lists{A}$, and $y \in \lists{B}$, we have $$\map(\tPair(f,g))(\zipPad(\alpha,\beta)(x,y)) = \zipPad(f(\alpha),g(\beta))(\map(f)(x),\map(g)(y)).$$
 </p></div>
 
 <div class="proof"><p>
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \map(\pair(f,g))(\zipPad(\alpha,\beta)(x,y)) \\
- & = & \map(\pair(f,g))(\zipPad(\alpha,\beta)(\nil,y)) \\
- & = & \map(\pair(f,g))(\map((\alpha,-))(y)) \\
- & = & (\map(\pair(f,g)) \circ \map((\alpha,-)))(y) \\
- & = & \map(\pair(f,g) \circ (\alpha,-))(y) \\
+ &   & \map(\tPair(f,g))(\zipPad(\alpha,\beta)(x,y)) \\
+ & = & \map(\tPair(f,g))(\zipPad(\alpha,\beta)(\nil,y)) \\
+ & = & \map(\tPair(f,g))(\map((\alpha,-))(y)) \\
+ & = & (\map(\tPair(f,g)) \circ \map((\alpha,-)))(y) \\
+ & = & \map(\tPair(f,g) \circ (\alpha,-))(y) \\
  & = & \map((f(\alpha),g(-)))(y) \\
  & = & \map((f(\alpha),-) \circ g)(y) \\
  & = & \map((f(\alpha),-))(\map(g)(y)) \\
@@ -500,11 +500,11 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed. Now suppose the equality holds for some $x$ and let $a \in A$. We consider two cases for $y$; either $y = \nil$ or $y = \cons(b,w)$. If $y = \nil$, we have
 $$\begin{eqnarray*}
- &   & \map(\pair(f,g))(\zipPad(\alpha,\beta)(\cons(a,x),y)) \\
- & = & \map(\pair(f,g))(\zipPad(\alpha,\beta)(\cons(a,x),\nil)) \\
- & = & \map(\pair(f,g))(\map((-,\beta))(\cons(a,x))) \\
- & = & (\map(\pair(f,g)) \circ \map((-,\beta)))(\cons(a,x)) \\
- & = & \map(\pair(f,g) \circ (-,\beta))(\cons(a,x)) \\
+ &   & \map(\tPair(f,g))(\zipPad(\alpha,\beta)(\cons(a,x),y)) \\
+ & = & \map(\tPair(f,g))(\zipPad(\alpha,\beta)(\cons(a,x),\nil)) \\
+ & = & \map(\tPair(f,g))(\map((-,\beta))(\cons(a,x))) \\
+ & = & (\map(\tPair(f,g)) \circ \map((-,\beta)))(\cons(a,x)) \\
+ & = & \map(\tPair(f,g) \circ (-,\beta))(\cons(a,x)) \\
  & = & \map((f(-),g(\beta)))(\cons(a,x)) \\
  & = & \map((-,g(\beta)) \circ f)(\cons(a,x)) \\
  & = & \map((-,g(\beta)))(\map(f)(\cons(a,x))) \\
@@ -513,9 +513,9 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed. If $y = \cons(b,w)$, we have
 $$\begin{eqnarray*}
- &   & \map(\pair(f,g))(\zipPad(\alpha,\beta)(\cons(a,x),\cons(b,w))) \\
- & = & \map(\pair(f,g))(\cons((a,b),\zipPad(\alpha,\beta)(x,w))) \\
- & = & \cons(\pair(f,g)(a,b),\map(\pair(f,g))(\zipPad(\alpha,\beta)(x,w))) \\
+ &   & \map(\tPair(f,g))(\zipPad(\alpha,\beta)(\cons(a,x),\cons(b,w))) \\
+ & = & \map(\tPair(f,g))(\cons((a,b),\zipPad(\alpha,\beta)(x,w))) \\
+ & = & \cons(\tPair(f,g)(a,b),\map(\tPair(f,g))(\zipPad(\alpha,\beta)(x,w))) \\
  & = & \cons((f(a),g(b)),\zipPad(f(\alpha),g(\beta))(\map(f)(x),\map(g)(w))) \\
  & = & \zipPad(f(\alpha),g(\beta))(\cons(f(a),\map(f)(x)),\cons(g(b),\map(g)(w))) \\
  & = & \zipPad(f(\alpha),g(\beta))(\map(f)(\cons(a,x)),\map(g)(\cons(b,w))) \\
@@ -576,11 +576,11 @@ Let $A$, $B$, and $C$ be sets, with $\alpha \in A$, $\beta \in B$, $\gamma \in C
 
 1. $$\begin{eqnarray*}
  &   & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(x,y),z) \\
- & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z))).
+ & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z))).
 \end{eqnarray*}$$
 2. $$\begin{eqnarray*}
  &   & \zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z)) \\
- & = & \map(\assocR)(\zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(x,y),z)).
+ & = & \map(\tAssocR)(\zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(x,y),z)).
 \end{eqnarray*}$$
 </p></div>
 
@@ -591,9 +591,9 @@ $$\begin{eqnarray*}
  & = & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(\nil,y),z) \\
  & = & \zipPad((\alpha,\beta),\gamma)(\nil,z) \\
  & = & \nil \\
- & = & \map(\assocL)(\nil) \\
- & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(\nil,\zipPad(\beta,\gamma)(y,z))) \\
- & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z)))
+ & = & \map(\tAssocL)(\nil) \\
+ & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(\nil,\zipPad(\beta,\gamma)(y,z))) \\
+ & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z)))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. If $y = \nil$, we have
 $$\begin{eqnarray*}
@@ -601,20 +601,20 @@ $$\begin{eqnarray*}
  & = & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(\cons(a,x),\nil),z) \\
  & = & \zipPad((\alpha,\beta),\gamma)(\nil,z) \\
  & = & \nil \\
- & = & \map(\assocL)(\nil) \\
- & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\nil)) \\
- & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zipPad(\beta,\gamma)(\nil,z))) \\
- & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zipPad(\beta,\gamma)(y,z)))
+ & = & \map(\tAssocL)(\nil) \\
+ & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\nil)) \\
+ & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zipPad(\beta,\gamma)(\nil,z))) \\
+ & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zipPad(\beta,\gamma)(y,z)))
 \end{eqnarray*}$$
 as claimed. Similarly, if $z = \nil$, we have
 $$\begin{eqnarray*}
  &   & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(\cons(a,x),y),z) \\
  & = & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(\cons(a,x),y),\nil) \\
  & = & \nil \\
- & = & \map(\assocL)(\nil) \\
- & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\nil)) \\
- & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zipPad(\beta,\gamma)(y,\nil))) \\
- & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zipPad(\beta,\gamma)(y,z))) \\
+ & = & \map(\tAssocL)(\nil) \\
+ & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\nil)) \\
+ & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zipPad(\beta,\gamma)(y,\nil))) \\
+ & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zipPad(\beta,\gamma)(y,z))) \\
 \end{eqnarray*}$$
 as claimed. Suppose then that $y = \cons(b,u)$ and $z = \cons(c,v)$. Using the inductive hypothesis, we have
 $$\begin{eqnarray*}
@@ -622,11 +622,11 @@ $$\begin{eqnarray*}
  & = & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(\cons(a,x),\cons(b,u)),\cons(c,v)) \\
  & = & \zipPad((\alpha,\beta),\gamma)(\cons((a,b),\zipPad(\alpha,\beta)(x,u)),\cons(c,v)) \\
  & = & \cons(((a,b),c),\zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(x,u),v)) \\
- & = & \cons(\assocL(a,(b,c)),\map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(u,v)))) \\
- & = & \map(\assocL)(\cons((a,(b,c)),\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(u,v)))) \\
- & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\cons((b,c),\zipPad(\beta,\gamma)(u,v)))) \\
- & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zipPad(\beta,\gamma)(\cons(b,u),\cons(c,v)))) \\
- & = & \map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zip(y,z))) \\
+ & = & \cons(\tAssocL(a,(b,c)),\map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(u,v)))) \\
+ & = & \map(\tAssocL)(\cons((a,(b,c)),\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(u,v)))) \\
+ & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\cons((b,c),\zipPad(\beta,\gamma)(u,v)))) \\
+ & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zipPad(\beta,\gamma)(\cons(b,u),\cons(c,v)))) \\
+ & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zip(y,z))) \\
 \end{eqnarray*}$$
 as claimed.
 2. We have
@@ -634,9 +634,9 @@ $$\begin{eqnarray*}
  &   & \zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z)) \\
  & = & \id(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z))) \\
  & = & \map(\id)(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z))) \\
- & = & \map(\assocR \circ \assocL)(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z))) \\
- & = & \map(\assocR)(\map(\assocL)(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z)))) \\
- & = & \map(\assocR)(\zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(x,y),z))
+ & = & \map(\tAssocR \circ \tAssocL)(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z))) \\
+ & = & \map(\tAssocR)(\map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z)))) \\
+ & = & \map(\tAssocR)(\zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(x,y),z))
 \end{eqnarray*}$$
 as claimed.
 </p></div>
