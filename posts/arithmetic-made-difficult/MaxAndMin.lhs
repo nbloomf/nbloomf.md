@@ -115,57 +115,57 @@ Implementation and Testing
 
 Property tests for ``max``:
 
-> _test_max_zero :: (Natural n)
->   => n -> Test (Nat n -> Bool)
+> _test_max_zero :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
 > _test_max_zero _ =
 >   testName "a == max(a,0) and a == max(0,a)" $
 >   \a -> and (eq a (max a zero)) (eq a (max zero a))
 > 
 > 
-> _test_max_idempotent :: (Natural n)
->   => n -> Test (Nat n -> Bool)
+> _test_max_idempotent :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
 > _test_max_idempotent _ =
 >   testName "a == max(a,a)" $
 >   \a -> eq (max a a) a
 > 
 > 
-> _test_max_commutative :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_max_commutative :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
 > _test_max_commutative _ =
 >   testName "max(a,b) == max(b,a)" $
 >   \a b -> eq (max a b) (max b a)
 > 
 > 
-> _test_max_next :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_max_next :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
 > _test_max_next _ =
 >   testName "max(next(a),next(b)) == next(max(a,b))" $
 >   \a b -> eq (max (next a) (next b)) (next (max a b))
 > 
 > 
-> _test_max_plus :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_max_plus :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
 > _test_max_plus _ =
 >   testName "max(plus(c,a),plus(c,b)) == plus(c,max(a,b))" $
 >   \a b c -> eq (max (plus c a) (plus c b)) (plus c (max a b))
 > 
 > 
-> _test_max_times :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_max_times :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
 > _test_max_times _ =
 >   testName "max(times(c,a),times(c,b)) == times(c,max(a,b))" $
 >   \a b c -> eq (max (times c a) (times c b)) (times c (max a b))
 > 
 > 
-> _test_max_associative :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_max_associative :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
 > _test_max_associative _ =
 >   testName "max(max(a,b),c) == max(a,max(b,c))" $
 >   \a b c -> eq (max (max a b) c) (max a (max b c))
 > 
 > 
-> _test_max_leq :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_max_leq :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
 > _test_max_leq _ =
 >   testName "if leq(a,c) and leq(b,c) then leq(max(a,b),c)" $
 >   \a b c -> if and (leq a c) (leq b c)
@@ -174,57 +174,57 @@ Property tests for ``max``:
 
 Property tests for ``min``:
 
-> _test_min_zero :: (Natural n)
->   => n -> Test (Nat n -> Bool)
+> _test_min_zero :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
 > _test_min_zero _ =
 >   testName "0 == min(a,0) and 0 == min(0,a)" $
 >   \a -> and (eq zero (min a zero)) (eq zero (min zero a))
 > 
 > 
-> _test_min_idempotent :: (Natural n)
->   => n -> Test (Nat n -> Bool)
+> _test_min_idempotent :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
 > _test_min_idempotent _ =
 >   testName "a == min(a,a)" $
 >   \a -> eq (min a a) a
 > 
 > 
-> _test_min_commutative :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_min_commutative :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
 > _test_min_commutative _ =
 >   testName "min(a,b) == min(b,a)" $
 >   \a b -> eq (min a b) (min b a)
 > 
 > 
-> _test_min_next :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_min_next :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
 > _test_min_next _ =
 >   testName "min(next(a),next(b)) == next(min(a,b))" $
 >   \a b -> eq (min (next a) (next b)) (next (min a b))
 > 
 > 
-> _test_min_plus :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_min_plus :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
 > _test_min_plus _ =
 >   testName "min(plus(c,a),plus(c,b)) == plus(c,min(a,b))" $
 >   \a b c -> eq (min (plus c a) (plus c b)) (plus c (min a b))
 > 
 > 
-> _test_min_times :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_min_times :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
 > _test_min_times _ =
 >   testName "min(times(c,a),times(c,b)) == times(c,min(a,b))" $
 >   \a b c -> eq (min (times c a) (times c b)) (times c (min a b))
 > 
 > 
-> _test_min_associative :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_min_associative :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
 > _test_min_associative _ =
 >   testName "min(min(a,b),c) == min(a,min(b,c))" $
 >   \a b c -> eq (min (min a b) c) (min a (min b c))
 > 
 > 
-> _test_min_leq :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_min_leq :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
 > _test_min_leq _ =
 >   testName "if leq(c,a) and leq(c,b) then leq(c,min(a,b))" $
 >   \a b c -> if and (leq c a) (leq c b)
@@ -233,50 +233,50 @@ Property tests for ``min``:
 
 And property tests using both:
 
-> _test_max_min_leq :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_max_min_leq :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
 > _test_max_min_leq _ =
 >   testName "leq(min(a,b),max(a,b))" $
 >   \a b -> leq (min a b) (max a b)
 > 
 > 
-> _test_max_min_plus :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_max_min_plus :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
 > _test_max_min_plus _ =
 >   testName "plus(min(a,b),max(a,b)) == plus(a,b)" $
 >   \a b -> eq (plus (min a b) (max a b)) (plus a b)
 > 
 > 
-> _test_max_min_times :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_max_min_times :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
 > _test_max_min_times _ =
 >   testName "times(min(a,b),max(a,b)) == times(a,b)" $
 >   \a b -> eq (times (min a b) (max a b)) (times a b)
 > 
 > 
-> _test_max_min_distributive_left :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_max_min_distributive_left :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
 > _test_max_min_distributive_left _ =
 >   testName "max(a,min(b,c)) == min(max(a,b),max(a,c))" $
 >   \a b c -> eq (max a (min b c)) (min (max a b) (max a c))
 > 
 > 
-> _test_max_min_distributive_right :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_max_min_distributive_right :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
 > _test_max_min_distributive_right _ =
 >   testName "max(min(b,c),a) == min(max(b,a),max(c,a))" $
 >   \a b c -> eq (max (min b c) a) (min (max b a) (max c a))
 > 
 > 
-> _test_min_max_distributive_left :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_min_max_distributive_left :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
 > _test_min_max_distributive_left _ =
 >   testName "min(a,max(b,c)) == max(min(a,b),min(a,c))" $
 >   \a b c -> eq (min a (max b c)) (max (min a b) (min a c))
 > 
 > 
-> _test_min_max_distributive_right :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_min_max_distributive_right :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
 > _test_min_max_distributive_right _ =
 >   testName "min(max(b,c),a) == max(min(b,a),min(c,a))" $
 >   \a b c -> eq (min (max b c) a) (max (min b a) (min c a))
@@ -285,7 +285,7 @@ And the suite for ``max`` and ``min``:
 
 > -- run all tests for max and min
 > _test_max_min ::
->   ( TypeName n, Natural n, Arbitrary n, Show n
+>   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
 > _test_max_min n maxSize numCases = do
 >   testLabel ("min & max: " ++ typeName n)

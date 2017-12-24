@@ -3,26 +3,32 @@ title: Less Than or Equal To
 author: nbloomf
 date: 2017-04-05
 tags: arithmetic-made-difficult, literate-haskell
+slug: leq
 ---
 
 > module LessThanOrEqualTo
 >  ( leq, _test_leq, main_leq
 >  ) where
 > 
+> import Prelude ()
 > import Booleans
+> import DisjointUnions
 > import NaturalNumbers
 > import Plus
 > import Times
 > import Minus
-> 
-> import Prelude ()
-> import Test.QuickCheck
 
-Next we'd like to nail down what it means for one natural number to be less than or equal to another. Note that while $\nplus$ and $\ntimes$ have signatures $$\nats \times \nats \rightarrow \nats,$$ "less than or equal to" (which I will abbrebiate to *leq* from now on) does not. In fact $\leq$ is typically defined as a set of pairs. To make $\leq$ computable, we will instead (try to) define it as a function with signature $$\nats \times \nats \rightarrow \bool.$$ In fact, we can make a reasonable attempt on $\nleq$ without using recursion at all.
+Next we'd like to nail down what it means for one natural number to be less than or equal to another. Note that while $\nplus$ and $\ntimes$ have signatures $$\nats \times \nats \rightarrow \nats,$$ "less than or equal to" (which I will abbrebiate to *leq* from now on) does not. In fact $\leq$ is typically defined as a set of pairs. To make $\leq$ computable, we will instead (try to) define it as a function with signature $$\nats \times \nats \rightarrow \bool.$$ In fact, we can make a reasonable attempt on $\nleq$ without using (explicit) recursion at all.
 
 <div class="result">
 <div class="defn"><p>
-Define $\nleq : \nats \times \nats \rightarrow \bool$ by $$\nleq(a,b) = \left\{\begin{array}{ll} \bfalse & \mathrm{if}\ \nminus(b,a) = \ast \\ \btrue & \mathrm{otherwise}. \end{array}\right.$$
+Define $\nleq : \nats \times \nats \rightarrow \bool$ by $$\nleq(a,b) = \isRgt(\nminus(b,a)).$$
+
+In Haskell:
+
+> leq :: (Natural t) => t -> t -> Bool
+> leq a b = isRgt (minus b a)
+
 </p></div>
 </div>
 
@@ -38,16 +44,55 @@ Let $a \in \nats$. Then we have the following.
 </div>
 
 <div class="proof"><p>
-1. Note that $$\zero = \nplus(\next(a),x) = \next(\nplus(a,x))$$ has no solution, so that $\nminus(\zero,\next(a)) = \ast$. Thus $\nleq(\next(a),\zero) = \bfalse$.
-2. Note that $\nminus(\next(\next(a)),\next(\zero)) = \nminus(\next(a),\zero)$; the conclusion follows from (1).
-3. Suppose $x \in \nats$ is a solution to the equation $$a = \nplus(\next(a),x).$$ Now
+1. We have
 $$\begin{eqnarray*}
- &   & \nplus(a,\zero) \\
- & = & a \\
- & = & \nplus(\next(a),x) \\
- & = & \nplus(a,\next(x)),
+ &   & \nleq(\next(a),\zero) \\
+ & = & \isRgt(\nminus(\zero,\next(a))) \\
+ & = & \isRgt(\lft(\ast)) \\
+ & = & \bfalse
 \end{eqnarray*}$$
-so by cancellation we have $\zero = \next(x)$ -- a contradiction. Thus $a = \nplus(\next(a),x)$ has no solution $x \in \nats$, and so $\nminus(a,\next(a)) = \ast$. Thus $\nleq(\next(a),a) = \bfalse$ as claimed.
+as claimed.
+2. We have
+$$\begin{eqnarray*}
+ &   & \nleq(\next(\next(a)),\next(\zero)) \\
+ & = & \isRgt(\nminus(\next(\zero),\next(\next(a)))) \\
+ & = & \isRgt(\nminus(\zero,\next(a))) \\
+ & = & \isRgt(\lft(\ast)) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as claimed.
+3. We have
+$$\begin{eqnarray*}
+ &   & \nleq(\next(a),a) \\
+ & = & \isRgt(\nminus(a,\next(a))) \\
+ & = & \isRgt(\lft(\ast)) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_leq_next_nat_zero :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_leq_next_nat_zero _ =
+>   testName "leq(next(a),zero) == false" $
+>   \a -> eq (leq (next a) zero) False
+> 
+> 
+> _test_leq_next_next_nat_one :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_leq_next_next_nat_one _ =
+>   testName "leq(next(next(a)),next(zero)) == false" $
+>   \a -> eq (leq (next (next a)) (next zero)) False
+> 
+> 
+> _test_leq_next_nat :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_leq_next_nat _ =
+>   testName "leq(next(a),a) == false" $
+>   \a -> eq (leq (next a) a) False
+
 </p></div>
 </div>
 
@@ -59,7 +104,24 @@ For all $a,b \in \nats$ we have $\nleq(\next(a),\next(b)) = \nleq(a,b)$.
 </div>
 
 <div class="proof"><p>
-Follows because $\nminus(\next(b),\next(a)) = \nminus(b,a)$.
+We have
+$$\begin{eqnarray*}
+ &   & \nleq(\next(a),\next(b)) \\
+ & = & \isRgt(\nminus(\next(b),\next(a))) \\
+ & = & \isRgt(\nminus(b,a)) \\
+ & = & \nleq(a,b)
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_leq_next_cancel :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_leq_next_cancel _ =
+>   testName "leq(next(a),next(b)) == leq(a,b)" $
+>   \a b -> eq (leq (next a) (next b)) (leq a b)
+
 </p></div>
 </div>
 
@@ -71,7 +133,7 @@ Let $a,b \in \nats$. Then $\nleq(a,b) = \btrue$ if and only if there exists a $c
 </div>
 
 <div class="proof"><p>
-We have $\nleq(a,b) = \btrue$ if and only of $\nminus(b,a) = c \in \nats$, if and only if $b = \nplus(a,c)$.
+We have $\nleq(a,b) = \btrue$ if and only if $\nminus(b,a) = \rgt(c)$ for some $c \in \nats$, if and only if $b = \nplus(a,c)$ for some $c \in \nats$.
 </p></div>
 </div>
 
@@ -88,19 +150,62 @@ We have the following.
 
 <div class="proof"><p>
 1. We have $a = \nplus(a,\zero)$, so that $\nminus(a,a) = \zero$, thus $\nleq(a,a) = \btrue$.
-2. Suppose $\nleq(a,b)$ and $\nleq(b,a)$; then there exist $u,v \in \nats$ such that $b = \nplus(a,u)$ and $a = \nplus(b,v)$. Now $$\begin{eqnarray*} & & \nplus(a,\zero) \\ & = & a \\ & = & \nplus(b,v) \\ & = & \nplus(\nplus(a,u),v) \\ & = & \nplus(a,\nplus(u,v)), \end{eqnarray*}$$ so that $\zero = \nplus(u,v)$, and thus $u = v = \zero$. So $b = \nplus(a,\zero) = a$ as claimed.
-3. Suppose $\nleq(a,b)$ and $\nleq(b,c)$; then there exist $u,v \in \nats$ such that $b = \nplus(a,u)$ and $c = \nplus(b,v)$. Now $$\begin{eqnarray*} & & c \\ & = & \nplus(b,v) \\ & = & \nplus(\nplus(a,u),v) \\ & = & \nplus(a,\nplus(u,v)) \end{eqnarray*}$$ as needed.
+2. Suppose $\nleq(a,b)$ and $\nleq(b,a)$; then there exist $u,v \in \nats$ such that $b = \nplus(a,u)$ and $a = \nplus(b,v)$. Now
+$$\begin{eqnarray*}
+ &   & \nplus(a,\zero) \\
+ & = & a \\
+ & = & \nplus(b,v) \\
+ & = & \nplus(\nplus(a,u),v) \\
+ & = & \nplus(a,\nplus(u,v)),
+\end{eqnarray*}$$
+so that $\zero = \nplus(u,v)$, and thus $u = v = \zero$. So $b = \nplus(a,\zero) = a$ as claimed.
+3. Suppose $\nleq(a,b)$ and $\nleq(b,c)$; then there exist $u,v \in \nats$ such that $b = \nplus(a,u)$ and $c = \nplus(b,v)$. Now
+$$\begin{eqnarray*}
+ &   & c \\
+ & = & \nplus(b,v) \\
+ & = & \nplus(\nplus(a,u),v) \\
+ & = & \nplus(a,\nplus(u,v))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_leq_reflexive :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_leq_reflexive _ =
+>   testName "leq(a,a) == true" $
+>   \a -> eq (leq a a) True
+> 
+> 
+> _test_leq_antisymmetric :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_leq_antisymmetric _ =
+>   testName "if and(leq(a,b),leq(b,a)) then eq(a,b)" $
+>   \a b -> if and (leq a b) (leq b a)
+>     then eq a b
+>     else True
+> 
+> 
+> _test_leq_transitive :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
+> _test_leq_transitive _ =
+>   testName "if and(leq(a,b),leq(b,c)) then leq(a,c)" $
+>   \a b c -> if and (leq a b) (leq b c)
+>     then leq a c
+>     else True
+
 </p></div>
 </div>
 
-And $\nleq$ interacts nicely with $\nplus$.
+Now $\nleq$ interacts nicely with $\nplus$. (@@@)
 
 <div class="result">
 <div class="thm">
-The following hold.
+The following hold for all $a,b,c,d \in \nats$.
 
-1. Let $a,b,c \in \nats$. Then $\nleq(a,b) = \nleq(\nplus(a,c),\nplus(b,c))$.
-2. Let $a,b,c,d \in \nats$. If $\nleq(a,b)$ and $\nleq(c,d)$, then $\nleq(\nplus(a,c),\nplus(b,d))$.
+1. $\nleq(a,b) = \nleq(\nplus(a,c),\nplus(b,c))$.
+2. If $\nleq(a,b)$ and $\nleq(c,d)$, then $\nleq(\nplus(a,c),\nplus(b,d))$.
 </div>
 
 <div class="proof"><p>
@@ -173,48 +278,29 @@ The conclusion holds by transitivity.
 That's enough.
 
 
-Implementation and Testing
---------------------------
-
-Here's ``leq``:
-
-> leq :: (Natural t) => t -> t -> Bool
-> leq a b = case minus b a of
->   Nothing -> False
->   Just _  -> True
+Testing
+-------
 
 And some property tests:
 
-> _test_leq_next_left :: (Natural n)
->   => n -> Test (Nat n -> Bool)
-> _test_leq_next_left _ =
->   testName "leq(next(a),a) == false" $
->   \a -> eq (leq (next a) a) False
 > 
 > 
-> _test_leq_right_plus :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_leq_right_plus :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
 > _test_leq_right_plus _ =
 >   testName "leq(a,plus(a,b)) == true" $
 >   \a b -> eq (leq a (plus a b)) True
 > 
 > 
-> _test_leq_reflexive :: (Natural n)
->   => n -> Test (Nat n -> Bool)
-> _test_leq_reflexive _ =
->   testName "leq(a,a) == true" $
->   \a -> eq (leq a a) True
-> 
-> 
-> _test_leq_plus :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_leq_plus :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
 > _test_leq_plus _ =
 >   testName "leq(a,b) == leq(plus(a,c),plus(b,c))" $
 >   \a b c -> eq (leq a b) (leq (plus a c) (plus b c))
 > 
 > 
-> _test_leq_times :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_leq_times :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
 > _test_leq_times _ =
 >   testName "leq(a,b) == leq(times(a,next(c)),times(b,next(c)))" $
 >   \a b c -> eq (leq a b) (leq (times a (next c)) (times b (next c)))
@@ -222,7 +308,7 @@ And some property tests:
 And a test wrapper:
 
 > -- run all tests for leq
-> _test_leq :: (TypeName n, Natural n, Arbitrary n, Show n)
+> _test_leq :: (TypeName n, Natural n, Equal n, Arbitrary n, Show n)
 >   => n -> Int -> Int -> IO ()
 > _test_leq n maxSize numCases = do
 >   testLabel ("leq: " ++ typeName n)
@@ -233,8 +319,14 @@ And a test wrapper:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_leq_next_left n)
+>   runTest args (_test_leq_next_nat_zero n)
+>   runTest args (_test_leq_next_next_nat_one n)
+>   runTest args (_test_leq_next_nat n)
+>   runTest args (_test_leq_next_cancel n)
 >   runTest args (_test_leq_reflexive n)
+>   runTest args (_test_leq_antisymmetric n)
+>   runTest args (_test_leq_transitive n)
+> 
 >   runTest args (_test_leq_right_plus n)
 >   runTest args (_test_leq_plus n)
 >   runTest args (_test_leq_times n)

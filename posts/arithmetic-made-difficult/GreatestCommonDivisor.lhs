@@ -9,6 +9,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( gcd, _test_gcd, main_gcd
 >   ) where
 >
+> import Prelude ()
 > import Booleans
 > import NaturalNumbers
 > import BailoutRecursion
@@ -18,9 +19,6 @@ tags: arithmetic-made-difficult, literate-haskell
 > import LessThanOrEqualTo
 > import DivisionAlgorithm
 > import Divides
-> 
-> import Prelude ()
-> import Test.QuickCheck
 
 Today we'll define the greatest common divisor of two natural numbers. The usual way to do this (in books I've seen) is to define what it means to say that $d$ is a greatest common divisor of $a$ and $b$, then show (possibly nonconstructively) that any two $a$ and $b$ have a greatest common divisor, and finally establish the Euclidean algorithm that actually computes GCDs. We will work backwards: first *defining* the GCD of two natural numbers using the punchline of the Euclidean algorithm and then proving that the output of this function acts like the GCD.
 
@@ -377,64 +375,64 @@ Here's ``gcd``:
 
 Property tests for ``gcd``:
 
-> _test_gcd_zero :: (Natural n)
->   => n -> Test (Nat n -> Bool)
+> _test_gcd_zero :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
 > _test_gcd_zero _ =
 >   testName "gcd(a,0) == a and gcd(0,a) == a" $
 >   \a -> and (eq a (gcd a zero)) (eq a (gcd zero a))
 > 
 > 
-> _test_gcd_one_right :: (Natural n)
->   => n -> Test (Nat n -> Bool)
+> _test_gcd_one_right :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
 > _test_gcd_one_right _ =
 >   testName "gcd(a,next(0)) == next(0)" $
 >   \a -> eq (next zero) (gcd a (next zero))
 > 
 > 
-> _test_gcd_one_left :: (Natural n)
->   => n -> Test (Nat n -> Bool)
+> _test_gcd_one_left :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
 > _test_gcd_one_left _ =
 >   testName "gcd(next(0),a) == next(0)" $
 >   \a -> eq (next zero) (gcd (next zero) a)
 > 
 > 
-> _test_gcd_rem :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_gcd_rem :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
 > _test_gcd_rem _ =
 >   testName "gcd(a,b) == gcd(b,rem(a,b))" $
 >   \a b -> eq (gcd a b) (gcd b (rem a b))
 > 
 > 
-> _test_gcd_commutative :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_gcd_commutative :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
 > _test_gcd_commutative _ =
 >   testName "gcd(a,b) == gcd(b,a)" $
 >   \a b -> eq (gcd a b) (gcd b a)
 > 
 > 
-> _test_gcd_div_args :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_gcd_div_args :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
 > _test_gcd_div_args _ =
 >   testName "div(gcd(a,b),a) and div(gcd(a,b),b)" $
 >   \a b -> and (div (gcd a b) a) (div (gcd a b) b)
 > 
 > 
-> _test_gcd_idempotent :: (Natural n)
->   => n -> Test (Nat n -> Bool)
+> _test_gcd_idempotent :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
 > _test_gcd_idempotent _ =
 >   testName "gcd(a,a) = a" $
 >   \a -> eq (gcd a a) a
 > 
 > 
-> _test_gcd_associative :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_gcd_associative :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
 > _test_gcd_associative _ =
 >   testName "gcd(gcd(a,b),c) == gcd(a,gcd(b,c))" $
 >   \a b c -> eq (gcd (gcd a b) c) (gcd a (gcd b c))
 > 
 > 
-> _test_gcd_distributive_times :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_gcd_distributive_times :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
 > _test_gcd_distributive_times _ =
 >   testName "times(gcd(a,b),c) == gcd(times(a,c),times(b,c))" $
 >   \a b c -> eq (times (gcd a b) c) (gcd (times a c) (times b c))
@@ -443,7 +441,7 @@ And the suite:
 
 > -- run all tests for gcd
 > _test_gcd ::
->   ( TypeName n, Natural n, Arbitrary n, Show n
+>   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
 > _test_gcd n maxSize numCases = do
 >   testLabel ("gcd: " ++ typeName n)

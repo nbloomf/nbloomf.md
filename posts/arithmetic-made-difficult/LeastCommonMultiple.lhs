@@ -9,6 +9,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( lcm, _test_lcm, main_lcm
 >   ) where
 >
+> import Prelude ()
 > import Booleans
 > import NaturalNumbers
 > import Plus
@@ -19,9 +20,6 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Divides
 > import GreatestCommonDivisor
 > import CoprimeTo
-> 
-> import Prelude ()
-> import Test.QuickCheck
 
 Recall the following property of $\nmax$: if $\nleq(c,a)$ and $\nleq(c,b)$, then $\nleq(c,\nmax(a,b))$. This statement fell out of the definition of $\nmax$ without much fuss, and may seem anticlimactic. But compare it to this analogous statement about $\ngcd$: if $\ndiv(c,a)$ and $\ndiv(c,b)$, then $\ndiv(c,\ngcd(a,b))$. Now $\nmax$ and $\ngcd$ seem to play very similar roles. Where $\nleq$ is a kind of "additive order" on $\nats$ and $\nmax$ gives an additive ceiling to $a$ and $b$, $\ndiv$ is a kind of "multiplicative order" and $\ngcd$ gives a multiplicative ceiling to $a$ and $b$. When an analogy this strong holds between two concepts in mathematics, it is frequently useful to see how far the analogy goes. To that end, today we will define the multiplicative counterpart to $\nmin$.
 
@@ -363,64 +361,64 @@ Here's ``lcm``:
 
 Property tests for ``lcm``:
 
-> _test_lcm_zero :: (Natural n)
->   => n -> Test (Nat n -> Bool)
+> _test_lcm_zero :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
 > _test_lcm_zero _ =
 >   testName "lcm(a,0) == 0 and lcm(0,a) == 0" $
 >   \a -> and (eq zero (lcm a zero)) (eq zero (lcm zero a))
 > 
 > 
-> _test_lcm_one :: (Natural n)
->   => n -> Test (Nat n -> Bool)
+> _test_lcm_one :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
 > _test_lcm_one _ =
 >   testName "lcm(a,next(0)) == a and lcm(next(0),a) == a" $
 >   \a -> and (eq a (lcm a (next zero))) (eq a (lcm (next zero) a))
 > 
 > 
-> _test_lcm_div_args :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_lcm_div_args :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
 > _test_lcm_div_args _ =
 >   testName "div(a,lcm(a,b)) and div(b,lcm(a,b))" $
 >   \a b -> and (div a (lcm a b)) (div b (lcm a b))
 > 
 > 
-> _test_lcm_idempotent :: (Natural n)
->   => n -> Test (Nat n -> Bool)
+> _test_lcm_idempotent :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
 > _test_lcm_idempotent _ =
 >   testName "lcm(a,a) == a" $
 >   \a -> eq (lcm a a) a
 > 
 > 
-> _test_lcm_commutative :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Bool)
+> _test_lcm_commutative :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
 > _test_lcm_commutative _ =
 >   testName "lcm(a,b) == lcm(b,a)" $
 >   \a b -> eq (lcm a b) (lcm b a)
 > 
 > 
-> _test_lcm_associative :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_lcm_associative :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
 > _test_lcm_associative _ =
 >   testName "lcm(lcm(a,b),c) == lcm(a,lcm(b,c))" $
 >   \a b c -> eq (lcm (lcm a b) c) (lcm a (lcm b c))
 > 
 > 
-> _test_lcm_distributive_times :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_lcm_distributive_times :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
 > _test_lcm_distributive_times _ =
 >   testName "lcm(times(c,a),times(c,b)) == times(c,lcm(a,b))" $
 >   \a b c -> eq (lcm (times c a) (times c b)) (times c (lcm a b))
 > 
 > 
-> _test_lcm_distributive_gcd :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_lcm_distributive_gcd :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
 > _test_lcm_distributive_gcd _ =
 >   testName "lcm(gcd(c,a),gcd(c,b)) == gcd(c,lcm(a,b))" $
 >   \a b c -> eq (lcm (gcd c a) (gcd c b)) (gcd c (lcm a b))
 > 
 > 
-> _test_gcd_distributive_lcm :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_gcd_distributive_lcm :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
 > _test_gcd_distributive_lcm _ =
 >   testName "gcd(lcm(c,a),lcm(c,b)) == lcm(c,gcd(a,b))" $
 >   \a b c -> eq (gcd (lcm c a) (lcm c b)) (lcm c (gcd a b))
@@ -429,7 +427,7 @@ And the suite:
 
 > -- run all tests for lcm
 > _test_lcm ::
->   ( TypeName n, Natural n, Arbitrary n, Show n
+>   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
 > _test_lcm n maxSize numCases = do
 >   testLabel ("lcm: " ++ typeName n)

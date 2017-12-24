@@ -20,7 +20,7 @@ slug: booleans
 > 
 > import Prelude
 >   ( Show(show), IO, Bool(..), Int, Maybe(..), Either(..), id
->   , putStrLn, (>>), return, (++), String, (.), ($), Integer
+>   , putStrLn, (>>), return, (++), String, (.), ($), Integer, const
 >   )
 > import Test.QuickCheck
 >   ( Testable(..), Args(..), Arbitrary(..), CoArbitrary(..)
@@ -629,6 +629,9 @@ Now that we've algebraified truth values, we will also algebraify equality. Typi
 >   eq True  False = False
 >   eq False True  = False
 >   eq False False = True
+> 
+> instance Equal () where
+>   eq () () = True
 > 
 > instance Equal a => Equal (Maybe a) where
 >   eq Nothing  Nothing  = True

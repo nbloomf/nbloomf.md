@@ -7,12 +7,15 @@ tags: arithmetic-made-difficult, literate-haskell
 
 > {-# LANGUAGE BangPatterns #-}
 > module NaturalNumbers
->   ( Natural(..), NatShape(..), Nat(..), Unary()
+>   ( Natural(..), NatShape(..), Unary()
 >   , isZero, prev, naturalRec
+> 
+>   , _test_nats, main_nats
 >   ) where
 > 
 > import Prelude ()
 > import Booleans
+> import DisjointUnions
 > import Unary
 
 We have assumed the existence of a set $\nats$ such that there is a unique inductive set homomorphism from $\nats$ to any other inductive set. But it turns out that this set is not *unique* with this property; any other inductive set which is *isomorphic* to $\nats$ enjoys it as well. In fact we've already seen one such set, namely $1 + \nats$.
@@ -45,15 +48,15 @@ Now every inductive set isomorphic to $\nats$ is characterized by (1) its zero e
 
 Our helpers $\iszero$ and $\prev$ can be written against this interface:
 
+> unnext :: (Natural n) => n -> Either () n
+> unnext = naturalRec (lft ()) phi
+>   where phi = rgt . (either (const zero) next)
+> 
 > isZero :: (Natural n) => n -> Bool
-> isZero m = case natShape m of
->   Zero   -> True
->   Next _ -> False
+> isZero = (either (const True) (const False)) . unnext
 > 
 > prev :: (Natural n) => n -> n
-> prev m = case natShape m of
->   Zero   -> zero
->   Next k -> k
+> prev = (either (const zero) id) . unnext
 
 As can the natural recursion operator $\natrec{\ast}{\ast}$.
 
@@ -81,41 +84,84 @@ From now on we'll write programs against the ``Natural`` interface with ``natura
 > 
 >   natural = mkUnary
 
-There is one bit of Haskell wierdness we have to deal with. We can define an ``Equal`` instance against the ``Natural`` interface (as we'll see), but the instance declaration
-
-```haskell
-instance (Natural t) => Equal t where
-  ...
-```
-
-is undecidable. To get around this we'll use a wrapper type, ``Nat``.
-
-> newtype Nat n = Nat { unNat :: n }
-> 
-> 
-> instance (Show t) => Show (Nat t) where
->   show = show . unNat
-> 
-> 
-> instance (Natural t) => Natural (Nat t) where
->   toUnary   = toUnary . unNat
->   fromUnary = Nat . fromUnary
-> 
->   zero = Nat zero
-> 
->   next = Nat . next . unNat
-> 
->   natural = Nat . natural
-> 
->   natShape (Nat x) = case natShape x of
->     Zero   -> Zero
->     Next y -> Next (Nat y)
-> 
-> 
-> instance (Arbitrary a) => Arbitrary (Nat a) where
->   arbitrary = do
->     x <- arbitrary
->     return (Nat x)
-
 Okay!
 
+
+Testing
+-------
+
+We proved some theorems about $\unnext$, $\prev$, and $\iszero$ in the last post.
+
+> _test_unnext_zero :: (Natural n, Equal n)
+>   => n -> Test Bool
+> _test_unnext_zero m =
+>   testName "unnext(0) == lft(*)" $
+>   eq
+>     (unnext (zero `withTypeOf` m))
+>     (lft ())
+> 
+> 
+> _test_unnext_next :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_unnext_next _ =
+>   testName "unnext(next(m)) == rgt(m)" $
+>   \m -> eq (unnext (next m)) (rgt m)
+> 
+> 
+> _test_prev_zero :: (Natural n, Equal n)
+>   => n -> Test Bool
+> _test_prev_zero m =
+>   testName "prev(0) == 0" $
+>   eq
+>     (prev (zero `withTypeOf` m))
+>     zero
+> 
+> 
+> _test_prev_next :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_prev_next _ =
+>   testName "prev(next(m)) == m" $
+>   \m -> eq (prev (next m)) m
+> 
+> 
+> _test_isZero_zero :: (Natural n, Equal n)
+>   => n -> Test Bool
+> _test_isZero_zero m =
+>   testName "isZero(0) == true" $
+>   eq
+>     (isZero (zero `withTypeOf` m))
+>     True
+> 
+> 
+> _test_isZero_next :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_isZero_next _ =
+>   testName "isZero(next(m)) == false" $
+>   \m -> eq (isZero (next m)) False
+
+
+Suite.
+
+> _test_nats :: (TypeName n, Natural n, Show n, Arbitrary n, Equal n)
+>   => n -> Int -> Int -> IO ()
+> _test_nats n maxSize numCases = do
+>   testLabel ("plus: " ++ typeName n)
+> 
+>   let
+>     args = stdArgs
+>       { maxSuccess = numCases
+>       , maxSize    = maxSize
+>       }
+> 
+>   runTest args (_test_unnext_zero n)
+>   runTest args (_test_unnext_next n)
+>   runTest args (_test_prev_zero n)
+>   runTest args (_test_prev_next n)
+>   runTest args (_test_isZero_zero n)
+>   runTest args (_test_isZero_next n)
+
+Main.
+
+> main_nats :: IO ()
+> main_nats = do
+>   _test_nats (zero :: Unary) 100 100

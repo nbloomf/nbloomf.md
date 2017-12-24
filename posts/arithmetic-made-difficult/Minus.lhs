@@ -3,20 +3,20 @@ title: Subtraction
 author: nbloomf
 date: 2017-04-02
 tags: arithmetic-made-difficult, literate-haskell
+slug: minus
 ---
 
 > module Minus
 >   ( minus, _test_minus, main_minus
 >   ) where
 >
+> import Prelude ()
 > import Booleans
+> import DisjointUnions
 > import NaturalNumbers
 > import BailoutRecursion
 > import Plus
 > import Times
-> 
-> import Prelude ()
-> import Test.QuickCheck
 
 We'd eventually like to solve some equations; for instance, one of the simplest equations we can construct with the tools we have so far is $$\nplus(a,x) = b$$ where $a$ and $b$ are in $\nats$. Putting on our third-grader hat of course the solution to $b = a+x$ is $x = b-a$. So we'll call this solution "b minus a". Our goal in this post is to give a constructive characterization for subtraction.
 
@@ -26,67 +26,184 @@ I can think of three options. First, we can just declare that $b-a$ is not defin
 
 The second option is to implement so-called *truncated subtraction*, so that anytime $b-a$ is not a natural number we simply call it 0. This also is not ideal, since now $b-a$ always exists, but the equation $b = a + (b-a)$ is no longer an identity and we cannot tell just from the value of $b-a$ whether it holds or not.
 
-The third option is a blend of the first two. We can attach an extra element to $\nats$, say $\ast$, and then say $b-a = \ast$ if $b-a$ is not a natural number. This allows us to distinguish when $b-a$ does not exist but keeps the minus function total. So our signature for minus will be $$\nats \times \nats \rightarrow \ast + \nats$$
+The third option is a blend of the first two. We can attach an extra element to $\nats$, say $\ast$, and then say $b-a = \ast$ if $b-a$ is not a natural number. This allows us to distinguish when $b-a$ does not exist but keeps the minus function total. So our signature for minus will be $$\nats \times \nats \rightarrow 1 + \nats,$$ where $1 = \{\ast\}$.
 
 <div class="result">
 <div class="defn"><p>
-Define maps $\varphi : \nats \rightarrow \ast + \nats$ by $$\varphi(x) = \left\{\begin{array}{ll} \zero & \mathrm{if}\ x == \zero \\ \ast & \mathrm{otherwise}; \end{array}\right.$$ $\beta : \nats \times \nats \rightarrow \bool$ by $$\beta(a,b) = \left\{\begin{array}{ll} \btrue & \mathrm{if}\ b = \zero \\ \bfalse & \mathrm{otherwise}; \end{array}\right.$$ $\psi : \nats \times \nats \rightarrow \ast + \nats$ by $$\psi(a,b) = \next(a);$$ and $\omega : \nats \times \nats \rightarrow \nats$ by $$\omega(a,b) = \prev(b).$$
+Define maps $\varphi : \nats \rightarrow 1 + \nats$ by
+$$\varphi(x) = \left\{\begin{array}{ll}
+ \rgt(\zero) & \mathrm{if}\ x == \zero \\
+ \lft(\ast) & \mathrm{otherwise};
+\end{array}\right.$$
+$\beta : \nats \times \nats \rightarrow \bool$ by
+$$\beta(a,b) = \left\{\begin{array}{ll}
+ \btrue & \mathrm{if}\ b = \zero \\
+ \bfalse & \mathrm{otherwise};
+\end{array}\right.$$
+$\psi : \nats \times \nats \rightarrow 1 + \nats$ by $$\psi(a,b) = \rgt(\next(a));$$ and $\omega : \nats \times \nats \rightarrow \nats$ by $$\omega(a,b) = \prev(b).$$
 
-Now define $\nminus : \nats \times \nats \rightarrow \ast + \nats$ by $$\nminus = \bailrec{\varphi}{\beta}{\psi}{\omega}.$$
+Now define $\nminus : \nats \times \nats \rightarrow 1 + \nats$ by $$\nminus = \bailrec{\varphi}{\beta}{\psi}{\omega}.$$
 
 In Haskell:
 
-> minus :: (Natural t) => t -> t -> Maybe t
+> minus :: (Natural t) => t -> t -> Either () t
 > minus = bailoutRec phi beta psi omega
 >   where
 >     phi x = if isZero x
->       then Just zero
->       else Nothing
+>       then rgt zero
+>       else lft ()
 > 
 >     beta _ b = isZero b
 > 
->     psi a _ = Just (next a)
+>     psi a _ = rgt (next a)
 > 
 >     omega _ b = prev b
 
 </p></div>
 </div>
 
-This is our first time using bailout recursion. Woo! As a reminder, $\nminus$ satisfies the following:
-$$\begin{eqnarray*}
-\nminus(\zero,a) & = & \left\{\begin{array}{ll} \zero & \mathrm{if}\ a = \zero \\ \ast & \mathrm{otherwise} \end{array}\right. \\
- & & \\
-\nminus(\next(b),a) & = & \left\{\begin{array}{ll} \next(b) & \mathrm{if}\ a = \zero \\ \nminus(b,\prev(a)) & \mathrm{otherwise}. \end{array}\right.
-\end{eqnarray*}$$
+Woo! Since $\nminus$ is defined in terms of bailout recursion, it is the unique solution to a system of functional equations.
+
+<div class="result">
+<div class="corollary"><p>
+$\nminus$ is the unique map $f : \nats \times \nats \rightarrow 1 + \nats$ with the property that for all $a,b \in \nats$, we have
+$$\left\{\begin{array}{l}
+ f(\zero,b) = \bif{\iszero(b)}{\rgt(\zero)}{\lft(\ast)} \\
+ f(\next(a),b) = \bif{\iszero(b)}{\rgt(\next(a))}{\nminus(a,\prev(b))}.
+\end{array}\right.$$
+</p></div>
+
+<div class="test"><p>
+
+> _test_minus_zero_left :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_minus_zero_left _ =
+>   testName "minus(0,b) == if(isZero(b),rgt(0),lft(*))" $
+>   \b -> if eq (isZero b) True
+>     then eq (minus zero b) (rgt zero)
+>     else eq (minus zero b) (lft ())
+> 
+> 
+> _test_minus_next_left :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_minus_next_left _ =
+>   testName
+>     "minus(next(a),b) == if(isZero(b),rgt(next(a)),minus(a,prev(b)))" $
+>   \a b -> if eq (isZero b) True
+>     then eq (minus (next a) b) (rgt (next a))
+>     else eq (minus (next a) b) (minus a (prev b))
+
+</p></div>
+</div>
 
 Here are some special cases:
 
 <div class="result">
 <div class="lemma">
-Let $a \in \nats$. Then we have $$\nminus(a,\zero) = a$$ and $$\nminus(\zero,\next(a)) = \ast.$$
+For all $n \in \nats$ we have the following.
+
+1. $\nminus(n,\zero) = \rgt(n)$.
+2. $\nminus(\zero,\next(n)) = \lft(\ast)$.
 </div>
 
 <div class="proof"><p>
-1. If $a = \zero$, then $$\nminus(\zero,\zero) = \varphi(\zero) = \zero.$$ If $a = \next(b)$, then we have $$\nminus(\next(b),\zero) = \psi(b,\zero) = \next(b) = a$$ as needed.
-2. We have $$\nminus(\zero,\next(a)) = \psi(\next(a)) = \ast$$ as claimed.
+1. If $n = \zero$, then
+$$\begin{eqnarray*}
+ &   & \nminus(\zero,\zero) \\
+ & = & \bif{\iszero(\zero)}{\rgt(\zero)}{\lft(\ast)} \\
+ & = & \bif{\btrue}{\rgt(\zero)}{\lft(\ast)} \\
+ & = & \rgt(\zero)
+\end{eqnarray*}$$
+as claimed. If $n = \next(m)$, we have
+$$\begin{eqnarray*}
+ &   & \nminus(\next(m),\zero) \\
+ & = & \bif{\iszero(\zero)}{\rgt(\next(m))}{\nminus(m,\prev(\zero))} \\
+ & = & \bif{\btrue}{\rgt(\next(m))}{\nminus(m,\prev(\zero))} \\
+ & = & \rgt(\next(m))
+\end{eqnarray*}$$
+as claimed.
+2. We have
+$$\begin{eqnarray*}
+ &   & \nminus(\zero,\next(n)) \\
+ & = & \bif{\iszero(\next(n))}{\rgt(\zero)}{\lft(\ast)} \\
+ & = & \bif{\bfalse}{\rgt(\zero)}{\lft(\ast)} \\
+ & = & \lft(\ast)
+\end{eqnarray*}$$ as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_minus_nat_zero :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_minus_nat_zero _ =
+>   testName "minus(n,0) == rgt(n)" $
+>   \n -> eq (minus n zero) (rgt n)
+> 
+> 
+> _test_minus_zero_next :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_minus_zero_next _ =
+>   testName "minus(0,next(n)) == lft(ast)" $
+>   \n -> eq (minus zero (next n)) (lft ())
+
 </p></div>
 </div>
 
-And a useful lemma:
+We can "cancel" $\next$s on both arguments of a $\nminus$.
 
 <div class="result">
-<div class="lemma">
+<div class="thm">
 Let $a,b \in \nats$. Then we have $$\nminus(\next(b),\next(a)) = \nminus(b,a).$$
 </div>
 
 <div class="proof"><p>
-Note that $\next(b) \neq \zero$, so we have
+We have
 $$\begin{eqnarray*}
  &   & \nminus(\next(b),\next(a)) \\
+ & = & \bif{\iszero(\next(a))}{\next(b)}{\nminus(b,\prev(\next(a)))} \\
+ & = & \bif{\bfalse}{\next(b)}{\nminus(b,\prev(\next(a)))} \\
  & = & \nminus(b,\prev(\next(a))) \\
  & = & \nminus(b,a)
 \end{eqnarray*}$$
 as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_minus_next_next :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_minus_next_next _ =
+>   testName "minus(next(b),next(a)) == minus(b,a)" $
+>   \a b -> eq (minus (next b) (next a)) (minus b a)
+
+</p></div>
+</div>
+
+Another important special case.
+
+<div class="result">
+<div class="thm">
+Let $a \in \nats$. Then we have $$\nminus(a,\next(a)) = \lft(\ast).$$
+</div>
+
+<div class="proof"><p>
+We proceed by induction on $a$. For the base case $a = \zero$ we have $$\nminus(\zero,\next(\zero)) = \lft(\ast)$$ as needed. For the inductive step, suppose the equality holds for some $a$; now
+$$\begin{eqnarray*}
+ &   & \nminus(\next(a),\next(\next(a))) \\
+ & = & \nminus(a,\next(a)) \\
+ & = & \lft(\ast)
+\end{eqnarray*}$$
+as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_minus_nat_next :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_minus_nat_next _ =
+>   testName "minus(a,next(a)) == lft(*)" $
+>   \a -> eq (minus a (next a)) (lft ())
+
 </p></div>
 </div>
 
@@ -96,17 +213,28 @@ The next result shows that $\nminus$ gives a solution to the equation $b = \nplu
 <div class="thm">
 Let $a,b,c \in \nats$. Then the following are equivalent.
 
-1. $\nminus(b,a) = c$.
+1. $\nminus(b,a) = \rgt(c)$.
 2. $b = \nplus(a,c)$.
 </div>
 
 <div class="proof"><p>
-First we show (1) implies (2) by induction on $b$. For the base case, suppose we have $\nminus(\zero,a) = c$. Now $$c = \nminus(\zero,a) = \varphi(a),$$ so that $a = \zero$ and $c = \zero$. Then $\zero = \nminus(a,c)$ as claimed. For the inductive step, suppose the result holds for some $b$, and suppose further that $\nminus(\next(b),a) = c$. If $a = \zero$, we have $$c = \nminus(\next(b),\zero) = \psi(b,\zero) = \next(b),$$ so that $\next(b) = \nplus(c,\zero)$ as needed. If $a \neq \zero$, then we have $a = \next(d)$ for some $d$. Now
+First we show (1) implies (2) by induction on $b$. For the base case, suppose we have $\nminus(\zero,a) = \rgt(c)$. Now
 $$\begin{eqnarray*}
- &   & c \\
+ &   & \rgt(c) \\
+ & = & \nminus(\zero,a) \\
+ & = & \bif{\iszero(a)}{\rgt(\zero)}{\lft(\ast)}.
+\end{eqnarray*}$$
+If $\iszero(a) = \bfalse$, we have $\rgt(c) = \lft(\ast)$, which is absurd. So $\iszero(a) = \btrue$, and thus $a = \zero$, and moreover $\rgt(c) = \rgt(\zero)$, so $c = \zero$. Then $\zero = \nplus(a,c)$ as needed. For the inductive step, suppose the result holds for all $a$ and $c$ for some $b$, and suppose further that $\nminus(\next(b),a) = \rgt(c)$. If $a = \zero$, we have
+$$\begin{eqnarray*}
+ &   & \rgt(c) \\
+ & = & \nminus(\next(b),\zero) \\
+ & = & \rgt(\next(b)),
+\end{eqnarray*}$$
+so that $\next(b) = c = \nplus(c,\zero)$ as needed. Suppose instead that $a = \next(d)$ for some $d$. Now
+$$\begin{eqnarray*}
+ &   & \rgt(c) \\
  & = & \nminus(\next(b),a) \\
  & = & \nminus(\next(b),\next(d)) \\
- & = & \nminus(b,\prev(\next(d))) \\
  & = & \nminus(b,d) \\
 \end{eqnarray*}$$
 and thus $\nplus(d,c) = b$. But then
@@ -116,77 +244,200 @@ $$\begin{eqnarray*}
  & = & \nplus(\next(d),c) \\
  & = & \nplus(a,c)
 \end{eqnarray*}$$
-as claimed.
+as needed.
 
-Next we show that (2) implies (1) by induction on $a$. For the base case $a = \zero$, if $b = \nplus(a,c) = c$ then $\nminus(b,\zero) = b = c$. For the inductive step, suppose the implication holds for some $a$, and suppose further that $b = \nplus(\next(a),c)$. Now
+Next we show that (2) implies (1) by induction on $a$. For the base case $a = \zero$, if $b = \nplus(a,c) = c$ then $\nminus(b,\zero) = b = c$ as needed. For the inductive step, suppose the implication holds for all $b$ and $c$ for some $a$. In particular, if $\nplus(a,c) = b$, then $\nminus(b,a) = \rgt(c)$. Suppose further that $b = \nplus(\next(a),c)$. Now $b = \next(\nplus(a,c)) = \next(d)$ for some $d$, where $\nminus(d,a) = \rgt(c)$. Then we have
 $$\begin{eqnarray*}
  &   & \nminus(b,\next(a)) \\
  & = & \nminus(\nplus(\next(a),c),\next(a)) \\
  & = & \nminus(\next(\nplus(a,c)),\next(a)) \\
  & = & \nminus(\nplus(a,c),a) \\
- & = & c
+ & = & \nminus(d,a) \\
+ & = & \rgt(c)
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_minus_plus_equiv :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
+> _test_minus_plus_equiv _ =
+>   testName "(minus(b,a) == rgt(c)) == (plus(a,c) == b)" $
+>   \a b c -> eq
+>     (eq (minus b a) (rgt c))
+>     (eq (plus a c) b)
+
+</p></div>
 </div>
 
-Now $\nminus$ inherits several properties from $\nplus$.
+Now $\nminus$ inherits several properties from $\nplus$. For instance, $\nminus$ is cancellative.
 
 <div class="result">
 <div class="thm">
 Let $a,b,c \in \nats$. Then the following are equivalent.
 
-1. $\nminus(\nplus(a,b),b) = a$.
-2. If $\nminus(b,a) = \nminus(b,c) \in \nats$, then $a = c$.
-3. If $\nminus(a,b) = \nminus(c,b) \in \nats$, then $a = c$.
-4. If $\nminus(b,a) \in \nats$, then $\nminus(\next(b),a) = \next(\nminus(b,a))$.
-5. If $\nminus(b,a) \in \nats$, then $\nminus(b,\nminus(b,a)) = a$.
-6. If $\nminus(a,b) \in \nats$, then $\nminus(\nplus(a,c),b) = \nplus(\nminus(a,b),c)$.
+1. If $\nminus(b,a) = \nminus(b,c)$ and $\isRgt(\nminus(b,a)) = \btrue$, then $a = c$.
+2. If $\nminus(a,b) = \nminus(c,b)$ and $\isRgt(\nminus(a,b)) = \btrue$, then $a = c$.
 </div>
 
 <div class="proof"><p>
-1. Note that $\nplus(a,b) = \nplus(a,b)$.
-2. Say $$\nminus(b,a) = d = \nminus(b,c),$$ with $d \in \nats$. Now $$\nplus(a,d) = b = \nplus(c,d)$$ and thus $a = c$ as claimed.
-3. Say $$\nminus(a,b) = d = \nminus(c,b),$$ with $d \in \nats$. Now $$a = \nplus(b,d) = c$$ as claimed.
-4. Say $\nminus(b,a) = c$. Now $\nplus(a,c) = b$, so that $$\nplus(a,\next(c)) = \next(\nplus(a,c)) = \next(b).$$ Thus we have $$\nminus(\next(b),a) = \next(c) = \next(\nminus(b,a))$$ as claimed.
-5. Say $\nminus(b,a) = c$. Now $b = \nplus(a,c)$, so that $a = \nminus(b,\nminus(b,a))$.
-6. We proceed by induction on $c$. For the base case, note that $$\nminus(\nplus(a,c),b) = \nminus(a,b) = \nplus(\nminus(a,b),c)$$ as needed. For the inductive step, suppose the equality holds for some $c$. Then we have
+1. Say $$\nminus(b,a) = \rgt(d) = \nminus(b,c).$$ Now $$\nplus(a,d) = b = \nplus(c,d)$$ and thus $a = c$ as claimed.
+2. Say $$\nminus(a,b) = \rgt(d) = \nminus(c,b).$$ Now $$a = \nplus(b,d) = c$$ as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_minus_cancellative_left :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
+> _test_minus_cancellative_left _ =
+>   testName "if minus(b,a) == minus(b,c) == rgt(d) then a == c" $
+>   \a b c -> if and (eq (minus b a) (minus b c)) (isRgt (minus b a))
+>     then eq a c
+>     else True
+> 
+> 
+> _test_minus_cancellative_right :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
+> _test_minus_cancellative_right _ =
+>   testName "if minus(a,b) == minus(c,b) == rgt(d) then a == c" $
+>   \a b c -> if and (eq (minus a b) (minus c b)) (isRgt (minus a b))
+>     then eq a c
+>     else True
+
+</p></div>
+</div>
+
+$\nminus$ "undoes" $\nplus$.
+
+<div class="result">
+<div class="thm">
+Let $a,b \in \nats$. Then the following are equivalent.
+
+1. $\nminus(\nplus(b,a),b) = \rgt(a)$.
+2. $\nminus(\nplus(a,b),b) = \rgt(a)$.
+</div>
+
+<div class="proof"><p>
+1. We have $\nplus(b,a) = \nplus(b,a)$, so that $\nminus(\nplus(b,a),b) = \rgt(a)$ as claimed.
+2. We have $$\nminus(\nplus(a,b),b) = \nminus(b,a),b) = \rgt(a)$$ as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_minus_plus_right :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_minus_plus_right _ =
+>   testName "minus(plus(b,a),b) == rgt(a)" $
+>   \a b -> eq (minus (plus b a) b) (rgt a)
+> 
+> 
+> _test_minus_plus_left :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_minus_plus_left _ =
+>   testName "minus(plus(a,b),b) == rgt(a)" $
+>   \a b -> eq (minus (plus a b) b) (rgt a)
+
+</p></div>
+</div>
+
+We are able to rearrange $\nminus$ expressions (a little bit).
+
+<div class="result">
+<div class="thm">
+Let $a,b,c,d \in \nats$. Then the following hold.
+
+1. If $\nminus(b,a) = \rgt(c)$, then $\nminus(\next(b),a) = \rgt(\next(c))$.
+2. If $\nminus(b,a) = \rgt(c)$, then $\nminus(b,c) = \rgt(a)$.
+3. If $\nminus(b,a) = \rgt(c)$, then $\nminus(\nplus(b,d),a) = \rgt(\nplus(c,d))$.
+</div>
+
+<div class="proof"><p>
+1. Since $\nminus(b,a) = \rgt(c)$, we have $\nplus(a,c) = b$, so that $$\nplus(a,\next(c)) = \next(\nplus(a,c)) = \next(b).$$ Thus we have $$\nminus(\next(b),a) = \rgt(\next(c))$$ as claimed.
+2. Since $\nminus(b,a) = \rgt(c)$, we have $b = \nplus(a,c) = \nplus(c,a)$, so that $\nminus(b,c) = \rgt(a)$ as claimed.
+3. Suppose $\nminus(b,a) = \rgt(c)$; then $b = \nplus(a,c)$. Now $$\nplus(b,d) = \nplus(\nplus(a,c),d) = \nplus(a,\nplus(c,d)),$$ so that $$\nminus(\nplus(b,d),a) = \rgt(\nplus(c,d))$$ as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_minus_next_left_cond :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_minus_next_left_cond _ =
+>   testName "if minus(b,a) == rgt(c) then minus(next(b),a) == rgt(next(c))" $
+>   \a b -> case minus b a of
+>     Right c -> eq (minus (next b) a) (rgt (next c))
+>     Left () -> True
+> 
+> 
+> _test_minus_swap :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_minus_swap _ =
+>   testName "if minus(b,a) == rgt(c) then minus(b,c) == rgt(a)" $
+>   \a b -> case minus b a of
+>     Right c -> eq (minus b c) (rgt a)
+>     Left () -> True
+> 
+> 
+> _test_minus_plus :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
+> _test_minus_plus _ =
+>   testName "if minus(b,a) == rgt(c) then minus(plus(b,d),a) == rgt(plus(c,d))" $
+>   \a b d -> case minus b a of
+>     Right c -> eq (minus (plus b d) a) (rgt (plus c d))
+>     Left () -> True
+
+</p></div>
+</div>
+
+Given natural numbers $a$ and $b$, either $\nminus(a,b)$ or $\nminus(b,a)$ is of the form $\rgt(c)$ for some $c$.
+
+<div class="result">
+<div class="thm">
+Let $a,b \in \nats$. If $\nminus(a,b) = \lft(\ast)$, then $\nminus(b,a) = \rgt(c)$ for some $c$.
+</div>
+
+<div class="proof"><p>
+We proceed by induction on $a$. For the base case $a = \zero$, if $\nminus(\zero,b) = \lft(\ast)$ we have $b \neq \zero$ and $\nminus(b,\zero) = \rgt(b)$ as needed.
+
+For the inductive step, suppose the implication holds for all $b$ for some $a$. Suppose further that $\nminus(\next(a),b) = \lft(\ast)$. If $b = \zero$, note that $\nminus(\next(a),\zero) = \lft(\zero)$ is false, so the implication holds vacuously. If $b = \next(d)$ for some $d$, then we have $$\lft(\ast) = \nminus(\next(a),b) = \nminus(\next(a),\next(d)) = \nminus(a,d).$$ By the induction hypothesis we have $$\nminus(d,a) = \rgt(c)$$ for some $c$, so that $$\nminus(b,a) = \nminus(\next(d),a) = \rgt(\next(c))$$ as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_minus_flip :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_minus_flip _ =
+>   testName "if minus(a,b) == lft(*) then isRgt(minus(b,a))" $
+>   \a b -> if eq (minus a b) (lft ())
+>     then isRgt (minus b a)
+>     else True
+
+</p></div>
+</div>
+
+$\ntimes$ distributes over $\nminus$.
+
+<div class="result">
+<div class="thm">
+Let $a,b,c \in \nats$. If $\nminus(a,b) = \rgt(d)$ for some $d \in \nats$, then $$\nminus(\ntimes(c,a),\ntimes(c,b)) = \rgt(\ntimes(c,d)).$$
+</div>
+
+<div class="proof"><p>
+We proceed by induction on $a$. For the base case $a = \zero$, suppose we have $\nminus(\zero,b) = \rgt(d)$; then $d = \zero$ and $b = \zero$. Now
 $$\begin{eqnarray*}
- &   & \nminus(\nplus(a,\next(c)),b) \\
- & = & \nminus(\next(\nplus(a,c)),b) \\
- & = & \next(\nminus(\nplus(a,c),b)) \\
- & = & \next(\nplus(\nminus(a,b),c)) \\
- & = & \nplus(\nminus(a,b),\next(c))
+ &   & \nminus(\ntimes(c,a),(\ntimes(c,b)) \\
+ & = & \nminus(\zero,\zero) \\
+ & = & \rgt(\zero)
 \end{eqnarray*}$$
-as needed.
-</p></div>
-</div>
+and
+$$\begin{eqnarray*}
+ &   & \rgt(\ntimes(c,d)) \\
+ & = & \rgt(\ntimes(c,\zero)) \\
+ & = & \zero
+\end{eqnarray*}$$
+as claimed.
 
-Finally:
-
-<div class="result">
-<div class="thm">
-Let $a,b \in \nats$. If $\nminus(a,b) = \ast$, then $\nminus(b,a) \in \nats$.
-</div>
-
-<div class="proof"><p>
-We proceed by induction on $a$. For the base case $a = \zero$, if $\nminus(\zero,b) = \ast$ we have $b \neq \zero$ and $\nminus(b,\zero) = b \in \nats$.
-
-For the inductive step, suppose the implication holds for all $b$ for some $a$. Suppose further that $\nminus(\next(a),b) = \ast$. If $b = \zero$, note that $\nminus(\next(a),\zero) = \zero$ is false, so the implication holds vacuously. If $b = \next(d)$, then we have $$\nminus(\next(a),b) = \nminus(\next(a),\next(d)) = \nminus(a,d).$$ By the induction hypothesis we have $$\nminus(d,a) = c,$$ so that $$\nminus(b,a) = \nminus(\next(d),\next(a)) = c.$$
-</p></div>
-</div>
-
-One more.
-
-<div class="result">
-<div class="thm">
-Let $a,b,c \in \nats$. If $\nminus(a,b) \in \nats$, then $$\nminus(\ntimes(c,a),\ntimes(c,b)) = \ntimes(c,\nminus(a,b))$$ for all $c \in \nats$.
-</div>
-
-<div class="proof"><p>
-We proceed by induction on $a$. For the base case $a = \zero$, suppose we have $\nminus(a,b) \in \nats$; then $b = \zero$. Now $$\nminus(\ntimes(c,a),(\ntimes(c,b)) = \nminus(\zero,\zero) = \zero$$ and $$\ntimes(c,\nminus(a,b)) = \ntimes(c,\zero) = \zero$$ as claimed.
-
-For the inductive step, suppose the equality holds for some $a \in \nats$ and suppose that $\nminus(\next(a),b) \in \nats$. Then we have
+For the inductive step, suppose the equality holds for some $a \in \nats$ and suppose that $\nminus(\next(a),b) = \rgt(d)$. Then we have
 $$\begin{eqnarray*}
  &   & \nminus(\ntimes(c,\next(a)),\ntimes(c,b)) \\
  & = & \nminus(\nplus(\ntimes(c,a),c),\ntimes(c,b)) \\
@@ -197,63 +448,28 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_minus_times_dist_left :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
+> _test_minus_times_dist_left _ =
+>   testName "if (minus(a,b) == rgt(d)) then minus(times(c,a),times(c,b)) == rgt(times(c,d))" $
+>   \a b c -> case (minus a b) of
+>     Right d -> eq
+>       (minus (times c a) (times c b))
+>       (rgt (times c d))
+>     Left () -> True
+
+</p></div>
 </div>
 
 
-Implementation and Testing
---------------------------
-
-And some properties. Some of these are less nice because ``minus`` returns a ``Maybe t``.
-
-> _test_minus_next :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Bool)
-> _test_minus_next _ =
->   testName "minus(next(a),next(b)) == minus(a,b)" $
->   \a b -> eq (minus (next a) (next b)) (minus a b)
-> 
-> 
-> _test_minus_zero_left :: (Natural n)
->   => n -> Test (Nat n -> Bool)
-> _test_minus_zero_left _ =
->   testName "minus(0,next(a)) == *" $
->   \a -> eq (minus zero (next a)) Nothing
-> 
-> 
-> _test_minus_zero_right :: (Natural n)
->   => n -> Test (Nat n -> Bool)
-> _test_minus_zero_right _ =
->   testName "minus(a,0) == a" $
->   \a -> eq (minus a zero) (Just a)
-> 
-> 
-> _test_minus_plus :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Bool)
-> _test_minus_plus _ =
->   testName "minus(plus(a,b),b) == a" $
->   \a b -> eq (minus (plus a b) b) (Just a)
-> 
-> 
-> _test_minus_next_left :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Bool)
-> _test_minus_next_left _ =
->   testName "minus(b,a) == c ==> minus(next(b),a) == next(c)" $
->   \a b -> case minus b a of
->     Just c  -> eq (minus (next b) a) (Just (next c))
->     Nothing -> True
-> 
-> 
-> _test_minus_swap :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Bool)
-> _test_minus_swap _ =
->   testName "minus(b,a) == c ==> minus(b,c) == a" $
->   \a b -> case minus b a of
->     Just c  -> eq (minus b c) (Just a)
->     Nothing -> True
-
-And a suite:
+Testing
+-------
 
 > _test_minus ::
->   ( TypeName n, Natural n, Arbitrary n, Show n
+>   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
 > _test_minus n maxSize numCases = do
 >   testLabel ("minus: " ++ typeName n)
@@ -264,15 +480,25 @@ And a suite:
 >      , maxSize    = maxSize
 >      }
 > 
->   runTest args (_test_minus_next n)
 >   runTest args (_test_minus_zero_left n)
->   runTest args (_test_minus_zero_right n)
->   runTest args (_test_minus_plus n)
 >   runTest args (_test_minus_next_left n)
+>   runTest args (_test_minus_nat_zero n)
+>   runTest args (_test_minus_zero_next n)
+>   runTest args (_test_minus_next_next n)
+>   runTest args (_test_minus_nat_next n)
+>   runTest args (_test_minus_plus_equiv n)
+>   runTest args (_test_minus_cancellative_left n)
+>   runTest args (_test_minus_cancellative_right n)
+>   runTest args (_test_minus_plus_right n)
+>   runTest args (_test_minus_plus_left n)
+>   runTest args (_test_minus_next_left_cond n)
 >   runTest args (_test_minus_swap n)
+>   runTest args (_test_minus_plus n)
+>   runTest args (_test_minus_flip n)
+>   runTest args (_test_minus_times_dist_left n)
 
-And the runner:
+Main:
 
 > main_minus :: IO ()
 > main_minus = do
->   _test_minus (zero :: Unary) 100 100
+>   _test_minus (zero :: Unary) 30 50

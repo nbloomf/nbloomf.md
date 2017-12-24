@@ -9,6 +9,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( power, _test_power, main_power
 >   ) where
 >
+> import Prelude ()
 > import Booleans
 > import NaturalNumbers
 > import SimpleRecursion
@@ -21,9 +22,6 @@ tags: arithmetic-made-difficult, literate-haskell
 > import GreatestCommonDivisor
 > import CoprimeTo
 > import LeastCommonMultiple
-> 
-> import Prelude ()
-> import Test.QuickCheck
 
 We defined $\ntimes$ as iterated addition; similarly, exponentiation is iterated multiplication. We'll call this function $\npower$.
 
@@ -174,43 +172,43 @@ Here's ``power``:
 
 Property tests:
 
-> _test_power_zero_right :: (Natural n)
->   => n -> Test (Nat n -> Bool)
+> _test_power_zero_right :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
 > _test_power_zero_right _ =
 >   testName "power(a,0) == 1" $
 >   \a -> eq (power a zero) (next zero)
 > 
 > 
-> _test_power_one_right :: (Natural n)
->   => n -> Test (Nat n -> Bool)
+> _test_power_one_right :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
 > _test_power_one_right _ =
 >   testName "power(a,1) == a" $
 >   \a -> eq (power a (next zero)) a
 > 
 > 
-> _test_power_zero_left :: (Natural n)
->   => n -> Test (Nat n -> Bool)
+> _test_power_zero_left :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
 > _test_power_zero_left _ =
 >   testName "power(a,0) == 1" $
 >   \a -> eq (power zero (next a)) zero
 > 
 > 
-> _test_power_plus_right :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_power_plus_right :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
 > _test_power_plus_right _ =
 >   testName "power(a,plus(b,c)) == times(power(a,b),power(a,c))" $
 >   \a b c -> eq (power a (plus b c)) (times (power a b) (power a c))
 > 
 > 
-> _test_power_times_right :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_power_times_right :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
 > _test_power_times_right _ =
 >   testName "power(a,times(b,c)) == power(power(a,b),c)" $
 >   \a b c -> eq (power a (times b c)) (power (power a b) c)
 > 
 > 
-> _test_power_times_left :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_power_times_left :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
 > _test_power_times_left _ =
 >   testName "power(times(a,b),c) == times(power(a,c),power(b,c))" $
 >   \a b c -> eq (power (times a b) c) (times (power a c) (power b c))
@@ -219,7 +217,7 @@ And the suite:
 
 > -- run all tests for power
 > _test_power ::
->   ( TypeName n, Natural n, Arbitrary n, Show n
+>   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
 > _test_power n maxSize numCases = do
 >   testLabel ("power: " ++ typeName n)

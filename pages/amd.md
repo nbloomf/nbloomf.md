@@ -19,7 +19,6 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * [Bailout Recursion](/posts/arithmetic-made-difficult/BailoutRecursion.html)
         * [Mutating Recursion](/posts/arithmetic-made-difficult/MutatingRecursion.html)
     * Arithmetic of Natural Numbers
-        * [Equality](/posts/arithmetic-made-difficult/Equals.html)
         * [Addition](/posts/arithmetic-made-difficult/Plus.html)
         * [Multiplication](/posts/arithmetic-made-difficult/Times.html)
         * [Really Simple Equations](/posts/arithmetic-made-difficult/really-simple-equations.html)

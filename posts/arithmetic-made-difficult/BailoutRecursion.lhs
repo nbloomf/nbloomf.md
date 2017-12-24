@@ -174,3 +174,22 @@ Arbitrary recursion is dangerous because in general, every time one function use
 In contrast, a *tail recursive* function by definition doesn't have to keep track of what remains to be done after the recursion. Our recursion operators, $\natrec{\ast}{\ast}$, $\simprec{\ast}{\ast}$, and $\bailrec{\ast}{\ast}{\ast}{\ast}$, are carefully chosen so that they have tail recursive implementations.
 
 By the way, I think it's helpful to compare the difference between arbitrary recursion and recursion operators to the difference between arbitrary ``GOTO``s and structured loops. In both cases we have a simple but dangerous primitive operation that is hidden behind a safer and more meaningful interface. A ``for`` loop means "repeat this some number of times"; while the meaning of simple recursion is given by its universal property.
+
+As with natural and simple recursion, the "uniqueness" part of bailout recursion is also handy. To be a little more explicit, it says the following.
+
+<div class="result">
+<div class="thm">
+Let $A$ and $B$ be sets, with mappings
+$$\begin{eqnarray*}
+\varphi & : & A \rightarrow B \\
+\beta & : & \nats \times A \rightarrow \bool \\
+\psi & : & \nats \times A \rightarrow B \\
+\omega & : & \nats \times A \rightarrow A. \\
+\end{eqnarray*}$$
+Then $\bailrec{\varphi}{\beta}{\psi}{\omega}$ is the unique solution $f : \nats \times A \rightarrow B$ to the following system of functional equations for all $k \in \nats$, $a \in A$:
+$$\left\{\begin{array}{l}
+ f(\zero,a) = \varphi(a) \\
+ f(\next(k),a) = \bif{\beta(k,a)}{\psi(m,a)}{f(k,\omega(k,a))}
+\end{array}\right.$$
+</div>
+</div>

@@ -14,7 +14,11 @@ library
     NaturalNumbers,
     SimpleRecursion,
     BailoutRecursion,
-    MutatingRecursion
+    MutatingRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo
   build-depends:
     base == 4.*,
     QuickCheck
@@ -44,375 +48,437 @@ test-suite amd-disjoint-union
   other-modules:
     Booleans
 
-
-
-test-suite amd-equals
-  type:          exitcode-stdio-1.0
-  main-is:       Equals.lhs
+test-suite amd-nats
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: NaturalNumbers.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Equals.main_eq
-  other-modules: Booleans, NaturalNumbers, BailoutRecursion, Unary
+  ghc-options: -main-is NaturalNumbers.main_nats
+  other-modules:
+    Booleans,
+    Unary,
+    DisjointUnions
 
 test-suite amd-plus
-  type:          exitcode-stdio-1.0
-  main-is:       Plus.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Plus.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Plus.main_plus
-  other-modules: Booleans, NaturalNumbers, Unary, SimpleRecursion,
-                 Equals, BailoutRecursion
+  ghc-options: -main-is Plus.main_plus
+  other-modules:
+    Booleans,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion
 
 test-suite amd-times
-  type:          exitcode-stdio-1.0
-  main-is:       Times.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Times.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Times.main_times
-  other-modules: Booleans, NaturalNumbers, Unary, Plus, SimpleRecursion,
-                 Equals, BailoutRecursion
+  ghc-options: -main-is Times.main_times
+  other-modules:
+    Booleans,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    Plus
 
 test-suite amd-minus
-  type:          exitcode-stdio-1.0
-  main-is:       Minus.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Minus.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Minus.main_minus
-  other-modules: Booleans, NaturalNumbers, Unary, Plus, Times, SimpleRecursion,
-                 Equals, BailoutRecursion
+  ghc-options: -main-is Minus.main_minus
+  other-modules:
+    Booleans,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    Plus,
+    Times
 
 test-suite amd-leq
-  type:          exitcode-stdio-1.0
-  main-is:       LessThanOrEqualTo.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: LessThanOrEqualTo.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is LessThanOrEqualTo.main_leq
-  other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
-                 Minus, SimpleRecursion, Equals, BailoutRecursion
+  ghc-options: -main-is LessThanOrEqualTo.main_leq
+  other-modules:
+    Booleans,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    Plus,
+    Times,
+    Minus
+
+
 
 test-suite amd-max-min
-  type:          exitcode-stdio-1.0
-  main-is:       MaxAndMin.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: MaxAndMin.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is MaxAndMin.main_max_min
+  ghc-options: -main-is MaxAndMin.main_max_min
   other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
                  Minus, LessThanOrEqualTo, SimpleRecursion,
-                 Equals, BailoutRecursion
+                 BailoutRecursion
 
 test-suite amd-divalg
-  type:          exitcode-stdio-1.0
-  main-is:       DivisionAlgorithm.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: DivisionAlgorithm.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is DivisionAlgorithm.main_divalg
+  ghc-options: -main-is DivisionAlgorithm.main_divalg
   other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
-                 Minus, LessThanOrEqualTo, SimpleRecursion, Equals,
+                 Minus, LessThanOrEqualTo, SimpleRecursion,
                  BailoutRecursion
 
 test-suite amd-div
-  type:          exitcode-stdio-1.0
-  main-is:       Divides.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Divides.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Divides.main_div
+  ghc-options: -main-is Divides.main_div
   other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
                  Minus, LessThanOrEqualTo, DivisionAlgorithm,
-                 SimpleRecursion, Equals, BailoutRecursion
+                 SimpleRecursion, BailoutRecursion
 
 test-suite amd-gcd
-  type:          exitcode-stdio-1.0
-  main-is:       GreatestCommonDivisor.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: GreatestCommonDivisor.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is GreatestCommonDivisor.main_gcd
+  ghc-options: -main-is GreatestCommonDivisor.main_gcd
   other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
                  Minus, LessThanOrEqualTo, DivisionAlgorithm,
-                 Divides, SimpleRecursion, Equals, BailoutRecursion
+                 Divides, SimpleRecursion, BailoutRecursion
 
 test-suite amd-coprime
-  type:          exitcode-stdio-1.0
-  main-is:       CoprimeTo.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: CoprimeTo.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is CoprimeTo.main_coprime
+  ghc-options: -main-is CoprimeTo.main_coprime
   other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
                  Minus, LessThanOrEqualTo, DivisionAlgorithm,
                  Divides, GreatestCommonDivisor, SimpleRecursion,
-                 BailoutRecursion, Equals
+                 BailoutRecursion
 
 test-suite amd-lcm
-  type:          exitcode-stdio-1.0
-  main-is:       LeastCommonMultiple.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: LeastCommonMultiple.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is LeastCommonMultiple.main_lcm
+  ghc-options: -main-is LeastCommonMultiple.main_lcm
   other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
                  Minus, LessThanOrEqualTo, DivisionAlgorithm,
                  Divides, GreatestCommonDivisor, CoprimeTo,
-                 SimpleRecursion, Equals, BailoutRecursion
+                 SimpleRecursion, BailoutRecursion
 
 test-suite amd-prime
-  type:          exitcode-stdio-1.0
-  main-is:       IsPrime.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: IsPrime.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is IsPrime.main_prime
+  ghc-options: -main-is IsPrime.main_prime
   other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
                  Minus, LessThanOrEqualTo, DivisionAlgorithm,
                  Divides, GreatestCommonDivisor, CoprimeTo,
-                 LeastCommonMultiple, Equals, SimpleRecursion,
+                 LeastCommonMultiple, SimpleRecursion,
                  BailoutRecursion
 
 test-suite amd-power
-  type:          exitcode-stdio-1.0
-  main-is:       Exponentiation.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Exponentiation.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Exponentiation.main_power
+  ghc-options: -main-is Exponentiation.main_power
   other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
                  Minus, LessThanOrEqualTo, DivisionAlgorithm,
                  Divides, GreatestCommonDivisor, CoprimeTo,
-                 LeastCommonMultiple, SimpleRecursion, Equals,
+                 LeastCommonMultiple, SimpleRecursion,
                  BailoutRecursion
 
 test-suite amd-choose
-  type:          exitcode-stdio-1.0
-  main-is:       Choose.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Choose.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Choose.main_choose
+  ghc-options: -main-is Choose.main_choose
   other-modules: Booleans, LessThanOrEqualTo, Minus, Plus,
                  NaturalNumbers, Times, Unary, SimpleRecursion,
-                 BailoutRecursion, Equals, MutatingRecursion
+                 BailoutRecursion, MutatingRecursion
 
 test-suite amd-rev
-  type:          exitcode-stdio-1.0
-  main-is:       Reverse.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Reverse.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Reverse.main_rev
+  ghc-options: -main-is Reverse.main_rev
   other-modules: Booleans, Lists, NaturalNumbers, Unary
 
 test-suite amd-cat
-  type:          exitcode-stdio-1.0
-  main-is:       Cat.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Cat.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Cat.main_cat
+  ghc-options: -main-is Cat.main_cat
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse
 
 test-suite amd-length
-  type:          exitcode-stdio-1.0
-  main-is:       Length.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Length.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Length.main_length
+  ghc-options: -main-is Length.main_length
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
-                 Reverse, Cat, Plus, SimpleRecursion, Equals,
+                 Reverse, Cat, Plus, SimpleRecursion,
                  BailoutRecursion
 
 test-suite amd-at
-  type:          exitcode-stdio-1.0
-  main-is:       At.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: At.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is At.main_at
+  ghc-options: -main-is At.main_at
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
-                 Times, Length, SimpleRecursion, BailoutRecursion,
-                 Equals
+                 Times, Length, SimpleRecursion, BailoutRecursion
 
 test-suite amd-map
-  type:          exitcode-stdio-1.0
-  main-is:       Map.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Map.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Map.main_map
+  ghc-options: -main-is Map.main_map
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
-                 Times, At, Length, SimpleRecursion, Equals,
+                 Times, At, Length, SimpleRecursion,
                  BailoutRecursion
 
 test-suite amd-range
-  type:          exitcode-stdio-1.0
-  main-is:       Range.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Range.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Range.main_range
+  ghc-options: -main-is Range.main_range
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
-                 Times, At, Map, UnfoldN, Length, Equals,
+                 Times, At, Map, UnfoldN, Length,
                  SimpleRecursion, BailoutRecursion
 
 test-suite amd-zip
-  type:          exitcode-stdio-1.0
-  main-is:       Zip.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Zip.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Zip.main_zip
+  ghc-options: -main-is Zip.main_zip
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
-                 Tuples, Length, Equals, BailoutRecursion, SimpleRecursion
+                 Tuples, Length, BailoutRecursion, SimpleRecursion
 
 test-suite amd-unzip
-  type:          exitcode-stdio-1.0
-  main-is:       Unzip.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Unzip.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Unzip.main_unzip
+  ghc-options: -main-is Unzip.main_unzip
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
-                 Tuples, Length, Zip, SimpleRecursion, Equals,
+                 Tuples, Length, Zip, SimpleRecursion,
                  BailoutRecursion
 
 test-suite amd-prefix
-  type:          exitcode-stdio-1.0
-  main-is:       Prefix.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Prefix.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Prefix.main_prefix
+  ghc-options: -main-is Prefix.main_prefix
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
-                 Tuples, Length, Zip, Equals, SimpleRecursion,
+                 Tuples, Length, Zip, SimpleRecursion,
                  BailoutRecursion
 
 test-suite amd-lcp
-  type:          exitcode-stdio-1.0
-  main-is:       LongestCommonPrefix.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: LongestCommonPrefix.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is LongestCommonPrefix.main_lcp
+  ghc-options: -main-is LongestCommonPrefix.main_lcp
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, Prefix, SimpleRecursion,
-                 Equals, BailoutRecursion
+                 BailoutRecursion
 
 test-suite amd-all-any
-  type:          exitcode-stdio-1.0
-  main-is:       AllAndAny.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: AllAndAny.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is AllAndAny.main_all_any
+  ghc-options: -main-is AllAndAny.main_all_any
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, Prefix, SimpleRecursion,
-                 BailoutRecursion, Equals
+                 BailoutRecursion, DisjointUnions
 
 test-suite amd-tails-inits
-  type:          exitcode-stdio-1.0
-  main-is:       TailsAndInits.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: TailsAndInits.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is TailsAndInits.main_tails_inits
+  ghc-options: -main-is TailsAndInits.main_tails_inits
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Prefix,
-                 LongestCommonPrefix, Equals, SimpleRecursion,
+                 LongestCommonPrefix, SimpleRecursion,
                  BailoutRecursion
 
 test-suite amd-filter
-  type:          exitcode-stdio-1.0
-  main-is:       Filter.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Filter.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Filter.main_filter
+  ghc-options: -main-is Filter.main_filter
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Prefix,
                  LongestCommonPrefix, TailsAndInits, SimpleRecursion,
-                 Equals, BailoutRecursion
+                 BailoutRecursion
 
 test-suite amd-elt
-  type:          exitcode-stdio-1.0
-  main-is:       Elt.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Elt.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Elt.main_elt
+  ghc-options: -main-is Elt.main_elt
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Filter
                  LongestCommonPrefix, TailsAndInits, Prefix,
-                 SimpleRecursion, Equals, BailoutRecursion
+                 SimpleRecursion, BailoutRecursion
 
 test-suite amd-count
-  type:          exitcode-stdio-1.0
-  main-is:       Count.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Count.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Count.main_count
+  ghc-options: -main-is Count.main_count
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
-                 Prefix, SimpleRecursion, Equals, BailoutRecursion
+                 Prefix, SimpleRecursion, BailoutRecursion
 
 test-suite amd-repeat
-  type:          exitcode-stdio-1.0
-  main-is:       Repeat.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Repeat.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Repeat.main_repeat
+  ghc-options: -main-is Repeat.main_repeat
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
-                 Count, Prefix, Equals, SimpleRecursion, BailoutRecursion
+                 Count, Prefix, SimpleRecursion, BailoutRecursion
 
 test-suite amd-sublist
-  type:          exitcode-stdio-1.0
-  main-is:       Sublist.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Sublist.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Sublist.main_sublist
+  ghc-options: -main-is Sublist.main_sublist
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
-                 Count, Prefix, Repeat, Equals, SimpleRecursion
+                 Count, Prefix, Repeat, SimpleRecursion
                  BailoutRecursion
 
 test-suite amd-infix
-  type:          exitcode-stdio-1.0
-  main-is:       Infix.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Infix.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Infix.main_isInfix
+  ghc-options: -main-is Infix.main_isInfix
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Sublist, SimpleRecursion,
-                 Equals, BailoutRecursion
+                 BailoutRecursion
 
 test-suite amd-select
-  type:          exitcode-stdio-1.0
-  main-is:       Select.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Select.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Select.main_select
+  ghc-options: -main-is Select.main_select
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Choose, Sublist,
-                 Equals, SimpleRecursion, BailoutRecursion,
+                 SimpleRecursion, BailoutRecursion,
                  MutatingRecursion
 
 test-suite amd-unique
-  type:          exitcode-stdio-1.0
-  main-is:       Unique.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Unique.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Unique.main_unique
+  ghc-options: -main-is Unique.main_unique
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Choose,
-                 Sublist, SimpleRecursion, Equals, BailoutRecursion,
+                 Sublist, SimpleRecursion, BailoutRecursion,
                  MutatingRecursion
 
 test-suite amd-delete
-  type:          exitcode-stdio-1.0
-  main-is:       Delete.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Delete.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Delete.main_delete
+  ghc-options: -main-is Delete.main_delete
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Choose,
-                 Sublist, Unique, SimpleRecursion, Equals,
+                 Sublist, Unique, SimpleRecursion,
                  BailoutRecursion, MutatingRecursion
 
 test-suite amd-dedupe
-  type:          exitcode-stdio-1.0
-  main-is:       Dedupe.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Dedupe.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is Dedupe.main_dedupe
+  ghc-options: -main-is Dedupe.main_dedupe
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
@@ -420,27 +486,29 @@ test-suite amd-dedupe
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Delete,
                  Choose, Sublist, Unique, SimpleRecursion,
-                 BailoutRecursion, Equals, MutatingRecursion
+                 BailoutRecursion, MutatingRecursion
 
 test-suite amd-take-drop
-  type:          exitcode-stdio-1.0
-  main-is:       TakeAndDrop.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: TakeAndDrop.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is TakeAndDrop.main_take_drop
+  ghc-options: -main-is TakeAndDrop.main_take_drop
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Delete,
-                 Dedupe, Choose, Sublist, Unique, Equals,
+                 Dedupe, Choose, Sublist, Unique,
                  SimpleRecursion, BailoutRecursion, MutatingRecursion
 
 test-suite amd-takebut-dropbut
-  type:          exitcode-stdio-1.0
-  main-is:       TakeButAndDropBut.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: TakeButAndDropBut.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is TakeButAndDropBut.main_takebut_dropbut
+  ghc-options: -main-is TakeButAndDropBut.main_takebut_dropbut
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
@@ -448,18 +516,19 @@ test-suite amd-takebut-dropbut
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Delete,
                  Dedupe, Choose, Sublist, Unique, TakeAndDrop,
-                 Equals, SimpleRecursion, BailoutRecursion, MutatingRecursion
+                 SimpleRecursion, BailoutRecursion, MutatingRecursion
 
 test-suite amd-takewhile-dropwhile
-  type:          exitcode-stdio-1.0
-  main-is:       TakeWhileAndDropWhile.lhs
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: TakeWhileAndDropWhile.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options:   -main-is TakeWhileAndDropWhile.main_takewhile_dropwhile
+  ghc-options: -main-is TakeWhileAndDropWhile.main_takewhile_dropwhile
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Delete,
-                 Dedupe, Choose, Sublist, Unique, Equals,
+                 Dedupe, Choose, Sublist, Unique,
                  SimpleRecursion, BailoutRecursion, MutatingRecursion

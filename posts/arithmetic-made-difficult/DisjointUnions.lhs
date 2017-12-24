@@ -8,7 +8,7 @@ slug: disjoint-unions
 
 > {-# LANGUAGE ScopedTypeVariables #-}
 > module DisjointUnions
->   ( lft, rgt, either, uswap, upair , uassocL, uassocR
+>   ( lft, rgt, either, uswap, upair , uassocL, uassocR, isLft, isRgt
 >   , _test_disjoint_union, main_disjoint_union
 >   ) where
 > 
@@ -481,7 +481,8 @@ as needed.
 > _test_uassocL_rgt_lft x _ z =
 >   testName "uassocL(rgt(lft(b))) == lft(rgt(b))" $
 >   \b -> eq
->     (uassocL ((rgt ((lft b) `withTypeOf` (rgt z)) `withTypeOf` (lft x))))
+>     (uassocL 
+>       ((rgt ((lft b) `withTypeOf` (rgt z)) `withTypeOf` (lft x))))
 >     (lft (rgt b))
 > 
 > 
@@ -490,7 +491,8 @@ as needed.
 > _test_uassocL_rgt_rgt x y _ =
 >   testName "uassocL(rgt(rgt(c))) == rgt(c)" $
 >   \c -> eq
->     (uassocL ((rgt ((rgt c) `withTypeOf` (lft y)) `withTypeOf` (lft x))))
+>     (uassocL
+>       ((rgt ((rgt c) `withTypeOf` (lft y)) `withTypeOf` (lft x))))
 >     (rgt c)
 > 
 > 
@@ -499,7 +501,8 @@ as needed.
 > _test_uassocR_lft_lft _ y z =
 >   testName "uassocR(lft(lft(a))) == lft(a)" $
 >   \a -> eq
->     (uassocR ((lft ((lft a) `withTypeOf` (rgt y)) `withTypeOf` (rgt z))))
+>     (uassocR
+>       ((lft ((lft a) `withTypeOf` (rgt y)) `withTypeOf` (rgt z))))
 >     (lft a)
 > 
 > 
@@ -508,7 +511,8 @@ as needed.
 > _test_uassocR_lft_rgt x _ z =
 >   testName "uassocR(lft(rgt(b))) == rgt(lft(b))" $
 >   \b -> eq
->     (uassocR ((lft ((rgt b) `withTypeOf` (lft x)) `withTypeOf` (rgt z))))
+>     (uassocR
+>       ((lft ((rgt b) `withTypeOf` (lft x)) `withTypeOf` (rgt z))))
 >     (rgt (lft b))
 > 
 > 
@@ -535,6 +539,102 @@ as needed.
 > _test_uassocL_uassocR _ _ _ =
 >   testName "uassocL . uassocR == id" $
 >   \x -> eq (uassocL (uassocR x)) x
+
+</p></div>
+</div>
+
+We also define some helper functions which detect whether an element of $A + B$ is a $\lft$ or a $\rgt$.
+
+<div class="result">
+<div class="defn">
+Let $A$ and $B$ be sets. We define $\isLft : A + B \rightarrow \bool$ by $$\isLft = \either(\const(\btrue),\const(\bfalse))$$ and $\isRgt : A + B \rightarrow \bool$ by $$\isRgt = \either(\const(\bfalse),\const(\btrue)).$$
+
+In Haskell:
+
+> isLft :: Either a b -> Bool
+> isLft = either (const True) (const False)
+> 
+> isRgt :: Either a b -> Bool
+> isRgt = either (const False) (const True)
+
+</div>
+</div>
+
+Now $\isLft$ and $\isRgt$ have some nice properties.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ and $B$ be sets. Then we have the following for all $a \in A$ and $b \in B$.
+
+1. $\isLft(\lft(a)) = \btrue$.
+2. $\isLft(\rgt(b)) = \bfalse$.
+3. $\isRgt(\lft(a)) = \bfalse$.
+4. $\isRgt(\rgt(b)) = \btrue$.
+</p></div>
+
+<div class="proof"><p>
+1. We have
+$$\begin{eqnarray*}
+ &   & \isLft(\lft(a)) \\
+ & = & \either(\const(\btrue),\const(\bfalse))(\lft(a)) \\
+ & = & \const(\btrue)(a) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as claimed.
+2. We have
+$$\begin{eqnarray*}
+ &   & \isLft(\rgt(b)) \\
+ & = & \either(\const(\btrue),\const(\bfalse))(\rgt(b)) \\
+ & = & \const(\bfalse)(b) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as claimed.
+3. We have
+$$\begin{eqnarray*}
+ &   & \isRgt(\lft(a)) \\
+ & = & \either(\const(\bfalse),\const(\btrue))(\lft(a)) \\
+ & = & \const(\bfalse)(a) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as claimed.
+4. We have
+$$\begin{eqnarray*}
+ &   & \isRgt(\rgt(b)) \\
+ & = & \either(\const(\bfalse),\const(\btrue))(\rgt(b)) \\
+ & = & \const(\btrue)(b) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_isLft_lft :: (Equal a, Equal b)
+>   => a -> b -> Test (a -> Bool)
+> _test_isLft_lft _ y =
+>   testName "isLft(lft(a)) == true" $
+>   \a -> eq (isLft ((lft a) `withTypeOf` (rgt y))) True
+> 
+> 
+> _test_isLft_rgt :: (Equal a, Equal b)
+>   => a -> b -> Test (b -> Bool)
+> _test_isLft_rgt x _ =
+>   testName "isLft(rgt(b)) == false" $
+>   \b -> eq (isLft ((rgt b) `withTypeOf` (lft x))) False
+> 
+> 
+> _test_isRgt_lft :: (Equal a, Equal b)
+>   => a -> b -> Test (a -> Bool)
+> _test_isRgt_lft _ y =
+>   testName "isRgt(lft(a)) == false" $
+>   \a -> eq (isRgt ((lft a) `withTypeOf` (rgt y))) False
+> 
+> 
+> _test_isRgt_rgt :: (Equal a, Equal b)
+>   => a -> b -> Test (b -> Bool)
+> _test_isRgt_rgt x _ =
+>   testName "isRgt(rgt(b)) == true" $
+>   \b -> eq (isRgt ((rgt b) `withTypeOf` (lft x))) True
 
 </p></div>
 </div>
@@ -578,6 +678,11 @@ The suite:
 >   runTest args (_test_uassocR_rgt a b c)
 >   runTest args (_test_uassocR_uassocL a b c)
 >   runTest args (_test_uassocL_uassocR a b c)
+> 
+>   runTest args (_test_isLft_lft a b)
+>   runTest args (_test_isLft_rgt a b)
+>   runTest args (_test_isRgt_lft a b)
+>   runTest args (_test_isRgt_rgt a b)
 
 
 And ``main``:
