@@ -3,6 +3,7 @@ title: The Division Algorithm
 author: nbloomf
 date: 2017-04-08
 tags: arithmetic-made-difficult, literate-haskell
+slug: divalg
 ---
 
 > module DivisionAlgorithm
@@ -11,6 +12,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >
 > import Prelude ()
 > import Booleans
+> import Tuples
 > import NaturalNumbers
 > import SimpleRecursion
 > import Plus
@@ -31,11 +33,83 @@ Let's try it.
 
 <div class="result">
 <div class="defn"><p>
-Define $\varphi : \nats \rightarrow \nats \times \nats$ by $\varphi(x) = (\zero,\zero)$, and define $\mu : \nats \times \nats \times (\nats \times \nats) \rightarrow \nats \times \nats$ by $$\mu(a,b,(q,r)) = \left\{ \begin{array}{ll} (\next(q),\zero) & \mathrm{if}\ b = \next(r) \\ (q,\next(r)) & \mathrm{otherwise}. \end{array} \right.$$ Then define $\ndivalg : \nats \times \nats \rightarrow \nats \times \nats$ by $$\ndivalg = \simprec{\varphi}{\mu}.$$
+Define $\varphi : \nats \rightarrow \nats \times \nats$ by $\varphi(x) = (\zero,\zero)$, and define $\mu : \nats \times \nats \times (\nats \times \nats) \rightarrow \nats \times \nats$ by
+$$\mu(a,b,(q,r)) = \left\{\begin{array}{ll}
+ (\next(q),\zero) & \mathrm{if}\ b = \next(r) \\
+ (q,\next(r)) & \mathrm{otherwise}.
+\end{array}\right.$$
+Then define $\ndivalg : \nats \times \nats \rightarrow \nats \times \nats$ by $$\ndivalg = \simprec{\varphi}{\mu}.$$ We also define helpers $\nquo, \nrem : \nats \times \nats \rightarrow \nats$ by $$\nquo(a,b) = \fst(\ndivalg(a,b))$$ and $$\nrem(a,b) = \snd(\ndivalg(a,b)).$$
+
+In Haskell:
+
+> divalg :: (Natural n, Equal n) => n -> n -> (n,n)
+> divalg = simpleRec phi mu
+>   where
+>     phi _ = (zero, zero)
+>     mu _ b (q,r) = if eq b (next r)
+>       then (next q, zero)
+>       else (q, next r)
+> 
+> 
+> quo :: (Natural n, Equal n) => n -> n -> n
+> quo a b = fst (divalg a b)
+> 
+> 
+> rem :: (Natural n, Equal n) => n -> n -> n
+> rem a b = snd (divalg a b)
+
 </p></div>
 </div>
 
-Get ready:
+Since $\ndivalg$ is defined in terms of simple recursion, it is the unique solution to a system of functional equations.
+
+<div class="result">
+<div class="corollary"><p>
+$\ndivalg$ is the unique map $f : \nats \times \nats \rightarrow \nats \times \nats$ with the property that for all $a,b \in \nats$, we have
+$$\left\{\begin{array}{l}
+ f(\zero,b) = (\zero,\zero) \\
+ f(\next(a),b) = \bif{\beq(b,\next(r))}{(\next(q),\zero)}{(q,\next(r))}\ \mathrm{where}\ (q,r) = f(q,r).
+\end{array}\right.$$
+</p></div>
+
+<div class="test"><p>
+
+> _test_divalg_zero_left :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_divalg_zero_left _ =
+>   testName "divalg(0,a) = (0,0)" $
+>   \a -> eq (divalg zero a) (zero, zero)
+> 
+> 
+> _test_divalg_next_left :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_divalg_next_left _ =
+>   testName "divalg(next(a),b) == if(eq(b,next(r)),(next(q),0),(q,next(r)))" $
+>   \a b -> let (q,r) = divalg a b in
+>     eq
+>       (divalg (next a) b)
+>       (if (eq b (next r)) then (next q, zero) else (q, next r))
+> 
+> 
+> _test_divalg_quo :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_divalg_quo _ =
+>   testName "quo(a,b) = q where (q,_) = divalg(a,b)" $
+>   \a b -> let (q,_) = divalg a b in
+>   eq q (quo a b)
+> 
+> 
+> _test_divalg_rem :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_divalg_rem _ =
+>   testName "rem(a,b) = r where (_,r) = divalg(a,b)" $
+>   \a b -> let (_,r) = divalg a b in
+>   eq r (rem a b)
+
+</p></div>
+</div>
+
+Now $\ndivalg(a,b)$ acts like the division algorithm.
 
 <div class="result">
 <div class="thm">
@@ -60,9 +134,28 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 If $\nleq(\next(r_1),b) = \bfalse$, then $\nleq(b,\next(r_1)) = \btrue$ and $\next(r_1) \neq b$. In particular, we must have $r_1 = b$. But then $\next(r_1) = \next(b)$, a contradiction. So we must have $\nleq(\next(r_1),b) = \btrue$, and the conclusion holds for all $b$ given $\next(a)$ as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_divalg_equality :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_divalg_equality _ =
+>   testName "a == plus(times(q,b),r) where (q,r) = divalg(a,b)" $
+>   \a b -> let (q,r) = divalg a b in
+>   eq a (plus (times q b) r)
+> 
+> 
+> _test_divalg_inequality :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_divalg_inequality _ =
+>   testName "leq(r,b) where (_,r) = divalg(a,next(b))" $
+>   \a b -> let (_,r) = divalg a (next b) in
+>   leq r b
+
+</p></div>
 </div>
 
-woo!
+Also the output of the division algorithm is unique.
 
 <div class="result">
 <div class="thm">
@@ -90,6 +183,18 @@ So we have $$\ntimes(q_1,\next(b)) = \nplus(\ntimes(q_2,\next(b)),k),$$ and sinc
 
 So we have $k = \zero$, and thus $$\ntimes(q_1,\next(b)) = \ntimes(q_2,\next(b)).$$ Thus $q_1 = q_2$, and moreover $r_1 = r_2$ as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_divalg_unique :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> n -> Bool)
+> _test_divalg_unique _ =
+>   testName "if and(eq(a,plus(times(q,next(b)),r),leq(r,b)) then (q,r) = divalg(a,b)" $
+>   \a b q r -> if and (eq a (plus (times q (next b)) r)) (leq r b)
+>     then eq (q,r) (divalg a (next b))
+>     else True
+
+</p></div>
 </div>
 
 The last two theorems say that the output of $\ndivalg(a,b)$ is the unique solution of a particular system of equations so long as $b$ is not $\zero$. But what if $b$ is zero? We frankly won't usually be interested in this case, but it will show up later as the base case in some induction proofs. Of course in the $b = \zero$ case the output of $\ndivalg$ is no longer a unique solution to the system of equations, and the particular solution is a quirk of our definition.
@@ -98,92 +203,27 @@ The last two theorems say that the output of $\ndivalg(a,b)$ is the unique solut
 <div class="thm">
 If $a \in \nats$ we have the following.
 
-1. $\ndivalg(\zero,a) = (\zero, \zero)$
-2. $\ndivalg(a,\zero) = (\zero,a)$.
-3. $\ndivalg(a,\next(\zero)) = (a,\zero)$.
-4. If $\nleq(a,b)$, then $\ndivalg(a,\next(b)) = (\zero,a)$.
+1. $\ndivalg(a,\zero) = (\zero,a)$.
+2. $\ndivalg(a,\next(\zero)) = (a,\zero)$.
+3. If $\nleq(a,b)$, then $\ndivalg(a,\next(b)) = (\zero,a)$.
 </div>
 
 <div class="proof"><p>
-1. Note that $$\ndivalg(\zero, a) = \phi(a) = (\zero, \zero).$$
-2. We proceed by induction on $a$. For the base case $a = \zero$, note that
-$$\begin{eqnarray*}
- &   & \ndivalg(\zero, \zero) \\
- & = & \varphi(\zero) \\
- & = & (\zero, \zero)
-\end{eqnarray*}$$
-as needed. For the inductive step, suppose the equation holds for some $a$. Now
+1. We proceed by induction on $a$. For the base case $a = \zero$, note that $$\ndivalg(\zero,\zero) = (\zero, \zero)$$ as needed. For the inductive step, suppose the equation holds for some $a$. Now
 $$\begin{eqnarray*}
  &   & \ndivalg(\next(a),\zero) \\
- & = & \mu(a, \zero, \ndivalg(a, \zero)) \\
- & = & \mu(a, \zero, (\zero, a)) \\
+ & = & \bif{\eq(\zero,\next(r))}{(\next(q),\zero)}{(q,\next(r))}\ \mathrm{where}\ (q,r) = \ndivalg(a,\zero) \\
+ & = & \bif{\eq(\zero,\next(a))}{(\next(\zero),\zero)}{(\zero,\next(a))} \\
+ & = & \bif{\bfalse}{(\next(\zero),\zero)}{(\zero,\next(a))} \\
  & = & (\zero, \next(a))
 \end{eqnarray*}$$
 as needed.
-3. Note that $a = \nplus(\ntimes(a,\next(\zero)),\zero)$ and $\nleq(\zero,\zero)$. By the uniqueness of quotients and remainders for nonzero divisors, we have $\ndivalg(a,\next(\zero)) = (a,\zero)$ as claimed.
-4. Note that $a = \nplus(\ntimes(\zero,\next(b)),a)$ and $\nleq(a,b)$. By the uniqueness of quotients and remainders for positive divisors we have $\ndivalg(a,\next(b)) = (\zero,a)$.
+2. Note that $a = \nplus(\ntimes(a,\next(\zero)),\zero)$ and $\nleq(\zero,\zero)$. By the uniqueness of quotients and remainders for nonzero divisors, we have $\ndivalg(a,\next(\zero)) = (a,\zero)$ as claimed.
+3. Note that $a = \nplus(\ntimes(\zero,\next(b)),a)$ and $\nleq(a,b)$. By the uniqueness of quotients and remainders for positive divisors we have $\ndivalg(a,\next(b)) = (\zero,a)$.
 </p></div>
-</div>
 
-And while we're at it, some special cases.
+<div class="test"><p>
 
-<div class="result">
-<div class="thm">
-Let $a,b \in \nats$. If $b \neq \zero$, then $\nquo(\ntimes(a,b),b) = a$.
-</div>
-
-<div class="proof"><p>
-Say $b = \next(m)$. Note that $\nleq(\zero,m)$. Now $$\ntimes(a,b) = \nplus(\ntimes(a,b),\zero),$$ and by the uniqueness of quotients by nonzero divisors, we have $a = \nquo(\ntimes(a,b),b)$ as claimed.
-</p></div>
-</div>
-
-
-Implementation and Testing
---------------------------
-
-Here's ``divalg``, ``quo``, and ``rem``:
-
-> divalg :: (Natural t) => t -> t -> (t,t)
-> divalg = simpleRec phi mu
->   where
->     phi _ = (zero, zero)
->     mu _ b (q,r) = if eq (Nat b) (Nat (next r))
->       then (next q, zero)
->       else (q, next r)
-> 
-> 
-> quo :: (Natural t) => t -> t -> t
-> quo a b = let (q,_) = divalg a b in q
-> 
-> 
-> rem :: (Natural t) => t -> t -> t
-> rem a b = let (_,r) = divalg a b in r
-
-Property tests:
-
-> _test_divalg_equality :: (Natural n, Equal n)
->   => n -> Test (n -> n -> Bool)
-> _test_divalg_equality _ =
->   testName "a == plus(times(q,b),r) where (q,r) = divalg(a,b)" $
->   \a b -> let (q,r) = divalg a b in
->   eq a (plus (times q b) r)
-> 
-> 
-> _test_divalg_inequality :: (Natural n, Equal n)
->   => n -> Test (n -> n -> Bool)
-> _test_divalg_inequality _ =
->   testName "leq(r,b) where (_,r) = divalg(a,next(b))" $
->   \a b -> let (_,r) = divalg a (next b) in
->   leq r b
-> 
-> 
-> _test_divalg_zero_left :: (Natural n, Equal n)
->   => n -> Test (n -> Bool)
-> _test_divalg_zero_left _ =
->   testName "divalg(0,a) = (0,0)" $
->   \a -> eq (divalg zero a) (zero, zero)
-> 
-> 
 > _test_divalg_zero_right :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
 > _test_divalg_zero_right _ =
@@ -205,33 +245,38 @@ Property tests:
 >   \a b -> if leq a b
 >     then eq (divalg a (next b)) (zero, a)
 >     else True
-> 
-> 
+
+</p></div>
+</div>
+
+$\nquo$ interacts with $\ntimes$.
+
+<div class="result">
+<div class="thm">
+Let $a,b \in \nats$. If $b \neq \zero$, then $\nquo(\ntimes(a,b),b) = a$.
+</div>
+
+<div class="proof"><p>
+Say $b = \next(m)$. Note that $\nleq(\zero,m)$. Now $$\ntimes(a,b) = \nplus(\ntimes(a,b),\zero),$$ and by the uniqueness of quotients by nonzero divisors, we have $a = \nquo(\ntimes(a,b),b)$ as claimed.
+</p></div>
+
+<div class="test"><p>
+
 > _test_divalg_times_left :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
 > _test_divalg_times_left _ =
 >   testName "quo(times(a,next(b)),next(b)) = a" $
 >   \a b -> eq (quo (times a (next b)) (next b)) a
-> 
-> 
-> _test_divalg_quo :: (Natural n, Equal n)
->   => n -> Test (n -> n -> Bool)
-> _test_divalg_quo _ =
->   testName "quo(a,b) = q where (q,_) = divalg(a,b)" $
->   \a b -> let (q,_) = divalg a b in
->   eq q (quo a b)
-> 
-> 
-> _test_divalg_rem :: (Natural n, Equal n)
->   => n -> Test (n -> n -> Bool)
-> _test_divalg_rem _ =
->   testName "rem(a,b) = r where (_,r) = divalg(a,b)" $
->   \a b -> let (_,r) = divalg a b in
->   eq r (rem a b)
 
-And the suite:
+</p></div>
+</div>
 
-> -- run all tests for divalg
+
+Testing
+-------
+
+Suite.
+
 > _test_divalg ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
@@ -244,17 +289,19 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
+>   runTest args (_test_divalg_zero_left n)
+>   runTest args (_test_divalg_next_left n)
+>   runTest args (_test_divalg_quo n)
+>   runTest args (_test_divalg_rem n)
 >   runTest args (_test_divalg_equality n)
 >   runTest args (_test_divalg_inequality n)
->   runTest args (_test_divalg_zero_left n)
+>   runTest args (_test_divalg_unique n)
 >   runTest args (_test_divalg_zero_right n)
 >   runTest args (_test_divalg_one_right n)
 >   runTest args (_test_divalg_leq n)
 >   runTest args (_test_divalg_times_left n)
->   runTest args (_test_divalg_quo n)
->   runTest args (_test_divalg_rem n)
 
-And the main function.
+Main.
 
 > main_divalg :: IO ()
 > main_divalg = do

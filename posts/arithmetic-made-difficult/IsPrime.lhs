@@ -8,7 +8,8 @@ tags: arithmetic-made-difficult, literate-haskell
 > module IsPrime
 >   ( mindiv, prime, _test_prime, main_prime
 >   ) where
->
+> 
+> import Prelude ()
 > import Booleans
 > import NaturalNumbers
 > import BailoutRecursion
@@ -21,9 +22,6 @@ tags: arithmetic-made-difficult, literate-haskell
 > import GreatestCommonDivisor
 > import CoprimeTo
 > import LeastCommonMultiple
-> 
-> import Prelude ()
-> import Test.QuickCheck
 
 Today we'll nail down what it means for a natural number to be *prime*. Typically this is done by saying something like "a natural number other than 0 or 1 is prime if it is not divisible by any natural number besides itself and 1" and from there, arguing that this property can be checked using trial division. As is typical in this series, we will turn this around -- *defining* primes to be those numbers which are detected by trial division (i.e. an algorithm) and then proving that such numbers have the divisibility properties we expect.
 
@@ -182,14 +180,14 @@ Here's ``mindiv`` and ``prime``:
 Property tests:
 
 > _test_mindiv_div :: (Natural n)
->   => n -> Test (Nat n -> Bool)
+>   => n -> Test (n -> Bool)
 > _test_mindiv_div _ =
 >   testName "div(mindiv(a),a) == true" $
 >   \a -> eq (div (mindiv a) a) True
 > 
 > 
 > _test_prime_mindiv :: (Natural n)
->   => n -> Test (Nat n -> Bool)
+>   => n -> Test (n -> Bool)
 > _test_prime_mindiv _ =
 >   testName "prime(mindiv(a)) == true" $
 >   \a -> if or (eq a zero) (eq a (next zero))

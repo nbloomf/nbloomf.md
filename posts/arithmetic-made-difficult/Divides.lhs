@@ -9,15 +9,13 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( div, _test_div, main_div
 >   ) where
 >
+> import Prelude ()
 > import Booleans
 > import NaturalNumbers
 > import Plus
 > import Times
 > import LessThanOrEqualTo
 > import DivisionAlgorithm
-> 
-> import Prelude ()
-> import Test.QuickCheck
 
 With the division algorithm in hand we can define what it means for one natural number to divide another.
 
@@ -177,28 +175,28 @@ Here's ``div``:
 Property tests:
 
 > _test_div_zero_right :: (Natural n)
->   => n -> Test (Nat n -> Bool)
+>   => n -> Test (n -> Bool)
 > _test_div_zero_right _ =
 >   testName "div(a,0) == true" $
 >   \a -> eq (div a zero) True
 > 
 > 
 > _test_div_one_left :: (Natural n)
->   => n -> Test (Nat n -> Bool)
+>   => n -> Test (n -> Bool)
 > _test_div_one_left _ =
 >   testName "div(next(0),a)" $
 >   \a -> div (next zero) a
 > 
 > 
 > _test_div_reflexive :: (Natural n)
->   => n -> Test (Nat n -> Bool)
+>   => n -> Test (n -> Bool)
 > _test_div_reflexive _ =
 >   testName "div(a,a) == true" $
 >   \a -> eq (div a a) True
 > 
 > 
 > _test_div_times :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Bool)
+>   => n -> Test (n -> n -> Bool)
 > _test_div_times _ =
 >   testName "div(a,times(a,b))" $
 >   \a b -> div a (times a b)

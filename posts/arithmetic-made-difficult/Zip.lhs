@@ -3,18 +3,19 @@ title: Zip
 author: nbloomf
 date: 2017-05-06
 tags: arithmetic-made-difficult, literate-haskell
+slug: zip
 ---
 
 > module Zip
 >   ( zip, zipPad, _test_zip, main_zip
 >   ) where
 > 
+> import Prelude ()
 > import Booleans
 > import Tuples
 > import NaturalNumbers
 > import Plus
 > import MaxAndMin
->
 > import Lists
 > import Reverse
 > import Cat
@@ -23,9 +24,6 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Map
 > import UnfoldN
 > import Range
-> 
-> import Prelude ()
-> import Test.QuickCheck
 
 Today we'll define a really useful function on lists called $\zip$. This map will take two lists, one in $\lists{A}$ and one in $\lists{B}$, and return a list in $\lists{A \times B}$. In progress, $\zip$ping two lists looks something like this:
 $$\begin{array}{ccccccccccc}
@@ -655,12 +653,12 @@ Here are our property tests for $\zip$ and $\zipPad$.
 >   \x y -> eq (map tswap (zip x y)) (zip y x)
 > 
 > 
-> _test_zip_length :: (List t, Equal a, Equal b, Natural n)
+> _test_zip_length :: (List t, Equal a, Equal b, Natural n, Equal n)
 >   => t a -> t b -> n -> Test (ListOf t a -> ListOf t b -> Bool)
 > _test_zip_length _ _ n =
 >   testName "length(zip(x,y)) == min(length(x),length(y))" $
 >   \x y -> let
->     lx = length x `withTypeOf` Nat n
+>     lx = length x `withTypeOf` n
 >   in
 >     eq (length (zip x y)) (min lx (length y))
 > 
@@ -698,7 +696,7 @@ Here are our property tests for $\zip$ and $\zipPad$.
 > _test_zipPad_length _ _ n =
 >   testName "length(zipPad(u,v)(x,y)) == max(length(x),length(y))" $
 >   \u v x y -> let
->     lx = length x `withTypeOf` Nat n
+>     lx = length x `withTypeOf` n
 >   in
 >     eq (length (zipPad u v x y)) (max lx (length y))
 > 

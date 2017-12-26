@@ -386,7 +386,7 @@ Here are our property tests for $\select$:
 > 
 > 
 > _test_select_nil :: (List t, Equal a, Natural n)
->   => t a -> n -> Test (Nat n -> Bool)
+>   => t a -> n -> Test (n -> Bool)
 > _test_select_nil t _ =
 >   testName "select(k,nil) == if k == 0 then cons(nil,nil) else nil" $
 >   \k -> let
@@ -408,14 +408,14 @@ Here are our property tests for $\select$:
 > 
 > 
 > _test_select_length :: (List t, Equal a, Natural n)
->   => t a -> n -> Test (Nat n -> ListOf t a -> Bool)
+>   => t a -> n -> Test (n -> ListOf t a -> Bool)
 > _test_select_length _ _ =
 >   testName "length(select(k,x)) == choose(length(x),k)" $
 >   \k x -> eq (length (select k x)) (choose (length x) k)
 > 
 > 
 > _test_select_sublist :: (List t, Equal a, Natural n)
->   => t a -> n -> Test (Nat n -> ListOf t a -> ListOf t a -> Bool)
+>   => t a -> n -> Test (n -> ListOf t a -> ListOf t a -> Bool)
 > _test_select_sublist _ _ =
 >   testName "sublist(x,y) == sublist(select(k,x),select(k,y))" $
 >   \k x y -> if eq (sublist x y) True
@@ -424,14 +424,14 @@ Here are our property tests for $\select$:
 > 
 > 
 > _test_select_all_sublist :: (List t, Equal a, Natural n)
->   => t a -> n -> Test (Nat n -> ListOf t a -> Bool)
+>   => t a -> n -> Test (n -> ListOf t a -> Bool)
 > _test_select_all_sublist _ _ =
 >   testName "all(sublist(-,x),select(k,x))" $
 >   \k x -> all (\u -> sublist u x) (select k x)
 > 
 > 
 > _test_select_all_length :: (List t, Equal a, Natural n)
->   => t a -> n -> Test (Nat n -> ListOf t a -> Bool)
+>   => t a -> n -> Test (n -> ListOf t a -> Bool)
 > _test_select_all_length _ _ =
 >   testName "all(eq(k,length(-)),select(k,x))" $
 >   \k x -> all (\u -> eq k (length u)) (select k x)

@@ -361,7 +361,7 @@ and if ``natRec e phi n == natRec' e phi n``, then
     == phi $ natRec' e phi n
     == natRec' e phi (N n)
 
-Since ``natRec e phi`` and ``natRec' e phi`` are both functions with signature ``Nat -> a`` which satisfy the universal property of $\nats$, they must be the same function: equal on all inputs.
+Since ``natRec e phi`` and ``natRec' e phi`` are both functions with signature ``Unary -> a`` which satisfy the universal property of $\nats$, they must be the same function: equal on all inputs.
 
 This is a powerful idea. We've effectively written a slow but obviously correct program, and then proven it is equivalent to a more efficient one. We'll be doing more of this later.
 

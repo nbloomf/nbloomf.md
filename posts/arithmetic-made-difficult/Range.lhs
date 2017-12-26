@@ -3,16 +3,17 @@ title: Range
 author: nbloomf
 date: 2017-05-05
 tags: arithmetic-made-difficult, literate-haskell
+slug: range
 ---
 
 > module Range
 >   ( range, _test_range, main_range
 >   ) where
 > 
+> import Prelude ()
 > import Booleans
 > import NaturalNumbers
 > import Plus
->
 > import Lists
 > import Reverse
 > import Cat
@@ -20,9 +21,6 @@ tags: arithmetic-made-difficult, literate-haskell
 > import At
 > import Map
 > import UnfoldN
-> 
-> import Prelude ()
-> import Test.QuickCheck
 
 For our first application of $\unfoldN$ we'll define a function, $\range$, that constructs lists of natural numbers. There are a few ways to do this. We could take an argument $n$ and construct the list of natural numbers from $\zero$ to $n$, but this is too specialized. We could instead take *two* arguments $a$ and $b$ and construct the list of natural numbers from $a$ to $b$, but we'll have to check whether or not the arguments are in order. A third option -- and the one we'll take -- is to take two arguments $a$ and $b$, and construct the list of the first $b$ natural numbers starting from $a$.
 
@@ -32,7 +30,7 @@ Define $f : \nats \rightarrow \ast + \nats \times \nats$ by $$f(k) = (\next(k),k
 
 In Haskell:
 
-> range :: (List t, Natural n) => n -> n -> t n
+> range :: (List t, Natural n, Equal n) => n -> n -> t n
 > range a b = unfoldN f b a
 >   where f k = Just (next k, k)
 
@@ -230,56 +228,56 @@ Testing
 
 Here are our property tests for $\range$.
 
-> _test_range_next_cons :: (List t, Natural n)
->   => t n -> Test (Nat n -> Nat n -> Bool)
+> _test_range_next_cons :: (List t, Natural n, Equal n)
+>   => t n -> Test (n -> n -> Bool)
 > _test_range_next_cons t =
 >   testName "range(a,next(b)) == cons(a,range(next(a),b))" $
 >   \a b -> let
->     x = (range a (next b)) `withTypeOf` ListOf (map Nat t)
+>     x = (range a (next b)) `withTypeOf` ListOf t
 >     y = (cons a (range (next a) b))
 >   in
 >     eq x y
 > 
 > 
-> _test_range_next_snoc :: (List t, Natural n)
->   => t n -> Test (Nat n -> Nat n -> Bool)
+> _test_range_next_snoc :: (List t, Natural n, Equal n)
+>   => t n -> Test (n -> n -> Bool)
 > _test_range_next_snoc t =
 >   testName "range(a,next(b)) == snoc(plus(a,b),range(a,b))" $
 >   \a b -> let
->     x = (range a (next b)) `withTypeOf` ListOf (map Nat t)
+>     x = (range a (next b)) `withTypeOf` ListOf t
 >     y = (snoc (plus a b) (range a b))
 >   in
 >     eq x y
 > 
 > 
-> _test_range_plus_right :: (List t, Natural n)
->   => t n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_range_plus_right :: (List t, Natural n, Equal n)
+>   => t n -> Test (n -> n -> n -> Bool)
 > _test_range_plus_right t =
 >   testName "range(a,plus(b,c)) == cat(range(a,b),range(plus(a,b),c))" $
 >   \a b c -> let
->     x = (range a (plus b c)) `withTypeOf` ListOf (map Nat t)
+>     x = (range a (plus b c)) `withTypeOf` ListOf t
 >     y = (cat (range a b) (range (plus a b) c))
 >   in
 >     eq x y
 > 
 > 
-> _test_range_next_left :: (List t, Natural n)
->   => t n -> Test (Nat n -> Nat n -> Bool)
+> _test_range_next_left :: (List t, Natural n, Equal n)
+>   => t n -> Test (n -> n -> Bool)
 > _test_range_next_left t =
 >   testName "range(next(a),b) == map(next,range(a,b))" $
 >   \a b -> let
->     x = (range (next a) b) `withTypeOf` ListOf (map Nat t)
+>     x = (range (next a) b) `withTypeOf` ListOf t
 >     y = (map next (range a b))
 >   in
 >     eq x y
 > 
 > 
-> _test_range_plus_left :: (List t, Natural n)
->   => t n -> Test (Nat n -> Nat n -> Nat n -> Bool)
+> _test_range_plus_left :: (List t, Natural n, Equal n)
+>   => t n -> Test (n -> n -> n -> Bool)
 > _test_range_plus_left t =
 >   testName "range(plus(a,b),c) == map(plus(a,-),range(b,c))" $
 >   \a b c -> let
->     x = (range (plus a b) c) `withTypeOf` ListOf (map Nat t)
+>     x = (range (plus a b) c) `withTypeOf` ListOf t
 >     y = (map (plus a) (range b c))
 >   in
 >     eq x y
@@ -288,7 +286,7 @@ And the suite:
 
 > -- run all tests for range
 > _test_range ::
->   ( TypeName n, Natural n, Show n, Arbitrary n
+>   ( TypeName n, Natural n, Equal n, Show n, Arbitrary n
 >   , TypeName (t n), List t
 >   ) => t n -> Int -> Int -> IO ()
 > _test_range t maxSize numCases = do

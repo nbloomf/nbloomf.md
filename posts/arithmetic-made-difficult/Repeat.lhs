@@ -3,6 +3,7 @@ title: Repeat
 author: nbloomf
 date: 2017-05-22
 tags: arithmetic-made-difficult, literate-haskell
+slug: repeat
 ---
 
 > module Repeat
@@ -218,7 +219,7 @@ Testing
 Here are our property tests for $\repeat$:
 
 > _test_repeat_alt :: (List t, Equal a, Natural n)
->   => t a -> n -> Test (Nat n -> a -> Bool)
+>   => t a -> n -> Test (n -> a -> Bool)
 > _test_repeat_alt t _ =
 >  testName "repeat'(n,a) == repeat(n,a)" $
 >  \k a -> let
@@ -228,7 +229,7 @@ Here are our property tests for $\repeat$:
 > 
 > 
 > _test_repeat_length :: (List t, Equal a, Natural n)
->   => t a -> n -> Test (Nat n -> a -> Bool)
+>   => t a -> n -> Test (n -> a -> Bool)
 > _test_repeat_length t _ =
 >  testName "length(repeat(n,a)) == n" $
 >  \k a -> let
@@ -238,7 +239,7 @@ Here are our property tests for $\repeat$:
 > 
 > 
 > _test_repeat_map :: (List t, Equal a, Equal b, Natural n)
->   => t a -> t b -> n -> Test ((a -> b) -> Nat n -> a -> Bool)
+>   => t a -> t b -> n -> Test ((a -> b) -> n -> a -> Bool)
 > _test_repeat_map t _ _ =
 >  testName "map(f)(repeat(n,a)) == repeat(n,f(a))" $
 >  \f k a -> let
@@ -248,7 +249,7 @@ Here are our property tests for $\repeat$:
 > 
 > 
 > _test_repeat_plus :: (List t, Equal a, Natural n)
->   => t a -> n -> Test (Nat n -> Nat n -> a -> Bool)
+>   => t a -> n -> Test (n -> n -> a -> Bool)
 > _test_repeat_plus t _ =
 >  testName "repeat(plus(m,n),a)) == cat(repeat(m,a),repeat(n,a))" $
 >  \m n a -> let
@@ -258,7 +259,7 @@ Here are our property tests for $\repeat$:
 > 
 > 
 > _test_repeat_snoc :: (List t, Equal a, Natural n)
->   => t a -> n -> Test (Nat n -> a -> Bool)
+>   => t a -> n -> Test (n -> a -> Bool)
 > _test_repeat_snoc t _ =
 >  testName "snoc(a,repeat(n,a)) == repeat(next(n),a)" $
 >  \n a -> let
@@ -268,7 +269,7 @@ Here are our property tests for $\repeat$:
 > 
 > 
 > _test_repeat_rev :: (List t, Equal a, Natural n)
->   => t a -> n -> Test (Nat n -> a -> Bool)
+>   => t a -> n -> Test (n -> a -> Bool)
 > _test_repeat_rev t _ =
 >  testName "rev(repeat(n,a)) == repeat(n,a)" $
 >  \n a -> let

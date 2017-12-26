@@ -405,7 +405,7 @@ Here are our property tests for $\tails$ and $\inits$:
 > _test_tails_length _ n =
 >   testName "length(tails(x)) == next(length(x))" $
 >   \x -> let
->     lx = length x `withTypeOf` Nat n
+>     lx = length x `withTypeOf` n
 >   in
 >     eq (length (tails x)) (next lx)
 > 
@@ -436,7 +436,7 @@ Here are our property tests for $\tails$ and $\inits$:
 > _test_inits_length _ n =
 >   testName "length(inits(x)) == next(length(x))" $
 >   \x -> let
->     lx = length x `withTypeOf` Nat n
+>     lx = length x `withTypeOf` n
 >   in
 >     eq (length (inits x)) (next lx)
 > 

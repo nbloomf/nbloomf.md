@@ -9,6 +9,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( mutatingRec
 >   ) where
 > 
+> import Prelude ()
 > import NaturalNumbers
 
 Note that both simple recursion and bailout recursion produce functions with type $$\nats \times A \rightarrow B;$$ we can call that $A$ argument the *parameter*. Now simple and bailout recursion use the parameter in different ways. Simple recursion is only allowed to change $A$ "outside" the recursive call, while bailout recursion can only change $A$ "inside" the recursive call. These restrictions were necessary so that simple and bailout recursion would have tail-recursive implementations. But there are times when we will want a recursive function with signature $\nats \times A \rightarrow B$ that can change its $A$ parameter both inside and outside the recursion.
@@ -70,3 +71,25 @@ And there's the definition from the proof:
 >   naturalRec phi w
 
 The naive implementation of mutating recursion is not tail recursive, and I think (without proof) that no truly tail recursive implementation exists (that is sort of the reason for this operator).
+
+
+What it does
+------------
+
+As with the other recursion operators, the "uniqueness" part of mutating recursion is also handy. To be a little more explicit, it says the following.
+
+<div class="result">
+<div class="thm">
+Let $A$ and $B$ be sets, with mappings
+$$\begin{eqnarray*}
+ \varphi & : & A \rightarrow B \\
+ \omega & : & A \rightarrow A \\
+ \chi & : & A \times B^A \rightarrow B.
+\end{eqnarray*}$$
+Then $\mutrec{\varphi}{\omega}{\chi}$ is the unique solution $f : \nats \times A \rightarrow B$ to the following system of functional equations for all $k \in \nats$, $a \in A$:
+$$\left\{\begin{array}{l}
+ f(\zero)(a) = \varphi(a) \\
+ f(\next(n))(a) = \chi(\omega(a),f(n))
+\end{array}\right.$$
+</div>
+</div>

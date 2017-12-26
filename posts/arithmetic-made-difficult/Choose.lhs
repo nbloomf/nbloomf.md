@@ -10,14 +10,12 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ( choose, _test_choose, main_choose
 >   ) where
 >
+> import Prelude ()
 > import Booleans
 > import NaturalNumbers
 > import MutatingRecursion
 > import Plus
 > import LessThanOrEqualTo
-> 
-> import Prelude ()
-> import Test.QuickCheck hiding (choose)
 
 Today we'll define the binomial coefficient operator, $\nchoose$.
 
@@ -232,14 +230,14 @@ Implementation and Testing
 Property tests:
 
 > _test_choose_alt :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Bool)
+>   => n -> Test (n -> n -> Bool)
 > _test_choose_alt _ =
 >   testName "choose(n,k) == choose'(n,k)" $
 >   \n k -> eq (choose n k) (choose' n k)
 > 
 > 
 > _test_choose_zero_left :: (Natural n)
->   => n -> Test (Nat n -> Bool)
+>   => n -> Test (n -> Bool)
 > _test_choose_zero_left _ =
 >   testName "choose(0,k) == if k==0 then 0 else 1" $
 >   \k -> if isZero k
@@ -248,21 +246,21 @@ Property tests:
 > 
 > 
 > _test_choose_zero_right :: (Natural n)
->   => n -> Test (Nat n -> Bool)
+>   => n -> Test (n -> Bool)
 > _test_choose_zero_right _ =
 >   testName "choose(n,0) == 1" $
 >   \n -> eq (choose n zero) (next zero)
 > 
 > 
 > _test_choose_equal_args :: (Natural n)
->   => n -> Test (Nat n -> Bool)
+>   => n -> Test (n -> Bool)
 > _test_choose_equal_args _ =
 >   testName "choose(n,n) == 1" $
 >   \n -> eq (choose n n) (next zero)
 > 
 > 
 > _test_choose_plus_plus :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Bool)
+>   => n -> Test (n -> n -> Bool)
 > _test_choose_plus_plus _ =
 >   testName "choose(next(n),next(k)) == plus(choose(n,next(k)),choose(n,k))" $
 >   \n k -> eq
@@ -271,7 +269,7 @@ Property tests:
 > 
 > 
 > _test_choose_big_k :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Bool)
+>   => n -> Test (n -> n -> Bool)
 > _test_choose_big_k _ =
 >   testName "leq(next(n),k) ==> choose(n,k) == 0" $
 >   \n k -> if leq (next n) k
@@ -280,7 +278,7 @@ Property tests:
 > 
 > 
 > _test_choose_plus :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Bool)
+>   => n -> Test (n -> n -> Bool)
 > _test_choose_plus _ =
 >   testName "choose(plus(a,b),a) == choose(plus(a,b),b)" $
 >   \a b -> eq (choose (plus a b) a) (choose (plus a b) b)

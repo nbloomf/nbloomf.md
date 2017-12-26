@@ -262,7 +262,7 @@ Here are our property tests for $\count$:
 >  testName "count(a,nil) == zero" $
 >  \a -> let
 >    nil'  = nil `withTypeOf` ListOf t
->    zero' = zero `withTypeOf` Nat k
+>    zero' = zero `withTypeOf` k
 >  in
 >    eq (count a nil') zero'
 > 
@@ -273,7 +273,7 @@ Here are our property tests for $\count$:
 >  testName "count(a,cons(a,nil)) == next(zero)" $
 >  \a -> let
 >    nil' = nil `withTypeOf` ListOf t
->    one  = next zero `withTypeOf` Nat k
+>    one  = next zero `withTypeOf` k
 >  in
 >    eq (count a (cons a nil')) one
 > 
@@ -283,7 +283,7 @@ Here are our property tests for $\count$:
 > _test_count_rev t k =
 >  testName "count(a,cons(a,nil)) == next(zero)" $
 >  \a x -> let
->    cx = count a x `withTypeOf` Nat k
+>    cx = count a x `withTypeOf` k
 >  in
 >    eq (count a (rev x)) cx
 > 
@@ -293,7 +293,7 @@ Here are our property tests for $\count$:
 > _test_count_snoc_cons t k =
 >  testName "count(a,cons(a,nil)) == next(zero)" $
 >  \a b x -> let
->    cbx = count a (cons b x) `withTypeOf` Nat k
+>    cbx = count a (cons b x) `withTypeOf` k
 >  in
 >    eq (count a (snoc b x)) cbx
 > 
@@ -303,7 +303,7 @@ Here are our property tests for $\count$:
 > _test_count_cat t k =
 >  testName "count(a,cat(x,y)) == plus(count(a,x),count(a,y))" $
 >  \a x y -> let
->    cx = count a x `withTypeOf` Nat k
+>    cx = count a x `withTypeOf` k
 >  in
 >    eq (count a (cat x y)) (plus cx (count a y))
 > 
@@ -313,7 +313,7 @@ Here are our property tests for $\count$:
 > _test_count_length t k =
 >  testName "count(a,x) == length(filter(eq(a,-),x))" $
 >  \a x -> let
->    cx = count a x `withTypeOf` Nat k
+>    cx = count a x `withTypeOf` k
 >  in
 >    eq cx (length (filter (eq a) x))
 

@@ -63,7 +63,7 @@ Again, when using this principle we will say we're using "strong induction *on* 
 <div class="proof"><p>
 Suppose to the contrary that some set $A$ and map $f : A \rightarrow \nats$ exist which do not have this property; that is, for all $a \in A$, there exists $b \in A$ such that $\nleq(f(a),f(b))$ is false.
 
-Define $$T = \{ n \in \nats \mid \exists a \in A, n = f(a) \},$$ and let $K = \nats \minus T$. Note that $T \neq \emptyset$. We will show that $K = \nats$ by strong induction.
+Define $$T = \{ n \in \nats \mid \exists a \in A, n = f(a) \},$$ and let $K = \nats \setminus T$. Note that $T \neq \emptyset$. We will show that $K = \nats$ by strong induction.
 
 For the base case, note that if $f(a) = \zero$, then $\nleq(f(a),f(b))$ is true for all $b \in A$. So we have $\zero \notin T$, and thus $\zero \in K$.
 

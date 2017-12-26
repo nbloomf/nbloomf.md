@@ -18,7 +18,9 @@ library
     Plus,
     Times,
     Minus,
-    LessThanOrEqualTo
+    LessThanOrEqualTo,
+    MaxAndMin,
+    DivisionAlgorithm
   build-depends:
     base == 4.*,
     QuickCheck
@@ -119,17 +121,23 @@ test-suite amd-leq
     Times,
     Minus
 
-
-
 test-suite amd-max-min
   default-language: Haskell2010
   type: exitcode-stdio-1.0
   main-is: MaxAndMin.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is MaxAndMin.main_max_min
-  other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
-                 Minus, LessThanOrEqualTo, SimpleRecursion,
-                 BailoutRecursion
+  other-modules:
+    Booleans,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo
 
 test-suite amd-divalg
   default-language: Haskell2010
@@ -137,9 +145,20 @@ test-suite amd-divalg
   main-is: DivisionAlgorithm.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is DivisionAlgorithm.main_divalg
-  other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
-                 Minus, LessThanOrEqualTo, SimpleRecursion,
-                 BailoutRecursion
+  other-modules:
+    Booleans,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo
+
+
 
 test-suite amd-div
   default-language: Haskell2010

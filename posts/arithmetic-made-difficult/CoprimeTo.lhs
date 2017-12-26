@@ -3,12 +3,14 @@ title: Coprime To
 author: nbloomf
 date: 2017-04-11
 tags: arithmetic-made-difficult, literate-haskell
+slug: coprime
 ---
 
 > module CoprimeTo
 >   ( coprime, _test_coprime, main_coprime
 >   ) where
->
+> 
+> import Prelude ()
 > import Booleans
 > import NaturalNumbers
 > import Plus
@@ -18,9 +20,6 @@ tags: arithmetic-made-difficult, literate-haskell
 > import DivisionAlgorithm
 > import Divides
 > import GreatestCommonDivisor
-> 
-> import Prelude ()
-> import Test.QuickCheck
 
 Today we'll take a break from reasoning about $\ngcd$ to name a special relationship among natural numbers: *coprimality*. Recall that two integers are called *coprime* if their greatest common divisor is 1. This definition does not require recursion.
 
@@ -85,7 +84,7 @@ Here's ``coprime``:
 Property tests:
 
 > _test_coprime_gcd_quo :: (Natural n)
->   => n -> Test (Nat n -> Nat n -> Bool)
+>   => n -> Test (n -> n -> Bool)
 > _test_coprime_gcd_quo _ =
 >   testName "coprime(quo(next(a),gcd(next(a),next(b))),quo(next(b),gcd(next(a),next(b)))) == true" $
 >   \x y -> let

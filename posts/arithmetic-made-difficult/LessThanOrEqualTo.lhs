@@ -32,15 +32,16 @@ In Haskell:
 </p></div>
 </div>
 
-First a basic (but important!) special case.
+First some basic (but important!) special cases.
 
 <div class="result">
 <div class="lemma">
-Let $a \in \nats$. Then we have the following.
+Let $a,b \in \nats$. Then we have the following.
 
 1. $\nleq(\next(a),\zero) = \bfalse$.
 2. $\nleq(\next(\next(a)),\next(\zero)) = \bfalse$.
 3. $\nleq(\next(a),a) = \bfalse$.
+4. $\nleq(a,\nplus(a,b)) = \btrue$.
 </div>
 
 <div class="proof"><p>
@@ -69,6 +70,7 @@ $$\begin{eqnarray*}
  & = & \bfalse
 \end{eqnarray*}$$
 as claimed.
+4. We have $\nminus(\nplus(a,b),a) = \rgt(b)$, so $\nleq(a,\nplus(a,b)) = \btrue$.
 </p></div>
 
 <div class="test"><p>
@@ -92,6 +94,13 @@ as claimed.
 > _test_leq_next_nat _ =
 >   testName "leq(next(a),a) == false" $
 >   \a -> eq (leq (next a) a) False
+> 
+> 
+> _test_leq_right_plus :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_leq_right_plus _ =
+>   testName "leq(a,plus(a,b)) == true" $
+>   \a b -> eq (leq a (plus a b)) True
 
 </p></div>
 </div>
@@ -198,14 +207,15 @@ as needed.
 </p></div>
 </div>
 
-Now $\nleq$ interacts nicely with $\nplus$. (@@@)
+Now $\nleq$ interacts nicely with $\nplus$.
 
 <div class="result">
 <div class="thm">
 The following hold for all $a,b,c,d \in \nats$.
 
 1. $\nleq(a,b) = \nleq(\nplus(a,c),\nplus(b,c))$.
-2. If $\nleq(a,b)$ and $\nleq(c,d)$, then $\nleq(\nplus(a,c),\nplus(b,d))$.
+2. $\nleq(a,b) = \nleq(\nplus(c,a),\nplus(c,b))$.
+3. If $\nleq(a,b)$ and $\nleq(c,d)$, then $\nleq(\nplus(a,c),\nplus(b,d))$.
 </div>
 
 <div class="proof"><p>
@@ -217,11 +227,38 @@ $$\begin{eqnarray*}
  & = & \nleq(a,b)
 \end{eqnarray*}$$
 as needed.
-2. We have $$\btrue = \nleq(a,b) = \nleq(\nplus(a,c),\nplus(b,c))$$ and $$\begin{eqnarray*} & & \btrue \\ & = & \nleq(c,d) \\ & = & \nleq(\nplus(c,b),\nplus(d,b)) \\ & = & \nleq(\nplus(b,c),\nplus(b,d)). \end{eqnarray*}$$ The result holds by transitivity.
+2. We have $$\nleq(\nplus(c,a),\nplus(c,b)) = \nleq(\nplus(a,c),\nplus(b,c)) = \nleq(a,b).$$
+3. We have $$\btrue = \nleq(a,b) = \nleq(\nplus(a,c),\nplus(b,c))$$ and $$\begin{eqnarray*} & & \btrue \\ & = & \nleq(c,d) \\ & = & \nleq(\nplus(c,b),\nplus(d,b)) \\ & = & \nleq(\nplus(b,c),\nplus(b,d)). \end{eqnarray*}$$ The result holds by transitivity.
+</p></div>
+
+<div class="test"><p>
+
+> _test_leq_plus_nat_right :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
+> _test_leq_plus_nat_right _ =
+>   testName "leq(a,b) == leq(plus(a,c),plus(b,c))" $
+>   \a b c -> eq (leq a b) (leq (plus a c) (plus b c))
+> 
+> 
+> _test_leq_plus_nat_left :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
+> _test_leq_plus_nat_left _ =
+>   testName "leq(a,b) == leq(plus(c,a),plus(c,b))" $
+>   \a b c -> eq (leq a b) (leq (plus c a) (plus c b))
+> 
+> 
+> _test_leq_plus_compatible :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> n -> Bool)
+> _test_leq_plus_compatible _ =
+>   testName "if and(leq(a,b),leq(c,d)) then leq(plus(a,c),plus(b,d))" $
+>   \a b c d -> if and (leq a b) (leq c d)
+>     then leq (plus a c) (plus b d)
+>     else True
+
 </p></div>
 </div>
 
-We can perform case analysis using $\nleq$:
+We can perform case analysis using $\nleq$.
 
 <div class="result">
 <div class="thm">
@@ -229,15 +266,52 @@ The following hold for all $a,b \in \nats$.
 
 1. If $\nleq(a,b)$ is false, then $\nleq(b,a)$ is true.
 2. Precisely one of the following is true: (i) $a = b$, (ii) $a \neq b$ and $\nleq(a,b)$, and (iii) $a \neq b$ and $\nleq(b,a)$.
-3. Let $a,b \in \nats$. If $\nleq(a,\next(b))$, then either $\nleq(a,b)$ or $a = \next(b)$.
-4. Let $a,b \in \nats$. If $\nleq(b,a)$ and $\nleq(a,\next(b))$, then either $a = b$ or $a = \next(b)$.
+3. If $\nleq(a,\next(b))$, then either $\nleq(a,b)$ or $a = \next(b)$.
+4. If $\nleq(b,a)$ and $\nleq(a,\next(b))$, then either $a = b$ or $a = \next(b)$.
 </div>
 
 <div class="proof"><p>
-1. If $\nleq(a,b)$ is false, we have $\nminus(b,a) = \ast$. Now $\nminus(a,b) \in \nats$, so that $\nminus(b,a)$ is true.
-2. If $a \neq b$ and $\nleq(a,b)$ is false, then $\nleq(b,a)$ is true.
+1. If $\nleq(a,b)$ is false, we have $\nminus(b,a) = \lft(\ast)$. Now $\nminus(a,b) \rgt(c)$ for some $c$, so that $\nminus(b,a)$ is true.
+2. If $a \neq b$ and $\nleq(a,b)$ is false, then $\nleq(b,a)$ is true. If $a \neq b$ and both $\nleq(a,b)$ and $\nleq(b,a)$, then $a = b$, which is absurd.
 3. Say $\next(b) = \nplus(a,c)$. If $c = \zero$, we have $a = \next(b)$. If $c = \next(d)$, we have $$\next(b) = \nplus(a,\next(d)) = \next(\nplus(a,d))$$ so that $b = \nplus(a,d)$ and thus $\nleq(a,b)$.
-4. Use antisymmetry.
+4. By (3), either $a = \next(b)$ or $\nleq(a,b)$; if $\nleq(a,b)$, then by antisymmetry we have $a = b$ as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_leq_swap_false :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_leq_swap_false _ =
+>   testName "if not(leq(a,b)) then leq(b,a)" $
+>   \a b -> if not (leq a b)
+>     then leq b a
+>     else True
+> 
+> 
+> _test_leq_trichotomy :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_leq_trichotomy _ =
+>   testName "or(eq(a,b),or(leq(a,b),leq(b,a)))" $
+>   \a b -> or (eq a b) (or (leq a b) (leq b a))
+> 
+> 
+> _test_leq_next_dichotomy :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_leq_next_dichotomy _ =
+>   testName "if leq(a,next(b)) then or(leq(a,b),eq(a,next(b)))" $
+>   \a b -> if leq a (next b)
+>     then or (leq a b) (eq a (next b))
+>     else True
+> 
+> 
+> _test_leq_next_squeeze :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_leq_next_squeeze _ =
+>   testName "if and(leq(b,a),leq(a,next(b))) then or(eq(a,b),eq(a,next(b)))" $
+>   \a b -> if and (leq b a) (leq a (next b))
+>     then or (eq a b) (eq a (next b))
+>     else True
+
 </p></div>
 </div>
 
@@ -273,6 +347,16 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 The conclusion holds by transitivity.
 </p></div>
+
+<div class="test"><p>
+
+> _test_leq_times_compatible :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
+> _test_leq_times_compatible _ =
+>   testName "leq(a,b) == leq(times(a,next(c)),times(b,next(c)))" $
+>   \a b c -> eq (leq a b) (leq (times a (next c)) (times b (next c)))
+
+</p></div>
 </div>
 
 That's enough.
@@ -280,32 +364,6 @@ That's enough.
 
 Testing
 -------
-
-And some property tests:
-
-> 
-> 
-> _test_leq_right_plus :: (Natural n, Equal n)
->   => n -> Test (n -> n -> Bool)
-> _test_leq_right_plus _ =
->   testName "leq(a,plus(a,b)) == true" $
->   \a b -> eq (leq a (plus a b)) True
-> 
-> 
-> _test_leq_plus :: (Natural n, Equal n)
->   => n -> Test (n -> n -> n -> Bool)
-> _test_leq_plus _ =
->   testName "leq(a,b) == leq(plus(a,c),plus(b,c))" $
->   \a b c -> eq (leq a b) (leq (plus a c) (plus b c))
-> 
-> 
-> _test_leq_times :: (Natural n, Equal n)
->   => n -> Test (n -> n -> n -> Bool)
-> _test_leq_times _ =
->   testName "leq(a,b) == leq(times(a,next(c)),times(b,next(c)))" $
->   \a b c -> eq (leq a b) (leq (times a (next c)) (times b (next c)))
-
-And a test wrapper:
 
 > -- run all tests for leq
 > _test_leq :: (TypeName n, Natural n, Equal n, Arbitrary n, Show n)
@@ -322,14 +380,21 @@ And a test wrapper:
 >   runTest args (_test_leq_next_nat_zero n)
 >   runTest args (_test_leq_next_next_nat_one n)
 >   runTest args (_test_leq_next_nat n)
+>   runTest args (_test_leq_right_plus n)
 >   runTest args (_test_leq_next_cancel n)
 >   runTest args (_test_leq_reflexive n)
 >   runTest args (_test_leq_antisymmetric n)
 >   runTest args (_test_leq_transitive n)
-> 
->   runTest args (_test_leq_right_plus n)
->   runTest args (_test_leq_plus n)
->   runTest args (_test_leq_times n)
+>   runTest args (_test_leq_plus_nat_right n)
+>   runTest args (_test_leq_plus_nat_left n)
+>   runTest args (_test_leq_plus_compatible n)
+>   runTest args (_test_leq_swap_false n)
+>   runTest args (_test_leq_trichotomy n)
+>   runTest args (_test_leq_next_dichotomy n)
+>   runTest args (_test_leq_next_squeeze n)
+>   runTest args (_test_leq_times_compatible n)
+
+And main.
 
 > main_leq :: IO ()
 > main_leq = do
