@@ -229,14 +229,14 @@ Implementation and Testing
 
 Property tests:
 
-> _test_choose_alt :: (Natural n)
+> _test_choose_alt :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
 > _test_choose_alt _ =
 >   testName "choose(n,k) == choose'(n,k)" $
 >   \n k -> eq (choose n k) (choose' n k)
 > 
 > 
-> _test_choose_zero_left :: (Natural n)
+> _test_choose_zero_left :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
 > _test_choose_zero_left _ =
 >   testName "choose(0,k) == if k==0 then 0 else 1" $
@@ -245,21 +245,21 @@ Property tests:
 >     else eq (choose zero k) zero
 > 
 > 
-> _test_choose_zero_right :: (Natural n)
+> _test_choose_zero_right :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
 > _test_choose_zero_right _ =
 >   testName "choose(n,0) == 1" $
 >   \n -> eq (choose n zero) (next zero)
 > 
 > 
-> _test_choose_equal_args :: (Natural n)
+> _test_choose_equal_args :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
 > _test_choose_equal_args _ =
 >   testName "choose(n,n) == 1" $
 >   \n -> eq (choose n n) (next zero)
 > 
 > 
-> _test_choose_plus_plus :: (Natural n)
+> _test_choose_plus_plus :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
 > _test_choose_plus_plus _ =
 >   testName "choose(next(n),next(k)) == plus(choose(n,next(k)),choose(n,k))" $
@@ -268,7 +268,7 @@ Property tests:
 >     (plus (choose n (next k)) (choose n k))
 > 
 > 
-> _test_choose_big_k :: (Natural n)
+> _test_choose_big_k :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
 > _test_choose_big_k _ =
 >   testName "leq(next(n),k) ==> choose(n,k) == 0" $
@@ -277,7 +277,7 @@ Property tests:
 >     else True
 > 
 > 
-> _test_choose_plus :: (Natural n)
+> _test_choose_plus :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
 > _test_choose_plus _ =
 >   testName "choose(plus(a,b),a) == choose(plus(a,b),b)" $
@@ -287,7 +287,7 @@ And the suite:
 
 > -- run all tests for choose
 > _test_choose ::
->   ( TypeName n, Natural n, Arbitrary n, Show n
+>   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
 > _test_choose n maxSize numCases = do
 >   testLabel ("choose: " ++ typeName n)

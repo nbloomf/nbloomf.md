@@ -26,7 +26,7 @@ Define $\nleq : \nats \times \nats \rightarrow \bool$ by $$\nleq(a,b) = \isRgt(\
 
 In Haskell:
 
-> leq :: (Natural t) => t -> t -> Bool
+> leq :: (Natural n) => n -> n -> Bool
 > leq a b = isRgt (minus b a)
 
 </p></div>

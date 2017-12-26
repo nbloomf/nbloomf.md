@@ -356,7 +356,7 @@ Implementation and Testing
 
 Here's ``lcm``:
 
-> lcm :: (Natural t) => t -> t -> t
+> lcm :: (Natural n) => n -> n -> n
 > lcm a b = quo (times a b) (gcd a b)
 
 Property tests for ``lcm``:

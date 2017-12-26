@@ -20,7 +20,8 @@ library
     Minus,
     LessThanOrEqualTo,
     MaxAndMin,
-    DivisionAlgorithm
+    DivisionAlgorithm,
+    Divides
   build-depends:
     base == 4.*,
     QuickCheck
@@ -158,17 +159,27 @@ test-suite amd-divalg
     Minus,
     LessThanOrEqualTo
 
-
-
 test-suite amd-div
   default-language: Haskell2010
   type: exitcode-stdio-1.0
   main-is: Divides.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Divides.main_div
-  other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
-                 Minus, LessThanOrEqualTo, DivisionAlgorithm,
-                 SimpleRecursion, BailoutRecursion
+  other-modules:
+    Booleans,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo,
+    DivisionAlgorithm
+
+
 
 test-suite amd-gcd
   default-language: Haskell2010
@@ -189,7 +200,7 @@ test-suite amd-coprime
   other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
                  Minus, LessThanOrEqualTo, DivisionAlgorithm,
                  Divides, GreatestCommonDivisor, SimpleRecursion,
-                 BailoutRecursion
+                 BailoutRecursion, DisjointUnions, Tuples
 
 test-suite amd-lcm
   default-language: Haskell2010
@@ -234,7 +245,7 @@ test-suite amd-choose
   ghc-options: -main-is Choose.main_choose
   other-modules: Booleans, LessThanOrEqualTo, Minus, Plus,
                  NaturalNumbers, Times, Unary, SimpleRecursion,
-                 BailoutRecursion, MutatingRecursion
+                 BailoutRecursion, MutatingRecursion, DisjointUnions
 
 test-suite amd-rev
   default-language: Haskell2010
@@ -251,7 +262,7 @@ test-suite amd-cat
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Cat.main_cat
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
-                 Reverse
+                 Reverse, DisjointUnions
 
 test-suite amd-length
   default-language: Haskell2010
@@ -271,7 +282,7 @@ test-suite amd-at
   ghc-options: -main-is At.main_at
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
-                 Times, Length, SimpleRecursion, BailoutRecursion
+                 Times, Length, SimpleRecursion, BailoutRecursion, DisjointUnions
 
 test-suite amd-map
   default-language: Haskell2010

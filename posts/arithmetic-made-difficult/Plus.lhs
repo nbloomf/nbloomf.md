@@ -35,7 +35,7 @@ Let $\mu : \nats \times \nats \times \nats \rightarrow \nats$ be given by $\mu(k
 
 In Haskell:
 
-> plus :: (Natural t) => t -> t -> t
+> plus :: (Natural n) => n -> n -> n
 > plus = simpleRec id mu
 >   where mu _ _ b = next b
 

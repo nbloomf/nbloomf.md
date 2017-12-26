@@ -50,7 +50,7 @@ Let $A$ be a set. Define $f : \lists{A} \rightarrow \ast + \lists{A} \times A$ b
 
 In Haskell:
 
-> take :: (Natural k, List t) => k -> t a -> t a
+> take :: (Natural n, List t) => n -> t a -> t a
 > take = unfoldN f
 >   where
 >     f z = case uncons z of
@@ -100,7 +100,7 @@ as claimed.
 
 In Haskell:
 
-> take' :: (Natural k, List t) => k -> t a -> t a
+> take' :: (Natural n, List t) => n -> t a -> t a
 > take' k x = case natShape k of
 >   Zero   -> nil
 >   Next t -> case listShape x of
@@ -329,7 +329,7 @@ Let $A$ be a set. Define $\beta : \nats \times A \rightarrow \bool$ by $$\beta(m
 
 In Haskell:
 
-> drop :: (Natural k, List t) => k -> t a -> t a
+> drop :: (Natural n, List t) => n -> t a -> t a
 > drop = bailoutRec id beta psi omega
 >   where
 >     beta  _ x = isNil x
@@ -383,7 +383,7 @@ as claimed.
 
 In Haskell:
 
-> drop' :: (Natural k, List t) => k -> t a -> t a
+> drop' :: (Natural n, List t) => n -> t a -> t a
 > drop' k x = case natShape k of
 >   Zero   -> x
 >   Next t -> case listShape x of
@@ -462,52 +462,52 @@ Testing
 
 Here are our property tests for $\take$:
 
-> _test_take_alt :: (List t, Equal a, Natural k)
->   => t a -> k -> Test (k -> ListOf t a -> Bool)
+> _test_take_alt :: (List t, Equal a, Natural n)
+>   => t a -> n -> Test (n -> ListOf t a -> Bool)
 > _test_take_alt _ _ =
 >   testName "take(k,x) == take'(k,x)" $
 >   \k x -> eq (take k x) (take' k x)
 > 
 > 
-> _test_take_prefix :: (List t, Equal a, Natural k)
->   => t a -> k -> Test (k -> ListOf t a -> Bool)
+> _test_take_prefix :: (List t, Equal a, Natural n)
+>   => t a -> n -> Test (n -> ListOf t a -> Bool)
 > _test_take_prefix _ _ =
 >   testName "prefix(take(k,x),x) == true" $
 >   \k x -> eq (prefix (take k x) x) True
 > 
 > 
-> _test_take_length :: (List t, Equal a, Natural k)
->   => t a -> k -> Test (k -> ListOf t a -> Bool)
+> _test_take_length :: (List t, Equal a, Natural n)
+>   => t a -> n -> Test (n -> ListOf t a -> Bool)
 > _test_take_length _ _ =
 >   testName "length(take(k,x)) == min(k,length(x))" $
 >   \k x -> eq (length (take k x)) (min k (length x))
 > 
 > 
-> _test_take_idempotent :: (List t, Equal a, Natural k)
->   => t a -> k -> Test (k -> ListOf t a -> Bool)
+> _test_take_idempotent :: (List t, Equal a, Natural n)
+>   => t a -> n -> Test (n -> ListOf t a -> Bool)
 > _test_take_idempotent _ _ =
 >   testName "take(k,(take(k,x)) == take(k,take(k,x))" $
 >   \k x -> eq (take k (take k x)) (take k x)
 
 And for $\drop$:
 
-> _test_drop_alt :: (List t, Equal a, Natural k)
->   => t a -> k -> Test (k -> ListOf t a -> Bool)
+> _test_drop_alt :: (List t, Equal a, Natural n)
+>   => t a -> n -> Test (n -> ListOf t a -> Bool)
 > _test_drop_alt _ _ =
 >   testName "drop(k,x) == drop'(k,x)" $
 >   \k x -> eq (drop k x) (drop' k x)
 > 
 > 
-> _test_drop_suffix :: (List t, Equal a, Natural k)
->   => t a -> k -> Test (k -> ListOf t a -> Bool)
+> _test_drop_suffix :: (List t, Equal a, Natural n)
+>   => t a -> n -> Test (n -> ListOf t a -> Bool)
 > _test_drop_suffix _ _ =
 >   testName "suffix(drop(k,x),x) == true" $
 >   \k x -> eq (suffix (drop k x) x) True
 
 And for both:
 
-> _test_take_drop_cat :: (List t, Equal a, Natural k)
->   => t a -> k -> Test (k -> ListOf t a -> Bool)
+> _test_take_drop_cat :: (List t, Equal a, Natural n)
+>   => t a -> n -> Test (n -> ListOf t a -> Bool)
 > _test_take_drop_cat _ _ =
 >   testName "cat(take(k,x),drop(k,x)) == x" $
 >   \k x -> eq (cat (take k x) (drop k x)) x

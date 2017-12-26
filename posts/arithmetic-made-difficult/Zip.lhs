@@ -691,7 +691,7 @@ Here are our property tests for $\zip$ and $\zipPad$.
 >   \u v x y -> eq (map tswap (zipPad u v x y)) (zipPad v u y x)
 > 
 > 
-> _test_zipPad_length :: (List t, Equal a, Equal b, Natural n)
+> _test_zipPad_length :: (List t, Equal a, Equal b, Natural n, Equal n)
 >   => t a -> t b -> n -> Test (a -> b -> ListOf t a -> ListOf t b -> Bool)
 > _test_zipPad_length _ _ n =
 >   testName "length(zipPad(u,v)(x,y)) == max(length(x),length(y))" $
@@ -731,7 +731,7 @@ And the suite:
 > _test_zip ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a
 >   , TypeName b, Equal b, Show b, Arbitrary b
->   , TypeName n, Natural n, Show n, Arbitrary n
+>   , TypeName n, Natural n, Equal n, Show n, Arbitrary n
 >   , TypeName (t a), TypeName (t b), List t
 >   ) => t a -> t b -> n -> Int -> Int -> IO ()
 > _test_zip t u n maxSize numCases = do

@@ -378,16 +378,16 @@ Here are our property tests for $\takeWhile$:
 
 And for $\dropBut$:
 
- > _test_dropWhile_suffix :: (List t, Equal a, Natural k)
- >   => t a -> k -> Test (k -> ListOf t a -> Bool)
+ > _test_dropWhile_suffix :: (List t, Equal a, Natural n)
+ >   => t a -> n -> Test (n -> ListOf t a -> Bool)
  > _test_dropWhile_suffix _ _ =
  >   testName "suffix(dropBut(k,x),x) == true" $
  >   \k x -> eq (suffix (dropBut k x) x) True
 
 And for both:
 
- > _test_takeWhile_dropWhile_cat :: (List t, Equal a, Natural k)
- >   => t a -> k -> Test (k -> ListOf t a -> Bool)
+ > _test_takeWhile_dropWhile_cat :: (List t, Equal a, Natural n)
+ >   => t a -> n -> Test (n -> ListOf t a -> Bool)
  > _test_takeWhile_dropWhile_cat _ _ =
  >   testName "cat(takeBut(k,x),dropBut(k,x)) == x" $
  >   \k x -> eq (cat (takeBut k x) (dropBut k x)) x

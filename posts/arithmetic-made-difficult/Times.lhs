@@ -28,7 +28,7 @@ Let $\varphi : \nats \rightarrow \nats$ be given by $\varphi(m) = \zero$, and le
 
 In Haskell:
 
-> times :: (Natural t) => t -> t -> t
+> times :: (Natural n) => n -> n -> n
 > times = simpleRec phi mu
 >   where
 >     phi _ = zero

@@ -161,7 +161,7 @@ Implementation and Testing
 
 Here's ``mindiv`` and ``prime``:
 
-> mindiv :: (Natural t) => t -> t
+> mindiv :: (Natural n) => n -> n
 > mindiv a = theta a (next (next zero))
 >   where
 >     theta = bailoutRec (phi a) (beta a) (psi a) (omega a)

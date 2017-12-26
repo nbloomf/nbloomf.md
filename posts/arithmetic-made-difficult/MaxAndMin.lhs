@@ -26,10 +26,10 @@ We define $\nmax : \nats \times \nats \rightarrow \nats$ by $$\nmax(a,b) = \bif{
 
 In Haskell:
 
-> max :: (Natural t) => t -> t -> t
+> max :: (Natural n) => n -> n -> n
 > max a b = if leq a b then b else a
 > 
-> min :: (Natural t) => t -> t -> t
+> min :: (Natural n) => n -> n -> n
 > min a b = if leq a b then a else b
 
 </p></div>

@@ -365,7 +365,7 @@ Implementation and Testing
 
 Here's ``gcd``:
 
-> gcd :: (Natural t) => t -> t -> t
+> gcd :: (Natural n) => n -> n -> n
 > gcd a b = (bailoutRec phi beta psi omega) (next (plus a b)) (a,b)
 >   where
 >     phi     (_,b) = b

@@ -164,7 +164,7 @@ Implementation and Testing
 
 Here's ``power``:
 
-> power :: (Natural t) => t -> t -> t
+> power :: (Natural n) => n -> n -> n
 > power a b = simpleRec phi mu b a
 >   where
 >     phi _     = next zero
