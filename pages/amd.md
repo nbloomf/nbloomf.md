@@ -28,6 +28,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * [Max and Min](/posts/arithmetic-made-difficult/MaxAndMin.html)
         * [The Division Algorithm](/posts/arithmetic-made-difficult/DivisionAlgorithm.html)
         * [Divides](/posts/arithmetic-made-difficult/Divides.html)
+        * [Norm Recursion](/posts/arithmetic-made-difficult/NormRecursion.html)
         * [Greatest Common Divisor](/posts/arithmetic-made-difficult/GreatestCommonDivisor.html)
         * [Coprime To](/posts/arithmetic-made-difficult/CoprimeTo.html)
         * [Least Common Multiple](/posts/arithmetic-made-difficult/LeastCommonMultiple.html)

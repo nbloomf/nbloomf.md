@@ -21,7 +21,8 @@ library
     LessThanOrEqualTo,
     MaxAndMin,
     DivisionAlgorithm,
-    Divides
+    Divides,
+    NormRecursion
   build-depends:
     base == 4.*,
     QuickCheck
