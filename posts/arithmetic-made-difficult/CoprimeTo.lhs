@@ -27,6 +27,12 @@ Today we'll take a break from reasoning about $\ngcd$ to name a special relation
 <div class="defn"><p>
 We define $\ncoprime : \nats \times \nats \rightarrow \bool$ by $$\ncoprime(a,b) = \left\{ \begin{array}{ll} \btrue & \mathrm{if}\ \ngcd(a,b) = \next(\zero) \\ \bfalse & \mathrm{otherwise}. \end{array}\right.$$
 </p></div>
+
+In Haskell:
+
+> coprime :: (Natural n, Equal n) => n -> n -> Bool
+> coprime a b = eq (next zero) (gcd a b)
+
 </div>
 
 Simple though it is, coprimality has some nice properties. We only need these two for now. The first result is known as Euclid's Lemma.
@@ -45,6 +51,18 @@ $$\begin{eqnarray*}
  & = & \ngcd(\ntimes(a,c),\ntimes(b,c)).
 \end{eqnarray*}$$
 But now $\ndiv(a,\ntimes(a,c))$ and $\ndiv(a,\ntimes(b,c))$, so that $\ndiv(a,c)$ by the universal property of $\ngcd$.
+</p></div>
+
+<div class="test"><p>
+
+> _test_coprime_euclids_lemma :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
+> _test_coprime_euclids_lemma _ =
+>   testName "if coprime(a,b) and div(a,times(b,c)) then div(a,c)" $
+>   \a b c -> if and (coprime a b) (div a (times b c))
+>     then div a c
+>     else True
+
 </p></div>
 </div>
 
@@ -70,23 +88,13 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 In particular, $\ntimes(k,\ngcd(a,b))$ is a common divisor of $a$ and $b$, and thus we have $$\ndiv(\ntimes(k,\ngcd(a,b)),\ngcd(a,b)).$$ Note that $\ngcd(a,b) \neq \zero$, so we have $\ndiv(k,\next(\zero))$. Thus $k = \next(\zero)$, and we have $\ncoprime(u,v)$ as claimed.
 </p></div>
-</div>
 
-
-Implementation and Testing
---------------------------
-
-Here's ``coprime``:
-
-> coprime :: (Natural n, Equal n) => n -> n -> Bool
-> coprime a b = eq (next zero) (gcd a b)
-
-Property tests:
+<div class="test"><p>
 
 > _test_coprime_gcd_quo :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
 > _test_coprime_gcd_quo _ =
->   testName "coprime(quo(next(a),gcd(next(a),next(b))),quo(next(b),gcd(next(a),next(b)))) == true" $
+>   testName "coprime(quo(next(a),gcd(next(a),next(b))),quo(next(b),gcd(next(a),next(b))))" $
 >   \x y -> let
 >     a = next x
 >     b = next y
@@ -94,9 +102,15 @@ Property tests:
 >     v = quo b (gcd a b)
 >   in eq (coprime u v) True
 
-And the suite:
+</p></div>
+</div>
 
-> -- run all tests for coprime
+
+Testing
+-------
+
+Suite:
+
 > _test_coprime ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
@@ -109,9 +123,10 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
+>   runTest args (_test_coprime_euclids_lemma n)
 >   runTest args (_test_coprime_gcd_quo n)
 
-And the main function:
+Main:
 
 > main_coprime :: IO ()
 > main_coprime = do

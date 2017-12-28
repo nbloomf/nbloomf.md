@@ -3,6 +3,7 @@ title: Least Common Multiple
 author: nbloomf
 date: 2017-04-12
 tags: arithmetic-made-difficult, literate-haskell
+slug: lcm
 ---
 
 > module LeastCommonMultiple
@@ -28,6 +29,12 @@ We don't need recursion for this.
 <div class="result">
 <div class="defn"><p>
 Define $\nlcm : \nats \times \nats \rightarrow \nats$ by $$\nlcm(a,b) = \nquo(\ntimes(a,b),\ngcd(a,b)).$$
+
+In Haskell:
+
+> lcm :: (Natural n, Equal n) => n -> n -> n
+> lcm a b = quo (times a b) (gcd a b)
+
 </p></div>
 </div>
 
@@ -351,15 +358,8 @@ as claimed.
 </div>
 
 
-Implementation and Testing
---------------------------
-
-Here's ``lcm``:
-
-> lcm :: (Natural n) => n -> n -> n
-> lcm a b = quo (times a b) (gcd a b)
-
-Property tests for ``lcm``:
+Testing
+-------
 
 > _test_lcm_zero :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
