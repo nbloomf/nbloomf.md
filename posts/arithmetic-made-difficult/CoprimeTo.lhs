@@ -83,7 +83,7 @@ Here's ``coprime``:
 
 Property tests:
 
-> _test_coprime_gcd_quo :: (Natural n)
+> _test_coprime_gcd_quo :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
 > _test_coprime_gcd_quo _ =
 >   testName "coprime(quo(next(a),gcd(next(a),next(b))),quo(next(b),gcd(next(a),next(b)))) == true" $
@@ -98,7 +98,7 @@ And the suite:
 
 > -- run all tests for coprime
 > _test_coprime ::
->   ( TypeName n, Natural n, Arbitrary n, Show n
+>   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
 > _test_coprime n maxSize numCases = do
 >   testLabel ("coprime: " ++ typeName n)

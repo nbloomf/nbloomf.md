@@ -3,6 +3,7 @@ title: Norm Recursion
 author: nbloomf
 date: 2017-12-25
 tags: arithmetic-made-difficult, literate-haskell
+slug: normrec
 ---
 
 > module NormRecursion where

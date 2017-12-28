@@ -22,7 +22,9 @@ library
     MaxAndMin,
     DivisionAlgorithm,
     Divides,
-    NormRecursion
+    NormRecursion,
+    GreatestCommonDivisor,
+    CoprimeTo
   build-depends:
     base == 4.*,
     QuickCheck
@@ -180,17 +182,29 @@ test-suite amd-div
     LessThanOrEqualTo,
     DivisionAlgorithm
 
-
-
 test-suite amd-gcd
   default-language: Haskell2010
   type: exitcode-stdio-1.0
   main-is: GreatestCommonDivisor.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is GreatestCommonDivisor.main_gcd
-  other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
-                 Minus, LessThanOrEqualTo, DivisionAlgorithm,
-                 Divides, SimpleRecursion, BailoutRecursion
+  other-modules:
+    Booleans,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo,
+    DivisionAlgorithm,
+    Divides,
+    NormRecursion
+
+
 
 test-suite amd-coprime
   default-language: Haskell2010

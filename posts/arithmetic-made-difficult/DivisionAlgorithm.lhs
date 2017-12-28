@@ -206,20 +206,28 @@ If $a \in \nats$ we have the following.
 1. $\ndivalg(a,\zero) = (\zero,a)$.
 2. $\ndivalg(a,\next(\zero)) = (a,\zero)$.
 3. If $\nleq(a,b)$, then $\ndivalg(a,\next(b)) = (\zero,a)$.
+4. $\ndivalg(\next(a),\next(a)) = (\next(\zero),\zero)$.
 </div>
 
 <div class="proof"><p>
 1. We proceed by induction on $a$. For the base case $a = \zero$, note that $$\ndivalg(\zero,\zero) = (\zero, \zero)$$ as needed. For the inductive step, suppose the equation holds for some $a$. Now
 $$\begin{eqnarray*}
  &   & \ndivalg(\next(a),\zero) \\
- & = & \bif{\eq(\zero,\next(r))}{(\next(q),\zero)}{(q,\next(r))}\ \mathrm{where}\ (q,r) = \ndivalg(a,\zero) \\
- & = & \bif{\eq(\zero,\next(a))}{(\next(\zero),\zero)}{(\zero,\next(a))} \\
+ & = & \bif{\beq(\zero,\next(r))}{(\next(q),\zero)}{(q,\next(r))}\ \mathrm{where}\ (q,r) = \ndivalg(a,\zero) \\
+ & = & \bif{\beq(\zero,\next(a))}{(\next(\zero),\zero)}{(\zero,\next(a))} \\
  & = & \bif{\bfalse}{(\next(\zero),\zero)}{(\zero,\next(a))} \\
  & = & (\zero, \next(a))
 \end{eqnarray*}$$
 as needed.
 2. Note that $a = \nplus(\ntimes(a,\next(\zero)),\zero)$ and $\nleq(\zero,\zero)$. By the uniqueness of quotients and remainders for nonzero divisors, we have $\ndivalg(a,\next(\zero)) = (a,\zero)$ as claimed.
 3. Note that $a = \nplus(\ntimes(\zero,\next(b)),a)$ and $\nleq(a,b)$. By the uniqueness of quotients and remainders for positive divisors we have $\ndivalg(a,\next(b)) = (\zero,a)$.
+4. Note that
+$$\begin{eqnarray*}
+ &   & \nplus(\ntimes(\next(\zero),a),\zero) \\
+ & = & \nplus(\next(a),\zero) \\
+ & = & \next(a).
+\end{eqnarray*}$$
+Since $\next(a) \neq \zero$, by the uniqueness of the division algorithm, we have $\ndivalg(\next(a),\next(a)) = (\next(\zero),\zero)$ as claimed.
 </p></div>
 
 <div class="test"><p>
@@ -245,6 +253,13 @@ as needed.
 >   \a b -> if leq a b
 >     then eq (divalg a (next b)) (zero, a)
 >     else True
+> 
+> 
+> _test_divalg_self_next :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_divalg_self_next _ =
+>   testName "divalg(next(a),next(a)) == (next(0),0)" $
+>   \a -> eq (divalg (next a) (next a)) (next zero, zero)
 
 </p></div>
 </div>
@@ -299,6 +314,7 @@ Suite.
 >   runTest args (_test_divalg_zero_right n)
 >   runTest args (_test_divalg_one_right n)
 >   runTest args (_test_divalg_leq n)
+>   runTest args (_test_divalg_self_next n)
 >   runTest args (_test_divalg_times_left n)
 
 Main.
