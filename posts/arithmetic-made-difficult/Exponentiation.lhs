@@ -3,6 +3,7 @@ title: Exponentiation
 author: nbloomf
 date: 2017-04-14
 tags: arithmetic-made-difficult, literate-haskell
+slug: power
 ---
 
 > module Exponentiation
@@ -21,61 +22,110 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Divides
 > import GreatestCommonDivisor
 > import CoprimeTo
-> import LeastCommonMultiple
 
 We defined $\ntimes$ as iterated addition; similarly, exponentiation is iterated multiplication. We'll call this function $\npower$.
 
 <div class="result">
 <div class="defn"><p>
 Define $\varphi : \nats \rightarrow \nats$ by $\varphi(a) = \next(\zero)$, and define $\mu : \nats \times \nats \times \nats \rightarrow \nats$ by $\mu(k,a,b) = \ntimes(b,a)$. We define $\npower : \nats \times \nats \rightarrow \nats$ by $$\npower(a,b) = \simprec{\varphi}{\mu}(b,a).$$
+
+In Haskell:
+
+> power :: (Natural n) => n -> n -> n
+> power a b = simpleRec phi mu b a
+>   where
+>     phi _     = next zero
+>     mu  _ a b = times b a
+
 </p></div>
 </div>
 
-Some special cases:
+Because $\npower$ is defined in terms of simple recursion, it is the unique solution to a system of functional equations.
+
+<div class="result">
+<div class="corollary"><p>
+$\npower$ is the unique map $f : \nats \times \nats \rightarrow \nats$ with the property that for all $a,b \in \nats$, we have
+$$\left\{\begin{array}{l}
+ f(a,\zero) = \next(\zero) \\
+ f(a,\next(b)) = \ntimes(f(a,b),a).
+\end{array}\right.$$
+</p></div>
+
+<div class="test"><p>
+
+> _test_power_zero_right :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_power_zero_right _ =
+>   testName "power(a,0) == 1" $
+>   \a -> eq (power a zero) (next zero)
+> 
+> 
+> _test_power_next_right :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_power_next_right _ =
+>   testName "power(a,next(b)) == times(power(a,b),a)" $
+>   \a b -> eq (power a (next b)) (times (power a b) a)
+
+</p></div>
+</div>
+
+Some special cases.
 
 <div class="result">
 <div class="thm">
 Let $a \in \nats$. Then we have the following.
 
-1. $\npower(a,\zero) = \next(\zero)$.
-2. $\npower(a,\next(\zero)) = a$.
-3. $\npower(\zero,\next(a)) = \zero$.
-4. $\npower(\next(\zero),a) = \next(\zero)$.
+1. $\npower(a,\next(\zero)) = a$.
+2. $\npower(\zero,\next(a)) = \zero$.
+3. $\npower(\next(\zero),a) = \next(\zero)$.
 </div>
 
 <div class="proof"><p>
 1. We have
 $$\begin{eqnarray*}
- &   & \npower(a,\zero) \\
- & = & \simprec{\varphi}{\mu}(\zero,a) \\
- & = & \varphi(a) \\
- & = & \next(\zero).
+ &   & \npower(a,\next(\zero)) \\
+ & = & \ntimes(\npower(a,\zero),a) \\
+ & = & \ntimes(\next(\zero),a) \\
+ & = & a.
 \end{eqnarray*}$$
 2. We have
 $$\begin{eqnarray*}
- &   & \npower(a,\next(\zero)) \\
- & = & \simprec{\varphi}{\mu}(\next(\zero),a) \\
- & = & \ntimes(a,\simprec{\varphi}{\mu}(\zero,a)) \\
- & = & \ntimes(a,\next(\zero)) \\
- & = & a.
-\end{eqnarray*}$$
-3. We have
-$$\begin{eqnarray*}
  &   & \npower(\zero,\next(a)) \\
- & = & \simprec{\varphi}{\mu}(\next(a),\zero) \\
- & = & \ntimes(\zero,\npower(a,\zero)) \\
+ & = & \ntimes(\npower(\zero,a),\zero) \\
  & = & \zero.
 \end{eqnarray*}$$
-4. We proceed by induction on $a$. For the base case, we have $\npower(\next(\zero),\zero) = \next(\zero)$ by (1). For the inductive step, suppose $\npower(\next(\zero),a) = \next(\zero)$. Now
+3. We proceed by induction on $a$. For the base case, we have $\npower(\next(\zero),\zero) = \next(\zero)$. For the inductive step, suppose $\npower(\next(\zero),a) = \next(\zero)$. Now
 $$\begin{eqnarray*}
  &   & \npower(\next(\zero),\next(a)) \\
- & = & \simprec{\varphi}{\mu}(\next(a),\next(\zero)) \\
- & = & \ntimes(\next(\zero),\simprec{\varphi}{\mu}(a,\next(\zero))) \\
- & = & \ntimes(\next(\zero),\npower(\next(\zero),a)) \\
+ & = & \ntimes(\npower(\next(\zero),a),\next(\zero)) \\
  & = & \npower(\next(\zero),a) \\
  & = & \next(\zero)
 \end{eqnarray*}$$
 as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_power_one_right :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_power_one_right _ =
+>   testName "power(a,1) == a" $
+>   \a -> eq (power a (next zero)) a
+> 
+> 
+> _test_power_zero_left :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_power_zero_left _ =
+>   testName "power(a,0) == 1" $
+>   \a -> eq (power zero (next a)) zero
+> 
+> 
+> _test_power_one_left :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_power_one_left _ =
+>   testName "power(1,a) == 1" $
+>   \a -> eq (power (next zero) a) (next zero)
+
 </p></div>
 </div>
 
@@ -85,22 +135,13 @@ And interaction with $\nplus$ and $\ntimes$.
 <div class="thm">
 Let $a,b,c \in \nats$. Then we have the following.
 
-1. $\npower(a,\next(b)) = \ntimes(a,\npower(a,b))$.
-2. $\npower(a,\nplus(b,c)) = \ntimes(\npower(a,b),\npower(a,c))$.
-3. $\npower(a,\ntimes(b,c)) = \npower(\npower(a,b),c)$.
-4. $\npower(\ntimes(a,b),c) = \ntimes(\npower(a,c),\npower(b,c))$.
+1. $\npower(a,\nplus(b,c)) = \ntimes(\npower(a,b),\npower(a,c))$.
+2. $\npower(a,\ntimes(b,c)) = \npower(\npower(a,b),c)$.
+3. $\npower(\ntimes(a,b),c) = \ntimes(\npower(a,c),\npower(b,c))$.
 </div>
 
 <div class="proof"><p>
-1. Note that
-$$\begin{eqnarray*}
- &   & \npower(a,\next(b)) \\
- & = & \simprec{\varphi}{\mu}(\next(b),a) \\
- & = & \ntimes(a,\simprec{\varphi}{\mu}(b,a)) \\
- & = & \ntimes(a,\npower(a,b))
-\end{eqnarray*}$$
-as claimed.
-2. We proceed by induction on $c$. For the base case $c = \zero$, note that
+1. We proceed by induction on $c$. For the base case $c = \zero$, note that
 $$\begin{eqnarray*}
  &   & \npower(a,\nplus(b,c)) \\
  & = & \npower(a,\nplus(b,\zero)) \\
@@ -119,7 +160,7 @@ $$\begin{eqnarray*}
  & = & \ntimes(\npower(a,b),\npower(a,\next(c)))
 \end{eqnarray*}$$
 as claimed.
-3. We proceed by induction on $c$. For the base case $c = \zero$, note that
+2. We proceed by induction on $c$. For the base case $c = \zero$, note that
 $$\begin{eqnarray*}
  &   & \npower(a,\ntimes(b,c)) \\
  & = & \npower(a,\ntimes(b,\zero)) \\
@@ -137,7 +178,7 @@ $$\begin{eqnarray*}
  & = & \npower(\npower(a,b),\next(c))
 \end{eqnarray*}$$
 as claimed.
-4. We proceed by induction on $c$. For the base case, we have
+3. We proceed by induction on $c$. For the base case, we have
 $$\begin{eqnarray*}
  &   & \npower(\ntimes(a,b),c) \\
  & = & \npower(\ntimes(a,b),\zero) \\
@@ -156,43 +197,9 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
-</div>
 
+<div class="test"><p>
 
-Implementation and Testing
---------------------------
-
-Here's ``power``:
-
-> power :: (Natural n) => n -> n -> n
-> power a b = simpleRec phi mu b a
->   where
->     phi _     = next zero
->     mu  _ a b = times b a
-
-Property tests:
-
-> _test_power_zero_right :: (Natural n, Equal n)
->   => n -> Test (n -> Bool)
-> _test_power_zero_right _ =
->   testName "power(a,0) == 1" $
->   \a -> eq (power a zero) (next zero)
-> 
-> 
-> _test_power_one_right :: (Natural n, Equal n)
->   => n -> Test (n -> Bool)
-> _test_power_one_right _ =
->   testName "power(a,1) == a" $
->   \a -> eq (power a (next zero)) a
-> 
-> 
-> _test_power_zero_left :: (Natural n, Equal n)
->   => n -> Test (n -> Bool)
-> _test_power_zero_left _ =
->   testName "power(a,0) == 1" $
->   \a -> eq (power zero (next a)) zero
-> 
-> 
 > _test_power_plus_right :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> n -> Bool)
 > _test_power_plus_right _ =
@@ -213,9 +220,15 @@ Property tests:
 >   testName "power(times(a,b),c) == times(power(a,c),power(b,c))" $
 >   \a b c -> eq (power (times a b) c) (times (power a c) (power b c))
 
-And the suite:
+</p></div>
+</div>
 
-> -- run all tests for power
+
+Testing
+-------
+
+Suite:
+
 > _test_power ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
@@ -229,13 +242,15 @@ And the suite:
 >       }
 > 
 >   runTest args (_test_power_zero_right n)
+>   runTest args (_test_power_next_right n)
 >   runTest args (_test_power_one_right n)
 >   runTest args (_test_power_zero_left n)
+>   runTest args (_test_power_one_left n)
 >   runTest args (_test_power_plus_right n)
 >   runTest args (_test_power_times_right n)
 >   runTest args (_test_power_times_left n)
 
-And the main function:
+Main:
 
 > main_power :: IO ()
 > main_power = do

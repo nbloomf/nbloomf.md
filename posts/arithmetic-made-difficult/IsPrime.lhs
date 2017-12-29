@@ -161,7 +161,7 @@ Implementation and Testing
 
 Here's ``mindiv`` and ``prime``:
 
-> mindiv :: (Natural n) => n -> n
+> mindiv :: (Natural n, Equal n) => n -> n
 > mindiv a = theta a (next (next zero))
 >   where
 >     theta = bailoutRec (phi a) (beta a) (psi a) (omega a)
@@ -179,14 +179,14 @@ Here's ``mindiv`` and ``prime``:
 
 Property tests:
 
-> _test_mindiv_div :: (Natural n)
+> _test_mindiv_div :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
 > _test_mindiv_div _ =
 >   testName "div(mindiv(a),a) == true" $
 >   \a -> eq (div (mindiv a) a) True
 > 
 > 
-> _test_prime_mindiv :: (Natural n)
+> _test_prime_mindiv :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
 > _test_prime_mindiv _ =
 >   testName "prime(mindiv(a)) == true" $
@@ -198,7 +198,7 @@ And the suite:
 
 > -- run all tests for prime
 > _test_prime ::
->   ( TypeName n, Natural n, Arbitrary n, Show n
+>   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
 > _test_prime n maxSize numCases = do
 >   testLabel ("mindiv & prime: " ++ typeName n)

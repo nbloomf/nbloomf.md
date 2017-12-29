@@ -25,7 +25,9 @@ library
     NormRecursion,
     GreatestCommonDivisor,
     CoprimeTo,
-    LeastCommonMultiple
+    LeastCommonMultiple,
+    IsPrime,
+    Exponentiation
   build-depends:
     base == 4.*,
     QuickCheck
@@ -272,11 +274,24 @@ test-suite amd-power
   main-is: Exponentiation.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Exponentiation.main_power
-  other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
-                 Minus, LessThanOrEqualTo, DivisionAlgorithm,
-                 Divides, GreatestCommonDivisor, CoprimeTo,
-                 LeastCommonMultiple, SimpleRecursion,
-                 BailoutRecursion
+  other-modules:
+    Booleans,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo,
+    DivisionAlgorithm,
+    Divides,
+    NormRecursion,
+    GreatestCommonDivisor,
+    CoprimeTo,
+    LeastCommonMultiple
 
 test-suite amd-choose
   default-language: Haskell2010

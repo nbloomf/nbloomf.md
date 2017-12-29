@@ -25,7 +25,7 @@ Today we'll take a break from reasoning about $\ngcd$ to name a special relation
 
 <div class="result">
 <div class="defn"><p>
-We define $\ncoprime : \nats \times \nats \rightarrow \bool$ by $$\ncoprime(a,b) = \left\{ \begin{array}{ll} \btrue & \mathrm{if}\ \ngcd(a,b) = \next(\zero) \\ \bfalse & \mathrm{otherwise}. \end{array}\right.$$
+We define $\ncoprime : \nats \times \nats \rightarrow \bool$ by $$\ncoprime(a,b) = \beq(\ngcd(a,b),\next(\zero)).$$
 </p></div>
 
 In Haskell:

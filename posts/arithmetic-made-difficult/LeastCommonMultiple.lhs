@@ -64,13 +64,30 @@ $$\begin{eqnarray*}
  & = & a.
 \end{eqnarray*}$$
 </p></div>
+
+<div class="test"><p>
+
+> _test_lcm_zero :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_lcm_zero _ =
+>   testName "lcm(a,0) == 0" $
+>   \a -> eq zero (lcm a zero)
+> 
+> 
+> _test_lcm_one :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_lcm_one _ =
+>   testName "lcm(a,next(0)) == a" $
+>   \a -> eq a (lcm a (next zero))
+
+</p></div>
 </div>
 
-As we might expect, $\nlcm$ enjoys many properties analogous to those of $\ngcd$.
+As we might expect, $\nlcm$ enjoys many properties analogous to those of $\ngcd$. It is idempotent and commutative.
 
 <div class="result">
 <div class="thm">
-Let $a,b,c \in \nats$. Then we have the following.
+Let $a,b \in \nats$. Then we have the following.
 
 1. $\nlcm(a,a) = a$.
 2. $\nlcm(a,b) = \nlcm(b,a)$.
@@ -101,6 +118,23 @@ $$\begin{eqnarray*}
  & = & \nlcm(b,a)
 \end{eqnarray*}$$
 as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_lcm_idempotent :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_lcm_idempotent _ =
+>   testName "lcm(a,a) == a" $
+>   \a -> eq (lcm a a) a
+> 
+> 
+> _test_lcm_commutative :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_lcm_commutative _ =
+>   testName "lcm(a,b) == lcm(b,a)" $
+>   \a b -> eq (lcm a b) (lcm b a)
+
 </p></div>
 </div>
 
@@ -155,6 +189,25 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_lcm_div_args :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_lcm_div_args _ =
+>   testName "div(a,lcm(a,b)) and div(b,lcm(a,b))" $
+>   \a b -> and (div a (lcm a b)) (div b (lcm a b))
+> 
+> 
+> _test_lcm_least_common :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
+> _test_lcm_least_common _ =
+>   testName "if div(a,c) and div(b,c) then div(lcm(a,b),c)" $
+>   \a b c -> if and (div a c) (div b c)
+>     then div (lcm a b) c
+>     else True
+
+</p></div>
 </div>
 
 And $\nlcm(a,b)$ is unique with this property.
@@ -174,20 +227,36 @@ Since $\ndiv(a,m)$ and $\ndiv(b,m)$, we have $\ndiv(\nlcm(a,b),m)$. But likewise
 </p></div>
 </div>
 
-More stuff:
+$\nlcm$ is associative:
 
 <div class="result">
 <div class="thm">
-Let $a,b,c \in \nats$. Then we have the following.
-
-1. $\nlcm(\nlcm(a,b),c) = \nlcm(a,\nlcm(b,c))$.
-2. $\nlcm(a,b) = a$ if and only if $\ndiv(b,a)$.
-3. $\nlcm(\ntimes(c,a),ntimes(c,b)) = \ntimes(c,\nlcm(a,b))$.
-4. If $\ndiv(a,b)$, then $\ndiv(\nlcm(a,c),\nlcm(b,c))$.
+Let $a,b,c \in \nats$. Then $\nlcm(\nlcm(a,b),c) = \nlcm(a,\nlcm(b,c))$.
 </div>
 
 <div class="proof"><p>
-1. Note that $\ndiv(a,\nlcm(a,\nlcm(b,c)))$. We also have $\ndiv(b,\nlcm(b,c))$, so that $$\ndiv(b,\nlcm(a,\nlcm(b,c))$$ by transitivity; similarly, $$\ndiv(c,\nlcm(a,\nlcm(b,c))).$$ By the universal property of $\nlcm$, we thus have $$\ndiv(\nlcm(a,b),\nlcm(a,\nlcm(b,c))),$$ so that $$\ndiv(\nlcm(\nlcm(a,b),c),\nlcm(a,\nlcm(b,c))).$$ A similar argument shows that $$\ndiv(\nlcm(a,\nlcm(b,c)),\nlcm(\nlcm(a,b),c)).$$ By antisymmetry, we thus have $$\nlcm(a,\nlcm(b,c)) = \nlcm(\nlcm(a,b),c)$$ as claimed.
+Note that $\ndiv(a,\nlcm(a,\nlcm(b,c)))$. We also have $\ndiv(b,\nlcm(b,c))$, so that $$\ndiv(b,\nlcm(a,\nlcm(b,c))$$ by transitivity; similarly, $$\ndiv(c,\nlcm(a,\nlcm(b,c))).$$ By the universal property of $\nlcm$, we thus have $$\ndiv(\nlcm(a,b),\nlcm(a,\nlcm(b,c))),$$ so that $$\ndiv(\nlcm(\nlcm(a,b),c),\nlcm(a,\nlcm(b,c))).$$ A similar argument shows that $$\ndiv(\nlcm(a,\nlcm(b,c)),\nlcm(\nlcm(a,b),c)).$$ By antisymmetry, we thus have $$\nlcm(a,\nlcm(b,c)) = \nlcm(\nlcm(a,b),c)$$ as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_lcm_associative :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
+> _test_lcm_associative _ =
+>   testName "lcm(lcm(a,b),c) == lcm(a,lcm(b,c))" $
+>   \a b c -> eq (lcm (lcm a b) c) (lcm a (lcm b c))
+
+</p></div>
+</div>
+
+$\nlcm$ detects $\ndiv$.
+
+<div class="result">
+<div class="thm">
+Let $a,b \in \nats$. Then $\nlcm(a,b) = a$ if and only if $\ndiv(b,a)$.
+</div>
+
+<div class="proof"><p>
 2. First suppose $\ndiv(b,a)$; say $a = \ntimes(b,d)$. Now $\ndiv(a,a)$ and $\ndiv(b,a)$, and if $\ndiv(c,a)$ and $\ndiv(c,b)$ then $\ndiv(c,a)$. By the universal property of $\nlcm$ we have $a = \nlcm(a,b)$. Conversely, suppose $a = \nlcm(a,b)$. We consider two cases: either $(a,b) = (\zero,\zero)$ or $(a,b) \neq (\zero,\zero)$. If $(a,b) = (\zero,\zero)$ then $\ndiv(b,a)$ as needed. Suppose then that $(a,b) \neq (\zero,\zero)$. If $a = \zero$, then $\ndiv(b,a)$ as claimed. Suppose $a \neq \zero$. Now let $d = \ngcd(a,b)$; note that $d \neq \zero$. Say $b = \ntimes(k,d)$. Now
 $$\begin{eqnarray*}
  &   & \ntimes(a,\next(\zero)) \\
@@ -198,7 +267,28 @@ $$\begin{eqnarray*}
  & = & \ntimes(a,k).
 \end{eqnarray*}$$
 Since $a \neq \zero$, we have $k = \next(\zero)$, and thus $b = \ngcd(a,b)$. Hence $\ndiv(b,a)$ as claimed.
-3. We consider two cases: either $c = \zero$ or $c \neq \zero$. If $c = \zero$ we have
+</p></div>
+
+<div class="test"><p>
+
+> _test_lcm_div :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_lcm_div _ =
+>   testName "lcm(a,b) == a if and only if ndiv(b,a)" $
+>   \a b -> eq (eq a (lcm a b)) (div b a)
+
+</p></div>
+</div>
+
+$\ntimes$ distributes over $\nlcm$.
+
+<div class="result">
+<div class="thm">
+Let $a,b,c \in \nats$. Then we have $$\nlcm(\ntimes(c,a),ntimes(c,b)) = \ntimes(c,\nlcm(a,b)).$$
+</div>
+
+<div class="proof"><p>
+We consider two cases: either $c = \zero$ or $c \neq \zero$. If $c = \zero$ we have
 $$\begin{eqnarray*}
  &   & \nlcm(\ntimes(c,a),\ntimes(c,b)) \\
  & = & \nlcm(\zero,\zero) \\
@@ -216,13 +306,46 @@ $$\begin{eqnarray*}
  & = & \ntimes(c,\nlcm(a,b))
 \end{eqnarray*}$$
 as claimed.
-4. We have
+</p></div>
+
+<div class="test"><p>
+
+> _test_lcm_distributive_times :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
+> _test_lcm_distributive_times _ =
+>   testName "lcm(times(c,a),times(c,b)) == times(c,lcm(a,b))" $
+>   \a b c -> eq (lcm (times c a) (times c b)) (times c (lcm a b))
+
+</p></div>
+</div>
+
+$\nlcm$ is compatible with $\ndiv$.
+
+<div class="result">
+<div class="thm">
+Let $a,b,c \in \nats$. If $\ndiv(a,b)$, then $\ndiv(\nlcm(a,c),\nlcm(b,c))$.
+</div>
+
+<div class="proof"><p>
+We have
 $$\begin{eqnarray*}
  &   & \nlcm(\nlcm(a,c),\nlcm(b,c)) \\
  & = & \nlcm(\nlcm(a,b),\nlcm(c,c)) \\
  & = & \nlcm(b,c) \\
 \end{eqnarray*}$$
 so that $\ndiv(\nlcm(a,c),\nlcm(b,c))$ as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_lcm_div_compatible :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
+> _test_lcm_div_compatible _ =
+>   testName "if div(a,b) then div(lcm(a,c),lcm(b,c))" $
+>   \a b c -> if div a b
+>     then div (lcm a c) (lcm b c)
+>     else True
+
 </p></div>
 </div>
 
@@ -355,61 +478,9 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
-</div>
 
+<div class="test"><p>
 
-Testing
--------
-
-> _test_lcm_zero :: (Natural n, Equal n)
->   => n -> Test (n -> Bool)
-> _test_lcm_zero _ =
->   testName "lcm(a,0) == 0 and lcm(0,a) == 0" $
->   \a -> and (eq zero (lcm a zero)) (eq zero (lcm zero a))
-> 
-> 
-> _test_lcm_one :: (Natural n, Equal n)
->   => n -> Test (n -> Bool)
-> _test_lcm_one _ =
->   testName "lcm(a,next(0)) == a and lcm(next(0),a) == a" $
->   \a -> and (eq a (lcm a (next zero))) (eq a (lcm (next zero) a))
-> 
-> 
-> _test_lcm_div_args :: (Natural n, Equal n)
->   => n -> Test (n -> n -> Bool)
-> _test_lcm_div_args _ =
->   testName "div(a,lcm(a,b)) and div(b,lcm(a,b))" $
->   \a b -> and (div a (lcm a b)) (div b (lcm a b))
-> 
-> 
-> _test_lcm_idempotent :: (Natural n, Equal n)
->   => n -> Test (n -> Bool)
-> _test_lcm_idempotent _ =
->   testName "lcm(a,a) == a" $
->   \a -> eq (lcm a a) a
-> 
-> 
-> _test_lcm_commutative :: (Natural n, Equal n)
->   => n -> Test (n -> n -> Bool)
-> _test_lcm_commutative _ =
->   testName "lcm(a,b) == lcm(b,a)" $
->   \a b -> eq (lcm a b) (lcm b a)
-> 
-> 
-> _test_lcm_associative :: (Natural n, Equal n)
->   => n -> Test (n -> n -> n -> Bool)
-> _test_lcm_associative _ =
->   testName "lcm(lcm(a,b),c) == lcm(a,lcm(b,c))" $
->   \a b c -> eq (lcm (lcm a b) c) (lcm a (lcm b c))
-> 
-> 
-> _test_lcm_distributive_times :: (Natural n, Equal n)
->   => n -> Test (n -> n -> n -> Bool)
-> _test_lcm_distributive_times _ =
->   testName "lcm(times(c,a),times(c,b)) == times(c,lcm(a,b))" $
->   \a b c -> eq (lcm (times c a) (times c b)) (times c (lcm a b))
-> 
-> 
 > _test_lcm_distributive_gcd :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> n -> Bool)
 > _test_lcm_distributive_gcd _ =
@@ -423,9 +494,15 @@ Testing
 >   testName "gcd(lcm(c,a),lcm(c,b)) == lcm(c,gcd(a,b))" $
 >   \a b c -> eq (gcd (lcm c a) (lcm c b)) (lcm c (gcd a b))
 
-And the suite:
+</p></div>
+</div>
 
-> -- run all tests for lcm
+
+Testing
+-------
+
+Suite:
+
 > _test_lcm ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
@@ -440,15 +517,18 @@ And the suite:
 > 
 >   runTest args (_test_lcm_zero n)
 >   runTest args (_test_lcm_one n)
->   runTest args (_test_lcm_div_args n)
 >   runTest args (_test_lcm_idempotent n)
 >   runTest args (_test_lcm_commutative n)
+>   runTest args (_test_lcm_div_args n)
+>   runTest args (_test_lcm_least_common n)
 >   runTest args (_test_lcm_associative n)
+>   runTest args (_test_lcm_div n)
 >   runTest args (_test_lcm_distributive_times n)
+>   runTest args (_test_lcm_div_compatible n)
 >   runTest args (_test_lcm_distributive_gcd n)
 >   runTest args (_test_gcd_distributive_lcm n)
 
-And the main function:
+Main:
 
 > main_lcm :: IO ()
 > main_lcm = do
