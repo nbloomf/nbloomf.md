@@ -32,6 +32,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * [Greatest Common Divisor](/posts/arithmetic-made-difficult/GreatestCommonDivisor.html)
         * [Coprime To](/posts/arithmetic-made-difficult/CoprimeTo.html)
         * [Least Common Multiple](/posts/arithmetic-made-difficult/LeastCommonMultiple.html)
+        * [Find Smallest](/posts/arithmetic-made-difficult/FindSmallest.html)
         * [Primes](/posts/arithmetic-made-difficult/IsPrime.html)
         * [Exponentiation](/posts/arithmetic-made-difficult/Exponentiation.html)
         * [Choose](/posts/arithmetic-made-difficult/Choose.html)

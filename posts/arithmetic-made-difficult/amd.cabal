@@ -26,6 +26,7 @@ library
     GreatestCommonDivisor,
     CoprimeTo,
     LeastCommonMultiple,
+    FindSmallest,
     IsPrime,
     Exponentiation
   build-depends:
@@ -253,6 +254,24 @@ test-suite amd-lcm
     NormRecursion,
     GreatestCommonDivisor,
     CoprimeTo
+
+test-suite amd-findsmallest
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: FindSmallest.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options: -main-is FindSmallest.main_findSmallest
+  other-modules:
+    Booleans,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo
 
 
 
