@@ -51,17 +51,17 @@ $$\left\{\begin{array}{l}
 <div class="test"><p>
 
 > _test_times_zero_left :: (Natural n, Equal n)
->   => n -> Test (n -> Bool)
-> _test_times_zero_left _ =
+>   => n -> (n -> n -> n) -> Test (n -> Bool)
+> _test_times_zero_left _ f =
 >   testName "times(0,a) == 0" $
->   \a -> eq zero (times zero a)
+>   \a -> eq (f zero a) zero
 > 
 > 
 > _test_times_next_left :: (Natural n, Equal n)
->   => n -> Test (n -> n -> Bool)
-> _test_times_next_left _ =
+>   => n -> (n -> n -> n) -> Test (n -> n -> Bool)
+> _test_times_next_left _ f =
 >   testName "times(next(a),b) == plus(times(a,b),b)" $
->   \a b -> eq (times (next a) b) (plus (times a b) b)
+>   \a b -> eq (f (next a) b) (plus (f a b) b)
 
 </p></div>
 </div>
@@ -110,17 +110,17 @@ as needed.
 <div class="test"><p>
 
 > _test_times_zero_right :: (Natural n, Equal n)
->   => n -> Test (n -> Bool)
-> _test_times_zero_right _ =
+>   => n -> (n -> n -> n) -> Test (n -> Bool)
+> _test_times_zero_right _ f =
 >   testName "0 == times(a,0)" $
->   \a -> eq zero (times a zero)
+>   \a -> eq (f a zero) zero
 > 
 > 
 > _test_times_next_right :: (Natural n, Equal n)
->   => n -> Test (n -> n -> Bool)
-> _test_times_next_right _ =
+>   => n -> (n -> n -> n) -> Test (n -> n -> Bool)
+> _test_times_next_right _ f =
 >   testName "times(a,next(b)) == plus(times(a,b),a)" $
->   \a b -> eq (times a (next b)) (plus (times a b) a)
+>   \a b -> eq (f a (next b)) (plus (f a b) a)
 
 </p></div>
 </div>
@@ -157,17 +157,17 @@ as needed.
 <div class="test"><p>
 
 > _test_times_one_left :: (Natural n, Equal n)
->   => n -> Test (n -> Bool)
-> _test_times_one_left _ =
+>   => n -> (n -> n -> n) -> Test (n -> Bool)
+> _test_times_one_left _ f =
 >   testName "a == times(1,a)" $
->   \a -> eq a (times (next zero) a)
+>   \a -> eq a (f (next zero) a)
 > 
 > 
 > _test_times_one_right :: (Natural n, Equal n)
->   => n -> Test (n -> Bool)
-> _test_times_one_right _ =
+>   => n -> (n -> n -> n) -> Test (n -> Bool)
+> _test_times_one_right _ f =
 >   testName "a == times(a,1)" $
->   \a -> eq a (times a (next zero))
+>   \a -> eq a (f a (next zero))
 
 </p></div>
 </div>
@@ -193,10 +193,10 @@ as needed.
 <div class="test"><p>
 
 > _test_times_commutative :: (Natural n, Equal n)
->   => n -> Test (n -> n -> Bool)
-> _test_times_commutative _ =
+>   => n -> (n -> n -> n) -> Test (n -> n -> Bool)
+> _test_times_commutative _ f =
 >   testName "times(a,b) == times(b,a)" $
->   \a b -> eq (times a b) (times b a)
+>   \a b -> eq (f a b) (f b a)
 
 </p></div>
 </div>
@@ -238,17 +238,17 @@ as claimed.
 <div class="test"><p>
 
 > _test_times_distributive_left :: (Natural n, Equal n)
->   => n -> Test (n -> n -> n -> Bool)
-> _test_times_distributive_left _ =
+>   => n -> (n -> n -> n) -> Test (n -> n -> n -> Bool)
+> _test_times_distributive_left _ f =
 >   testName "times(a,plus(b,c)) == plus(times(a,b),times(a,c))" $
->   \a b c -> eq (times a (plus b c)) (plus (times a b) (times a c))
+>   \a b c -> eq (f a (plus b c)) (plus (f a b) (f a c))
 > 
 > 
 > _test_times_distributive_right :: (Natural n, Equal n)
->   => n -> Test (n -> n -> n -> Bool)
-> _test_times_distributive_right _ =
+>   => n -> (n -> n -> n) -> Test (n -> n -> n -> Bool)
+> _test_times_distributive_right _ f =
 >   testName "times(plus(a,b),c) == plus(times(a,c),times(b,c))" $
->   \a b c -> eq (times (plus a b) c) (plus (times a c) (times b c))
+>   \a b c -> eq (f (plus a b) c) (plus (f a c) (f b c))
 
 </p></div>
 </div>
@@ -282,10 +282,10 @@ as needed.
 <div class="test"><p>
 
 > _test_times_associative :: (Natural n, Equal n)
->   => n -> Test (n -> n -> n -> Bool)
-> _test_times_associative _ =
+>   => n -> (n -> n -> n) -> Test (n -> n -> n -> Bool)
+> _test_times_associative _ f =
 >   testName "times(times(a,b),c) == times(a,times(b,c))" $
->   \a b c -> eq (times (times a b) c) (times a (times b c))
+>   \a b c -> eq (f (f a b) c) (f a (f b c))
 
 </p></div>
 </div>
@@ -330,19 +330,19 @@ as needed.
 <div class="test"><p>
 
 > _test_times_cancellative_left :: (Natural n, Equal n)
->   => n -> Test (n -> n -> n -> Bool)
-> _test_times_cancellative_left _ =
+>   => n -> (n -> n -> n) -> Test (n -> n -> n -> Bool)
+> _test_times_cancellative_left _ f =
 >   testName "if times(next(c),a) == times(next(c),b) then a == b" $
->   \a b c -> if eq (times (next c) a) (times (next c) b)
+>   \a b c -> if eq (f (next c) a) (f (next c) b)
 >     then eq a b
 >     else True
 > 
 > 
 > _test_times_cancellative_right :: (Natural n, Equal n)
->   => n -> Test (n -> n -> n -> Bool)
-> _test_times_cancellative_right _ =
+>   => n -> (n -> n -> n) -> Test (n -> n -> n -> Bool)
+> _test_times_cancellative_right _ f =
 >   testName "if times(a,next(c)) == plus(b,next(c)) then a == b" $
->   \a b c -> if eq (times a (next c)) (times b (next c))
+>   \a b c -> if eq (f a (next c)) (f b (next c))
 >     then eq a b
 >     else True
 
@@ -354,8 +354,8 @@ Testing
 -------
 
 > _test_times :: (TypeName n, Natural n, Equal n, Arbitrary n, Show n)
->   => n -> Int -> Int -> IO ()
-> _test_times n maxSize numCases = do
+>   => n -> (n -> n -> n) -> Int -> Int -> IO ()
+> _test_times n f maxSize numCases = do
 >   testLabel ("times: " ++ typeName n)
 > 
 >   let
@@ -364,18 +364,18 @@ Testing
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_times_zero_left n)
->   runTest args (_test_times_next_left n)
->   runTest args (_test_times_zero_right n)
->   runTest args (_test_times_next_right n)
->   runTest args (_test_times_one_left n)
->   runTest args (_test_times_one_right n)
->   runTest args (_test_times_commutative n)
->   runTest args (_test_times_distributive_left n)
->   runTest args (_test_times_distributive_right n)
->   runTest args (_test_times_associative n)
->   runTest args (_test_times_cancellative_left n)
->   runTest args (_test_times_cancellative_right n)
+>   runTest args (_test_times_zero_left n f)
+>   runTest args (_test_times_next_left n f)
+>   runTest args (_test_times_zero_right n f)
+>   runTest args (_test_times_next_right n f)
+>   runTest args (_test_times_one_left n f)
+>   runTest args (_test_times_one_right n f)
+>   runTest args (_test_times_commutative n f)
+>   runTest args (_test_times_distributive_left n f)
+>   runTest args (_test_times_distributive_right n f)
+>   runTest args (_test_times_associative n f)
+>   runTest args (_test_times_cancellative_left n f)
+>   runTest args (_test_times_cancellative_right n f)
 
 I used a much smaller number of test cases this time, because these run much more slowly than the tests for ``plus``. The culprit is ``_test_times_associative``. What's happening is that multiplication of ``Nat``s is inherently slow; it's implemented as iterated addition, which itself is iterated ``N``.
 
@@ -383,4 +383,4 @@ The problem lies in our *representation* of the natural numbers. A better repres
 
 > main_times :: IO ()
 > main_times = do
->   _test_times (zero :: Unary) 20 100
+>   _test_times (zero :: Unary) times 40 100
