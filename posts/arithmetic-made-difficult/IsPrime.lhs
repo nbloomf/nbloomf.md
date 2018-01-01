@@ -71,9 +71,9 @@ If $a = \next(\next(m))$ for some $m$, we have
 $$\begin{eqnarray*}
  &   & \nmindiv(a) \\
  & = & \nmindiv(\next(\next(m))) \\
- & = & \either(\const(a),\id)(\findsmallest(\sigma(a))(m,\next(\next(\zero)))).
+ & = & \either(\const(a),\id)(\findsmallest{\sigma(a)}(m,\next(\next(\zero)))).
 \end{eqnarray*}$$
-We have two possibilities for $\findsmallest(\sigma(a))(m,\next(\next(\zero))) = Q$.
+We have two possibilities for $\findsmallest{\sigma(a)}(m,\next(\next(\zero))) = Q$.
 
 Suppose $Q = \rgt(t)$; then we have
 $$\begin{eqnarray*}
@@ -82,7 +82,7 @@ $$\begin{eqnarray*}
  & = & \id(t) \\
  & = & t.
 \end{eqnarray*}$$
-By the properties of $\findsmallest$ we have $\nleq(\next(\next(\zero)),t)$ and $\nleq(t,\next(m))$ (so $t \neq \zero$ and $t \neq \next(\zero)$) and $\ndiv(t,a)$, and moreover if $\nleq(\next(\next(\zero)),k)$ and $\nleq(k,\next(m))$ and $\ndiv(k,a)$ then $\nleq(t,k)$ as claimed.
+By the properties of $\findsmallest{\sigma(a)}$ we have $\nleq(\next(\next(\zero)),t)$ and $\nleq(t,\next(m))$ (so $t \neq \zero$ and $t \neq \next(\zero)$) and $\ndiv(t,a)$, and moreover if $\nleq(\next(\next(\zero)),k)$ and $\nleq(k,\next(m))$ and $\ndiv(k,a)$ then $\nleq(t,k)$ as claimed.
 
 Suppose instead that $Q = \lft(\ast)$; then we have
 $$\begin{eqnarray*}
@@ -91,7 +91,7 @@ $$\begin{eqnarray*}
  & = & \const(a)(\ast) \\
  & = & a. 
 \end{eqnarray*}$$
-Again by the properties of $\findsmallest$, there does not exist $k$ such that $\nleq(\next(\next(\zero)),k)$ and $\nleq(k,\next(m))$ and $\ndiv(k,a)$ as claimed.
+Again by the properties of $\findsmallest{\sigma(a)}$, there does not exist $k$ such that $\nleq(\next(\next(\zero)),k)$ and $\nleq(k,\next(m))$ and $\ndiv(k,a)$ as claimed.
 </p></div>
 
 <div class="test"><p>
@@ -150,12 +150,6 @@ $(2)$ implies $(3)$: Of course $a \neq \zero$ and $a \neq \next(\zero)$. Say $\n
 
 $(3)$ implies $(1)$: It suffices to show that if $a \neq \zero$ and $a \neq \next(\zero)$ then $\nmindiv(a) = a$. To this end, let $d = \nmindiv(a)$ and write $a = \ntimes(\nmindiv(a),k)$. Suppose $\ndiv(a,k)$, with $k = \ntimes(a,w)$. Since $a \neq \zero$, by cancellation we have $\next(\zero) = \ntimes(\nmindiv(a),w)$, so that $\nmindiv(a) = \next(\zero)$, a contradiction. Thus $\ndiv(a,\nmindiv(a))$, so we have $a = \nmindiv(a)$ as needed.
 </p></div>
-
-<div class="test"><p>
-
-(@@@)
-
-</p></div>
 </div>
 
 Minimal divisors are prime.
@@ -195,7 +189,15 @@ Let $d = \ngcd(a,p)$. Now $\ndiv(d,p)$, so that either $d = \next(\zero)$ or $d 
 
 <div class="test"><p>
 
-(@@@)
+> _test_prime_gcd :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_prime_gcd _ =
+>   testName "if prime(p) then eq(gcd(a,p),if(div(p,a),p,next(0)))" $
+>   \a p -> if prime p
+>     then if div p a
+>       then eq (gcd a p) p
+>       else eq (gcd a p) (next zero)
+>     else True
 
 </p></div>
 </div>
@@ -221,6 +223,7 @@ Suite:
 >   runTest args (_test_mindiv_div n)
 >   runTest args (_test_mindiv_min n)
 >   runTest args (_test_prime_mindiv n)
+>   runTest args (_test_prime_gcd n)
 
 Main:
 

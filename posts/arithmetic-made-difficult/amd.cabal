@@ -342,7 +342,7 @@ test-suite amd-rev
   main-is: Reverse.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Reverse.main_rev
-  other-modules: Booleans, Lists, NaturalNumbers, Unary
+  other-modules: Booleans, Lists, NaturalNumbers, Unary, DisjointUnions
 
 test-suite amd-cat
   default-language: Haskell2010
@@ -361,7 +361,7 @@ test-suite amd-length
   ghc-options: -main-is Length.main_length
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, SimpleRecursion,
-                 BailoutRecursion
+                 BailoutRecursion, DisjointUnions
 
 test-suite amd-at
   default-language: Haskell2010
@@ -382,7 +382,7 @@ test-suite amd-map
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Length, SimpleRecursion,
-                 BailoutRecursion
+                 BailoutRecursion, DisjointUnions
 
 test-suite amd-range
   default-language: Haskell2010
@@ -393,7 +393,7 @@ test-suite amd-range
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, Length,
-                 SimpleRecursion, BailoutRecursion
+                 SimpleRecursion, BailoutRecursion, DisjointUnions
 
 test-suite amd-zip
   default-language: Haskell2010
@@ -404,7 +404,7 @@ test-suite amd-zip
   other-modules: Booleans, Lists, NaturalNumbers, Unary,
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
-                 Tuples, Length, BailoutRecursion, SimpleRecursion
+                 Tuples, Length, BailoutRecursion, SimpleRecursion, DisjointUnions
 
 test-suite amd-unzip
   default-language: Haskell2010
@@ -416,7 +416,7 @@ test-suite amd-unzip
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, SimpleRecursion,
-                 BailoutRecursion
+                 BailoutRecursion, DisjointUnions
 
 test-suite amd-prefix
   default-language: Haskell2010
@@ -428,7 +428,7 @@ test-suite amd-prefix
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, SimpleRecursion,
-                 BailoutRecursion
+                 BailoutRecursion, DisjointUnions
 
 test-suite amd-lcp
   default-language: Haskell2010
@@ -440,7 +440,7 @@ test-suite amd-lcp
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, Prefix, SimpleRecursion,
-                 BailoutRecursion
+                 BailoutRecursion, DisjointUnions
 
 test-suite amd-all-any
   default-language: Haskell2010
@@ -465,7 +465,7 @@ test-suite amd-tails-inits
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Prefix,
                  LongestCommonPrefix, SimpleRecursion,
-                 BailoutRecursion
+                 BailoutRecursion, DisjointUnions
 
 test-suite amd-filter
   default-language: Haskell2010
@@ -478,7 +478,7 @@ test-suite amd-filter
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Prefix,
                  LongestCommonPrefix, TailsAndInits, SimpleRecursion,
-                 BailoutRecursion
+                 BailoutRecursion, DisjointUnions
 
 test-suite amd-elt
   default-language: Haskell2010
@@ -491,7 +491,7 @@ test-suite amd-elt
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Filter
                  LongestCommonPrefix, TailsAndInits, Prefix,
-                 SimpleRecursion, BailoutRecursion
+                 SimpleRecursion, BailoutRecursion, DisjointUnions
 
 test-suite amd-count
   default-language: Haskell2010
@@ -517,7 +517,7 @@ test-suite amd-repeat
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
-                 Count, Prefix, SimpleRecursion, BailoutRecursion
+                 Count, Prefix, SimpleRecursion, BailoutRecursion, DisjointUnions
 
 test-suite amd-sublist
   default-language: Haskell2010
@@ -531,7 +531,7 @@ test-suite amd-sublist
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, SimpleRecursion
-                 BailoutRecursion
+                 BailoutRecursion, DisjointUnions
 
 test-suite amd-infix
   default-language: Haskell2010
@@ -545,7 +545,7 @@ test-suite amd-infix
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Sublist, SimpleRecursion,
-                 BailoutRecursion
+                 BailoutRecursion, DisjointUnions
 
 test-suite amd-select
   default-language: Haskell2010
@@ -560,7 +560,7 @@ test-suite amd-select
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Choose, Sublist,
                  SimpleRecursion, BailoutRecursion,
-                 MutatingRecursion
+                 MutatingRecursion, DisjointUnions
 
 test-suite amd-unique
   default-language: Haskell2010
@@ -575,7 +575,7 @@ test-suite amd-unique
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Choose,
                  Sublist, SimpleRecursion, BailoutRecursion,
-                 MutatingRecursion
+                 MutatingRecursion, DisjointUnions
 
 test-suite amd-delete
   default-language: Haskell2010
@@ -590,7 +590,7 @@ test-suite amd-delete
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Choose,
                  Sublist, Unique, SimpleRecursion,
-                 BailoutRecursion, MutatingRecursion
+                 BailoutRecursion, MutatingRecursion, DisjointUnions
 
 test-suite amd-dedupe
   default-language: Haskell2010
@@ -605,7 +605,7 @@ test-suite amd-dedupe
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Delete,
                  Choose, Sublist, Unique, SimpleRecursion,
-                 BailoutRecursion, MutatingRecursion
+                 BailoutRecursion, MutatingRecursion, DisjointUnions
 
 test-suite amd-take-drop
   default-language: Haskell2010
@@ -620,7 +620,7 @@ test-suite amd-take-drop
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Delete,
                  Dedupe, Choose, Sublist, Unique,
-                 SimpleRecursion, BailoutRecursion, MutatingRecursion
+                 SimpleRecursion, BailoutRecursion, MutatingRecursion, DisjointUnions
 
 test-suite amd-takebut-dropbut
   default-language: Haskell2010
@@ -635,7 +635,7 @@ test-suite amd-takebut-dropbut
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Delete,
                  Dedupe, Choose, Sublist, Unique, TakeAndDrop,
-                 SimpleRecursion, BailoutRecursion, MutatingRecursion
+                 SimpleRecursion, BailoutRecursion, MutatingRecursion, DisjointUnions
 
 test-suite amd-takewhile-dropwhile
   default-language: Haskell2010
@@ -650,4 +650,4 @@ test-suite amd-takewhile-dropwhile
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Delete,
                  Dedupe, Choose, Sublist, Unique,
-                 SimpleRecursion, BailoutRecursion, MutatingRecursion
+                 SimpleRecursion, BailoutRecursion, MutatingRecursion, DisjointUnions

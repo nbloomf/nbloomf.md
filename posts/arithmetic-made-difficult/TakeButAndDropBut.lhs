@@ -238,22 +238,22 @@ Testing
 
 Here are our property tests for $\takeBut$:
 
-> _test_takeBut_prefix :: (List t, Equal a, Natural n)
->   => t a -> k -> Test (k -> ListOf t a -> Bool)
-> _test_takeBut_prefix _ _ =
+> _test_takeBut_prefix :: (List t, Equal a, Natural n, Equal n)
+>   => t a -> n -> Test (n -> ListOf t a -> Bool)
+> _test_takeBut_prefix _ m =
 >   testName "prefix(takeBut(k,x),x) == true" $
 >   \k x -> eq (prefix (takeBut k x) x) True
 
 And for $\dropBut$:
 
-> _test_dropBut_suffix :: (List t, Equal a, Natural n)
+> _test_dropBut_suffix :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (n -> ListOf t a -> Bool)
 > _test_dropBut_suffix _ _ =
 >   testName "suffix(dropBut(k,x),x) == true" $
 >   \k x -> eq (suffix (dropBut k x) x) True
 > 
 > 
-> _test_dropBut_idempotent :: (List t, Equal a, Natural n)
+> _test_dropBut_idempotent :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (n -> ListOf t a -> Bool)
 > _test_dropBut_idempotent _ _ =
 >   testName "dropBut(k,dropBut(k,x)) == dropBut(k,x)" $
@@ -261,7 +261,7 @@ And for $\dropBut$:
 
 And for both:
 
-> _test_takeBut_dropBut_cat :: (List t, Equal a, Natural n)
+> _test_takeBut_dropBut_cat :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (n -> ListOf t a -> Bool)
 > _test_takeBut_dropBut_cat _ _ =
 >   testName "cat(takeBut(k,x),dropBut(k,x)) == x" $
@@ -269,11 +269,10 @@ And for both:
 
 And the suite:
 
-> -- run all tests for takeBut & dropBut
 > _test_takebut_dropbut ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
->   , TypeName n, Natural n, Show n, Arbitrary n
+>   , TypeName n, Natural n, Show n, Arbitrary n, Equal n
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_takebut_dropbut t k maxSize numCases = do
 >   testLabel ("takeBut & dropBut: " ++ typeName t)

@@ -400,7 +400,7 @@ Here are our property tests for $\tails$ and $\inits$:
 >   \f x -> eq (tails (map f x)) (map (map f) (tails x))
 > 
 > 
-> _test_tails_length :: (List t, Equal a, Natural n)
+> _test_tails_length :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (ListOf t a -> Bool)
 > _test_tails_length _ n =
 >   testName "length(tails(x)) == next(length(x))" $
@@ -431,7 +431,7 @@ Here are our property tests for $\tails$ and $\inits$:
 >   \f x -> eq (inits (map f x)) (map (map f) (inits x))
 > 
 > 
-> _test_inits_length :: (List t, Equal a, Natural n)
+> _test_inits_length :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (ListOf t a -> Bool)
 > _test_inits_length _ n =
 >   testName "length(inits(x)) == next(length(x))" $
@@ -452,7 +452,7 @@ And the suite:
 > -- run all tests for tails and inits
 > _test_tails_inits ::
 >   ( TypeName a, Show a, Equal a, Arbitrary a, CoArbitrary a
->   , TypeName n, Natural n
+>   , TypeName n, Natural n, Equal n
 >   , TypeName (t a), List t
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_tails_inits t n maxSize numCases = do

@@ -462,28 +462,28 @@ Testing
 
 Here are our property tests for $\take$:
 
-> _test_take_alt :: (List t, Equal a, Natural n)
+> _test_take_alt :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (n -> ListOf t a -> Bool)
 > _test_take_alt _ _ =
 >   testName "take(k,x) == take'(k,x)" $
 >   \k x -> eq (take k x) (take' k x)
 > 
 > 
-> _test_take_prefix :: (List t, Equal a, Natural n)
+> _test_take_prefix :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (n -> ListOf t a -> Bool)
 > _test_take_prefix _ _ =
 >   testName "prefix(take(k,x),x) == true" $
 >   \k x -> eq (prefix (take k x) x) True
 > 
 > 
-> _test_take_length :: (List t, Equal a, Natural n)
+> _test_take_length :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (n -> ListOf t a -> Bool)
 > _test_take_length _ _ =
 >   testName "length(take(k,x)) == min(k,length(x))" $
 >   \k x -> eq (length (take k x)) (min k (length x))
 > 
 > 
-> _test_take_idempotent :: (List t, Equal a, Natural n)
+> _test_take_idempotent :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (n -> ListOf t a -> Bool)
 > _test_take_idempotent _ _ =
 >   testName "take(k,(take(k,x)) == take(k,take(k,x))" $
@@ -491,14 +491,14 @@ Here are our property tests for $\take$:
 
 And for $\drop$:
 
-> _test_drop_alt :: (List t, Equal a, Natural n)
+> _test_drop_alt :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (n -> ListOf t a -> Bool)
 > _test_drop_alt _ _ =
 >   testName "drop(k,x) == drop'(k,x)" $
 >   \k x -> eq (drop k x) (drop' k x)
 > 
 > 
-> _test_drop_suffix :: (List t, Equal a, Natural n)
+> _test_drop_suffix :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (n -> ListOf t a -> Bool)
 > _test_drop_suffix _ _ =
 >   testName "suffix(drop(k,x),x) == true" $
@@ -506,7 +506,7 @@ And for $\drop$:
 
 And for both:
 
-> _test_take_drop_cat :: (List t, Equal a, Natural n)
+> _test_take_drop_cat :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (n -> ListOf t a -> Bool)
 > _test_take_drop_cat _ _ =
 >   testName "cat(take(k,x),drop(k,x)) == x" $
@@ -518,7 +518,7 @@ And the suite:
 > _test_take_drop ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
->   , TypeName n, Natural n, Show n, Arbitrary n
+>   , TypeName n, Natural n, Show n, Arbitrary n, Equal n
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_take_drop t k maxSize numCases = do
 >   testLabel ("take & drop: " ++ typeName t)

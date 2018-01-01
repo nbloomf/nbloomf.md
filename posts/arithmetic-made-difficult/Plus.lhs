@@ -52,17 +52,17 @@ $\nplus$ is the unique map $f : \nats \times \nats \rightarrow \nats$ with the p
 <div class="test"><p>
 
 > _test_plus_zero_left :: (Natural n, Equal n)
->   => n -> Test (n -> Bool)
-> _test_plus_zero_left _ =
->   testName "plus(0,b) == b" $
->   \b -> eq (plus zero b) b
+>   => n -> (n -> n -> n) -> Test (n -> Bool)
+> _test_plus_zero_left _ f =
+>   testName "f(0,b) == b" $
+>   \b -> eq (f zero b) b
 > 
 > 
 > _test_plus_next_left :: (Natural n, Equal n)
->   => n -> Test (n -> n -> Bool)
-> _test_plus_next_left _ =
->   testName "next(plus(a,b)) == plus(next(a),b)" $
->   \a b -> eq (next (plus a b)) (plus (next a) b)
+>   => n -> (n -> n -> n) -> Test (n -> n -> Bool)
+> _test_plus_next_left _ f =
+>   testName "f(next(a),b) == next(f(a,b))" $
+>   \a b -> eq (f (next a) b) (next (f a b))
 
 </p></div>
 </div>
@@ -98,17 +98,17 @@ as needed.
 <div class="test"><p>
 
 > _test_plus_zero_right :: (Natural n, Equal n)
->   => n -> Test (n -> Bool)
-> _test_plus_zero_right _ =
+>   => n -> (n -> n -> n) -> Test (n -> Bool)
+> _test_plus_zero_right _ f =
 >   testName "plus(a,0) == a" $
->   \a -> eq (plus a zero) a
+>   \a -> eq (f a zero) a
 > 
 > 
 > _test_plus_next_right :: (Natural n, Equal n)
->   => n -> Test (n -> n -> Bool)
-> _test_plus_next_right _ =
+>   => n -> (n -> n -> n) -> Test (n -> n -> Bool)
+> _test_plus_next_right _ f =
 >   testName "next(plus(a,b)) == plus(a,next(b))" $
->   \a b -> eq (plus a (next b)) (next (plus a b))
+>   \a b -> eq (f a (next b)) (next (f a b))
 
 </p></div>
 </div>
@@ -146,17 +146,17 @@ as needed.
 <div class="test"><p>
 
 > _test_plus_associative :: (Natural n, Equal n)
->   => n -> Test (n -> n -> n -> Bool)
-> _test_plus_associative _ =
+>   => n -> (n -> n -> n) -> Test (n -> n -> n -> Bool)
+> _test_plus_associative _ f =
 >   testName "plus(plus(a,b),c) == plus(a,plus(b,c))" $
->   \a b c -> eq (plus (plus a b) c) (plus a (plus b c))
+>   \a b c -> eq (f (f a b) c) (f a (f b c))
 > 
 > 
 > _test_plus_commutative :: (Natural n, Equal n)
->   => n -> Test (n -> n -> Bool)
-> _test_plus_commutative _ =
+>   => n -> (n -> n -> n) -> Test (n -> n -> Bool)
+> _test_plus_commutative _ f =
 >   testName "plus(a,b) == plus(b,a)" $
->   \a b -> eq (plus a b) (plus b a)
+>   \a b -> eq (f a b) (f b a)
 
 </p></div>
 </div>
@@ -179,19 +179,19 @@ The following hold for all natural numbers $a$, $b$, and $c$.
 <div class="test"><p>
 
 > _test_plus_cancellative_left :: (Natural n, Equal n)
->   => n -> Test (n -> n -> n -> Bool)
-> _test_plus_cancellative_left _ =
+>   => n -> (n -> n -> n) -> Test (n -> n -> n -> Bool)
+> _test_plus_cancellative_left _ f =
 >   testName "if plus(c,a) == plus(c,b) then a == b" $
->   \a b c -> if eq (plus c a) (plus c b)
+>   \a b c -> if eq (f c a) (f c b)
 >     then eq a b
 >     else True
 > 
 > 
 > _test_plus_cancellative_right :: (Natural n, Equal n)
->   => n -> Test (n -> n -> n -> Bool)
-> _test_plus_cancellative_right _ =
+>   => n -> (n -> n -> n) -> Test (n -> n -> n -> Bool)
+> _test_plus_cancellative_right _ f =
 >   testName "if plus(a,c) == plus(b,c) then a == b" $
->   \a b c -> if eq (plus a c) (plus b c)
+>   \a b c -> if eq (f a c) (f b c)
 >     then eq a b
 >     else True
 
@@ -204,10 +204,12 @@ Of course we will eventually prefer to say $a + b$ instead of $\nplus(a,b)$. But
 Testing
 -------
 
+Suite:
+
 > _test_plus
 >   :: (TypeName n, Natural n, Equal n, Show n, Arbitrary n)
->   => n -> Int -> Int -> IO ()
-> _test_plus n maxSize numCases = do
+>   => n -> (n -> n -> n) -> Int -> Int -> IO ()
+> _test_plus n f maxSize numCases = do
 >   testLabel ("plus: " ++ typeName n)
 > 
 >   let
@@ -216,17 +218,17 @@ Testing
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_plus_zero_left n)
->   runTest args (_test_plus_next_left n)
->   runTest args (_test_plus_zero_right n)
->   runTest args (_test_plus_next_right n)
->   runTest args (_test_plus_associative n)
->   runTest args (_test_plus_commutative n)
->   runTest args (_test_plus_cancellative_left n)
->   runTest args (_test_plus_cancellative_right n)
+>   runTest args (_test_plus_zero_left n f)
+>   runTest args (_test_plus_next_left n f)
+>   runTest args (_test_plus_zero_right n f)
+>   runTest args (_test_plus_next_right n f)
+>   runTest args (_test_plus_associative n f)
+>   runTest args (_test_plus_commutative n f)
+>   runTest args (_test_plus_cancellative_left n f)
+>   runTest args (_test_plus_cancellative_right n f)
 
-woo!
+Main:
 
 > main_plus :: IO ()
 > main_plus = do
->   _test_plus (zero :: Unary) 100 100
+>   _test_plus (zero :: Unary) plus 100 100

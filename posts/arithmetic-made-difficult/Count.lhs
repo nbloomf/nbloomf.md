@@ -3,6 +3,7 @@ title: Count
 author: nbloomf
 date: 2017-05-21
 tags: arithmetic-made-difficult, literate-haskell
+slug: count
 ---
 
 > module Count
@@ -256,7 +257,7 @@ Testing
 
 Here are our property tests for $\count$:
 
-> _test_count_nil :: (List t, Equal a, Natural n)
+> _test_count_nil :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (a -> Bool)
 > _test_count_nil t k =
 >  testName "count(a,nil) == zero" $
@@ -267,7 +268,7 @@ Here are our property tests for $\count$:
 >    eq (count a nil') zero'
 > 
 > 
-> _test_count_one :: (List t, Equal a, Natural n)
+> _test_count_one :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (a -> Bool)
 > _test_count_one t k =
 >  testName "count(a,cons(a,nil)) == next(zero)" $
@@ -278,7 +279,7 @@ Here are our property tests for $\count$:
 >    eq (count a (cons a nil')) one
 > 
 > 
-> _test_count_rev :: (List t, Equal a, Natural n)
+> _test_count_rev :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (a -> ListOf t a -> Bool)
 > _test_count_rev t k =
 >  testName "count(a,cons(a,nil)) == next(zero)" $
@@ -288,7 +289,7 @@ Here are our property tests for $\count$:
 >    eq (count a (rev x)) cx
 > 
 > 
-> _test_count_snoc_cons :: (List t, Equal a, Natural n)
+> _test_count_snoc_cons :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (a -> a -> ListOf t a -> Bool)
 > _test_count_snoc_cons t k =
 >  testName "count(a,cons(a,nil)) == next(zero)" $
@@ -298,7 +299,7 @@ Here are our property tests for $\count$:
 >    eq (count a (snoc b x)) cbx
 > 
 > 
-> _test_count_cat :: (List t, Equal a, Natural n)
+> _test_count_cat :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (a -> ListOf t a -> ListOf t a -> Bool)
 > _test_count_cat t k =
 >  testName "count(a,cat(x,y)) == plus(count(a,x),count(a,y))" $
@@ -308,7 +309,7 @@ Here are our property tests for $\count$:
 >    eq (count a (cat x y)) (plus cx (count a y))
 > 
 > 
-> _test_count_length :: (List t, Equal a, Natural n)
+> _test_count_length :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (a -> ListOf t a -> Bool)
 > _test_count_length t k =
 >  testName "count(a,x) == length(filter(eq(a,-),x))" $
@@ -323,7 +324,7 @@ And the suite:
 > _test_count ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
->   , TypeName n, Natural n
+>   , TypeName n, Natural n, Equal n
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_count t n maxSize numCases = do
 >   testLabel ("count: " ++ typeName t ++ " & " ++ typeName n)
