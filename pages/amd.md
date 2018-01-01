@@ -18,6 +18,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * [Simple Recursion](/posts/arithmetic-made-difficult/SimpleRecursion.html)
         * [Bailout Recursion](/posts/arithmetic-made-difficult/BailoutRecursion.html)
         * [Mutating Recursion](/posts/arithmetic-made-difficult/MutatingRecursion.html)
+        * [Double Natural Recursion](/posts/arithmetic-made-difficult/DoubleNaturalRecursion.html)
     * Arithmetic of Natural Numbers
         * [Addition](/posts/arithmetic-made-difficult/Plus.html)
         * [Multiplication](/posts/arithmetic-made-difficult/Times.html)
@@ -79,7 +80,14 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * Topics on Lists
         * Run Length Encoding
         * Edit Distance
-4. List of Arithmetics
+        * Sums and Products
+        * Fundamental Theorem of Arithmetic
+        * Number Partitions
+4. Fixed Radix Numeral Systems
+    * CarryBase
+    * PlusBase
+    * TimesBase
+5. List of Arithmetics
     * [On Boring and Repetitive Proofs](/posts/arithmetic-made-difficult/on-boring-proofs.html)
     * Partial and Total Orders
         * Sorted
@@ -92,8 +100,6 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * Mproduct
     * Lattices
     * Semirings
-5. Fixed Radix Numeral Systems
-    * Carry
 6. Binary Trees
 7. Sequences
 

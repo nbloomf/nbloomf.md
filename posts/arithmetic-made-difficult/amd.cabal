@@ -15,6 +15,7 @@ library
     SimpleRecursion,
     BailoutRecursion,
     MutatingRecursion,
+    DoubleNaturalRecursion,
     Plus,
     Times,
     Minus,
@@ -28,7 +29,8 @@ library
     LeastCommonMultiple,
     FindSmallest,
     IsPrime,
-    Exponentiation
+    Exponentiation,
+    Choose
   build-depends:
     base == 4.*,
     QuickCheck
@@ -324,17 +326,26 @@ test-suite amd-power
     CoprimeTo,
     LeastCommonMultiple
 
-
-
 test-suite amd-choose
   default-language: Haskell2010
   type: exitcode-stdio-1.0
   main-is: Choose.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Choose.main_choose
-  other-modules: Booleans, LessThanOrEqualTo, Minus, Plus,
-                 NaturalNumbers, Times, Unary, SimpleRecursion,
-                 BailoutRecursion, MutatingRecursion, DisjointUnions
+  other-modules:
+    Booleans,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    DoubleNaturalRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo
+
+
 
 test-suite amd-rev
   default-language: Haskell2010

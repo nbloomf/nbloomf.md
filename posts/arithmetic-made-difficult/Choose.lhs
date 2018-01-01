@@ -3,9 +3,9 @@ title: Choose
 author: nbloomf
 date: 2017-04-15
 tags: arithmetic-made-difficult, literate-haskell
+slug: choose
 ---
 
-> {-# LANGUAGE ScopedTypeVariables #-}
 > module Choose
 >   ( choose, _test_choose, main_choose
 >   ) where
@@ -13,7 +13,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Prelude ()
 > import Booleans
 > import NaturalNumbers
-> import MutatingRecursion
+> import DoubleNaturalRecursion
 > import Plus
 > import LessThanOrEqualTo
 
@@ -21,78 +21,61 @@ Today we'll define the binomial coefficient operator, $\nchoose$.
 
 <div class="result">
 <div class="defn"><p>
-Define mappings $\varphi : \nats \times \nats \rightarrow \nats$ by $$\varphi(a,b) = \bif{\iszero(a)}{\next(\zero)}{\zero},$$ $\omega : \nats \times \nats \rightarrow \nats \times \nats$ by $$\omega(a,b) = (\prev(a),a),$$ and $\chi : \nats \times \nats \rightarrow \nats^{\nats \times \nats} \rightarrow \nats$ by $$\chi((a,b),f) = \bif{\iszero(b)}{\next(\zero)}{\nplus(f(b,\zero),f(a,\zero))}.$$ We then define $\nchoose : \nats \times \nats \rightarrow \nats$ by $$\nchoose(n,k) = \mutrec{\varphi}{\omega}{\chi}(n)(k,\zero).$$
-</p></div>
-</div>
-
-We can implement $\nchoose$ using the definition:
-
-> choose' :: (Natural n) => n -> n -> n
-> choose' n k = mutatingRec phi omega chi n (k,zero)
->   where
->     phi :: (Natural n) => (n,n) -> n
->     phi (a,_) = if isZero a
->       then next zero
->       else zero
-> 
->     omega :: (Natural n) => (n,n) -> (n,n)
->     omega (a,_) = (prev a, a)
-> 
->     chi :: (Natural n) => (n,n) -> ((n,n) -> n) -> n
->     chi (a,b) f = if isZero b
->       then next zero
->       else plus (f (b,zero)) (f (a,zero))
-
-The following theorem suggests a more straightforward implementation.
-
-<div class="result">
-<div class="thm">
-We have the following.
-
-1. $\nchoose(\zero,k) = \bif{\iszero(k)}{\next(\zero)}{\zero}$.
-2. $\nchoose(\next(n),\zero) = \next(\zero)$.
-3. $\nchoose(\next(n),\next(k)) = \nplus(\nchoose(n,\next(k)),\nchoose(n,k))$.
-</div>
-
-<div class="proof"><p>
-1. Note that
-$$\begin{eqnarray*}
- &   & \nchoose(\zero,k) \\
- & = & \mutrec{\varphi}{\omega}{\chi}(\zero)(k,\zero) \\
- & = & \varphi(k,\zero) \\
- & = & \bif{\iszero(k)}{\next(\zero)}{\zero}
-\end{eqnarray*}$$
-as claimed.
-2. Note that
-$$\begin{eqnarray*}
- &   & \nchoose(\next(n),\zero) \\
- & = & \mutrec{\varphi}{\omega}{\chi}(\next(n))(\zero,\zero) \\
- & = & \chi(\omega(\zero,\zero),\mutrec{\varphi}{\omega}{\chi}(n)) \\
- & = & \chi((\zero,\zero),\mutrec{\varphi}{\omega}{\chi}(n)) \\
- & = & \next(\zero)
-\end{eqnarray*}$$
-as claimed.
-3. Note that
-$$\begin{eqnarray*}
- &   & \nchoose(\next(n),\next(k)) \\
- & = & \mutrec{\varphi}{\omega}{\chi}(\next(n))(\next(k),\zero) \\
- & = & \chi(\omega(\next(k),\zero),\mutrec{\varphi}{\omega}{\chi}(n)) \\
- & = & \chi((k,\next(k)),\mutrec{\varphi}{\omega}{\chi}(n)) \\
- & = & \nplus(\mutrec{\varphi}{\omega}{\chi}(n)(\next(k),\zero),\mutrec{\varphi}{\omega}{\chi}(n)(k,\zero)) \\
- & = & \nplus(\nchoose(n,\next(k)),\nchoose(n,k))
-\end{eqnarray*}$$
-as claimed.
-</p></div>
-</div>
+Define $\delta : \nats \rightarrow \nats$ by $$\delta(k) = \bif{\iszero(k)}{\next(\zero)}{\zero},$$ $\psi : \nats \rightarrow \nats$ by $$\psi(m) = \next(\zero),$$ and $\chi : \nats \times \nats \times \nats$ by $$\chi(t,a,b) = \nplus(a,b).$$ Now define $\nchoose : \nats \times \nats \rightarrow \nats$ by $$\nchoose = \dnatrec{\delta}{\psi}{\chi}.$$
 
 In Haskell:
 
 > choose :: (Natural n) => n -> n -> n
-> choose n k = case natShape n of
->   Zero   -> if isZero k then next zero else zero
->   Next m -> case natShape k of
->     Zero   -> next zero
->     Next t -> plus (choose m k) (choose m t)
+> choose = dnaturalRec delta (const (next zero)) chi
+>   where
+>     delta k = if isZero k then next zero else zero
+>     chi _ a b = plus a b
+
+</p></div>
+</div>
+
+Because $\nchoose$ is implemented in terms of double natural recursion, it is the unique solution to a system of equations.
+
+<div class="result">
+<div class="corollary">
+$\nchoose$ is the unique solution $f : \nats \times \nats \rightarrow \nats$ to the following system of functional equations for all $n,k \in \nats$.
+$$\left\{\begin{array}{l}
+ f(\zero,k) = \bif{\iszero(k)}{\next(\zero)}{\zero} \\
+ f(\next(n),\zero) = \next(\zero) \\
+ f(\next(n),\next(k)) = \nplus(f(n,k),f(n,\next(k))).
+\end{array}\right.$$
+</div>
+
+<div class="test"><p>
+
+> _test_choose_zero_nat :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_choose_zero_nat _ =
+>   testName "choose(0,k) == if(isZero(k),next(zero),zero)" $
+>   \k -> if isZero k
+>     then eq (choose zero k) (next zero)
+>     else eq (choose zero k) zero
+> 
+> 
+> _test_choose_next_zero :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_choose_next_zero _ =
+>   testName "choose(next(n),0) == 1" $
+>   \n -> eq (choose (next n) zero) (next zero)
+> 
+> 
+> _test_choose_next_next :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_choose_next_next _ =
+>   testName "choose(next(n),next(k)) == plus(choose(n,next(k)),choose(n,k))" $
+>   \n k -> eq
+>     (choose (next n) (next k))
+>     (plus (choose n (next k)) (choose n k))
+
+</p></div>
+</div>
+
+In Haskell:
 
 We can show that $\nchoose$ satisfies the usual properties of binomial coefficients. First, if $k$ is large enough then $\nchoose(n,k) = \zero$.
 
@@ -229,27 +212,7 @@ Implementation and Testing
 
 Property tests:
 
-> _test_choose_alt :: (Natural n, Equal n)
->   => n -> Test (n -> n -> Bool)
-> _test_choose_alt _ =
->   testName "choose(n,k) == choose'(n,k)" $
->   \n k -> eq (choose n k) (choose' n k)
-> 
-> 
-> _test_choose_zero_left :: (Natural n, Equal n)
->   => n -> Test (n -> Bool)
-> _test_choose_zero_left _ =
->   testName "choose(0,k) == if k==0 then 0 else 1" $
->   \k -> if isZero k
->     then eq (choose zero k) (next zero)
->     else eq (choose zero k) zero
-> 
-> 
-> _test_choose_zero_right :: (Natural n, Equal n)
->   => n -> Test (n -> Bool)
-> _test_choose_zero_right _ =
->   testName "choose(n,0) == 1" $
->   \n -> eq (choose n zero) (next zero)
+
 > 
 > 
 > _test_choose_equal_args :: (Natural n, Equal n)
@@ -258,14 +221,6 @@ Property tests:
 >   testName "choose(n,n) == 1" $
 >   \n -> eq (choose n n) (next zero)
 > 
-> 
-> _test_choose_plus_plus :: (Natural n, Equal n)
->   => n -> Test (n -> n -> Bool)
-> _test_choose_plus_plus _ =
->   testName "choose(next(n),next(k)) == plus(choose(n,next(k)),choose(n,k))" $
->   \n k -> eq
->     (choose (next n) (next k))
->     (plus (choose n (next k)) (choose n k))
 > 
 > 
 > _test_choose_big_k :: (Natural n, Equal n)
@@ -285,7 +240,6 @@ Property tests:
 
 And the suite:
 
-> -- run all tests for choose
 > _test_choose ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
@@ -298,11 +252,11 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_choose_alt n)
->   runTest args (_test_choose_zero_left n)
->   runTest args (_test_choose_zero_right n)
+>   runTest args (_test_choose_zero_nat n)
+>   runTest args (_test_choose_next_zero n)
+>   runTest args (_test_choose_next_next n)
+> 
 >   runTest args (_test_choose_equal_args n)
->   runTest args (_test_choose_plus_plus n)
 >   runTest args (_test_choose_big_k n)
 >   runTest args (_test_choose_plus n)
 
