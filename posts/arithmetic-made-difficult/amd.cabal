@@ -273,19 +273,31 @@ test-suite amd-findsmallest
     Minus,
     LessThanOrEqualTo
 
-
-
 test-suite amd-prime
   default-language: Haskell2010
   type: exitcode-stdio-1.0
   main-is: IsPrime.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is IsPrime.main_prime
-  other-modules: Booleans, NaturalNumbers, Unary, Plus, Times,
-                 Minus, LessThanOrEqualTo, DivisionAlgorithm,
-                 Divides, GreatestCommonDivisor, CoprimeTo,
-                 LeastCommonMultiple, SimpleRecursion,
-                 BailoutRecursion
+  other-modules:
+    Booleans,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo,
+    DivisionAlgorithm,
+    Divides,
+    NormRecursion,
+    GreatestCommonDivisor,
+    CoprimeTo,
+    LeastCommonMultiple,
+    FindSmallest
 
 test-suite amd-power
   default-language: Haskell2010
@@ -311,6 +323,8 @@ test-suite amd-power
     GreatestCommonDivisor,
     CoprimeTo,
     LeastCommonMultiple
+
+
 
 test-suite amd-choose
   default-language: Haskell2010
@@ -490,7 +504,7 @@ test-suite amd-count
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
-                 Prefix, SimpleRecursion, BailoutRecursion
+                 Prefix, SimpleRecursion, BailoutRecursion, DisjointUnions
 
 test-suite amd-repeat
   default-language: Haskell2010

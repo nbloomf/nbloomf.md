@@ -3,6 +3,7 @@ title: Is Prime
 author: nbloomf
 date: 2017-04-13
 tags: arithmetic-made-difficult, literate-haskell
+slug: isprime
 ---
 
 > module IsPrime
@@ -11,6 +12,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > 
 > import Prelude ()
 > import Booleans
+> import DisjointUnions
 > import NaturalNumbers
 > import BailoutRecursion
 > import Plus
@@ -22,6 +24,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > import GreatestCommonDivisor
 > import CoprimeTo
 > import LeastCommonMultiple
+> import FindSmallest
 
 Today we'll nail down what it means for a natural number to be *prime*. Typically this is done by saying something like "a natural number other than 0 or 1 is prime if it is not divisible by any natural number besides itself and 1" and from there, arguing that this property can be checked using trial division. As is typical in this series, we will turn this around -- *defining* primes to be those numbers which are detected by trial division (i.e. an algorithm) and then proving that such numbers have the divisibility properties we expect.
 
@@ -29,77 +32,87 @@ In fact we'll do a little more: instead of simply using trial division to detect
 
 <div class="result">
 <div class="defn"><p>
-Define $\varphi : \nats \rightarrow \nats \rightarrow \bool$ by $$\varphi(a)(b) = a,$$ $\beta : \nats \rightarrow \nats \times \nats \rightarrow \bool$ by $$\beta(a)(k,b) = \ndiv(b,a),$$ $\psi : \nats \rightarrow \nats \times \nats \rightarrow \nats$ by $$\psi(a)(k,b) = b,$$ and $\omega : \nats \rightarrow \nats \times \nats \rightarrow \nats$ by $$\omega(a)(k,b) = \next(b).$$ Now define $\nmindiv : \nats \rightarrow \bool$ by $$\nmindiv(a) = \bailrec{\varphi(a)}{\beta(a)}{\psi(a)}{\omega(a)}(a,\next(\next(a))).$$
+Define $\sigma : \nats \rightarrow \bool^{\nats}$ by $$\sigma(a)(b) = \div(b,a),$$ and define $\varphi : \nats \rightarrow 1 + \nats$ piecewise by
+$$\nmindiv(n) = \left\{\begin{array}{ll}
+ \rgt(\zero) & \mathrm{if}\ n = \zero \\
+ \rgt(\next(\zero)) & \mathrm{if}\ n = \next(\zero) \\
+ \findsmallest{\sigma(n)}(m,\next(\next(\zero))) & \mathrm{if}\ n = \next(\next(m)).
+\end{array}\right.$$
+Now define $\nmindiv : \nats \rightarrow \nats$ by $$\nmindiv(n) = \either(\const(n),\id)(\varphi(n)).$$
+
+In Haskell:
+
+> mindiv :: (Natural n, Equal n) => n -> n
+> mindiv n = either (const n) id (phi n)
+>   where
+>     phi n = case natShape n of
+>       Zero -> rgt zero
+>       Next k -> case natShape k of
+>         Zero -> rgt (next zero)
+>         Next m -> findSmallest (sigma n) m (next (next zero))
+> 
+>     sigma n a = div a n
+
 </p></div>
 </div>
 
-For brevity we will define $\Theta : \nats \times \nats \rightarrow \nats$ by $$\Theta = \bailrec{\varphi(a)}{\beta(a)}{\psi(a)}{\omega(a)}$$ as in the definition of $\nmindiv$.
-
-<div class="result">
-<div class="lemma">
-Let $a \in \nats$. Suppose $t \in \nats$ has the property that $t \neq \zero$, $t \neq \next(\zero)$, and $\ndiv(t,a) = \btrue$, and if $k \in \nats$ with $\nleq(k,t)$, $k \neq \zero$, $k \neq \next(\zero)$, and $k \neq t$, then $\ndiv(k,a) = \bfalse$.
-
-Then for all $u \in \nats$, if $$\nleq(\next(\next(\next(u))),t) = \btrue$$ then $$\Theta(a,\next(\next(\zero))) = \Theta(\nminus(a,u),\next(\next(u))).$$
-</div>
-
-<div class="proof"><p>
-We proceed by induction on $u$. For the base case $u = \zero$, the implication is either vacuous (if $\nleq(\next(\next(\next(\zero))),t)$ is false) or trivial (otherwise, since in this case we have $\nminus(a,\zero) = a$).
-
-For the inductive step, suppose the implication holds for some $u \in \nats$. Suppose further that $$\nleq(\next(\next(\next(\next(u)))),t).$$ Now $$\nleq(\next(\next(\next(u))),t).$$ Say $t = \nplus(\next(u),h)$ and $t = \nplus(u,k)$; then we have $k = \next(h)$. Using the induction hypothesis, we have
-$$\begin{eqnarray*}
- &   & \Theta(a,\next(\next(\zero))) \\
- & = & \Theta(\nminus(a,u),\next(\next(u))) \\
- & = & \Theta(k,\next(\next(u))) \\
- & = & \Theta(\next(h),\next(\next(u))) \\
- & = & Q
-\end{eqnarray*}$$
-Note that $\next(\next(u))$ is not $\zero$, $\next(\zero)$, or $t$. Thus $\ndiv(\next(\next(u)),a) = \bfalse$, and we have
-$$\begin{eqnarray*}
- &   & Q \\
- & = & \Theta(h,\next(\next(\next(u)))) \\
- & = & \Theta(\nminus(a,\next(u)),\next(\next(\next(u))))
-\end{eqnarray*}$$
-as needed.
-</p></div>
-</div>
-
-We can show that $\nmindiv(a)$ is the smallest divisor of $a$ in an appropriate sense.
+Almost by definition, $\nmindiv(a)$ is the smallest divisor of $a$ in a precise sense.
 
 <div class="result">
 <div class="thm"><p>
-Let $a \in \nats$ with $a \neq \zero$ and $a \neq \next(\zero)$. Then we have the following.
+Let $a \in \nats$ with $\nleq(\next(\next(\zero)),a)$. Then we have the following.
 
-1. $\nmindiv(a) \neq \zero$ and $\nmindiv(a) \neq \next(\zero)$ and $\ndiv(\nmindiv(a),a)$.
-2. If $k \neq \zero$ and $k \neq \next(\zero)$ and $\ndiv(k,a)$, then $\nleq(\nmindiv(a),k)$.
+1. $\nleq(\next(\next(\zero)),\nmindiv(a))$ and $\ndiv(\nmindiv(a),a)$.
+2. If $\nleq(\next(\next(\zero)),k)$ and $\ndiv(k,a)$, then $\nleq(\nmindiv(a),k)$.
 </p></div>
 
 <div class="proof"><p>
-Let $a \in \nats$ with $a \neq \zero$ and $a \neq \next(\zero)$. Now define a set $D(a) \subseteq \nats$ by $$D(a) = \{ k \in \nats \mid k \neq \zero, k \neq \next(\zero), \ndiv(k,a) \}.$$ Now $D(a)$ is not empty, since $a \in D(a)$. By the Well-Ordering Property, then, $D(a)$ has a least element; we call this element $\mu_a$. Certainly $\mu_a$ satisfies conditions (1) and (2); thus it suffices to show that $\nmindiv(a) = \mu_a$. We consider two possibilities: either $\mu_a = \next(\next(\zero))$ or $\mu_a = \next(\next(\next(m)))$ for some $m$. (Note that $\mu_a$ is not $\zero$ or $\next(\zero)$ by definition.
+If $a = \next(\next(m))$ for some $m$, we have
+$$\begin{eqnarray*}
+ &   & \nmindiv(a) \\
+ & = & \nmindiv(\next(\next(m))) \\
+ & = & \either(\const(a),\id)(\findsmallest(\sigma(a))(m,\next(\next(\zero)))).
+\end{eqnarray*}$$
+We have two possibilities for $\findsmallest(\sigma(a))(m,\next(\next(\zero))) = Q$.
 
-First suppose $\mu_a = \next(\next(\zero))$. Note that $a = \next(b)$ for some $b$ (since $a \neq \zero$). Now
+Suppose $Q = \rgt(t)$; then we have
 $$\begin{eqnarray*}
- &   & \nmindiv(a) \\
- & = & \Theta(a,\next(\next(\zero))) \\
- & = & \Theta(\next(b),\next(\next(\zero))) \\
- & = & \next(\next(\zero)) \\
- & = & \mu_a
+ &   & \either(\const(a),\id)(Q) \\
+ & = & \either(\const(a),\id)(\rgt(t)) \\
+ & = & \id(t) \\
+ & = & t.
 \end{eqnarray*}$$
-since $\ndiv(\next(\next(\zero)),a)$. Now suppose $\mu_a = \next(\next(\next(m)))$. Note that $\nminus(a,m) = \next(\next(q))$. By the lemma, we have
+By the properties of $\findsmallest$ we have $\nleq(\next(\next(\zero)),t)$ and $\nleq(t,\next(m))$ (so $t \neq \zero$ and $t \neq \next(\zero)$) and $\ndiv(t,a)$, and moreover if $\nleq(\next(\next(\zero)),k)$ and $\nleq(k,\next(m))$ and $\ndiv(k,a)$ then $\nleq(t,k)$ as claimed.
+
+Suppose instead that $Q = \lft(\ast)$; then we have
 $$\begin{eqnarray*}
- &   & \nmindiv(a) \\
- & = & \Theta(a,\next(\next(\zero))) \\
- & = & \Theta(\nminus(a,m),\next(\next(m)))) \\
- & = & \Theta(\next(\next(q)),\next(\next(m))) \\
- & = & R. \\
+ &   & \either(\const(a),\id)(Q) \\
+ & = & \either(\const(a),\id)(\lft(\ast)) \\
+ & = & \const(a)(\ast) \\
+ & = & a. 
 \end{eqnarray*}$$
-Now $\ndiv(\next(\next(m)),a) = \bfalse$, since $\next(\next(m))$ is not $\zero$, $\next(\zero)$, or $\mu_a$, and $\mu_a$ is minimal in $D(a)$. Thus we have
-$$\begin{eqnarray*}
- &   & R \\
- & = & \Theta(\next(q),\next(\next(\next(m)))) \\
- & = & \next(\next(\next(m))) \\
- & = & \mu_a
-\end{eqnarray*}$$
-as claimed.
+Again by the properties of $\findsmallest$, there does not exist $k$ such that $\nleq(\next(\next(\zero)),k)$ and $\nleq(k,\next(m))$ and $\ndiv(k,a)$ as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_mindiv_div :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_mindiv_div _ =
+>   testName "if leq(next(next(zero)),a) then leq(next(next(zero)),mindiv(a)) and div(mindiv(a),a)" $
+>   \a -> if leq (next (next zero)) a
+>     then and (leq (next (next zero)) (mindiv a)) (div (mindiv a) a)
+>     else True
+> 
+> 
+> _test_mindiv_min :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_mindiv_min _ =
+>   testName "if leq(next(next(zero)),k) and div(k,a) then leq(mindiv(a),k)" $
+>   \a k -> if and (leq (next (next zero)) k) (div k a)
+>     then leq (mindiv a) k
+>     else True
+
 </p></div>
 </div>
 
@@ -108,6 +121,14 @@ Now we define a boolean function $\nisprime$ as follows.
 <div class="result">
 <div class="defn"><p>
 Define $\nisprime : \nats \rightarrow \bool$ by $$\nisprime(a) = \left\{ \begin{array}{ll} \bfalse & \mathrm{if} a = \zero\ \mathrm{or}\ a = \next(\zero) \\ \nequal(a,\nmindiv(a)) & \mathrm{otherwise}. \end{array} \right.$$
+
+In Haskell:
+
+> prime :: (Natural n, Equal n) => n -> Bool
+> prime a = if leq a (next zero)
+>   then False
+>   else eq a (mindiv a)
+
 </p></div>
 </div>
 
@@ -129,6 +150,12 @@ $(2)$ implies $(3)$: Of course $a \neq \zero$ and $a \neq \next(\zero)$. Say $\n
 
 $(3)$ implies $(1)$: It suffices to show that if $a \neq \zero$ and $a \neq \next(\zero)$ then $\nmindiv(a) = a$. To this end, let $d = \nmindiv(a)$ and write $a = \ntimes(\nmindiv(a),k)$. Suppose $\ndiv(a,k)$, with $k = \ntimes(a,w)$. Since $a \neq \zero$, by cancellation we have $\next(\zero) = \ntimes(\nmindiv(a),w)$, so that $\nmindiv(a) = \next(\zero)$, a contradiction. Thus $\ndiv(a,\nmindiv(a))$, so we have $a = \nmindiv(a)$ as needed.
 </p></div>
+
+<div class="test"><p>
+
+(@@@)
+
+</p></div>
 </div>
 
 Minimal divisors are prime.
@@ -140,6 +167,18 @@ Let $a \in \nats$ with $a \neq \zero$ and $a \neq \next(\zero)$. Then $$\nisprim
 
 <div class="proof"><p>
 Let $a \in \nats$ with $a \neq \zero$ and $a \neq \next(\zero)$, and let $d = \nmindiv(a)$. Suppose now that $d = \ntimes(u,v)$. Since $d \neq \zero$, we have $u \neq \zero$. If $u = \next(\zero)$, we have $v = d$. If $u \neq \next(\zero)$, we have $\ndiv(u,a)$ and thus $\nleq(d,u)$; but $\nleq(u,d)$, so that $d = u$ by antisymmetry and thus $v = \next(\zero)$. Thus $\nisprime(\nmindiv(a))$ as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_prime_mindiv :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_prime_mindiv _ =
+>   testName "if leq(next(next(zero)),a) then prime(mindiv(a)) == true" $
+>   \a -> if leq (next (next zero)) a
+>     then eq (prime (mindiv a)) True
+>     else True
+
 </p></div>
 </div>
 
@@ -153,50 +192,20 @@ Let $p,a \in \nats$ with $\nisprime(p)$. Then $$\ngcd(a,p) = \left\{ \begin{arra
 <div class="proof"><p>
 Let $d = \ngcd(a,p)$. Now $\ndiv(d,p)$, so that either $d = \next(\zero)$ or $d = p$. If $\ndiv(p,a) = \bfalse$, we thus have $d = \next(\zero)$.
 </p></div>
+
+<div class="test"><p>
+
+(@@@)
+
+</p></div>
 </div>
 
 
-Implementation and Testing
---------------------------
+Testing
+-------
 
-Here's ``mindiv`` and ``prime``:
+Suite:
 
-> mindiv :: (Natural n, Equal n) => n -> n
-> mindiv a = theta a (next (next zero))
->   where
->     theta = bailoutRec (phi a) (beta a) (psi a) (omega a)
-> 
->     phi   a   _ = a
->     beta  a _ b = div b a
->     psi   _ _ b = b
->     omega a _ b = next b
-> 
-> 
-> prime :: (Natural n, Equal n) => n -> Bool
-> prime a = if leq a (next zero)
->   then False
->   else eq a (mindiv a)
-
-Property tests:
-
-> _test_mindiv_div :: (Natural n, Equal n)
->   => n -> Test (n -> Bool)
-> _test_mindiv_div _ =
->   testName "div(mindiv(a),a) == true" $
->   \a -> eq (div (mindiv a) a) True
-> 
-> 
-> _test_prime_mindiv :: (Natural n, Equal n)
->   => n -> Test (n -> Bool)
-> _test_prime_mindiv _ =
->   testName "prime(mindiv(a)) == true" $
->   \a -> if or (eq a zero) (eq a (next zero))
->     then True
->     else eq (prime (mindiv a)) True
-
-And the suite:
-
-> -- run all tests for prime
 > _test_prime ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
@@ -210,10 +219,11 @@ And the suite:
 >       }
 > 
 >   runTest args (_test_mindiv_div n)
+>   runTest args (_test_mindiv_min n)
 >   runTest args (_test_prime_mindiv n)
 
-And the main function:
+Main:
 
 > main_prime :: IO ()
 > main_prime = do
->   _test_prime (zero :: Unary) 20 100
+>   _test_prime (zero :: Unary) 40 100
