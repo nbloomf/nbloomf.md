@@ -75,8 +75,6 @@ $$\left\{\begin{array}{l}
 </p></div>
 </div>
 
-In Haskell:
-
 We can show that $\nchoose$ satisfies the usual properties of binomial coefficients. First, if $k$ is large enough then $\nchoose(n,k) = \zero$.
 
 <div class="result">
@@ -108,6 +106,18 @@ $$\begin{eqnarray*}
  & = & \zero
 \end{eqnarray*}$$
 as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_choose_big_k :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> Bool)
+> _test_choose_big_k _ =
+>   testName "leq(next(n),k) ==> choose(n,k) == 0" $
+>   \n k -> if leq (next n) k
+>     then eq (choose n k) zero
+>     else True
+
 </p></div>
 </div>
 
@@ -150,6 +160,23 @@ $$\begin{eqnarray*}
  & = & \next(\zero)
 \end{eqnarray*}$$
 as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_choose_nat_zero :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_choose_nat_zero _ =
+>   testName "choose(n,zero) == 1" $
+>   \n -> eq (choose n zero) (next zero)
+> 
+> 
+> _test_choose_equal_args :: (Natural n, Equal n)
+>   => n -> Test (n -> Bool)
+> _test_choose_equal_args _ =
+>   testName "choose(n,n) == 1" $
+>   \n -> eq (choose n n) (next zero)
+
 </p></div>
 </div>
 
@@ -204,41 +231,23 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
-</div>
 
+<div class="test"><p>
 
-Implementation and Testing
---------------------------
-
-Property tests:
-
-
-> 
-> 
-> _test_choose_equal_args :: (Natural n, Equal n)
->   => n -> Test (n -> Bool)
-> _test_choose_equal_args _ =
->   testName "choose(n,n) == 1" $
->   \n -> eq (choose n n) (next zero)
-> 
-> 
-> 
-> _test_choose_big_k :: (Natural n, Equal n)
->   => n -> Test (n -> n -> Bool)
-> _test_choose_big_k _ =
->   testName "leq(next(n),k) ==> choose(n,k) == 0" $
->   \n k -> if leq (next n) k
->     then eq (choose n k) zero
->     else True
-> 
-> 
 > _test_choose_plus :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
 > _test_choose_plus _ =
 >   testName "choose(plus(a,b),a) == choose(plus(a,b),b)" $
 >   \a b -> eq (choose (plus a b) a) (choose (plus a b) b)
 
-And the suite:
+</p></div>
+</div>
+
+
+Testing
+-------
+
+Suite:
 
 > _test_choose ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
@@ -255,12 +264,12 @@ And the suite:
 >   runTest args (_test_choose_zero_nat n)
 >   runTest args (_test_choose_next_zero n)
 >   runTest args (_test_choose_next_next n)
-> 
->   runTest args (_test_choose_equal_args n)
 >   runTest args (_test_choose_big_k n)
+>   runTest args (_test_choose_nat_zero n)
+>   runTest args (_test_choose_equal_args n)
 >   runTest args (_test_choose_plus n)
 
-And the main function:
+Main:
 
 > main_choose :: IO ()
 > main_choose = do

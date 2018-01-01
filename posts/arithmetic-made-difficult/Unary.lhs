@@ -213,11 +213,11 @@ as claimed.
 We're now ready to finish off the Peano axioms.
 
 <div class="result">
-<div class="thm">
+<div class="thm"><p>
 1. Every natural number is either $\zero$ or of the form $\next(m)$ for some natural number $m$,
 2. No natural number is both $\zero$ and $\next(m)$ for some $m$, and
 3. $\next(n) = \next(m)$ if and only if $n = m$.
-</div>
+</p></div>
 
 <div class="proof"><p>
 1. Let $n \in \nats$ and let $\Omega$ be the inverse of $\unnext$. Consider $\unnext(n) \in 1 + \nats$; we have either $\unnext(n) = \lft(\ast)$ or $\unnext(n) = \rgt(m)$ for some $m \in \nats$. In the first case we have

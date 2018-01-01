@@ -3,6 +3,7 @@ title: Reverse
 author: nbloomf
 date: 2017-04-24
 tags: arithmetic-made-difficult, literate-haskell
+slug: rev
 ---
 
 > {-# LANGUAGE BangPatterns #-}
@@ -538,58 +539,58 @@ Testing
 
 Here are our property tests.
 
-> _test_snoc_cons_commute :: (List t, Equal a)
->   => t a -> Test (a -> a -> ListOf t a -> Bool)
+> _test_snoc_cons_commute :: (List t, Equal (t a))
+>   => t a -> Test (a -> a -> t a -> Bool)
 > _test_snoc_cons_commute _ =
 >   testName "snoc(a,cons(b,x)) == cons(b,snoc(a,x))" $
 >   \a b x -> eq (snoc a (cons b x)) (cons b (snoc a x))
 > 
 > 
-> _test_rev_single :: (List t, Equal a)
+> _test_rev_single :: (List t, Equal (t a))
 >   => t a -> Test (a -> Bool)
 > _test_rev_single z =
 >   testName "rev(cons(a,nil)) == cons(a,nil)" $
 >   \a -> let
->     nil' = nil `withTypeOf` (ListOf z)
+>     nil' = nil `withTypeOf` z
 >   in
 >     eq (rev (cons a nil')) (cons a nil')
 > 
 > 
-> _test_rev_double :: (List t, Equal a)
+> _test_rev_double :: (List t, Equal (t a))
 >   => t a -> Test (a -> a -> Bool)
 > _test_rev_double z =
 >   testName "rev(cons(a,cons(b,nil))) == cons(b,cons(a,nil))" $
 >   \a b -> let
->     nil' = nil `withTypeOf` (ListOf z)
+>     nil' = nil `withTypeOf` z
 >   in
 >     eq
 >       (rev (cons a (cons b nil')))
 >       (cons b (cons a nil'))
 > 
 > 
-> _test_rev_snoc :: (List t, Equal a)
->   => t a -> Test (a -> a -> ListOf t a -> Bool)
+> _test_rev_snoc :: (List t, Equal (t a))
+>   => t a -> Test (a -> a -> t a -> Bool)
 > _test_rev_snoc _ =
 >   testName "rev(snoc(a,x)) == cons(a,rev(x))" $
 >   \a b x -> eq (rev (snoc a x)) (cons a (rev x))
 > 
 > 
-> _test_rev_involution :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> Bool)
+> _test_rev_involution :: (List t, Equal (t a))
+>   => t a -> Test (t a -> Bool)
 > _test_rev_involution _ =
 >   testName "rev(rev(x)) == x" $
 >   \x -> eq (rev (rev x)) x
 > 
 > 
-> _test_rev_isnil_cons :: (List t, Equal a)
->   => t a -> Test (a -> ListOf t a -> Bool)
+> _test_rev_isnil_cons :: (List t, Equal (t a))
+>   => t a -> Test (a -> t a -> Bool)
 > _test_rev_isnil_cons _ =
 >   testName "isnil(rev(cons(a,x))) == false" $
 >   \a x -> eq (isNil (rev (cons a x))) False
 > 
 > 
-> _test_rev_alt :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> Bool)
+> _test_rev_alt :: (List t, Equal (t a))
+>   => t a -> Test (t a -> Bool)
 > _test_rev_alt _ =
 >   testName "rev(x) == rev'(x)" $
 >   \x -> eq (rev x) (rev' x)
@@ -599,7 +600,7 @@ And the suite:
 > -- run all tests for snoc and rev
 > _test_rev ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a
->   , TypeName (t a), List t
+>   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a)
 >   ) => t a -> Int -> Int -> IO ()
 > _test_rev t maxSize numCases = do
 >   testLabel ("rev: " ++ typeName t)

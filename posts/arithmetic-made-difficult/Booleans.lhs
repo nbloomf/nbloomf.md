@@ -19,7 +19,7 @@ slug: booleans
 >   ) where
 > 
 > import Prelude
->   ( Show(show), IO, Bool(..), Int, Maybe(..), Either(..), id
+>   ( Show(show), IO, Bool(..), Int, Maybe(..), Either(..), id, undefined
 >   , putStrLn, (>>), return, (++), String, (.), ($), Integer, const
 >   )
 > import Test.QuickCheck

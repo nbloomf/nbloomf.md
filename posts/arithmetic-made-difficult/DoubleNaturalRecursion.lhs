@@ -81,7 +81,7 @@ as needed.
 Implementation
 --------------
 
-There's a couple of ways to implement $\dnatrec{\ast}{\ast}$.
+There's a couple of ways to implement $\dnatrec{\ast}{\ast}{\ast}$.
 
 > dnaturalRec, dnaturalRec' :: (Natural n)
 >   => (n -> a)
@@ -89,7 +89,7 @@ There's a couple of ways to implement $\dnatrec{\ast}{\ast}$.
 >   -> (n -> a -> a -> a)
 >   -> n -> n -> a
 
-We can implement $\dnatrec{\ast}{\ast}{\ast}$ using the definition in the theorem:
+We can use the definition in the theorem:
 
 > dnaturalRec' delta psi chi = naturalRec delta phi
 >   where

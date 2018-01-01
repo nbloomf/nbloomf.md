@@ -41,8 +41,9 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
     * Type
         * [Iterative Sets Redux](/posts/arithmetic-made-difficult/iterative-sets-redux.html)
         * [Lists](/posts/arithmetic-made-difficult/Lists.html)
+        * [Head and Tail](/posts/arithmetic-made-difficult/HeadAndTail.html)
     * Recursion Operators
-        * Double Fold
+        * [Double Fold](/posts/arithmetic-made-difficult/DoubleFold.html)
         * Consuming Fold
     * Arithmetic of Lists
         * [Reverse](/posts/arithmetic-made-difficult/Reverse.html)

@@ -41,13 +41,15 @@
 \(\newcommand{\unnext}{\mathsf{unnext}}\)
 \(\newcommand{\iszero}{\mathsf{isZero}}\)
 \(\newcommand{\prev}{\mathsf{prev}}\)
+
+<!-- natural number recursion -->
 \(\newcommand{\natrec}[2]{\mathsf{natrec}(#1,#2)}\)
 \(\newcommand{\simprec}[2]{\mathsf{simprec}(#1,#2)}\)
 \(\newcommand{\bailrec}[4]{\mathsf{bailrec}(#1,#2,#3,#4)}\)
 \(\newcommand{\mutrec}[3]{\mathsf{mutrec}(#1,#2,#3)}\)
+\(\newcommand{\dnatrec}[3]{\mathsf{dnatrec}(#1,#2,#3)}\)
 \(\newcommand{\normrec}[3]{\mathsf{normrec}(#1,#2,#3)}\)
 \(\newcommand{\findsmallest}[1]{\mathsf{findsmallest}(#1)}\)
-\(\newcommand{\dnatrec}[3]{\mathsf{dnatrec}(#1,#2,#3)}\)
 
 <!- natural number arithmetic -->
 \(\newcommand{\nequal}{\mathsf{eq}}\)
@@ -74,15 +76,20 @@
 \(\newcommand{\dom}{\mathsf{dom}}\)
 \(\newcommand{\cod}{\mathsf{cod}}\)
 
-<!-- list -->
+<!-- lists -->
+\(\newcommand{\lists}[1]{\mathsf{List}(#1)}\)
 \(\newcommand{\nil}{\mathsf{nil}}\)
 \(\newcommand{\cons}{\mathsf{cons}}\)
-\(\newcommand{\lists}[1]{\mathsf{List}(#1)}\)
-\(\newcommand{\foldr}[2]{\mathsf{foldr}(#1,#2)}\)
-\(\newcommand{\dfoldr}[3]{\mathsf{dfoldr}(#1,#2,#3)}\)
 \(\newcommand{\uncons}{\mathsf{uncons}}\)
 \(\newcommand{\isnil}{\mathsf{isNil}}\)
 \(\newcommand{\tail}{\mathsf{tail}}\)
+\(\newcommand{\head}{\mathsf{head}}\)
+
+<!-- list recursion -->
+\(\newcommand{\foldr}[2]{\mathsf{foldr}(#1,#2)}\)
+\(\newcommand{\dfoldr}[3]{\mathsf{dfoldr}(#1,#2,#3)}\)
+
+<!-- list arithmetic -->
 \(\newcommand{\snoc}{\mathsf{snoc}}\)
 \(\newcommand{\rev}{\mathsf{rev}}\)
 \(\newcommand{\foldl}[2]{\mathsf{foldl}(#1,#2)}\)
