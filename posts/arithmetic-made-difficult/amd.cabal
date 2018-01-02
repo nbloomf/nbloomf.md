@@ -33,11 +33,15 @@ library
     Choose,
     Lists,
     HeadAndTail,
+    LeftFold,
     DoubleFold,
+    Snoc,
     Reverse
   build-depends:
     base == 4.*,
     QuickCheck
+
+
 
 test-suite amd-boolean
   default-language: Haskell2010
@@ -363,13 +367,50 @@ test-suite amd-head-tail
     NaturalNumbers,
     Lists
 
+test-suite amd-foldl
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: LeftFold.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options: -main-is LeftFold.main_foldl
+  other-modules:
+    Booleans,
+    DisjointUnions,
+    Unary,
+    Lists
+
+test-suite amd-snoc
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Snoc.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options: -main-is Snoc.main_snoc
+  other-modules:
+    Booleans,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    Lists,
+    HeadAndTail,
+    LeftFold
+
 test-suite amd-rev
   default-language: Haskell2010
   type: exitcode-stdio-1.0
   main-is: Reverse.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Reverse.main_rev
-  other-modules: Booleans, Lists, NaturalNumbers, Unary, DisjointUnions
+  other-modules:
+    Booleans,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    Lists,
+    HeadAndTail,
+    LeftFold,
+    Snoc
 
 
 
@@ -481,7 +522,7 @@ test-suite amd-all-any
                  Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, Prefix, SimpleRecursion,
-                 BailoutRecursion, DisjointUnions
+                 BailoutRecursion, DisjointUnions, HeadAndTail, LeftFold, Snoc
 
 test-suite amd-tails-inits
   default-language: Haskell2010

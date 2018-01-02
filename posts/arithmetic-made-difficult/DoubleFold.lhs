@@ -15,7 +15,7 @@ slug: dfoldr
 > import DisjointUnions
 > import Lists
 
-Every $A$-inductive homomorphism $\lists{A} \rightarrow B$ can be defined in terms of $\foldr{\ast}{\ast}$. But, as with $\nats$, some specializations of $\foldr{\ast}{\ast}$ show up often enough to warrant their own name. Today we'll define one of these, analogous to $\dnatrec$.
+Every $A$-inductive homomorphism $\lists{A} \rightarrow B$ can be defined in terms of $\foldr{\ast}{\ast}$. But, as with $\nats$, some specializations of $\foldr{\ast}{\ast}$ show up often enough to warrant their own name. Today we'll define one of these, analogous to $\dnatrec{\ast}{\ast}{\ast}$.
 
 <div class="result">
 <div class="thm">

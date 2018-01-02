@@ -43,9 +43,11 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * [Lists](/posts/arithmetic-made-difficult/Lists.html)
         * [Head and Tail](/posts/arithmetic-made-difficult/HeadAndTail.html)
     * Recursion Operators
+        * [Left Fold](/posts/arithmetic-made-difficult/LeftFold.html)
         * [Double Fold](/posts/arithmetic-made-difficult/DoubleFold.html)
         * Consuming Fold
     * Arithmetic of Lists
+        * [Snoc](/posts/arithmetic-made-difficult/Snoc.html)
         * [Reverse](/posts/arithmetic-made-difficult/Reverse.html)
         * [Cat](/posts/arithmetic-made-difficult/Cat.html)
         * [Length](/posts/arithmetic-made-difficult/Length.html)
