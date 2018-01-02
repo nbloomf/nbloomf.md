@@ -3,19 +3,20 @@ title: Cat
 author: nbloomf
 date: 2017-04-25
 tags: arithmetic-made-difficult, literate-haskell
+slug: cat
 ---
 
 > module Cat
 >   ( cat, _test_cat, main_cat
 >   ) where
 > 
+> import Prelude ()
 > import Booleans
 > import NaturalNumbers
 > import Lists
+> import HeadAndTail
+> import Snoc
 > import Reverse
-> 
-> import Prelude (Show, Int, IO)
-> import Test.QuickCheck
 
 In this post we'll consider the function that takes two lists and appends one to the "end" of the other. This function is known as $\cat$, which is short for *catenate* -- a jargony word that means *to connect in a series*.
 
@@ -34,27 +35,29 @@ In Haskell:
 Because $\cat$ is defined in terms of fold, it is the unique solution to a system of functional equations.
 
 <div class="result">
-<div class="thm"><p>
-Let $A$ be a set. Then $\cat$ is the unique mapping $f : \lists{A} \times \lists{A} \rightarrow \lists{A}$ with the property that for all $a \in A$ and $x,y \in \lists{A}$ we have $$\left\{ \begin{array}{l} f(\nil,y) = y \\ f(\cons(a,x),y) = \cons(a,f(x,y)). \end{array} \right.$$
+<div class="corollary"><p>
+Let $A$ be a set. Then $\cat$ is the unique mapping $f : \lists{A} \times \lists{A} \rightarrow \lists{A}$ with the property that for all $a \in A$ and $x,y \in \lists{A}$ we have
+$$\left\{\begin{array}{l}
+ f(\nil,y) = y \\
+ f(\cons(a,x),y) = \cons(a,f(x,y)).
+\end{array}\right.$$
 </p></div>
 
-<div class="proof"><p>
-To see that $\cat$ is a solution, note that
-$$\begin{eqnarray*}
- &   & \cat(\nil,y) \\
- & = & \foldr{y}{\cons}(\nil) \\
- & = & y
-\end{eqnarray*}$$
-and
-$$\begin{eqnarray*}
- &   & \cat(\cons(a,x),y) \\
- & = & \foldr{y}{\cons}(\cons(a,x)) \\
- & = & \cons(a,\foldr{y}{\cons}(x)) \\
- & = & \cons(a,\cat(x,y))
-\end{eqnarray*}$$
-as claimed.
+<div class="test"><p>
 
-To see uniqueness, note that under these conditions we have $$f(x,y) = \foldr{y}{\cons}(x) = \cat(x,y)$$ as claimed.
+> _test_cat_nil_left :: (List t, Equal (t a))
+>   => t a -> Test (t a -> Bool)
+> _test_cat_nil_left _ =
+>   testName "cat(nil,x) == x" $
+>   \a -> eq (cat nil a) a
+> 
+> 
+> _test_cat_cons_left :: (List t, Equal (t a))
+>   => t a -> Test (a -> t a -> t a -> Bool)
+> _test_cat_cons_left _ =
+>   testName "cat(cons(a,x),y) == cons(a,cat(x,y))" $
+>   \a x y -> eq (cat (cons a x) y) (cons a (cat x y))
+
 </p></div>
 </div>
 
@@ -75,16 +78,26 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_cat_nil_right :: (List t, Equal (t a))
+>   => t a -> Test (t a -> Bool)
+> _test_cat_nil_right _ =
+>   testName "cat(x,nil) == x" $
+>   \a -> eq (cat a nil) a
+
+</p></div>
 </div>
 
-$\cat$ interacts with $\cons$ and $\snoc$:
+$\cat$ interacts with $\snoc$:
 
 <div class="result">
 <div class="thm"><p>
 Let $A$ be a set. The following hold for all $a \in A$ and $x,y \in \lists{A}$.
 
-1. $\cat(x,\cons(a,y)) = \cat(\snoc(a,x),y)$.
-2. $\snoc(a,\cat(x,y)) = \cat(x,\snoc(a,y))$.
+1. $\cat(\snoc(a,x),y) = \cat(x,\cons(a,y))$.
+2. $\cat(x,\snoc(a,y)) = \snoc(a,\cat(x,y))$.
 </p></div>
 
 <div class="proof"><p>
@@ -113,13 +126,59 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_cat_snoc_left :: (List t, Equal (t a))
+>   => t a -> Test (a -> t a -> t a -> Bool)
+> _test_cat_snoc_left _ =
+>   testName "cat(x,cons(a,y)) == cat(snoc(a,x),y)" $
+>   \a x y -> eq (cat x (cons a y)) (cat (snoc a x) y)
+> 
+> 
+> _test_cat_snoc_right :: (List t, Equal (t a))
+>   => t a -> Test (a -> t a -> t a -> Bool)
+> _test_cat_snoc_right _ =
+>   testName "snoc(a,cat(x,y)) == cat(x,snoc(a,y))" $
+>   \a x y -> eq (snoc a (cat x y)) (cat x (snoc a y))
+
+</p></div>
 </div>
 
-As a corollary, we can "solve" a simple list equation.
+We can "solve" a simple list equation.
 
 <div class="result">
 <div class="corollary"><p>
-If $\nil = \cat(x,y)$, then $x = y = \nil$.
+We have $\nil = \cat(x,y)$ if and only if $x = y = \nil$.
+</p></div>
+
+<div class="proof"><p>
+The "only if" direction is clear. To see the "if" direction, suppose we have $x,y \in \lists{A}$ such that $\cat(x,y) = \nil$. If $x = \cons(a,u)$, then
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \isnil(\nil) \\
+ & = & \isnil(\cat(x,y)) \\
+ & = & \isnil(\cat(\cons(a,u),y)) \\
+ & = & \isnil(\cons(a,\cat(u,y))) \\
+ & = & \bfalse,
+\end{eqnarray*}$$
+which is absurd. Thus $x = \nil$, and we have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \isnil(\cat(\nil,y)) \\
+ & = & \isnil(y)
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_cat_nil_nil :: (List t, Equal (t a))
+>   => t a -> Test (t a -> t a -> Bool)
+> _test_cat_nil_nil _ =
+>   testName "isNil(cat(x,y)) == and(isNil(x),isNil(y))" $
+>   \x y -> eq (isNil (cat x y)) (and (isNil x) (isNil y))
+
 </p></div>
 </div>
 
@@ -146,6 +205,16 @@ $$\begin{eqnarray*}
  & = & \cat(x,\cat(y,\cons(a,z)))
 \end{eqnarray*}$$
 as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_cat_associative :: (List t, Equal (t a))
+>   => t a -> Test (t a -> t a -> t a -> Bool)
+> _test_cat_associative _ =
+>   testName "cat(cat(x,y),z) == cat(x,cat(y,z))" $
+>   \x y z -> eq (cat (cat x y) z) (cat x (cat y z))
+
 </p></div>
 </div>
 
@@ -175,6 +244,16 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_cat_rev :: (List t, Equal (t a))
+>   => t a -> Test (t a -> t a -> Bool)
+> _test_cat_rev _ =
+>   testName "rev(cat(x,y)) == cat(rev(y),rev(x))" $
+>   \x y -> eq (rev (cat x y)) (cat (rev y) (rev x))
+
+</p></div>
 </div>
 
 Finally, $\cat$ is cancellative.
@@ -183,12 +262,12 @@ Finally, $\cat$ is cancellative.
 <div class="thm"><p>
 Let $A$ be a set. For all $x,y,z \in \lists{A}$ we have the following.
 
-1. If $\cat(z,x) = \cat(z,y)$, then $x = y$.
-2. If $\cat(x,z) = \cat(y,z)$, then $x = y$.
+1. $\cat(z,x) = \cat(z,y)$ if and only if $x = y$.
+2. $\cat(x,z) = \cat(y,z)$ if and only if $x = y$.
 </p></div>
 
 <div class="proof"><p>
-1. We proceed by list induction on $z$. For the base case $z = \nil$, suppose $\cat(z,x) = \cat(z,y)$. Then we have
+1. The "only if" direction is clear. For the "if" direction we proceed by list induction on $z$. For the base case $z = \nil$, suppose $\cat(z,x) = \cat(z,y)$. Then we have
 $$\begin{eqnarray*}
  &   & x \\
  & = & \cat(\nil,x) \\
@@ -198,7 +277,7 @@ $$\begin{eqnarray*}
  & = & y
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the implication holds for some $z$, and let $a \in A$. Now suppose we have $$\cat(\cons(a,z),x) = \cat(\cons(a,z),y).$$ Then we have $\cons(a,\cat(z,x)) = \cons(a,\cat(z,y)),$$ so that $$\cat(z,x) = \cat(z,y).$$ By the inductive hypothesis, $x = y$ as claimed.
-2. Note that
+2. The "only if" direction is clear. For the "if" direction, note that
 $$\begin{eqnarray*}
  &   & \cat(\rev(z),\rev(x)) \\
  & = & \rev(\cat(x,z)) \\
@@ -206,6 +285,23 @@ $$\begin{eqnarray*}
  & = & \cat(\rev(z),\rev(y)).
 \end{eqnarray*}$$
 By (1), we have $\rev(x) = \rev(y)$, and thus $x = y$ as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_cat_left_cancellative :: (List t, Equal (t a))
+>   => t a -> Test (t a -> t a -> t a -> Bool)
+> _test_cat_left_cancellative _ =
+>   testName "eq(cat(z,x),cat(z,y)) == eq(x,y)" $
+>   \x y z -> eq (eq (cat z x) (cat z y)) (eq x y)
+> 
+> 
+> _test_cat_right_cancellative :: (List t, Equal (t a))
+>   => t a -> Test (t a -> t a -> t a -> Bool)
+> _test_cat_right_cancellative _ =
+>   testName "eq(cat(x,z),cat(y,z)) == eq(x,y)" $
+>   \x y z -> eq (eq (cat x z) (cat y z)) (eq x y)
+
 </p></div>
 </div>
 
@@ -221,22 +317,20 @@ Let $A$ be a set. The following hold for all $x,u,v \in \lists{A}$.
 </p></div>
 
 <div class="proof"><p>
-1. We proceed by list induction on $x$. For the base case $x = \nil$, if $x = \cat(x,v)$ we have
+1. Note that
 $$\begin{eqnarray*}
- &   & \nil \\
+ &   & \cat(x,\nil) \\
  & = & x \\
- & = & \cat(x,v) \\
- & = & \cat(\nil,v) \\
- & = & \nil
+ & = & \cat(x,v),
 \end{eqnarray*}$$
-as needed. For the inductive step, suppose the implication holds for some $x$ and let $a \in A$. Suppose further that $\cons(a,x) = \cat(\cons(a,x),v)$. Then $$\cons(a,x) = \cons(a,\cat(x,v)),$$ so that $x = \cat(x,v)$, and by the inductive hypothesis, $v = \nil$ as needed.
-2. Suppose $x = \cat(u,x)$. Then
+so that $v = \nil$ by cancellation.
+2. Note that
 $$\begin{eqnarray*}
- &   & \rev(x) \\
- & = & \rev(\cat(u,x)) \\
- & = & \cat(\rev(x),\rev(u));
+ &   & \cat(\nil,x) \\
+ & = & x \\
+ & = & \cat(u,x),
 \end{eqnarray*}$$
-by part (1) we have $\rev(u) = \nil$, so that $$u = \rev(\rev(u)) = \rev(\nil) = \nil$$ as claimed.
+so that $u = \nil$ by cancellation.
 3. We proceed by list induction on $x$. For the base case $x = \nil$, if $x = \cat(u,\cat(x,v))$ we have
 $$\begin{eqnarray*}
  &   & \nil \\
@@ -269,61 +363,43 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 so that $v = u = \nil$ as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_cat_right_identity_unique :: (List t, Equal (t a))
+>   => t a -> Test (t a -> t a -> Bool)
+> _test_cat_right_identity_unique _ =
+>   testName "if eq(cat(x,v),x) then eq(v,nil)" $
+>   \x v -> if eq (cat x v) x then eq v nil else True
+> 
+> 
+> _test_cat_left_identity_unique :: (List t, Equal (t a))
+>   => t a -> Test (t a -> t a -> Bool)
+> _test_cat_left_identity_unique _ =
+>   testName "if eq(cat(u,x),x) then eq(u,nil)" $
+>   \x u -> if eq (cat u x) x then eq u nil else True
+> 
+> 
+> _test_cat_nil_list_nil :: (List t, Equal (t a))
+>   => t a -> Test (t a -> t a -> t a -> Bool)
+> _test_cat_nil_list_nil _ =
+>   testName "if eq(cat(u,x),x) then eq(u,nil)" $
+>   \x u v -> if eq (cat u (cat x v)) x
+>     then and (eq u nil) (eq v nil)
+>     else True
+
+</p></div>
 </div>
 
 
 Testing
 -------
 
-Here are our property tests for $\cat$.
+Suite:
 
-> _test_cat_nil :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> Bool)
-> _test_cat_nil _ =
->   testName "cat(nil,x) == x and cat(x,nil) == x" $
->   \a -> and (eq a (cat nil a)) (eq a (cat a nil))
-> 
-> 
-> _test_cat_cons_snoc :: (List t, Equal a)
->   => t a -> Test (a -> ListOf t a -> ListOf t a -> Bool)
-> _test_cat_cons_snoc _ =
->   testName "cat(x,cons(a,y)) == cat(snoc(a,x),y)" $
->   \a x y -> eq (cat x (cons a y)) (cat (snoc a x) y)
-> 
-> 
-> _test_cat_cons :: (List t, Equal a)
->   => t a -> Test (a -> ListOf t a -> ListOf t a -> Bool)
-> _test_cat_cons _ =
->   testName "cons(a,cat(x,y)) == cat(cons(a,x),y)" $
->   \a x y -> eq (cons a (cat x y)) (cat (cons a x) y)
-> 
-> 
-> _test_cat_snoc :: (List t, Equal a)
->   => t a -> Test (a -> ListOf t a -> ListOf t a -> Bool)
-> _test_cat_snoc _ =
->   testName "snoc(a,cat(x,y)) == cat(x,snoc(a,y))" $
->   \a x y -> eq (snoc a (cat x y)) (cat x (snoc a y))
-> 
-> 
-> _test_cat_associative :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
-> _test_cat_associative _ =
->   testName "cat(cat(x,y),z) == cat(x,cat(y,z))" $
->   \x y z -> eq (cat (cat x y) z) (cat x (cat y z))
-> 
-> 
-> _test_cat_rev :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
-> _test_cat_rev _ =
->   testName "rev(cat(x,y)) == cat(rev(y),rev(x))" $
->   \x y -> eq (rev (cat x y)) (cat (rev y) (rev x))
-
-And the suite:
-
-> -- run all tests for cat
 > _test_cat ::
 >   ( TypeName a, Show a, Equal a, Arbitrary a
->   , TypeName (t a), List t
+>   , TypeName (t a), List t, Equal (t a), Show (t a), Arbitrary (t a)
 >   ) => t a -> Int -> Int -> IO ()
 > _test_cat t maxSize numCases = do
 >   testLabel ("cat:" ++ typeName t)
@@ -334,12 +410,19 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_cat_nil t)
->   runTest args (_test_cat_cons_snoc t)
->   runTest args (_test_cat_cons t)
->   runTest args (_test_cat_snoc t)
+>   runTest args (_test_cat_nil_left t)
+>   runTest args (_test_cat_cons_left t)
+>   runTest args (_test_cat_nil_right t)
+>   runTest args (_test_cat_snoc_left t)
+>   runTest args (_test_cat_snoc_right t)
+>   runTest args (_test_cat_nil_nil t)
 >   runTest args (_test_cat_associative t)
 >   runTest args (_test_cat_rev t)
+>   runTest args (_test_cat_left_cancellative t)
+>   runTest args (_test_cat_right_cancellative t)
+>   runTest args (_test_cat_right_identity_unique t)
+>   runTest args (_test_cat_left_identity_unique t)
+>   runTest args (_test_cat_nil_list_nil t)
 
 And ``main``:
 

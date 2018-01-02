@@ -3,6 +3,7 @@ title: TakeBut and DropBut
 author: nbloomf
 date: 2017-12-15
 tags: arithmetic-made-difficult, literate-haskell
+slug: takebut-dropbut
 ---
 
 > module TakeButAndDropBut
@@ -239,7 +240,7 @@ Testing
 Here are our property tests for $\takeBut$:
 
 > _test_takeBut_prefix :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (n -> ListOf t a -> Bool)
+>   => t a -> n -> Test (n -> t a -> Bool)
 > _test_takeBut_prefix _ m =
 >   testName "prefix(takeBut(k,x),x) == true" $
 >   \k x -> eq (prefix (takeBut k x) x) True
@@ -247,14 +248,14 @@ Here are our property tests for $\takeBut$:
 And for $\dropBut$:
 
 > _test_dropBut_suffix :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (n -> ListOf t a -> Bool)
+>   => t a -> n -> Test (n -> t a -> Bool)
 > _test_dropBut_suffix _ _ =
 >   testName "suffix(dropBut(k,x),x) == true" $
 >   \k x -> eq (suffix (dropBut k x) x) True
 > 
 > 
 > _test_dropBut_idempotent :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (n -> ListOf t a -> Bool)
+>   => t a -> n -> Test (n -> t a -> Bool)
 > _test_dropBut_idempotent _ _ =
 >   testName "dropBut(k,dropBut(k,x)) == dropBut(k,x)" $
 >   \k x -> eq (dropBut k (dropBut k x)) (dropBut k x)
@@ -262,7 +263,7 @@ And for $\dropBut$:
 And for both:
 
 > _test_takeBut_dropBut_cat :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (n -> ListOf t a -> Bool)
+>   => t a -> n -> Test (n -> t a -> Bool)
 > _test_takeBut_dropBut_cat _ _ =
 >   testName "cat(takeBut(k,x),dropBut(k,x)) == x" $
 >   \k x -> eq (cat (takeBut k x) (dropBut k x)) x

@@ -3,6 +3,7 @@ title: Sublist
 author: nbloomf
 date: 2017-05-23
 tags: arithmetic-made-difficult, literate-haskell
+slug: sublist
 ---
 
 > module Sublist
@@ -832,21 +833,21 @@ Testing
 Here are our property tests for $\sublist$:
 
 > _test_sublist_alt :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test (t a -> t a -> Bool)
 > _test_sublist_alt _ =
 >   testName "sublist'(x,y) == sublist(x,y)" $
 >   \x y -> eq (sublist' x y) (sublist x y)
 > 
 > 
 > _test_sublist_cons :: (List t, Equal a)
->   => t a -> Test (a -> ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test (a -> t a -> t a -> Bool)
 > _test_sublist_cons _ =
 >   testName "sublist(x,y) == sublist(cons(a,x),cons(a,y))" $
 >   \a x y -> eq (sublist (cons a x) (cons a y)) (sublist x y)
 > 
 > 
 > _test_sublist_cons_left :: (List t, Equal a)
->   => t a -> Test (a -> ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test (a -> t a -> t a -> Bool)
 > _test_sublist_cons_left _ =
 >   testName "sublist(cons(a,x),y) ==> sublist(x,y)" $
 >   \a x y -> if sublist (cons a x) y
@@ -855,7 +856,7 @@ Here are our property tests for $\sublist$:
 > 
 > 
 > _test_sublist_cons_right :: (List t, Equal a)
->   => t a -> Test (a -> ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test (a -> t a -> t a -> Bool)
 > _test_sublist_cons_right _ =
 >   testName "sublist(x,y) ==> sublist(x,cons(a,y))" $
 >   \a x y -> if sublist x y
@@ -864,21 +865,21 @@ Here are our property tests for $\sublist$:
 > 
 > 
 > _test_sublist_reflexive :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> Bool)
+>   => t a -> Test (t a -> Bool)
 > _test_sublist_reflexive _ =
 >   testName "sublist(x,x) == true" $
 >   \x -> eq (sublist x x) True
 > 
 > 
 > _test_sublist_antisymmetric :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test (t a -> t a -> Bool)
 > _test_sublist_antisymmetric _ =
 >   testName "sublist(x,y) & sublist(y,x) ==> eq(x,y)" $
 >   \x y -> eq (and (sublist x y) (sublist y x)) (eq x y)
 > 
 > 
 > _test_sublist_transitive :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test (t a -> t a -> t a -> Bool)
 > _test_sublist_transitive _ =
 >   testName "sublist(x,y) & sublist(y,z) ==> sublist(x,z)" $
 >   \x y z -> if and (sublist x y) (sublist y z)
@@ -887,21 +888,21 @@ Here are our property tests for $\sublist$:
 > 
 > 
 > _test_sublist_snoc_nil :: (List t, Equal a)
->   => t a -> Test (a -> ListOf t a -> Bool)
+>   => t a -> Test (a -> t a -> Bool)
 > _test_sublist_snoc_nil _ =
 >   testName "sublist(snoc(a,x),nil) == false" $
 >   \a x -> eq (sublist (snoc a x) nil) False
 > 
 > 
 > _test_sublist_rev :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test (t a -> t a -> Bool)
 > _test_sublist_rev _ =
 >   testName "sublist(x,y) == sublist(rev(x),rev(y))" $
 >   \x y -> eq (sublist x y) (sublist (rev x) (rev y))
 > 
 > 
 > _test_sublist_cat_left :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test (t a -> t a -> t a -> Bool)
 > _test_sublist_cat_left _ =
 >   testName "sublist(x,y) ==> sublist(cat(u,x),cat(u,y))" $
 >   \x y u -> if sublist x y
@@ -910,7 +911,7 @@ Here are our property tests for $\sublist$:
 > 
 > 
 > _test_sublist_cat_right :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test (t a -> t a -> t a -> Bool)
 > _test_sublist_cat_right _ =
 >   testName "sublist(x,y) ==> sublist(cat(x,u),cat(y,u))" $
 >   \x y u -> if sublist x y
@@ -919,7 +920,7 @@ Here are our property tests for $\sublist$:
 > 
 > 
 > _test_sublist_cat :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test (t a -> t a -> t a -> t a -> Bool)
 > _test_sublist_cat _ =
 >   testName "sublist(x,y) & sublist(u,v) ==> sublist(cat(x,u),cat(y,v))" $
 >   \x y u v -> if and (sublist x y) (sublist u v)

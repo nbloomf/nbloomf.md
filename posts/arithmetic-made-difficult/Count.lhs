@@ -262,7 +262,7 @@ Here are our property tests for $\count$:
 > _test_count_nil t k =
 >  testName "count(a,nil) == zero" $
 >  \a -> let
->    nil'  = nil `withTypeOf` ListOf t
+>    nil'  = nil `withTypeOf` t
 >    zero' = zero `withTypeOf` k
 >  in
 >    eq (count a nil') zero'
@@ -273,14 +273,14 @@ Here are our property tests for $\count$:
 > _test_count_one t k =
 >  testName "count(a,cons(a,nil)) == next(zero)" $
 >  \a -> let
->    nil' = nil `withTypeOf` ListOf t
+>    nil' = nil `withTypeOf` t
 >    one  = next zero `withTypeOf` k
 >  in
 >    eq (count a (cons a nil')) one
 > 
 > 
 > _test_count_rev :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (a -> ListOf t a -> Bool)
+>   => t a -> n -> Test (a -> t a -> Bool)
 > _test_count_rev t k =
 >  testName "count(a,cons(a,nil)) == next(zero)" $
 >  \a x -> let
@@ -290,7 +290,7 @@ Here are our property tests for $\count$:
 > 
 > 
 > _test_count_snoc_cons :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (a -> a -> ListOf t a -> Bool)
+>   => t a -> n -> Test (a -> a -> t a -> Bool)
 > _test_count_snoc_cons t k =
 >  testName "count(a,cons(a,nil)) == next(zero)" $
 >  \a b x -> let
@@ -300,7 +300,7 @@ Here are our property tests for $\count$:
 > 
 > 
 > _test_count_cat :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (a -> ListOf t a -> ListOf t a -> Bool)
+>   => t a -> n -> Test (a -> t a -> t a -> Bool)
 > _test_count_cat t k =
 >  testName "count(a,cat(x,y)) == plus(count(a,x),count(a,y))" $
 >  \a x y -> let
@@ -310,7 +310,7 @@ Here are our property tests for $\count$:
 > 
 > 
 > _test_count_length :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (a -> ListOf t a -> Bool)
+>   => t a -> n -> Test (a -> t a -> Bool)
 > _test_count_length t k =
 >  testName "count(a,x) == length(filter(eq(a,-),x))" $
 >  \a x -> let

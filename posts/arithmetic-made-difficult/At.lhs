@@ -19,6 +19,8 @@ slug: at
 > import Minus
 > import LessThanOrEqualTo
 > import Lists
+> import HeadAndTail
+> import Snoc
 > import Reverse
 > import Cat
 > import Length
@@ -31,10 +33,10 @@ Define $\varphi : A \times (\ast + A) \rightarrow \ast + A$ by $$\varphi(a,b) = 
 
 In Haskell:
 
-> head :: (List t) => t a -> Either () a
-> head = foldr (lft ()) phi
->   where
->     phi a _ = rgt a
+ > head :: (List t) => t a -> Either () a
+ > head = foldr (lft ()) phi
+ >   where
+ >     phi a _ = rgt a
 
 </p></div>
 </div>
@@ -513,7 +515,7 @@ Testing
 
 Here are our property tests for $\at$.
 
-> _test_at_nil :: (List t, Equal a, Natural n, Equal n)
+> _test_at_nil :: (List t, Equal a, Equal (t a), Natural n, Equal n)
 >   => t a -> n -> Test (n -> Bool)
 > _test_at_nil z n =
 >   testName "at(nil,k) == *" $
@@ -523,7 +525,7 @@ Here are our property tests for $\at$.
 >     eq (at nil' m) (lft ())
 > 
 > 
-> _test_at_single :: (List t, Equal a, Natural n, Equal n)
+> _test_at_single :: (List t, Equal a, Equal (t a), Natural n, Equal n)
 >   => t a -> n -> Test (a -> Bool)
 > _test_at_single z n =
 >   testName "at(cons(a,nil),next(0)) == a" $
@@ -534,7 +536,7 @@ Here are our property tests for $\at$.
 >     eq (at (cons a nil') (next zero')) (rgt a)
 > 
 > 
-> _test_at_double :: (List t, Equal a, Natural n, Equal n)
+> _test_at_double :: (List t, Equal a, Equal (t a), Natural n, Equal n)
 >   => t a -> n -> Test (a -> a -> Bool)
 > _test_at_double z n =
 >   testName "at(cons(a,cons(b,nil)),next(next(0))) == b" $
@@ -545,15 +547,15 @@ Here are our property tests for $\at$.
 >     eq (at (cons a (cons b nil')) (next (next zero'))) (rgt b)
 > 
 > 
-> _test_at_next_next_cons :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (ListOf t a -> a -> n -> Bool)
+> _test_at_next_next_cons :: (List t, Equal a, Equal (t a), Natural n, Equal n)
+>   => t a -> n -> Test (t a -> a -> n -> Bool)
 > _test_at_next_next_cons z _ =
 >   testName "at(cons(a,x),next(next(k))) == at(x,next(k))" $
 >   \x a k -> eq (at (cons a x) (next (next k))) (at x (next k))
 > 
 > 
-> _test_at_length_rev :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (ListOf t a -> Bool)
+> _test_at_length_rev :: (List t, Equal a, Equal (t a), Natural n, Equal n)
+>   => t a -> n -> Test (t a -> Bool)
 > _test_at_length_rev _ n =
 >   testName "at(x,length(x)) == head(rev(x))" $
 >   \x -> let
@@ -562,8 +564,8 @@ Here are our property tests for $\at$.
 >     eq (at x lx) (head (rev x))
 > 
 > 
-> _test_at_range :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (ListOf t a -> n -> Bool)
+> _test_at_range :: (List t, Equal a, Equal (t a), Natural n, Equal n)
+>   => t a -> n -> Test (t a -> n -> Bool)
 > _test_at_range _ n =
 >   testName "leq(length(x),k) <==> at(x,next(k)) == *" $
 >   \x k -> let
@@ -576,8 +578,8 @@ Here are our property tests for $\at$.
 >       else eq (at x k) (lft ())
 > 
 > 
-> _test_at_snoc :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (ListOf t a -> a -> n -> Bool)
+> _test_at_snoc :: (List t, Equal a, Equal (t a), Natural n, Equal n)
+>   => t a -> n -> Test (t a -> a -> n -> Bool)
 > _test_at_snoc z n =
 >   testName "leq(k,length(x)) ==> at(snoc(a,x),k) == at(x,k)" $
 >   \x a k -> let
@@ -588,8 +590,8 @@ Here are our property tests for $\at$.
 >       else True
 > 
 > 
-> _test_at_cat_left :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (ListOf t a -> ListOf t a -> n -> Bool)
+> _test_at_cat_left :: (List t, Equal a, Equal (t a), Natural n, Equal n)
+>   => t a -> n -> Test (t a -> t a -> n -> Bool)
 > _test_at_cat_left z n =
 >   testName "leq(k,length(x))       ==> at(cat(x,y),k) == at(x,k)" $
 >   \x y k -> let
@@ -600,8 +602,8 @@ Here are our property tests for $\at$.
 >       else True
 > 
 > 
-> _test_at_cat_right :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (ListOf t a -> ListOf t a -> n -> Bool)
+> _test_at_cat_right :: (List t, Equal a, Equal (t a), Natural n, Equal n)
+>   => t a -> n -> Test (t a -> t a -> n -> Bool)
 > _test_at_cat_right z n =
 >   testName "leq(next(length(x)),k) ==> at(cat(x,y),k) == at(y,minus(k,length(x)))" $
 >   \x y k -> let
@@ -614,8 +616,8 @@ Here are our property tests for $\at$.
 >         eq (at (cat x y) k) (at y m)
 > 
 > 
-> _test_at_rev :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (ListOf t a -> n -> Bool)
+> _test_at_rev :: (List t, Equal a, Equal (t a), Natural n, Equal n)
+>   => t a -> n -> Test (t a -> n -> Bool)
 > _test_at_rev z n =
 >   testName "at(x,u) == at(rev(x),minus(next(length(x)),u))" $
 >   \x u -> let 
@@ -625,13 +627,12 @@ Here are our property tests for $\at$.
 >       Right v -> eq (at x u) (at (rev x) v)
 >       Left () -> True
 
-And the suite:
+Suite:
 
-> -- run all tests for at
 > _test_at ::
 >   ( TypeName a, Show a, Equal a, Arbitrary a
 >   , TypeName n, Natural n, Equal n, Show n, Arbitrary n
->   , TypeName (t a), List t
+>   , TypeName (t a), List t, Equal (t a), Show (t a), Arbitrary (t a)
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_at t n maxSize numCases = do
 >   testLabel ("at: " ++ typeName t ++ " & " ++ typeName n)

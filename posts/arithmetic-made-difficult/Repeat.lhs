@@ -223,7 +223,7 @@ Here are our property tests for $\repeat$:
 > _test_repeat_alt t _ =
 >  testName "repeat'(n,a) == repeat(n,a)" $
 >  \k a -> let
->    rna = repeat k a `withTypeOf` ListOf t
+>    rna = repeat k a `withTypeOf` t
 >  in
 >    eq (repeat' k a) rna
 > 
@@ -233,7 +233,7 @@ Here are our property tests for $\repeat$:
 > _test_repeat_length t _ =
 >  testName "length(repeat(n,a)) == n" $
 >  \k a -> let
->    rka = repeat k a `withTypeOf` ListOf t
+>    rka = repeat k a `withTypeOf` t
 >  in
 >    eq (length rka) k
 > 
@@ -243,7 +243,7 @@ Here are our property tests for $\repeat$:
 > _test_repeat_map t _ _ =
 >  testName "map(f)(repeat(n,a)) == repeat(n,f(a))" $
 >  \f k a -> let
->    rka = repeat k a `withTypeOf` ListOf t
+>    rka = repeat k a `withTypeOf` t
 >  in
 >    eq (repeat k (f a)) (map f rka)
 > 
@@ -253,7 +253,7 @@ Here are our property tests for $\repeat$:
 > _test_repeat_plus t _ =
 >  testName "repeat(plus(m,n),a)) == cat(repeat(m,a),repeat(n,a))" $
 >  \m n a -> let
->    rma = repeat m a `withTypeOf` ListOf t
+>    rma = repeat m a `withTypeOf` t
 >  in
 >    eq (repeat (plus m n) a) (cat rma (repeat n a))
 > 
@@ -263,7 +263,7 @@ Here are our property tests for $\repeat$:
 > _test_repeat_snoc t _ =
 >  testName "snoc(a,repeat(n,a)) == repeat(next(n),a)" $
 >  \n a -> let
->    rna = repeat n a `withTypeOf` ListOf t
+>    rna = repeat n a `withTypeOf` t
 >  in
 >    eq (snoc a rna) (repeat (next n) a)
 > 
@@ -273,7 +273,7 @@ Here are our property tests for $\repeat$:
 > _test_repeat_rev t _ =
 >  testName "rev(repeat(n,a)) == repeat(n,a)" $
 >  \n a -> let
->    rna = repeat n a `withTypeOf` ListOf t
+>    rna = repeat n a `withTypeOf` t
 >  in
 >    eq (rev rna) rna
 

@@ -3,6 +3,7 @@ title: Map
 author: nbloomf
 date: 2017-04-29
 tags: arithmetic-made-difficult, literate-haskell
+slug: map
 ---
 
 > module Map
@@ -257,22 +258,22 @@ Testing
 
 Here are our property tests for $\map$.
 
-> _test_map_id :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> Bool)
+> _test_map_id :: (List t, Equal (t a))
+>   => t a -> Test (t a -> Bool)
 > _test_map_id _ =
 >   testName "map(id)(x) == x" $
 >   \x -> eq (map id x) x
 >
 > 
-> _test_map_cat :: (List t, Equal a)
->   => t a -> Test ((a -> a) -> ListOf t a -> ListOf t a -> Bool)
+> _test_map_cat :: (List t, Equal (t a))
+>   => t a -> Test ((a -> a) -> t a -> t a -> Bool)
 > _test_map_cat _ =
 >   testName "map(f)(cat(x,y)) == cat(map(f)(x),map(f)(y))" $
 >   \f x y -> eq (map f (cat x y)) (cat (map f x) (map f y))
 >
 > 
-> _test_map_rev :: (List t, Equal a)
->   => t a -> Test ((a -> a) -> ListOf t a -> Bool)
+> _test_map_rev :: (List t, Equal (t a))
+>   => t a -> Test ((a -> a) -> t a -> Bool)
 > _test_map_rev _ =
 >   testName "map(f)(rev(x)) == rev(map(f)(x))" $
 >   \f x -> eq (map f (rev x)) (rev (map f x))
@@ -282,7 +283,7 @@ And the suite:
 > -- run all tests for map
 > _test_map ::
 >   ( TypeName a, Show a, Equal a, Arbitrary a, CoArbitrary a
->   , TypeName (t a), List t
+>   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a)
 >   ) => t a -> Int -> Int -> IO ()
 > _test_map t maxSize numCases = do
 >   testLabel ("map: " ++ typeName t)

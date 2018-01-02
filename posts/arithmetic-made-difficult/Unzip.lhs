@@ -3,6 +3,7 @@ title: Unzip
 author: nbloomf
 date: 2017-05-07
 tags: arithmetic-made-difficult, literate-haskell
+slug: unzip
 ---
 
 > module Unzip
@@ -194,14 +195,14 @@ Testing
 Here are our property tests for $\unzip$.
 
 > _test_unzip_zip :: (List t, Equal a, Equal b)
->   => t a -> t b -> Test (ListOf t (a,b) -> Bool)
+>   => t a -> t b -> Test (t (a,b) -> Bool)
 > _test_unzip_zip _ _ =
 >   testName "zip(unzip(x)) == x" $
 >   \x -> eq ((uncurry zip) (unzip x)) x
 > 
 > 
 > _test_unzip_tswap :: (List t, Equal a, Equal b)
->   => t a -> t b -> Test (ListOf t (a,b) -> Bool)
+>   => t a -> t b -> Test (t (a,b) -> Bool)
 > _test_unzip_tswap _ _ =
 >   testName "tswap(unzip(x)) == unzip(map(tswap)(x))" $
 >   \x -> eq (unzip (map tswap x)) (tswap (unzip x))

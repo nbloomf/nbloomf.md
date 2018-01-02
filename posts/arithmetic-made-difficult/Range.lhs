@@ -15,6 +15,7 @@ slug: range
 > import NaturalNumbers
 > import Plus
 > import Lists
+> import Snoc
 > import Reverse
 > import Cat
 > import Length
@@ -228,66 +229,65 @@ Testing
 
 Here are our property tests for $\range$.
 
-> _test_range_next_cons :: (List t, Natural n, Equal n)
+> _test_range_next_cons :: (List t, Natural n, Equal (t n), Equal n)
 >   => t n -> Test (n -> n -> Bool)
 > _test_range_next_cons t =
 >   testName "range(a,next(b)) == cons(a,range(next(a),b))" $
 >   \a b -> let
->     x = (range a (next b)) `withTypeOf` ListOf t
+>     x = (range a (next b)) `withTypeOf` t
 >     y = (cons a (range (next a) b))
 >   in
 >     eq x y
 > 
 > 
-> _test_range_next_snoc :: (List t, Natural n, Equal n)
+> _test_range_next_snoc :: (List t, Natural n, Equal (t n), Equal n)
 >   => t n -> Test (n -> n -> Bool)
 > _test_range_next_snoc t =
 >   testName "range(a,next(b)) == snoc(plus(a,b),range(a,b))" $
 >   \a b -> let
->     x = (range a (next b)) `withTypeOf` ListOf t
+>     x = (range a (next b)) `withTypeOf` t
 >     y = (snoc (plus a b) (range a b))
 >   in
 >     eq x y
 > 
 > 
-> _test_range_plus_right :: (List t, Natural n, Equal n)
+> _test_range_plus_right :: (List t, Natural n, Equal (t n), Equal n)
 >   => t n -> Test (n -> n -> n -> Bool)
 > _test_range_plus_right t =
 >   testName "range(a,plus(b,c)) == cat(range(a,b),range(plus(a,b),c))" $
 >   \a b c -> let
->     x = (range a (plus b c)) `withTypeOf` ListOf t
+>     x = (range a (plus b c)) `withTypeOf` t
 >     y = (cat (range a b) (range (plus a b) c))
 >   in
 >     eq x y
 > 
 > 
-> _test_range_next_left :: (List t, Natural n, Equal n)
+> _test_range_next_left :: (List t, Natural n, Equal (t n), Equal n)
 >   => t n -> Test (n -> n -> Bool)
 > _test_range_next_left t =
 >   testName "range(next(a),b) == map(next,range(a,b))" $
 >   \a b -> let
->     x = (range (next a) b) `withTypeOf` ListOf t
+>     x = (range (next a) b) `withTypeOf` t
 >     y = (map next (range a b))
 >   in
 >     eq x y
 > 
 > 
-> _test_range_plus_left :: (List t, Natural n, Equal n)
+> _test_range_plus_left :: (List t, Natural n, Equal (t n), Equal n)
 >   => t n -> Test (n -> n -> n -> Bool)
 > _test_range_plus_left t =
 >   testName "range(plus(a,b),c) == map(plus(a,-),range(b,c))" $
 >   \a b c -> let
->     x = (range (plus a b) c) `withTypeOf` ListOf t
+>     x = (range (plus a b) c) `withTypeOf` t
 >     y = (map (plus a) (range b c))
 >   in
 >     eq x y
 
 And the suite:
 
-> -- run all tests for range
 > _test_range ::
 >   ( TypeName n, Natural n, Equal n, Show n, Arbitrary n
->   , TypeName (t n), List t
+>   , TypeName (t n), List t, Equal (t n), Show (t n), Arbitrary (t n)
 >   ) => t n -> Int -> Int -> IO ()
 > _test_range t maxSize numCases = do
 >   testLabel ("range: " ++ typeName t)

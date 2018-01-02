@@ -3,6 +3,7 @@ title: Filter
 author: nbloomf
 date: 2017-05-13
 tags: arithmetic-made-difficult, literate-haskell
+slug: filter
 ---
 
 > module Filter
@@ -345,21 +346,21 @@ Testing
 Here are our property tests for $\filter$:
 
 > _test_filter_alt :: (List t, Equal a)
->   => t a -> Test ((a -> Bool) -> ListOf t a -> Bool)
+>   => t a -> Test ((a -> Bool) -> t a -> Bool)
 > _test_filter_alt _ =
 >   testName "filter(p,x) == filter'(p,x)" $
 >   \p x -> eq (filter p x) (filter' p x)
 > 
 > 
 > _test_filter_all :: (List t, Equal a)
->   => t a -> Test ((a -> Bool) -> ListOf t a -> Bool)
+>   => t a -> Test ((a -> Bool) -> t a -> Bool)
 > _test_filter_all _ =
 >   testName "all(p,filter(p,x)) == true" $
 >   \p x -> eq (all p (filter p x)) True
 > 
 > 
 > _test_filter_snoc :: (List t, Equal a)
->   => t a -> Test ((a -> Bool) -> a -> ListOf t a -> Bool)
+>   => t a -> Test ((a -> Bool) -> a -> t a -> Bool)
 > _test_filter_snoc _ =
 >   testName "filter(p,snoc(a,x)) == if(p(a),snoc(a,filter(p,x)),filter(p,x))" $
 >   \p a x -> if eq (p a) True
@@ -368,21 +369,21 @@ Here are our property tests for $\filter$:
 > 
 > 
 > _test_filter_rev :: (List t, Equal a)
->   => t a -> Test ((a -> Bool) -> ListOf t a -> Bool)
+>   => t a -> Test ((a -> Bool) -> t a -> Bool)
 > _test_filter_rev _ =
 >   testName "filter(p,rev(x)) == rev(filter(p,x))" $
 >   \p x -> eq (filter p (rev x)) (rev (filter p x))
 > 
 > 
 > _test_filter_cat :: (List t, Equal a)
->   => t a -> Test ((a -> Bool) -> ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test ((a -> Bool) -> t a -> t a -> Bool)
 > _test_filter_cat _ =
 >   testName "filter(p,cat(x,y)) == cat(filter(p,x),filter(p,y))" $
 >   \p x y -> eq (filter p (cat x y)) (cat (filter p x) (filter p y))
 > 
 > 
 > _test_filter_eq_all :: (List t, Equal a)
->   => t a -> Test ((a -> Bool) -> ListOf t a -> Bool)
+>   => t a -> Test ((a -> Bool) -> t a -> Bool)
 > _test_filter_eq_all _ =
 >   testName "eq(x,filter(p,x)) == all(p,x)" $
 >   \p x -> eq (eq x (filter p x)) (all p x)

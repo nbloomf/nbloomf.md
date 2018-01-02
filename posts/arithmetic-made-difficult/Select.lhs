@@ -377,7 +377,7 @@ Testing
 Here are our property tests for $\select$:
 
 > _test_select_zero :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (ListOf t a -> Bool)
+>   => t a -> n -> Test (t a -> Bool)
 > _test_select_zero _ n =
 >   testName "select(zero,x) == cons(nil,nil)" $
 >   \x -> let
@@ -391,7 +391,7 @@ Here are our property tests for $\select$:
 > _test_select_nil t _ =
 >   testName "select(k,nil) == if k == 0 then cons(nil,nil) else nil" $
 >   \k -> let
->     nil' = nil `withTypeOf` (ListOf t)
+>     nil' = nil `withTypeOf` t
 >   in
 >     if isZero k
 >       then eq (select k nil') (cons nil nil)
@@ -399,7 +399,7 @@ Here are our property tests for $\select$:
 > 
 > 
 > _test_select_one :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (ListOf t a -> Bool)
+>   => t a -> n -> Test (t a -> Bool)
 > _test_select_one _ n =
 >   testName "select(next(zero),x) == map(cons(-,nil))(x)" $
 >   \x -> let
@@ -409,14 +409,14 @@ Here are our property tests for $\select$:
 > 
 > 
 > _test_select_length :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (n -> ListOf t a -> Bool)
+>   => t a -> n -> Test (n -> t a -> Bool)
 > _test_select_length _ _ =
 >   testName "length(select(k,x)) == choose(length(x),k)" $
 >   \k x -> eq (length (select k x)) (choose (length x) k)
 > 
 > 
 > _test_select_sublist :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (n -> ListOf t a -> ListOf t a -> Bool)
+>   => t a -> n -> Test (n -> t a -> t a -> Bool)
 > _test_select_sublist _ _ =
 >   testName "sublist(x,y) == sublist(select(k,x),select(k,y))" $
 >   \k x y -> if eq (sublist x y) True
@@ -425,14 +425,14 @@ Here are our property tests for $\select$:
 > 
 > 
 > _test_select_all_sublist :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (n -> ListOf t a -> Bool)
+>   => t a -> n -> Test (n -> t a -> Bool)
 > _test_select_all_sublist _ _ =
 >   testName "all(sublist(-,x),select(k,x))" $
 >   \k x -> all (\u -> sublist u x) (select k x)
 > 
 > 
 > _test_select_all_length :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (n -> ListOf t a -> Bool)
+>   => t a -> n -> Test (n -> t a -> Bool)
 > _test_select_all_length _ _ =
 >   testName "all(eq(k,length(-)),select(k,x))" $
 >   \k x -> all (\u -> eq k (length u)) (select k x)

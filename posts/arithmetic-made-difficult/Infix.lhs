@@ -3,6 +3,7 @@ title: Infix
 author: nbloomf
 date: 2017-05-24
 tags: arithmetic-made-difficult, literate-haskell
+slug: infix
 ---
 
 > module Infix
@@ -396,35 +397,35 @@ Testing
 Here are our property tests for $\infix$:
 
 > _test_infix_nil_left :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> Bool)
+>   => t a -> Test (t a -> Bool)
 > _test_infix_nil_left _ =
 >   testName "infix(nil,x) == true" $
 >   \x -> eq (isInfix nil x) True
 > 
 > 
 > _test_infix_nil_right :: (List t, Equal a)
->   => t a -> Test (a -> ListOf t a -> Bool)
+>   => t a -> Test (a -> t a -> Bool)
 > _test_infix_nil_right _ =
 >   testName "infix(cons(a,x),nil) == false" $
 >   \a x -> eq (isInfix (cons a x) nil) False
 > 
 > 
 > _test_infix_cat_right :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test (t a -> t a -> Bool)
 > _test_infix_cat_right _ =
 >   testName "infix(x,cat(x,y)) = true" $
 >   \x y -> isInfix x (cat x y)
 > 
 > 
 > _test_infix_cat_left :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test (t a -> t a -> Bool)
 > _test_infix_cat_left _ =
 >   testName "infix(x,cat(y,x)) = true" $
 >   \x y -> isInfix x (cat y x)
 > 
 > 
 > _test_infix_cons :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> a -> ListOf t a -> Bool)
+>   => t a -> Test (t a -> a -> t a -> Bool)
 > _test_infix_cons _ =
 >   testName "infix(x,cons(b,y)) == or(prefix(x,cons(b,y)),infix(x,y))" $
 >   \x b y -> eq
@@ -433,14 +434,14 @@ Here are our property tests for $\infix$:
 > 
 > 
 > _test_infix_snoc_nil :: (List t, Equal a)
->   => t a -> Test (a -> ListOf t a -> Bool)
+>   => t a -> Test (a -> t a -> Bool)
 > _test_infix_snoc_nil _ =
 >   testName "infix(snoc(a,x),nil) == false" $
 >   \a x -> eq (isInfix (snoc a x) nil) False
 > 
 > 
 > _test_infix_snoc :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> a -> ListOf t a -> Bool)
+>   => t a -> Test (t a -> a -> t a -> Bool)
 > _test_infix_snoc _ =
 >   testName "infix(x,snoc(b,y)) == or(suffix(x,snoc(b,y)),infix(x,y))" $
 >   \x b y -> eq
@@ -449,28 +450,28 @@ Here are our property tests for $\infix$:
 > 
 > 
 > _test_infix_rev :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test (t a -> t a -> Bool)
 > _test_infix_rev _ =
 >   testName "infix(rev(x),rev(y)) == infix(x,y)" $
 >   \x y -> eq (isInfix (rev x) (rev y)) (isInfix x y)
 > 
 > 
 > _test_infix_cat :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test (t a -> t a -> t a -> Bool)
 > _test_infix_cat _ =
 >   testName "infix(x,cat(u,cat(x,v)))" $
 >   \x u v -> isInfix x (cat u (cat x v))
 > 
 > 
 > _test_infix_reflexive :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> Bool)
+>   => t a -> Test (t a -> Bool)
 > _test_infix_reflexive _ =
 >   testName "infix(x,x) == true" $
 >   \x -> eq (isInfix x x) True
 > 
 > 
 > _test_infix_symmetric :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test (t a -> t a -> Bool)
 > _test_infix_symmetric _ =
 >   testName "infix(x,y) & infix(y,x) ==> eq(x,y)" $
 >   \x y -> if and (isInfix x y) (isInfix y x)
@@ -479,7 +480,7 @@ Here are our property tests for $\infix$:
 > 
 > 
 > _test_infix_transitive :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test (t a -> t a -> t a -> Bool)
 > _test_infix_transitive _ =
 >   testName "infix(x,y) & infix(y,z) ==> sublist(x,z)" $
 >   \x y z -> if and (isInfix x y) (isInfix y z)
@@ -488,7 +489,7 @@ Here are our property tests for $\infix$:
 > 
 > 
 > _test_infix_prefix :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test (t a -> t a -> Bool)
 > _test_infix_prefix _ =
 >   testName "prefix(x,y) ==> infix(x,y)" $
 >   \x y -> if prefix x y
@@ -497,7 +498,7 @@ Here are our property tests for $\infix$:
 > 
 > 
 > _test_infix_suffix :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test (t a -> t a -> Bool)
 > _test_infix_suffix _ =
 >   testName "suffix(x,y) ==> infix(x,y)" $
 >   \x y -> if suffix x y
@@ -506,7 +507,7 @@ Here are our property tests for $\infix$:
 > 
 > 
 > _test_infix_sublist :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test (t a -> t a -> Bool)
 > _test_infix_sublist _ =
 >   testName "infix(x,y) ==> sublist(x,y)" $
 >   \x y -> if isInfix x y

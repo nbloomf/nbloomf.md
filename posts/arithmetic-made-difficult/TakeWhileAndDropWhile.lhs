@@ -3,6 +3,7 @@ title: TakeWhile and DropWhile
 author: nbloomf
 date: 2017-12-16
 tags: arithmetic-made-difficult, literate-haskell
+slug: takewhile-dropwhile
 ---
 
 > module TakeWhileAndDropWhile
@@ -12,6 +13,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > 
 > import Booleans
 > import Tuples
+> import DisjointUnions
 > import NaturalNumbers
 > import Plus
 > import MaxAndMin
@@ -111,9 +113,9 @@ To see uniqueness, note that under these conditions we have $$f(p,x) = \foldr{\n
 In Haskell:
 
 > takeWhile :: (List t) => (a -> Bool) -> t a -> t a
-> takeWhile p z = case listShape z of
->   Nil      -> nil
->   Cons a x -> if eq (p a) True
+> takeWhile p z = case unnext z of
+>   Left ()     -> nil
+>   Right (a,x) -> if eq (p a) True
 >     then cons a (takeWhile p x)
 >     else nil
 
@@ -349,28 +351,28 @@ Testing
 Here are our property tests for $\takeWhile$:
 
 > _test_takeWhile_alt :: (List t, Equal a)
->   => t a -> Test ((a -> Bool) -> ListOf t a -> Bool)
+>   => t a -> Test ((a -> Bool) -> t a -> Bool)
 > _test_takeWhile_alt _ =
 >   testName "takeWhile(p,x) == takeWhile'(p,x)" $
 >   \p x -> eq (takeWhile p x) (takeWhile' p x)
 > 
 > 
 > _test_takeWhile_prefix :: (List t, Equal a)
->   => t a -> Test ((a -> Bool) -> ListOf t a -> Bool)
+>   => t a -> Test ((a -> Bool) -> t a -> Bool)
 > _test_takeWhile_prefix _ =
 >   testName "prefix(takeWhile(p,x),x) == true" $
 >   \p x -> eq (prefix (takeWhile p x) x) True
 > 
 > 
 > _test_takeWhile_idempotent :: (List t, Equal a)
->   => t a -> Test ((a -> Bool) -> ListOf t a -> Bool)
+>   => t a -> Test ((a -> Bool) -> t a -> Bool)
 > _test_takeWhile_idempotent _ =
 >   testName "takeWhile(p,takeWhile(p,x)) == takeWhile(p,x)" $
 >   \p x -> eq (takeWhile p (takeWhile p x)) (takeWhile p x)
 > 
 > 
 > _test_takeWhile_commutes :: (List t, Equal a)
->   => t a -> Test ((a -> Bool) -> (a -> Bool) -> ListOf t a -> Bool)
+>   => t a -> Test ((a -> Bool) -> (a -> Bool) -> t a -> Bool)
 > _test_takeWhile_commutes _ =
 >   testName "takeWhile(p,takeWhile(q,x)) == takeWhile(q,takeWhile(p,x))" $
 >   \p q x ->
@@ -379,7 +381,7 @@ Here are our property tests for $\takeWhile$:
 And for $\dropBut$:
 
  > _test_dropWhile_suffix :: (List t, Equal a, Natural n)
- >   => t a -> n -> Test (n -> ListOf t a -> Bool)
+ >   => t a -> n -> Test (n -> t a -> Bool)
  > _test_dropWhile_suffix _ _ =
  >   testName "suffix(dropBut(k,x),x) == true" $
  >   \k x -> eq (suffix (dropBut k x) x) True
@@ -387,7 +389,7 @@ And for $\dropBut$:
 And for both:
 
  > _test_takeWhile_dropWhile_cat :: (List t, Equal a, Natural n)
- >   => t a -> n -> Test (n -> ListOf t a -> Bool)
+ >   => t a -> n -> Test (n -> t a -> Bool)
  > _test_takeWhile_dropWhile_cat _ _ =
  >   testName "cat(takeBut(k,x),dropBut(k,x)) == x" $
  >   \k x -> eq (cat (takeBut k x) (dropBut k x)) x

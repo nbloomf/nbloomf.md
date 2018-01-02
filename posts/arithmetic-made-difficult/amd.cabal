@@ -36,7 +36,9 @@ library
     LeftFold,
     DoubleFold,
     Snoc,
-    Reverse
+    Reverse,
+    Cat,
+    Length
   build-depends:
     base == 4.*,
     QuickCheck
@@ -412,16 +414,23 @@ test-suite amd-rev
     LeftFold,
     Snoc
 
-
-
 test-suite amd-cat
   default-language: Haskell2010
   type: exitcode-stdio-1.0
   main-is: Cat.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Cat.main_cat
-  other-modules: Booleans, Lists, NaturalNumbers, Unary,
-                 Reverse, DisjointUnions
+  other-modules:
+    Booleans,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    Lists,
+    HeadAndTail,
+    LeftFold,
+    Snoc,
+    Reverse
 
 test-suite amd-length
   default-language: Haskell2010
@@ -429,9 +438,20 @@ test-suite amd-length
   main-is: Length.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Length.main_length
-  other-modules: Booleans, Lists, NaturalNumbers, Unary,
-                 Reverse, Cat, Plus, SimpleRecursion,
-                 BailoutRecursion, DisjointUnions
+  other-modules:
+    Booleans,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion
+    BailoutRecursion,
+    Plus,
+    Lists,
+    Snoc,
+    Reverse,
+    Cat
+
+
 
 test-suite amd-at
   default-language: Haskell2010

@@ -3,6 +3,7 @@ title: Unique
 author: nbloomf
 date: 2017-05-26
 tags: arithmetic-made-difficult, literate-haskell
+slug: unique
 ---
 
 > module Unique
@@ -33,8 +34,6 @@ tags: arithmetic-made-difficult, literate-haskell
 > import Select
 > 
 > import Prelude (uncurry)
-> import Test.QuickCheck
-> import Text.Show.Functions
 
 Today we'll introduce a boolean function $\unique$ to detect whether or not a list has any duplicate items. As usual, we'd like to define $\unique$ as a fold. The signature needs to be $$\lists{A} \rightarrow \bool.$$ How can we do this? Intuitively, we might say
 
@@ -54,9 +53,9 @@ In Haskell:
 >   where
 >     epsilon _ = True
 > 
->     phi a f w = case listShape w of
->       Nil      -> True
->       Cons _ u -> and (all (\b -> not (eq a b)) u) (f u)
+>     phi a f w = case unnext w of
+>       Left ()     -> True
+>       Right (_,u) -> and (all (\b -> not (eq a b)) u) (f u)
 
 </p></div>
 </div>
@@ -103,9 +102,9 @@ the equality follows from (2).
 In Haskell:
 
 > unique :: (List t, Equal a) => t a -> Bool
-> unique x = case listShape x of
->   Nil      -> True
->   Cons a u -> and (all (not . eq a) u) (unique u)
+> unique x = case unnext x of
+>   Left ()     -> True
+>   Right (a,u) -> and (all (not . eq a) u) (unique u)
 
 Special cases.
 
@@ -393,21 +392,21 @@ Testing
 Here are our property tests for $\unique$:
 
 > _test_unique_alt :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> Bool)
+>   => t a -> Test (t a -> Bool)
 > _test_unique_alt _ =
 >   testName "unique'(x) == unique(x)" $
 >    \x -> eq (unique x) (unique' x)
 > 
 > 
 > _test_unique_rev :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> Bool)
+>   => t a -> Test (t a -> Bool)
 > _test_unique_rev _ =
 >   testName "unique(x) == unique(rev(x))" $
 >    \x -> eq (unique x) (unique (rev x))
 > 
 > 
 > _test_unique_sublist :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test (t a -> t a -> Bool)
 > _test_unique_sublist _ =
 >   testName "unique(x) & sublist(y,x) ==> unique(y)" $
 >    \x y -> if and (unique x) (sublist y x)
@@ -416,7 +415,7 @@ Here are our property tests for $\unique$:
 > 
 > 
 > _test_unique_select_two :: (List t, Equal a, Natural n)
->   => t a -> n -> Test (ListOf t a -> Bool)
+>   => t a -> n -> Test (t a -> Bool)
 > _test_unique_select_two _ n =
 >   testName "unique(x) == unique(select(next(next(zero)),x))" $
 >    let

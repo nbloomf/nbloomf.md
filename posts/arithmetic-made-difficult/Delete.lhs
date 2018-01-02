@@ -3,6 +3,7 @@ title: Delete
 author: nbloomf
 date: 2017-05-27
 tags: arithmetic-made-difficult, literate-haskell
+slug: delete
 ---
 
 > module Delete
@@ -349,7 +350,7 @@ Testing
 Here are our property tests for $\delete$:
 
 > _test_delete_elt :: (List t, Equal a)
->   => t a -> Test (a -> ListOf t a -> Bool)
+>   => t a -> Test (a -> t a -> Bool)
 > _test_delete_elt _ =
 >   testName "eq(x,delete(a,x)) == not(elt(a,x))" $
 >   \a x -> eq (eq x (delete a x)) (not (elt a x))

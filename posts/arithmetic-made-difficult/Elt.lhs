@@ -3,6 +3,7 @@ title: Elt
 author: nbloomf
 date: 2017-05-20
 tags: arithmetic-made-difficult, literate-haskell
+slug: elt
 ---
 
 > module Elt
@@ -363,7 +364,7 @@ Testing
 Here are our property tests for $\elt$:
 
 > _test_elt_alt :: (List t, Equal a)
->   => t a -> Test (a -> ListOf t a -> Bool)
+>   => t a -> Test (a -> t a -> Bool)
 > _test_elt_alt _ =
 >   testName "elt'(a,x) == elt(a,x)" $
 >   \a x -> eq (elt a x) (elt' a x)
@@ -380,35 +381,35 @@ Here are our property tests for $\elt$:
 > 
 > 
 > _test_elt_cat :: (List t, Equal a)
->   => t a -> Test (a -> ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test (a -> t a -> t a -> Bool)
 > _test_elt_cat _ =
 >   testName "elt(a,cat(x,y)) == or(elt(a,x),elt(a,y))" $
 >   \a x y -> eq (elt a (cat x y)) (or (elt a x) (elt a y))
 > 
 > 
 > _test_elt_rev :: (List t, Equal a)
->   => t a -> Test (a -> ListOf t a -> Bool)
+>   => t a -> Test (a -> t a -> Bool)
 > _test_elt_rev _ =
 >   testName "elt(a,x) == elt(a,rev(x))" $
 >   \a x -> eq (elt a x) (elt a (rev x))
 > 
 > 
 > _test_elt_tails :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test (t a -> t a -> Bool)
 > _test_elt_tails _ =
 >   testName "elt(y,tails(x)) == suffix(y,x)" $
 >   \x y -> eq (elt y (tails x)) (suffix y x)
 > 
 > 
 > _test_elt_inits :: (List t, Equal a)
->   => t a -> Test (ListOf t a -> ListOf t a -> Bool)
+>   => t a -> Test (t a -> t a -> Bool)
 > _test_elt_inits _ =
 >   testName "elt(y,inits(x)) == prefix(y,x)" $
 >   \x y -> eq (elt y (inits x)) (prefix y x)
 > 
 > 
 > _test_elt_filter_eq :: (List t, Equal a)
->   => t a -> Test (a -> ListOf t a -> Bool)
+>   => t a -> Test (a -> t a -> Bool)
 > _test_elt_filter_eq _ =
 >   testName "elt(a,filter(eq(a,-),x)) == false" $
 >   \a x -> eq (elt a (filter (not . eq a) x)) False
