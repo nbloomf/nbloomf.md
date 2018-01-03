@@ -51,9 +51,9 @@ We can translate the definition of $\sublist$ to Haskell:
 > sublist' :: (List t, Equal a) => t a -> t a -> Bool
 > sublist' x y = foldr isNil phi y x
 >   where
->     phi a f w = case listShape w of
->       Nil      -> True
->       Cons b u -> if eq a b then f u else f w
+>     phi a f w = case uncons w of
+>       Left ()     -> True
+>       Right (b,u) -> if eq a b then f u else f w
 
 The following result suggests an alternative implementation.
 
@@ -97,11 +97,11 @@ as claimed.
 In Haskell:
 
 > sublist :: (List t, Equal a) => t a -> t a -> Bool
-> sublist x y = case listShape x of
->   Nil      -> True
->   Cons a u -> case listShape y of
->     Nil      -> False
->     Cons b v -> if eq a b
+> sublist x y = case uncons x of
+>   Left ()     -> True
+>   Right (a,u) -> case uncons y of
+>     Left ()     -> False
+>     Right (b,v) -> if eq a b
 >       then sublist u v
 >       else sublist x v
 

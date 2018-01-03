@@ -63,9 +63,9 @@ We can translate $\lcp$ to Haskell directly as follows:
 >   where
 >     epsilon _ = nil
 > 
->     phi a f w = case listShape w of
->       Nil      -> nil
->       Cons b u -> if eq a b
+>     phi a f w = case uncons w of
+>       Left ()     -> nil
+>       Right (b,u)x -> if eq a b
 >         then cons a (f u)
 >         else nil
 
@@ -120,11 +120,11 @@ as claimed.
 In Haskell:
 
 > lcp :: (List t, Equal a) => t a -> t a -> t a
-> lcp x y = case listShape x of
->   Nil      -> nil
->   Cons a u -> case listShape y of
->     Nil      -> nil
->     Cons b v -> if eq a b
+> lcp x y = case uncons x of
+>   Left ()     -> nil
+>   Right (a,u) -> case uncons y of
+>     Left ()     -> nil
+>     Right (b,v) -> if eq a b
 >       then cons a (lcp u v)
 >       else nil
 

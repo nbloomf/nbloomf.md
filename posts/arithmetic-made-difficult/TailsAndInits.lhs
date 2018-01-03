@@ -79,9 +79,9 @@ as claimed.
 In Haskell:
 
 > tails :: (List t) => t a -> t (t a)
-> tails x = case listShape x of
->   Nil      -> cons nil nil
->   Cons a w -> cons (cons a w) (tails w)
+> tails x = case uncons x of
+>   Left ()     -> cons nil nil
+>   Right (a,w) -> cons (cons a w) (tails w)
 
 Special case.
 

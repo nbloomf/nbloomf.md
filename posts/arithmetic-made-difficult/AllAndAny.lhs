@@ -90,9 +90,9 @@ as needed.
 In Haskell:
 
 > all :: (List t) => (a -> Bool) -> t a -> Bool
-> all p x = case listShape x of
->   Nil      -> True
->   Cons a w -> and (p a) (all p w)
+> all p x = case uncons x of
+>   Left ()     -> True
+>   Right (a,w) -> and (p a) (all p w)
 
 As a corollary:
 
@@ -294,9 +294,9 @@ as claimed.
 </div>
 
 > any :: (List t) => (a -> Bool) -> t a -> Bool
-> any p x = case listShape x of
->   Nil      -> False
->   Cons a w -> or (p a) (any p w)
+> any p x = case uncons x of
+>   Left ()     -> False
+>   Right (a,w) -> or (p a) (any p w)
 
 And a corollary.
 

@@ -99,9 +99,9 @@ as claimed.
 In Haskell:
 
 > elt :: (List t, Equal a) => a -> t a -> Bool
-> elt a x = case listShape x of
->   Nil      -> False
->   Cons b w -> if eq a b
+> elt a x = case uncons x of
+>   Left ()     -> False
+>   Right (b,w) -> if eq a b
 >     then True
 >     else elt a w
 

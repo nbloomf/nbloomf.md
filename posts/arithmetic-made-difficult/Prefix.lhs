@@ -66,9 +66,9 @@ We can translate this definition directly to Haskell:
 >   where
 >     epsilon _ = True
 > 
->     phi a f w = case listShape w of
->       Nil      -> False
->       Cons b u -> if eq a b
+>     phi a f w = case uncons w of
+>       Left ()     -> False
+>       Right (b,u) -> if eq a b
 >         then f u
 >         else False
 
@@ -122,11 +122,11 @@ as claimed.
 In Haskell:
 
 > prefix :: (List t, Equal a) => t a -> t a -> Bool
-> prefix u v = case listShape u of
->   Nil      -> True
->   Cons a x -> case listShape v of
->     Nil      -> False
->     Cons b y -> if eq a b
+> prefix u v = case uncons u of
+>   Left ()     -> True
+>   Right (a,x) -> case uncons v of
+>     Left ()     -> False
+>     Right (b,y) -> if eq a b
 >       then prefix x y
 >       else False
 

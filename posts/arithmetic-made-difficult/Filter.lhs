@@ -99,9 +99,9 @@ as claimed.
 In Haskell:
 
 > filter :: (List t) => (a -> Bool) -> t a -> t a
-> filter p x = case listShape x of
->   Nil      -> nil
->   Cons a w -> if eq (p a) True
+> filter p x = case uncons x of
+>   Left ()     -> nil
+>   Right (a,w) -> if eq (p a) True
 >     then cons a (filter p w)
 >     else filter p w
 

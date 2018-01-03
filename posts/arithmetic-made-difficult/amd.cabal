@@ -440,6 +440,7 @@ test-suite amd-length
   ghc-options: -main-is Length.main_length
   other-modules:
     Booleans,
+    Tuples,
     DisjointUnions,
     Unary,
     NaturalNumbers,
@@ -447,6 +448,8 @@ test-suite amd-length
     BailoutRecursion,
     Plus,
     Lists,
+    HeadAndTail,
+    LeftFold,
     Snoc,
     Reverse,
     Cat

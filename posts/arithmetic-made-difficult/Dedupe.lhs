@@ -90,9 +90,9 @@ as claimed.
 In Haskell:
 
 > dedupeL' :: (List t, Equal a) => t a -> t a
-> dedupeL' x = case listShape x of
->   Nil      -> nil
->   Cons a u -> cons a (delete a (dedupeL' u))
+> dedupeL' x = case uncons x of
+>   Left ()     -> nil
+>   Right (a,u) -> cons a (delete a (dedupeL' u))
 
 Now $\dedupeL$ and $\delete$ commute.
 
