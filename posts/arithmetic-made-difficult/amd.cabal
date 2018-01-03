@@ -38,7 +38,8 @@ library
     Snoc,
     Reverse,
     Cat,
-    Length
+    Length,
+    At
   build-depends:
     base == 4.*,
     QuickCheck
@@ -454,17 +455,34 @@ test-suite amd-length
     Reverse,
     Cat
 
-
-
 test-suite amd-at
   default-language: Haskell2010
   type: exitcode-stdio-1.0
   main-is: At.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is At.main_at
-  other-modules: Booleans, Lists, NaturalNumbers, Unary,
-                 Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
-                 Times, Length, SimpleRecursion, BailoutRecursion, DisjointUnions
+  other-modules:
+    Booleans,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo,
+    Lists,
+    HeadAndTail,
+    LeftFold,
+    Snoc,
+    Reverse,
+    Cat,
+    Length
+
+
+
 
 test-suite amd-map
   default-language: Haskell2010

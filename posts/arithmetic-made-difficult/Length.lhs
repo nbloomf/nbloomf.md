@@ -76,25 +76,95 @@ $\addlength$ interacts with $\cons$ and $\snoc$.
 <div class="thm"><p>
 Let $A$ be a set. For all $n \in \nats$, $a \in A$, and $x \in \lists{A}$, we have the following.
 
-1. $\addlength(n,\cons(a,x)) = \next(\addlength(n,x))$.
-2. $\addlength(n,\snoc(a,x)) = \next(\addlength(n,x))$.
+1. $\addlength(n,\snoc(a,x)) = \next(\addlength(n,x))$.
+2. $\addlength(n,\cons(a,x)) = \next(\addlength(n,x))$.
 </p></div>
 
 <div class="proof"><p>
-1. (@@@)
-2. (@@@)
+1. Letting $\varphi$ be as defined in the definition of $\addlength$, we have
+$$\begin{eqnarray*}
+ &   & \addlength(n,\snoc(a,x)) \\
+ & = & \foldl{\varphi}(n,\snoc(a,x)) \\
+ & = & \varphi(\foldl{\varphi}(n,x),a) \\
+ & = & \next(\foldl{\varphi}(n,x)) \\
+ & = & \next(\addlength(n,x))
+\end{eqnarray*}$$
+as claimed.
+2. We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \addlength(n,\cons(a,\nil)) \\
+ & = & \addlength(\next(n),\nil) \\
+ & = & \next(n) \\
+ & = & \next(\addlength(n,\nil))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $a$ and $n$ for some $x$, and let $b \in A$. Now
+$$\begin{eqnarray*}
+ &   & \addlength(n,\cons(a,\cons(b,x))) \\
+ & = & \addlength(\next(n),\cons(b,x)) \\
+ & = & \next(\addlength(\next(n),x)) \\
+ & = & \next(\addlength(n,\cons(b,x)))
+\end{eqnarray*}$$
+as needed.
 </p></div>
 
 <div class="test"><p>
 
-(@@@)
+> _test_addlength_snoc_next
+>   :: (List t, Equal (t a), Natural n, Equal n)
+>   => t a -> n -> Test (n -> a -> t a -> Bool)
+> _test_addlength_snoc_next t _ =
+>   testName "addlength(n,snoc(a,x)) == next(addlength(n,x))" $
+>   \n a x ->
+>     eq (addlength n (snoc a x)) (next (addlength n x))
+> 
+> 
+> _test_addlength_cons_next
+>   :: (List t, Equal (t a), Natural n, Equal n)
+>   => t a -> n -> Test (n -> a -> t a -> Bool)
+> _test_addlength_cons_next t _ =
+>   testName "addlength(n,cons(a,x)) == next(addlength(n,x))" $
+>   \n a x ->
+>     eq (addlength n (cons a x)) (next (addlength n x))
 
 </p></div>
 </div>
 
 $\addlength$ interacts with $\rev$.
 
-(@@@)
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $n \in \nats$ and $x \in \lists{A}$, we have $$\addlength(n,\rev(x)) = \addlength(n,x).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \addlength(n,\rev(\nil)) \\
+ & = & \addlength(n,\nil)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $n$ for some $x$, and let $a \in A$. Now
+$$\begin{eqnarray*}
+ &   & \addlength(n,\rev(\cons(a,x))) \\
+ & = & \addlength(n,\snoc(a,\rev(x))) \\
+ & = & \next(\addlength(n,\rev(x))) \\
+ & = & \next(\addlength(n,x)) \\
+ & = & \addlength(n,\cons(a,x))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_addlength_rev
+>   :: (List t, Equal (t a), Natural n, Equal n)
+>   => t a -> n -> Test (n -> t a -> Bool)
+> _test_addlength_rev _ _ =
+>   testName "addlength(n,rev(x)) == addlength(n,x)" $
+>   \n x ->
+>     eq (addlength n (rev x)) (addlength n x)
+
+</p></div>
+</div>
 
 Now we define $\length$ as follows.
 
@@ -139,7 +209,17 @@ as needed.
 
 <div class="test"><p>
 
-(@@@)
+> _test_length_foldr
+>   :: (List t, Equal (t a), Natural n, Equal n)
+>   => t a -> n -> Test (t a -> Bool)
+> _test_length_foldr _ k =
+>   testName "length(x) == foldr(zero,psi)(x)" $
+>   \x ->
+>     let
+>       zero' = zero `withTypeOf` k
+>       psi _ m = next m
+>     in
+>       eq (length x) (foldr zero' psi x)
 
 </p></div>
 </div>
@@ -148,121 +228,32 @@ Since $\length$ is equivalent to a right fold, it is the unique solution to a sy
 
 <div class="result">
 <div class="corollary"><p>
-(@@@)
+Let $A$ be a set. $\length$ is the unique solution $f : \lists{A} \rightarrow \nats$ to the following system of equations for all $a \in A$ and $x \in \lists{A}$.
+$$\left\{\begin{array}{l}
+ f(\nil) = \zero \\
+ f(\cons(a,x)) = \next(f(x))
+\end{array}\right.$$
 </p></div>
 
-<div class="proof"><p>
+<div class="test"><p>
 
-(@@@)
+> _test_length_nil
+>   :: (List t, Equal (t a), Natural n, Equal n)
+>   => t a -> n -> Test Bool
+> _test_length_nil t k =
+>   testName "length(nil) == zero" $
+>     eq (length (nil `withTypeOf` t)) (zero `withTypeOf` k)
+> 
+> 
+> _test_length_cons
+>   :: (List t, Equal (t a), Natural n, Equal n)
+>   => t a -> n -> Test (a -> t a -> Bool)
+> _test_length_cons _ k =
+>   testName "length(cons(a,x)) == next(length(x))" $
+>   \a x -> eq
+>     ((length (cons a x)) `withTypeOf` k)
+>     (next (length x))
 
-</p></div>
-</div>
-
-(@@@)
-
-We let $\varphi$ be as in this definition for the remainder of this post. Now a lemma:
-
-<div class="result">
-<div class="lemma"><p>
-Let $A$ be a set. For all $a,b \in A$, $k \in \nats$, and $x \in \lists{A}$, we have the following.
-
-1. $\foldl{k}{\varphi}(\cons(a,x)) = \foldl{k}{\varphi}(\cons(b,x))$.
-2. $\foldl{k}{\varphi}(\cons(a,x)) = \foldl{k}{\varphi}(\snoc(a,x))$.
-</p></div>
-
-<div class="proof"><p>
-1. Note that
-$$\begin{eqnarray*}
- &   & \foldl{k}{\varphi}(\cons(a,x)) \\
- & = & \foldr{k}{\varphi}(\rev(\cons(a,x))) \\
- & = & \foldr{k}{\varphi}(\snoc(a,\rev(x))) \\
- & = & \foldr{\varphi(a,k)}{\varphi}(\rev(x)) \\
- & = & \foldr{\next(k)}{\varphi}(\rev(x)) \\
- & = & \foldr{\varphi(b,k)}{\varphi}(\rev(x)) \\
- & = & \foldr{k}{\varphi}(\snoc(b,\rev(x))) \\
- & = & \foldr{k}{\varphi}(\rev(\cons(b,x))) \\
- &   & \foldl{k}{\varphi}(\cons(b,x)) \\
-\end{eqnarray*}$$
-as claimed.
-2. We proceed by list induction on $x$. For the base case $x = \nil$, note that
-$$\begin{eqnarray*}
- &   & \foldl{k}{\varphi}(\cons(a,\nil)) \\
- & = & \foldr{k}{\varphi}(\rev(\cons(a,\nil))) \\
- & = & \foldr{k}{\varphi}(\cons(a,\nil)) \\
- & = & \foldr{k}{\varphi}(\cons(a,\rev(\nil))) \\
- & = & \foldr{k}{\varphi}(\rev(\snoc(a,\nil))) \\
- & = & \foldl{k}{\varphi}(\snoc(a,\nil)) \\
-\end{eqnarray*}$$
-as claimed. For the inductive step, suppose the result holds for some $x \in \lists{A}$, and let $b \in A$. Now
-$$\begin{eqnarray*}
- &   & \foldl{k}{\varphi}(\snoc(a,\cons(b,x))) \\
- & = & \foldl{k}{\varphi}(\cons(b,\snoc(a,x))) \\
- & = & \foldr{k}{\varphi}(\rev(\cons(b,\snoc(a,x)))) \\
- & = & \foldr{k}{\varphi}(\snoc(b,\rev(\snoc(a,x)))) \\
- & = & \foldr{\varphi(b,k)}{\varphi}(\rev(\snoc(a,x))) \\
- & = & \foldl{\varphi(b,k)}{\varphi}(\snoc(a,x)) \\
- & = & \foldl{\next(k)}{\varphi}(\cons(a,x)) \\
- & = & \foldl{\varphi(a,k)}{\varphi}(\cons(b,x)) \\
- & = & \foldr{\varphi(a,k)}{\varphi}(\rev(\cons(b,x))) \\
- & = & \foldr{k}{\varphi}(\snoc(a,\rev(\cons(b,x)))) \\
- & = & \foldr{k}{\varphi}(\rev(\cons(a,\cons(b,x)))) \\
- & = & \foldl{k}{\varphi}(\cons(a,\cons(b,x))) \\
-\end{eqnarray*}$$
-as claimed.
-</p></div>
-</div>
-
-In particular:
-
-<div class="result">
-<div class="corollary"><p>
-For all $a \in A$ and $x \in \lists{A}$:
-
-1. $\length(\cons(a,x)) = \length(\cons(b,x))$.
-2. $\length(\cons(a,x)) = \length(\snoc(a,x))$.
-</p></div>
-</div>
-
-Although $\length$ is defined in terms of $\foldl{\ast}{\ast}$, it has a $\foldr{\ast}{\ast}$-based interpretation as well:
-
-<div class="result">
-<div class="thm"><p>
-With $\varphi$ as in the definition of $\length$, we have $$\length(x) = \foldr{\zero}{\varphi}.$$ In particuar, $$\length(\cons(a,x)) = \next(\length(x)).$$
-</p></div>
-
-<div class="proof"><p>
-We proceed by list induction. For the base case $x = \nil$, note that
-$$\begin{eqnarray*}
- &   & \length(\nil) \\
- & = & \foldl{\zero}{\varphi}(\nil) \\
- & = & \foldr{\zero}{\varphi}(\rev(\nil)) \\
- & = & \foldr{\zero}{\varphi}(\nil)
-\end{eqnarray*}$$
-as claimed. For the inductive step, suppose the equality holds for some $x \in \lists{A}$, and let $a \in A$. Now
-$$\begin{eqnarray*}
- &   & \length(\cons(a,x)) \\
- & = & \length(\snoc(a,x)) \\
- & = & \foldl{\zero}{\varphi}(\snoc(a,x)) \\
- & = & \foldr{\zero}{\varphi}(\rev(\snoc(a,x))) \\
- & = & \foldr{\zero}{\varphi}(\cons(a,\rev(x))) \\
- & = & \next(\foldr{\zero}{\varphi}(\rev(x))) \\
- & = & \next(\foldl{\zero}{\varphi}(x)) \\
- & = & \next(\length(x)) \\
- & = & \next(\foldl{\zero}{\varphi}(x)) \\
- & = & \varphi(a,\foldr{\zero}{\varphi}(x)) \\
- & = & \foldr{\zero}{\varphi}(\cons(a,x))
-\end{eqnarray*}$$
-as needed.
-
-Now note that
-$$\begin{eqnarray*}
- &   & \length(\cons(a,x)) \\
- & = & \foldr{\zero}{\varphi}(\cons(a,x)) \\
- & = & \varphi(a,\foldr{\zero}{\varphi}(x)) \\
- & = & \varphi(a,\length(x)) \\
- & = & \next(\length(x))
-\end{eqnarray*}$$
-as claimed.
 </p></div>
 </div>
 
@@ -272,27 +263,19 @@ Special cases.
 <div class="thm"><p>
 For all $a,b \in A$, we have:
 
-1. $\length(\nil) = \zero$.
-2. $\length(\cons(a,\nil)) = \next(\zero)$.
-3. $\length(\cons(a,\cons(b,\nil))) = \next(\next(\zero))$.
+1. $\length(\cons(a,\nil)) = \next(\zero)$.
+2. $\length(\cons(a,\cons(b,\nil))) = \next(\next(\zero))$.
 </p></div>
 
 <div class="proof"><p>
 1. We have
-$$\begin{eqnarray*}
- &   & \length(\nil) \\
- & = & \foldr{\zero}{\varphi}(\nil) \\
- & = & \zero
-\end{eqnarray*}$$
-as claimed.
-2. We have
 $$\begin{eqnarray*}
  &   & \length(\cons(a,\nil)) \\
  & = & \next(\length(\nil)) \\
  & = & \next(\zero)
 \end{eqnarray*}$$
 as claimed.
-3. Note that
+2. Note that
 $$\begin{eqnarray*}
  &   & \length(\cons(a,\cons(b,\nil))) \\
  & = & \next(\length(\cons(b,\nil))) \\
@@ -300,33 +283,95 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_length_single
+>   :: (List t, Equal (t a), Natural n, Equal n)
+>   => t a -> n -> Test (a -> Bool)
+> _test_length_single t k =
+>   testName "length(cons(a,nil)) == next(zero)" $
+>   \a -> eq
+>     ((next zero) `withTypeOf` k)
+>     (length (cons a (nil `withTypeOf` t)))
+> 
+> 
+> _test_length_double
+>   :: (List t, Equal (t a), Natural n, Equal n)
+>   => t a -> n -> Test (a -> a -> Bool)
+> _test_length_double t k =
+>   testName "length(cons(a,cons(b,nil))) == next(next(zero))" $
+>   \a b -> eq
+>     ((next (next zero)) `withTypeOf` k)
+>     (length (cons a (cons b (nil `withTypeOf` t))))
+
+</p></div>
+</div>
+
+$\length$ interacts with $\snoc$.
+
+<div class="result">
+<div class="thm"><p>
+For all $a \in A$ and $x \in \lists{A}$, we have $$\length(\snoc(a,x)) = \next(\length(x)).$$
+</p></div>
+
+<div class="proof"><p>
+We have
+$$\begin{eqnarray*}
+ &   & \length(\snoc(a,x)) \\
+ & = & \addlength(\zero,\snoc(a,x)) \\
+ & = & \next(\addlength(\zero,x)) \\
+ & = & \next(\length(x))
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_length_snoc :: (List t, Equal (t a), Natural n, Equal n)
+>   => t a -> n -> Test (a -> t a -> Bool)
+> _test_length_snoc _ k =
+>   testName "length(snoc(a,x)) == next(length(x))" $
+>   \a x -> eq
+>     ((length (snoc a x)) `withTypeOf` k)
+>     (next (length x))
+
+</p></div>
 </div>
 
 $\length$ is invariant over $\rev$.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$ we have the following.
-
-1. $\length(\snoc(a,x)) = \next(\length(x))$.
-2. $\length(\rev(x)) = \length(x)$.
+Let $A$ be a set. For all $x \in \lists{A}$ we have $$\length(\rev(x)) = \length(x).$$
 </p></div>
 
 <div class="proof"><p>
-1. We have $$\length(\snoc(a,x)) = \length(\cons(a,x)) = \next(\length(x))$$ as claimed.
-2. We proceed by list induction. For the base case $x = \nil$, it suffices to note that $\rev(\nil) = \nil$. For the inductive step, suppose the equality holds for some $x \in \lists{A}$, and let $b \in A$. Now
+Note that
 $$\begin{eqnarray*}
- &   & \length(\rev(\cons(a,x))) \\
- & = & \length(\snoc(a,\rev(x))) \\
- & = & \next(\length(\rev(x))) \\
- & = & \next(\length(x)) \\
- & = & \length(\cons(a,x))
+ &   & \length(\rev(x)) \\
+ & = & \addlength(\zero,\rev(x)) \\
+ & = & \addlength(\zero,x) \\
+ & = & \length(x)
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_length_rev
+>   :: (List t, Equal (t a), Natural n, Equal n)
+>   => t a -> n -> Test (t a -> Bool)
+> _test_length_rev _ k =
+>   testName "length(rev(x)) == length(x)" $
+>   \x -> eq
+>     ((length (rev x)) `withTypeOf` k)
+>     (length x)
+
+</p></div>
 </div>
 
-And $\length$ turns $\cat$ into $\nplus$.
+$\length$ turns $\cat$ into $\nplus$.
 
 <div class="result">
 <div class="thm"><p>
@@ -352,6 +397,19 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_length_cat
+>   :: (List t, Equal (t a), Natural n, Equal n)
+>   => t a -> n -> Test (t a -> t a -> Bool)
+> _test_length_cat _ k =
+>   testName "length(cat(x,y)) == plus(length(x),length(y))" $
+>   \x y -> eq
+>     ((length (cat x y)) `withTypeOf` k)
+>     (plus (length x) (length y))
+
+</p></div>
 </div>
 
 And $\length$ detects $\nil$.
@@ -370,99 +428,26 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 in particular, $\length(x) \neq \zero$.
 </p></div>
+
+<div class="test"><p>
+
+> _test_length_zero
+>   :: (List t, Equal (t a), Natural n, Equal n)
+>   => t a -> n -> Test (t a -> Bool)
+> _test_length_zero _ k =
+>   testName "eq(length(x),zero) == eq(x,nil)" $
+>   \x -> eq
+>     (eq (length x) (zero `withTypeOf` k))
+>     (eq x nil)
+
+</p></div>
 </div>
 
 
 Testing
 -------
 
-Here are our property tests for $\length$.
-
-> _test_length_cons :: (List t, Equal (t a), Natural n, Equal n)
->   => t a -> n -> Test (a -> a -> t a -> Bool)
-> _test_length_cons _ n =
->   testName "length(cons(a,x)) == length(cons(b,x))" $
->   \a b x ->
->     eq
->       ((length (cons a x)) `withTypeOf` n)
->       (length (cons b x))
-> 
-> 
-> _test_length_cons_snoc
->   :: (List t, Equal (t a), Natural n, Equal n)
->   => t a -> n -> Test (a -> t a -> Bool)
-> _test_length_cons_snoc _ n =
->   testName "length(cons(a,x)) == length(snoc(a,x))" $
->   \a x ->
->     eq
->       ((length (cons a x)) `withTypeOf` n)
->       (length (snoc a x))
-> 
-> 
-> _test_length_cons_next
->   :: (List t, Equal (t a), Natural n, Equal n)
->   => t a -> n -> Test (a -> t a -> Bool)
-> _test_length_cons_next _ n =
->   testName "length(cons(a,x)) == next(length(x))" $
->   \a x ->
->     eq
->       (length (cons a x))
->       ((next (length x)) `withTypeOf` n)
-> 
-> 
-> _test_length_single
->   :: (List t, Equal (t a), Natural n, Equal n)
->   => t a -> n -> Test (a -> Bool)
-> _test_length_single z n =
->   testName "length(cons(a,nil)) == next(zero)" $
->   \a -> let
->     nil' = nil `withTypeOf` z
->     one  = (next zero) `withTypeOf` n
->   in
->     eq one (length (cons a nil'))
-> 
-> 
-> _test_length_double :: (List t, Equal (t a), Natural n, Equal n)
->   => t a -> n -> Test (a -> a -> Bool)
-> _test_length_double z n =
->   testName "length(cons(a,cons(b,nil))) == next(next(zero))" $
->   \a b -> let
->     nil' = nil `withTypeOf` z
->     two  = (next (next zero)) `withTypeOf` n
->   in
->     eq two (length (cons a (cons b nil')))
-> 
-> 
-> _test_length_snoc_next :: (List t, Equal (t a), Natural n, Equal n)
->   => t a -> n -> Test (a -> t a -> Bool)
-> _test_length_snoc_next _ n =
->   testName "length(snoc(a,x)) == next(length(x))" $
->   \a x -> let
->     nlx = (next (length x)) `withTypeOf` n
->   in
->     eq nlx (length (snoc a x))
-> 
-> 
-> _test_length_rev :: (List t, Equal (t a), Natural n, Equal n)
->   => t a -> n -> Test (t a -> Bool)
-> _test_length_rev _ n =
->   testName "length(rev(x)) == length(x)" $
->   \x -> let
->     lx = length x `withTypeOf` n
->   in
->     eq lx (length (rev x))
-> 
-> 
-> _test_length_cat :: (List t, Equal (t a), Natural n, Equal n)
->   => t a -> n -> Test (t a -> t a -> Bool)
-> _test_length_cat _ n =
->   testName "length(cat(x,y)) == plus(length(x),length(y))" $
->   \x y -> let
->     lxy = (length (cat x y)) `withTypeOf` n
->   in
->     eq lxy (plus (length x) (length y))
-
-And the suite:
+Suite:
 
 > _test_length ::
 >   ( TypeName a, Show a, Equal a, Arbitrary a
@@ -480,17 +465,21 @@ And the suite:
 > 
 >   runTest args (_test_addlength_nil_right t n)
 >   runTest args (_test_addlength_cons_right t n)
+>   runTest args (_test_addlength_snoc_next t n)
+>   runTest args (_test_addlength_cons_next t n)
+>   runTest args (_test_addlength_rev t n)
 > 
+>   runTest args (_test_length_foldr t n)
+>   runTest args (_test_length_nil t n)
 >   runTest args (_test_length_cons t n)
->   runTest args (_test_length_cons_snoc t n)
->   runTest args (_test_length_cons_next t n)
 >   runTest args (_test_length_single t n)
 >   runTest args (_test_length_double t n)
->   runTest args (_test_length_snoc_next t n)
+>   runTest args (_test_length_snoc t n)
 >   runTest args (_test_length_rev t n)
 >   runTest args (_test_length_cat t n)
+>   runTest args (_test_length_zero t n)
 
-And ``main``:
+Main:
 
 > main_length :: IO ()
 > main_length = do
