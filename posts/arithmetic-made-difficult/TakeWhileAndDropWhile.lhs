@@ -19,6 +19,8 @@ slug: takewhile-dropwhile
 > import MaxAndMin
 > 
 > import Lists
+> import HeadAndTail
+> import Snoc
 > import Reverse
 > import Length
 > import Map
@@ -113,7 +115,7 @@ To see uniqueness, note that under these conditions we have $$f(p,x) = \foldr{\n
 In Haskell:
 
 > takeWhile :: (List t) => (a -> Bool) -> t a -> t a
-> takeWhile p z = case unnext z of
+> takeWhile p z = case uncons z of
 >   Left ()     -> nil
 >   Right (a,x) -> if eq (p a) True
 >     then cons a (takeWhile p x)
@@ -350,28 +352,28 @@ Testing
 
 Here are our property tests for $\takeWhile$:
 
-> _test_takeWhile_alt :: (List t, Equal a)
+> _test_takeWhile_alt :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
 > _test_takeWhile_alt _ =
 >   testName "takeWhile(p,x) == takeWhile'(p,x)" $
 >   \p x -> eq (takeWhile p x) (takeWhile' p x)
 > 
 > 
-> _test_takeWhile_prefix :: (List t, Equal a)
+> _test_takeWhile_prefix :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
 > _test_takeWhile_prefix _ =
 >   testName "prefix(takeWhile(p,x),x) == true" $
 >   \p x -> eq (prefix (takeWhile p x) x) True
 > 
 > 
-> _test_takeWhile_idempotent :: (List t, Equal a)
+> _test_takeWhile_idempotent :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
 > _test_takeWhile_idempotent _ =
 >   testName "takeWhile(p,takeWhile(p,x)) == takeWhile(p,x)" $
 >   \p x -> eq (takeWhile p (takeWhile p x)) (takeWhile p x)
 > 
 > 
-> _test_takeWhile_commutes :: (List t, Equal a)
+> _test_takeWhile_commutes :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> (a -> Bool) -> t a -> Bool)
 > _test_takeWhile_commutes _ =
 >   testName "takeWhile(p,takeWhile(q,x)) == takeWhile(q,takeWhile(p,x))" $
@@ -380,7 +382,7 @@ Here are our property tests for $\takeWhile$:
 
 And for $\dropBut$:
 
- > _test_dropWhile_suffix :: (List t, Equal a, Natural n)
+ > _test_dropWhile_suffix :: (List t, Equal a, Natural n, Equal (t a))
  >   => t a -> n -> Test (n -> t a -> Bool)
  > _test_dropWhile_suffix _ _ =
  >   testName "suffix(dropBut(k,x),x) == true" $
@@ -388,7 +390,7 @@ And for $\dropBut$:
 
 And for both:
 
- > _test_takeWhile_dropWhile_cat :: (List t, Equal a, Natural n)
+ > _test_takeWhile_dropWhile_cat :: (List t, Equal a, Natural n, Equal (t a))
  >   => t a -> n -> Test (n -> t a -> Bool)
  > _test_takeWhile_dropWhile_cat _ _ =
  >   testName "cat(takeBut(k,x),dropBut(k,x)) == x" $
@@ -401,6 +403,7 @@ And the suite:
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
 >   , TypeName n, Natural n, Show n, Arbitrary n
+>   , Equal (t a), Show (t a), Arbitrary (t a)
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_takewhile_dropwhile t k maxSize numCases = do
 >   testLabel ("takeWhile & dropWhile: " ++ typeName t)

@@ -12,6 +12,7 @@ slug: range
 > 
 > import Prelude ()
 > import Booleans
+> import DisjointUnions
 > import NaturalNumbers
 > import Plus
 > import Lists
@@ -33,7 +34,7 @@ In Haskell:
 
 > range :: (List t, Natural n, Equal n) => n -> n -> t n
 > range a b = unfoldN f b a
->   where f k = Just (next k, k)
+>   where f k = rgt (next k, k)
 
 </p></div>
 </div>

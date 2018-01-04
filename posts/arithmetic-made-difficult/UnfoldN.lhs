@@ -7,19 +7,22 @@ slug: unfoldn
 ---
 
 > module UnfoldN
->   ( unfoldN
+>   ( unfoldN, tacunfoldN, _test_unfoldN, main_unfoldN
 >   ) where
 > 
 > import Prelude ()
 > import Booleans
+> import DisjointUnions
 > import NaturalNumbers
 > import BailoutRecursion
 > import Lists
+> import HeadAndTail
+> import Snoc
 > import Reverse
 > import Cat
-> import Length
-> import At
 > import Map
+
+(@@@)
 
 So far we've developed a few functions that operate on lists. But we don't have a convenient programmatic way to *construct* lists out of nothing -- we'll remedy this today with a function called $\unfoldN{\ast}$. From the name, it sounds like unfold should be the "opposite" (or *dual*) of a fold. But the full story is a little more complicated than this; the true opposite to fold doesn't operate on lists at all, but on *streams* (which we'll get to later). Roughly speaking, $\lists{A}$ is an initial algebra, elements of $\lists{A}$ are required to be "finite", and $\foldr{\ast}{\ast}$ condenses a $\lists{A}$ element to a single item. Streams, in contrast, are required to be "infinite" and collectively form a *terminal algebra* and their universal map expands a single item to an infinite structure. All that is to say that the $\unfoldN{\ast}$ function we define here is *not* the real dual of $\foldr{\ast}{\ast}$ -- which partly explains why it is so complicated looking.
 
@@ -36,6 +39,127 @@ There is a problem with translating this type to $\lists{A}$, though. It has to 
 How can we fix this? One strategy would be to impose some kind of constraint on the map so that it must eventually return a ``Nothing``. That may well be possible, but my hunch is that it would make reasoning about unfolds complicated -- we'd have to prove that a given map satisfies the constraint before using it.
 
 Another strategy -- and the one we will take -- is to give unfold a natural number argument that acts as a countdown timer. If it reaches $\zero$, we're done. (This also explains the ``N`` in $\unfoldN{\ast}$.) This strategy also makes it possible to define $\unfoldN{\ast}$ using bailout recursion on $\nats$.
+
+Before defining $\unfoldN{\ast}$, we need a helper operator analogous to $\revcat$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ and $B$ be sets, and let $f : A \rightarrow 1 + (A \times B)$. There is a unique function $$\Theta : \lists{B} \times \nats \times A \rightarrow \lists{B}$$ such that for all $a \in A$, $x \in \lists{A}$, and $n \in \nats$, we have $$\Theta(x,\zero,a) = x$$ and
+$$\Theta(x,\next(n),a) = \left\{\begin{array}{ll}
+ x & \mathrm{if}\ f(a) = \lft(\ast) \\
+ \Theta(\snoc(b,x),n,c) & \mathrm{if}\ f(a) = \rgt((c,b)).
+\end{array}\right.$$
+We denote this unique map $\tacunfoldN{f}$.
+</p>
+
+<div class="proof"><p>
+We define $\varphi : A \times \lists{B} \rightarrow \lists{B}$ by $$\varphi(a,x) = x,$$ $\beta : \nats \times (A \times \lists{B}) \rightarrow \bool$ by $$\beta(n,(a,x)) = \isLft(f(a)),$$ $\psi : \nats \times (A \times \lists{B}) \rightarrow \lists{B}$ by $$\psi(n,(a,x)) = x,$$ and $\omega : \nats \times (A \times \lists{B}) \rightarrow A \times \lists{B}$ by
+$$\omega(n,(a,x)) = \left\{\begin{array}{ll}
+ (a,x) & \mathrm{if}\ f(a) = \lft(\ast) \\
+ (c,\snoc(b,x)) & \mathrm{if}\ f(a) = \rgt((c,b)).
+\end{array}\right.$$
+Finally, define $$\tacunfoldN{f}(x,n,a) = \bailoutRec{\varphi}{\beta}{\psi}{\omega}(n,(a,x)).$$ For brevity, in this proof we let $\Omega = \bailoutRec{\varphi}{\beta}{\psi}{\omega}$.
+
+First we show that $\tacunfoldN{f}$ has the desired properties. To this end, note that
+$$\begin{eqnarray*}
+ &   & \tacunfoldN{f}(x,\zero,a) \\
+ & = & \Omega(\zero,(a,x)) \\
+ & = & \varphi(a,x) \\
+ & = & x.
+\end{eqnarray*}$$
+Now suppose $f(a) = \lft(\ast)$; then
+$$\begin{eqnarray*}
+ &   & \tacunfoldN{f}(x,\next(n),a) \\
+ & = & \Omega(\next(n),(a,x)) \\
+ & = & \bif{\beta(a,x)}{\psi(a,x)}{\Omega(n,\omega(n,(a,x)))} \\
+ & = & \bif{\isLft(f(a))}{\psi(a,x)}{\Omega(n,\omega(n,(a,x)))} \\
+ & = & \bif{\btrue}{\psi(a,x)}{\Omega(n,\omega(n,(a,x)))} \\
+ & = & \psi(a,x) \\
+ & = & x
+\end{eqnarray*}$$
+as needed. Suppose instead that $f(a) = \rgt(c,b)$. Then
+$$\begin{eqnarray*}
+ &   & \tacunfoldN{f}(x,\next(n),a) \\
+ & = & \Omega(\next(n),(a,x)) \\
+ & = & \bif{\beta(a,x)}{\psi(a,x)}{\Omega(n,\omega(n,(a,x)))} \\
+ & = & \bif{\isLft(f(a))}{\psi(a,x)}{\Omega(n,\omega(n,(a,x)))} \\
+ & = & \bif{\bfalse}{\psi(a,x)}{\Omega(n,\omega(n,(a,x)))} \\
+ & = & \Omega(n,(c,\snoc(b,x))) \\
+ & = & \tacunfoldN{f}(\snoc(b,x),n,c)
+\end{eqnarray*}$$
+as needed.
+
+To see uniqueness, suppose now that $\Psi : \lists{B} \times \nats \times A \rightarrow \lists{B}$ has these properties. We show that $\Psi = \tacunfoldN{f}$ by induction on $n$. For the base case $n = \zero$, we have
+$$\begin{eqnarray*}
+ &   & \Psi(x,\zero,a) \\
+ & = & x \\
+ & = & \tacunfoldN{f}(x,\zero,a)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose we have $\Psi(x,n,a) = \tacunfoldN{f}(x,n,a)$ for all $x$ and $a$ for some $n$. Let $a \in A$. If $f(a) = \lft(\ast)$, then
+$$\begin{eqnarray*}
+ &   & \Psi(x,\next(n),a) \\
+ & = & x \\
+ & = & \tacunfoldN{f}(x,\next(n),a)
+\end{eqnarray*}$$
+as needed. If $f(a) = \rgt((c,b))$, then
+$$\begin{eqnarray*}
+ &   & \Psi(x,\next(n),a) \\
+ & = & \Psi(\snoc(b,x),n,c) \\
+ & = & \tacunfoldN{f}(\snoc(b,x),n,c) \\
+ & = & \tacunfoldN{f}(x,\next(n),a)
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
+We can implement $\tacunfoldN{f}$ using the definition from the proof, or by pattern matching using the universal property.
+
+> tacunfoldN', tacunfoldN
+>   :: (List t, Natural n)
+>   => (a -> Either () (a,b)) -> t b -> n -> a -> t b
+> 
+> tacunfoldN' f x n a = bailoutRec phi beta psi omega n (a,x)
+>   where
+>     phi (a,x) = x
+>     beta n (a,x) = isLft (f a)
+>     psi n (a,x) = x
+>     omega n (a,x) = case f a of
+>       Left () -> (a,x)
+>       Right (c,b) -> (c, snoc b x)
+> 
+> 
+> tacunfoldN f x n a = case unnext n of
+>   Left () -> x
+>   Right k -> case f a of
+>     Left () -> x
+>     Right (c,b) -> tacunfoldN f (snoc b x) k c
+
+We should test that these two implementations agree.
+
+> _test_tacunfoldN_equiv :: (List t, Equal (t a), Natural n)
+>   => t a -> n -> Test ((a -> Either () (a,a)) -> t a -> n -> a -> Bool)
+> _test_tacunfoldN_equiv _ _ =
+>   testName "tacunfoldN(x,n,a) == tacunfoldN'(x,n,a)" $
+>   \f x n a -> eq (tacunfoldN f x n a) (tacunfoldN' f x n a)
+
+And while we're at it, test that $\tacunfoldN{f}$ does satisfy the universal property.
+
+> _test_tacunfoldN_zero :: (List t, Equal (t a), Natural n)
+>   => t a -> n -> Test ((a -> Either () (a,a)) -> t a -> a -> Bool)
+> _test_tacunfoldN_zero _ k =
+>   testName "tacunfoldN(x,zero,a) == x" $
+>   \f x a -> eq (tacunfoldN f x (zero `withTypeOf` k) a) x
+> 
+> 
+> _test_tacunfoldN_next :: (List t, Equal (t a), Natural n)
+>   => t a -> n -> Test ((a -> Either () (a,a)) -> t a -> n -> a -> Bool)
+> _test_tacunfoldN_next _ _ =
+>   testName "tacunfoldN(x,next(n),a) == if(isLft(f(a)),x,tacunfoldN(snoc(b,x),n,c))" $
+>   \f x n a -> case f a of
+>     Left () -> eq (tacunfoldN f x (next n) a) x
+>     Right (c,b) -> eq (tacunfoldN f x (next n) a) (tacunfoldN f (snoc b x) n c)
+
+(@@@)
 
 <div class="result">
 <div class="thm"><p>
@@ -204,9 +328,40 @@ as claimed.
 </div>
 
 > unfoldN :: (List t, Natural n)
->   => (a -> Maybe (a,b)) -> n -> a -> t b
+>   => (a -> Either () (a,b)) -> n -> a -> t b
 > unfoldN f n a = case natShape n of
 >   Zero   -> nil
 >   Next k -> case f a of
->     Nothing    -> nil
->     Just (c,b) -> cons b (unfoldN f k c)
+>     Left ()     -> nil
+>     Right (c,b) -> cons b (unfoldN f k c)
+
+
+Testing
+-------
+
+Suite:
+
+> _test_unfoldN ::
+>   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
+>   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a)
+>   , TypeName n, Equal n, Show n, Arbitrary n, Natural n
+>   ) => t a -> n -> Int -> Int -> IO ()
+> _test_unfoldN t n maxSize numCases = do
+>   testLabel ("rev: " ++ typeName t)
+> 
+>   let
+>     args = stdArgs
+>       { maxSuccess = numCases
+>       , maxSize    = maxSize
+>       }
+> 
+>   runTest args (_test_tacunfoldN_equiv t n)
+>   runTest args (_test_tacunfoldN_zero t n)
+>   runTest args (_test_tacunfoldN_next t n)
+
+Main:
+
+> main_unfoldN :: IO ()
+> main_unfoldN = do
+>   _test_unfoldN (nil :: ConsList Bool)  (zero :: Unary) 20 100
+>   _test_unfoldN (nil :: ConsList Unary) (zero :: Unary) 20 100

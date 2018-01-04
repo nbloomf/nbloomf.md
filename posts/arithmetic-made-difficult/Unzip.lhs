@@ -194,14 +194,14 @@ Testing
 
 Here are our property tests for $\unzip$.
 
-> _test_unzip_zip :: (List t, Equal a, Equal b)
+> _test_unzip_zip :: (List t, Equal a, Equal b, Equal (t (a,b)))
 >   => t a -> t b -> Test (t (a,b) -> Bool)
 > _test_unzip_zip _ _ =
 >   testName "zip(unzip(x)) == x" $
 >   \x -> eq ((uncurry zip) (unzip x)) x
 > 
 > 
-> _test_unzip_tswap :: (List t, Equal a, Equal b)
+> _test_unzip_tswap :: (List t, Equal a, Equal b, Equal (t b), Equal (t a))
 >   => t a -> t b -> Test (t (a,b) -> Bool)
 > _test_unzip_tswap _ _ =
 >   testName "tswap(unzip(x)) == unzip(map(tswap)(x))" $
@@ -214,6 +214,8 @@ And the suite:
 >   ( TypeName a, Show a, Equal a, Arbitrary a
 >   , TypeName b, Show b, Equal b, Arbitrary b
 >   , TypeName (t a), TypeName (t b), List t
+>   , Equal (t (a,b)), Arbitrary (t a), Show (t a), Arbitrary (t b), Show (t b)
+>   , Show (t (a,b)), Arbitrary (t (a,b)), Equal (t b), Equal (t a)
 >   ) => t a -> t b -> Int -> Int -> IO ()
 > _test_unzip t u maxSize numCases = do
 >   testLabel ("unzip: " ++ typeName t ++ " & " ++ typeName u)

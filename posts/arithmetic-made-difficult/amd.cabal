@@ -40,7 +40,8 @@ library
     Cat,
     Length,
     At,
-    Map
+    Map,
+    UnfoldN
   build-depends:
     base == 4.*,
     QuickCheck
@@ -508,6 +509,35 @@ test-suite amd-map
     Cat,
     Length,
     At
+
+test-suite amd-unfoldN
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: UnfoldN.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options: -main-is UnfoldN.main_unfoldN
+  other-modules:
+    Booleans,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo,
+    Lists,
+    HeadAndTail,
+    LeftFold,
+    Snoc,
+    Reverse,
+    Cat,
+    At,
+    Length,
+    Map
+    
 
 
 

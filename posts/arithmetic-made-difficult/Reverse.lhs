@@ -6,8 +6,6 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: rev
 ---
 
-> {-# LANGUAGE BangPatterns #-}
-> {-# LANGUAGE ScopedTypeVariables #-}
 > module Reverse
 >   ( revcat, rev, _test_rev, main_rev
 >   ) where

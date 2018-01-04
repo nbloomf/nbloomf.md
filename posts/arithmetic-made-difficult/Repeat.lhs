@@ -11,6 +11,7 @@ slug: repeat
 >   ) where
 > 
 > import Booleans
+> import DisjointUnions
 > import NaturalNumbers
 > import Plus
 > 
@@ -47,7 +48,7 @@ We can implement $\repeat$ in Haskell using the definition:
 > repeat' :: (List t, Equal a, Natural n) => n -> a -> t a
 > repeat' n a = unfoldN f n a
 >   where
->     f x = Just (x,x)
+>     f x = rgt (x,x)
 
 But the next result suggests another way.
 
