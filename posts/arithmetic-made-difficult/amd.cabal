@@ -39,7 +39,8 @@ library
     Reverse,
     Cat,
     Length,
-    At
+    At,
+    Map
   build-depends:
     base == 4.*,
     QuickCheck
@@ -481,19 +482,35 @@ test-suite amd-at
     Cat,
     Length
 
-
-
-
 test-suite amd-map
   default-language: Haskell2010
   type: exitcode-stdio-1.0
   main-is: Map.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Map.main_map
-  other-modules: Booleans, Lists, NaturalNumbers, Unary,
-                 Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
-                 Times, At, Length, SimpleRecursion,
-                 BailoutRecursion, DisjointUnions
+  other-modules:
+    Booleans,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo,
+    Lists,
+    HeadAndTail,
+    LeftFold,
+    Snoc,
+    Reverse,
+    Cat,
+    Length,
+    At
+
+
+
 
 test-suite amd-range
   default-language: Haskell2010

@@ -10,20 +10,19 @@ slug: map
 >   ( map, _test_map, main_map
 >   ) where
 > 
+> import Prelude ()
 > import Booleans
+> import DisjointUnions
 > import NaturalNumbers
->
 > import Lists
+> import HeadAndTail
+> import Snoc
 > import Reverse
 > import Cat
 > import Length
 > import At
-> 
-> import Prelude (Show, Int, IO, id)
-> import Test.QuickCheck
-> import Text.Show.Functions
 
-Today we'll explore one of the most useful functions on $\lists{A}$: $\map$. What $\map$ does is take a function $A \rightarrow B$ and a list in $\lists{A}$, and apply the function "itemwise" to get a list in $\lists{B}$.
+Today we'll explore one of the most useful functions on $\lists{A}$: $\map$. What $\map$ does is take a function $A \rightarrow B$ and a $\lists{A}$, and apply the function "itemwise" to get a $\lists{B}$.
 
 <div class="result">
 <div class="defn"><p>
@@ -39,7 +38,34 @@ In Haskell:
 </p></div>
 </div>
 
-(For the rest of this post we will let $\varphi$ be as in this definition.)
+Since $\map$ is defined as a $\foldr{\ast}{\ast}$, it is the unique solution to a system of functional equations.
+
+<div class="result">
+<div class="thm"><p>
+$\map(\alpha)$ is the unique solution $f : \lists{A} \rightarrow \lists{B}$ of the following equations for all $a \in A$ and $x \in \lists{A}$:
+$$\left\{\begin{array}{l}
+ f(\nil) = \nil \\
+ f(\cons(a,x)) = \cons(\alpha(a),f(x))
+\end{array}\right.$$
+</p></div>
+
+<div class="test"><p>
+
+> _test_map_nil :: (List t, Equal (t a))
+>   => t a -> Test ((a -> a) -> Bool)
+> _test_map_nil t =
+>   testName "map(f)(nil) == nil" $
+>   \f -> eq (map f (nil `withTypeOf` t)) nil
+> 
+> 
+> _test_map_cons :: (List t, Equal (t a))
+>   => t a -> Test ((a -> a) -> a -> t a -> Bool)
+> _test_map_cons _ =
+>   testName "map(f)(cons(a,x)) == cons(f(a),map(f)(x))" $
+>   \f a x -> eq (map f (cons a x)) (cons (f a) (map f x))
+
+</p></div>
+</div>
 
 One way to think about $\map$ is that it fills in the following diagram.
 $$\require{AMScd}
@@ -50,75 +76,118 @@ A @>{f}>> B\\
 \end{CD}$$
 This looks an awful lot like a functor diagram. Recall that given two categories, a functor associates objects to objects and morphisms to morphisms, preserving $\id$ and composition. And indeed, $\map$ is the morphism part of the $\lists{\ast}$ functor.
 
-$\map$ takes $\id_A$ to $\id_{\lists{A}}$:
+$\map$ takes $\id_A$ to $\id_{\lists{A}}$.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set. Then we have $$\map(\id_A) = \id_{\lists{A}}.$$
+Let $A$ be a set. Then we have $$\map(\id_A)(x) = x.$$
 </p></div>
 
 <div class="proof"><p>
-Note that
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \varphi(\id_A)(a,x) \\
- & = & \cons(\id_A(a),x) \\
- & = & \cons(a,x);
+ &   & \map(\id)(\nil) \\
+ & = & \nil
 \end{eqnarray*}$$
-that is, $\varphi(\id_A) = \cons$. So we have
+as needed. For the inductive step, suppose the equality holds for all $f$ for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
- &   & \map(\id_A) \\
- & = & \foldr{\nil}{\varphi(\id_A)} \\
- & = & \foldr{\nil}{\cons} \\
- & = & \id_{\lists{A}}
+ &   & \map(\id)(\cons(a,x)) \\
+ & = & \cons(\id(a),\map(\id)(x)) \\
+ & = & \cons(a,x)
 \end{eqnarray*}$$
-as claimed.
+as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_map_id :: (List t, Equal (t a))
+>   => t a -> Test (t a -> Bool)
+> _test_map_id _ =
+>   testName "map(id)(x) == x" $
+>   \x -> eq (map id x) x
+
 </p></div>
 </div>
 
-$\map$ preserves composition:
+$\map$ preserves composition.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$, $B$, and $C$ be sets, with maps $f : A \rightarrow B$ and $g : B \rightarrow C$. Then $$\map(g \circ f) = \map(g) \circ \map(f).$$
+Let $A$, $B$, and $C$ be sets, with maps $f : A \rightarrow B$ and $g : B \rightarrow C$. For all $x \in \lists{A}$ we have $$\map(g \circ f)(x) = (\map(g) \circ \map(f))(x).$$
 </p></div>
 
 <div class="proof"><p>
-We will show that $$\map(g \circ f)(x) = (\map(g) \circ \map(f))(x)$$ for all $x \in \lists{A}$, proceeding by list induction on $x$. For the base case $x = \nil$, note that
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & (\map(g) \circ \map(f))(x) \\
  & = & (\map(g) \circ \map(f))(\nil) \\
  & = & \map(g)(\map(f)(\nil)) \\
- & = & \map(g)(\foldr{\nil}{\varphi(f)}(\nil)) \\
  & = & \map(g)(\nil) \\
- & = & \foldr{\nil}{\varphi(g)}(\nil) \\
  & = & \nil \\
- & = & \foldr{\nil}{\varphi(g \circ f)}(\nil) \\
  & = & \map(g \circ f)(\nil)
 \end{eqnarray*}$$
 as claimed. Suppose now that the equality holds for some $x \in \lists{A}$ and let $a \in A$. Then we have
 $$\begin{eqnarray*}
  &   & (\map(g) \circ \map(f))(\cons(a,x)) \\
  & = & \map(g)(\map(f)(\cons(a,x))) \\
- & = & \map(g)(\foldr{\nil}{\varphi(f)}(\cons(a,x))) \\
- & = & \map(g)(\varphi(f)(a,\foldr{\nil}{\varphi(f)}(x))) \\
- & = & \map(g)(\cons(f(a),\foldr{\nil}{\varphi(f)}(x))) \\
  & = & \map(g)(\cons(f(a),\map(f)(x))) \\
- & = & \foldr{\nil}{\varphi(g)}(\cons(f(a),\map(f)(x))) \\
- & = & \varphi(g)(f(a),\foldr{\nil}{\varphi(g)}(\map(f)(x))) \\
- & = & \cons(g(f(a)),\foldr{\nil}{\varphi(g)}(\map(f)(x))) \\
  & = & \cons(g(f(a)),\map(g)(\map(f)(x))) \\
  & = & \cons((g \circ f)(a),(\map(g) \circ \map(f))(x)) \\
- & = & \cons((g \circ f)(a),\map(g \circ f)(x)) \\
- & = & \varphi(g \circ f)(a,\map(g \circ f)(x)) \\
- & = & \varphi(g \circ f)(a,\foldr{\nil}{\varphi(g \circ f)}(x)) \\
- & = & \foldr{\nil}{g \circ f}(\cons(a,x)) \\
+ & = & \cons((g \circ f)(a),(\map(g \circ f)(x)) \\
  & = & \map(g \circ f)(\cons(a,x))
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_map_compose :: (List t, Equal (t a))
+>   => t a -> Test ((a -> a) -> (a -> a) -> t a -> Bool)
+> _test_map_compose _ =
+>   testName "map(g . f)(x) == (map(g) . map(f))(x)" $
+>   \g f x -> eq (map (g . f) x) (((map g) . (map f)) x)
+
+</p></div>
 </div>
 
-$\map(f)$ respects $\cat$:
+$\map(f)$ respects $\tail$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. For all $x \in \lists{A}$, we have $$\map(f)(\tail(x)) = \tail(\map(f)(x)).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \map(f)(\tail(\nil)) \\
+ & = & \map(f)(\nil) \\
+ & = & \nil \\
+ & = & \tail(\nil) \\
+ & = & \tail(\map(f)(\nil))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Then
+$$\begin{eqnarray*}
+ &   & \map(f)(\tail(\cons(a,x))) \\
+ & = & \map(f)(x) \\
+ & = & \tail(\cons(f(a),\map(f)(x)) \\
+ & = & \tail(\map(f)(\cons(a,x)))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_map_tail :: (List t, Equal (t a))
+>   => t a -> Test ((a -> a) -> t a -> Bool)
+> _test_map_tail _ =
+>   testName "map(f)(tail(x)) == tail(map(f)(x))" $
+>   \f x -> eq (map f (tail x)) (tail (map f x))
+
+</p></div>
+</div>
+
+$\map(f)$ respects $\cat$.
 
 <div class="result">
 <div class="thm"><p>
@@ -146,9 +215,59 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_map_cat :: (List t, Equal (t a))
+>   => t a -> Test ((a -> a) -> t a -> t a -> Bool)
+> _test_map_cat _ =
+>   testName "map(f)(cat(x,y)) == cat(map(f)(x),map(f)(y))" $
+>   \f x y -> eq (map f (cat x y)) (cat (map f x) (map f y))
+
+</p></div>
 </div>
 
-$\map(f)$ respects $\rev$:
+$\map(f)$ respects $\snoc$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. For all $a \in A$ and $x \in \lists{A}$, we have $$\map(f)(\snoc(a,x)) = snoc(f(a),\map(f)(x)).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \map(f)(\snoc(a,\nil)) \\
+ & = & \map(f)(\cons(a,\nil)) \\
+ & = & \cons(f(a),\map(f)(\nil)) \\
+ & = & \cons(f(a),\nil) \\
+ & = & \snoc(f(a),\nil) \\
+ & = & \snoc(f(a),\map(f)(\nil))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $f$ and $a$ for some $x$, and let $b \in A$. Now
+$$\begin{eqnarray*}
+ &   & \map(f)(\snoc(a,\cons(b,x))) \\
+ & = & \map(f)(\cons(b,\snoc(a,x))) \\
+ & = & \cons(f(b),\map(f)(\snoc(a,x))) \\
+ & = & \cons(f(b),\snoc(f(a),\map(f)(x))) \\
+ & = & \snoc(f(a),\cons(f(b),\map(f)(x))) \\
+ & = & \snoc(f(a),\map(f)(\cons(b,x)))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_map_snoc :: (List t, Equal (t a))
+>   => t a -> Test ((a -> a) -> a -> t a -> Bool)
+> _test_map_snoc _ =
+>   testName "map(f)(snoc(a,x)) == snoc(f(a),map(f)(x))" $
+>   \f a x -> eq (map f (snoc a x)) (snoc (f a) (map f x))
+
+</p></div>
+</div>
+
+$\map(f)$ respects $\rev$.
 
 <div class="result">
 <div class="thm"><p>
@@ -169,59 +288,72 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equation holds for some $x \in \lists{A}$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \map(f)(\rev(\cons(a,x))) \\
- & = & \map(f)(\rev(\cons(a,\cat(\nil,x)))) \\
- & = & \map(f)(\rev(\cat(\cons(a,\nil),x))) \\
- & = & \map(f)(\cat(\rev(x),\rev(\cons(a,\nil)))) \\
- & = & \cat(\map(f)(\rev(x)),\map(f)(\rev(\cons(a,\nil)))) \\
- & = & \cat(\rev(\map(f)(x)),\map(f)(\cons(a,\nil))) \\
- & = & \cat(\rev(\map(f)(x)),\cons(f(a),\map(f)(\nil))) \\
- & = & \cat(\rev(\map(f)(x)),\cons(f(a),\nil)) \\
- & = & \cat(\rev(\map(f)(x)),\rev(\cons(f(a),\nil))) \\
- & = & \cat(\rev(\map(f)(x)),\rev(\map(f)(\cons(a,\nil)))) \\
- & = & \rev(\cat(\map(f)(\cons(a,\nil)),\map(f)(x))) \\
- & = & \rev(\cat(\cons(f(a),\map(f)(\nil)),\map(f)(x))) \\
- & = & \rev(\cat(\cons(f(a),\nil),\map(f)(x))) \\
- & = & \rev(\cons(f(a),\cat(\nil,\map(f)(x)))) \\
- & = & \rev(\cons(f(a),\map(f)(x))) \\
+ & = & \map(f)(\snoc(a,\rev(x))) \\
+ & = & \snoc(f(a),\map(f)(\rev(x))) \\
+ & = & \snoc(f(a),\rev(\map(f)(x))) \\
+ & = & \rev(\cons(f(a),\map(f)(x)) \\
  & = & \rev(\map(f)(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_map_rev :: (List t, Equal (t a))
+>   => t a -> Test ((a -> a) -> t a -> Bool)
+> _test_map_rev _ =
+>   testName "map(f)(rev(x)) == rev(map(f)(x))" $
+>   \f x -> eq (map f (rev x)) (rev (map f x))
+
+</p></div>
 </div>
+
+(@@@)
 
 $\map(f)$ interacts with $\at$:
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. Let $x \in \lists{A}$, and suppose $\at(x,k) \neq \ast$. Then we have $$\at(\map(f)(x),k) = f(\at(x,k)).$$
+Let $A$ and $B$ be sets with a map $f : A \rightarrow B$ and $x \in \lists{A}$. Then we have $$\at(\map(f)(x),k) = \upair(\id,f)(\at(x,k)).$$
 </p></div>
 
 <div class="proof"><p>
-We proceed by list induction on $x$. For the base case $x = \nil$, note that $\at(x,k) = \ast$ for all $k$, so the implication holds vacuously. For the inductive step, suppose the implication holds for all $k$ for some $x$. Now let $a \in A$. We consider three possibilities for $k$: either $k = \zero$, $k = \next(\zero)$, or $k = \next(\next(\zero))$.
-
-If $k = \zero$, then $\at(\cons(a,x),k) = \ast$, and the implication holds vacuously.
-
-Suppose $k = \next(\zero)$. Now $\at(\cons(a,x),k) \neq \ast$, and we have
+There are two possibilities for $x$. If $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & f(\at(\cons(a,x),k)) \\
- & = & f(\at(\cons(a,x),\next(\zero)) \\
- & = & f(a) \\
- & = & \at(\cons(f(a),\map(f)(x)),\next(\zero)) \\
- & = & \at(\map(f)(\cons(a,x)),\next(\zero)) \\
- & = & \at(\map(f)(\cons(a,x)),k)
+ &   & \at(\map(f)(\nil),k) \\
+ & = & \at(\nil,k) \\
+ & = & \lft(\ast) \\
+ & = & \lft(\id(\ast)) \\
+ & = & \upair(\id,f)(\lft(\ast)) \\
+ & = & \upair(\id,f)(\at(\nil,k))
 \end{eqnarray*}$$
-as claimed.
-
-Finally, suppose $k = \next(\next(m))$. Suppose further that $\at(\cons(a,x),k) \neq \ast$. Using the inductive hypothesis, we have
+as claimed. Suppose instead that $x = \cons(a,y)$. We now proceed by induction on $k$. For the base case $k = \zero$, we have
 $$\begin{eqnarray*}
- &   & f(\at(\cons(a,x),k)) \\
- & = & f(\at(\cons(a,x),\next(\next(m)))) \\
- & = & f(\at(x,\next(m))) \\
- & = & \at(\map(f)(x),\next(m)) \\
- & = & \at(\cons(f(a),\map(f)(x)),\next(\next(m))) \\
- & = & \at(\map(f)(\cons(a,x)),k)
+ &   & \at(\map(f)(\cons(a,y)),\zero) \\
+ & = & \at(\cons(f(a),\map(f)(y)),\zero) \\
+ & = & \rgt(f(a)) \\
+ & = & \upair(\id,f)(\rgt(a)) \\
+ & = & \upair(\id,f)(\at(\cons(a,y),\zero))
 \end{eqnarray*}$$
-as claimed.
+as needed. For the inductive step, suppose the equality holds for all $a$ and $y$ for some $k$. Now
+$$\begin{eqnarray*}
+ &   & \at(\map(f)(\cons(a,y)),\next(k)) \\
+ & = & \at(\cons(f(a),\map(f)(y)),\next(k)) \\
+ & = & \at(\map(f)(y),k) \\
+ & = & \upair(\id,f)(\at(y,k)) \\
+ & = & \upair(\id,f)(\at(\cons(a,y),\next(k)))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_map_at :: (List t, Equal (t a), Natural n, Equal n, Equal a)
+>   => t a -> n -> Test ((a -> a) -> t a -> n -> Bool)
+> _test_map_at _ _ =
+>   testName "at(map(f)(x),k) == upair(id,f)(at(x,k))" $
+>   \f x k -> eq (at (map f x) k) (upair id f (at x k))
+
 </p></div>
 </div>
 
@@ -250,42 +382,30 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_map_length :: (List t, Equal (t a), Natural n, Equal n, Equal a)
+>   => t a -> n -> Test ((a -> a) -> t a -> Bool)
+> _test_map_length _ k =
+>   testName "length(map(f)(x)) == length(x)" $
+>   \f x -> eq (length (map f x)) ((length x) `withTypeOf` k)
+
+</p></div>
 </div>
 
 
 Testing
 -------
 
-Here are our property tests for $\map$.
+Suite:
 
-> _test_map_id :: (List t, Equal (t a))
->   => t a -> Test (t a -> Bool)
-> _test_map_id _ =
->   testName "map(id)(x) == x" $
->   \x -> eq (map id x) x
->
-> 
-> _test_map_cat :: (List t, Equal (t a))
->   => t a -> Test ((a -> a) -> t a -> t a -> Bool)
-> _test_map_cat _ =
->   testName "map(f)(cat(x,y)) == cat(map(f)(x),map(f)(y))" $
->   \f x y -> eq (map f (cat x y)) (cat (map f x) (map f y))
->
-> 
-> _test_map_rev :: (List t, Equal (t a))
->   => t a -> Test ((a -> a) -> t a -> Bool)
-> _test_map_rev _ =
->   testName "map(f)(rev(x)) == rev(map(f)(x))" $
->   \f x -> eq (map f (rev x)) (rev (map f x))
-
-And the suite:
-
-> -- run all tests for map
 > _test_map ::
 >   ( TypeName a, Show a, Equal a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a)
->   ) => t a -> Int -> Int -> IO ()
-> _test_map t maxSize numCases = do
+>   , TypeName n, Show n, Equal n, Natural n, Arbitrary n
+>   ) => t a -> n -> Int -> Int -> IO ()
+> _test_map t n maxSize numCases = do
 >   testLabel ("map: " ++ typeName t)
 > 
 >   let
@@ -294,13 +414,20 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
+>   runTest args (_test_map_nil t)
+>   runTest args (_test_map_cons t)
 >   runTest args (_test_map_id t)
+>   runTest args (_test_map_compose t)
+>   runTest args (_test_map_tail t)
 >   runTest args (_test_map_cat t)
+>   runTest args (_test_map_snoc t)
 >   runTest args (_test_map_rev t)
+>   runTest args (_test_map_at t n)
+>   runTest args (_test_map_length t n)
 
-And ``main``:
+Main:
 
 > main_map :: IO ()
 > main_map = do
->   _test_map (nil :: ConsList Bool)  20 100
->   _test_map (nil :: ConsList Unary) 20 100
+>   _test_map (nil :: ConsList Bool)  (zero :: Unary) 20 100
+>   _test_map (nil :: ConsList Unary) (zero :: Unary) 20 100
