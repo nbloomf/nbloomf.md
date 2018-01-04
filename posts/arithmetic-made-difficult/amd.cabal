@@ -41,7 +41,8 @@ library
     Length,
     At,
     Map,
-    UnfoldN
+    UnfoldN,
+    Range
   build-depends:
     base == 4.*,
     QuickCheck
@@ -537,10 +538,6 @@ test-suite amd-unfoldN
     At,
     Length,
     Map
-    
-
-
-
 
 test-suite amd-range
   default-language: Haskell2010
@@ -548,10 +545,34 @@ test-suite amd-range
   main-is: Range.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Range.main_range
-  other-modules: Booleans, Lists, NaturalNumbers, Unary,
-                 Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
-                 Times, At, Map, UnfoldN, Length,
-                 SimpleRecursion, BailoutRecursion, DisjointUnions
+  other-modules:
+    Booleans,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo,
+    Lists,
+    HeadAndTail,
+    LeftFold,
+    Snoc,
+    Reverse,
+    Cat,
+    At,
+    Length,
+    Map,
+    UnfoldN
+
+
+
+
+
+
 
 test-suite amd-zip
   default-language: Haskell2010
