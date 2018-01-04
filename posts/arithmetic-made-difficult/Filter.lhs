@@ -14,6 +14,8 @@ slug: filter
 > import NaturalNumbers
 > 
 > import Lists
+> import HeadAndTail
+> import Snoc
 > import Reverse
 > import Length
 > import Map
@@ -345,21 +347,21 @@ Testing
 
 Here are our property tests for $\filter$:
 
-> _test_filter_alt :: (List t, Equal a)
+> _test_filter_alt :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
 > _test_filter_alt _ =
 >   testName "filter(p,x) == filter'(p,x)" $
 >   \p x -> eq (filter p x) (filter' p x)
 > 
 > 
-> _test_filter_all :: (List t, Equal a)
+> _test_filter_all :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
 > _test_filter_all _ =
 >   testName "all(p,filter(p,x)) == true" $
 >   \p x -> eq (all p (filter p x)) True
 > 
 > 
-> _test_filter_snoc :: (List t, Equal a)
+> _test_filter_snoc :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> a -> t a -> Bool)
 > _test_filter_snoc _ =
 >   testName "filter(p,snoc(a,x)) == if(p(a),snoc(a,filter(p,x)),filter(p,x))" $
@@ -368,21 +370,21 @@ Here are our property tests for $\filter$:
 >     else eq (filter p (snoc a x)) (filter p x)
 > 
 > 
-> _test_filter_rev :: (List t, Equal a)
+> _test_filter_rev :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
 > _test_filter_rev _ =
 >   testName "filter(p,rev(x)) == rev(filter(p,x))" $
 >   \p x -> eq (filter p (rev x)) (rev (filter p x))
 > 
 > 
-> _test_filter_cat :: (List t, Equal a)
+> _test_filter_cat :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> t a -> t a -> Bool)
 > _test_filter_cat _ =
 >   testName "filter(p,cat(x,y)) == cat(filter(p,x),filter(p,y))" $
 >   \p x y -> eq (filter p (cat x y)) (cat (filter p x) (filter p y))
 > 
 > 
-> _test_filter_eq_all :: (List t, Equal a)
+> _test_filter_eq_all :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
 > _test_filter_eq_all _ =
 >   testName "eq(x,filter(p,x)) == all(p,x)" $
@@ -394,6 +396,7 @@ And the suite:
 > _test_filter ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
+>   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (a,a))
 >   ) => t a -> Int -> Int -> IO ()
 > _test_filter t maxSize numCases = do
 >   testLabel ("filter: " ++ typeName t)

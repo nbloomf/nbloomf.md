@@ -15,6 +15,8 @@ slug: repeat
 > import Plus
 > 
 > import Lists
+> import HeadAndTail
+> import Snoc
 > import Reverse
 > import Length
 > import Map
@@ -218,7 +220,7 @@ Testing
 
 Here are our property tests for $\repeat$:
 
-> _test_repeat_alt :: (List t, Equal a, Natural n, Equal n)
+> _test_repeat_alt :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> a -> Bool)
 > _test_repeat_alt t _ =
 >  testName "repeat'(n,a) == repeat(n,a)" $
@@ -228,7 +230,7 @@ Here are our property tests for $\repeat$:
 >    eq (repeat' k a) rna
 > 
 > 
-> _test_repeat_length :: (List t, Equal a, Natural n, Equal n)
+> _test_repeat_length :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> a -> Bool)
 > _test_repeat_length t _ =
 >  testName "length(repeat(n,a)) == n" $
@@ -238,7 +240,7 @@ Here are our property tests for $\repeat$:
 >    eq (length rka) k
 > 
 > 
-> _test_repeat_map :: (List t, Equal a, Equal b, Natural n, Equal n)
+> _test_repeat_map :: (List t, Equal a, Equal b, Natural n, Equal n, Equal (t b))
 >   => t a -> t b -> n -> Test ((a -> b) -> n -> a -> Bool)
 > _test_repeat_map t _ _ =
 >  testName "map(f)(repeat(n,a)) == repeat(n,f(a))" $
@@ -248,7 +250,7 @@ Here are our property tests for $\repeat$:
 >    eq (repeat k (f a)) (map f rka)
 > 
 > 
-> _test_repeat_plus :: (List t, Equal a, Natural n, Equal n)
+> _test_repeat_plus :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> n -> a -> Bool)
 > _test_repeat_plus t _ =
 >  testName "repeat(plus(m,n),a)) == cat(repeat(m,a),repeat(n,a))" $
@@ -258,7 +260,7 @@ Here are our property tests for $\repeat$:
 >    eq (repeat (plus m n) a) (cat rma (repeat n a))
 > 
 > 
-> _test_repeat_snoc :: (List t, Equal a, Natural n, Equal n)
+> _test_repeat_snoc :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> a -> Bool)
 > _test_repeat_snoc t _ =
 >  testName "snoc(a,repeat(n,a)) == repeat(next(n),a)" $
@@ -268,7 +270,7 @@ Here are our property tests for $\repeat$:
 >    eq (snoc a rna) (repeat (next n) a)
 > 
 > 
-> _test_repeat_rev :: (List t, Equal a, Natural n, Equal n)
+> _test_repeat_rev :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> a -> Bool)
 > _test_repeat_rev t _ =
 >  testName "rev(repeat(n,a)) == repeat(n,a)" $
@@ -285,6 +287,7 @@ And the suite:
 >   , TypeName b, Equal b, Show b, Arbitrary b, CoArbitrary b
 >   , TypeName (t a), List t
 >   , TypeName n, Natural n, Arbitrary n, Show n, Equal n
+>   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (a,a)), Equal (t b)
 >   ) => t a -> t b -> n -> Int -> Int -> IO ()
 > _test_repeat t u n maxSize numCases = do
 >   testLabel ("repeat: " ++ typeName t ++ " & " ++ typeName n)

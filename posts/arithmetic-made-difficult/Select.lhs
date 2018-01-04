@@ -376,7 +376,7 @@ Testing
 
 Here are our property tests for $\select$:
 
-> _test_select_zero :: (List t, Equal a, Natural n, Equal n)
+> _test_select_zero :: (List t, Equal a, Natural n, Equal n, Equal (t (t a)))
 >   => t a -> n -> Test (t a -> Bool)
 > _test_select_zero _ n =
 >   testName "select(zero,x) == cons(nil,nil)" $
@@ -386,7 +386,7 @@ Here are our property tests for $\select$:
 >     eq (select zero' x) (cons nil nil)
 > 
 > 
-> _test_select_nil :: (List t, Equal a, Natural n, Equal n)
+> _test_select_nil :: (List t, Equal a, Natural n, Equal n, Equal (t (t a)))
 >   => t a -> n -> Test (n -> Bool)
 > _test_select_nil t _ =
 >   testName "select(k,nil) == if k == 0 then cons(nil,nil) else nil" $
@@ -398,7 +398,7 @@ Here are our property tests for $\select$:
 >       else eq (select k nil') nil
 > 
 > 
-> _test_select_one :: (List t, Equal a, Natural n, Equal n)
+> _test_select_one :: (List t, Equal a, Natural n, Equal n, Equal (t (t a)))
 >   => t a -> n -> Test (t a -> Bool)
 > _test_select_one _ n =
 >   testName "select(next(zero),x) == map(cons(-,nil))(x)" $
@@ -408,14 +408,14 @@ Here are our property tests for $\select$:
 >     eq (select one' x) (map (\a -> cons a nil) x)
 > 
 > 
-> _test_select_length :: (List t, Equal a, Natural n, Equal n)
+> _test_select_length :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> Bool)
 > _test_select_length _ _ =
 >   testName "length(select(k,x)) == choose(length(x),k)" $
 >   \k x -> eq (length (select k x)) (choose (length x) k)
 > 
 > 
-> _test_select_sublist :: (List t, Equal a, Natural n, Equal n)
+> _test_select_sublist :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> t a -> Bool)
 > _test_select_sublist _ _ =
 >   testName "sublist(x,y) == sublist(select(k,x),select(k,y))" $
@@ -424,14 +424,14 @@ Here are our property tests for $\select$:
 >     else True
 > 
 > 
-> _test_select_all_sublist :: (List t, Equal a, Natural n, Equal n)
+> _test_select_all_sublist :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> Bool)
 > _test_select_all_sublist _ _ =
 >   testName "all(sublist(-,x),select(k,x))" $
 >   \k x -> all (\u -> sublist u x) (select k x)
 > 
 > 
-> _test_select_all_length :: (List t, Equal a, Natural n, Equal n)
+> _test_select_all_length :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> Bool)
 > _test_select_all_length _ _ =
 >   testName "all(eq(k,length(-)),select(k,x))" $
@@ -444,6 +444,7 @@ And the suite:
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName n, Natural n, Show n, Arbitrary n, Equal n
 >   , TypeName (t a), List t
+>   , Equal (t a), Show (t a), Arbitrary (t a), Equal (t (t a))
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_select t n maxSize numCases = do
 >   testLabel ("select: " ++ typeName t)

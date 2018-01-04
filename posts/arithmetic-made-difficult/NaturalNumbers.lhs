@@ -8,7 +8,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > {-# LANGUAGE BangPatterns #-}
 > module NaturalNumbers
 >   ( Natural(..), NatShape(..), Unary()
->   , isZero, prev, naturalRec
+>   , isZero, prev, unnext, naturalRec
 > 
 >   , _test_nats, main_nats
 >   ) where

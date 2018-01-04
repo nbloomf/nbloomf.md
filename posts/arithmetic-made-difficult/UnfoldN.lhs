@@ -3,29 +3,27 @@ title: UnfoldN
 author: nbloomf
 date: 2017-05-03
 tags: arithmetic-made-difficult, literate-haskell
+slug: unfoldn
 ---
 
 > module UnfoldN
 >   ( unfoldN
 >   ) where
 > 
+> import Prelude ()
 > import Booleans
 > import NaturalNumbers
 > import BailoutRecursion
->
 > import Lists
 > import Reverse
 > import Cat
 > import Length
 > import At
 > import Map
-> 
-> import Prelude ()
-> import Test.QuickCheck
 
-So far we've developed a few functions that operate on lists. But we don't have a convenient programmatic way to *construct* lists -- we'll remedy this today with a function called $\unfoldN$. From the name, it sounds like unfold should be the "opposite" (or *dual*) of a fold. But the full story is a little more complicated than this; the true opposite to fold doesn't operate on lists at all, but on *streams* (which we haven't defined). Roughly speaking, $\lists{A}$ is an initial algebra, elements of $\lists{A}$ are required to be "finite", and $\foldr{\ast}{\ast}$ condenses a $\lists{A}$ element to a single item. Streams, in contrast, are required to be "infinite" and collectively form a *terminal algebra* and their universal map expands a single item to an infinite structure. All that is to say that the $\unfoldN$ function we define here is *not* the real dual of $\foldr{\ast}{\ast}$ -- which partly explains why it is so complicated looking.
+So far we've developed a few functions that operate on lists. But we don't have a convenient programmatic way to *construct* lists out of nothing -- we'll remedy this today with a function called $\unfoldN{\ast}$. From the name, it sounds like unfold should be the "opposite" (or *dual*) of a fold. But the full story is a little more complicated than this; the true opposite to fold doesn't operate on lists at all, but on *streams* (which we'll get to later). Roughly speaking, $\lists{A}$ is an initial algebra, elements of $\lists{A}$ are required to be "finite", and $\foldr{\ast}{\ast}$ condenses a $\lists{A}$ element to a single item. Streams, in contrast, are required to be "infinite" and collectively form a *terminal algebra* and their universal map expands a single item to an infinite structure. All that is to say that the $\unfoldN{\ast}$ function we define here is *not* the real dual of $\foldr{\ast}{\ast}$ -- which partly explains why it is so complicated looking.
 
-So what will $\unfoldN$ do? Roughly speaking, we'd like to be able to build up interesting lists of arbitrary size using a small amount of initial data. For example, here is a version of the signature for Haskell's standard ``unfoldr`` function.
+So what will $\unfoldN{\ast}$ do? Roughly speaking, we'd like to be able to build up interesting lists of arbitrary size using a small amount of initial data. For example, here is a version of the signature for Haskell's standard ``unfoldr`` function.
 
 ```haskell
 unfoldr :: (a -> Maybe (a,b)) -> a -> [b]
@@ -37,15 +35,52 @@ There is a problem with translating this type to $\lists{A}$, though. It has to 
 
 How can we fix this? One strategy would be to impose some kind of constraint on the map so that it must eventually return a ``Nothing``. That may well be possible, but my hunch is that it would make reasoning about unfolds complicated -- we'd have to prove that a given map satisfies the constraint before using it.
 
-Another strategy -- and the one we will take -- is to give unfold a natural number argument that acts as a countdown timer. If it reaches $\zero$, we're done. (This also explains the ``N`` in $\unfoldN$.) This strategy also makes it possible to define $\unfoldN$ using bailout recursion on $\nats$.
+Another strategy -- and the one we will take -- is to give unfold a natural number argument that acts as a countdown timer. If it reaches $\zero$, we're done. (This also explains the ``N`` in $\unfoldN{\ast}$.) This strategy also makes it possible to define $\unfoldN{\ast}$ using bailout recursion on $\nats$.
 
 <div class="result">
-<div class="defn"><p>
-Let $A$ and $B$ be sets. Define $\varphi : A \times \lists{B} \rightarrow \lists{B}$ by $$\varphi(a,x) = \rev(x),$$ $\beta : (\ast + A \times B)^A \rightarrow \nats \times (A \times \lists{B}) \rightarrow \bool$ by $$\beta(f)(k,(a,x)) = \left\{\begin{array}{ll} \btrue & \mathrm{if}\ f(a) = \ast \\ \bfalse & \mathrm{otherwise}, \end{array}\right.$$ $\psi : \nats \times (A \times \lists{B}) \rightarrow \lists{B}$ by $$\psi(k,(a,x)) = \rev(x),$$ and $\omega : (\ast + A \times B)^A \rightarrow \nats \times (A \times \lists{B}) \rightarrow A \times \lists{B}$ by $$\omega(f)(k,(a,x)) = \left\{\begin{array}{ll} (a,x) & \mathrm{if}\ f(a) = \ast \\ (d,\cons(b,x)) & \mathrm{if}\ f(a) = (d,b). \end{array}\right.$$ We then define $$\unfoldN : (\ast + A \times B)^A \times \nats \times A \rightarrow \lists{B}$$ by $$\unfoldN(f,k,a) = \bailrec{\varphi}{\beta(f)}{\psi}{\omega(f)}(k,(a,\nil)).$$
+<div class="thm"><p>
+Let $A$ and $B$ be sets, and let $f : A \rightarrow 1 + (A \times B)$. There is a unique map $\Omega : \nats \times A \rightarrow \lists{B}$ such that $$\Omega(\zero,a) = \nil$$ and
+$$\Omega(\next(n),a) = \left\{\begin{array}{ll}
+ \nil & \mathrm{if}\ f(a) = \lft(\ast) \\
+ \cons(b,\Theta(n,c)) & \mathrm{if}\ f(a) = \rgt((b,c)).
+\end{array}\right.$$
+We denote this map $\unfoldN{f}$.
+</p></div>
+
+<div class="proof"><p>
+Define $\varphi : A \times \lists{B} \rightarrow \lists{B}$ by $$\varphi(a,x) = \rev(x),$$ $\beta : \nats \times (A \times \lists{B}) \rightarrow \bool$ by $$\beta(k,(a,x)) = \bif{\isLft(f(a))}{\btrue}{\bfalse},$$ $\psi : \nats \times (A \times \lists{B}) \rightarrow \lists{B}$ by $$\psi(k,(a,x)) = \rev(x),$$ and $\omega : \nats \times (A \times \lists{B}) \rightarrow A \times \lists{B}$ by $$\omega(k,(a,x)) = \left\{\begin{array}{ll} (a,x) & \mathrm{if}\ f(a) = \lft(\ast) \\ (d,\cons(b,x)) & \mathrm{if}\ f(a) = \rgt((d,b)). \end{array}\right.$$ Now let $\Omega : \nats \times A \rightarrow \lists{B}$ be given by $$\Omega(k,a) = \bailrec{\varphi}{\beta}{\psi}{\omega}(k,(a,\nil)).$$
+
+To see that $\Omega$ has the claimed properties, note that
+$$\begin{eqnarray*}
+ &   & \Omega(\zero,a) \\
+ & = & \bailrec{\varphi}{\beta}{\psi}{\omega}(\zero,(a,\nil)) \\
+ & = & \varphi(a,\nil) \\
+ & = & \rev(\nil) \\
+ & = & \nil,
+\end{eqnarray*}$$
+and if $f(a) = \lft(\ast)$, we have
+$$\begin{eqnarray*}
+ &   & \Omega(\next(n),a) \\
+ & = & \bailrec{\varphi}{\beta}{\psi}{\omega}(\next(n),(a,\nil)) \\
+ & = & \bif{\beta(n,(a,\nil))}{\psi(n,(a,\nil))}{\bailrec{\varphi}{\beta}{\psi}{\omega}(n,\omega(n,(a,\nil)))} \\
+ & = & \bif{\bif{\isLft(f(a))}{\btrue}{\bfalse}}{\psi(n,(a,\nil))}{\bailrec{\varphi}{\beta}{\psi}{\omega}(n,\omega(n,(a,\nil)))} \\
+ & = & \bif{\btrue}{\psi(n,(a,\nil))}{\bailrec{\varphi}{\beta}{\psi}{\omega}(n,\omega(n,(a,\nil)))} \\
+ & = & \psi(n,(a,\nil)) \\
+ & = & \rev(\nil) \\
+ & = & \nil,
+\end{eqnarray*}$$
+and if $f(a) = \rgt((b,c))$, we have
+$$\begin{eqnarray*}
+ &   & \Omega(\next(n),a) \\
+ & = & \bailrec{\varphi}{\beta}{\psi}{\omega}(\next(n),(a,\nil)) \\
+ & = & \bif{\beta(n,(a,\nil))}{\psi(n,(a,\nil))}{\bailrec{\varphi}{\beta}{\psi}{\omega}(n,\omega(n,(a,\nil)))} \\
+ & = & \bif{\bif{\isLft(f(a))}{\btrue}{\bfalse}}{\psi(n,(a,\nil))}{\bailrec{\varphi}{\beta}{\psi}{\omega}(n,\omega(n,(a,\nil)))} \\
+ & = & \bif{\bfalse}{\psi(n,(a,\nil))}{\bailrec{\varphi}{\beta}{\psi}{\omega}(n,\omega(n,(a,\nil)))} \\
+ & = & \bailrec{\varphi}{\beta}{\psi}{\omega}(n,\omega(n,(a,\nil))) \\
+ & = & 
+\end{eqnarray*}$$
 </p></div>
 </div>
-
-We let $\Theta = \bailrec{\varphi}{\beta(f)}{\psi}{\omega(f)}$ as in the definition of $\unfoldN$.
 
 We won't prove many general properties of $\unfoldN$ here; instead we will define more specific functions in terms of $\unfoldN$ and prove properties about them.
 

@@ -15,6 +15,9 @@ slug: count
 > import Plus
 > 
 > import Lists
+> import HeadAndTail
+> import LeftFold
+> import Snoc
 > import Reverse
 > import Length
 > import Map
@@ -43,9 +46,9 @@ Let $A$ be a set, and define $\varphi : A \rightarrow A \times \nats \rightarrow
 In Haskell:
 
 > count :: (List t, Equal a, Natural n) => a -> t a -> n
-> count a x = foldl zero (phi a) x
+> count a x = foldl (phi a) zero x
 >   where
->     phi u b k = ifThenElse (eq u b) (next k) k
+>     phi u k b = ifThenElse (eq u b) (next k) k
 
 Recall that $\foldl{e}{\varphi} = \foldr{e}{\varphi}$ if $\varphi$ has the property that $$\varphi(a,\varphi(b,e)) = \varphi(b,\varphi(a,e))$$ for all $a$, $b$, and $e$. I claim that the function $\varphi(a)$ in the definition of $\count$ has this property.
 
@@ -325,6 +328,7 @@ And the suite:
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
 >   , TypeName n, Natural n, Equal n
+>   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (a,a))
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_count t n maxSize numCases = do
 >   testLabel ("count: " ++ typeName t ++ " & " ++ typeName n)

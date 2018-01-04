@@ -349,7 +349,7 @@ Testing
 
 Here are our property tests for $\delete$:
 
-> _test_delete_elt :: (List t, Equal a)
+> _test_delete_elt :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
 > _test_delete_elt _ =
 >   testName "eq(x,delete(a,x)) == not(elt(a,x))" $
@@ -361,6 +361,7 @@ And the suite:
 > _test_delete ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
+>   , Equal (t a), Show (t a), Arbitrary (t a), Equal (t (t a))
 >   ) => t a -> Int -> Int -> IO ()
 > _test_delete t maxSize numCases = do
 >   testLabel ("delete: " ++ typeName t)

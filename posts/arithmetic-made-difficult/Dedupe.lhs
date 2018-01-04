@@ -348,42 +348,42 @@ Testing
 
 Here are our property tests for $\dedupeL$ and $\dedupeR$:
 
-> _test_dedupeL_alt :: (List t, Equal a)
+> _test_dedupeL_alt :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> Bool)
 > _test_dedupeL_alt _ =
 >   testName "dedupeL(x) == dedupeL'(x)" $
 >   \x -> eq (dedupeL x) (dedupeL' x)
 > 
 > 
-> _test_dedupeL_unique :: (List t, Equal a)
+> _test_dedupeL_unique :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> Bool)
 > _test_dedupeL_unique _ =
 >   testName "unique(dedupeL(x)) == true" $
 >   \x -> eq (unique (dedupeL x)) True
 > 
 > 
-> _test_dedupeL_delete :: (List t, Equal a)
+> _test_dedupeL_delete :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
 > _test_dedupeL_delete _ =
 >   testName "dedupeL(delete(a,x)) == delete(a,dedupeL(x))" $
 >   \a x -> eq (dedupeL (delete a x)) (delete a (dedupeL x))
 > 
 > 
-> _test_dedupeL_idempotent :: (List t, Equal a)
+> _test_dedupeL_idempotent :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> Bool)
 > _test_dedupeL_idempotent _ =
 >   testName "dedupeL(dedupeL(x)) == dedupeL(x)" $
 >   \x -> eq (dedupeL (dedupeL x)) (dedupeL x)
 > 
 > 
-> _test_dedupeL_eq_unique :: (List t, Equal a)
+> _test_dedupeL_eq_unique :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> Bool)
 > _test_dedupeL_eq_unique _ =
 >   testName "eq(x,dedupeL(x)) == unique(x)" $
 >   \x -> eq (eq x (dedupeL x)) (unique x)
 > 
 > 
-> _test_dedupeL_prefix :: (List t, Equal a)
+> _test_dedupeL_prefix :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> Bool)
 > _test_dedupeL_prefix _ =
 >   testName "prefix(x,y) ==> prefix(dedupeL(x),dedupeL(y))" $
@@ -392,14 +392,14 @@ Here are our property tests for $\dedupeL$ and $\dedupeR$:
 >     else True
 > 
 > 
-> _test_dedupeR_unique :: (List t, Equal a)
+> _test_dedupeR_unique :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> Bool)
 > _test_dedupeR_unique _ =
 >   testName "unique(dedupeR(x)) == true" $
 >   \x -> eq (unique (dedupeR x)) True
 > 
 > 
-> _test_dedupeR_idempotent :: (List t, Equal a)
+> _test_dedupeR_idempotent :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> Bool)
 > _test_dedupeR_idempotent _ =
 >   testName "dedupeR(dedupeR(x)) == dedupeR(x)" $
@@ -411,6 +411,7 @@ And the suite:
 > _test_dedupe ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
+>   , Equal (t a), Show (t a), Arbitrary (t a), Equal (t (t a))
 >   ) => t a -> Int -> Int -> IO ()
 > _test_dedupe t maxSize numCases = do
 >   testLabel ("dedupeL & dedupeR: " ++ typeName t)

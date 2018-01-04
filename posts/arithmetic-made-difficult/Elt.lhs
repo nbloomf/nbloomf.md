@@ -363,14 +363,14 @@ Testing
 
 Here are our property tests for $\elt$:
 
-> _test_elt_alt :: (List t, Equal a)
+> _test_elt_alt :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
 > _test_elt_alt _ =
 >   testName "elt'(a,x) == elt(a,x)" $
 >   \a x -> eq (elt a x) (elt' a x)
 > 
 > 
-> _test_elt_nil :: (List t, Equal a)
+> _test_elt_nil :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> Bool)
 > _test_elt_nil x =
 >   testName "elt(a,nil) == false" $
@@ -380,35 +380,35 @@ Here are our property tests for $\elt$:
 >     eq (elt a nil') False
 > 
 > 
-> _test_elt_cat :: (List t, Equal a)
+> _test_elt_cat :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> t a -> Bool)
 > _test_elt_cat _ =
 >   testName "elt(a,cat(x,y)) == or(elt(a,x),elt(a,y))" $
 >   \a x y -> eq (elt a (cat x y)) (or (elt a x) (elt a y))
 > 
 > 
-> _test_elt_rev :: (List t, Equal a)
+> _test_elt_rev :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
 > _test_elt_rev _ =
 >   testName "elt(a,x) == elt(a,rev(x))" $
 >   \a x -> eq (elt a x) (elt a (rev x))
 > 
 > 
-> _test_elt_tails :: (List t, Equal a)
+> _test_elt_tails :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> Bool)
 > _test_elt_tails _ =
 >   testName "elt(y,tails(x)) == suffix(y,x)" $
 >   \x y -> eq (elt y (tails x)) (suffix y x)
 > 
 > 
-> _test_elt_inits :: (List t, Equal a)
+> _test_elt_inits :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> Bool)
 > _test_elt_inits _ =
 >   testName "elt(y,inits(x)) == prefix(y,x)" $
 >   \x y -> eq (elt y (inits x)) (prefix y x)
 > 
 > 
-> _test_elt_filter_eq :: (List t, Equal a)
+> _test_elt_filter_eq :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
 > _test_elt_filter_eq _ =
 >   testName "elt(a,filter(eq(a,-),x)) == false" $
@@ -420,6 +420,7 @@ And the suite:
 > _test_elt ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
+>   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (a,a))
 >   ) => t a -> Int -> Int -> IO ()
 > _test_elt t maxSize numCases = do
 >   testLabel ("elt: " ++ typeName t)

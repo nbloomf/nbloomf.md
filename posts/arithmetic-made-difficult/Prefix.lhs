@@ -649,6 +649,7 @@ And the suite:
 > _test_prefix ::
 >   ( TypeName a, Show a, Equal a, Arbitrary a
 >   , TypeName (t a), List t
+>   , Show (t a), Equal (t a), Arbitrary (t a)
 >   ) => t a -> Int -> Int -> IO ()
 > _test_prefix t maxSize numCases = do
 >   testLabel ("prefix & suffix: " ++ typeName t)

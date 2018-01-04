@@ -3,7 +3,7 @@ title: Zip
 author: nbloomf
 date: 2017-05-06
 tags: arithmetic-made-difficult, literate-haskell
-slug: zip
+slug: zip-zippad
 ---
 
 > module Zip
@@ -77,7 +77,7 @@ We can implement $\zip$ directly with $\foldr{-}{-}$ as in the definition.
 > zip' = foldr epsilon phi
 >   where
 >     phi :: (List t) => a -> (t b -> t (a,b)) -> t b -> t (a,b)
->     phi x f z = case unnext z of
+>     phi x f z = case uncons z of
 >       Left ()      -> nil
 >       Right (y,ys) -> cons (x,y) (f ys)
 >
@@ -127,9 +127,9 @@ as claimed.
 In Haskell:
 
 > zip :: (List t) => t a -> t b -> t (a,b)
-> zip x y = case unnext x of
+> zip x y = case uncons x of
 >   Left ()      -> nil
->   Right (a,as) -> case unnext y of
+>   Right (a,as) -> case uncons y of
 >     Left ()      -> nil
 >     Right (b,bs) -> cons (a,b) (zip as bs)
 
@@ -364,7 +364,7 @@ The implementation from the definition does the job:
 > zipPad' u v = foldr (delta u) (psi v)
 >   where
 >     psi :: (List t) => b -> a -> (t b -> t (a,b)) -> t b -> t (a,b)
->     psi v x f z = case unnext z of
+>     psi v x f z = case uncons z of
 >       Left ()      -> cons (x,v) (f nil)
 >       Right (y,ys) -> cons (x,y) (f ys)
 >
@@ -426,9 +426,9 @@ as claimed.
 In Haskell:
 
 > zipPad :: (List t) => a -> b -> t a -> t b -> t (a,b)
-> zipPad u v x y = case unnext x of
+> zipPad u v x y = case uncons x of
 >   Left ()      -> map (\w -> (u,w)) y
->   Right (a,as) -> case unnext y of
+>   Right (a,as) -> case uncons y of
 >     Left ()      -> map (\w -> (w,v)) x
 >     Right (b,bs) -> cons (a,b) (zipPad u v as bs)
 
@@ -647,7 +647,7 @@ Testing
 
 Here are our property tests for $\zip$ and $\zipPad$.
 
-> _test_zip_tswap :: (List t, Equal a, Equal b)
+> _test_zip_tswap :: (List t, Equal a, Equal b, Equal (t (b,a)))
 >   => t a -> t b -> Test (t a -> t b -> Bool)
 > _test_zip_tswap _ _ =
 >   testName "map(tswap)(zip(x,y)) == zip(y,x)" $
@@ -664,28 +664,28 @@ Here are our property tests for $\zip$ and $\zipPad$.
 >     eq (length (zip x y)) (min lx (length y))
 > 
 > 
-> _test_zip_zip_left :: (List t, Equal a)
+> _test_zip_zip_left :: (List t, Equal a, Equal (t ((a,a),a)))
 >   => t a -> Test (t a -> t a -> t a -> Bool)
 > _test_zip_zip_left _ =
 >   testName "zip(zip(x,y),z) == map(tassocL)zip(x,zip(y,z))" $
 >   \x y z -> eq (zip (zip x y) z) (map tassocL (zip x (zip y z)))
 > 
 > 
-> _test_zip_zip_right :: (List t, Equal a)
+> _test_zip_zip_right :: (List t, Equal a, Equal (t (a,(a,a))))
 >   => t a -> Test (t a -> t a -> t a -> Bool)
 > _test_zip_zip_right _ =
 >   testName "zip(zip(x,y),z) == map(tassocR)zip(x,zip(y,z))" $
 >   \x y z -> eq (zip x (zip y z)) (map tassocR (zip (zip x y) z))
 > 
 > 
-> _test_zip_alt :: (List t, Equal a, Equal b)
+> _test_zip_alt :: (List t, Equal a, Equal b, Equal (t (a,b)))
 >   => t a -> t b -> Test (t a -> t b -> Bool)
 > _test_zip_alt _ _ =
 >   testName "zip'(x,y) == zip(x,y)" $
 >   \x y -> eq (zip' x y) (zip x y)
 > 
 > 
-> _test_zipPad_tswap :: (List t, Equal a, Equal b)
+> _test_zipPad_tswap :: (List t, Equal a, Equal b, Equal (t (b,a)))
 >   => t a -> t b -> Test (a -> b -> t a -> t b -> Bool)
 > _test_zipPad_tswap _ _ =
 >   testName "map(tswap)(zipPad(u,v)(x,y)) == zipPad(v,u)(y,x)" $
@@ -702,7 +702,7 @@ Here are our property tests for $\zip$ and $\zipPad$.
 >     eq (length (zipPad u v x y)) (max lx (length y))
 > 
 > 
-> _test_zipPad_zipPad_left :: (List t, Equal a)
+> _test_zipPad_zipPad_left :: (List t, Equal a, Equal (t ((a,a),a)))
 >   => t a -> Test (a -> a -> a -> t a -> t a -> t a -> Bool)
 > _test_zipPad_zipPad_left _ =
 >   testName "zipPad((a,b),c)(zipPad(a,b)(x,y),z) == map(tassocL)zipPad(a,(b,c))(x,zipPad(b,c)(y,z))" $
@@ -711,7 +711,7 @@ Here are our property tests for $\zip$ and $\zipPad$.
 >     (map tassocL (zipPad a (b,c) x (zipPad b c y z)))
 > 
 > 
-> _test_zipPad_zipPad_right :: (List t, Equal a)
+> _test_zipPad_zipPad_right :: (List t, Equal a, Equal (t (a,(a,a))))
 >   => t a -> Test (a -> a -> a -> t a -> t a -> t a -> Bool)
 > _test_zipPad_zipPad_right _ =
 >   testName "zipPad((a,b),c)(zipPad(a,b)(x,y),z) == map(tassocR)zipPad(a,(b,c))(x,zipPad(b,c)(y,z))" $
@@ -720,7 +720,7 @@ Here are our property tests for $\zip$ and $\zipPad$.
 >     (map tassocR (zipPad (a,b) c (zipPad a b x y) z))
 > 
 > 
-> _test_zipPad_alt :: (List t, Equal a, Equal b)
+> _test_zipPad_alt :: (List t, Equal a, Equal b, Equal (t (a,b)))
 >   => t a -> t b -> Test (a -> b -> t a -> t b -> Bool)
 > _test_zipPad_alt _ _ =
 >   testName "zipPad'(x,y) == zipPad(x,y)" $
@@ -733,7 +733,9 @@ And the suite:
 >   ( TypeName a, Equal a, Show a, Arbitrary a
 >   , TypeName b, Equal b, Show b, Arbitrary b
 >   , TypeName n, Natural n, Equal n, Show n, Arbitrary n
->   , TypeName (t a), TypeName (t b), List t, Equal (t a), Show (t a)
+>   , TypeName (t a), TypeName (t b), List t, Equal (t a), Show (t a), Arbitrary (t a)
+>   , Equal (t b), Show (t b), Arbitrary (t b), Equal (t (a,b)), Equal (t (b,a))
+>   , Equal (t (a,(a,a))), Equal (t ((a,a),a))
 >   ) => t a -> t b -> n -> Int -> Int -> IO ()
 > _test_zip t u n maxSize numCases = do
 >   testLabel ("zip & zipPad: " ++ typeName t ++ " & " ++ typeName u ++ " & " ++ typeName n)

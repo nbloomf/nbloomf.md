@@ -53,7 +53,7 @@ In Haskell:
 >   where
 >     epsilon _ = True
 > 
->     phi a f w = case unnext w of
+>     phi a f w = case uncons w of
 >       Left ()     -> True
 >       Right (_,u) -> and (all (\b -> not (eq a b)) u) (f u)
 
@@ -102,7 +102,7 @@ the equality follows from (2).
 In Haskell:
 
 > unique :: (List t, Equal a) => t a -> Bool
-> unique x = case unnext x of
+> unique x = case uncons x of
 >   Left ()     -> True
 >   Right (a,u) -> and (all (not . eq a) u) (unique u)
 
@@ -430,6 +430,7 @@ And the suite:
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
 >   , TypeName n, Natural n, Show n, Arbitrary n
+>   , Equal (t a), Show (t a), Arbitrary (t a), Equal (t (t a))
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_unique t n maxSize numCases = do
 >   testLabel ("unique: " ++ typeName t)

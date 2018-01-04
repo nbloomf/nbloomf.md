@@ -15,6 +15,8 @@ slug: tails-inits
 > import NaturalNumbers
 > 
 > import Lists
+> import HeadAndTail
+> import Snoc
 > import Reverse
 > import Length
 > import Map
@@ -387,21 +389,21 @@ Testing
 
 Here are our property tests for $\tails$ and $\inits$:
 
-> _test_tails_alt :: (List t, Equal a)
+> _test_tails_alt :: (List t, Equal a, Equal (t (t a)))
 >   => t a -> Test (t a -> Bool)
 > _test_tails_alt _ =
 >   testName "tails(x) == tails'(x)" $
 >   \x -> eq (tails x) (tails' x)
 > 
 > 
-> _test_tails_map :: (List t, Equal a)
+> _test_tails_map :: (List t, Equal a, Equal (t (t a)))
 >   => t a -> Test ((a -> a) -> t a -> Bool)
 > _test_tails_map _ =
 >   testName "tails(map(f)(x)) == map(map(f))(tails(x))" $
 >   \f x -> eq (tails (map f x)) (map (map f) (tails x))
 > 
 > 
-> _test_tails_length :: (List t, Equal a, Natural n, Equal n)
+> _test_tails_length :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (t a -> Bool)
 > _test_tails_length _ n =
 >   testName "length(tails(x)) == next(length(x))" $
@@ -411,21 +413,21 @@ Here are our property tests for $\tails$ and $\inits$:
 >     eq (length (tails x)) (next lx)
 > 
 > 
-> _test_tails_snoc :: (List t, Equal a)
+> _test_tails_snoc :: (List t, Equal a, Equal (t (t a)))
 >   => t a -> Test (a -> t a -> Bool)
 > _test_tails_snoc _ =
 >   testName "tails(snoc(a,x)) == snoc(nil,map(snoc(a,-))(tails(x)))" $
 >   \a x -> eq (tails (snoc a x)) (snoc nil (map (snoc a) (tails x)))
 > 
 > 
-> _test_tails_lcs :: (List t, Equal a)
+> _test_tails_lcs :: (List t, Equal a, Equal (t a), Equal (t (t a)))
 >   => t a -> Test (t a -> t a -> Bool)
 > _test_tails_lcs _ =
 >   testName "tails(lcs(x,y)) == lcs(tails(x),tails(y))" $
 >   \x y -> eq (tails (lcs x y)) (lcs (tails x) (tails y))
 > 
 > 
-> _test_inits_map :: (List t, Equal a)
+> _test_inits_map :: (List t, Equal a, Equal (t (t a)))
 >   => t a -> Test ((a -> a) -> t a -> Bool)
 > _test_inits_map _ =
 >   testName "inits(map(f)(x)) == map(map(f))(inits(x))" $
@@ -442,7 +444,7 @@ Here are our property tests for $\tails$ and $\inits$:
 >     eq (length (inits x)) (next lx)
 > 
 > 
-> _test_inits_lcp :: (List t, Equal a)
+> _test_inits_lcp :: (List t, Equal a, Equal (t a), Equal (t (t a)))
 >   => t a -> Test (t a -> t a -> Bool)
 > _test_inits_lcp _ =
 >   testName "inits(lcp(x,y)) == lcp(inits(x),inits(y))" $
@@ -455,6 +457,7 @@ And the suite:
 >   ( TypeName a, Show a, Equal a, Arbitrary a, CoArbitrary a
 >   , TypeName n, Natural n, Equal n
 >   , TypeName (t a), List t
+>   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (a,a)), Equal (t (t a))
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_tails_inits t n maxSize numCases = do
 >   testLabel ("tails & inits: " ++ typeName t ++ " & " ++ typeName n)
