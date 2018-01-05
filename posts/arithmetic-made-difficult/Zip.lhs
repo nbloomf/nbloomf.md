@@ -3,11 +3,11 @@ title: Zip
 author: nbloomf
 date: 2017-05-06
 tags: arithmetic-made-difficult, literate-haskell
-slug: zip-zippad
+slug: zip
 ---
 
 > module Zip
->   ( zip, zipPad, _test_zip, main_zip
+>   ( zip, _test_zip, main_zip
 >   ) where
 > 
 > import Prelude ()
@@ -18,6 +18,9 @@ slug: zip-zippad
 > import Plus
 > import MaxAndMin
 > import Lists
+> import HeadAndTail
+> import DoubleFold
+> import Snoc
 > import Reverse
 > import Cat
 > import Length
@@ -34,106 +37,62 @@ $$\begin{array}{ccccccccccc}
           &   &           &   &           & \diagdown &     &   &     &   &     \\
           &   &           &   &           &           & b_4 & - & b_5 & - & b_6
 \end{array}$$
-Hence the name $\zip$ -- it looks like a zipper in action. Two big questions have to be resolved. First, it seems clear what $\zip$ should do if we give it two lists with the same length. But what if we try to zip two lists of different lengths? I can see two basic strategies. On one hand we can just truncate to the length of the shortest list. Another idea is to *pad* the shorter list to the length of the longer. These are both useful but essentially different behaviors, so we will define two different functions to handle them. The truncation strategy will be called $\zip$ and the padding strategy will be called $\zipPad$.
-
-The second problem to address is exactly how to implement such a function. The signature of $\zip$ is $$\lists{A} \times \lists{B} \rightarrow \lists{A \times B}.$$ At the moment we have only two essentially different recursion operators on $\lists{-}$. There's $\foldr{-}{-}$, with signature $$\lists{A} \rightarrow B,$$ and $\unfoldN(-,-,-)$, with signature $$(A \rightarrow \ast + A \times B) \times \nats \times A \rightarrow \lists{B}.$$ Which to use? $\unfoldN$ has the right output type, and it is reasonably straightforward to define $\zip$ using $\unfoldN$ (try it!). But $\unfoldN$ has a drawback -- we have to compute an upper bound on the length of the output in advance. In the case of $\zip(x,y)$, that bound is $\nmin(\length(x),\length(y))$. We prefer to avoid doing too much computation in the $\nats$ argument of $\unfoldN$, so that strategy is out.
-
-But $\foldr{-}{-}$ takes only one input list. The usual way to turn a function of one argument into a function of two arguments is with currying -- that is, make the *return* type a function. So we should look for appropriate $\varepsilon$ and $\varphi$ so that $$\foldr{\varepsilon}{\varphi} : \lists{A} \rightarrow \lists{A \times B}^{\lists{B}}$$ uncurries to $$\zip : \lists{A} \times \lists{B} \rightarrow \lists{A \times B}$$ as we want. Now we should have $$\varepsilon : \lists{A \times B}^{\lists{B}},$$ and intuitively,
-$$\begin{eqnarray*}
- &   & \nil \\
- & = & \zip(\nil,y) \\
- & = & \foldr{\varepsilon}{\varphi}(\nil)(y) \\
- & = & \varepsilon(y).
-\end{eqnarray*}$$
-
-Similarly, we want $$\varphi : \lists{A} \times \lists{A \times B}^{\lists{B}} \rightarrow \lists{A \times B}^{\lists{B}},$$ with
-$$\begin{eqnarray*}
- &   & \nil \\
- & = & \zip(\cons(a,x),\nil) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\nil) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\nil) \\
- & = & \varphi(a,\zip(x,-))(\nil)
-\end{eqnarray*}$$
-and
-$$\begin{eqnarray*}
- &   & \cons((a,b),\zip(x,y)) \\
- & = & \zip(\cons(a,x),\cons(b,y)) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\cons(b,y)) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\cons(b,y)) \\
- & = & \varphi(a,\zip(x,-))(\cons(b,y)).
-\end{eqnarray*}$$
-
-Once again, the recursion operators allow us to be sloppy at first. :) With these constraints in hand, we define $\zip$ like so.
+Hence the name $\zip$ -- it looks like a zipper in action. A big question has to be resolved. It seems clear what $\zip$ should do if we give it two lists with the same length. But what if we try to zip two lists of different lengths? I can see two basic strategies. On one hand we can just truncate to the length of the shortest list. Another idea is to *pad* the shorter list to the length of the longer. These are both useful but essentially different behaviors, so we will define two different functions to handle them. The truncation strategy will be called $\zip$ and the padding strategy will be called $\zipPad$.
 
 <div class="result">
 <div class="defn"><p>
-Let $A$ and $B$ be sets. Define $\varepsilon : \lists{A \times B}^{\lists{B}}$ by $$\varepsilon(y) = \nil$$ and define $\varphi : \lists{A} \times \lists{A \times B}^{\lists{B}} \rightarrow \lists{A\times B}^{\lists{B}}$ by $$\varphi(x,f)(z) = \left\{\begin{array}{ll} \nil & \mathrm{if}\ z = \nil \\ \cons((x,y),f(w)) & \mathrm{if}\ z = \cons(y,w). \end{array}\right.$$ We then define $\zip : \lists{A} \times \lists{B} \rightarrow \lists{A \times B}$ by $$\zip(x,y) = \foldr{\varepsilon}{\varphi}(x)(y).$$
-</p></div>
-</div>
-
-We can implement $\zip$ directly with $\foldr{-}{-}$ as in the definition.
-
-> zip' :: (List t) => t a -> t b -> t (a,b)
-> zip' = foldr epsilon phi
->   where
->     phi :: (List t) => a -> (t b -> t (a,b)) -> t b -> t (a,b)
->     phi x f z = case uncons z of
->       Left ()      -> nil
->       Right (y,ys) -> cons (x,y) (f ys)
->
->     epsilon :: (List t) => t b -> t (a,b)
->     epsilon _ = nil
-
-This does the job. But it's also a little awkward; it constructs an intermediate list of functions. The following result suggests a more straightforward implementation.
-
-<div class="result">
-<div class="thm"><p>
-Let $A$ and $B$ be sets. Then we have the following for all $a \in A$, $x \in \lists{A}$, $b \in B$, and $y \in \lists{B}$.
-
-1. $\zip(\nil,y) = \nil$.
-2. $\zip(x,\nil) = \nil$.
-3. $\zip(\cons(a,x),\cons(b,y)) = \cons((a,b),\zip(x,y))$.
-</p></div>
-
-<div class="proof"><p>
-1. We have
-$$\begin{eqnarray*}
- &   & \zip(\nil,y) \\
- & = & \foldr{\varepsilon}{\varphi}(\nil)(y) \\
- & = & \varepsilon(y) \\
- & = & \nil
-\end{eqnarray*}$$
-as claimed.
-2. We consider two cases: either $x = \nil$ or $x = \cons(d,w)$ for some $d \in A$ and $w \in \lists{A}$. Certainly if $x = \nil$ we have $$\zip(x,\nil) = \zip(\nil,\nil) = \nil$$ as claimed. Suppose then that $x = \cons(d,w)$; now we have
-$$\begin{eqnarray*}
- &   & \zip(\cons(d,w),\nil) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(d,w))(\nil) \\
- & = & \varphi(d,\foldr{\varepsilon}{\varphi}(x))(\nil) \\
- & = & \nil
-\end{eqnarray*}$$
-as claimed.
-3. Note that
-$$\begin{eqnarray*}
- &   & \zip(\cons(a,x),\cons(b,y)) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\cons(b,y)) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\cons(b,y)) \\
- & = & \cons((a,b),\foldr{\varepsilon}{\varphi}(x)(y)) \\
- & = & \cons((a,b),\zip(x,y))
-\end{eqnarray*}$$
-as claimed.
-</p></div>
-</div>
+Let $A$ and $B$ be sets. Define $\delta : \lists{B} \rightarrow \lists{A \times B}$ by $$\delta(y) = \nil,$$ $\psi : A \times \lists{A \times B} \rightarrow \lists{A \times B}$ by $$\psi(a,z) = \nil,$$ and $\chi : A \times B \times \lists{A \times B} \times \lists{A \times B} \rightarrow \lists{A \times B}$ by $$\chi(a,b,z,w) = \cons((a,b),z).$$ Now define $$\zip : \lists{A} \times \lists{B} \rightarrow \lists{A \times B}$$ by $$\zip = \dfoldr{\delta}{\psi}{\chi}.$$
 
 In Haskell:
 
 > zip :: (List t) => t a -> t b -> t (a,b)
-> zip x y = case uncons x of
->   Left ()      -> nil
->   Right (a,as) -> case uncons y of
->     Left ()      -> nil
->     Right (b,bs) -> cons (a,b) (zip as bs)
+> zip = dfoldr delta psi chi
+>   where
+>     delta _ = nil
+>     psi _ _ = nil
+>     chi a b z _ = cons (a,b) z
 
-Now $\map(\tSwap) \circ \zip = \zip \circ \tSwap$:
+</p></div>
+</div>
+
+Since $\zip$ is defined in terms of $\dfoldr{\ast}{\ast}{\ast}$, it is the unique solution to a system of functional equations.
+
+<div class="result">
+<div class="corollary"><p>
+Let $A$ and $B$ be sets. Then $\zip$ is the unique solution $f : \lists{A} \times \lists{B} \rightarrow \lists{A \times B}$ to the following equations for all $a \in A$, $b \in B$, $x \in \lists{A}$, and $y \in \lists{B}$.
+$$\left\{\begin{array}{l}
+ f(\nil,y) = \nil \\
+ f(\cons(a,x),\nil) = \nil \\
+ f(\cons(a,x),\cons(b,y)) = \cons((a,b),f(x,y))
+\end{array}\right.$$
+</p></div>
+
+<div class="test"><p>
+
+> _test_zip_nil_list :: (List t, Equal (t (a,b)))
+>   => t a -> t b -> Test (t b -> Bool)
+> _test_zip_nil_list ta _ =
+>   testName "zip(nil,y) == nil" $
+>   \y -> eq (zip (nil `withTypeOf` ta) y) nil
+> 
+> 
+> _test_zip_cons_nil :: (List t, Equal (t (a,b)))
+>   => t a -> t b -> Test (a -> t a -> Bool)
+> _test_zip_cons_nil _ tb =
+>   testName "zip(cons(a,x),nil) == nil" $
+>   \a x -> eq (zip (cons a x) (nil `withTypeOf` tb)) nil
+> 
+> 
+> _test_zip_cons_cons :: (List t, Equal (t (a,b)))
+>   => t a -> t b -> Test (a -> t a -> b -> t b -> Bool)
+> _test_zip_cons_cons _ _ =
+>   testName "zip(cons(a,x),cons(b,y)) == cons((a,b),zip(x,y))" $
+>   \a x b y -> eq (zip (cons a x) (cons b y)) (cons (a,b) (zip x y))
+
+</p></div>
+</div>
+
+Now $\map(\tSwap) \circ \zip = \zip \circ \tSwap$.
 
 <div class="result">
 <div class="thm"><p>
@@ -171,9 +130,19 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_zip_tswap :: (List t, Equal (t (b,a)))
+>   => t a -> t b -> Test (t a -> t b -> Bool)
+> _test_zip_tswap _ _ =
+>   testName "map(tswap)(zip(x,y)) == zip(y,x)" $
+>   \x y -> eq (map tswap (zip x y)) (zip y x)
+
+</p></div>
 </div>
 
-And $\map(\tPair(f,g)) \circ \zip = \zip \circ \tPair(\map(f),\map(g))$:
+And $\map(\tPair(f,g)) \circ \zip = \zip \circ \tPair(\map(f),\map(g))$.
 
 <div class="result">
 <div class="thm"><p>
@@ -215,9 +184,19 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_zip_tpair :: (List t, Equal (t (a,b)))
+>   => t a -> t b -> Test ((a -> a) -> (b -> b) -> t a -> t b -> Bool)
+> _test_zip_tpair _ _ =
+>   testName "map(tpair(f,g))(zip(x,y)) == zip(map(f)(x),map(g)(y))" $
+>   \f g x y -> eq (map (tpair f g) (zip x y)) (zip (map f x) (map g y))
+
+</p></div>
 </div>
 
-The length of a zipped list:
+$\zip$ interacts with $\length$.
 
 <div class="result">
 <div class="thm"><p>
@@ -258,9 +237,21 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_zip_length :: (List t, Natural n, Equal n)
+>   => t a -> t b -> n -> Test (t a -> t b -> Bool)
+> _test_zip_length _ _ n =
+>   testName "length(zip(x,y)) == min(length(x),length(y))" $
+>   \x y -> eq
+>     ((length (zip x y)) `withTypeOf` n)
+>     (min (length x) (length y))
+
+</p></div>
 </div>
 
-$\zip$ is kind of associative:
+$\zip$ is kind of associative.
 
 <div class="result">
 <div class="thm"><p>
@@ -324,320 +315,22 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
-</div>
 
-How about $\zipPad$? We want a signature like $$A \times B \rightarrow \lists{A} \times \lists{B} \rightarrow \lists{A \times B},$$ from a function $$\foldr{\delta}{\psi} : \lists{A} \rightarrow \lists{A \times B}^{\lists{B}}.$$ Let $\alpha \in A$ and $\beta \in B$ be the "pad" elements. Now $\delta : \lists{A \times B}^{\lists{B}}$ should satisfy
-$$\begin{eqnarray*}
- &   & \map((\alpha,-))(y) \\
- & = & \zipPad(\alpha,\beta)(\nil,y) \\
- & = & \foldr{\delta}{\psi}(\nil)(y) \\
- & = & \delta(y),
-\end{eqnarray*}$$
-and $\psi : \lists{A} \times \lists{A \times B}^{\lists{B}} \rightarrow \lists{A \times B}^{\lists{B}}$ should satisfy
-$$\begin{eqnarray*}
- &   & \cons((a,\beta),\foldr{\delta}{\psi}(x)(\nil)) \\
- & = & \cons((a,\beta),\zipPad(\alpha,\beta)(x,\nil)) \\
- & = & \zipPad(\alpha,\beta)(\cons(a,x),\nil) \\
- & = & \foldr{\delta}{\psi}(\cons(a,x))(\nil) \\
- & = & \psi(a,\foldr{\delta}{\psi}(x))(\nil)
-\end{eqnarray*}$$
-and
-$$\begin{eqnarray*}
- &   & \cons((a,b),\zipPad(x,y)) \\
- & = & \zipPad(\alpha,\beta)(\cons(a,x),\cons(b,y)) \\
- & = & \foldr{\delta}{\psi}(\cons(a,x))(\cons(b,y)) \\
- & = & \psi(a,\foldr{\delta}{\psi}(x))(\cons(b,y)).
-\end{eqnarray*}$$
-With this in mind, we define $\zipPad$ like so.
+<div class="test"><p>
 
-<div class="result">
-<div class="defn"><p>
-Let $A$ and $B$ be sets. Define $\delta : A \rightarrow \lists{A \times B}^{\lists{B}}$ by $$\delta(u)(y) = \map((u,-))(y)$$ and define $\psi : B \rightarrow \lists{A} \times \lists{A \times B}^{\lists{B}} \rightarrow \lists{A\times B}^{\lists{B}}$ by $$\psi(v)(x,f)(z) = \left\{\begin{array}{ll} \cons((x,v),f(z)) & \mathrm{if}\ z = \nil \\ \cons((x,y),f(w)) & \mathrm{if}\ z = \cons(y,w). \end{array}\right.$$ We then define $\zipPad : A \times B \rightarrow \lists{A} \times \lists{B} \rightarrow \lists{A \times B}$ by $$\zipPad(u,v)(x,y) = \foldr{\delta(u)}{\psi(v)}(x)(y).$$
-</p></div>
-</div>
+> _test_zip_zip_left :: (List t, Equal (t ((a,a),a)))
+>   => t a -> Test (t a -> t a -> t a -> Bool)
+> _test_zip_zip_left _ =
+>   testName "zip(zip(x,y),z) == map(tassocL)zip(x,zip(y,z))" $
+>   \x y z -> eq (zip (zip x y) z) (map tassocL (zip x (zip y z)))
+> 
+> 
+> _test_zip_zip_right :: (List t, Equal (t (a,(a,a))))
+>   => t a -> Test (t a -> t a -> t a -> Bool)
+> _test_zip_zip_right _ =
+>   testName "zip(zip(x,y),z) == map(tassocR)zip(x,zip(y,z))" $
+>   \x y z -> eq (zip x (zip y z)) (map tassocR (zip (zip x y) z))
 
-The implementation from the definition does the job:
-
-```haskell
-
-> zipPad' :: (List t) => a -> b -> t a -> t b -> t (a,b)
-> zipPad' u v = foldr (delta u) (psi v)
->   where
->     psi :: (List t) => b -> a -> (t b -> t (a,b)) -> t b -> t (a,b)
->     psi v x f z = case uncons z of
->       Left ()      -> cons (x,v) (f nil)
->       Right (y,ys) -> cons (x,y) (f ys)
->
->     delta :: (List t) => a -> t b -> t (a,b)
->     delta u z = map (\t -> (u,t)) z
-
-```
-
-But again, a more straightforward implementation is possible.
-
-<div class="result">
-<div class="defn"><p>
-Let $A$ and $B$ be sets. The following hold for all $\alpha, a \in A$, $x \in \lists{A}$, $\beta, b \in B$, and $y \in \lists{B}$.
-
-1. $\zipPad(\alpha,\beta)(\nil,y) = \map((\alpha,-))(y)$.
-2. $\zipPad(\alpha,\beta)(x,\nil) = \map((-,\beta))(x)$.
-3. $\zipPad(\alpha,\beta)(\cons(a,x),\cons(b,y)) = \cons((a,b),\zipPad(\alpha,\beta)(x,y))$.
-</p></div>
-
-<div class="proof"><p>
-1. Note that
-$$\begin{eqnarray*}
- &   & \zipPad(\alpha,\beta)(\nil,y) \\
- & = & \foldr{\delta(\alpha)}{\psi(\beta)}(\nil)(y) \\
- & = & \delta(\alpha)(y) \\
- & = & \map((\alpha,-))(y)
-\end{eqnarray*}$$
-as claimed.
-2. We proceed by list induction on $x$. For the base case $x = \nil$, we have
-$$\begin{eqnarray*}
- &   & \zipPad(\alpha,\beta)(\nil,\nil) \\
- & = & \nil \\
- & = & \map((-,\beta))(\nil) \\
- & = & \map((-,\beta))(x)
-\end{eqnarray*}$$
-as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
-$$\begin{eqnarray*}
- &   & \zipPad(\alpha,\beta)(\cons(a,x),\nil) \\
- & = & \foldr{\delta(\alpha)}{\psi(\beta)}(\cons(a,x))(\nil) \\
- & = & \psi(\beta)(a,\foldr{\delta(\alpha)}{\psi(\beta)}(x))(\nil) \\
- & = & \cons((a,\beta),\foldr{\delta(\alpha)}{\psi(\beta)}(x)(\nil)) \\
- & = & \cons((a,\beta),\zipPad(\alpha,\beta)(x,\nil)) \\
- & = & \cons((a,\beta),\map((-,\beta))(x)) \\
- & = & \map((-,\beta))(\cons(a,x))
-\end{eqnarray*}$$
-as needed.
-3. We have
-$$\begin{eqnarray*}
- &   & \zipPad(\alpha,\beta)(\cons(a,x),\cons(b,y)) \\
- & = & \foldr{\delta(\alpha)}{\psi(\beta)}(\cons(a,x))(\cons(b,y)) \\
- & = & \psi(\beta)(a,\foldr{\delta(\alpha)}{\psi(\beta)}(x))(\cons(b,y)) \\
- & = & \cons((a,b),\foldr{\delta(\alpha)}{\psi(\beta)}(x)(y)) \\
- & = & \cons((a,b),\zipPad(\alpha,\beta)(x,y))
-\end{eqnarray*}$$
-as claimed.
-</p></div>
-</div>
-
-In Haskell:
-
-> zipPad :: (List t) => a -> b -> t a -> t b -> t (a,b)
-> zipPad u v x y = case uncons x of
->   Left ()      -> map (\w -> (u,w)) y
->   Right (a,as) -> case uncons y of
->     Left ()      -> map (\w -> (w,v)) x
->     Right (b,bs) -> cons (a,b) (zipPad u v as bs)
-
-Now $\zipPad$ satisfies several properties analogous to those of $\zip$.
-
-<div class="result">
-<div class="thm"><p>
-Let $A$ and $B$ be sets. Then for all $\alpha \in A$, $\beta \in B$, $x \in \lists{A}$, and $y \in \lists{B}$ we have $$\map(\tSwap)(\zipPad(\alpha,\beta)(x,y)) = \zipPad(\beta,\alpha)(y,x).$$
-</p></div>
-
-<div class="proof"><p>
-We proceed by list induction on $x$. For the base case $x = \nil$, we have
-$$\begin{eqnarray*}
- &   & \map(\tSwap)(\zipPad(\alpha,\beta)(x,y)) \\
- & = & \map(\tSwap)(\zipPad(\alpha,\beta)(\nil,y)) \\
- & = & \map(\tSwap)(\map((\alpha,-))(y)) \\
- & = & (\map(\tSwap) \circ \map((\alpha,-)))(y) \\
- & = & \map(\tSwap \circ (\alpha,-))(y) \\
- & = & \map((-,\alpha))(y) \\
- & = & \zipPad(\beta,\alpha)(y,\nil) \\
- & = & \zipPad(\beta,\alpha)(y,x)
-\end{eqnarray*}$$
-as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now we consider two cases for $y$; either $y = \nil$ or $y = \cons(b,w)$. If $y = \nil$, we have
-$$\begin{eqnarray*}
- &   & \map(\tSwap)(\zipPad(\alpha,\beta)(\cons(a,x),y)) \\
- & = & \map(\tSwap)(\zipPad(\alpha,\beta)(\cons(a,x),\nil)) \\
- & = & \map(\tSwap)(\map((-,\beta))(\cons(a,x))) \\
- & = & (\map(\tSwap) \circ \map((-,\beta)))(\cons(a,x)) \\
- & = & \map(\tSwap \circ (-,\beta))(\cons(a,x)) \\
- & = & \map((\beta,-))(\cons(a,x)) \\
- & = & \zipPad(\alpha,\beta)(\nil,\cons(a,x)) \\
- & = & \zipPad(\alpha,\beta)(y,\cons(a,x))
-\end{eqnarray*}$$
-as needed. Finally, suppose $y = \cons(b,w)$. Then we have
-$$\begin{eqnarray*}
- &   & \map(\tSwap)(\zipPad(\alpha,\beta)(\cons(a,x),y)) \\
- & = & \map(\tSwap)(\zipPad(\alpha,\beta)(\cons(a,x),\cons(b,w))) \\
- & = & \map(\tSwap)(\cons((a,b),\zipPad(\alpha,\beta)(x,w)) \\
- & = & \cons(\tSwap((a,b)),\map(\tSwap)(\zipPad(\alpha,\beta)(x,w))) \\
- & = & \cons((b,a),\zipPad(\beta,\alpha)(w,x)) \\
- & = & \zipPad(\beta,\alpha)(\cons(b,w),\cons(a,x)) \\
- & = & \zipPad(\beta,\alpha)(y,\cons(a,x)) \\
-\end{eqnarray*}$$
-as needed.
-</p></div>
-</div>
-
-and...
-
-<div class="result">
-<div class="thm"><p>
-Let $A$, $B$, $U$, and $V$ be sets, with functions $f : A \rightarrow U$ and $g : B \rightarrow V$. Then for all $\alpha \in A$, $\beta \in B$, $x \in \lists{A}$, and $y \in \lists{B}$, we have $$\map(\tPair(f,g))(\zipPad(\alpha,\beta)(x,y)) = \zipPad(f(\alpha),g(\beta))(\map(f)(x),\map(g)(y)).$$
-</p></div>
-
-<div class="proof"><p>
-We proceed by list induction on $x$. For the base case $x = \nil$, we have
-$$\begin{eqnarray*}
- &   & \map(\tPair(f,g))(\zipPad(\alpha,\beta)(x,y)) \\
- & = & \map(\tPair(f,g))(\zipPad(\alpha,\beta)(\nil,y)) \\
- & = & \map(\tPair(f,g))(\map((\alpha,-))(y)) \\
- & = & (\map(\tPair(f,g)) \circ \map((\alpha,-)))(y) \\
- & = & \map(\tPair(f,g) \circ (\alpha,-))(y) \\
- & = & \map((f(\alpha),g(-)))(y) \\
- & = & \map((f(\alpha),-) \circ g)(y) \\
- & = & \map((f(\alpha),-))(\map(g)(y)) \\
- & = & \zipPad(f(\alpha),g(\beta))(\nil,\map(g)(y)) \\
- & = & \zipPad(f(\alpha),g(\beta))(x,\map(g)(y))
-\end{eqnarray*}$$
-as needed. Now suppose the equality holds for some $x$ and let $a \in A$. We consider two cases for $y$; either $y = \nil$ or $y = \cons(b,w)$. If $y = \nil$, we have
-$$\begin{eqnarray*}
- &   & \map(\tPair(f,g))(\zipPad(\alpha,\beta)(\cons(a,x),y)) \\
- & = & \map(\tPair(f,g))(\zipPad(\alpha,\beta)(\cons(a,x),\nil)) \\
- & = & \map(\tPair(f,g))(\map((-,\beta))(\cons(a,x))) \\
- & = & (\map(\tPair(f,g)) \circ \map((-,\beta)))(\cons(a,x)) \\
- & = & \map(\tPair(f,g) \circ (-,\beta))(\cons(a,x)) \\
- & = & \map((f(-),g(\beta)))(\cons(a,x)) \\
- & = & \map((-,g(\beta)) \circ f)(\cons(a,x)) \\
- & = & \map((-,g(\beta)))(\map(f)(\cons(a,x))) \\
- & = & \zipPad(f(\alpha),g(\beta))(\map(f)(\cons(a,x)),\nil) \\
- & = & \zipPad(f(\alpha),g(\beta))(\map(f)(\cons(a,x)),y) \\
-\end{eqnarray*}$$
-as needed. If $y = \cons(b,w)$, we have
-$$\begin{eqnarray*}
- &   & \map(\tPair(f,g))(\zipPad(\alpha,\beta)(\cons(a,x),\cons(b,w))) \\
- & = & \map(\tPair(f,g))(\cons((a,b),\zipPad(\alpha,\beta)(x,w))) \\
- & = & \cons(\tPair(f,g)(a,b),\map(\tPair(f,g))(\zipPad(\alpha,\beta)(x,w))) \\
- & = & \cons((f(a),g(b)),\zipPad(f(\alpha),g(\beta))(\map(f)(x),\map(g)(w))) \\
- & = & \zipPad(f(\alpha),g(\beta))(\cons(f(a),\map(f)(x)),\cons(g(b),\map(g)(w))) \\
- & = & \zipPad(f(\alpha),g(\beta))(\map(f)(\cons(a,x)),\map(g)(\cons(b,w))) \\
- & = & \zipPad(f(\alpha),g(\beta))(\map(f)(\cons(a,x)),\map(g)(y)) \\
-\end{eqnarray*}$$
-as needed.
-</p></div>
-</div>
-
-and...
-
-<div class="result">
-<div class="thm"><p>
-Let $A$ and $B$ be sets, with $\alpha \in A$, $\beta \in B$, $x \in \lists{A}$, and $y \in \lists{B}$. Then $$\length(\zipPad(\alpha,\beta)(x,y)) = \nmax(\length(x),\length(y)).$$
-</p></div>
-
-<div class="proof"><p>
-We proceed by list induction on $x$. For the base case $x = \nil$, we have
-$$\begin{eqnarray*}
- &   & \length(\zipPad(\alpha,\beta)(x,y)) \\
- & = & \length(\zipPad(\alpha,\beta)(\nil,y)) \\
- & = & \length(\map((\alpha,-))(y)) \\
- & = & \length(y) \\
- & = & \nmax(\zero,\length(y)) \\
- & = & \nmax(\length(\nil),\length(y)) \\
- & = & \nmax(\length(x),\length(y)) \\
-\end{eqnarray*}$$
-as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. We consider two possibilities for $y$: either $y = \nil$ or $y = \cons(b,w)$. If $y = \nil$, we have
-$$\begin{eqnarray*}
- &   & \length(\zipPad(\alpha,\beta)(\cons(a,x),y)) \\
- & = & \length(\zipPad(\alpha,\beta)(\cons(a,x),\nil)) \\
- & = & \length(\map((-,\beta))(\cons(a,x))) \\
- & = & \length(\cons(a,x)) \\
- & = & \nmax(\length(\cons(a,x)),\zero) \\
- & = & \nmax(\length(\cons(a,x)),\length(\nil)) \\
- & = & \nmax(\length(\cons(a,x)),\length(y)) \\
-\end{eqnarray*}$$
-as claimed. Suppose then that $y = \cons(b,w)$. Now
-$$\begin{eqnarray*}
- &   & \length(\zipPad(\alpha,\beta)(\cons(a,x),y)) \\
- & = & \length(\zipPad(\alpha,\beta)(\cons(a,x),\cons(b,w))) \\
- & = & \length(\cons((a,b),\zipPad(\alpha,\beta)(x,w))) \\
- & = & \next(\length(\zipPad(\alpha,\beta)(x,w))) \\
- & = & \next(\nmax(\length(x),\length(w))) \\
- & = & \nmax(\next(\length(x)),\next(\length(w))) \\
- & = & \nmax(\length(\cons(a,x)),\length(\cons(b,w))) \\
- & = & \nmax(\length(\cons(a,x)),\length(y)) \\
-\end{eqnarray*}$$
-as claimed.
-</p></div>
-</div>
-
-$\zipPad$ is also kind of associative:
-
-<div class="result">
-<div class="thm"><p>
-Let $A$, $B$, and $C$ be sets, with $\alpha \in A$, $\beta \in B$, $\gamma \in C$, $x \in \lists{A}$, $y \in \lists{B}$, and $z \in \lists{C}$. Then the following hold.
-
-1. $$\begin{eqnarray*}
- &   & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(x,y),z) \\
- & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z))).
-\end{eqnarray*}$$
-2. $$\begin{eqnarray*}
- &   & \zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z)) \\
- & = & \map(\tAssocR)(\zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(x,y),z)).
-\end{eqnarray*}$$
-</p></div>
-
-<div class="proof"><p>
-1. We proceed by list induction on $x$. For the base case $x = \nil$, we have
-$$\begin{eqnarray*}
- &   & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(x,y),z) \\
- & = & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(\nil,y),z) \\
- & = & \zipPad((\alpha,\beta),\gamma)(\nil,z) \\
- & = & \nil \\
- & = & \map(\tAssocL)(\nil) \\
- & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(\nil,\zipPad(\beta,\gamma)(y,z))) \\
- & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z)))
-\end{eqnarray*}$$
-as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. If $y = \nil$, we have
-$$\begin{eqnarray*}
- &   & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(\cons(a,x),y),z) \\
- & = & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(\cons(a,x),\nil),z) \\
- & = & \zipPad((\alpha,\beta),\gamma)(\nil,z) \\
- & = & \nil \\
- & = & \map(\tAssocL)(\nil) \\
- & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\nil)) \\
- & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zipPad(\beta,\gamma)(\nil,z))) \\
- & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zipPad(\beta,\gamma)(y,z)))
-\end{eqnarray*}$$
-as claimed. Similarly, if $z = \nil$, we have
-$$\begin{eqnarray*}
- &   & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(\cons(a,x),y),z) \\
- & = & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(\cons(a,x),y),\nil) \\
- & = & \nil \\
- & = & \map(\tAssocL)(\nil) \\
- & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\nil)) \\
- & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zipPad(\beta,\gamma)(y,\nil))) \\
- & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zipPad(\beta,\gamma)(y,z))) \\
-\end{eqnarray*}$$
-as claimed. Suppose then that $y = \cons(b,u)$ and $z = \cons(c,v)$. Using the inductive hypothesis, we have
-$$\begin{eqnarray*}
- &   & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(\cons(a,x),y),z) \\
- & = & \zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(\cons(a,x),\cons(b,u)),\cons(c,v)) \\
- & = & \zipPad((\alpha,\beta),\gamma)(\cons((a,b),\zipPad(\alpha,\beta)(x,u)),\cons(c,v)) \\
- & = & \cons(((a,b),c),\zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(x,u),v)) \\
- & = & \cons(\tAssocL(a,(b,c)),\map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(u,v)))) \\
- & = & \map(\tAssocL)(\cons((a,(b,c)),\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(u,v)))) \\
- & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\cons((b,c),\zipPad(\beta,\gamma)(u,v)))) \\
- & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zipPad(\beta,\gamma)(\cons(b,u),\cons(c,v)))) \\
- & = & \map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(\cons(a,x),\zip(y,z))) \\
-\end{eqnarray*}$$
-as claimed.
-2. We have
-$$\begin{eqnarray*}
- &   & \zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z)) \\
- & = & \id(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z))) \\
- & = & \map(\id)(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z))) \\
- & = & \map(\tAssocR \circ \tAssocL)(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z))) \\
- & = & \map(\tAssocR)(\map(\tAssocL)(\zipPad(\alpha,(\beta,\gamma))(x,\zipPad(\beta,\gamma)(y,z)))) \\
- & = & \map(\tAssocR)(\zipPad((\alpha,\beta),\gamma)(\zipPad(\alpha,\beta)(x,y),z))
-\end{eqnarray*}$$
-as claimed.
 </p></div>
 </div>
 
@@ -645,100 +338,18 @@ as claimed.
 Testing
 -------
 
-Here are our property tests for $\zip$ and $\zipPad$.
+Suite:
 
-> _test_zip_tswap :: (List t, Equal a, Equal b, Equal (t (b,a)))
->   => t a -> t b -> Test (t a -> t b -> Bool)
-> _test_zip_tswap _ _ =
->   testName "map(tswap)(zip(x,y)) == zip(y,x)" $
->   \x y -> eq (map tswap (zip x y)) (zip y x)
-> 
-> 
-> _test_zip_length :: (List t, Equal a, Equal b, Natural n, Equal n)
->   => t a -> t b -> n -> Test (t a -> t b -> Bool)
-> _test_zip_length _ _ n =
->   testName "length(zip(x,y)) == min(length(x),length(y))" $
->   \x y -> let
->     lx = length x `withTypeOf` n
->   in
->     eq (length (zip x y)) (min lx (length y))
-> 
-> 
-> _test_zip_zip_left :: (List t, Equal a, Equal (t ((a,a),a)))
->   => t a -> Test (t a -> t a -> t a -> Bool)
-> _test_zip_zip_left _ =
->   testName "zip(zip(x,y),z) == map(tassocL)zip(x,zip(y,z))" $
->   \x y z -> eq (zip (zip x y) z) (map tassocL (zip x (zip y z)))
-> 
-> 
-> _test_zip_zip_right :: (List t, Equal a, Equal (t (a,(a,a))))
->   => t a -> Test (t a -> t a -> t a -> Bool)
-> _test_zip_zip_right _ =
->   testName "zip(zip(x,y),z) == map(tassocR)zip(x,zip(y,z))" $
->   \x y z -> eq (zip x (zip y z)) (map tassocR (zip (zip x y) z))
-> 
-> 
-> _test_zip_alt :: (List t, Equal a, Equal b, Equal (t (a,b)))
->   => t a -> t b -> Test (t a -> t b -> Bool)
-> _test_zip_alt _ _ =
->   testName "zip'(x,y) == zip(x,y)" $
->   \x y -> eq (zip' x y) (zip x y)
-> 
-> 
-> _test_zipPad_tswap :: (List t, Equal a, Equal b, Equal (t (b,a)))
->   => t a -> t b -> Test (a -> b -> t a -> t b -> Bool)
-> _test_zipPad_tswap _ _ =
->   testName "map(tswap)(zipPad(u,v)(x,y)) == zipPad(v,u)(y,x)" $
->   \u v x y -> eq (map tswap (zipPad u v x y)) (zipPad v u y x)
-> 
-> 
-> _test_zipPad_length :: (List t, Equal a, Equal b, Natural n, Equal n)
->   => t a -> t b -> n -> Test (a -> b -> t a -> t b -> Bool)
-> _test_zipPad_length _ _ n =
->   testName "length(zipPad(u,v)(x,y)) == max(length(x),length(y))" $
->   \u v x y -> let
->     lx = length x `withTypeOf` n
->   in
->     eq (length (zipPad u v x y)) (max lx (length y))
-> 
-> 
-> _test_zipPad_zipPad_left :: (List t, Equal a, Equal (t ((a,a),a)))
->   => t a -> Test (a -> a -> a -> t a -> t a -> t a -> Bool)
-> _test_zipPad_zipPad_left _ =
->   testName "zipPad((a,b),c)(zipPad(a,b)(x,y),z) == map(tassocL)zipPad(a,(b,c))(x,zipPad(b,c)(y,z))" $
->   \a b c x y z -> eq
->     (zipPad (a,b) c (zipPad a b x y) z)
->     (map tassocL (zipPad a (b,c) x (zipPad b c y z)))
-> 
-> 
-> _test_zipPad_zipPad_right :: (List t, Equal a, Equal (t (a,(a,a))))
->   => t a -> Test (a -> a -> a -> t a -> t a -> t a -> Bool)
-> _test_zipPad_zipPad_right _ =
->   testName "zipPad((a,b),c)(zipPad(a,b)(x,y),z) == map(tassocR)zipPad(a,(b,c))(x,zipPad(b,c)(y,z))" $
->   \a b c x y z -> eq
->     (zipPad a (b,c) x (zipPad b c y z))
->     (map tassocR (zipPad (a,b) c (zipPad a b x y) z))
-> 
-> 
-> _test_zipPad_alt :: (List t, Equal a, Equal b, Equal (t (a,b)))
->   => t a -> t b -> Test (a -> b -> t a -> t b -> Bool)
-> _test_zipPad_alt _ _ =
->   testName "zipPad'(x,y) == zipPad(x,y)" $
->   \u v x y -> eq (zipPad' u v x y) (zipPad u v x y)
-
-And the suite:
-
-> -- run all tests for zip
 > _test_zip ::
->   ( TypeName a, Equal a, Show a, Arbitrary a
->   , TypeName b, Equal b, Show b, Arbitrary b
+>   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
+>   , TypeName b, Equal b, Show b, Arbitrary b, CoArbitrary b
 >   , TypeName n, Natural n, Equal n, Show n, Arbitrary n
 >   , TypeName (t a), TypeName (t b), List t, Equal (t a), Show (t a), Arbitrary (t a)
 >   , Equal (t b), Show (t b), Arbitrary (t b), Equal (t (a,b)), Equal (t (b,a))
 >   , Equal (t (a,(a,a))), Equal (t ((a,a),a))
 >   ) => t a -> t b -> n -> Int -> Int -> IO ()
 > _test_zip t u n maxSize numCases = do
->   testLabel ("zip & zipPad: " ++ typeName t ++ " & " ++ typeName u ++ " & " ++ typeName n)
+>   testLabel ("zip: " ++ typeName t ++ " & " ++ typeName u ++ " & " ++ typeName n)
 > 
 >   let
 >     args = stdArgs
@@ -746,19 +357,16 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
+>   runTest args (_test_zip_nil_list t u)
+>   runTest args (_test_zip_cons_nil t u)
+>   runTest args (_test_zip_cons_cons t u)
 >   runTest args (_test_zip_tswap t u)
+>   runTest args (_test_zip_tpair t u)
 >   runTest args (_test_zip_length t u n)
 >   runTest args (_test_zip_zip_left t)
 >   runTest args (_test_zip_zip_right t)
->   runTest args (_test_zip_alt t u)
-> 
->   runTest args (_test_zipPad_tswap t u)
->   runTest args (_test_zipPad_length t u n)
->   runTest args (_test_zipPad_zipPad_left t)
->   runTest args (_test_zipPad_zipPad_right t)
->   runTest args (_test_zipPad_alt t u)
 
-And ``main``:
+Main:
 
 > main_zip :: IO ()
 > main_zip = do

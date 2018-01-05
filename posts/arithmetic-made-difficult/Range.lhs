@@ -39,82 +39,74 @@ In Haskell:
 </p></div>
 </div>
 
-In this post we let $\Theta = \bailrec{\varphi}{\beta(f)}{\psi}{\omega(f)}$ as in the definition of $\unfoldN$.
+Since $\range$ is an $\unfoldN{\ast}$, it is the unique solution to a system of functional equations.
 
-Special cases:
+<div class="result">
+<div class="corollary"><p>
+$\range$ is the unique $f : \nats \times \nats \rightarrow \lists{\nats}$ satisfying the following system of equations for all $a,b \in \nats$.
+$$\left\{\begin{array}{l}
+ f(a,\zero) = \nil \\
+ f(a,\next(b)) = \cons(a,f(\next(a),b))
+\end{array}\right.$$
+</p></div>
+
+<div class="test"><p>
+
+> _test_range_zero :: (List t, Natural n, Equal (t n), Equal n)
+>   => t n -> Test (n -> Bool)
+> _test_range_zero t =
+>   testName "range(a,zero) == nil" $
+>   \a -> eq (range a zero) (nil `withTypeOf` t)
+> 
+> 
+> _test_range_next :: (List t, Natural n, Equal (t n), Equal n)
+>   => t n -> Test (n -> n -> Bool)
+> _test_range_next t =
+>   testName "range(a,next(b)) == cons(a,range(next(a),b))" $
+>   \a b -> eq
+>     ((range a (next b)) `withTypeOf` t)
+>     (cons a (range (next a) b))
+
+</p></div>
+</div>
+
+A special case.
 
 <div class="result">
 <div class="thm"><p>
-For all $a \in \nats$ we have the following.
-
-1. $\range(a,\zero) = \nil$.
-2. $\range(a,\next(\zero)) = \cons(a,\nil)$.
+For all $a \in \nats$ we have $\range(a,\next(\zero)) = \cons(a,\nil)$.
 </p></div>
 
 <div class="proof"><p>
-1. We have
-$$\begin{eqnarray*}
- &   & \range(a,\zero) \\
- & = & \unfoldN(f,\zero,a) \\
- & = & \nil
-\end{eqnarray*}$$
-as claimed.
-2. We have
+Note that
 $$\begin{eqnarray*}
  &   & \range(a,\next(\zero)) \\
- & = & \unfoldN(f,\next(\zero),a) \\
- & = & \Theta(\next(\zero),(a,\nil)) \\
- & = & \Theta(\zero,(\next(a),\cons(a,\nil))) \\
- & = & \rev(\cons(a,\nil)) \\
+ & = & \cons(a,\range(\next(a),\zero)) \\
  & = & \cons(a,\nil)
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_range_one :: (List t, Natural n, Equal (t n), Equal n)
+>   => t n -> Test (n -> Bool)
+> _test_range_one t =
+>   testName "range(a,next(zero)) == cons(a,nil)" $
+>   \a -> eq (range a (next zero)) ((cons a nil) `withTypeOf` t)
+
+</p></div>
 </div>
 
-$\range$ interacts with $\next$ in its second argument:
+The $\length$ of a $\range$ is predictable.
 
 <div class="result">
 <div class="thm"><p>
-For all $a,b \in \nats$ we have the following.
-
-1. $\range(a,\next(b)) = \cons(a,\range(\next(a),b))$.
-2. $\range(a,\next(b)) = \snoc(\nplus(a,b),\range(a,b))$.
-3. $\length(\range(a,b)) = b$.
+For all $a,b \in \nats$, we have $\length(\range(a,b)) = b$.
 </p></div>
 
 <div class="proof"><p>
-1. Note that
-$$\begin{eqnarray*}
- &   & \range(a,\next(b)) \\
- & = & \unfoldN(f,\next(b),a) \\
- & = & \Theta(\next(b),(a,\nil)) \\
- & = & \Theta(b,(\next(a),\cons(a,\nil))) \\
- & = & \cat(\rev(\cons(a,\nil)),\unfoldN(f,b,\next(a))) \\
- & = & \cat(\cons(a,\nil),\range(\next(a),b)) \\
- & = & \cons(a,\cat(\nil,\range(\next(a),b))) \\
- & = & \cons(a,\range(\next(a),b)
-\end{eqnarray*}$$
-as claimed.
-2. We proceed by induction on $b$. For the base case $b = \zero$, we have
-$$\begin{eqnarray*}
- &   & \range(a,\next(b)) \\
- & = & \range(a,\next(\zero)) \\
- & = & \cons(a,\nil) \\
- & = & \snoc(a,\nil) \\
- & = & \snoc(\nplus(a,\zero),\range(a,\zero)) \\
- & = & \snoc(\nplus(a,b),\range(a,b)) \\
-\end{eqnarray*}$$
-as claimed. For the inductive step, suppose the equality holds for some $b$. Then we have
-$$\begin{eqnarray*}
- &   & \range(a,\next(\next(b)) \\
- & = & \cons(a,\range(\next(a),\next(b))) \\
- & = & \cons(a,\snoc(\nplus(\next(a),b),\range(\next(a),b))) \\
- & = & \snoc(\nplus(\next(a),b),\cons(a,\range(\next(a),b))) \\
- & = & \snoc(\nplus(a,\next(b)),\range(a,\next(b)))
-\end{eqnarray*}$$
-as needed.
-3. We proceed by induction on $b$. For the base case $b = \zero$, we have
+We proceed by induction on $b$. For the base case $b = \zero$, we have
 $$\begin{eqnarray*}
  &   & \length(\range(a,b)) \\
  & = & \length(\range(a,\zero)) \\
@@ -131,9 +123,60 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_range_length :: (List t, Natural n, Equal (t n), Equal n)
+>   => t n -> Test (n -> n -> Bool)
+> _test_range_length t =
+>   testName "length(range(a,b)) == b" $
+>   \a b -> eq (length ((range a b) `withTypeOf` t)) b
+
+</p></div>
 </div>
 
-$\range$ interacts with $\nplus$ in its second argument:
+$\range$ interacts with $\snoc$.
+
+<div class="result">
+<div class="thm"><p>
+For all $a,b \in \nats$ we have $$\range(a,\next(b)) = \snoc(\nplus(a,b),\range(a,b)).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by induction on $b$. For the base case $b = \zero$, we have
+$$\begin{eqnarray*}
+ &   & \range(a,\next(b)) \\
+ & = & \range(a,\next(\zero)) \\
+ & = & \cons(a,\nil) \\
+ & = & \snoc(a,\nil) \\
+ & = & \snoc(\nplus(a,\zero),\range(a,\zero)) \\
+ & = & \snoc(\nplus(a,b),\range(a,b)) \\
+\end{eqnarray*}$$
+as claimed. For the inductive step, suppose the equality holds for some $b$. Then we have
+$$\begin{eqnarray*}
+ &   & \range(a,\next(\next(b))) \\
+ & = & \cons(a,\range(\next(a),\next(b))) \\
+ & = & \cons(a,\snoc(\nplus(\next(a),b),\range(\next(a),b))) \\
+ & = & \snoc(\nplus(\next(a),b),\cons(a,\range(\next(a),b))) \\
+ & = & \snoc(\nplus(a,\next(b)),\range(a,\next(b)))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_range_snoc :: (List t, Natural n, Equal (t n), Equal n)
+>   => t n -> Test (n -> n -> Bool)
+> _test_range_snoc t =
+>   testName "range(a,next(b)) == snoc(plus(a,b),range(a,b))" $
+>   \a b -> eq
+>     ((range a (next b)) `withTypeOf` t)
+>     (snoc (plus a b) (range a b))
+
+</p></div>
+</div>
+
+$\range$ interacts with $\nplus$ in its second argument.
 
 <div class="result">
 <div class="thm"><p>
@@ -162,9 +205,21 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_range_plus_right :: (List t, Natural n, Equal (t n), Equal n)
+>   => t n -> Test (n -> n -> n -> Bool)
+> _test_range_plus_right t =
+>   testName "range(a,plus(b,c)) == cat(range(a,b),range(plus(a,b),c))" $
+>   \a b c -> eq
+>     ((range a (plus b c)) `withTypeOf` t)
+>     (cat (range a b) (range (plus a b) c))
+
+</p></div>
 </div>
 
-$\range$ interacts with $\next$ in its first argument:
+$\range$ interacts with $\next$ in its first argument.
 
 <div class="result">
 <div class="thm"><p>
@@ -190,6 +245,18 @@ $$\begin{eqnarray*}
  & = & \map(\next)(\range(a,\next(b)))
 \end{eqnarray*}$$
 as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_range_next_left :: (List t, Natural n, Equal (t n), Equal n)
+>   => t n -> Test (n -> n -> Bool)
+> _test_range_next_left t =
+>   testName "range(next(a),b) == map(next,range(a,b))" $
+>   \a b -> eq
+>     ((range (next a) b) `withTypeOf` t)
+>     (map next (range a b))
+
 </p></div>
 </div>
 
@@ -222,69 +289,25 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_range_plus_left :: (List t, Natural n, Equal (t n), Equal n)
+>   => t n -> Test (n -> n -> n -> Bool)
+> _test_range_plus_left t =
+>   testName "range(plus(a,b),c) == map(plus(a,-),range(b,c))" $
+>   \a b c -> eq
+>     ((range (plus a b) c) `withTypeOf` t)
+>     (map (plus a) (range b c))
+
+</p></div>
 </div>
 
 
 Testing
 -------
 
-Here are our property tests for $\range$.
-
-> _test_range_next_cons :: (List t, Natural n, Equal (t n), Equal n)
->   => t n -> Test (n -> n -> Bool)
-> _test_range_next_cons t =
->   testName "range(a,next(b)) == cons(a,range(next(a),b))" $
->   \a b -> let
->     x = (range a (next b)) `withTypeOf` t
->     y = (cons a (range (next a) b))
->   in
->     eq x y
-> 
-> 
-> _test_range_next_snoc :: (List t, Natural n, Equal (t n), Equal n)
->   => t n -> Test (n -> n -> Bool)
-> _test_range_next_snoc t =
->   testName "range(a,next(b)) == snoc(plus(a,b),range(a,b))" $
->   \a b -> let
->     x = (range a (next b)) `withTypeOf` t
->     y = (snoc (plus a b) (range a b))
->   in
->     eq x y
-> 
-> 
-> _test_range_plus_right :: (List t, Natural n, Equal (t n), Equal n)
->   => t n -> Test (n -> n -> n -> Bool)
-> _test_range_plus_right t =
->   testName "range(a,plus(b,c)) == cat(range(a,b),range(plus(a,b),c))" $
->   \a b c -> let
->     x = (range a (plus b c)) `withTypeOf` t
->     y = (cat (range a b) (range (plus a b) c))
->   in
->     eq x y
-> 
-> 
-> _test_range_next_left :: (List t, Natural n, Equal (t n), Equal n)
->   => t n -> Test (n -> n -> Bool)
-> _test_range_next_left t =
->   testName "range(next(a),b) == map(next,range(a,b))" $
->   \a b -> let
->     x = (range (next a) b) `withTypeOf` t
->     y = (map next (range a b))
->   in
->     eq x y
-> 
-> 
-> _test_range_plus_left :: (List t, Natural n, Equal (t n), Equal n)
->   => t n -> Test (n -> n -> n -> Bool)
-> _test_range_plus_left t =
->   testName "range(plus(a,b),c) == map(plus(a,-),range(b,c))" $
->   \a b c -> let
->     x = (range (plus a b) c) `withTypeOf` t
->     y = (map (plus a) (range b c))
->   in
->     eq x y
-
-And the suite:
+Suite:
 
 > _test_range ::
 >   ( TypeName n, Natural n, Equal n, Show n, Arbitrary n
@@ -299,13 +322,16 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_range_next_cons t)
->   runTest args (_test_range_next_snoc t)
+>   runTest args (_test_range_zero t)
+>   runTest args (_test_range_next t)
+>   runTest args (_test_range_one t)
+>   runTest args (_test_range_length t)
+>   runTest args (_test_range_snoc t)
 >   runTest args (_test_range_plus_right t)
 >   runTest args (_test_range_next_left t)
 >   runTest args (_test_range_plus_left t)
 
-And ``main``:
+Main:
 
 > main_range :: IO ()
 > main_range = do

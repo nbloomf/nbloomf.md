@@ -272,7 +272,7 @@ $$\left\{\begin{array}{l}
 </p></div>
 
 <div class="proof"><p>
-To see that $\unfoldN$ satisfies the first equation, note that
+To see that $\unfoldN{\ast}$ satisfies the first equation, note that
 $$\begin{eqnarray*}
  &   & \unfoldN{f}(\zero,a) \\
  & = & \tacunfoldN{f}(\nil,\zero,a) \\

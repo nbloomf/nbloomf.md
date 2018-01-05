@@ -42,7 +42,9 @@ library
     At,
     Map,
     UnfoldN,
-    Range
+    Range,
+    Zip,
+    ZipPad
   build-depends:
     base == 4.*,
     QuickCheck
@@ -568,22 +570,74 @@ test-suite amd-range
     Map,
     UnfoldN
 
-
-
-
-
-
-
 test-suite amd-zip
   default-language: Haskell2010
   type: exitcode-stdio-1.0
   main-is: Zip.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Zip.main_zip
-  other-modules: Booleans, Lists, NaturalNumbers, Unary,
-                 Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
-                 Times, At, Map, UnfoldN, MaxAndMin, Range,
-                 Tuples, Length, BailoutRecursion, SimpleRecursion, DisjointUnions
+  other-modules:
+    Booleans,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo,
+    MaxAndMin,
+    Lists,
+    HeadAndTail,
+    LeftFold,
+    DoubleFold,
+    Snoc,
+    Reverse,
+    Cat,
+    At,
+    Length,
+    Map,
+    UnfoldN,
+    Range
+
+test-suite amd-zippad
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: ZipPad.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options: -main-is ZipPad.main_zipPad
+  other-modules:
+    Booleans,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo,
+    MaxAndMin,
+    Lists,
+    HeadAndTail,
+    LeftFold,
+    DoubleFold,
+    Snoc,
+    Reverse,
+    Cat,
+    At,
+    Length,
+    Map,
+    UnfoldN,
+    Range
+
+
+
+
+
 
 test-suite amd-unzip
   default-language: Haskell2010

@@ -7,7 +7,7 @@ slug: tuples
 ---
 
 > module Tuples
->   ( fst, snd, dup, tswap, tpair, tassocL, tassocR
+>   ( fst, snd, dup, tswap, tpair, tassocL, tassocR, tupL, tupR
 >   , _test_tuple, main_tuple
 >   ) where
 > 
@@ -348,6 +348,177 @@ as claimed.
 </p></div>
 </div>
 
+We also define a pair of helper functions for constructing tuples.
+
+<div class="result">
+<div class="dfn"><p>
+Let $A$ and $B$ be sets. We define $\tupL : A \rightarrow (A \times B)^B$ by $$\tup(a)(b) = (a,b)$$ and $\tupR : B \rightarrow (A \times B)^B$ by $$\tupR(b)(a) = (a,b).$$
+
+In Haskell:
+
+> tupL :: a -> b -> (a,b)
+> tupL a b = (a,b)
+> 
+> 
+> tupR :: b -> a -> (a,b)
+> tupR b a = (a,b)
+
+</p></div>
+</div>
+
+$\tupL$ and $\tupR$ interact with $\fst$ and $\snd$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ and $B$ be sets. For all $a \in A$ and $b \in B$ we have the following.
+
+1. $\fst(\tupL(a)(b)) = a$.
+2. $\snd(\tupL(a)(b)) = b$.
+3. $\fst(\tupR(b)(a)) = a$.
+4. $\snd(\tupR(b)(a)) = b$.
+</p></div>
+
+<div class="proof"><p>
+1. $\fst(\tupL(a)(b)) = \fst(a,b) = a$.
+2. $\snd(\tupL(a)(b)) = \snd(a,b) = b$.
+3. $\fst(\tupR(b)(a)) = \fst(a,b) = a$.
+4. $\snd(\tupR(b)(a)) = \snd(a,b) = b$.
+</p></div>
+
+<div class="test"><p>
+
+> _test_fst_tupL :: (Equal a, Equal b)
+>   => a -> b -> Test (a -> b -> Bool)
+> _test_fst_tupL _ _ =
+>   testName "fst(tupL(a)(b)) == a" $
+>   \a b -> eq (fst (tupL a b)) a
+> 
+> 
+> _test_snd_tupL :: (Equal a, Equal b)
+>   => a -> b -> Test (a -> b -> Bool)
+> _test_snd_tupL _ _ =
+>   testName "snd(tupL(a)(b)) == b" $
+>   \a b -> eq (snd (tupL a b)) b
+> 
+> 
+> _test_fst_tupR :: (Equal a, Equal b)
+>   => a -> b -> Test (a -> b -> Bool)
+> _test_fst_tupR _ _ =
+>   testName "fst(tupR(b)(a)) == a" $
+>   \a b -> eq (fst (tupR b a)) a
+> 
+> 
+> _test_snd_tupR :: (Equal a, Equal b)
+>   => a -> b -> Test (a -> b -> Bool)
+> _test_snd_tupR _ _ =
+>   testName "snd(tupR(b)(a)) == b" $
+>   \a b -> eq (snd (tupR b a)) b
+
+</p></div>
+</div>
+
+$\tupL$ and $\tupR$ interact with $\tSwap$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ and $B$ be sets with $a \in A$ and $b \in B$. Then we have the following.
+
+1. $\tSwap \circ \tupL(a) = \tupR(a)$.
+2. $\tSwap \circ \tupR(b) = \tupL(b)$.
+</p></div>
+
+<div class="proof"><p>
+1. Note that
+$$\begin{eqnarray*}
+ &   & (\tSwap \circ \tupL(a))(b) \\
+ & = & \tSwap(\tupL(a)(b)) \\
+ & = & \tSwap(a,b) \\
+ & = & (b,a) \\
+ & = & \tupR(a)(b).
+\end{eqnarray*}$$
+2. Note that
+$$\begin{eqnarray*}
+ &   & (\tSwap \circ \tupR(b))(a) \\
+ & = & \tSwap(\tupR(b)(a)) \\
+ & = & \tSwap(a,b) \\
+ & = & (b,a) \\
+ & = & \tupL(b)(a).
+\end{eqnarray*}$$
+</p></div>
+
+<div class="test"><p>
+
+> _test_tswap_tupL :: (Equal a, Equal b)
+>   => a -> b -> Test (a -> b -> Bool)
+> _test_tswap_tupL _ _ =
+>   testName "tswap . tupL(a) == tupR(a)" $
+>   \a b -> eq (tswap (tupL a b)) (tupR a b)
+> 
+> 
+> _test_tswap_tupR :: (Equal a, Equal b)
+>   => a -> b -> Test (a -> b -> Bool)
+> _test_tswap_tupR _ _ =
+>   testName "tswap . tupR(b) == tupL(b)" $
+>   \a b -> eq (tswap (tupR b a)) (tupL b a)
+
+</p></div>
+</div>
+
+$\tupL$ and $\tupR$ interact with $\tPair$.
+
+<div class="result">
+<div class="thm"><p>
+Let $f : A \rightarrow U$ and $g : B \rightarrow V$, with $a \in A$ and $b \in B$. Then we have the following.
+
+1. $\tPair(f,g) \circ \tupL(a) = \tupL(f(a)) \circ g$.
+2. $\tPair(f,g) \circ \tupR(b) = \tupR(g(b)) \circ f$.
+</p></div>
+
+<div class="proof"><p>
+1. Let $b \in B$. Then
+$$\begin{eqnarray*}
+ &   & (\tPair(f,g) \circ \tupL(a))(b) \\
+ & = & \tPair(f,g)(\tupL(a)(b)) \\
+ & = & \tPair(f,g)(a,b) \\
+ & = & (f(a),g(b)) \\
+ & = & \tupL(f(a))(g(b)) \\
+ & = & (\tupL(f(a)) \circ g)(b)
+\end{eqnarray*}$$
+as claimed.
+2. Let $a \in A$. Then
+$$\begin{eqnarray*}
+ &   & (\tPair(f,g) \circ \tupR(b))(a) \\
+ & = & \tPair(f,g)(\tupR(b)(a)) \\
+ & = & \tPair(f,g)(a,b) \\
+ & = & (f(a),g(b)) \\
+ & = & \tupR(g(b))(f(a)) \\
+ & = & (\tupR(g(b)) \circ f)(a)
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_tpair_tupL :: (Equal a, Equal b)
+>   => a -> b -> Test ((a -> a) -> (b -> b) -> a -> b -> Bool)
+> _test_tpair_tupL _ _ =
+>   testName "tpair(f,g) . tupL(a) == tupL(f(a)) . g" $
+>   \f g a b -> eq
+>     (((tpair f g) . (tupL a)) b)
+>     (((tupL (f a)) . g) b)
+> 
+> 
+> _test_tpair_tupR :: (Equal a, Equal b)
+>   => a -> b -> Test ((a -> a) -> (b -> b) -> a -> b -> Bool)
+> _test_tpair_tupR _ _ =
+>   testName "tpair(f,g) . tupR(b) == tupR(g(b)) . f" $
+>   \f g a b -> eq
+>     (((tpair f g) . (tupR b)) a)
+>     (((tupR (g b)) . f) a)
+
+</p></div>
+</div>
+
 
 Testing
 -------
@@ -370,18 +541,22 @@ The suite:
 >       }
 > 
 >   runTest args (_test_dup_fst_snd a b)
-> 
 >   runTest args (_test_tswap_entries a b)
 >   runTest args (_test_tswap_tswap a b)
-> 
 >   runTest args (_test_tpair_apply a b)
 >   runTest args (_test_tpair_tpair a b)
-> 
 >   runTest args (_test_tassocL_entries a b c)
 >   runTest args (_test_tassocR_entries a b c)
 >   runTest args (_test_tassocL_tassocR a b c)
 >   runTest args (_test_tassocR_tassocL a b c)
-
+>   runTest args (_test_fst_tupL a b)
+>   runTest args (_test_snd_tupL a b)
+>   runTest args (_test_fst_tupR a b)
+>   runTest args (_test_snd_tupR a b)
+>   runTest args (_test_tswap_tupL a b)
+>   runTest args (_test_tswap_tupR a b)
+>   runTest args (_test_tpair_tupL a b)
+>   runTest args (_test_tpair_tupR a b)
 
 And ``main``:
 
