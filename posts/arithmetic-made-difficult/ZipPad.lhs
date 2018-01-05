@@ -20,14 +20,8 @@ slug: zippad
 > import Lists
 > import HeadAndTail
 > import DoubleFold
-> import Snoc
-> import Reverse
-> import Cat
 > import Length
-> import At
 > import Map
-> import UnfoldN
-> import Range
 
 Now to define $\zipPad$, an alternate interpretation of $\zip$.
 

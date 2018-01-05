@@ -20,14 +20,8 @@ slug: zip
 > import Lists
 > import HeadAndTail
 > import DoubleFold
-> import Snoc
-> import Reverse
-> import Cat
 > import Length
-> import At
 > import Map
-> import UnfoldN
-> import Range
 
 Today we'll define a really useful function on lists called $\zip$. This map will take two lists, one in $\lists{A}$ and one in $\lists{B}$, and return a list in $\lists{A \times B}$. In progress, $\zip$ping two lists looks something like this:
 $$\begin{array}{ccccccccccc}

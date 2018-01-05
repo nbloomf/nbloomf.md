@@ -44,7 +44,9 @@ library
     UnfoldN,
     Range,
     Zip,
-    ZipPad
+    ZipPad,
+    Unzip,
+    Prefix
   build-depends:
     base == 4.*,
     QuickCheck
@@ -598,9 +600,7 @@ test-suite amd-zip
     Cat,
     At,
     Length,
-    Map,
-    UnfoldN,
-    Range
+    Map
 
 test-suite amd-zippad
   default-language: Haskell2010
@@ -630,14 +630,7 @@ test-suite amd-zippad
     Cat,
     At,
     Length,
-    Map,
-    UnfoldN,
-    Range
-
-
-
-
-
+    Map
 
 test-suite amd-unzip
   default-language: Haskell2010
@@ -645,11 +638,30 @@ test-suite amd-unzip
   main-is: Unzip.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Unzip.main_unzip
-  other-modules: Booleans, Lists, NaturalNumbers, Unary,
-                 Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
-                 Times, At, Map, UnfoldN, MaxAndMin, Range,
-                 Tuples, Length, Zip, SimpleRecursion,
-                 BailoutRecursion, DisjointUnions
+  other-modules:
+    Booleans,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo,
+    MaxAndMin,
+    Lists,
+    HeadAndTail,
+    LeftFold,
+    DoubleFold,
+    Snoc,
+    Reverse,
+    Cat,
+    At,
+    Length,
+    Map,
+    Zip
 
 test-suite amd-prefix
   default-language: Haskell2010
@@ -657,11 +669,37 @@ test-suite amd-prefix
   main-is: Prefix.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Prefix.main_prefix
-  other-modules: Booleans, Lists, NaturalNumbers, Unary,
-                 Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
-                 Times, At, Map, UnfoldN, MaxAndMin, Range,
-                 Tuples, Length, Zip, SimpleRecursion,
-                 BailoutRecursion, DisjointUnions
+  other-modules:
+    Booleans,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo,
+    MaxAndMin,
+    Lists,
+    HeadAndTail,
+    LeftFold,
+    DoubleFold,
+    Snoc,
+    Reverse,
+    Cat,
+    At,
+    Length,
+    Map,
+    UnfoldN,
+    Range,
+    Zip
+
+
+
+
+
 
 test-suite amd-lcp
   default-language: Haskell2010

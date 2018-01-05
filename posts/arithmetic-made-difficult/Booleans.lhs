@@ -20,7 +20,7 @@ slug: booleans
 > 
 > import Prelude
 >   ( Show(show), IO, Bool(..), Int, Maybe(..), Either(..), id, undefined
->   , putStrLn, (>>), return, (++), String, (.), ($), Integer, const
+>   , putStrLn, (>>), return, (++), String, (.), ($), Integer, const, uncurry
 >   )
 > import Test.QuickCheck
 >   ( Testable(..), Args(..), Arbitrary(..), CoArbitrary(..)

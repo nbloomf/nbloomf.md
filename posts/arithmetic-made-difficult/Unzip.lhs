@@ -10,24 +10,18 @@ slug: unzip
 >   ( unzip, _test_unzip, main_unzip
 >   ) where
 > 
+> import Prelude ()
 > import Booleans
 > import Tuples
 > import NaturalNumbers
 > import Plus
 > import MaxAndMin
->
 > import Lists
 > import Reverse
 > import Cat
 > import Length
-> import At
 > import Map
-> import UnfoldN
-> import Range
 > import Zip
-> 
-> import Prelude (uncurry)
-> import Test.QuickCheck
 
 Today we will define a kind of one-sided inverse of $\zip$, called $\unzip$. Recall that $\zip$ has signature $$\lists{A} \times \lists{B} \rightarrow \lists{A \times B}.$$ An inverse will then have signature $$\lists{A \times B} \rightarrow \lists{A} \times \lists{B},$$ and should "undo" the zipping. As usual we'd like to define this as a fold if possible; to that end we need $\varepsilon : \lists{A} \times \lists{B}$ and $$\varphi : (A \times B) \times (\lists{A} \times \lists{B}) \rightarrow \lists{A} \times \lists{B}$$ such that
 $$\begin{eqnarray*}
@@ -61,32 +55,32 @@ In Haskell:
 </p></div>
 </div>
 
-<div class="result">
-<div class="thm"><p>
-Let $A$ and $B$ be sets. We have the following for all $x \in \lists{A \times B}$ and $(a,b) \in A \times B$.
+Because $\unzip$ is defined as a $\foldr{\ast}{\ast}$, it is the unique solution to a system of functional equations.
 
-1. $\unzip(\nil) = (\nil,\nil)$.
-2. If $\unzip(x) = (u,v)$, then $\unzip(\cons((a,b),x) = (\cons(a,u),\cons(b,v))$.
+<div class="result">
+<div class="corollary"><p>
+Let $A$ and $B$ be sets. Then $\unzip$ is the unique map $f : \lists{A \times B} \rightarrow \lists{A} \times \lists{B}$ such that the following hold for all $a \in A$, $b \in B$, $x \in \lists{A}$, and $y \in \lists{B}$.
+$$\left\{\begin{array}{l}
+ f(\nil) = (\nil,\nil) \\
+ f(\cons(a,b),z) = (\cons(a,\fst(z)),\cons(b,\snd(z))).
+\end{array}\right.$$
 </p></div>
 
-<div class="proof"><p>
-1. Note that
-$$\begin{eqnarray*}
- &   & \unzip(\nil) \\
- & = & \foldr{(\nil,\nil)}{\varphi}(\nil) \\
- & = & (\nil,\nil)
-\end{eqnarray*}$$
-as claimed.
-2. Note that
-$$\begin{eqnarray*}
- &   & \unzip(\cons((a,b),x)) \\
- & = & \foldr{(\nil,\nil}{\varphi}(\cons((a,b),x)) \\
- & = & \varphi((a,b),\foldr{(\nil,\nil)}{\varphi}(x)) \\
- & = & \varphi((a,b),\unzip(x)) \\
- & = & \varphi((a,b),(u,v)) \\
- & = & (\cons(a,u),\cons(b,v))
-\end{eqnarray*}$$
-as claimed.
+<div class="test"><p>
+
+> _test_unzip_nil :: (List t, Equal (t a), Equal (t b))
+>   => t a -> t b -> Test Bool
+> _test_unzip_nil ta tb =
+>   testName "unzip(nil) == (nil,nil)" $
+>   eq (unzip nil) (nil `withTypeOf` ta, nil `withTypeOf` tb)
+> 
+> 
+> _test_unzip_cons :: (List t, Equal (t a), Equal (t b))
+>   => t a -> t b -> Test (a -> b -> t (a,b) -> Bool)
+> _test_unzip_cons ta tb =
+>   testName "unzip(cons((a,b),z)) == (cons(a,fst(unzip(z))),cons(b,snd(unzip(z))))" $
+>   \a b z -> eq (unzip (cons (a,b) z)) (cons a (fst (unzip z)), cons b (snd (unzip z)))
+
 </p></div>
 </div>
 
@@ -109,12 +103,22 @@ $$\begin{eqnarray*}
 as needed. Suppose now that the result holds for some $x$ and let $a \in A$ and $b \in B$. Let $(u,v) = \unzip(x)$. Now
 $$\begin{eqnarray*}
  &   & \zip(\unzip(\cons((a,b),x)) \\
- & = & \zip(\cons(a,u),\cons(b,v)) \\
- & = & \cons((a,b),\zip(u,v)) \\
+ & = & \zip(\cons(a,\fst(\unzip(x))),\cons(b,\snd(\unzip(x)))) \\
+ & = & \cons((a,b),\zip(\fst(\unzip(x)),\snd(\unzip(x)))) \\
  & = & \cons((a,b),\zip(\unzip(x))) \\
  & = & \cons((a,b),x)
 \end{eqnarray*}$$
 as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_unzip_zip :: (List t, Equal a, Equal b, Equal (t (a,b)))
+>   => t a -> t b -> Test (t (a,b) -> Bool)
+> _test_unzip_zip _ _ =
+>   testName "zip(unzip(x)) == x" $
+>   \x -> eq ((uncurry zip) (unzip x)) x
+
 </p></div>
 </div>
 
@@ -149,9 +153,19 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_unzip_tswap :: (List t, Equal (t b), Equal (t a))
+>   => t a -> t b -> Test (t (a,b) -> Bool)
+> _test_unzip_tswap _ _ =
+>   testName "tswap(unzip(x)) == unzip(map(tswap)(x))" $
+>   \x -> eq (unzip (map tswap x)) (tswap (unzip x))
+
+</p></div>
 </div>
 
-One more.
+$\unzip$ interacts with $\tPair$.
 
 <div class="result">
 <div class="thm"><p>
@@ -186,33 +200,27 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_unzip_tpair :: (List t, Equal (t b), Equal (t a))
+>   => t a -> t b -> Test ((a -> a) -> (b -> b) -> t (a,b) -> Bool)
+> _test_unzip_tpair _ _ =
+>   testName "unzip(map(tpair(f,g))(x)) == tpair(map(f),map(g))(unzip(x))" $
+>   \f g x -> eq (unzip (map (tpair f g) x)) (tpair (map f) (map g) (unzip x))
+
+</p></div>
 </div>
 
 
 Testing
 -------
 
-Here are our property tests for $\unzip$.
+Suite:
 
-> _test_unzip_zip :: (List t, Equal a, Equal b, Equal (t (a,b)))
->   => t a -> t b -> Test (t (a,b) -> Bool)
-> _test_unzip_zip _ _ =
->   testName "zip(unzip(x)) == x" $
->   \x -> eq ((uncurry zip) (unzip x)) x
-> 
-> 
-> _test_unzip_tswap :: (List t, Equal a, Equal b, Equal (t b), Equal (t a))
->   => t a -> t b -> Test (t (a,b) -> Bool)
-> _test_unzip_tswap _ _ =
->   testName "tswap(unzip(x)) == unzip(map(tswap)(x))" $
->   \x -> eq (unzip (map tswap x)) (tswap (unzip x))
-
-And the suite:
-
-> -- run all tests for unzip
 > _test_unzip ::
->   ( TypeName a, Show a, Equal a, Arbitrary a
->   , TypeName b, Show b, Equal b, Arbitrary b
+>   ( TypeName a, Show a, Equal a, Arbitrary a, CoArbitrary a
+>   , TypeName b, Show b, Equal b, Arbitrary b, CoArbitrary b
 >   , TypeName (t a), TypeName (t b), List t
 >   , Equal (t (a,b)), Arbitrary (t a), Show (t a), Arbitrary (t b), Show (t b)
 >   , Show (t (a,b)), Arbitrary (t (a,b)), Equal (t b), Equal (t a)
@@ -226,10 +234,13 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
+>   runTest args (_test_unzip_nil t u)
+>   runTest args (_test_unzip_cons t u)
 >   runTest args (_test_unzip_zip t u)
 >   runTest args (_test_unzip_tswap t u)
+>   runTest args (_test_unzip_tpair t u)
 
-And ``main``:
+Main:
 
 > main_unzip :: IO ()
 > main_unzip = do

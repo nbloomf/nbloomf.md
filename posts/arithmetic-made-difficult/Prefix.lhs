@@ -10,48 +10,19 @@ slug: prefix-suffix
 >   ( prefix, suffix, _test_prefix, main_prefix
 >   ) where
 > 
+> import Prelude ()
 > import Booleans
 > import NaturalNumbers
 > import Lists
 > import Reverse
 > import Cat
 > import Zip
-> 
-> import Prelude ()
-> import Test.QuickCheck
 
 The $\cat$ function on $\lists{A}$ is analogous to $\nplus$ on $\nats$. Carrying this analogy further, $\zip$ and $\zipPad$ are analogous to $\nmin$ and $\nmax$, respectively. When analogies like this occur in mathematics it can be fruitful to see how far they go. With that in mind, today we will explore the list-analogue of $\nleq$. This role is played by two functions which we call $\prefix$ and $\suffix$.
 
-Intuitively, $\prefix$ will detect when one list is an initial segment of another, while $\suffix$ detects when one list is a terminal segment of another. We'll start with $\prefix$. This function should have a signature like $$\lists{A} \times \lists{A} \rightarrow \bool.$$ But how to define this as a fold? Taking a cue from our definition of $\zip$, we'll look for $\varepsilon$ and $\varphi$ so that $$\prefix(x,y) = \foldr{\varepsilon}{\varphi}(x)(y)$$ behaves as expected. So we want $$\varepsilon : \bool^{\lists{A}}$$ such that
-$$\begin{eqnarray*}
- &   & \btrue \\
- & = & \prefix(\nil,y) \\
- & = & \foldr{\varepsilon}{\varphi}(\nil)(y) \\
- & = & \varepsilon(y).
-\end{eqnarray*}$$
-Similarly, we want $$\varphi : A \times \bool^{\lists{A}} \rightarrow \bool^{\lists{A}}$$ such that
-$$\begin{eqnarray*}
- &   & \bfalse \\
- & = & \prefix(\cons(a,x),\nil) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\nil) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\nil),
-\end{eqnarray*}$$
-while if $a = b$, we want
-$$\begin{eqnarray*}
- &   & \prefix(x,y) \\
- & = & \prefix(\cons(a,x),\cons(b,y)) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\cons(b,y)) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\cons(b,y)) \\
-\end{eqnarray*}$$
-and if $a \neq b$, we want
-$$\begin{eqnarray*}
- &   & \bfalse \\
- & = & \prefix(\cons(a,x),\cons(b,y)) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\cons(b,y)) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\cons(b,y)). \\
-\end{eqnarray*}$$
+Intuitively, $\prefix$ will detect when one list is an initial segment of another, while $\suffix$ detects when one list is a terminal segment of another. We'll start with $\prefix$, which we can define as a $\dfoldr{\ast}{\ast}{\ast}$ as follows.
 
-So motivated, we define $\prefix$ as follows.
+(@@@)
 
 <div class="result">
 <div class="defn"><p>
