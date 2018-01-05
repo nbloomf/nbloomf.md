@@ -13,93 +13,74 @@ slug: prefix-suffix
 > import Prelude ()
 > import Booleans
 > import NaturalNumbers
+> import LessThanOrEqualTo
 > import Lists
+> import DoubleFold
+> import Snoc
 > import Reverse
 > import Cat
+> import Length
+> import Map
 > import Zip
 
 The $\cat$ function on $\lists{A}$ is analogous to $\nplus$ on $\nats$. Carrying this analogy further, $\zip$ and $\zipPad$ are analogous to $\nmin$ and $\nmax$, respectively. When analogies like this occur in mathematics it can be fruitful to see how far they go. With that in mind, today we will explore the list-analogue of $\nleq$. This role is played by two functions which we call $\prefix$ and $\suffix$.
 
 Intuitively, $\prefix$ will detect when one list is an initial segment of another, while $\suffix$ detects when one list is a terminal segment of another. We'll start with $\prefix$, which we can define as a $\dfoldr{\ast}{\ast}{\ast}$ as follows.
 
-(@@@)
-
 <div class="result">
 <div class="defn"><p>
-Let $A$ be a set. Define $\varepsilon : \lists{A} \rightarrow \bool$ by $$\varepsilon(y) = \btrue.$$ Define $\varphi : A \times \bool^{\lists{A}} \rightarrow \bool^{\lists{A}}$ by $$\varphi(a,f)(w) = \left\{\begin{array}{ll} f(u) & \mathrm{if}\ w = \cons(b,u)\ \mathrm{and}\ a = b \\ \bfalse & \mathrm{otherwise.} \end{array}\right.$$ Then we define $$\prefix : \lists{A} \times \lists{A} \rightarrow \bool$$ by $$\prefix(x,y) = \foldr{\varepsilon}{\varphi}(x)(y).$$
-</p></div>
-</div>
-
-We can translate this definition directly to Haskell:
-
-> prefix' :: (List t, Equal a) => t a -> t a -> Bool
-> prefix' = foldr epsilon phi
->   where
->     epsilon _ = True
-> 
->     phi a f w = case uncons w of
->       Left ()     -> False
->       Right (b,u) -> if eq a b
->         then f u
->         else False
-
-The next result suggests a more straightforward implementation.
-
-<div class="result">
-<div class="thm"><p>
-Let $A$ be a set. For all $a,b \in A$ and $x,y \in \lists{A}$, we have the following.
-
-1. $\prefix(\nil,y) = \btrue$.
-2. $\prefix(\cons(a,x),\nil) = \bfalse$.
-3. $$\prefix(\cons(a,x),\cons(b,y)) = \left\{\begin{array}{ll} \bfalse & \mathrm{if}\ a \neq b \\ \prefix(x,y) & \mathrm{if}\ a = b. \end{array}\right.$$
-</p></div>
-
-<div class="proof"><p>
-1. Note that
-$$\begin{eqnarray*}
- &   & \prefix(\nil,y) \\
- & = & \foldr{\varepsilon}{\varphi}(\nil)(y) \\
- & = & \varepsilon(y) \\
- & = & \btrue
-\end{eqnarray*}$$
-as claimed.
-2. Note that
-$$\begin{eqnarray*}
- &   & \prefix(\cons(a,x),\nil) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\nil) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\nil) \\
- & = & \bfalse
-\end{eqnarray*}$$
-as claimed.
-3. First suppose $a = b$. Now
-$$\begin{eqnarray*}
- &   & \prefix(\cons(a,x),\cons(b,y)) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\cons(b,y)) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\cons(b,y)) \\
- & = & \foldr{\varepsilon}{\varphi}(x)(y) \\
- & = & \prefix(x,y)
-\end{eqnarray*}$$
-as claimed. If $a \neq b$, we have
-$$\begin{eqnarray*}
- &   & \prefix(\cons(a,x),\cons(b,y)) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\cons(b,y)) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\cons(b,y)) \\
- & = & \bfalse
-\end{eqnarray*}$$
-as claimed.
-</p></div>
-</div>
+Let $A$ be a set. Define $\delta : \lists{A} \rightarrow \bool$ by $\delta(y) = \btrue$, define $\psi : A \times \bool \rightarrow \bool$ by $\psi(a,p) = \bfalse$, and define $\chi : A \times A \times \bool \times \bool \rightarrow \lists{A}$ by $$\chi(a,b,p,q) = \bif{\beq(a,b)}{p}{\bfalse}.$$ Now define $$\prefix : \lists{A} \times \lists{A} \rightarrow \bool$$ by $$\prefix = \dfoldr{\delta}{\psi}{\chi}.$$
 
 In Haskell:
 
 > prefix :: (List t, Equal a) => t a -> t a -> Bool
-> prefix u v = case uncons u of
->   Left ()     -> True
->   Right (a,x) -> case uncons v of
->     Left ()     -> False
->     Right (b,y) -> if eq a b
->       then prefix x y
->       else False
+> prefix = dfoldr delta psi chi
+>   where
+>     delta _ = True
+>     psi _ _ = False
+>     chi a b p _ = if eq a b then p else False
+
+</p></div>
+</div>
+
+Since $\prefix$ is defined as a double fold, it is the unique solution to a system of functional equations.
+
+<div class="result">
+<div class="corollary"><p>
+Let $A$ be a set. $\prefix$ is the unique map $f : \lists{A} \times \lists{A} \rightarrow \bool$ satisfying the following equations for all $a,b \in A$ and $x,y \in \lists{A}$.
+$$\left\{\begin{array}{l}
+ f(\nil,y) = \btrue \\
+ f(\cons(a,x),\nil) = \bfalse \\
+ f(\cons(a,x),\cons(b,y)) = \bif{\beq(a,b)}{f(x,y)}{\bfalse}
+\end{array}\right.$$
+</p></div>
+
+<div class="test"><p>
+
+> _test_prefix_nil_list :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> Bool)
+> _test_prefix_nil_list _ =
+>   testName "prefix(nil,y) == true" $
+>   \y -> eq (prefix nil y) True
+> 
+> 
+> _test_prefix_cons_nil :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (a -> t a -> Bool)
+> _test_prefix_cons_nil _ =
+>   testName "prefix(nil,y) == true" $
+>   \a x -> eq (prefix (cons a x) nil) False
+> 
+> 
+> _test_prefix_cons_cons :: (List t, Equal a)
+>   => t a -> Test (a -> t a -> a -> t a -> Bool)
+> _test_prefix_cons_cons _ =
+>   testName "prefix((cons(a,x),cons(b,y)) == if(eq(a,b),prefix(x,y),false)" $
+>   \a x b y -> eq
+>     (prefix (cons a x) (cons b y))
+>     (if eq a b then prefix x y else False)
+
+</p></div>
+</div>
 
 Now $\prefix$ is analogous to $\nleq$ in that it detects the existence of solutions $z$ to the equation $y = \cat(x,z)$.
 
@@ -136,19 +117,43 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_prefix_cat :: (List t, Equal a)
+>   => t a -> Test (t a -> t a -> Bool)
+> _test_prefix_cat _ =
+>   testName "prefix(x,cat(x,y))" $
+>   \x y -> prefix x (cat x y)
+
+</p></div>
 </div>
 
+And $\prefix$ interacts with $\snoc$.
+
 <div class="result">
-<div class="corollary"><p>
+<div class="thm"><p>
 Let $A$ be a set. For all $x,y \in \lists{A}$, if $\prefix(x,y) = \btrue$, then $\prefix(x,\snoc(a,y)) = \btrue$.
 </p></div>
 
 <div class="proof"><p>
 If $\prefix(x,y) = \btrue$, then $y = \cat(x,z)$ for some $z$. Now $$\snoc(a,y) = \snoc(\cat(x,z)) = \cat(x,\snoc(a,z)),$$ and so $\prefix(x,\snoc(a,y)) = \btrue$ as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_prefix_snoc :: (List t, Equal a)
+>   => t a -> Test (a -> t a -> t a -> Bool)
+> _test_prefix_snoc _ =
+>   testName "if prefix(x,y) then prefix(x,snoc(a,y))" $
+>   \a x y -> if prefix x y
+>     then prefix x (snoc a y)
+>     else True
+
+</p></div>
 </div>
 
-And $\prefix$ is a partial order:
+$\prefix$ is a partial order.
 
 <div class="result">
 <div class="thm"><p>
@@ -178,9 +183,37 @@ $$\begin{eqnarray*}
 Since $\cat$ is cancellative, we have $\nil = \cat(u,v)$, so that $u = \nil$, and thus $x = y$ as claimed.
 3. If $\prefix(x,y)$, we have $y = \cat(x,u)$. Similarly, if $\prefix(y,z)$, we have $z = \cat(y,v)$. Now $$z = \cat(\cat(x,u),v) = \cat(x,\cat(u,v))$$ so that $\prefix(x,z)$ as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_prefix_reflexive :: (List t, Equal a)
+>   => t a -> Test (t a -> Bool)
+> _test_prefix_reflexive _ =
+>   testName "prefix(x,x)" $
+>   \x -> prefix x x
+> 
+> 
+> _test_prefix_symmetric :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> t a -> Bool)
+> _test_prefix_symmetric _ =
+>   testName "prefix(x,y) & prefix(y,x) ==> eq(x,y)" $
+>   \x y -> if and (prefix x y) (prefix y x)
+>     then eq x y
+>     else True
+> 
+> 
+> _test_prefix_transitive :: (List t, Equal a)
+>   => t a -> Test (t a -> t a -> t a -> Bool)
+> _test_prefix_transitive _ =
+>   testName "prefix(x,y) & prefix(y,z) ==> prefix(x,z)" $
+>   \x y z -> if and (prefix x y) (prefix y z)
+>     then prefix x z
+>     else True
+
+</p></div>
 </div>
 
-$\map$ preserves prefixes:
+$\map$ preserves $\prefix$.
 
 <div class="result">
 <div class="thm"><p>
@@ -218,9 +251,21 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_prefix_map :: (List t, Equal a)
+>   => t a -> Test ((a -> a) -> t a -> t a -> Bool)
+> _test_prefix_map _ =
+>   testName "if prefix(x,y) then prefix(map(f)(x),map(f)(y))" $
+>   \f x y -> if prefix x y
+>     then prefix (map f x) (map f y)
+>     else True
+
+</p></div>
 </div>
 
-And $\zip$ preserves prefixes.
+And $\zip$ preserves $\prefix$.
 
 <div class="result">
 <div class="thm"><p>
@@ -252,40 +297,49 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_prefix_zip :: (List t, Equal a)
+>   => t a -> Test (t a -> t a -> t a -> t a -> Bool)
+> _test_prefix_zip _ =
+>   testName "prefix(x,y) & prefix(u,v) ==> prefix(zip(x,u),zip(y,v))" $
+>   \x y u v -> if and (prefix x y) (prefix u v)
+>     then prefix (zip x u) (zip y v)
+>     else True
+
+</p></div>
 </div>
 
-$\length$ can detect when $\prefix$ is false (sometimes):
+$\prefix$ interacts with $\length$.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set with $x,y \in \lists{A}$. If $\nleq(\next(\length(y)),\length(x)) = \btrue$, then $\prefix(x,y) = \bfalse$.
+Let $A$ be a set with $x,y \in \lists{A}$. If $\prefix(x,y)$, then $\nleq(\length(x),\length(y)$.
 </p></div>
 
 <div class="proof"><p>
-We proceed by list induction on $x$. For the base case $x = \nil$, note that
+Suppose $\prefix(x,y)$. Then we have $y = \cat(x,z)$ for some $z$, and so
 $$\begin{eqnarray*}
- &   & \nleq(\next(\length(y)),\length(x)) \\
- & = & \nleq(\next(\length(y)),\length(\nil)) \\
- & = & \nleq(\next(\length(y)),\zero) \\
- & = & \bfalse,
+ &   & \nleq(\length(x),\length(y)) \\
+ & = & \nleq(\length(x),\length(\cat(x,z))) \\
+ & = & \nleq(\length(x),\nplus(\length(x),\length(z))) \\
+ & = & \nleq(\zero,\length(z)) \\
+ & = & \btrue
 \end{eqnarray*}$$
-so the implication holds vacuously. For the inductive step, suppose the implication holds for all $y$ for some $x$ and let $a \in A$. Suppose further that $$\nleq(\next(\length(y)),\length(\cons(a,x))) = \btrue.$$ We consider two possibilities for $y$. If $y = \nil$, then $$\prefix(\cons(a,x),y) = \prefix(\cons(a,x),\nil) = \bfalse$$ as needed. Suppose then that $y = \cons(b,v)$ for some $b \in A$ and $v \in \lists{A}$. Now
-$$\begin{eqnarray*}
- &   & \btrue \\
- & = & \nleq(\next(\length(y)),\length(\cons(a,x))) \\
- & = & \nleq(\next(\length(\cons(b,v))),\next(\length(x))) \\
- & = & \nleq(\next(\next(\length(v))),\next(\length(x))) \\
- & = & \nleq(\next(\length(v)),\length(x)).
-\end{eqnarray*}$$
-By the inductive hypothesis, we have $\prefix(x,v) = \bfalse$. Now
-$$\begin{eqnarray*}
- &   & \prefix(\cons(a,x),y) \\
- & = & \prefix(\cons(a,x),\cons(b,v)) \\
- & = & \bif{\beq(a,b)}{\prefix(x,v)}{\bfalse} \\
- & = & \bif{\beq(a,b)}{\bfalse}{\bfalse} \\
- & = & \bfalse
-\end{eqnarray*}$$
-as needed.
+as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_prefix_length :: (List t, Equal a, Natural n, Equal n)
+>   => t a -> n -> Test (t a -> t a -> Bool)
+> _test_prefix_length _ k =
+>   testName "if prefix(x,y) then leq(length(x),length(y))" $
+>   \x y -> if prefix x y
+>     then leq ((length x) `withTypeOf` k) (length y)
+>     else True
+
 </p></div>
 </div>
 
@@ -302,6 +356,8 @@ In Haskell:
 
 </p></div>
 </div>
+
+(@@@)
 
 Not surprisingly, we can characterize $\prefix$ in terms of $\suffix$.
 
@@ -557,41 +613,6 @@ so that $\prefix(x,\cons(a,\nil)) = \bfalse$. Similarly, $$\nleq(\next(\length(\
 Testing
 -------
 
-Here are our property tests for $\prefix$ and $\suffix$.
-
-> _test_prefix_cat :: (List t, Equal a)
->   => t a -> Test (t a -> t a -> Bool)
-> _test_prefix_cat _ =
->   testName "prefix(x,cat(x,y))" $
->   \x y -> prefix x (cat x y)
-> 
-> 
-> _test_prefix_reflexive :: (List t, Equal a)
->   => t a -> Test (t a -> Bool)
-> _test_prefix_reflexive _ =
->   testName "prefix(x,x)" $
->   \x -> prefix x x
-> 
-> 
-> _test_prefix_transitive :: (List t, Equal a)
->   => t a -> Test (t a -> t a -> t a -> Bool)
-> _test_prefix_transitive _ =
->   testName "prefix(x,y) & prefix(y,z) ==> prefix(x,z)" $
->   \x y z -> if and (prefix x y) (prefix y z)
->     then prefix x z
->     else True
-> 
-> 
-> _test_prefix_zip :: (List t, Equal a)
->   => t a -> Test (t a -> t a -> t a -> t a -> Bool)
-> _test_prefix_zip _ =
->   testName "prefix(x,y) & prefix(u,v) ==> prefix(zip(x,u),zip(y,v))" $
->   \x y u v -> if and (prefix x y) (prefix u v)
->     then prefix (zip x u) (zip y v)
->     else True
-
-Tests for $\suffix$:
-
 > _test_suffix_cat :: (List t, Equal a)
 >   => t a -> Test (t a -> t a -> Bool)
 > _test_suffix_cat _ =
@@ -614,16 +635,16 @@ Tests for $\suffix$:
 >     then suffix x z
 >     else True
 
-And the suite:
+Suite:
 
-> -- run all tests for prefix & suffix
 > _test_prefix ::
->   ( TypeName a, Show a, Equal a, Arbitrary a
+>   ( TypeName a, Show a, Equal a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
+>   , TypeName n, Equal n, Natural n, Show n, Arbitrary n
 >   , Show (t a), Equal (t a), Arbitrary (t a)
->   ) => t a -> Int -> Int -> IO ()
-> _test_prefix t maxSize numCases = do
->   testLabel ("prefix & suffix: " ++ typeName t)
+>   ) => t a -> n -> Int -> Int -> IO ()
+> _test_prefix t n maxSize numCases = do
+>   testLabel ("prefix & suffix: " ++ typeName t ++ " & " ++ typeName n)
 > 
 >   let
 >     args = stdArgs
@@ -631,18 +652,25 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
+>   runTest args (_test_prefix_nil_list t)
+>   runTest args (_test_prefix_cons_nil t)
+>   runTest args (_test_prefix_cons_cons t)
 >   runTest args (_test_prefix_cat t)
+>   runTest args (_test_prefix_snoc t)
 >   runTest args (_test_prefix_reflexive t)
+>   runTest args (_test_prefix_symmetric t)
 >   runTest args (_test_prefix_transitive t)
+>   runTest args (_test_prefix_map t)
 >   runTest args (_test_prefix_zip t)
+>   runTest args (_test_prefix_length t n)
 > 
 >   runTest args (_test_suffix_cat t)
 >   runTest args (_test_suffix_reflexive t)
 >   runTest args (_test_suffix_transitive t)
 
-And ``main``:
+Main:
 
 > main_prefix :: IO ()
 > main_prefix = do
->   _test_prefix (nil :: ConsList Bool)  20 100
->   _test_prefix (nil :: ConsList Unary) 20 100
+>   _test_prefix (nil :: ConsList Bool)  (zero :: Unary) 20 100
+>   _test_prefix (nil :: ConsList Unary) (zero :: Unary) 20 100
