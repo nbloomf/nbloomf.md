@@ -315,14 +315,14 @@ as claimed.
 > _test_zip_zip_left :: (List t, Equal (t ((a,a),a)))
 >   => t a -> Test (t a -> t a -> t a -> Bool)
 > _test_zip_zip_left _ =
->   testName "zip(zip(x,y),z) == map(tassocL)zip(x,zip(y,z))" $
+>   testName "zip(zip(x,y),z) == map(tassocL)(zip(x,zip(y,z)))" $
 >   \x y z -> eq (zip (zip x y) z) (map tassocL (zip x (zip y z)))
 > 
 > 
 > _test_zip_zip_right :: (List t, Equal (t (a,(a,a))))
 >   => t a -> Test (t a -> t a -> t a -> Bool)
 > _test_zip_zip_right _ =
->   testName "zip(zip(x,y),z) == map(tassocR)zip(x,zip(y,z))" $
+>   testName "zip(zip(x,y),z) == map(tassocR)(zip(x,zip(y,z)))" $
 >   \x y z -> eq (zip x (zip y z)) (map tassocR (zip (zip x y) z))
 
 </p></div>

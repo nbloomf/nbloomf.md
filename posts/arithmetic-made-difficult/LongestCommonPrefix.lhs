@@ -3,130 +3,80 @@ title: Longest Common Prefix
 author: nbloomf
 date: 2017-05-09
 tags: arithmetic-made-difficult, literate-haskell
+slug: lcp-lcs
 ---
 
 > module LongestCommonPrefix
 >   ( lcp, lcs, _test_lcp, main_lcp
 >   ) where
 > 
+> import Prelude ()
 > import Booleans
 > import NaturalNumbers
 > import Lists
+> import DoubleFold
+> import Snoc
 > import Reverse
 > import Cat
 > import Zip
 > import Prefix
->
-> import Prelude ()
-> import Test.QuickCheck
 
-Today we'll compute the *longest common prefix* of two strings (and while we're at it, the *longest common suffix*). Given two lists $x$ and $y$, their longest common prefix is the longest list which is a prefix of both, just like it says on the tin. We'll denote this function $\lcp$, and we want it to have a signature like $$\lists{A} \times \lists{A} \rightarrow \lists{A}.$$ To define $\lcp$ as a fold like $$\lcp(x,y) = \foldr{\varepsilon}{\varphi}(x)(y)$$ we need $\varepsilon : \lists{A}^{\lists{A}}$ such that
-$$\begin{eqnarray*}
- &   & \nil \\
- & = & \lcp(\nil,y) \\
- & = & \foldr{\varepsilon}{\varphi}(\nil)(y) \\
- & = & \varepsilon(y),
-\end{eqnarray*}$$
-and $$\varphi : A \times \lists{A}^{\lists{A}} \rightarrow \lists{A}^{\lists{A}}$$ such that
-$$\begin{eqnarray*}
- &   & \nil \\
- & = & \lcp(\cons(a,x),\nil) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\nil) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\nil)
-\end{eqnarray*}$$
-and if $a = b$, then
-$$\begin{eqnarray*}
- &   & \cons(a,\lcp(x,y)) \\
- & = & \lcp(\cons(a,x),\cons(b,y)) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\cons(b,y)) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\cons(b,y)) \\
-\end{eqnarray*}$$
-while if $a \neq b$, we want
-$$\begin{eqnarray*}
- &   & \nil \\
- & = & \lcp(\cons(a,x),\cons(b,y)) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\cons(b,y)) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\cons(b,y))
-\end{eqnarray*}$$
-With this in mind, we define $\lcp$ like so.
+Today we'll compute the *longest common prefix* of two lists (and while we're at it, the *longest common suffix*). Given two lists $x$ and $y$, their longest common prefix is the longest list which is a prefix of both, just like it says on the tin. We'll denote this function $\lcp$, and we want it to have a signature like $$\lists{A} \times \lists{A} \rightarrow \lists{A}.$$ Double fold was made for situations like this.
 
 <div class="result">
 <div class="defn"><p>
-Let $A$ be a set. Define $\varepsilon : \lists{A} \rightarrow \lists{A}$ by $$\varepsilon(y) = \nil$$ and define $\varphi : A \times \lists{A}^{\lists{A}} \rightarrow \lists{A}^{\lists{A}}$ by $$\varphi(a,f)(w) = \left\{ \begin{array}{ll} \cons(a,f(u)) & \mathrm{if}\ w = \cons(a,u) \\ \nil & \mathrm{otherwise}. \end{array} \right.$$ Now define $\lcp : \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\lcp(x,y) = \foldr{\varepsilon}{\varphi}(x)(y).$$
-</p></div>
-</div>
-
-We can translate $\lcp$ to Haskell directly as follows:
-
-> lcp' :: (List t, Equal a) => t a -> t a -> t a
-> lcp' = foldr epsilon phi
->   where
->     epsilon _ = nil
-> 
->     phi a f w = case uncons w of
->       Left ()     -> nil
->       Right (b,u) -> if eq a b
->         then cons a (f u)
->         else nil
-
-The next result suggests a more straightforward implementation.
-
-<div class="result">
-<div class="thm"><p>
-Let $A$ be a set with $x,y \in \lists{A}$ and $a,b \in A$. Then we have the following.
-
-1. $\lcp(\nil,y) = \nil$.
-2. $\lcp(x,\nil) = \nil$.
-3. $$\lcp(\cons(a,x),\cons(b,y)) = \left\{ \begin{array}{ll} \cons(a,\lcp(x,y)) & \mathrm{if}\ a = b \\ \nil & \mathrm{otherwise}. \end{array} \right.$$
-</p></div>
-
-<div class="proof"><p>
-1. We have
-$$\begin{eqnarray*}
- &   & \lcp(\nil,y) \\
- & = & \foldr{\varepsilon}{\varphi}(\nil)(y) \\
- & = & \varepsilon(y) \\
- & = & \nil
-\end{eqnarray*}$$
-as claimed.
-2. We have
-$$\begin{eqnarray*}
- &   & \lcp(\cons(a,x),\nil) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\nil) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\nil) \\
- & = & \nil
-\end{eqnarray*}$$
-as claimed.
-3. If $a = b$ we have
-$$\begin{eqnarray*}
- &   & \lcp(\cons(a,x),\cons(b,y)) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\cons(b,y)) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\cons(b,y)) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\cons(a,y)) \\
- & = & \cons(a,\foldr{\varepsilon}{\varphi}(x)(y)) \\
- & = & \cons(a,\lcp(x,y)),
-\end{eqnarray*}$$
-and if $a \neq b$ we have
-$$\begin{eqnarray*}
- &   & \lcp(\cons(a,x),\cons(b,y)) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\cons(b,y)) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\cons(b,y)) \\
- & = & \nil
-\end{eqnarray*}$$
-as claimed.
-</p></div>
-</div>
+Let $A$ be a set. Define $\delta : \lists{A} \rightarrow \lists{A}$ by $\delta(y) = \nil$, $\psi : A \times \lists{A} \rightarrow \lists{A}$ by $$\psi(a,x) = \nil,$$ and $\chi : A \times A \times \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\chi(a,b,z,w) = \bif{\beq(a,b)}{cons(a,z)}{\nil}.$$ Now define $\lcp : \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\lcp = \dfoldr{\delta}{\psi}{\chi}.$$
 
 In Haskell:
 
 > lcp :: (List t, Equal a) => t a -> t a -> t a
-> lcp x y = case uncons x of
->   Left ()     -> nil
->   Right (a,u) -> case uncons y of
->     Left ()     -> nil
->     Right (b,v) -> if eq a b
->       then cons a (lcp u v)
->       else nil
+> lcp = dfoldr delta psi chi
+>   where
+>     delta _ = nil
+>     psi _ _ = nil
+>     chi a b z _ = if eq a b then cons a z else nil
+
+</p></div>
+</div>
+
+Since $\lcp$ is defined as a double fold, it is the unique solution to a system of functional equations.
+
+<div class="result">
+<div class="corollary"><p>
+Let $A$ be a set. Then $\lcp$ is the unique map $f : \lists{A} \times \lists{A} \rightarrow \lists{A}$ satisfying the following equations for all $a,b \in A$ and $x,y \in \lists{A}$.
+$$\left\{\begin{array}{l}
+ f(\nil,y) = \nil \\
+ f(\cons(a,x),\nil) = \nil \\
+ f(\cons(a,x),\cons(b,y)) = \bif{\beq(a,b)}{\cons(a,f(x,y))}{\nil}
+\end{array}\right.$$
+</p></div>
+
+<div class="test"><p>
+
+> _test_lcp_nil_list :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> Bool)
+> _test_lcp_nil_list _ =
+>   testName "lcp(nil,y) == nil" $
+>   \y -> eq (lcp nil y) nil
+> 
+> 
+> _test_lcp_cons_nil :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (a -> t a -> Bool)
+> _test_lcp_cons_nil _ =
+>   testName "lcp(cons(a,x),nil) == nil" $
+>   \a x -> eq (lcp (cons a x) nil) nil
+> 
+> 
+> _test_lcp_cons_cons :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (a -> t a -> a -> t a -> Bool)
+> _test_lcp_cons_cons _ =
+>   testName "lcp(cons(a,x),cons(b,y)) == if(eq(a,b),cons(a,lcp(x,y),nil)" $
+>   \a x b y -> eq
+>     (lcp (cons a x) (cons b y))
+>     (if eq a b then cons a (lcp x y) else nil)
+
+</p></div>
+</div>
 
 Now $\lcp$ lives up to the name (the *universal property* of $\lcp$):
 
@@ -210,22 +160,36 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_lcp_is_common :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> t a -> Bool)
+> _test_lcp_is_common _ =
+>   testName "and(prefix(lcp(x,y),x),prefix(lcp(x,y),y))" $
+>   \x y -> and (prefix (lcp x y) x) (prefix (lcp x y) y)
+> 
+> 
+> _test_lcp_is_longest :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> t a -> t a -> Bool)
+> _test_lcp_is_longest _ =
+>   testName "if and(prefix(z,x),prefix(z,y)) then prefix(z,lcp(x,y))" $
+>   \x y z -> if and (prefix z x) (prefix z y)
+>     then prefix z (lcp x y)
+>     else True
+
+</p></div>
 </div>
 
-$\lcp$ satisfies some nice identities:
+$\lcp$ is idempotent.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set. The following hold for all $x,y,z \in \lists{A}$.
-
-1. $\lcp(x,x) = x$.
-2. $\lcp(x,y) = \lcp(y,x)$.
-3. $\lcp(\lcp(x,y),z) = \lcp(x,\lcp(y,z))$.
-4. $\cat(x,\lcp(y,z)) = \lcp(\cat(x,y),\cat(x,z))$.
+Let $A$ be a set. For all $x \in \lists{A}$ we have $\lcp(x,x) = x$.
 </p></div>
 
 <div class="proof"><p>
-1. We proceed by list induction on $x$. For the base case $x = \nil$, we have
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \lcp(x,x) \\
  & = & \lcp(\nil,\nil) \\
@@ -239,7 +203,28 @@ $$\begin{eqnarray*}
  & = & \cons(a,x)
 \end{eqnarray*}$$
 as needed.
-2. We proceed by list induction on $x$. For the base case $x = \nil$, we have
+</p></div>
+
+<div class="test"><p>
+
+> _test_lcp_idempotent :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> Bool)
+> _test_lcp_idempotent _ =
+>   testName "lcp(x,x) == x" $
+>   \x -> eq (lcp x x) x
+
+</p></div>
+</div>
+
+$\lcp$ is commutative.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $x,y \in \lists{A}$ we have $\lcp(x,y) = \lcp(y,x)$.
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \lcp(x,y) \\
  & = & \lcp(\nil,y) \\
@@ -255,28 +240,60 @@ $$\begin{eqnarray*}
  & = & \lcp(\nil,\cons(a,x)) \\
  & = & \lcp(y,\cons(a,x))
 \end{eqnarray*}$$
-as needed. Now suppose $y = \cons(b,w)$. If $b \neq a$, we have
+as needed. Now suppose $y = \cons(b,w)$. Then we have
 $$\begin{eqnarray*}
  &   & \lcp(\cons(a,x),y) \\
  & = & \lcp(\cons(a,x),\cons(b,w)) \\
- & = & \nil \\
- & = & \lcp(\cons(b,w),\cons(a,x)) \\
- & = & \lcp(y,\cons(a,x)),
-\end{eqnarray*}$$
-while if $a = b$, we have
-$$\begin{eqnarray*}
- &   & \lcp(\cons(a,x),y) \\
- & = & \lcp(\cons(a,x),\cons(b,w)) \\
- & = & \lcp(\cons(a,x),\cons(a,w)) \\
- & = & \cons(a,\lcp(x,w)) \\
- & = & \cons(a,\lcp(w,x)) \\
- & = & \lcp(\cons(a,w),\cons(a,x)) \\
+ & = & \bif{\beq(a,b)}{\lcp(x,w)}{\nil} \\
+ & = & \bif{\beq(b,a)}{\lcp(w,x)}{\nil} \\
  & = & \lcp(\cons(b,w),\cons(a,x)) \\
  & = & \lcp(y,\cons(a,x))
 \end{eqnarray*}$$
 as needed.
-3. Let $h = \lcp(\lcp(x,y),z)$, $k = \lcp(x,\lcp(y,z))$, $u = \lcp(x,y)$, and $v = \lcp(y,z)$. First we show that $\prefix(h,k)$. Note that $\prefix(h,u)$, so that $\prefix(h,x)$ and $\prefix(h,y)$. Now $\prefix(h,z)$, so that $\prefix(h,v)$. Thus $\prefix(h,k)$. The proof that $\prefix(k,h)$ is similar; thus $h = k$ as claimed.
-4. We proceed by list induction on $x$. For the base case $x = \nil$, we have
+</p></div>
+
+<div class="test"><p>
+
+> _test_lcp_commutative :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> t a -> Bool)
+> _test_lcp_commutative _ =
+>   testName "lcp(x,y) == lcp(y,x)" $
+>   \x y -> eq (lcp x y) (lcp y x)
+
+</p></div>
+</div>
+
+$\lcp$ is associative.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $x,y,z \in \lists{A}$ we have $\lcp(\lcp(x,y),z) = \lcp(x,\lcp(y,z))$.
+</p></div>
+
+<div class="proof"><p>
+Let $h = \lcp(\lcp(x,y),z)$, $k = \lcp(x,\lcp(y,z))$, $u = \lcp(x,y)$, and $v = \lcp(y,z)$. First we show that $\prefix(h,k)$. Note that $\prefix(h,u)$, so that $\prefix(h,x)$ and $\prefix(h,y)$. Now $\prefix(h,z)$, so that $\prefix(h,v)$. Thus $\prefix(h,k)$. The proof that $\prefix(k,h)$ is similar; thus $h = k$ as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_lcp_associative :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> t a -> t a -> Bool)
+> _test_lcp_associative _ =
+>   testName "lcp(lcp(x,y),z) == lcp(x,lcp(y,z))" $
+>   \x y z -> eq (lcp (lcp x y) z) (lcp x (lcp y z))
+
+</p></div>
+</div>
+
+$\cat$ distributes over $\lcp$ from the left.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $x,y,z \in \lists{A}$ we have $\cat(x,\lcp(y,z)) = \lcp(\cat(x,y),\cat(x,z))$.
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \cat(x,\lcp(y,z)) \\
  & = & \cat(\nil,\lcp(y,z)) \\
@@ -294,9 +311,19 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_lcp_cat_left :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> t a -> t a -> Bool)
+> _test_lcp_cat_left _ =
+>   testName "cat(x,lcp(y,z)) == lcp(cat(x,y),cat(x,z))" $
+>   \x y z -> eq (cat x (lcp y z)) (lcp (cat x y) (cat x z))
+
+</p></div>
 </div>
 
-$\lcp$ detects prefixes:
+$\lcp$ detects prefixes.
 
 <div class="result">
 <div class="thm"><p>
@@ -312,15 +339,23 @@ $$\begin{eqnarray*}
  & = & \cat(x,\nil) \\
  & = & x
 \end{eqnarray*}$$
-as claimed.
-
-To see the "only if" part, suppose we have $\lcp(x,y) = x$; using the universal property of $\lcp$, we have
+as claimed. To see the "only if" part, suppose we have $\lcp(x,y) = x$; using the universal property of $\lcp$, we have
 $$\begin{eqnarray*}
  &   & \prefix(x,y) \\
  & = & \prefix(\lcp(x,y),y) \\
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_lcp_prefix :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> t a -> Bool)
+> _test_lcp_prefix _ =
+>   testName "lcp(x,y) == x iff prefix(x,y)" $
+>   \x y -> eq (eq (lcp x y) x) (prefix x y)
+
 </p></div>
 </div>
 
@@ -407,9 +442,19 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_lcp_zip :: (List t, Equal a, Equal (t (a,a)))
+>   => t a -> Test (t a -> t a -> t a -> t a -> Bool)
+> _test_lcp_zip _ =
+>   testName "zip(lcp(x,y),lcp(u,v)) == lcp(zip(x,u),zip(y,v))" $
+>   \x y u v -> eq (zip (lcp x y) (lcp u v)) (lcp (zip x u) (zip y v))
+
+</p></div>
 </div>
 
-And $\lcp$ interacts with $\map(f)$ if $f$ is injective.
+$\lcp$ interacts with $\map(f)$ if $f$ is injective.
 
 <div class="result">
 <div class="thm"><p>
@@ -478,7 +523,45 @@ In Haskell:
 </p></div>
 </div>
 
-$\lcs$ lives up to the name:
+Many properties of $\lcp$ have analogues for $\lcs$.
+
+<div class="result">
+<div class="corollary"><p>
+Let $A$ be a set. For all $a,b \in A$ and $x,y \in \lists{A}$, we have the following.
+
+1. $\lcs(\nil,y) = \nil$.
+2. $\lcs(\snoc(a,x),\nil) = \nil$.
+3. $\lcs(\snoc(a,x),\snoc(b,y)) = \bif{\beq(a,b)}{\snoc(a,\lcs(x,y))}{\nil}$.
+</p></div>
+
+<div class="test"><p>
+
+> _test_lcs_nil_list :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> Bool)
+> _test_lcs_nil_list _ =
+>   testName "lcs(nil,y) == nil" $
+>   \y -> eq (lcs nil y) nil
+> 
+> 
+> _test_lcs_snoc_nil :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (a -> t a -> Bool)
+> _test_lcs_snoc_nil _ =
+>   testName "lcs(snoc(a,x),nil) == nil" $
+>   \a x -> eq (lcs (snoc a x) nil) nil
+> 
+> 
+> _test_lcs_snoc_snoc :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (a -> t a -> a -> t a -> Bool)
+> _test_lcs_snoc_snoc _ =
+>   testName "lcs(snoc(a,x),snoc(b,y)) == if(eq(a,b),snoc(a,lcs(x,y),nil)" $
+>   \a x b y -> eq
+>     (lcs (snoc a x) (snoc b y))
+>     (if eq a b then snoc a (lcs x y) else nil)
+
+</p></div>
+</div>
+
+$\lcs$ lives up to the name.
 
 <div class="result">
 <div class="thm"><p>
@@ -527,22 +610,36 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_lcs_is_common :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> t a -> Bool)
+> _test_lcs_is_common _ =
+>   testName "and(suffix(lcs(x,y),x),suffix(lcs(x,y),y))" $
+>   \x y -> and (suffix (lcs x y) x) (suffix (lcs x y) y)
+> 
+> 
+> _test_lcs_is_longest :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> t a -> t a -> Bool)
+> _test_lcs_is_longest _ =
+>   testName "if and(suffix(z,x),suffix(z,y)) then suffix(z,lcs(x,y))" $
+>   \x y z -> if and (suffix z x) (suffix z y)
+>     then suffix z (lcs x y)
+>     else True
+
+</p></div>
 </div>
 
-$\lcs$ satisfies some nice identities:
+$\lcs$ is idempotent.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set. The following hold for all $x,y,z \in \lists{A}$.
-
-1. $\lcs(x,x) = x$.
-2. $\lcs(x,y) = \lcs(y,x)$.
-3. $\lcs(\lcs(x,y),z) = \lcs(x,\lcs(y,z))$.
-4. $\cat(\lcs(x,y),z) = \lcs(\cat(x,z),\cat(y,z))$.
+Let $A$ be a set. For all $x \in \lists{A}$ we have $\lcs(x,x) = x$.
 </p></div>
 
 <div class="proof"><p>
-1. Note that
+Note that
 $$\begin{eqnarray*}
  &   & \lcs(x,x) \\
  & = & \rev(\lcp(\rev(x),\rev(x))) \\
@@ -550,7 +647,28 @@ $$\begin{eqnarray*}
  & = & x
 \end{eqnarray*}$$
 as claimed.
-2. We have
+<p></div>
+
+<div class="test"><p>
+
+> _test_lcs_idempotent :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> Bool)
+> _test_lcs_idempotent _ =
+>   testName "lcs(x,x) == x" $
+>   \x -> eq (lcs x x) x
+
+</p></div>
+</div>
+
+$\lcs$ is commutative.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $x,y \in \lists{A}$ we have $\lcs(x,y) = \lcs(y,x)$.
+</p></div>
+
+<div class="proof"><p>
+We have
 $$\begin{eqnarray*}
  &   & \lcs(x,y) \\
  & = & \rev(\lcp(\rev(x),\rev(y))) \\
@@ -558,7 +676,28 @@ $$\begin{eqnarray*}
  & = & \lcs(y,x)
 \end{eqnarray*}$$
 as claimed.
-3. We have
+</p></div>
+
+<div class="test"><p>
+
+> _test_lcs_commutative :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> t a -> Bool)
+> _test_lcs_commutative _ =
+>   testName "lcs(x,y) == lcs(y,x)" $
+>   \x y -> eq (lcs x y) (lcs y x)
+
+</p></div>
+</div>
+
+$\lcs$ is associative.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $x,y,z \in \lists{A}$ we have $\lcs(\lcs(x,y),z) = \lcs(x,\lcs(y,z))$.
+</p></div>
+
+<div class="proof"><p>
+We have
 $$\begin{eqnarray*}
  &   & \lcs(\lcs(x,y),z) \\
  & = & \lcs(\rev(\lcp(\rev(x),\rev(y))),z) \\
@@ -570,7 +709,28 @@ $$\begin{eqnarray*}
  & = & \lcs(x,\lcs(y,z))
 \end{eqnarray*}$$
 as claimed.
-4. Note that
+</p></div>
+
+<div class="test"><p>
+
+> _test_lcs_associative :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> t a -> t a -> Bool)
+> _test_lcs_associative _ =
+>   testName "lcs(lcs(x,y),z) == lcs(x,lcs(y,z))" $
+>   \x y z -> eq (lcs (lcs x y) z) (lcs x (lcs y z))
+
+</p></div>
+</div>
+
+$\cat$ distributes over $\lcs$ from the right.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $x,y,z \in \lists{A}$ we have $\cat(\lcs(x,y),z) = \lcs(\cat(x,z),\cat(y,z))$.
+</p></div>
+
+<div class="proof"><p>
+Note that
 $$\begin{eqnarray*}
  &   & \lcs(\cat(x,z),\cat(y,z)) \\
  & = & \rev(\lcp(\rev(\cat(x,z)),\rev(\cat(y,z)))) \\
@@ -581,9 +741,19 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_lcs_cat_right :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> t a -> t a -> Bool)
+> _test_lcs_cat_right _ =
+>   testName "cat(lcs(x,y),z) == lcs(cat(x,z),cat(y,z))" $
+>   \x y z -> eq (cat (lcs x y) z) (lcs (cat x z) (cat y z))
+
+</p></div>
 </div>
 
-And $\lcs$ detects suffixes:
+$\lcs$ detects suffixes.
 
 <div class="result">
 <div class="thm"><p>
@@ -593,37 +763,15 @@ Let $A$ be a set with $x,y \in \lists{A}$. Then $\lcs(x,y) = x$ if and only if $
 <div class="proof"><p>
 Note that $$\lcs(x,y) = x$$ if and only if $$\rev(\lcp(\rev(x),\rev(y))) = x$$ if and only if $$\rev(\rev(\lcp(\rev(x),\rev(y)))) = \rev(x)$$ if and only if $$\lcp(\rev(x),\rev(y)) = \rev(x)$$ if and only if $$\prefix(\rev(x),\rev(y)) = \btrue$$ if and only if $$\suffix(x,y) = \btrue$$ as claimed.
 </p></div>
-</div>
 
-And $\lcs$ cooperates with $\snoc$.
+<div class="test"><p>
 
-<div class="result">
-<div class="thm"><p>
-Let $A$ be a set. For all $x,y \in \lists{A}$ and $a,b \in A$ we have $$\lcs(\snoc(a,x),\snoc(b,y)) = \left\{\begin{array}{ll} \snoc(a,\lcs(x,y)) & \mathrm{if}\ a = b \\ \nil & \mathrm{if}\ a \neq b. \end{array}\right.$$
-</p></div>
+> _test_lcs_suffix :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> t a -> Bool)
+> _test_lcs_suffix _ =
+>   testName "lcs(x,y) == x <==> suffix(x,y)" $
+>   \x y -> eq (eq (lcs x y) x) (suffix x y)
 
-<div class="proof"><p>
-Note that
-$$\begin{eqnarray*}
- &   & \lcs(\snoc(a,x),\snoc(b,y)) \\
- & = & \rev(\lcp(\rev(\snoc(a,x)),\rev(\snoc(b,y))) \\
- & = & \rev(\lcp(\cons(a,\rev(x)),\cons(b,\rev(y)) \\
- & = & Q.
-\end{eqnarray*}$$
-If $a = b$, we have
-$$\begin{eqnarray*}
- &   & Q \\
- & = & \rev(\cons(a,\lcp(\rev(x),\rev(y)))) \\
- & = & \snoc(a,\rev(\lcp(\rev(x),\rev(y)))) \\
- & = & \snoc(a,\lcs(x,y))
-\end{eqnarray*}$$
-as claimed. If $a \neq b$, we have
-$$\begin{eqnarray*}
- &   & Q \\
- & = & \rev(\nil) \\
- & = & \nil
-\end{eqnarray*}$$
-as claimed.
 </p></div>
 </div>
 
@@ -652,95 +800,8 @@ as claimed.
 Testing
 -------
 
-Here are our property tests for $\lcp$:
+Suite:
 
-> _test_lcp_alt :: (List t, Equal a, Equal (t a))
->   => t a -> Test (t a -> t a -> Bool)
-> _test_lcp_alt _ =
->   testName "lcp(x,y) == lcp'(x,y)" $
->   \x y -> eq (lcp x y) (lcp' x y)
-> 
-> 
-> _test_lcp_idempotent :: (List t, Equal a, Equal (t a))
->   => t a -> Test (t a -> Bool)
-> _test_lcp_idempotent _ =
->   testName "lcp(x,x) == x" $
->   \x -> eq (lcp x x) x
-> 
-> 
-> _test_lcp_commutative :: (List t, Equal a, Equal (t a))
->   => t a -> Test (t a -> t a -> Bool)
-> _test_lcp_commutative _ =
->   testName "lcp(x,y) == lcp(y,x)" $
->   \x y -> eq (lcp x y) (lcp y x)
-> 
-> 
-> _test_lcp_associative :: (List t, Equal a, Equal (t a))
->   => t a -> Test (t a -> t a -> t a -> Bool)
-> _test_lcp_associative _ =
->   testName "lcp(lcp(x,y),z) == lcp(x,lcp(y,z))" $
->   \x y z -> eq (lcp (lcp x y) z) (lcp x (lcp y z))
-> 
-> 
-> _test_lcp_cat :: (List t, Equal a, Equal (t a))
->   => t a -> Test (t a -> t a -> t a -> Bool)
-> _test_lcp_cat _ =
->   testName "cat(x,lcp(y,z)) == lcp(cat(x,y),cat(x,z))" $
->   \x y z -> eq (cat x (lcp y z)) (lcp (cat x y) (cat x z))
-> 
-> 
-> _test_lcp_prefix :: (List t, Equal a, Equal (t a))
->   => t a -> Test (t a -> t a -> Bool)
-> _test_lcp_prefix _ =
->   testName "lcp(x,y) == x iff prefix(x,y)" $
->   \x y -> eq (eq (lcp x y) x) (prefix x y)
-> 
-> 
-> _test_lcp_zip :: (List t, Equal a, Equal (t (a,a)))
->   => t a -> Test (t a -> t a -> t a -> t a -> Bool)
-> _test_lcp_zip _ =
->   testName "zip(lcp(x,y),lcp(u,v)) == lcp(zip(x,u),zip(y,v))" $
->   \x y u v -> eq (zip (lcp x y) (lcp u v)) (lcp (zip x u) (zip y v))
-
-Tests for $\lcs$:
-
-> _test_lcs_idempotent :: (List t, Equal a, Equal (t a))
->   => t a -> Test (t a -> Bool)
-> _test_lcs_idempotent _ =
->   testName "lcs(x,x) == x" $
->   \x -> eq (lcs x x) x
-> 
-> 
-> _test_lcs_commutative :: (List t, Equal a, Equal (t a))
->   => t a -> Test (t a -> t a -> Bool)
-> _test_lcs_commutative _ =
->   testName "lcs(x,y) == lcs(y,x)" $
->   \x y -> eq (lcs x y) (lcs y x)
-> 
-> 
-> _test_lcs_associative :: (List t, Equal a, Equal (t a))
->   => t a -> Test (t a -> t a -> t a -> Bool)
-> _test_lcs_associative _ =
->   testName "lcs(lcs(x,y),z) == lcs(x,lcs(y,z))" $
->   \x y z -> eq (lcs (lcs x y) z) (lcs x (lcs y z))
-> 
-> 
-> _test_lcs_cat :: (List t, Equal a, Equal (t a))
->   => t a -> Test (t a -> t a -> t a -> Bool)
-> _test_lcs_cat _ =
->   testName "cat(lcs(x,y),z) == lcs(cat(x,z),cat(y,z))" $
->   \x y z -> eq (cat (lcs x y) z) (lcs (cat x z) (cat y z))
-> 
-> 
-> _test_lcs_suffix :: (List t, Equal a, Equal (t a))
->   => t a -> Test (t a -> t a -> Bool)
-> _test_lcs_suffix _ =
->   testName "lcs(x,y) == x <==> suffix(x,y)" $
->   \x y -> eq (eq (lcs x y) x) (suffix x y)
-
-And the suite:
-
-> -- run all tests for lcp and lcs
 > _test_lcp ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a
 >   , TypeName (t a), List t
@@ -755,21 +816,30 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_lcp_alt t)
+>   runTest args (_test_lcp_nil_list t)
+>   runTest args (_test_lcp_cons_nil t)
+>   runTest args (_test_lcp_cons_cons t)
+>   runTest args (_test_lcp_is_common t)
+>   runTest args (_test_lcp_is_longest t)
 >   runTest args (_test_lcp_idempotent t)
 >   runTest args (_test_lcp_commutative t)
 >   runTest args (_test_lcp_associative t)
->   runTest args (_test_lcp_cat t)
+>   runTest args (_test_lcp_cat_left t)
 >   runTest args (_test_lcp_prefix t)
 >   runTest args (_test_lcp_zip t)
 > 
+>   runTest args (_test_lcs_nil_list t)
+>   runTest args (_test_lcs_snoc_nil t)
+>   runTest args (_test_lcs_snoc_snoc t)
+>   runTest args (_test_lcs_is_common t)
+>   runTest args (_test_lcs_is_longest t)
 >   runTest args (_test_lcs_idempotent t)
 >   runTest args (_test_lcs_commutative t)
 >   runTest args (_test_lcs_associative t)
->   runTest args (_test_lcs_cat t)
+>   runTest args (_test_lcs_cat_right t)
 >   runTest args (_test_lcs_suffix t)
 
-And ``main``:
+Main:
 
 > main_lcp :: IO ()
 > main_lcp = do

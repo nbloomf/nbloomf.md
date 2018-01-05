@@ -67,7 +67,7 @@ $$\left\{\begin{array}{l}
 > _test_prefix_cons_nil :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
 > _test_prefix_cons_nil _ =
->   testName "prefix(nil,y) == true" $
+>   testName "prefix(cons(a,x),nil) == false" $
 >   \a x -> eq (prefix (cons a x) nil) False
 > 
 > 
@@ -357,8 +357,6 @@ In Haskell:
 </p></div>
 </div>
 
-(@@@)
-
 Not surprisingly, we can characterize $\prefix$ in terms of $\suffix$.
 
 <div class="result">
@@ -374,6 +372,16 @@ $$\begin{eqnarray*}
  & = & \prefix(x,y)
 \end{eqnarray*}$$
 as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_suffix_prefix :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> t a -> Bool)
+> _test_suffix_prefix _ =
+>   testName "prefix(x,y) == suffix(rev(x),rev(y))" $
+>   \x y -> eq (prefix x y) (suffix (rev x) (rev y))
+
 </p></div>
 </div>
 
@@ -422,9 +430,35 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_suffix_nil_list :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> Bool)
+> _test_suffix_nil_list _ =
+>   testName "suffix(nil,y) == true" $
+>   \y -> eq (suffix nil y) True
+> 
+> 
+> _test_suffix_snoc_nil :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (a -> t a -> Bool)
+> _test_suffix_snoc_nil _ =
+>   testName "suffix(snoc(a,x),y) == true" $
+>   \a x -> eq (suffix (snoc a x) nil) False
+> 
+> 
+> _test_suffix_snoc_snoc :: (List t, Equal a)
+>   => t a -> Test (a -> t a -> a -> t a -> Bool)
+> _test_suffix_snoc_snoc _ =
+>   testName "suffix((snoc(a,x),snoc(b,y)) == if(eq(a,b),suffix(x,y),false)" $
+>   \a x b y -> eq
+>     (suffix (snoc a x) (snoc b y))
+>     (if eq a b then suffix x y else False)
+
+</p></div>
 </div>
 
-Like $\prefix$, $\suffix$ also detects the existence of solutions $z$ to the equation $y = \cat(z,x)$.
+$\suffix$ also detects the existence of solutions $z$ to the equation $y = \cat(z,x)$.
 
 <div class="result">
 <div class="thm"><p>
@@ -453,24 +487,48 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_suffix_cat :: (List t, Equal a)
+>   => t a -> Test (t a -> t a -> Bool)
+> _test_suffix_cat _ =
+>   testName "suffix(x,cat(y,x))" $
+>   \x y -> suffix x (cat y x)
+
+</p></div>
 </div>
 
-$\suffix$ and $\cons$:
+$\suffix$ interacts with $\cons$.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set. For all $x \in \lists{A}$ and $a \in A$ we have $$\suffix(x,\cons(a,x)) = \btrue.$$
+Let $A$ be a set. For all $x,y \in \lists{A}$ and $a \in A$, if $\suffix(x,y)$, then $\suffix(x,\cons(a,y)$.
 </p></div>
 
 <div class="proof"><p>
-Note that
+Suppose $\suffix(x,y)$. Then we have
 $$\begin{eqnarray*}
- &   & \suffix(x,\cons(a,x)) \\
- & = & \suffix(x,\cons(a,\cat(\nil,x))) \\
- & = & \suffix(x,\cat(\cons(a,\nil),x)) \\
- & = & \btrue
+ &   & \btrue \\
+ & = & \suffix(x,y) \\
+ & = & \prefix(\rev(x),\rev(y)) \\
+ & = & \prefix(\rev(x),\snoc(a,\rev(y))) \\
+ & = & \prefix(\rev(x),\rev(\cons(a,y))) \\
+ & = & \suffix(x,\cons(a,y))
 \end{eqnarray*}$$
 as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_suffix_cons :: (List t, Equal a)
+>   => t a -> Test (a -> t a -> t a -> Bool)
+> _test_suffix_cons _ =
+>   testName "if suffix(x,y) then suffix(x,cons(a,y))" $
+>   \a x y -> if suffix x y
+>     then suffix x (cons a y)
+>     else True
+
 </p></div>
 </div>
 
@@ -504,6 +562,34 @@ $$\begin{eqnarray*}
 Since $\cat$ is cancellative, we have $\nil = \cat(v,u)$, so that $u = \nil$, and thus $x = y$ as claimed.
 3. If $\suffix(x,y)$ and $\suffix(y,z)$, then $\prefix(\rev(x),\rev(y))$ and $\prefix(\rev(y),\rev(z))$. So $\prefix(\rev(x),\rev(z))$, and thus $\suffix(x,z)$.
 </p></div>
+
+<div class="test"><p>
+
+> _test_suffix_reflexive :: (List t, Equal a)
+>   => t a -> Test (t a -> Bool)
+> _test_suffix_reflexive _ =
+>   testName "suffix(x,x) == true" $
+>   \x -> eq (suffix x x) True
+> 
+> 
+> _test_suffix_symmetric :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> t a -> Bool)
+> _test_suffix_symmetric _ =
+>   testName "suffix(x,y) & suffix(y,x) ==> eq(x,y)" $
+>   \x y -> if and (suffix x y) (suffix y x)
+>     then eq x y
+>     else True
+> 
+> 
+> _test_suffix_transitive :: (List t, Equal a)
+>   => t a -> Test (t a -> t a -> t a -> Bool)
+> _test_suffix_transitive _ =
+>   testName "suffix(x,y) & suffix(y,z) ==> suffix(x,z)" $
+>   \x y z -> if and (suffix x y) (suffix y z)
+>     then suffix x z
+>     else True
+
+</p></div>
 </div>
 
 $\map$ preserves suffixes:
@@ -523,54 +609,51 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_suffix_map :: (List t, Equal a)
+>   => t a -> Test ((a -> a) -> t a -> t a -> Bool)
+> _test_suffix_map _ =
+>   testName "if suffix(x,y) then suffix(map(f)(x),map(f)(y))" $
+>   \f x y -> if suffix x y
+>     then suffix (map f x) (map f y)
+>     else True
+
+</p></div>
 </div>
 
-$\suffix$ and $\length$:
+$\suffix$ interacts with $\length$.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set with $x,y \in \lists{A}$. If $\nleq(\next(\length(y)),\length(x)) = \btrue$, then $\suffix(x,y) = \bfalse$. 
+Let $A$ be a set with $x,y \in \lists{A}$. If $\suffix(x,y)$, then $\nleq(\length(x),\length(y))$.
 </p></div>
 
 <div class="proof"><p>
-Note that
+Suppose $\suffix(x,y)$. Then $\prefix(\rev(x),\rev(y))$, so we have
 $$\begin{eqnarray*}
- &   & \nleq(\next(\length(\rev(y))),\length(\rev(x))) \\
- & = & \nleq(\next(\length(y)),\length(x)) \\
- & = & \btrue,
-\end{eqnarray*}$$
-so that
-$$\begin{eqnarray*}
- &   & \suffix(x,y) \\
- & = & \prefix(\rev(x),\rev(y)) \\
- & = & \bfalse
+ &   & \nleq(\length(x),\length(y)) \\
+ & = & \nleq(\length(\rev(x),\length(\rev(y))) \\
+ & = & \btrue
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_suffix_length :: (List t, Equal a, Natural n, Equal n)
+>   => t a -> n -> Test (t a -> t a -> Bool)
+> _test_suffix_length _ k =
+>   testName "if suffix(x,y) then leq(length(x),length(y))" $
+>   \x y -> if suffix x y
+>     then leq ((length x) `withTypeOf` k) (length y)
+>     else True
+
+</p></div>
 </div>
 
-Finally:
-
-<div class="result">
-<div class="thm"><p>
-Let $A$ be a set. If $y \neq \cons(a,x)$, then $$\suffix(y,x) = \suffix(y,\cons(a,x)).$$
-</p></div>
-
-<div class="proof"><p>
-Suppose $\suffix(y,x) = \btrue$. Then we have $x = \cat(z,y)$, so that $$\cons(a,x) = \cons(a,\cat(z,y)) = \cat(\cons(a,z),y),$$ so that $\suffix(y,\cons(a,x))$.
-
-Conversely, suppose $\suffix(y,\cons(a,x)) = \btrue$. Then we have $\cons(a,x) = \cat(z,y)$ for some $z$. If $z = \nil$, then $\cons(a,x) = y$; a contradiction. Say then that $z = \cons(b,w)$. Now
-$$\begin{eqnarray*}
- &   & \cons(a,x) \\
- & = & \cat(z,y) \\
- & = & \cat(\cons(b,w),y) \\
- & = & \cons(b,\cat(w,y));
-\end{eqnarray*}$$
-</p></div>
-in particular we must have $a = b$ and $x = \cat(w,y)$. Thus $\suffix(y,x) = \btrue$.
-</div>
-
-One more special case.
+As a special case, the prefixes and suffixes of a one-element list coincide.
 
 <div class="result">
 <div class="thm"><p>
@@ -607,33 +690,21 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 so that $\prefix(x,\cons(a,\nil)) = \bfalse$. Similarly, $$\nleq(\next(\length(\cons(a,\nil))),\length(x)) = \btrue$$ so that $\suffix(x,\cons(a,\nil)) = \bfalse$ as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_prefix_suffix_singleton :: (List t, Equal a)
+>   => t a -> Test (a -> t a -> Bool)
+> _test_prefix_suffix_singleton _ =
+>   testName "prefix(x,cons(a,nil)) == suffix(x,cons(a,nil))" $
+>   \a x -> eq (prefix x (cons a nil)) (suffix x (cons a nil))
+
+</p></div>
 </div>
 
 
 Testing
 -------
-
-> _test_suffix_cat :: (List t, Equal a)
->   => t a -> Test (t a -> t a -> Bool)
-> _test_suffix_cat _ =
->   testName "suffix(y,cat(x,y)) == true" $
->   \x y -> eq (suffix y (cat x y)) True
-> 
-> 
-> _test_suffix_reflexive :: (List t, Equal a)
->   => t a -> Test (t a -> Bool)
-> _test_suffix_reflexive _ =
->   testName "suffix(x,x) == true" $
->   \x -> eq (suffix x x) True
-> 
-> 
-> _test_suffix_transitive :: (List t, Equal a)
->   => t a -> Test (t a -> t a -> t a -> Bool)
-> _test_suffix_transitive _ =
->   testName "suffix(x,y) & suffix(y,z) ==> suffix(x,z)" $
->   \x y z -> if and (suffix x y) (suffix y z)
->     then suffix x z
->     else True
 
 Suite:
 
@@ -664,9 +735,19 @@ Suite:
 >   runTest args (_test_prefix_zip t)
 >   runTest args (_test_prefix_length t n)
 > 
+>   runTest args (_test_suffix_prefix t)
+>   runTest args (_test_suffix_nil_list t)
+>   runTest args (_test_suffix_snoc_nil t)
+>   runTest args (_test_suffix_snoc_snoc t)
 >   runTest args (_test_suffix_cat t)
+>   runTest args (_test_suffix_cons t)
 >   runTest args (_test_suffix_reflexive t)
+>   runTest args (_test_suffix_symmetric t)
 >   runTest args (_test_suffix_transitive t)
+>   runTest args (_test_suffix_map t)
+>   runTest args (_test_suffix_length t n)
+> 
+>   runTest args (_test_prefix_suffix_singleton t)
 
 Main:
 
