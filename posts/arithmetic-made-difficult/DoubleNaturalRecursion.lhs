@@ -93,17 +93,17 @@ We can use the definition in the theorem:
 
 > dnaturalRec' delta psi chi = naturalRec delta phi
 >   where
->     phi g k = case natShape k of
->       Zero -> psi (g zero)
->       Next m -> chi m (g m) (g (next m))
+>     phi g k = case unnext k of
+>       Left () -> psi (g zero)
+>       Right m -> chi m (g m) (g (next m))
 
 And there's the definition from the universal property:
 
-> dnaturalRec delta psi chi n k = case natShape n of
->   Zero -> delta k
->   Next m -> case natShape k of
->     Zero -> psi (dnaturalRec delta psi chi m zero)
->     Next t -> chi t
+> dnaturalRec delta psi chi n k = case unnext n of
+>   Left () -> delta k
+>   Right m -> case unnext k of
+>     Left () -> psi (dnaturalRec delta psi chi m zero)
+>     Right t -> chi t
 >       (dnaturalRec delta psi chi m t)
 >       (dnaturalRec delta psi chi m (next t))
 

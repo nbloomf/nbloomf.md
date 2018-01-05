@@ -3,6 +3,7 @@ title: Mutating Recursion
 author: nbloomf
 date: 2014-05-22
 tags: arithmetic-made-difficult, literate-haskell
+slug: mutrec
 ---
 
 > module MutatingRecursion
@@ -10,6 +11,8 @@ tags: arithmetic-made-difficult, literate-haskell
 >   ) where
 > 
 > import Prelude ()
+> import Booleans
+> import DisjointUnions
 > import NaturalNumbers
 
 Note that both simple recursion and bailout recursion produce functions with type $$\nats \times A \rightarrow B;$$ we can call that $A$ argument the *parameter*. Now simple and bailout recursion use the parameter in different ways. Simple recursion is only allowed to change $A$ "outside" the recursive call, while bailout recursion can only change $A$ "inside" the recursive call. These restrictions were necessary so that simple and bailout recursion would have tail-recursive implementations. But there are times when we will want a recursive function with signature $\nats \times A \rightarrow B$ that can change its $A$ parameter both inside and outside the recursion.
@@ -58,9 +61,9 @@ There's the naive way:
 
 > mutatingRec phi omega chi =
 >   let
->     theta n a = case natShape n of
->       Zero   -> phi a
->       Next m -> chi (omega a) (theta m)
+>     theta n a = case unnext n of
+>       Left () -> phi a
+>       Right m -> chi (omega a) (theta m)
 > 
 >   in theta
 

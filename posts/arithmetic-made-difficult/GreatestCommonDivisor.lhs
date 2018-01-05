@@ -72,9 +72,9 @@ in particular, $$\nleq(\eta(\varphi(a,b)),\nplus(b,\nrem(a,b))).$$ Now if $\nleq
 >   => n -> Test ((n,n) -> Bool)
 > _test_gcd_eta_norm _ =
 >   testName "eta is iterative norm" $
->   \x -> case natShape (eta x) of
->     Zero   -> isZero (eta (phi x))
->     Next m -> leq (eta (phi x)) m
+>   \x -> case unnext (eta x) of
+>     Left () -> isZero (eta (phi x))
+>     Right m -> leq (eta (phi x)) m
 
 </p></div>
 </div>

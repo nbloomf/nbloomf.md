@@ -158,7 +158,7 @@ And the concrete type:
 >     return (list xs)
 > 
 >   shrink  N      = []
->   shrink (C a x) = [C a N, x]
+>   shrink (C a x) = [x]
 
 This business about initial algebras is nice, but it will be convenient to unpack this definition a little bit. First, we give the following more concrete description of $F_A$-algebras:
 

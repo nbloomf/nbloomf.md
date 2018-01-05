@@ -82,9 +82,9 @@ as claimed.
 In Haskell:
 
 > repeat :: (List t, Equal a, Natural n) => n -> a -> t a
-> repeat n a = case natShape n of
->   Zero   -> nil
->   Next k -> cons a (repeat k a)
+> repeat n a = case unnext n of
+>   Left () -> nil
+>   Right k -> cons a (repeat k a)
 
 $\repeat$ is kind of boring. I'm not sure if we'll actually need these, but here are some interactions using $\repeat$.
 

@@ -37,9 +37,7 @@ In Haskell:
 > at x k = bailoutRec head beta psi omega k x
 >   where
 >     beta _ x = isNil x
-> 
 >     psi _ _ = lft ()
-> 
 >     omega _ x = tail x
 
 </p></div>

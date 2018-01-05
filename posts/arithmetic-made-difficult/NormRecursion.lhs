@@ -129,9 +129,9 @@ We can implement $\normrec{\ast}{\ast}{\ast}$ using the definition from the theo
 
 Or by pattern matching, using the universal property.
 
-> normRec phi eta chi a = case natShape (eta a) of
->   Zero   -> chi a
->   Next _ -> normRec phi eta chi (phi a)
+> normRec phi eta chi a = case unnext (eta a) of
+>   Left () -> chi a
+>   Right _ -> normRec phi eta chi (phi a)
 
 As with our other recursion operators, $\normrec{\varphi}{\eta}{\chi}$ is the unique solution to a system of functional equations. Specifically, we have the following.
 

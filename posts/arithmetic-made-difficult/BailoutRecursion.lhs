@@ -3,6 +3,7 @@ title: Bailout Recursion
 author: nbloomf
 date: 2014-05-21
 tags: arithmetic-made-difficult, literate-haskell
+slug: bailrec
 ---
 
 > {-# LANGUAGE BangPatterns #-}
@@ -136,10 +137,9 @@ There's the naive way:
 
 > bailoutRec phi beta psi omega =
 >   let
->     theta n a = case natShape n of
->       Zero -> phi a
->
->       Next m ->
+>     theta n a = case unnext n of
+>       Left () -> phi a
+>       Right m ->
 >         if beta m a
 >           then psi m a
 >           else theta m (omega m a)

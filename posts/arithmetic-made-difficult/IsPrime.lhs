@@ -45,11 +45,11 @@ In Haskell:
 > mindiv :: (Natural n, Equal n) => n -> n
 > mindiv n = either (const n) id (phi n)
 >   where
->     phi n = case natShape n of
->       Zero -> rgt zero
->       Next k -> case natShape k of
->         Zero -> rgt (next zero)
->         Next m -> findSmallest (sigma n) m (next (next zero))
+>     phi n = case unnext n of
+>       Left () -> rgt zero
+>       Right k -> case unnext k of
+>         Left () -> rgt (next zero)
+>         Right m -> findSmallest (sigma n) m (next (next zero))
 > 
 >     sigma n a = div a n
 

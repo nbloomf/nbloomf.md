@@ -82,9 +82,9 @@ In Haskell:
 >       then cons nil nil
 >       else nil
 > 
->     phi a f n = case natShape n of
->       Zero   -> cons nil nil
->       Next k -> cat (map (cons a) (f k)) (f n)
+>     phi a f n = case unnext n of
+>       Left () -> cons nil nil
+>       Right k -> cat (map (cons a) (f k)) (f n)
 
 </p></div>
 </div>

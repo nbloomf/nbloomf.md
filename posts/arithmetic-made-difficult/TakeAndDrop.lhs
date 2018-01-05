@@ -103,9 +103,9 @@ as claimed.
 In Haskell:
 
 > take' :: (Natural n, List t) => n -> t a -> t a
-> take' k x = case natShape k of
->   Zero   -> nil
->   Next t -> case uncons x of
+> take' k x = case unnext k of
+>   Left () -> nil
+>   Right t -> case uncons x of
 >     Left ()     -> nil
 >     Right (a,u) -> cons a (take' t u)
 
@@ -386,9 +386,9 @@ as claimed.
 In Haskell:
 
 > drop' :: (Natural n, List t) => n -> t a -> t a
-> drop' k x = case natShape k of
->   Zero   -> x
->   Next t -> case uncons x of
+> drop' k x = case unnext k of
+>   Left () -> x
+>   Right t -> case uncons x of
 >     Left ()     -> nil
 >     Right (_,u) -> drop' t u
 

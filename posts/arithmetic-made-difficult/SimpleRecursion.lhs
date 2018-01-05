@@ -117,9 +117,9 @@ As we did with $\natrec{\ast}{\ast}$, we'd like to implement $\simprec{\ast}{\as
 
 There's the naive way:
 
-> simpleRec'' phi mu n a = case natShape n of
->   Zero   -> phi a
->   Next k -> mu k a $ simpleRec'' phi mu k a
+> simpleRec'' phi mu n a = case unnext n of
+>   Left () -> phi a
+>   Right k -> mu k a $ simpleRec'' phi mu k a
 
 There's the definition from the proof:
 
@@ -131,9 +131,9 @@ And the tail recursive strategy:
 
 > simpleRec phi mu n a =
 >   let
->     tau !x h m = case natShape m of
->       Zero   -> x
->       Next k -> tau (mu h a x) (next h) k
+>     tau !x h m = case unnext m of
+>       Left () -> x
+>       Right k -> tau (mu h a x) (next h) k
 >   in tau (phi a) zero n
 
 Some simple testing again shows that the tail recursive form is more efficient -- both of the other forms run out of space on medium-sized numbers. All we need to do is verify that the efficient ``simpRec`` is equivalent to the inefficient, but obviously correct, ``simpRec''``. We will (eventually) do this by induction.

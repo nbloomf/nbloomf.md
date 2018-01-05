@@ -7,8 +7,8 @@ tags: arithmetic-made-difficult, literate-haskell
 
 > {-# LANGUAGE BangPatterns #-}
 > module NaturalNumbers
->   ( Natural(..), NatShape(..), Unary()
->   , isZero, prev, unnext, naturalRec
+>   ( Natural(..), Unary()
+>   , isZero, prev, naturalRec
 > 
 >   , _test_nats, main_nats
 >   ) where
@@ -22,36 +22,21 @@ We have assumed the existence of a set $\nats$ such that there is a unique induc
 
 Here's a handwavy proof. Let $(A,\varphi,e)$ be an inductive set, and suppose the unique map $\theta : \nats \rightarrow A$ is bijective. Then there is a unique inductive set homomorphism $\omega : A \rightarrow \nats$; namely, $\omega = \theta^{-1}$. Now any homomorphism from $A$ factors through the (unique) map $\omega$.
 
-From a mathematical point of view, isomorphic objects are interchangeable. But as we'll eventually see, from a *computational* point of view, isomorphic objects can behave very differently. For this reason we will think of the properties of $\nats$ as a kind of interface, and write our programs against that. Specifically, every element of a $\nats$-like set is either the zero or the successor of some other element; we'll represent this with the type ``NatShape``.
-
-> data NatShape n = Zero | Next n
+From a mathematical point of view, isomorphic objects are interchangeable. But as we'll eventually see, from a *computational* point of view, isomorphic objects can behave very differently. For this reason we will think of the properties of $\nats$ as a kind of interface, and write our programs against that. Specifically, every element of a $\nats$-like set is either the zero or the successor of some other element, and $\unnext$ discriminates between the two.
 
 Now every inductive set isomorphic to $\nats$ is characterized by (1) its zero element, (2) its successor function, (3) the unique map $A \rightarrow \nats$, and (4) the unique map $\nats \rightarrow A$. We will also need a helper function to recognize the shape of a natural number, and for convenience a helper to convert a Haskell-native ``Integer`` to a natural number.
 
 > class Natural n where
->   toUnary   :: n -> Unary
->   fromUnary :: Unary -> n
-> 
 >   zero :: n
->   zero = fromUnary zero
 > 
 >   next :: n -> n
->   next = fromUnary . next . toUnary
 > 
+>   unnext :: n -> Either () n
+>   
 >   natural :: Integer -> n
->   natural = fromUnary . mkUnary
-> 
->   natShape :: n -> NatShape n
->   natShape m = case natShape (toUnary m) of
->     Zero   -> Zero
->     Next k -> Next (fromUnary k)
 
 Our helpers $\iszero$ and $\prev$ can be written against this interface:
 
-> unnext :: (Natural n) => n -> Either () n
-> unnext = naturalRec (lft ()) phi
->   where phi = rgt . (either (const zero) next)
-> 
 > isZero :: (Natural n) => n -> Bool
 > isZero = (either (const True) (const False)) . unnext
 > 
@@ -64,23 +49,21 @@ As can the natural recursion operator $\natrec{\ast}{\ast}$.
 >   => a -> (a -> a) -> n -> a
 > naturalRec e phi n =
 >   let
->     tau !x k = case natShape k of
->       Zero   -> x
->       Next m -> tau (phi x) m
+>     tau !x k = case unnext k of
+>       Left () -> x
+>       Right m -> tau (phi x) m
 >   in tau e n
 
 From now on we'll write programs against the ``Natural`` interface with ``naturalRec`` instead of ``Unary`` specifically. Of course, ``Unary`` is an instance of ``Natural``:
 
 > instance Natural Unary where
->   toUnary   x = x
->   fromUnary x = x
-> 
 >   zero = Z
+> 
 >   next = N
 > 
->   natShape m = case m of
->     Z   -> Zero
->     N k -> Next k
+>   unnext k = case k of
+>     Z   -> Left ()
+>     N m -> Right m
 > 
 >   natural = mkUnary
 

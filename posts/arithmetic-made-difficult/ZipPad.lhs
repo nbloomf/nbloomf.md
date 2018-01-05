@@ -396,7 +396,7 @@ Suite:
 >   , Equal (t (a,(a,a))), Equal (t ((a,a),a))
 >   ) => t a -> t b -> n -> Int -> Int -> IO ()
 > _test_zipPad t u n maxSize numCases = do
->   testLabel ("zip & zipPad: " ++ typeName t ++ " & " ++ typeName u ++ " & " ++ typeName n)
+>   testLabel ("zipPad: " ++ typeName t ++ " & " ++ typeName u ++ " & " ++ typeName n)
 > 
 >   let
 >     args = stdArgs
