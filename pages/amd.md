@@ -7,6 +7,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
 
 1. First Steps
     * [Booleans](/posts/arithmetic-made-difficult/Booleans.html)
+    * [Predicates](/posts/arithmetic-made-difficult/Predicates.html)
     * [Tuples](/posts/arithmetic-made-difficult/Tuples.html)
     * [Disjoint Unions](/posts/arithmetic-made-difficult/DisjointUnions.html)
 2. $\mathbb{N}$
