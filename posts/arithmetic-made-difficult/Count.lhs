@@ -7,13 +7,13 @@ slug: count
 ---
 
 > module Count
->   ( count, _test_count, main_count
+>   ( count, addcount, _test_count, main_count
 >   ) where
 > 
+> import Prelude ()
 > import Booleans
 > import NaturalNumbers
 > import Plus
-> 
 > import Lists
 > import HeadAndTail
 > import LeftFold
@@ -28,52 +28,273 @@ slug: count
 > import TailsAndInits
 > import Filter
 > import Elt
-> 
-> import Prelude ()
-> import Test.QuickCheck
-> import Text.Show.Functions
 
 Today we'll define $\count$, which takes an $A$ and a $\lists{A}$ and returns the number of items in the $\lists{A}$ that are identical to the $A$. As usual we'll define this as a fold. Note that -- unlike some of the other list functions  we've seen -- in principle, $\count$ shouldn't care so much what *order* the items in its input come in. Moreover, note that $\count$ necessarily must examine every item in its input if it's going to return the correct answer. When this happens -- we don't care about order but have to look at every item -- the *left fold* operator can be used instead of the right fold, with the advantage that left fold is more space efficient.
 
-With this in mind, we define $\count$ like so.
+When dealing with left folds, it is often handier to parameterize on the base case, so that's what we'll do.
 
 <div class="result">
 <div class="defn"><p>
-Let $A$ be a set, and define $\varphi : A \rightarrow A \times \nats \rightarrow \nats$ by $$\varphi(a)(b,k) = \bif{\beq(a,b)}{\next(k)}{k}.$$ Then define $\count : A \times \lists{A} \rightarrow \nats$ by $$\count(a,x) = \foldl{\zero}{\varphi(a)}(x).$$
-</p></div>
-</div>
+Let $A$ be a set with $a \in A$, and define $\varphi : \nats \times A \rightarrow \nats$ by $$\varphi(k,b) = \bif{\beq(a,b)}{\next(k)}{k}.$$ Now we define $\addcount(a) : \nats \times \lists{A} \rightarrow \nats$ by $$\addcount(a)(n,x) = \foldl{\varphi}(n)(x).$$
 
 In Haskell:
 
-> count :: (List t, Equal a, Natural n) => a -> t a -> n
-> count a x = foldl (phi a) zero x
+> addcount:: (List t, Equal a, Natural n) => a -> n -> t a -> n
+> addcount a = foldl phi
 >   where
->     phi u k b = ifThenElse (eq u b) (next k) k
+>     phi k b = if eq a b then next k else k
 
-Recall that $\foldl{e}{\varphi} = \foldr{e}{\varphi}$ if $\varphi$ has the property that $$\varphi(a,\varphi(b,e)) = \varphi(b,\varphi(a,e))$$ for all $a$, $b$, and $e$. I claim that the function $\varphi(a)$ in the definition of $\count$ has this property.
+</p></div>
+</div>
+
+Since $\addcount$ is defined as a left fold, it can be characterized as the unique solution to a system of functional equations.
+
+<div class="result">
+<div class="corollary"><p>
+Let $A$ be a set with $a \in A$. Then $\addcount$ is the unique map $f : \nats \times \lists{A} \rightarrow \nats$ satisfying the following system of equations for all $k \in \nats$, $b \in A$, and $x \in \lists{A}$.
+$$\left\{\begin{array}{l}
+ f(k,\nil) = k \\
+ f(k,\cons(b,x)) = f(\bif{\beq(a,b)}{\next(k)}{k},x)
+\end{array}\right.$$
+</p></div>
+
+<div class="test"><p>
+
+> _test_addcount_nil :: (List t, Equal a, Natural n, Equal n)
+>   => t a -> n -> Test (a -> n -> Bool)
+> _test_addcount_nil t _ =
+>   testName "addcount(a)(k,nil) == k" $
+>   \a k -> eq (addcount a k (nil `withTypeOf` t)) k
+> 
+> 
+> _test_addcount_cons :: (List t, Equal a, Natural n, Equal n)
+>   => t a -> n -> Test (a -> n -> a -> t a -> Bool)
+> _test_addcount_cons _ _ =
+>   testName "addcount(a)(k,cons(b,x)) == addcount(a)(if(eq(a,b),next(k),k),x)" $
+>   \a k b x -> eq (addcount a k (cons b x)) (addcount a (if eq a b then next k else k) x)
+
+</p></div>
+</div>
+
+$\addcount$ interacts with $\next$.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set, and let $\varphi$ be as in the definition of $\count$. Then for all $a,b,c \in A$ and $k \in \nats$, we have $$\varphi(a)(b,\varphi(a)(c,k)) = \varphi(a)(c,\varphi(a)(b,k)).$$
+Let $A$ be a set with $a \in A$. For all $k \in \nats$ and $x \in \lists{A}$, we have $$\addcount(a)(\next(k),x) = \next(\addcount(a)(k,x)).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \addcount(a)(\next(k),\nil) \\
+ & = & \next(k) \\
+ & = & \next(\addcount(a)(k,\nil))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $k$ for some $x$ and let $b \in A$. Now
+$$\begin{eqnarray*}
+ &   & \addcount(a)(\next(k),\cons(b,x)) \\
+ & = & \addcount(a)(\bif{\beq(a,b)}{\next(\next(k))}{\next(k)},x) \\
+ & = & \next(\addcount(a)(\bif{\beq(a,b)}{\next(k)}{k},x)) \\
+ & = & \next(\addcount(a)(k,\cons(b,x)))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_addcount_next :: (List t, Equal a, Natural n, Equal n)
+>   => t a -> n -> Test (a -> n -> t a -> Bool)
+> _test_addcount_next _ _ =
+>   testName "addcount(a)(next(k),x) == next(addcount(a)(k,x))" $
+>   \a k x -> eq (addcount a (next k) x) (next (addcount a k x))
+
+</p></div>
+</div>
+
+Now $\addcount$ interacts with $\snoc$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $a \in A$. For all $b \in A$ and $x \in \lists{A}$, we have $$\addcount(a)(k,\snoc(b,x)) = \addcount(a)(\bif{\beq(a,b)}{\next(k)}{k},x).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \addcount(a)(k,\snoc(b,\nil)) \\
+ & = & \addcount(a)(k,\cons(b,\nil)) \\
+ & = & \addcount(a)(\bif{\beq(a,b)}{\next(k)}{k},\nil)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $b$ and $k$ for some $x$, and let $c \in A$. Now
+$$\begin{eqnarray*}
+ &   & \addcount(a)(k,\snoc(b,\cons(c,x))) \\
+ & = & \addcount(a)(k,\cons(c,\snoc(b,x))) \\
+ & = & \addcount(a)(\bif{\beq(a,c)}{\next(k)}{k},\snoc(b,x)) \\
+ & = & \addcount(a)(\bif{\beq(a,b)}{\next(\bif{\beq(a,c)}{\next(k)}{k})}{\bif{\beq(a,c)}{\next(k)}{k}},x) \\
+ & = & \addcount(a)(\bif{\beq(a,b)}{\bif{\beq(a,c)}{\next(\next(k))}{\next(k)}}{\bif{\beq(a,c)}{\next(k)}{k}},x) \\
+ & = & \addcount(a)(\bif{\beq(a,c)}{\bif{\beq(a,b)}{\next(\next(k))}{\next(k)}}{\bif{\beq(a,b)}{\next(k)}{k}},x) \\
+ & = & \addcount(a)(\bif{\beq(a,c)}{\next(\bif{\beq(a,b)}{\next(k)}{k})}{\bif{\beq(a,b)}{\next(k)}{k}},x) \\
+ & = & \addcount(a)(\bif{\beq(a,b)}{\next(k)}{k},\cons(c,x))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_addcount_snoc :: (List t, Equal a, Natural n, Equal n)
+>   => t a -> n -> Test (a -> n -> a -> t a -> Bool)
+> _test_addcount_snoc _ _ =
+>   testName "addcount(a)(k,snoc(b,x)) == addcount(a)(if(eq(a,b),next(k),k),x)" $
+>   \a k b x -> eq (addcount a k (snoc b x)) (addcount a (if eq a b then next k else k) x)
+
+</p></div>
+</div>
+
+$\addcount$ interacts with $\rev$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $a \in A$. For all $k \in \nats$ and $x \in \lists{A}$, we have $$\addcount(a)(k,\rev(x)) = \addcount(a)(k,x).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \addcount(a)(k,\rev(\nil)) \\
+ & = & \addcount(a)(k,\nil)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $k$ for some $x$, and let $b \in A$. Now
+$$\begin{eqnarray*}
+ &   & \addcount(a)(k,\rev(\cons(b,x))) \\
+ & = & \addcount(a)(k,\snoc(b,\rev(x))) \\
+ & = & \addcount(a)(\bif{\beq(a,b)}{\next(k)}{k},\rev(x)) \\
+ & = & \addcount(a)(\bif{\beq(a,b)}{\next(k)}{k},x) \\
+ & = & \addcount(a)(k,\cons(b,x))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_addcount_rev :: (List t, Equal a, Natural n, Equal n)
+>   => t a -> n -> Test (a -> n -> t a -> Bool)
+> _test_addcount_rev _ _ =
+>   testName "addcount(a)(k,rev(x)) == addcount(a)(k,x)" $
+>   \a k x -> eq (addcount a k (rev x)) (addcount a k x)
+
+</p></div>
+</div>
+
+We can also characterize $\addcount$ as a right fold.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $a \in A$, and define $\psi : A \times \nats \rightarrow \nats$ by $$\psi(b,k) = \bif{\beq(a,b)}{\next(k)}{k}.$$ Then we have $$\addcount(a)(k,x) = \foldr{k}{\psi}(x).$$
 </p></div>
 
 <div class="proof"><p>
 Note that
 $$\begin{eqnarray*}
- &   & \varphi(a)(b,\varphi(a)(c,k)) \\
- & = & \varphi(a)(b,\bif{\beq(a,c)}{\next(k)}{k}) \\
- & = & \bif{\beq(a,b)}{\next(\bif{\beq(a,c)}{\next(k)}{k})}{\bif{\beq(a,c)}{\next(k)}{k}} \\
- & = & \bif{\beq(a,b)}{\bif{\beq(a,c)}{\next(\next(k))}{\next(k)}}{\bif{\beq(a,c)}{\next(k)}{k}} \\
- & = & \bif{\beq(a,c)}{\bif{\beq(a,b)}{\next(\next(k))}{\next(k)}}{\bif{\beq(a,b)}{\next(k)}{k}} \\
- & = & \bif{\beq(a,c)}{\next(\bif{\beq(a,b)}{\next(k)}{k})}{\bif{\beq(a,b)}{\next(k)}{k}} \\
- & = & \varphi(a)(c,\bif{\beq(a,b)}{\next(k)}{k}) \\
- & = & \varphi(a)(c,\varphi(a)(b,k))
+ &   & \addcount(a)(k,\nil) \\
+ & = & k \\
+ & = & \foldr{k}{\psi}(\nil)
 \end{eqnarray*}$$
-as claimed.
+and
+$$\begin{eqnarray*}
+ &   & \addcount(a)(k,\cons(b,x)) \\
+ & = & \addcount(a)(\bif{\beq(a,b)}{\next(k)}{k},x) \\
+ & = & \bif{\beq(a,b)}{\addcount(a)(\next(k),x)}{\addcount(a)(k,x)} \\
+ & = & \bif{\beq(a,b)}{\next(\addcount(a)(k,x))}{\addcount(a)(k,x)} \\
+ & = & \psi(b,\addcount(a)(k,x)).
+\end{eqnarray*}$$
+By the universal property of right fold, the equality holds for all $x$.
+</p></div>
+
+<div class="test"><p>
+
+> _test_addcount_foldr :: (List t, Equal a, Natural n, Equal n)
+>   => t a -> n -> Test (a -> n -> t a -> Bool)
+> _test_addcount_foldr _ _ =
+>   testName "addcount(a)(k,x) == foldr(k,psi)(x)" $
+>   \a k x ->
+>     let psi b k = if eq a b then next k else k in
+>     eq (addcount a k x) (foldr k psi x)
+
 </p></div>
 </div>
 
-So we can evaluate $\count$ as a left fold, but reason about $\count$ as a right fold.
+So we can evaluate $\addcount$ as a left fold, but reason about $\count$ as a right fold. Since $\addcount(a)$ is also a right fold, it can be characterized as the unique solution to a (different) system of functional equations.
+
+<div class="result">
+<div class="corollary"><p>
+Let $A$ be a set with $a \in A$. Now $\addcount(a)$ is the unique map $f : \nats \times \lists{A} \rightarrow \nats$ satisfying the following equations for all $b \in A$ and $x \in \lists{A}$.
+$$\left\{\begin{array}{l}
+ f(k,\nil) = k \\
+ f(k,\cons(b,x)) = \bif{\beq(a,b)}{\next(f(k,x))}{f(k,x)}
+\end{array}\right.$$
+</p></div>
+
+<div class="test"><p>
+
+> _test_addcount_foldr_cons :: (List t, Equal a, Natural n, Equal n)
+>   => t a -> n -> Test (a -> n -> a -> t a -> Bool)
+> _test_addcount_foldr_cons _ _ =
+>   testName "addcount(a)(k,cons(b,x)) == if(eq(a,b),next(addcount(a)(k,x)),addcount(a)(k,x))" $
+>   \a k b x -> eq
+>     (addcount a k (cons b x))
+>     (if eq a b then next (addcount a k x) else addcount a k x)
+
+</p></div>
+</div>
+
+We define $\count$ in terms of $\addcount$.
+
+<div class="result">
+<div class="defn"><p>
+Let $A$ be a set with $a \in A$. We define $\count : A \rightarrow \nats^{\lists{A}}$ by $$\count(a)(x) = \addcount(a)(\zero,x).$$
+
+In Haskell:
+
+> count :: (List t, Equal a, Natural n) => a -> t a -> n
+> count a = addcount a zero
+
+</p></div>
+</div>
+
+Since $\count$ is defined in terms of $\addcount$, it is also the unique solution to a system of functional equations.
+
+<div class="result">
+<div class="corollary"><p>
+Let $A$ be a set with $a \in A$. Then $\count(a)$ is the unique map $f : \lists{A} \rightarrow \nats$ which satisfies the following system of equations for all $b \in A$ and $x \in \lists{A}$.
+$$\left\{\begin{array}{l}
+ f(\nil) = \zero \\
+ f(\cons(b,x)) = \bif{\beq(a,b)}{\next(f(x))}{f(x)}
+\end{array}\right.$$
+</p></div>
+
+<div class="test"><p>
+
+> _test_count_nil :: (List t, Equal a, Natural n, Equal n)
+>   => t a -> n -> Test (a -> Bool)
+> _test_count_nil t k =
+>   testName "count(a)(nil) == zero" $
+>   \a -> eq (count a (nil `withTypeOf` t)) (zero `withTypeOf` k)
+> 
+> 
+> _test_count_cons :: (List t, Equal a, Natural n, Equal n)
+>   => t a -> n -> Test (a -> a -> t a -> Bool)
+> _test_count_cons _ k =
+>   testName "count(a)(cons(b,x)) == if(eq(a,b),next(count(a)(x)),count(a)(x))" $
+>   \a b x -> eq
+>     ((count a (cons b x)) `withTypeOf` k)
+>     (if eq a b then next (count a x) else count a x)
+
+</p></div>
+</div>
+
+(@@@)
+
+
 
 Special cases.
 
@@ -81,18 +302,10 @@ Special cases.
 <div class="thm"><p>
 Let $A$ be a set.
 
-1. $\count(a,\nil) = \zero$.
 2. $\count(a,\cons(b,\nil)) = \bif{\beq(a,b)}{\next(\zero)}{\zero}$.
 </p></div>
 
 <div class="proof"><p>
-1. Note that
-$$\begin{eqnarray*}
- &   & \count(a,\nil) \\
- & = & \foldl{\zero}{\varphi(a)}(\nil) \\
- & = & \zero
-\end{eqnarray*}$$
-as claimed.
 2. Note that
 $$\begin{eqnarray*}
  &   & \count(a,\cons(b,\nil)) \\
@@ -258,17 +471,7 @@ as needed.
 Testing
 -------
 
-Here are our property tests for $\count$:
 
-> _test_count_nil :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (a -> Bool)
-> _test_count_nil t k =
->  testName "count(a,nil) == zero" $
->  \a -> let
->    nil'  = nil `withTypeOf` t
->    zero' = zero `withTypeOf` k
->  in
->    eq (count a nil') zero'
 > 
 > 
 > _test_count_one :: (List t, Equal a, Natural n, Equal n)
@@ -321,13 +524,12 @@ Here are our property tests for $\count$:
 >  in
 >    eq cx (length (filter (eq a) x))
 
-And the suite:
+Suite:
 
-> -- run all tests for count
 > _test_count ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
->   , TypeName n, Natural n, Equal n
+>   , TypeName n, Natural n, Equal n, Show n, Arbitrary n
 >   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (a,a))
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_count t n maxSize numCases = do
@@ -339,14 +541,24 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
+>   runTest args (_test_addcount_nil t n)
+>   runTest args (_test_addcount_cons t n)
+>   runTest args (_test_addcount_next t n)
+>   runTest args (_test_addcount_snoc t n)
+>   runTest args (_test_addcount_rev t n)
+>   runTest args (_test_addcount_foldr t n)
+>   runTest args (_test_addcount_foldr_cons t n)
+> 
 >   runTest args (_test_count_nil t n)
+>   runTest args (_test_count_cons t n)
+> 
 >   runTest args (_test_count_one t n)
 >   runTest args (_test_count_snoc_cons t n)
 >   runTest args (_test_count_rev t n)
 >   runTest args (_test_count_cat t n)
 >   runTest args (_test_count_length t n)
 
-And ``main``:
+Main:
 
 > main_count :: IO ()
 > main_count = do

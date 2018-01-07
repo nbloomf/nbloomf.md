@@ -10,10 +10,11 @@ slug: elt
 >   ( elt, _test_elt, main_elt
 >   ) where
 > 
+> import Prelude ()
 > import Booleans
 > import NaturalNumbers
-> 
 > import Lists
+> import Snoc
 > import Reverse
 > import Length
 > import Map
@@ -23,180 +24,221 @@ slug: elt
 > import AllAndAny
 > import TailsAndInits
 > import Filter
-> 
-> import Prelude ()
-> import Test.QuickCheck
-> import Text.Show.Functions
 
-Today we'll define a boolean function, $\elt$, which detects whether or not a given $a$ is an item in a list. As usual we want to define $\elt$ as a fold: should we use a right fold or a left fold? Recall that the tradeoff between the two is that foldl is tail recursive, but foldr does not necessarily have to process the entire list. In this case, $\elt(a,x)$ should be able to return early once it sees an $a$. So lets say $$\elt(a,x) = \foldr{\varepsilon}{\varphi}(x).$$ Now what should $\varepsilon$ and $\varphi$ be? Well, we want
+Today we'll define a boolean function, $\elt$, which detects whether or not a given $a$ is an item in a list. As usual we want to define $\elt$ as a fold: should we use a right fold or a left fold? Recall that the tradeoff between the two is that foldl is tail recursive, but foldr does not necessarily have to process the entire list. In this case, $\elt(a)(x)$ should be able to return early once it sees an $a$. So lets say $$\elt(a)(x) = \foldr{\varepsilon}{\varphi}(x).$$ Now what should $\varepsilon$ and $\varphi$ be? Well, we want
 $$\begin{eqnarray*}
  &   & \bfalse \\
- & = & \elt(a,\nil) \\
+ & = & \elt(a)(\nil) \\
  & = & \foldr{\varepsilon}{\varphi}(x) \\
  & = & \varepsilon,
 \end{eqnarray*}$$
 and if $a = b$ we want
 $$\begin{eqnarray*}
  &   & \btrue \\
- & = & \elt(a,\cons(b,x)) \\
+ & = & \elt(a)(\cons(b,x)) \\
  & = & \foldr{\varepsilon}{\varphi}(\cons(b,x)) \\
  & = & \varphi(b,\foldr{\varepsilon}{\varphi}(x)) \\
- & = & \varphi(b,\elt(a,x))
+ & = & \varphi(b,\elt(a)(x))
 \end{eqnarray*}$$
 while if $a \neq b$ we want
 $$\begin{eqnarray*}
- &   & \elt(a,x) \\
- & = & \elt(a,\cons(b,x)) \\
+ &   & \elt(a)(x) \\
+ & = & \elt(a)(\cons(b,x)) \\
  & = & \foldr{\varepsilon}{\varphi}(\cons(b,x)) \\
  & = & \varphi(b,\foldr{\varepsilon}{\varphi}(x)) \\
- & = & \varphi(b,\elt(a,x)).
+ & = & \varphi(b,\elt(a)(x)).
 \end{eqnarray*}$$
 With this in mind we define $\elt$ like so.
 
 <div class="result">
 <div class="defn"><p>
-Let $A$ be a set. Define $\varphi : A \rightarrow A \rightarrow \bool \rightarrow \bool$ by $$\varphi(a)(b,p) = \bif{\beq(a,b)}{\btrue}{p}.$$ Now define $\elt : A \times \lists{A} \rightarrow \bool$ by $$\elt(a,x) = \foldr{\bfalse}{\varphi(a)}(x).$$
-</p></div>
-</div>
-
-We can translate $\elt$ to Haskell directly as follows:
-
-> elt' :: (List t, Equal a) => a -> t a -> Bool
-> elt' a = foldr False (phi a)
->   where
->     phi a b p = if eq a b then True else p
-
-The next result suggests a more straightforward implementation.
-
-<div class="result">
-<div class="thm"><p>
-Let $A$ be a set.
-
-1. $\elt(a,\nil) = \bfalse$.
-2. $\elt(a,\cons(b,x)) = \bif{\beq(a,b)}{\btrue}{\elt(a,x)}$.
-</p></div>
-
-<div class="proof"><p>
-1. Note that
-$$\begin{eqnarray*}
- &   & \elt(a,\nil) \\
- & = & \foldr{\bfalse}{\varphi(a)}(\nil) \\
- & = & \bfalse
-\end{eqnarray*}$$
-as claimed.
-2. Note that
-$$\begin{eqnarray*}
- &   & \elt(a,\cons(b,x)) \\
- & = & \foldr{\bfalse}{\varphi(a)}(\cons(b,x)) \\
- & = & \varphi(a)(b,\foldr{\bfalse}{\varphi(a)}(x)) \\
- & = & \varphi(a)(b,\elt(a,x)) \\
- & = & \bif{\beq(a,b)}{\btrue}{\elt(a,x)}
-\end{eqnarray*}$$
-as claimed.
-</p></div>
-</div>
+Let $A$ be a set and let $a \in A$. Define $\varphi : A \rightarrow \bool \rightarrow \bool$ by $$\varphi(b,p) = \bif{\beq(a,b)}{\btrue}{p}.$$ Now define $\elt : A \rightarrow \bool^{\lists{A}}$ by $$\elt(a)(x) = \foldr{\bfalse}{\varphi}(x).$$
 
 In Haskell:
 
 > elt :: (List t, Equal a) => a -> t a -> Bool
-> elt a x = case uncons x of
->   Left ()     -> False
->   Right (b,w) -> if eq a b
->     then True
->     else elt a w
+> elt a = foldr False phi
+>   where
+>     phi b p = if eq a b then True else p
 
-Now $\elt$ interacts with $\cat$:
+</p></div>
+</div>
+
+Since $\elt$ is defined as a $\foldr{\ast}{\ast}$, it can be characterized as the unique solution to a system of functional equations.
+
+<div class="result">
+<div class="corollary"><p>
+Let $A$ be a set with $a \in A$. $\elt$ is the unique map $f : \lists{A} \rightarrow \bool$ satisfying the following equations for all $b \in A$ and $x \in \lists{A}$.
+$$\left\{\begin{array}{l}
+ f(\nil) = \bfalse \\
+ f(\cons(b,x)) = \bif{\beq(a,b)}{\btrue}{f(x)}
+\end{array}\right.$$
+</p></div>
+
+<div class="test"><p>
+
+> _test_elt_nil :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (a -> Bool)
+> _test_elt_nil t =
+>   testName "elt(a)(nil) == false" $
+>   \a -> eq (elt a (nil `withTypeOf` t)) False
+> 
+> 
+> _test_elt_cons :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (a -> a -> t a -> Bool)
+> _test_elt_cons _ =
+>   testName "elt(a)(cons(b,x)) == if(eq(a,b),true,elt(a)(x))" $
+>   \a b x -> eq
+>     (elt a (cons b x))
+>     (if eq a b then True else elt a x)
+
+</p></div>
+</div>
+
+$\elt$ interacts with $\cat$.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set. For all $a \in A$ and $x,y \in \lists{A}$ we have $$\elt(a,\cat(x,y)) = \bor(\elt(a,x),\elt(a,y)).$$
+Let $A$ be a set. For all $a \in A$ and $x,y \in \lists{A}$ we have $$\elt(a)(\cat(x,y)) = \bor(\elt(a)(x),\elt(a)(y)).$$
 </p></div>
 
 <div class="proof"><p>
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \elt(a,\cat(x,y)) \\
- & = & \elt(a,\cat(\nil,y)) \\
- & = & \elt(a,y) \\
- & = & \bor(\bfalse,\elt(a,y)) \\
- & = & \bor(\elt(a,\nil),\elt(a,y)) \\
- & = & \bor(\elt(a,x),\elt(a,y))
+ &   & \elt(a)(\cat(x,y)) \\
+ & = & \elt(a)(\cat(\nil,y)) \\
+ & = & \elt(a)(y) \\
+ & = & \bor(\bfalse,\elt(a)(y)) \\
+ & = & \bor(\elt(a)(\nil),\elt(a)(y)) \\
+ & = & \bor(\elt(a)(x),\elt(a)(y))
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for all $y$ some $x$, and let $b \in A$. If $b = a$ we have
 $$\begin{eqnarray*}
- &   & \elt(a,\cat(\cons(b,x),y)) \\
- & = & \elt(a,\cons(b,\cat(x,y))) \\
- & = & \bif{\beq(a,b)}{\btrue}{\elt(a,\cat(x,y))} \\
+ &   & \elt(a)(\cat(\cons(b,x),y)) \\
+ & = & \elt(a)(\cons(b,\cat(x,y))) \\
+ & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(\cat(x,y))} \\
  & = & \btrue \\
- & = & \bor(\btrue,\elt(a,y)) \\
- & = & \bor(\bif{\beq(a,b)}{\btrue}{\elt(a,x)},\elt(a,y)) \\
- & = & \bor(\elt(a,\cons(b,x)),\elt(a,y))
+ & = & \bor(\btrue,\elt(a)(y)) \\
+ & = & \bor(\bif{\beq(a,b)}{\btrue}{\elt(a)(x)},\elt(a)(y)) \\
+ & = & \bor(\elt(a)(\cons(b,x)),\elt(a)(y))
 \end{eqnarray*}$$
 as claimed. If $b \neq a$, we have
 $$\begin{eqnarray*}
- &   & \elt(a,\cat(\cons(b,x),y)) \\
- & = & \elt(a,\cons(b,\cat(x,y))) \\
- & = & \bif{\beq(a,b)}{\btrue}{\elt(a,\cat(x,y))} \\
- & = & \elt(a,\cat(x,y)) \\
- & = & \bor(\elt(a,x),\elt(a,y)) \\
- & = & \bor(\bif{\beq(a,b)}{\btrue}{\elt(a,x)},\elt(a,y)) \\'
- & = & \bor(\elt(a,\cons(b,x)),\elt(a,y))
+ &   & \elt(a)(\cat(\cons(b,x),y)) \\
+ & = & \elt(a)(\cons(b,\cat(x,y))) \\
+ & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(\cat(x,y))} \\
+ & = & \elt(a)(\cat(x,y)) \\
+ & = & \bor(\elt(a)(x),\elt(a)(y)) \\
+ & = & \bor(\bif{\beq(a,b)}{\btrue}{\elt(a)(x)},\elt(a)(y)) \\'
+ & = & \bor(\elt(a)(\cons(b,x)),\elt(a)(y))
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_elt_cat :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (a -> t a -> t a -> Bool)
+> _test_elt_cat _ =
+>   testName "elt(a)(cat(x,y)) == or(elt(a)(x),elt(a)(y))" $
+>   \a x y -> eq (elt a (cat x y)) (or (elt a x) (elt a y))
+
+</p></div>
 </div>
 
-And with $\rev$:
+$\elt$ interacts with $\snoc$.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$ we have $$\elt(a,x) = \elt(a,\rev(x)).$$
+Let $A$ be a set, with $a \in A$. For all $b \in A$ and $x \in \lists{A}$ we have $$\elt(a)(\snoc(b,x)) = \bif{\beq(a,b)}{\btrue}{\elt(a)(x)}.$$
 </p></div>
 
 <div class="proof"><p>
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \elt(a,\rev(x)) \\
- & = & \elt(a,\rev(\nil)) \\
- & = & \elt(a,\nil) \\
- & = & \elt(a,x)
+ &   & \elt(a)(\snoc(b,\nil)) \\
+ & = & \elt(a)(\cons(b,\nil)) \\
+ & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(\nil)}
 \end{eqnarray*}$$
-as claimed. For the inductive step, suppose the equality holds for some $x$ and let $b \in A$. Now
+as needed. For the inductive step, suppose the equality holds for all $b$ for some $x$, and let $c \in A$. Now
 $$\begin{eqnarray*}
- &   & \elt(a,\rev(\cons(b,x))) \\
- & = & \elt(a,\snoc(b,\rev(x))) \\
- & = & \elt(a,\cat(\snoc(b,\rev(x)),\nil)) \\
- & = & \elt(a,\cat(\rev(x),\cons(b,\nil))) \\
- & = & \bor(\elt(a,\rev(x)),\elt(a,\cons(b,\nil))) \\
- & = & \bor(\elt(a,x),\elt(a,\cons(b,\nil))) \\
- & = & \bor(\elt(a,\cons(b,\nil)),\elt(a,x)) \\
- & = & \elt(a,\cat(\cons(b,\nil),x)) \\
- & = & \elt(a,\cons(b,\cat(\nil,x))) \\
- & = & \elt(a,\cons(b,x))
+ &   & \elt(a)(\snoc(b,\cons(c,x))) \\
+ & = & \elt(a)(\cons(c,\snoc(b,x))) \\
+ & = & \bif{\beq(a,c)}{\btrue}{\elt(a)(\snoc(b,x))} \\
+ & = & \bif{\beq(a,c)}{\btrue}{\bif{\beq(a,b)}{\btrue}{\elt(a)(x)}} \\
+ & = & \bif{\beq(a,b)}{\btrue}{\bif{\beq(a,c)}{\btrue}{\elt(a)(x)}} \\
+ & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(\cons(c,x))}
 \end{eqnarray*}$$
-as claimed.
+as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_elt_snoc :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (a -> a -> t a -> Bool)
+> _test_elt_snoc _ =
+>   testName "elt(a)(snoc(b,x)) == if(eq(a,b),true,elt(a)(x))" $
+>   \a b x -> eq (elt a (snoc b x)) (if eq a b then True else elt a x)
+
 </p></div>
 </div>
 
-$\elt$ interacts with $\map(f)$ when $f$ is injective:
+$\elt$ interacts with $\rev$.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ and $B$ be sets and suppose $f : A \rightarrow B$ is injective. Then for all $a \in A$ and $x \in \lists{A}$ we have $$\elt(a,x) = \elt(f(a),\map(f)(x)).$$
+Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$ we have $$\elt(a)(x) = \elt(a)(\rev(x)).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \elt(a)(\rev(x)) \\
+ & = & \elt(a)(\rev(\nil)) \\
+ & = & \elt(a)(\nil) \\
+ & = & \elt(a)(x)
+\end{eqnarray*}$$
+as claimed. For the inductive step, suppose the equality holds for some $x$ and let $b \in A$. Now
+$$\begin{eqnarray*}
+ &   & \elt(a)(\rev(\cons(b,x))) \\
+ & = & \elt(a)(\snoc(b,\rev(x))) \\
+ & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(\rev(x))} \\
+ & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(x)} \\
+ & = & \elt(a)(\cons(b,x))
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_elt_rev :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (a -> t a -> Bool)
+> _test_elt_rev _ =
+>   testName "elt(a)(x) == elt(a)(rev(x))" $
+>   \a x -> eq (elt a x) (elt a (rev x))
+
+</p></div>
+</div>
+
+$\elt$ interacts with $\map(f)$ when $f$ is injective.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ and $B$ be sets and suppose $f : A \rightarrow B$ is injective. Then for all $a \in A$ and $x \in \lists{A}$ we have $$\elt(a)(x) = \elt(f(a),\map(f)(x)).$$
 </p></div>
 
 <div class="proof"><p>
 We proceed by list induction on $x$. For the base case $x = \nil$ we have
 $$\begin{eqnarray*}
- &   & \elt(a,\nil) \\
+ &   & \elt(a)(\nil) \\
  & = & \bfalse \\
  & = & \elt(f(a),\nil) \\
  & = & \elt(f(a),\map(f)(\nil))
 \end{eqnarray*}$$
-as claimed. For the inductive step, suppose the equality holds for all $x$ and let $b \in A$. Then we have
+as claimed. For the inductive step, suppose the equality holds for all $x$ and let $b \in A$. Note that $\beq(a,b) = \beq(f(a),f(b))$. Then we have
 $$\begin{eqnarray*}
- &   & \elt(a,\cons(b,x)) \\
- & = & \bif{\beq(a,b)}{\btrue}{\elt(a,x)} \\
+ &   & \elt(a)(\cons(b,x)) \\
+ & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(x)} \\
  & = & \bif{\beq(f(a),f(b))}{\btrue}{\elt(f(a),\map(f)(x))} \\
  & = & \elt(f(a),\cons(f(b),\map(f)(x))) \\
  & = & \elt(f(a),\map(f)(\cons(b,x)))
@@ -271,129 +313,9 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
-</div>
 
-As another special case:
+<div class="test"><p>
 
-<div class="result">
-<div class="thm"><p>
-Let $A$ be a set, with $a \in A$ and $x \in \lists{A}$. Then $$\elt(a,\filter(\bnot(\beq(a,-)),x)) = \bfalse.$$
-</p></div>
-
-<div class="proof"><p>
-We proceed by list induction on $x$. For the base case $x = \nil$, we have
-$$\begin{eqnarray*}
- &   & \elt(a,\filter(\bnot(\beq(a,-)),\nil)) \\
- & = & \elt(a,\nil) \\
- & = & \bfalse
-\end{eqnarray*}$$
-as claimed. For the inductive step, suppose the equality holds for $x$ and let $b \in A$. We have two possibilities. If $b = a$ (that is, $\bnot(\beq(a,b)) = \bfalse$), we have
-$$\begin{eqnarray*}
- &   & \elt(a,\filter(\bnot(\beq(a,-)),\cons(b,x))) \\
- & = & \elt(a,\filter(\bnot(\beq(a,-)),x)) \\
- & = & \bfalse
-\end{eqnarray*}$$
-as claimed. If $b \neq a$ (that is, $\bnot(\beq(a,b)) = \btrue$), we have
-$$\begin{eqnarray*}
- &   & \elt(a,\filter(\bnot(\beq(a,-)),\cons(b,x))) \\
- & = & \elt(a,\cons(b,\filter(\bnot(\beq(a,-),x))) \\
- & = & \filter(\bnot(\beq(a,-)),x) \\
- & = & \bfalse
-\end{eqnarray*}$$
-as claimed.
-</p></div>
-</div>
-
-$\elt$ is an $\any$:
-
-<div class="result">
-<div class="thm"><p>
-Let $A$ be a set, with $a \in A$ and $x \in \lists{A}$. Then $$\elt(a,x) = \any(\beq(a,-),x).$$
-</p></div>
-
-<div class="proof"><p>
-We proceed by list induction on $x$. For the base case $x = \nil$, we have
-$$\begin{eqnarray*}
- &   & \elt(a,x) \\
- & = & \elt(a,\nil) \\
- & = & \bfalse \\
- & = & \any(\beq(a,-),\nil) \\
- & = & \any(\beq(a,-),x)
-\end{eqnarray*}$$
-as needed. For the inductive step, suppose the equality holds for some $x$ and let $b \in A$. We consider two possibilities. If $a = b$, we have
-$$\begin{eqnarray*}
- &   & \elt(a,\cons(b,x)) \\
- & = & \bif{\beq(a,b)}{\btrue}{\elt(a,x)} \\
- & = & \bif{\btrue}{\btrue}{\elt(a,x)} \\
- & = & \btrue \\
- & = & \bor(\btrue,\any(\beq(a,-),x)) \\
- & = & \bor(\beq(a,b),\any(\beq(a,-),x)) \\
- & = & \any(\beq(a,-),\cons(b,x))
-\end{eqnarray*}$$
-as needed. If $a \neq b$, using the inductive hypothesis we have
-$$\begin{eqnarray*}
- &   & \elt(a,\cons(b,x)) \\
- & = & \bif{\beq(a,b)}{\btrue}{\elt(a,x)} \\
- & = & \bif{\bfalse}{\btrue}{\elt(a,x)} \\
- & = & \elt(a,x) \\
- & = & \any(\beq(a,-),x) \\
- & = & \bor(\bfalse,\any(\beq(a,-),x)) \\
- & = & \bor(\beq(a,b),\any(\beq(a,-),x)) \\
- & = & \any(\beq(a,-),\cons(b,x))
-\end{eqnarray*}$$
-as needed.
-</p></div>
-</div>
-
-$\elt$ can detect when two lists are distinct:
-
-<div class="result">
-<div class="thm"><p>
-Let $A$ be a set, with $a \in A$ and $x,y \in \lists{A}$. If $\elt(a,x) \neq \elt(a,y)$, then $x \neq y$.
-</p></div>
-
-<div class="proof"><p>
-The contrapositive of this statement is trivial and kind of silly looking: If $x = y$, then $\elt(a,x) = \elt(a,y)$. But notice that this theorem gives us a simple way to detect when two lists are distinct from each other.
-</p></div>
-</div>
-
-
-Testing
--------
-
-Here are our property tests for $\elt$:
-
-> _test_elt_alt :: (List t, Equal a, Equal (t a))
->   => t a -> Test (a -> t a -> Bool)
-> _test_elt_alt _ =
->   testName "elt'(a,x) == elt(a,x)" $
->   \a x -> eq (elt a x) (elt' a x)
-> 
-> 
-> _test_elt_nil :: (List t, Equal a, Equal (t a))
->   => t a -> Test (a -> Bool)
-> _test_elt_nil x =
->   testName "elt(a,nil) == false" $
->   \a -> let
->     nil' = nil `withTypeOf` x
->   in
->     eq (elt a nil') False
-> 
-> 
-> _test_elt_cat :: (List t, Equal a, Equal (t a))
->   => t a -> Test (a -> t a -> t a -> Bool)
-> _test_elt_cat _ =
->   testName "elt(a,cat(x,y)) == or(elt(a,x),elt(a,y))" $
->   \a x y -> eq (elt a (cat x y)) (or (elt a x) (elt a y))
-> 
-> 
-> _test_elt_rev :: (List t, Equal a, Equal (t a))
->   => t a -> Test (a -> t a -> Bool)
-> _test_elt_rev _ =
->   testName "elt(a,x) == elt(a,rev(x))" $
->   \a x -> eq (elt a x) (elt a (rev x))
-> 
-> 
 > _test_elt_tails :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> Bool)
 > _test_elt_tails _ =
@@ -406,17 +328,134 @@ Here are our property tests for $\elt$:
 > _test_elt_inits _ =
 >   testName "elt(y,inits(x)) == prefix(y,x)" $
 >   \x y -> eq (elt y (inits x)) (prefix y x)
-> 
-> 
+
+</p></div>
+</div>
+
+If we filter $a$ out of a list, it is no longer an item there.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set, with $a \in A$ and $x \in \lists{A}$. Then $$\elt(a)(\filter(\bnot(\beq(a,-)),x)) = \bfalse.$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \elt(a)(\filter(\bnot(\beq(a,-)),\nil)) \\
+ & = & \elt(a)(\nil) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as claimed. For the inductive step, suppose the equality holds for $x$ and let $b \in A$. We have two possibilities. If $b = a$ (that is, $\bnot(\beq(a,b)) = \bfalse$), we have
+$$\begin{eqnarray*}
+ &   & \elt(a)(\filter(\bnot(\beq(a,-)),\cons(b,x))) \\
+ & = & \elt(a)(\filter(\bnot(\beq(a,-)),x)) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as claimed. If $b \neq a$ (that is, $\bnot(\beq(a,b)) = \btrue$), we have
+$$\begin{eqnarray*}
+ &   & \elt(a)(\filter(\bnot(\beq(a,-)),\cons(b,x))) \\
+ & = & \elt(a)(\cons(b,\filter(\bnot(\beq(a,-),x))) \\
+ & = & \filter(\bnot(\beq(a,-)),x) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+
+<div class="test"><p>
+
 > _test_elt_filter_eq :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
 > _test_elt_filter_eq _ =
->   testName "elt(a,filter(eq(a,-),x)) == false" $
+>   testName "elt(a)(filter(eq(a,-),x)) == false" $
 >   \a x -> eq (elt a (filter (not . eq a) x)) False
 
-And the suite:
+</p></div>
+</div>
 
-> -- run all tests for elt
+(@@@)
+
+$\elt$ is an $\any$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set, with $a \in A$ and $x \in \lists{A}$. Then $$\elt(a)(x) = \any(\beq(a,-),x).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \elt(a)(x) \\
+ & = & \elt(a)(\nil) \\
+ & = & \bfalse \\
+ & = & \any(\beq(a,-),\nil) \\
+ & = & \any(\beq(a,-),x)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$ and let $b \in A$. We consider two possibilities. If $a = b$, we have
+$$\begin{eqnarray*}
+ &   & \elt(a)(\cons(b,x)) \\
+ & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(x)} \\
+ & = & \bif{\btrue}{\btrue}{\elt(a)(x)} \\
+ & = & \btrue \\
+ & = & \bor(\btrue,\any(\beq(a,-),x)) \\
+ & = & \bor(\beq(a,b),\any(\beq(a,-),x)) \\
+ & = & \any(\beq(a,-),\cons(b,x))
+\end{eqnarray*}$$
+as needed. If $a \neq b$, using the inductive hypothesis we have
+$$\begin{eqnarray*}
+ &   & \elt(a)(\cons(b,x)) \\
+ & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(x)} \\
+ & = & \bif{\bfalse}{\btrue}{\elt(a)(x)} \\
+ & = & \elt(a)(x) \\
+ & = & \any(\beq(a,-),x) \\
+ & = & \bor(\bfalse,\any(\beq(a,-),x)) \\
+ & = & \bor(\beq(a,b),\any(\beq(a,-),x)) \\
+ & = & \any(\beq(a,-),\cons(b,x))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_elt_any :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (a -> t a -> Bool)
+> _test_elt_any _ =
+>   testName "elt(a)(x) == any(eq(a,-))(x)" $
+>   \a x -> eq (elt a x) (any (eq a) x)
+
+</p></div>
+</div>
+
+$\elt$ can detect when two lists are distinct.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set, with $a \in A$ and $x,y \in \lists{A}$. If $\elt(a)(x) \neq \elt(a)(y)$, then $x \neq y$.
+</p></div>
+
+<div class="proof"><p>
+The contrapositive of this statement is trivial and kind of silly looking: If $x = y$, then $\elt(a)(x) = \elt(a)(y)$. But notice that this theorem gives us a simple way to detect when two lists are distinct from each other.
+</p></div>
+
+<div class="test"><p>
+
+> _test_elt_distinct :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (a -> t a -> t a -> Bool)
+> _test_elt_distinct _ =
+>   testName "if elt(a)(x) /= elt(a)(y) then x /= y" $
+>   \a x y -> if not (eq (elt a x) (elt a y))
+>     then not (eq x y)
+>     else True
+
+</p></div>
+</div>
+
+
+Testing
+-------
+
+Suite:
+
 > _test_elt ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
@@ -431,15 +470,18 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_elt_alt t)
 >   runTest args (_test_elt_nil t)
+>   runTest args (_test_elt_cons t)
 >   runTest args (_test_elt_cat t)
+>   runTest args (_test_elt_snoc t)
 >   runTest args (_test_elt_rev t)
 >   runTest args (_test_elt_tails t)
 >   runTest args (_test_elt_inits t)
 >   runTest args (_test_elt_filter_eq t)
+>   runTest args (_test_elt_any t)
+>   runTest args (_test_elt_distinct t)
 
-And ``main``:
+Main:
 
 > main_elt :: IO ()
 > main_elt = do

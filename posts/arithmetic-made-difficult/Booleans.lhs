@@ -845,6 +845,49 @@ as claimed.
 </p></div>
 </div>
 
+$\bif{\ast}{\ast}{\ast}$ is sort of commutative.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $p,q \in \bool$ and $a,b \in A$, we have
+$$\begin{eqnarray*}
+ &   & \bif{p}{a}{\bif{q}{a}{b}} \\
+ & = & \bif{q}{a}{\bif{p}{a}{b}}.
+\end{eqnarray*}$$
+</p></div>
+
+<div class="proof"><p>
+If $p = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \bif{p}{a}{\bif{q}{a}{b}} \\
+ & = & a \\
+ & = & \bif{q}{a}{a} \\
+ & = & \bif{q}{a}{\bif{p}{a}{c}}
+\end{eqnarray*}$$
+as claimed. Likewise, the equality holds if $q = \btrue$. Suppose then that $p = q = \bfalse$; now
+$$\begin{eqnarray*}
+ &   & \bif{p}{a}{\bif{q}{a}{b}} \\
+ & = & \bif{q}{a}{b} \\
+ & = & b \\
+ & = & \bif{p}{a}{b} \\
+ & = & \bif{q}{a}{\bif{p}{a}{b}}
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_if_commute_left :: (Equal a)
+>   => a -> Test (Bool -> Bool -> a -> a -> Bool)
+> _test_if_commute_left _ =
+>   testName "if(p,a,if(q,a,b)) == if(q,a,if(p,a,b))" $
+>   \p q a b -> eq
+>     (ifThenElse p a (ifThenElse q a b))
+>     (ifThenElse q a (ifThenElse p a b))
+
+</p></div>
+</div>
+
 
 Equality
 --------
@@ -961,6 +1004,7 @@ And the suite:
 >   runTest args (_test_if_func x)
 >   runTest args (_test_if_nest x)
 >   runTest args (_test_if_prune x)
+>   runTest args (_test_if_commute_left x)
 
 Main:
 

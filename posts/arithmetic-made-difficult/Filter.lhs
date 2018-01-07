@@ -60,7 +60,7 @@ In Haskell:
 Since $\filter(p)$ is defined as a $\foldr{\ast}{\ast}$, it can be characterized as the unique solution to a system of functional equations.
 
 <div class="result">
-<div class="thm"><p>
+<div class="corollary"><p>
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. $\filter(p)$ is the unique map $f : \lists{A} \rightarrow \lists{A}$ satisfying the following for all $a \in A$ and $x \in \lists{A}$.
 $$\left\{\begin{array}{ll}
  f(\nil) = \nil \\
@@ -329,7 +329,7 @@ as needed
 
 > _test_filter_idempotent :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
-> _test_filter_itempotent _ =
+> _test_filter_idempotent _ =
 >   testName "filter(p)(filter(p)(x)) == filter(p)(x)" $
 >   \p x -> eq (filter p (filter p x)) (filter p x)
 

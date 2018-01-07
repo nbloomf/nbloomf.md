@@ -52,7 +52,9 @@ library
     LongestCommonPrefix,
     AllAndAny,
     TailsAndInits,
-    Filter
+    Filter,
+    Elt,
+    Count
   build-depends:
     base == 4.*,
     QuickCheck
@@ -861,24 +863,43 @@ test-suite amd-filter
     AllAndAny,
     TailsAndInits
 
-
-
-
-
-
-
 test-suite amd-elt
   default-language: Haskell2010
   type: exitcode-stdio-1.0
   main-is: Elt.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Elt.main_elt
-  other-modules: Booleans, Lists, NaturalNumbers, Unary,
-                 Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
-                 Times, At, Map, UnfoldN, MaxAndMin, Range,
-                 Tuples, Length, Zip, AllAndAny, Filter
-                 LongestCommonPrefix, TailsAndInits, Prefix,
-                 SimpleRecursion, BailoutRecursion, DisjointUnions, HeadAndTail, LeftFold, Snoc, DoubleFold, Predicates, ConsumingFold
+  other-modules:
+    Booleans,
+    Predicates,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo,
+    MaxAndMin,
+    Lists,
+    HeadAndTail,
+    LeftFold,
+    DoubleFold,
+    ConsumingFold,
+    Snoc,
+    Reverse,
+    Cat,
+    At,
+    Length,
+    Map,
+    Zip,
+    Prefix,
+    LongestCommonPrefix,
+    AllAndAny,
+    TailsAndInits,
+    Filter
 
 test-suite amd-count
   default-language: Haskell2010
@@ -886,12 +907,45 @@ test-suite amd-count
   main-is: Count.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Count.main_count
-  other-modules: Booleans, Lists, NaturalNumbers, Unary,
-                 Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
-                 Times, At, Map, UnfoldN, MaxAndMin, Range,
-                 Tuples, Length, Zip, AllAndAny, Filter,
-                 LongestCommonPrefix, TailsAndInits, Elt,
-                 Prefix, SimpleRecursion, BailoutRecursion, DisjointUnions, HeadAndTail, LeftFold, Snoc, DoubleFold, Predicates, ConsumingFold
+  other-modules:
+    Booleans,
+    Predicates,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo,
+    MaxAndMin,
+    Lists,
+    HeadAndTail,
+    LeftFold,
+    DoubleFold,
+    ConsumingFold,
+    Snoc,
+    Reverse,
+    Cat,
+    At,
+    Length,
+    Map,
+    Zip,
+    Prefix,
+    LongestCommonPrefix,
+    AllAndAny,
+    TailsAndInits,
+    Filter,
+    Elt
+
+
+
+
+
+
+
 
 test-suite amd-repeat
   default-language: Haskell2010
