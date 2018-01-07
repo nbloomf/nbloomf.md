@@ -231,7 +231,7 @@ $\map(f)$ respects $\snoc$.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. For all $a \in A$ and $x \in \lists{A}$, we have $$\map(f)(\snoc(a,x)) = snoc(f(a),\map(f)(x)).$$
+Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. For all $a \in A$ and $x \in \lists{A}$, we have $$\map(f)(\snoc(a,x)) = \snoc(f(a),\map(f)(x)).$$
 </p></div>
 
 <div class="proof"><p>

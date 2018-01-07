@@ -72,27 +72,56 @@ $$\left\{\begin{array}{l}
 </p></div>
 </div>
 
-(@@@)
-
-Special case.
+Special cases.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a sets. For all $a \in A$ we have $$\tails(\cons(a,\nil)) = \cons(\cons(a,\nil),\cons(\nil,\nil)).$$
+Let $A$ be a sets. For all $a,b \in A$ we have the following.
+
+1. $\tails(\cons(a,\nil)) = \cons(\cons(a,\nil),\cons(\nil,\nil))$.
+2. $\tails(\cons(a,\cons(b,\nil))) = \cons(\cons(a,\cons(b,\nil)),\cons(\cons(b,\nil),\cons(\nil,\nil)))$.
 </p></div>
 
 <div class="proof"><p>
-Note that
+1. Note that
 $$\begin{eqnarray*}
  &   & \tails(\cons(a,\nil)) \\
  & = & \cons(\cons(a,\nil),\tails(\nil)) \\
  & = & \cons(\cons(a,\nil),\cons(\nil,\nil))
 \end{eqnarray*}$$
 as claimed.
+2. Note that
+$$\begin{eqnarray*}
+ &   & \tails(\cons(a,\cons(b,\nil))) \\
+ & = & \cons(\cons(a,\cons(b,\nil)),\tails(\cons(b,\nil))) \\
+ & = & \cons(\cons(a,\cons(b,\nil)),\cons(\cons(a,\nil),\cons(\nil,\nil)))
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_tails_single :: (List t, Equal a, Equal (t (t a)))
+>   => t a -> Test (a -> Bool)
+> _test_tails_single t =
+>   testName "tails(cons(a,nil)) == cons(cons(a,nil),cons(nil,nil))" $
+>   \a -> eq
+>     (tails (cons a (nil `withTypeOf` t)))
+>     (cons (cons a nil) (cons nil nil))
+> 
+> 
+> _test_tails_double :: (List t, Equal a, Equal (t (t a)))
+>   => t a -> Test (a -> a -> Bool)
+> _test_tails_double t =
+>   testName "tails(cons(a,cons(b,nil))) == cons(cons(a,cons(b,nil)),cons(cons(b,nil),cons(nil,nil)))" $
+>   \a b -> eq
+>     (tails (cons a (cons b (nil `withTypeOf` t))))
+>     (cons (cons a (cons b nil)) (cons (cons b nil) (cons nil nil)))
+
 </p></div>
 </div>
 
-$\tails$ interacts with $\map$:
+$\tails$ interacts with $\map$.
 
 <div class="result">
 <div class="thm"><p>
@@ -120,9 +149,19 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_tails_map :: (List t, Equal a, Equal (t (t a)))
+>   => t a -> Test ((a -> a) -> t a -> Bool)
+> _test_tails_map _ =
+>   testName "tails(map(f)(x)) == map(map(f))(tails(x))" $
+>   \f x -> eq (tails (map f x)) (map (map f) (tails x))
+
+</p></div>
 </div>
 
-$\tails$ interacts with $\length$:
+$\tails$ interacts with $\length$.
 
 <div class="result">
 <div class="thm"><p>
@@ -147,9 +186,20 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_tails_length
+>   :: (List t, Equal a, Natural n, Equal n, Equal (t a))
+>   => t a -> n -> Test (t a -> Bool)
+> _test_tails_length _ n =
+>   testName "length(tails(x)) == next(length(x))" $
+>   \x -> eq (length (tails x)) (next (length x `withTypeOf` n))
+
+</p></div>
 </div>
 
-$\tails$ interacts with $\snoc$:
+$\tails$ interacts with $\snoc$.
 
 <div class="result">
 <div class="thm"><p>
@@ -183,88 +233,19 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
-</div>
 
-And $\tails$ distributes over $\lcs$.
+<div class="test"><p>
 
-<div class="result">
-<div class="thm"><p>
-Let $A$ be a set. For all $x,y \in \lists{A}$, we have the following.
+> _test_tails_snoc :: (List t, Equal a, Equal (t (t a)))
+>   => t a -> Test (a -> t a -> Bool)
+> _test_tails_snoc _ =
+>   testName "tails(snoc(a,x)) == snoc(nil,map(snoc(a,-))(tails(x)))" $
+>   \a x -> eq (tails (snoc a x)) (snoc nil (map (snoc a) (tails x)))
 
-1. $\lcs(\cons(\nil,\nil),\tails(x)) = \cons(\nil,\nil)$.
-2. $\tails(\lcs(x,y)) = \lcs(\tails(x),\tails(y))$.
-</p></div>
-
-<div class="proof"><p>
-1. We proceed by list induction on $x$. For the base case $x = \nil$, we have
-$$\begin{eqnarray*}
- &   & \lcs(\cons(\nil,\nil),\tails(x)) \\
- & = & \lcs(\cons(\nil,\nil),\cons(\nil,\nil)) \\
- & = & \cons(\nil,\nil)
-\end{eqnarray*}$$
-as claimed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now $\lcs(\cons(\nil,\nil),\tails(x)) = \cons(\nil,\nil)$, so that $\tails(x) = \cat(w,\cons(\nil,\nil))$ for some $w$. Now
-$$\begin{eqnarray*}
- &   & \tails(\cons(a,x)) \\
- & = & \cons(\cons(a,x),\tails(x)) \\
- & = & \cons(\cons(a,x),\cat(w,\cons(\nil,\nil))) \\
- & = & \cat(\cons(\cons(a,x),w),\cons(\nil,\nil))),
-\end{eqnarray*}$$
-and thus $$\lcs(\cons(\nil,\nil),\cons(a,x)) = \cons(\nil,\nil)$$ as claimed.
-2. We proceed by list induction on $\length(x)$. For the base case $\length(x) = \zero$ we have $x = \nil$. Then (using (1))
-$$\begin{eqnarray*}
- &   & \tails(\lcs(x,y)) \\
- & = & \tails(\lcs(\nil,y)) \\
- & = & \tails(\nil) \\
- & = & \cons(\nil,\nil) \\
- & = & \lcs(\cons(\nil,\nil),\tails(y)) \\
- & = & \lcs(\tails(\nil),\tails(y)) \\
- & = & \lcs(\tails(x),\tails(y))
-\end{eqnarray*}$$
-as claimed. For the inductive step, suppose the equality holds for all $y$ whenever $\length(x) = n$, and suppose we have $x \in \lists{A}$ with $\length(x) = \next(n)$. Note that $x =\cons(a,v) \neq \nil$ for some $v$ with $\length(v) = n$; in particular $x = \cons(a,v) = \snoc(d,u)$ for some $u$ and $d$ with $\length(u) = n$. We consider two cases for $y$. If $y = \nil$, we have
-$$\begin{eqnarray*}
- &   & \tails(\lcs(x,y)) \\
- & = & \tails(\lcs(x,\nil)) \\
- & = & \tails(\nil) \\
- & = & \cons(\nil,\nil) \\
- & = & \lcs(\tails(x),\cons(\nil,\nil)) \\
- & = & \lcs(\tails(x),\tails(\nil)) \\
- & = & \lcs(\tails(x),\tails(y))
-\end{eqnarray*}$$
-as claimed. Suppose then that $y \neq \nil$; then we have $y = \snoc(b,w)$ for some $b \in A$ and $w \in \lists{A}$. Suppose $d = b$. Note that the function $\snoc(d,-) = \cat(-,\cons(d,\nil))$ in injective. Using the inductive hypothesis we have
-$$\begin{eqnarray*}
- &   & \tails(\lcs(x,y)) \\
- & = & \tails(\lcs(\snoc(d,u),\snoc(b,w))) \\
- & = & \tails(\snoc(d,\lcs(u,w))) \\
- & = & \snoc(\nil,\map(\snoc(d,-))(\tails(\lcs(u,w)))) \\
- & = & \snoc(\nil,\map(\snoc(d,-))(\lcs(\tails(u),\tails(w)))) \\
- & = & \snoc(\nil,\lcs(\map(\snoc(d,-))(\tails(u)),\map(\snoc(d,-))(\tails(w)))) \\
- & = & \lcs(\snoc(\nil,\map(\snoc(d,-))(\tails(u))),\snoc(\nil,\map(\snoc(d,-))(\tails(w)))) \\
- & = & \lcs(\tails(\snoc(d,u)),\tails(\snoc(d,w))) \\
- & = & \lcs(\tails(\snoc(d,u)),\tails(\snoc(b,w))) \\
- & = & \lcs(\tails(x),\tails(y))
-\end{eqnarray*}$$
-as needed. Now suppose $d \neq b$. In this case we have
-$$\begin{eqnarray*}
- &   & \lcs(\tails(x),\tails(y)) \\
- & = & \lcs(\tails(\snoc(d,u)),\tails(\snoc(b,w))) \\
- & = & \lcs(\snoc(\nil,\map(\snoc(d,-))(\tails(u))),\snoc(\nil,\map(\snoc(b,-))(\tails(w)))) \\
- & = & \snoc(\nil,\lcs(\map(\snoc(d,-))(\tails(u)),\map(\snoc(b,-))(\tails(w)))) \\
- & = & \snoc(\nil,Q).
-\end{eqnarray*}$$
-Consider this $Q$. If $Q \neq \nil$, that is, $Q = \cons(h,p)$ for some $h$ and $p$, note that $$\snoc(d,q) = h = \snoc(b,q')$$ for some $q$ and $q'$. But $d \neq b$ -- a contradiction. So in fact $Q = \nil$, and we have
-$$\begin{eqnarray*}
- &   & \snoc(\nil,Q) \\
- & = & \snoc(\nil,\nil) \\
- & = & \cons(\nil,\nil) \\
- & = & \tails(\nil) \\
- & = & \tails(\lcs(\snoc(d,u),\snoc(b,w))) \\
- & = & \tails(\lcs(x,y))
-\end{eqnarray*}$$
-as needed.
 </p></div>
 </div>
 
-And $\tails$ consists of suffixes.
+And $\tails(x)$ consists of suffixes.
 
 <div class="result">
 <div class="thm"><p>
@@ -292,6 +273,16 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_tails_suffix :: (List t, Equal a, Equal (t (t a)))
+>   => t a -> Test (t a -> Bool)
+> _test_tails_suffix _ =
+>   testName "all(suffix(_,x))(tails(x))" $
+>   \x -> all (\y -> suffix y x) (tails x)
+
+</p></div>
 </div>
 
 Next we'll define $\inits$ in terms of $\tails$.
@@ -299,15 +290,86 @@ Next we'll define $\inits$ in terms of $\tails$.
 <div class="result">
 <div class="thm"><p>
 Let $A$ be a sets. We define $\inits : \lists{A} \rightarrow \lists{\lists{A}}$ by $$\inits(x) = \rev(\map(\rev)(\tails(\rev(x)))).$$
-</p></div>
-</div>
 
 In Haskell:
 
 > inits :: (List t) => t a -> t (t a)
 > inits = rev . map rev . tails . rev
 
-$\inits$ interacts with $\map$:
+</p></div>
+</div>
+
+(@@@)
+
+And likewise, $\tails$ has an expression in terms of $\inits$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $x \in \lists{A}$ we have $$\tails(x) = \map(\rev)(\rev(\inits(\rev(x)))).$$
+</p></div>
+
+<div class="proof"><p>
+Note that
+$$\begin{eqnarray*}
+ &   & \map(\rev) \circ \rev \circ \inits \circ \rev \\
+ & = & \map(\rev) \circ \rev \circ \rev \circ \map(\rev) \circ \tails \circ \rev \circ \rev \\
+ & = & \map(\rev) \circ \map(\rev) \circ \tails \\
+ & = & \map(\rev \circ \rev) \circ \tails \\
+ & = & \map(\id) \circ \tails \\
+ & = & \tails
+\end{eqnarray*}$$
+as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_inits_tails :: (List t, Equal a, Equal (t (t a)))
+>   => t a -> Test (t a -> Bool)
+> _test_inits_tails _ =
+>   testName "tails(x) == rev(map(rev)(inits(rev(x))))" $
+>   \x -> eq (tails x) (map rev (rev (inits (rev x))))
+
+</p></div>
+</div>
+
+$\inits$ interacts with $\cons$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have $$\inits(\cons(a,x)) = \cons(\nil,\map(\cons(a,-))(\inits(x))).$$
+</p></div>
+
+<div class="proof"><p>
+Note that
+$$\begin{eqnarray*}
+ &   & \inits(\cons(a,x)) \\
+ & = & \rev(\map(\rev)(\tails(\rev(\cons(a,x))))) \\
+ & = & \rev(\map(\rev)(\tails(\snoc(a,\rev(x))))) \\
+ & = & \rev(\map(\rev)(\snoc(\nil,\map(\snoc(a,-))(\tails(\rev(a)))))) \\
+ & = & \rev(\snoc(\rev(\nil),\map(\rev)(\map(\snoc(a,-))(\tails(\rev(a)))))) \\
+ & = & \rev(\snoc(\nil,\map(\rev)(\map(\snoc(a,-))(\tails(\rev(a)))))) \\
+ & = & \rev(\snoc(\nil,\map(\rev \circ \snoc(a,-))(\tails(\rev(a))))) \\
+ & = & \rev(\snoc(\nil,\map(\cons(a,-) \circ \rev)(\tails(\rev(a))))) \\
+ & = & \rev(\snoc(\nil,\map(\cons(a,-))(\map(\rev)(\tails(\rev(a)))))) \\
+ & = & \cons(\nil,\rev(\map(\cons(a,-))(\map(\rev)(\tails(\rev(a)))))) \\
+ & = & \cons(\nil,\map(\cons(a,-))(\rev(\map(\rev)(\tails(\rev(a)))))) \\
+ & = & \cons(\nil,\map(\cons(a,-))(\inits(x))) \\
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_inits_cons :: (List t, Equal a, Equal (t (t a)))
+>   => t a -> Test (a -> t a -> Bool)
+> _test_inits_cons _ =
+>   testName "inits(cons(a,x)) == cons(nil,map(cons(a,-))(inits(x)))" $
+>   \a x -> eq (inits (cons a x)) (cons nil (map (cons a) (inits x)))
+
+</p></div>
+</div>
+
+$\inits$ interacts with $\map$.
 
 <div class="result">
 <div class="thm"><p>
@@ -329,7 +391,19 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_inits_map :: (List t, Equal a, Equal (t (t a)))
+>   => t a -> Test ((a -> a) -> t a -> Bool)
+> _test_inits_map _ =
+>   testName "inits(map(f)(x)) == map(map(f))(inits(x))" $
+>   \f x -> eq (inits (map f x)) (map (map f) (inits x))
+
+</p></div>
 </div>
+
+$\inits$ interacts with $\length$.
 
 <div class="result">
 <div class="thm"><p>
@@ -348,9 +422,19 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_inits_length :: (List t, Equal a, Natural n, Equal n)
+>   => t a -> n -> Test (t a -> Bool)
+> _test_inits_length _ n =
+>   testName "length(inits(x)) == next(length(x))" $
+>   \x -> eq (length (inits x)) (next (length x `withTypeOf` n))
+
+</p></div>
 </div>
 
-Finally, $\inits$ distributes over $\lcp$.
+$\inits$ distributes over $\lcp$.
 
 <div class="result">
 <div class="thm"><p>
@@ -358,17 +442,97 @@ Let $A$ be a set. For all $x,y \in \lists{A}$, we have $$\inits(\lcp(x,y)) = \lc
 </p></div>
 
 <div class="proof"><p>
-Note that $\rev$ is injective. Now
+We proceed by list induction on $x$. For the base case $x = \nil$, we have two possibilities for $y$. If $y = \nil$ we have
+$$\begin{eqnarray*}
+ &   & \lcp(\inits(x),\inits(y))
+ & = & \lcp(\inits(\nil),\inits(\nil)) \\
+ & = & \lcp(\cons(\nil,\nil),\cons(\nil,\nil)) \\
+ & = & \cons(\nil,\nil),
+\end{eqnarray*}$$
+and if $y = \cons(a,u)$, we have
 $$\begin{eqnarray*}
  &   & \lcp(\inits(x),\inits(y)) \\
- & = & \lcp(\rev(\map(\rev)(\tails(\rev(x)))),\rev(\map(\rev)(\tails(\rev(y))))) \\
- & = & \rev(\lcs(\map(\rev)(\tails(\rev(x))),\map(\rev)(\tails(\rev(y))))) \\
- & = & \rev(\map(\rev)(\lcs(\tails(\rev(x)),\tails(\rev(y))))) \\
- & = & \rev(\map(\rev)(\tails(\lcs(\rev(x),\rev(y))))) \\
- & = & \rev(\map(\rev)(\tails(\rev(\lcp(x,y))))) \\
- & = & \inits(\lcp(x,y))
+ & = & \lcp(\inits(\nil),\inits(\cons(a,u))) \\
+ & = & \lcp(\cons(\nil,\nil),\cons(\nil,\map(\cons(a,-))(\inits(x))) \\
+ & = & \cons(\nil,\lcp(\nil,\map(\cons(a,-))(\inits(x)))) \\
+ & = & \cons(\nil,\nil)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $y$ for some $x$, and let $a \in A$. We have two possibilities for $y$. If $y = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \inits(\lcp(\cons(a,x),\nil)) \\
+ & = & \inits(\lcp(\nil,\cons(a,x))) \\
+ & = & \lcp(\tails(\nil),\tails(\cons(a,x))) \\
+ & = & \lcp(\tails(\cons(a,x)),\tails(\nil))
+\end{eqnarray*}$$
+as needed. Suppose then that $y = \cons(b,u)$. If $b = a$, note that $\cons(a,-)$ is injective, so that
+$$\begin{eqnarray*}
+ &   & \lcp(\tails(\cons(a,x)),\tails(y)) \\
+ & = & \lcp(\tails(\cons(a,x)),\tails(\cons(b,u))) \\
+ & = & \lcp(\cons(\nil,\map(\cons(a,-))(\tails(x))),\cons(\nil,\map(\cons(b,-))(\tails(u)))) \\
+ & = & \lcp(\cons(\nil,\map(\cons(a,-))(\tails(x))),\cons(\nil,\map(\cons(a,-))(\tails(u)))) \\
+ & = & \cons(\nil,\lcp(\map(\cons(a,-))(\tails(x)),\map(\cons(a,-))(\tails(u)))) \\
+ & = & \cons(\nil,\map(\cons(a,-))(\lcp(\tails(x),\tails(u)))) \\
+ & = & \cons(\nil,\map(\cons(a,-))(\tails(\lcp(x,u)))) \\
+ & = & \tails(\cons(a,\lcp(x,u))) \\
+ & = & \tails(\lcp(\cons(a,x),\cons(a,u))) \\
+ & = & \tails(\lcp(\cons(a,x),\cons(b,u))) \\
+ & = & \tails(\lcp(\cons(a,x),y))
+\end{eqnarray*}$$
+as needed. If $b \neq a$, we instead, since $\cons(a,x) \neq \cons(b,x)$ for all $x$, we have
+$$\begin{eqnarray*}
+ &   & \lcp(\tails(\cons(a,x)),\tails(y)) \\
+ & = & \lcp(\tails(\cons(a,x)),\tails(\cons(b,u))) \\
+ & = & \lcp(\cons(\nil,\map(\cons(a,-))(\tails(x))),\cons(\nil,\map(\cons(b,-))(\tails(u)))) \\
+ & = & \cons(\nil,\lcp(\map(\cons(a,-))(\tails(x)),\map(\cons(b,-))(\tails(u)))) \\
+ & = & \cons(\nil,\nil) \\
+ & = & \tails(\nil) \\
+ & = & \tails(\lcp(\cons(a,x),\cons(b,u))) \\
+ & = & \tails(\lcp(\cons(a,x),y))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_inits_lcp :: (List t, Equal a, Equal (t a), Equal (t (t a)))
+>   => t a -> Test (t a -> t a -> Bool)
+> _test_inits_lcp _ =
+>   testName "inits(lcp(x,y)) == lcp(inits(x),inits(y))" $
+>   \x y -> eq (inits (lcp x y)) (lcp (inits x) (inits y))
+
+</p></div>
+</div>
+
+And $\tails$ distributes over $\lcs$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $x,y \in \lists{A}$, we have $$\tails(\lcs(x,y)) = \lcs(\tails(x),\tails(y)).$$
+</p></div>
+
+<div class="proof"><p>
+Note that $\rev$ is injective, so that
+$$\begin{eqnarray*}
+ &   & \tails(\lcs(x,y)) \\
+ & = & \map(\rev)(\rev(\inits(\rev(\lcs(x,y))))) \\
+ & = & \map(\rev)(\rev(\inits(\lcp(\rev(x),\rev(y))))) \\
+ & = & \map(\rev)(\rev(\lcp(\inits(\rev(x)),\inits(\rev(y))))) \\
+ & = & \rev(\map(\rev)(\lcp(\inits(\rev(x)),\inits(\rev(y))))) \\
+ & = & \rev(\lcp(\map(\rev)(\inits(\rev(x))),\map(\rev)(\inits(\rev(y))))) \\
+ & = & \lcs(\rev(\map(\rev)(\inits(\rev(x)))),\rev(\map(\rev)(\inits(\rev(y))))) \\
+ & = & \lcs(\tails(x),\tails(y))
 \end{eqnarray*}$$
 as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_tails_lcs :: (List t, Equal a, Equal (t a), Equal (t (t a)))
+>   => t a -> Test (t a -> t a -> Bool)
+> _test_tails_lcs _ =
+>   testName "tails(lcs(x,y)) == lcs(tails(x),tails(y))" $
+>   \x y -> eq (tails (lcs x y)) (lcs (tails x) (tails y))
+
 </p></div>
 </div>
 
@@ -376,63 +540,7 @@ as claimed.
 Testing
 -------
 
-> 
-> 
-> _test_tails_map :: (List t, Equal a, Equal (t (t a)))
->   => t a -> Test ((a -> a) -> t a -> Bool)
-> _test_tails_map _ =
->   testName "tails(map(f)(x)) == map(map(f))(tails(x))" $
->   \f x -> eq (tails (map f x)) (map (map f) (tails x))
-> 
-> 
-> _test_tails_length :: (List t, Equal a, Natural n, Equal n, Equal (t a))
->   => t a -> n -> Test (t a -> Bool)
-> _test_tails_length _ n =
->   testName "length(tails(x)) == next(length(x))" $
->   \x -> let
->     lx = length x `withTypeOf` n
->   in
->     eq (length (tails x)) (next lx)
-> 
-> 
-> _test_tails_snoc :: (List t, Equal a, Equal (t (t a)))
->   => t a -> Test (a -> t a -> Bool)
-> _test_tails_snoc _ =
->   testName "tails(snoc(a,x)) == snoc(nil,map(snoc(a,-))(tails(x)))" $
->   \a x -> eq (tails (snoc a x)) (snoc nil (map (snoc a) (tails x)))
-> 
-> 
-> _test_tails_lcs :: (List t, Equal a, Equal (t a), Equal (t (t a)))
->   => t a -> Test (t a -> t a -> Bool)
-> _test_tails_lcs _ =
->   testName "tails(lcs(x,y)) == lcs(tails(x),tails(y))" $
->   \x y -> eq (tails (lcs x y)) (lcs (tails x) (tails y))
-> 
-> 
-> _test_inits_map :: (List t, Equal a, Equal (t (t a)))
->   => t a -> Test ((a -> a) -> t a -> Bool)
-> _test_inits_map _ =
->   testName "inits(map(f)(x)) == map(map(f))(inits(x))" $
->   \f x -> eq (inits (map f x)) (map (map f) (inits x))
-> 
-> 
-> _test_inits_length :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (t a -> Bool)
-> _test_inits_length _ n =
->   testName "length(inits(x)) == next(length(x))" $
->   \x -> let
->     lx = length x `withTypeOf` n
->   in
->     eq (length (inits x)) (next lx)
-> 
-> 
-> _test_inits_lcp :: (List t, Equal a, Equal (t a), Equal (t (t a)))
->   => t a -> Test (t a -> t a -> Bool)
-> _test_inits_lcp _ =
->   testName "inits(lcp(x,y)) == lcp(inits(x),inits(y))" $
->   \x y -> eq (inits (lcp x y)) (lcp (inits x) (inits y))
-
-And the suite:
+Suite:
 
 > _test_tails_inits ::
 >   ( TypeName a, Show a, Equal a, Arbitrary a, CoArbitrary a
@@ -451,17 +559,22 @@ And the suite:
 > 
 >   runTest args (_test_tails_nil t)
 >   runTest args (_test_tails_cons t)
-> 
+>   runTest args (_test_tails_single t)
+>   runTest args (_test_tails_double t)
 >   runTest args (_test_tails_map t)
 >   runTest args (_test_tails_length t n)
 >   runTest args (_test_tails_snoc t)
->   runTest args (_test_tails_lcs t)
+>   runTest args (_test_tails_suffix t)
 > 
+>   runTest args (_test_inits_tails t)
+>   runTest args (_test_inits_cons t)
 >   runTest args (_test_inits_map t)
 >   runTest args (_test_inits_length t n)
+> 
 >   runTest args (_test_inits_lcp t)
+>   runTest args (_test_tails_lcs t)
 
-And ``main``:
+Main:
 
 > main_tails_inits :: IO ()
 > main_tails_inits = do

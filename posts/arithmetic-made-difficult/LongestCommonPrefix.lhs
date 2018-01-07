@@ -18,6 +18,7 @@ slug: lcp-lcs
 > import Snoc
 > import Reverse
 > import Cat
+> import Map
 > import Zip
 > import Prefix
 
@@ -509,6 +510,52 @@ as needed.
 </p></div>
 </div>
 
+And $\lcp$ interacts with $\map(f)$ and $\map(g)$ if $f$ and $g$ have no images in common.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ and $B$ be sets
+
+1. Suppose $f,g : A \rightarrow B$ are functions with the property that $f(a) \neq g(b)$ for all $a,b \in A$. Then $\lcp(\map(f)(x),\map(g)(y)) = \nil$ for all $x,y \in \lists{A}$.
+2. In particular, $f(x) = \cons(a,x)$ and $g(x) = \cons(b,x)$ have this property if $a \neq b$.
+</p></div>
+
+<div class="proof"><p>
+1. We proceed by list induction on $x$. For the base case $x = \nil$, note that
+$$\begin{eqnarray*}
+ &   & \lcp(\map(f)(\nil),\map(g)(y)) \\
+ & = & \lcp(\nil,\map(g)(y)) \\
+ & = & \nil
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $y$ for some $x$, and let $a \in A$. We have two possibilities for $y$. If $y = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \lcp(\map(f)(\cons(a,x)),\map(g)(\nil)) \\
+ & = & \lcp(\map(f)(\cons(a,x)),\nil) \\
+ & = & \nil
+\end{eqnarray*}$$
+as needed, and if $y = \cons(b,u)$, since $f(a) \neq g(b)$, we have
+$$\begin{eqnarray*}
+ &   & \lcp(\map(f)(\cons(a,x)),\map(g)(\cons(b,u))) \\
+ & = & \lcp(\cons(f(a),\map(f)(x)),\cons(g(b))(\map(g)(u))) \\
+ & = & \nil
+\end{eqnarray*}$$
+as needed.
+2. Note that if $\cons(a,x) = \cons(b,y)$, we must have $a = b$.
+</p></div>
+
+<div class="test"><p>
+
+> _test_lcp_map_cons :: (List t, Equal a, Equal (t a), Equal (t (t a)))
+>   => t a -> Test (a -> a -> t (t a) -> t (t a) -> Bool)
+> _test_lcp_map_cons _ =
+>   testName "if a /= b then lcp(map(cons(a,-))(x),map(cons(b,-))(y)) == nil" $
+>   \a b x y -> if not (eq a b)
+>     then eq (lcp (map (cons a) x) (map (cons b) y)) nil
+>     else True
+
+</p></div>
+</div>
+
 We can define the dual operation, longest common suffix, in terms of $\lcp$ like so.
 
 <div class="result">
@@ -553,7 +600,7 @@ Let $A$ be a set. For all $a,b \in A$ and $x,y \in \lists{A}$, we have the follo
 > _test_lcs_snoc_snoc :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> a -> t a -> Bool)
 > _test_lcs_snoc_snoc _ =
->   testName "lcs(snoc(a,x),snoc(b,y)) == if(eq(a,b),snoc(a,lcs(x,y),nil)" $
+>   testName "lcs(snoc(a,x),snoc(b,y)) == if(eq(a,b),snoc(a,lcs(x,y)),nil)" $
 >   \a x b y -> eq
 >     (lcs (snoc a x) (snoc b y))
 >     (if eq a b then snoc a (lcs x y) else nil)
@@ -647,7 +694,7 @@ $$\begin{eqnarray*}
  & = & x
 \end{eqnarray*}$$
 as claimed.
-<p></div>
+</p></div>
 
 <div class="test"><p>
 
@@ -806,6 +853,7 @@ Suite:
 >   ( TypeName a, Equal a, Show a, Arbitrary a
 >   , TypeName (t a), List t
 >   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (a,a))
+>   , Arbitrary (t (t a)), Show (t (t a)), Equal (t (t a))
 >   ) => t a -> Int -> Int -> IO ()
 > _test_lcp t maxSize numCases = do
 >   testLabel ("lcp & lcs: " ++ typeName t)
@@ -827,6 +875,7 @@ Suite:
 >   runTest args (_test_lcp_cat_left t)
 >   runTest args (_test_lcp_prefix t)
 >   runTest args (_test_lcp_zip t)
+>   runTest args (_test_lcp_map_cons t)
 > 
 >   runTest args (_test_lcs_nil_list t)
 >   runTest args (_test_lcs_snoc_nil t)

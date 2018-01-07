@@ -51,7 +51,8 @@ library
     Prefix,
     LongestCommonPrefix,
     AllAndAny,
-    TailsAndInits
+    TailsAndInits,
+    Filter
   build-depends:
     base == 4.*,
     QuickCheck
@@ -823,24 +824,48 @@ test-suite amd-tails-inits
     LongestCommonPrefix,
     AllAndAny
 
-
-
-
-
-
-
 test-suite amd-filter
   default-language: Haskell2010
   type: exitcode-stdio-1.0
   main-is: Filter.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Filter.main_filter
-  other-modules: Booleans, Lists, NaturalNumbers, Unary,
-                 Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
-                 Times, At, Map, UnfoldN, MaxAndMin, Range,
-                 Tuples, Length, Zip, AllAndAny, Prefix,
-                 LongestCommonPrefix, TailsAndInits, SimpleRecursion,
-                 BailoutRecursion, DisjointUnions, HeadAndTail, LeftFold, Snoc, DoubleFold, Predicates, ConsumingFold
+  other-modules:
+    Booleans,
+    Predicates,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo,
+    MaxAndMin,
+    Lists,
+    HeadAndTail,
+    LeftFold,
+    DoubleFold,
+    ConsumingFold,
+    Snoc,
+    Reverse,
+    Cat,
+    At,
+    Length,
+    Map,
+    Zip,
+    Prefix,
+    LongestCommonPrefix,
+    AllAndAny,
+    TailsAndInits
+
+
+
+
+
+
 
 test-suite amd-elt
   default-language: Haskell2010
@@ -853,7 +878,7 @@ test-suite amd-elt
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Filter
                  LongestCommonPrefix, TailsAndInits, Prefix,
-                 SimpleRecursion, BailoutRecursion, DisjointUnions, HeadAndTail, LeftFold, Snoc, DoubleFold, Predicates
+                 SimpleRecursion, BailoutRecursion, DisjointUnions, HeadAndTail, LeftFold, Snoc, DoubleFold, Predicates, ConsumingFold
 
 test-suite amd-count
   default-language: Haskell2010
@@ -866,7 +891,7 @@ test-suite amd-count
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
-                 Prefix, SimpleRecursion, BailoutRecursion, DisjointUnions, HeadAndTail, LeftFold, Snoc, DoubleFold, Predicates
+                 Prefix, SimpleRecursion, BailoutRecursion, DisjointUnions, HeadAndTail, LeftFold, Snoc, DoubleFold, Predicates, ConsumingFold
 
 test-suite amd-repeat
   default-language: Haskell2010
@@ -879,7 +904,7 @@ test-suite amd-repeat
                  Times, At, Map, UnfoldN, MaxAndMin, Range,
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
-                 Count, Prefix, SimpleRecursion, BailoutRecursion, DisjointUnions, HeadAndTail, LeftFold, Snoc, DoubleFold, Predicates
+                 Count, Prefix, SimpleRecursion, BailoutRecursion, DisjointUnions, HeadAndTail, LeftFold, Snoc, DoubleFold, Predicates, ConsumingFold
 
 test-suite amd-sublist
   default-language: Haskell2010
@@ -893,7 +918,7 @@ test-suite amd-sublist
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, SimpleRecursion
-                 BailoutRecursion, DisjointUnions, HeadAndTail, LeftFold, Snoc, DoubleFold, Predicates
+                 BailoutRecursion, DisjointUnions, HeadAndTail, LeftFold, Snoc, DoubleFold, Predicates, ConsumingFold
 
 test-suite amd-infix
   default-language: Haskell2010
@@ -907,7 +932,7 @@ test-suite amd-infix
                  Tuples, Length, Zip, AllAndAny, Filter,
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Sublist, SimpleRecursion,
-                 BailoutRecursion, DisjointUnions, HeadAndTail, LeftFold, Snoc, DoubleFold, Predicates
+                 BailoutRecursion, DisjointUnions, HeadAndTail, LeftFold, Snoc, DoubleFold, Predicates, ConsumingFold
 
 test-suite amd-select
   default-language: Haskell2010
@@ -922,7 +947,7 @@ test-suite amd-select
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Choose, Sublist,
                  SimpleRecursion, BailoutRecursion,
-                 MutatingRecursion, DisjointUnions, DoubleNaturalRecursion, HeadAndTail, LeftFold, Snoc, DoubleFold
+                 MutatingRecursion, DisjointUnions, DoubleNaturalRecursion, HeadAndTail, LeftFold, Snoc, DoubleFold, ConsumingFold, Predicates
 
 test-suite amd-unique
   default-language: Haskell2010
@@ -937,7 +962,7 @@ test-suite amd-unique
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Choose,
                  Sublist, SimpleRecursion, BailoutRecursion,
-                 MutatingRecursion, DisjointUnions, DoubleNaturalRecursion, HeadAndTail, LeftFold, Snoc, DoubleFold
+                 MutatingRecursion, DisjointUnions, DoubleNaturalRecursion, HeadAndTail, LeftFold, Snoc, DoubleFold, Predicates, ConsumingFold
 
 test-suite amd-delete
   default-language: Haskell2010
@@ -952,7 +977,7 @@ test-suite amd-delete
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Choose,
                  Sublist, Unique, SimpleRecursion,
-                 BailoutRecursion, MutatingRecursion, DisjointUnions, DoubleNaturalRecursion, HeadAndTail, LeftFold, Snoc, DoubleFold
+                 BailoutRecursion, MutatingRecursion, DisjointUnions, DoubleNaturalRecursion, HeadAndTail, LeftFold, Snoc, DoubleFold, Predicates, ConsumingFold
 
 test-suite amd-dedupe
   default-language: Haskell2010
@@ -967,7 +992,7 @@ test-suite amd-dedupe
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Delete,
                  Choose, Sublist, Unique, SimpleRecursion,
-                 BailoutRecursion, MutatingRecursion, DisjointUnions, DoubleNaturalRecursion, HeadAndTail, LeftFold, Snoc, DoubleFold
+                 BailoutRecursion, MutatingRecursion, DisjointUnions, DoubleNaturalRecursion, HeadAndTail, LeftFold, Snoc, DoubleFold, Predicates, ConsumingFold
 
 test-suite amd-take-drop
   default-language: Haskell2010
@@ -982,7 +1007,7 @@ test-suite amd-take-drop
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Delete,
                  Dedupe, Choose, Sublist, Unique,
-                 SimpleRecursion, BailoutRecursion, MutatingRecursion, DisjointUnions, DoubleNaturalRecursion, HeadAndTail, LeftFold, Snoc, DoubleFold
+                 SimpleRecursion, BailoutRecursion, MutatingRecursion, DisjointUnions, DoubleNaturalRecursion, HeadAndTail, LeftFold, Snoc, DoubleFold, Predicates, ConsumingFold
 
 test-suite amd-takebut-dropbut
   default-language: Haskell2010
@@ -997,7 +1022,7 @@ test-suite amd-takebut-dropbut
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Delete,
                  Dedupe, Choose, Sublist, Unique, TakeAndDrop,
-                 SimpleRecursion, BailoutRecursion, MutatingRecursion, DisjointUnions, DoubleNaturalRecursion, HeadAndTail, LeftFold, Snoc, DoubleFold
+                 SimpleRecursion, BailoutRecursion, MutatingRecursion, DisjointUnions, DoubleNaturalRecursion, HeadAndTail, LeftFold, Snoc, DoubleFold, Predicates, ConsumingFold
 
 test-suite amd-takewhile-dropwhile
   default-language: Haskell2010
@@ -1012,4 +1037,4 @@ test-suite amd-takewhile-dropwhile
                  LongestCommonPrefix, TailsAndInits, Elt,
                  Count, Prefix, Repeat, Select, Delete,
                  Dedupe, Choose, Sublist, Unique,
-                 SimpleRecursion, BailoutRecursion, MutatingRecursion, DisjointUnions, DoubleNaturalRecursion, HeadAndTail, LeftFold, Snoc, DoubleFold
+                 SimpleRecursion, BailoutRecursion, MutatingRecursion, DisjointUnions, DoubleNaturalRecursion, HeadAndTail, LeftFold, Snoc, DoubleFold, Predicates, ConsumingFold
