@@ -8,7 +8,7 @@ executable site
     site.lhs
   build-depends:
     base == 4.*,
-    hakyll == 4.9.*,
+    hakyll >= 4.9.8.0,
     hakyll-shortcode == 0.0.2,
     pandoc,
     regex-compat,

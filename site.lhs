@@ -27,6 +27,7 @@ As usual we begin with some pragmas and imports, to be used later. The ``Overloa
 > import qualified Data.Set as S (fromList, union)
 > import Text.Pandoc.Options 
 >   ( Extension(..)
+>   , readerExtensions
 >   , writerExtensions
 >   , writerHTMLMathMethod
 >   , HTMLMathMethod(MathJax)
@@ -308,6 +309,16 @@ Compilers
 > pandocStringCompiler text = do
 >   pandoc <- readPandocWith defaultHakyllReaderOptions text
 >   return $ writePandocWith customWriterOptions pandoc
+> 
+
+ > customReaderOptions = defaultHakyllReaderOptions
+ >   { readerExtensions = S.union
+ >       (readerExtensions defaultHakyllReaderOptions)
+ >       (S.fromList
+ >         [ Ext_fenced_divs
+ >         ])
+ >   }
+
 > 
 > customWriterOptions = defaultHakyllWriterOptions 
 >   { writerExtensions = S.union

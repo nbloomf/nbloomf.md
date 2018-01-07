@@ -6,16 +6,16 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: tails-inits
 ---
 
-> {-# LANGUAGE FlexibleInstances #-}
 > module TailsAndInits
 >   ( tails, inits, _test_tails_inits, main_tails_inits
 >   ) where
 > 
+> import Prelude ()
 > import Booleans
 > import NaturalNumbers
-> 
 > import Lists
 > import HeadAndTail
+> import ConsumingFold
 > import Snoc
 > import Reverse
 > import Length
@@ -25,65 +25,54 @@ slug: tails-inits
 > import Prefix
 > import LongestCommonPrefix
 > import AllAndAny
-> 
-> import Prelude ()
-> import Test.QuickCheck
-> import Text.Show.Functions
 
-Today we'll construct the lists of all suffixes ($\tails$) and prefixes ($\inits$) of a list. Starting with $\tails$: this function should have a signature like $$\lists{A} \rightarrow \lists{\lists{A}}.$$ Here's how I did it: we have (almost) one suffix for each item in the list -- the suffix starting at that item -- plus the empty suffix. This suggests we can define $\tails$ as a fold. The hitch is in the return type; fold prefers to decompose a list, while it appears that $\tails$ is building a list up. As usual, the way to handle this is by folding a list of *functions*. The only way I can see to do this is by defining $\tails$ as $$\tails(x) = \foldr{\varepsilon}{\varphi}(x)(x)$$ for some appropriate $\varepsilon$ and $\varphi$. Unpacking this using the behavior we want, I get the following definition.
+Today we'll construct the lists of all suffixes ($\tails$) and prefixes ($\inits$) of a list. Starting with $\tails$: this function should have a signature like $$\lists{A} \rightarrow \lists{\lists{A}}.$$
 
 <div class="result">
 <div class="defn"><p>
-Let $A$ be a set. Define $\varepsilon : \lists{A} \rightarrow \lists{\lists{A}}$ by $$\varepsilon(w) = \cons(w,\nil)$$ and define $\varphi : A \times \lists{\lists{A}}^{\lists{A}} \rightarrow \lists{\lists{A}}^{\lists{A}}$ by $$\varphi(a,f)(w) = \cons(w,f(\tail(w))).$$ Now define $\tails : \lists{A} \rightarrow \lists{\lists{A}}$ by $$\tails(x) = \foldr{\varepsilon}{\varphi}(x)(x).$$
-</p></div>
-</div>
-
-We can translate $\tails$ to Haskell directly as follows:
-
-> tails' :: (List t) => t a -> t (t a)
-> tails' x = foldr epsilon phi x x
->   where
->     epsilon w = cons w nil
->     phi _ f w = cons w (f (tail w))
-
-The next result suggests a more straightforward implementation.
-
-<div class="result">
-<div class="thm"><p>
-Let $A$ be a set. For all $x \in \lists{A}$ and $a \in A$ we have the following.
-
-1. $\tails(\nil) = \cons(\nil,\nil)$.
-2. $\tails(\cons(a,x)) = \cons(\cons(a,x),\tails(x))$.
-</p></div>
-
-<div class="proof"><p>
-1. Note that
-$$\begin{eqnarray*}
- &   & \tails(\nil) \\
- & = & \foldr{\varepsilon}{\varphi}(\nil)(\nil) \\
- & = & \varepsilon(\nil) \\
- & = & \cons(\nil,\nil)
-\end{eqnarray*}$$
-as claimed.
-2. Note that
-$$\begin{eqnarray*}
- &   & \tails(\cons(a,x)) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\cons(a,x)) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\cons(a,x)) \\
- & = & \cons(\cons(a,x),\foldr{\varepsilon}{\varphi}(x)(\tail(\cons(a,x)))) \\
- & = & \cons(\cons(a,x),\foldr{\varepsilon}{\varphi}(x)(x)) \\
- & = & \cons(\cons(a,x),\tails(x))
-\end{eqnarray*}$$
-as claimed.
-</p></div>
-</div>
+Let $A$ be a set. Let $\gamma = \cons(\nil,\nil)$, and define $\sigma : A \times \lists{A} \times \lists{\lists{A}} \rightarrow \lists{\lists{A}}$ by $$\sigma(a,x,z) = \cons(\cons(a,x),z).$$ Now define $\tails : \lists{A} \rightarrow \lists{\lists{A}}$ by $$\tails = \cfoldr{\gamma}{\sigma}.$$
 
 In Haskell:
 
 > tails :: (List t) => t a -> t (t a)
-> tails x = case uncons x of
->   Left ()     -> cons nil nil
->   Right (a,w) -> cons (cons a w) (tails w)
+> tails = cfoldr gamma sigma
+>   where
+>     gamma = cons nil nil
+>     sigma a x z = cons (cons a x) z
+
+</p></div>
+</div>
+
+Since $\tails$ is defined as a $\cfoldr{\ast}{\ast}$, it is the unique solution to a system of functional equations.
+
+<div class="result">
+<div class="corollary"><p>
+Let $A$ be a set. $\tails$ is the unique map $f : \lists{A} \rightarrow \lists{\lists{A}}$ which satisfies the following equations for all $a \in A$ and $x \in \lists{A}$.
+$$\left\{\begin{array}{l}
+ f(\nil) = \cons(\nil,\nil) \\
+ f(\cons(a,x)) = \cons(\cons(a,x),f(x))
+\end{array}\right.$$
+</p></div>
+
+<div class="test"><p>
+
+> _test_tails_nil :: (List t, Equal a, Equal (t (t a)))
+>   => t a -> Test Bool
+> _test_tails_nil t =
+>   testName "tails(nil) == cons(nil,nil)" $
+>   eq (tails (nil `withTypeOf` t)) (cons nil nil)
+> 
+> 
+> _test_tails_cons :: (List t, Equal a, Equal (t (t a)))
+>   => t a -> Test (a -> t a -> Bool)
+> _test_tails_cons _ =
+>   testName "tails(cons(a,x)) == cons(cons(a,x),tails(x))" $
+>   \a x -> eq (tails (cons a x)) (cons (cons a x) (tails x))
+
+</p></div>
+</div>
+
+(@@@)
 
 Special case.
 
@@ -387,13 +376,6 @@ as claimed.
 Testing
 -------
 
-Here are our property tests for $\tails$ and $\inits$:
-
-> _test_tails_alt :: (List t, Equal a, Equal (t (t a)))
->   => t a -> Test (t a -> Bool)
-> _test_tails_alt _ =
->   testName "tails(x) == tails'(x)" $
->   \x -> eq (tails x) (tails' x)
 > 
 > 
 > _test_tails_map :: (List t, Equal a, Equal (t (t a)))
@@ -452,7 +434,6 @@ Here are our property tests for $\tails$ and $\inits$:
 
 And the suite:
 
-> -- run all tests for tails and inits
 > _test_tails_inits ::
 >   ( TypeName a, Show a, Equal a, Arbitrary a, CoArbitrary a
 >   , TypeName n, Natural n, Equal n
@@ -468,7 +449,9 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_tails_alt t)
+>   runTest args (_test_tails_nil t)
+>   runTest args (_test_tails_cons t)
+> 
 >   runTest args (_test_tails_map t)
 >   runTest args (_test_tails_length t n)
 >   runTest args (_test_tails_snoc t)

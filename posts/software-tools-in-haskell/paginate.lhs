@@ -8,7 +8,7 @@ tags: software-tools-in-haskell, literate-haskell
 
 As usual, we start with some imports.
 
-> {-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
+> {-# LANGUAGE TypeSynonymInstances, FlexibleInstances, ConstrainedClassMethods #-}
 > -- paginate: format lines with page numbers and headers
 > module Main where
 > 

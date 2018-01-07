@@ -159,6 +159,11 @@ And the concrete type:
 > 
 >   shrink  N      = []
 >   shrink (C a x) = [x]
+> 
+> 
+> instance (Arbitrary a) => CoArbitrary (ConsList a) where
+>   coarbitrary N = variant 0
+>   coarbitrary (C a x) = variant 1 . coarbitrary x
 
 This business about initial algebras is nice, but it will be convenient to unpack this definition a little bit. First, we give the following more concrete description of $F_A$-algebras:
 
