@@ -122,6 +122,48 @@ pre.literate {
 /* Theorems */
 /************/
 
+/* main style */
+div.definition, div.theorem {
+  border-left: solid 1px gray;
+  padding-left: 12px;
+  padding-right: 12px;
+  background: #f7f7f7;
+  position: relative;
+}
+
+/* reference labels */
+a[href^="#"] {
+  text-decoration: none;
+  position: absolute;
+  left: -20pt;
+}
+
+a[href^="#"]::before {
+  content: "⚓"
+}
+
+div.definition p:first-child::before {
+  content: "Def'n:\0000a0";
+  font-style: italic;
+}
+
+div.theorem p:first-child::before {
+  content: "Theorem:\0000a0";
+  font-style: italic;
+}
+
+div.proof p:first-child::before {
+  content: "Proof:\0000a0";
+  font-style: italic;
+}
+
+div.test div.sourceCode:first-child::before {
+  content: "Test:\0000a0";
+  font-style: italic;
+}
+
+/* legacy */
+
 div.result, div.problem {
   border-left: solid 1px gray;
   padding-left: 12px;
@@ -151,16 +193,6 @@ div.result div.thm p:first-child:before {
 
 div.result div.axiom p:first-child:before {
   content: "Axiom:\0000a0";
-  font-style: italic;
-}
-
-div.result div.proof p:first-child:before {
-  content: "Proof:\0000a0";
-  font-style: italic;
-}
-
-div.result div.test p:first-child:before {
-  content: "Test:\0000a0";
   font-style: italic;
 }
 

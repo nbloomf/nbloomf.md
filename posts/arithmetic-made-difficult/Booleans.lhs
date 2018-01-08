@@ -16,7 +16,7 @@ slug: booleans
 >   , module Prelude
 >   , module Test.QuickCheck
 >   , module Test.QuickCheck.Test
->   ) where
+> ) where
 > 
 > import Prelude
 >   ( Show(show), IO, Bool(..), Int, Maybe(..), Either(..), id, undefined
@@ -32,11 +32,9 @@ slug: booleans
 
 Before we think about numbers or writing programs, let's start by nailing down some important ideas about truth values. In math there can be a kind of other-worldness about True and False, since they live in the "metalanguage" of mathematical logic rather than the "object language" of whatever we are studying. But it will turn out to be useful to algebraify the truth values themselves.
 
-<div class="result">
-<div class="defn"><p><a name="def-bool" />
-We define a set $\bool = \{\btrue,\bfalse\}$. The elements of $\bool$ are called *booleans* or *truth values*.
-</p></div>
-</div>
+:::: definition ::::
+[](#def-bool) We define a set $\bool = \{\btrue,\bfalse\}$. The elements of $\bool$ are called *booleans* or *truth values*.
+::::::::::::::::::::
 
 We can model $\bool$ using the built in Haskell type ``Bool``, which looks something like this.
 
@@ -46,9 +44,8 @@ data Bool = True | False
 
 We also define the usual logical operators in turn. First, $\bnot$:
 
-<div class="result">
-<div class="defn"><p><a name="def-not" />
-We define $\bnot : \bool \rightarrow \bool$ by
+:::: definition ::::
+[](#def-not) We define $\bnot : \bool \rightarrow \bool$ by
 $$\begin{eqnarray*}
 \bnot(\btrue)  & = & \bfalse \\
 \bnot(\bfalse) & = & \btrue.
@@ -60,29 +57,27 @@ In Haskell:
 > not True  = False
 > not False = True
 
-</p></div>
-</div>
+::::::::::::::::::::
 
 Where $\bnot$ is an involution.
 
-<div class="result">
-<div class="thm"><p>
+:::: theorem ::::
+[](#not-involution)
 For all $a \in \bool$ we have $\bnot(\bnot(a)) = a$.
-</p></div>
 
-<div class="proof"><p>
+::: proof :::
 If $a = \btrue$ we have $$\bnot(\bnot(\btrue)) = \bnot(\bfalse) = \btrue,$$ and if $a = \bfalse$, we have $$\bnot(\bnot(\bfalse)) = \bnot(\btrue) = \bfalse$$ as claimed.
-</p></div>
+:::::::::::::
 
-<div class="test"><p>
+::: test :::
 
 > _test_not_involutive :: Test (Bool -> Bool)
 > _test_not_involutive =
 >   testName "not(not(p)) == p" $
 >   \p -> eq (not (not p)) p
 
-</p></div>
-</div>
+::::::::::::
+:::::::::::::::::
 
 Next, $\band$:
 
@@ -520,7 +515,7 @@ $$\begin{eqnarray*}
  & = & \bimpl(\btrue,\bimpl(\btrue,\btrue)) \\
  & = & \bimpl(\btrue,\btrue) \\
  & = & \btrue.
-\end{\eqnarray*}$$
+\end{eqnarray*}$$
 Suppose instead that $p = \btrue$. Now
 $$\begin{eqnarray*}
  &   & \bimpl(\bimpl(p,\bimpl(q,r)),\bimpl(\bimpl(p,q),\bimpl(p,r))) \\

@@ -27,6 +27,7 @@ As usual we begin with some pragmas and imports, to be used later. The ``Overloa
 > import qualified Data.Set as S (fromList, union)
 > import Text.Pandoc.Options 
 >   ( Extension(..)
+>   , enableExtension
 >   , readerExtensions
 >   , writerExtensions
 >   , writerHTMLMathMethod
@@ -310,25 +311,32 @@ Compilers
 >   pandoc <- readPandocWith defaultHakyllReaderOptions text
 >   return $ writePandocWith customWriterOptions pandoc
 > 
-
- > customReaderOptions = defaultHakyllReaderOptions
- >   { readerExtensions = S.union
- >       (readerExtensions defaultHakyllReaderOptions)
- >       (S.fromList
- >         [ Ext_fenced_divs
- >         ])
- >   }
-
+> customReaderOptions = defaultHakyllReaderOptions
+>   { readerExtensions =
+>       let
+>         defaults = readerExtensions defaultHakyllReaderOptions
+> 
+>         exts =
+>           [ Ext_fenced_divs
+>           ]
+> 
+>       in
+>         foldr enableExtension defaults exts
+>   }
 > 
 > customWriterOptions = defaultHakyllWriterOptions 
->   { writerExtensions = S.union
->       (writerExtensions defaultHakyllWriterOptions)
->       (S.fromList
->          [ Ext_tex_math_dollars
->          , Ext_tex_math_double_backslash
->          , Ext_latex_macros
->          , Ext_grid_tables
->          ])
+>   { writerExtensions =
+>       let
+>         defaults = writerExtensions defaultHakyllWriterOptions
+> 
+>         exts =
+>           [ Ext_tex_math_dollars
+>           , Ext_tex_math_double_backslash
+>           , Ext_latex_macros
+>           , Ext_grid_tables
+>           ]
+>       in
+>         foldr enableExtension defaults exts
 >
 >   , writerHTMLMathMethod = MathJax ""
 >   }
