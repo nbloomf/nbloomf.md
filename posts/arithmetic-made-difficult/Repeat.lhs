@@ -10,11 +10,11 @@ slug: repeat
 >   ( repeat, _test_repeat, main_repeat
 >   ) where
 > 
+> import Prelude ()
 > import Booleans
 > import DisjointUnions
 > import NaturalNumbers
 > import Plus
-> 
 > import Lists
 > import HeadAndTail
 > import Snoc
@@ -30,65 +30,59 @@ slug: repeat
 > import Filter
 > import Elt
 > import Count
-> 
-> import Prelude ()
-> import Test.QuickCheck
-> import Text.Show.Functions
 
 So far we've defined a bunch of functions that operate on lists, but still only one that can create one out of nothing, namely $\range$. ($\tails$ and $\inits$ create lists, but only if we have one to start with.) Today we'll nail down another list-creating utility, $\repeat$.
 
 <div class="result">
 <div class="defn"><p>
-Let $A$ be a set, and define $f : A \rightarrow \ast + A \times A$ by $f(x) = (x,x)$. Now define $\repeat : \nats \times A \rightarrow \lists{A}$ by $$\repeat(n,a) = \unfoldN(f,n,a).$$
-</p></div>
-</div>
-
-We can implement $\repeat$ in Haskell using the definition:
-
-> repeat' :: (List t, Equal a, Natural n) => n -> a -> t a
-> repeat' n a = unfoldN f n a
->   where
->     f x = rgt (x,x)
-
-But the next result suggests another way.
-
-<div class="result">
-<div class="thm"><p>
-Let $A$ be a set. For all $a \in A$ and $k \in \nats$ we have the following.
-
-1. $\repeat(\zero,a) = \nil$.
-2. $\repeat(\next(k),a) = \cons(a,\repeat(k,a))$.
-</p></div>
-
-<div class="proof"><p>
-1. Note that
-$$\begin{eqnarray*}
- &   & \repeat(\zero,a) \\
- & = & \unfoldN(f,\zero,a) \\
- & = & \nil
-\end{eqnarray*}$$
-as claimed.
-2. Note that
-$$\begin{eqnarray*}
- &   & \repeat(\next(k),a) \\
- & = & \unfoldN(f,\next(k),a) \\
- & = & \cons(a,\unfoldN(f,k,a)) \\
- & = & \cons(a,\repeat(k,a))
-\end{eqnarray*}$$
-as claimed.
-</p></div>
-</div>
+Let $A$ be a set, and define $f : A \rightarrow 1 + A \times A$ by $f(x) = \rgt((x,x))$. Now define $\repeat : \nats \rightarrow {\lists{A}}^A$ by $$\repeat(n)(a) = \unfoldN(f)(n,a).$$
 
 In Haskell:
 
-> repeat :: (List t, Equal a, Natural n) => n -> a -> t a
-> repeat n a = case unnext n of
->   Left () -> nil
->   Right k -> cons a (repeat k a)
+> repeat :: (List t, Natural n) => n -> a -> t a
+> repeat n a = unfoldN f n a
+>   where
+>     f x = rgt (x,x)
+
+</p></div>
+</div>
+
+Since $\repeat$ is defined as an unfoldN, it is the unique solution to a system of functional equations.
+
+<div class="result">
+<div class="corollary"><p>
+Let $A$ be a set. Then $\repeat$ is the unique map $f : \nats \rightarrow {\lists{A}}^A$ satisfying the following equations for all $n \in \nats$ and $a \in A$.
+$$\left\{\begin{array}{l}
+ f(\zero)(a) = \nil \\
+ f(\next(n))(a) = \cons(a,f(n)(a))
+\end{array}\right.$$
+</p></div>
+
+<div class="test"><p>
+
+> _test_repeat_zero :: (List t, Equal a, Natural n, Equal n, Equal (t a))
+>   => t a -> n -> Test (a -> Bool)
+> _test_repeat_zero t k =
+>   testName "repeat(zero,a) == nil" $
+>   \a -> eq
+>     (repeat (zero `withTypeOf` k) a)
+>     (nil `withTypeOf` t)
+> 
+> 
+> _test_repeat_next :: (List t, Equal a, Natural n, Equal n, Equal (t a))
+>   => t a -> n -> Test (n -> a -> Bool)
+> _test_repeat_next t _ =
+>   testName "repeat(next(n),a) == cons(a,repeat(n,a))" $
+>   \n a -> eq
+>     (repeat (next n) a)
+>     ((cons a (repeat n a)) `withTypeOf` t)
+
+</p></div>
+</div>
 
 $\repeat$ is kind of boring. I'm not sure if we'll actually need these, but here are some interactions using $\repeat$.
 
-First, $\repeat$ and $\length$:
+$\repeat$ and $\length$.
 
 <div class="result">
 <div class="thm"><p>
@@ -111,9 +105,19 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_repeat_length :: (List t, Equal a, Natural n, Equal n, Equal (t a))
+>   => t a -> n -> Test (n -> a -> Bool)
+> _test_repeat_length t _ =
+>  testName "length(repeat(n,a)) == n" $
+>  \n a -> eq (length (repeat n a `withTypeOf` t)) n
+
+</p></div>
 </div>
 
-$\repeat$ and $\map$:
+$\repeat$ and $\map$.
 
 <div class="result">
 <div class="thm"><p>
@@ -138,9 +142,21 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_repeat_map :: (List t, Equal a, Equal b, Natural n, Equal n, Equal (t b))
+>   => t a -> t b -> n -> Test ((a -> b) -> n -> a -> Bool)
+> _test_repeat_map t _ _ =
+>   testName "map(f)(repeat(n,a)) == repeat(n,f(a))" $
+>   \f k a -> eq
+>     (repeat k (f a))
+>     (map f (repeat k a `withTypeOf` t))
+
+</p></div>
 </div>
 
-$\repeat$ and $\nplus$:
+$\repeat$ and $\nplus$.
 
 <div class="result">
 <div class="thm"><p>
@@ -166,37 +182,69 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_repeat_plus :: (List t, Equal a, Natural n, Equal n, Equal (t a))
+>   => t a -> n -> Test (n -> n -> a -> Bool)
+> _test_repeat_plus t _ =
+>   testName "repeat(plus(m,n),a)) == cat(repeat(m,a),repeat(n,a))" $
+>   \m n a -> eq
+>     ((repeat (plus m n) a) `withTypeOf` t)
+>     (cat (repeat m a) (repeat n a))
+
+</p></div>
 </div>
 
-Finally, $\repeat$ and $\rev$:
+$\repeat$ and $\snoc$.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set. For all $n \in \nats$ and $a \in A$, we have the following.
-
-1. $\snoc(a,\repeat(n,a)) = \repeat(\next(n),a).$$
-2. $\rev(\repeat(n,a)) = \repeat(n,a)$.
+Let $A$ be a set. For all $n \in \nats$ and $a \in A$, we have $$\snoc(a,\repeat(n,a)) = \repeat(\next(n),a).$$
 </p></div>
 
 <div class="proof"><p>
-1. We proceed by induction on $n$. For the base case $n = \zero$, we have
+We proceed by induction on $n$. For the base case $n = \zero$, we have
 $$\begin{eqnarray*}
- &   & \snoc(a,\repeat(\zero,a)) \\
+ &   & \snoc(a,\repeat(\zero)(a)) \\
  & = & \snoc(a,\nil) \\
  & = & \cons(a,\nil) \\
- & = & \cons(a,\repeat(\zero,a)) \\
- & = & \repeat(\next(\zero),a)
+ & = & \cons(a,\repeat(\zero)(a)) \\
+ & = & \repeat(\next(n))(a)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $n$. Now we have
 $$\begin{eqnarray*}
- &   & \snoc(a,\repeat(\next(n),a)) \\
- & = & \snoc(a,\cons(a,\repeat(n,a))) \\
- & = & \cons(a,\snoc(a,\repeat(n,a))) \\
- & = & \cons(a,\repeat(\next(n),a)) \\
- & = & \repeat(\next(\next(n)),a)
+ &   & \snoc(a,\repeat(\next(n))(a)) \\
+ & = & \snoc(a,\cons(a,\repeat(n)(a))) \\
+ & = & \cons(a,\snoc(a,\repeat(n)(a))) \\
+ & = & \cons(a,\repeat(\next(n))(a)) \\
+ & = & \repeat(\next(\next(n)))(a)
 \end{eqnarray*}$$
 as needed.
-2. We proceed by induction on $n$. For the base case $n = \zero$, we have
+</p></div>
+
+<div class="test"><p>
+
+> _test_repeat_snoc :: (List t, Equal a, Natural n, Equal n, Equal (t a))
+>   => t a -> n -> Test (n -> a -> Bool)
+> _test_repeat_snoc t _ =
+>   testName "snoc(a,repeat(n)(a)) == repeat(next(n))(a)" $
+>   \n a -> eq
+>     (snoc a ((repeat n a) `withTypeOf` t))
+>     (repeat (next n) a)
+
+</p></div>
+</div>
+
+$\repeat$ and $\rev$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $n \in \nats$ and $a \in A$, we have $$\rev(\repeat(n,a)) = \repeat(n,a).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by induction on $n$. For the base case $n = \zero$, we have
 $$\begin{eqnarray*}
  &   & \rev(\repeat(\zero,a)) \\
  & = & \rev(\nil) \\
@@ -213,76 +261,26 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_repeat_rev :: (List t, Equal a, Natural n, Equal n, Equal (t a))
+>   => t a -> n -> Test (n -> a -> Bool)
+> _test_repeat_rev t _ =
+>   testName "rev(repeat(n,a)) == repeat(n,a)" $
+>   \n a -> eq
+>     (rev (repeat n a))
+>     (repeat n a `withTypeOf` t)
+
+</p></div>
 </div>
 
 
 Testing
 -------
 
-Here are our property tests for $\repeat$:
+Suite:
 
-> _test_repeat_alt :: (List t, Equal a, Natural n, Equal n, Equal (t a))
->   => t a -> n -> Test (n -> a -> Bool)
-> _test_repeat_alt t _ =
->  testName "repeat'(n,a) == repeat(n,a)" $
->  \k a -> let
->    rna = repeat k a `withTypeOf` t
->  in
->    eq (repeat' k a) rna
-> 
-> 
-> _test_repeat_length :: (List t, Equal a, Natural n, Equal n, Equal (t a))
->   => t a -> n -> Test (n -> a -> Bool)
-> _test_repeat_length t _ =
->  testName "length(repeat(n,a)) == n" $
->  \k a -> let
->    rka = repeat k a `withTypeOf` t
->  in
->    eq (length rka) k
-> 
-> 
-> _test_repeat_map :: (List t, Equal a, Equal b, Natural n, Equal n, Equal (t b))
->   => t a -> t b -> n -> Test ((a -> b) -> n -> a -> Bool)
-> _test_repeat_map t _ _ =
->  testName "map(f)(repeat(n,a)) == repeat(n,f(a))" $
->  \f k a -> let
->    rka = repeat k a `withTypeOf` t
->  in
->    eq (repeat k (f a)) (map f rka)
-> 
-> 
-> _test_repeat_plus :: (List t, Equal a, Natural n, Equal n, Equal (t a))
->   => t a -> n -> Test (n -> n -> a -> Bool)
-> _test_repeat_plus t _ =
->  testName "repeat(plus(m,n),a)) == cat(repeat(m,a),repeat(n,a))" $
->  \m n a -> let
->    rma = repeat m a `withTypeOf` t
->  in
->    eq (repeat (plus m n) a) (cat rma (repeat n a))
-> 
-> 
-> _test_repeat_snoc :: (List t, Equal a, Natural n, Equal n, Equal (t a))
->   => t a -> n -> Test (n -> a -> Bool)
-> _test_repeat_snoc t _ =
->  testName "snoc(a,repeat(n,a)) == repeat(next(n),a)" $
->  \n a -> let
->    rna = repeat n a `withTypeOf` t
->  in
->    eq (snoc a rna) (repeat (next n) a)
-> 
-> 
-> _test_repeat_rev :: (List t, Equal a, Natural n, Equal n, Equal (t a))
->   => t a -> n -> Test (n -> a -> Bool)
-> _test_repeat_rev t _ =
->  testName "rev(repeat(n,a)) == repeat(n,a)" $
->  \n a -> let
->    rna = repeat n a `withTypeOf` t
->  in
->    eq (rev rna) rna
-
-And the suite:
-
-> -- run all tests for repeat
 > _test_repeat ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName b, Equal b, Show b, Arbitrary b, CoArbitrary b
@@ -299,14 +297,15 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_repeat_alt t n)
+>   runTest args (_test_repeat_zero t n)
+>   runTest args (_test_repeat_next t n)
 >   runTest args (_test_repeat_length t n)
 >   runTest args (_test_repeat_map t u n)
 >   runTest args (_test_repeat_plus t n)
 >   runTest args (_test_repeat_snoc t n)
 >   runTest args (_test_repeat_rev t n)
 
-And ``main``:
+Main:
 
 > main_repeat :: IO ()
 > main_repeat = do
