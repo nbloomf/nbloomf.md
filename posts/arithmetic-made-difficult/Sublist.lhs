@@ -42,7 +42,7 @@ Blah blah, define $\sublist$ like this.
 
 <div class="result">
 <div class="defn"><p>
-Let $A$ be a set. Define $\psi : A \times \bool \rightarrow \bool$ by $$\psi(a,p) = \btrue,$$ and $\chi : A \times A \times \bool \times \bool \rightarrow \lists{A}$ by $$\chi(a,b,p,q) = \bif{\beq(a,b)}{p}{q}.$$ We now define $\sublist : \lists{A} \times \lists{A} \rightarrow \bool$ by $$\sublist(x,y) = \dfoldr{\isnil}{\psi}{\chi}(y,x).$$
+Let $A$ be a set. Define $\psi : A \times \bool \rightarrow \bool$ by $$\psi(a,p) = \btrue,$$ and $\chi : A \times A \times \lists{A} \times \bool \times \bool \rightarrow \lists{A}$ by $$\chi(a,b,y,p,q) = \bif{\beq(a,b)}{p}{q}.$$ We now define $\sublist : \lists{A} \times \lists{A} \rightarrow \bool$ by $$\sublist(x,y) = \dfoldr{\isnil}{\psi}{\chi}(y,x).$$
 
 In Haskell:
 
@@ -51,7 +51,7 @@ In Haskell:
 >   where
 >     delta y = isNil y
 >     psi _ _ = True
->     chi a b p q = if eq a b then p else q
+>     chi a b _ p q = if eq a b then p else q
 
 </p></div>
 </div>

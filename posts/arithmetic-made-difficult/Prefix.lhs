@@ -29,7 +29,7 @@ Intuitively, $\prefix$ will detect when one list is an initial segment of anothe
 
 <div class="result">
 <div class="defn"><p>
-Let $A$ be a set. Define $\delta : \lists{A} \rightarrow \bool$ by $\delta(y) = \btrue$, define $\psi : A \times \bool \rightarrow \bool$ by $\psi(a,p) = \bfalse$, and define $\chi : A \times A \times \bool \times \bool \rightarrow \lists{A}$ by $$\chi(a,b,p,q) = \bif{\beq(a,b)}{p}{\bfalse}.$$ Now define $$\prefix : \lists{A} \times \lists{A} \rightarrow \bool$$ by $$\prefix = \dfoldr{\delta}{\psi}{\chi}.$$
+Let $A$ be a set. Define $\delta : \lists{A} \rightarrow \bool$ by $\delta(y) = \btrue$, define $\psi : A \times \bool \rightarrow \bool$ by $\psi(a,p) = \bfalse$, and define $\chi : A \times A \times \lists{A} \times \bool \times \bool \rightarrow \lists{A}$ by $$\chi(a,b,y,p,q) = \bif{\beq(a,b)}{p}{\bfalse}.$$ Now define $$\prefix : \lists{A} \times \lists{A} \rightarrow \bool$$ by $$\prefix = \dfoldr{\delta}{\psi}{\chi}.$$
 
 In Haskell:
 
@@ -38,7 +38,7 @@ In Haskell:
 >   where
 >     delta _ = True
 >     psi _ _ = False
->     chi a b p _ = if eq a b then p else False
+>     chi a b _ p _ = if eq a b then p else False
 
 </p></div>
 </div>

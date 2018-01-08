@@ -35,7 +35,7 @@ Hence the name $\zip$ -- it looks like a zipper in action. A big question has to
 
 <div class="result">
 <div class="defn"><p>
-Let $A$ and $B$ be sets. Define $\delta : \lists{B} \rightarrow \lists{A \times B}$ by $$\delta(y) = \nil,$$ $\psi : A \times \lists{A \times B} \rightarrow \lists{A \times B}$ by $$\psi(a,z) = \nil,$$ and $\chi : A \times B \times \lists{A \times B} \times \lists{A \times B} \rightarrow \lists{A \times B}$ by $$\chi(a,b,z,w) = \cons((a,b),z).$$ Now define $$\zip : \lists{A} \times \lists{B} \rightarrow \lists{A \times B}$$ by $$\zip = \dfoldr{\delta}{\psi}{\chi}.$$
+Let $A$ and $B$ be sets. Define $\delta : \lists{B} \rightarrow \lists{A \times B}$ by $$\delta(y) = \nil,$$ $\psi : A \times \lists{A \times B} \rightarrow \lists{A \times B}$ by $$\psi(a,z) = \nil,$$ and $\chi : A \times B \times \lists{B} \times \lists{A \times B} \times \lists{A \times B} \rightarrow \lists{A \times B}$ by $$\chi(a,b,y,z,w) = \cons((a,b),z).$$ Now define $$\zip : \lists{A} \times \lists{B} \rightarrow \lists{A \times B}$$ by $$\zip = \dfoldr{\delta}{\psi}{\chi}.$$
 
 In Haskell:
 
@@ -44,7 +44,7 @@ In Haskell:
 >   where
 >     delta _ = nil
 >     psi _ _ = nil
->     chi a b z _ = cons (a,b) z
+>     chi a b _ z _ = cons (a,b) z
 
 </p></div>
 </div>

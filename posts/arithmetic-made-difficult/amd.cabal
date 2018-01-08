@@ -56,7 +56,8 @@ library
     Elt,
     Count,
     Repeat,
-    Sublist
+    Sublist,
+    Infix
   build-depends:
     base == 4.*,
     QuickCheck
@@ -1027,27 +1028,56 @@ test-suite amd-sublist
     Count,
     Repeat
 
-
-
-
-
-
-
-
-
 test-suite amd-infix
   default-language: Haskell2010
   type: exitcode-stdio-1.0
   main-is: Infix.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Infix.main_isInfix
-  other-modules: Booleans, Lists, NaturalNumbers, Unary,
-                 Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
-                 Times, At, Map, UnfoldN, MaxAndMin, Range,
-                 Tuples, Length, Zip, AllAndAny, Filter,
-                 LongestCommonPrefix, TailsAndInits, Elt,
-                 Count, Prefix, Repeat, Sublist, SimpleRecursion,
-                 BailoutRecursion, DisjointUnions, HeadAndTail, LeftFold, Snoc, DoubleFold, Predicates, ConsumingFold
+  other-modules:
+    Booleans,
+    Predicates,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo,
+    MaxAndMin,
+    Lists,
+    HeadAndTail,
+    LeftFold,
+    DoubleFold,
+    ConsumingFold,
+    Snoc,
+    Reverse,
+    Cat,
+    At,
+    Length,
+    Map,
+    UnfoldN,
+    Range,
+    Zip,
+    Prefix,
+    LongestCommonPrefix,
+    AllAndAny,
+    TailsAndInits,
+    Filter,
+    Elt,
+    Count,
+    Repeat,
+    Sublist
+
+
+
+
+
+
+
+
+
 
 test-suite amd-select
   default-language: Haskell2010

@@ -27,7 +27,7 @@ Now to define $\zipPad$, an alternate interpretation of $\zip$.
 
 <div class="result">
 <div class="defn"><p>
-Let $A$ and $B$ be sets, with $u \in A$ and $v \in B$. Define $\delta : \lists{B} \rightarrow \lists{A \times B}$ by $$\delta(y) = \map(\tupL(u))(y),$$ $\psi : A \times \lists{A \times B} \rightarrow \lists{A \times B}$ by $$\psi(a,z) = \cons((a,v),z),$$ and $\chi : A \times B \times \lists{A \times B} \times \lists{A \times B} \rightarrow \lists{A \times B}$ by $$\chi(a,b,z,w) = \cons((a,b),z).$$ We then define $\zipPad(u,v) : \lists{A} \times \lists{B} \rightarrow \lists{A \times B}$ by $$\zipPad(u,v) = \dfoldr{\delta}{\psi}{\chi}.$$
+Let $A$ and $B$ be sets, with $u \in A$ and $v \in B$. Define $\delta : \lists{B} \rightarrow \lists{A \times B}$ by $$\delta(y) = \map(\tupL(u))(y),$$ $\psi : A \times \lists{A \times B} \rightarrow \lists{A \times B}$ by $$\psi(a,z) = \cons((a,v),z),$$ and $\chi : A \times B \times \lists{B} \times \lists{A \times B} \times \lists{A \times B} \rightarrow \lists{A \times B}$ by $$\chi(a,b,y,z,w) = \cons((a,b),z).$$ We then define $\zipPad(u,v) : \lists{A} \times \lists{B} \rightarrow \lists{A \times B}$ by $$\zipPad(u,v) = \dfoldr{\delta}{\psi}{\chi}.$$
 
 In Haskell:
 
@@ -36,7 +36,7 @@ In Haskell:
 >   where
 >     delta y = map (tupL u) y
 >     psi a z = cons (a,v) z
->     chi a b z _ = cons (a,b) z
+>     chi a b _ z _ = cons (a,b) z
 
 </p></div>
 </div>

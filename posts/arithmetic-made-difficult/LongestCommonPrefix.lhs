@@ -26,7 +26,7 @@ Today we'll compute the *longest common prefix* of two lists (and while we're at
 
 <div class="result">
 <div class="defn"><p>
-Let $A$ be a set. Define $\delta : \lists{A} \rightarrow \lists{A}$ by $\delta(y) = \nil$, $\psi : A \times \lists{A} \rightarrow \lists{A}$ by $$\psi(a,x) = \nil,$$ and $\chi : A \times A \times \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\chi(a,b,z,w) = \bif{\beq(a,b)}{cons(a,z)}{\nil}.$$ Now define $\lcp : \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\lcp = \dfoldr{\delta}{\psi}{\chi}.$$
+Let $A$ be a set. Define $\delta : \lists{A} \rightarrow \lists{A}$ by $\delta(y) = \nil$, $\psi : A \times \lists{A} \rightarrow \lists{A}$ by $$\psi(a,x) = \nil,$$ and $\chi : A \times A \times \lists{A} \times \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\chi(a,b,y,z,w) = \bif{\beq(a,b)}{cons(a,z)}{\nil}.$$ Now define $\lcp : \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\lcp = \dfoldr{\delta}{\psi}{\chi}.$$
 
 In Haskell:
 
@@ -35,7 +35,7 @@ In Haskell:
 >   where
 >     delta _ = nil
 >     psi _ _ = nil
->     chi a b z _ = if eq a b then cons a z else nil
+>     chi a b _ z _ = if eq a b then cons a z else nil
 
 </p></div>
 </div>

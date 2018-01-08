@@ -10,11 +10,11 @@ slug: infix
 >   ( isInfix, _test_isInfix, main_isInfix
 >   ) where
 > 
+> import Prelude ()
 > import Booleans
 > import Tuples
 > import NaturalNumbers
 > import Plus
-> 
 > import Lists
 > import HeadAndTail
 > import Snoc
@@ -30,16 +30,12 @@ slug: infix
 > import Count
 > import Repeat
 > import Sublist
-> 
-> import Prelude ()
-> import Test.QuickCheck
-> import Text.Show.Functions
 
 Today we'll nail down ``infix``, a variant on ``sublist``.
 
 <div class="result">
 <div class="defn"><p>
-Let $A$ be a set. We define $\infix : \lists{A} \times \lists{A} \rightarrow \bool$ by $$\infix(x,y) = \any(\prefix(x,-),\tails(y)).$$
+Let $A$ be a set. We define $\infix : \lists{A} \times \lists{A} \rightarrow \bool$ by $$\infix(x,y) = \any(\prefix(x,-))(\tails(y)).$$
 
 In Haskell:
 
@@ -50,6 +46,8 @@ In Haskell:
 </div>
 
 (``infix`` is a reserved word in Haskell, so we'll call this function ``isInfix``.)
+
+(@@@)
 
 The following result suggests another implementation.
 
@@ -516,9 +514,8 @@ Here are our property tests for $\infix$:
 >     then sublist x y
 >     else True
 
-And the suite:
+Suite:
 
-> -- run all tests for infix
 > _test_isInfix ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
@@ -549,7 +546,7 @@ And the suite:
 >   runTest args (_test_infix_suffix t)
 >   runTest args (_test_infix_sublist t)
 
-And ``main``:
+Main:
 
 > main_isInfix :: IO ()
 > main_isInfix = do
