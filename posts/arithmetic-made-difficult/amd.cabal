@@ -54,7 +54,8 @@ library
     TailsAndInits,
     Filter,
     Elt,
-    Count
+    Count,
+    Repeat
   build-depends:
     base == 4.*,
     QuickCheck
@@ -940,25 +941,56 @@ test-suite amd-count
     Filter,
     Elt
 
-
-
-
-
-
-
-
 test-suite amd-repeat
   default-language: Haskell2010
   type: exitcode-stdio-1.0
   main-is: Repeat.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Repeat.main_repeat
-  other-modules: Booleans, Lists, NaturalNumbers, Unary,
-                 Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
-                 Times, At, Map, UnfoldN, MaxAndMin, Range,
-                 Tuples, Length, Zip, AllAndAny, Filter,
-                 LongestCommonPrefix, TailsAndInits, Elt,
-                 Count, Prefix, SimpleRecursion, BailoutRecursion, DisjointUnions, HeadAndTail, LeftFold, Snoc, DoubleFold, Predicates, ConsumingFold
+  other-modules:
+    Booleans,
+    Predicates,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo,
+    MaxAndMin,
+    Lists,
+    HeadAndTail,
+    LeftFold,
+    DoubleFold,
+    ConsumingFold,
+    Snoc,
+    Reverse,
+    Cat,
+    At,
+    Length,
+    Map,
+    UnfoldN,
+    Range,
+    Zip,
+    Prefix,
+    LongestCommonPrefix,
+    AllAndAny,
+    TailsAndInits,
+    Filter,
+    Elt,
+    Count
+
+
+
+
+
+
+
+
+
 
 test-suite amd-sublist
   default-language: Haskell2010

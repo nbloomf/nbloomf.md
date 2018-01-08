@@ -292,21 +292,15 @@ $$\left\{\begin{array}{l}
 </p></div>
 </div>
 
-(@@@)
-
-
-
-Special cases.
+A special case.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set.
-
-2. $\count(a,\cons(b,\nil)) = \bif{\beq(a,b)}{\next(\zero)}{\zero}$.
+Let $A$ be a set, with $a,b \in A$. Then $$\count(a,\cons(b,\nil)) = \bif{\beq(a,b)}{\next(\zero)}{\zero}.$$
 </p></div>
 
 <div class="proof"><p>
-2. Note that
+Note that
 $$\begin{eqnarray*}
  &   & \count(a,\cons(b,\nil)) \\
  & = & \foldl{\zero}{\varphi(a)}(\cons(b,\nil)) \\
@@ -316,47 +310,89 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_count_one :: (List t, Equal a, Natural n, Equal n)
+>   => t a -> n -> Test (a -> a -> Bool)
+> _test_count_one t k =
+>   testName "count(a,cons(b,nil)) == if(eq(a,b),next(zero),zero)" $
+>   \a b -> eq
+>     (count a (cons b (nil `withTypeOf` t)))
+>     (if eq a b then (next zero `withTypeOf` k) else zero)
+
+</p></div>
 </div>
 
-$\count$ respects $\rev$ and $\cat$:
+$\count$ interacts with $\snoc$.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set. For all $a \in A$ and $x,y \in \lists{A}$ we have the following.
-
-1. $\count(a,\snoc(b,x)) = \count(a,\cons(b,x))$.
-2. $\count(a,\rev(x)) = \count(a,x)$.
-3. $\count(a,\cons(b,x)) = \bif{\beq(a,b)}{\next(\count(a,x))}{\count(a,x)}$.
-4. $\count(a,\cat(x,y)) = \nplus(\count(a,x),\count(a,y))$.
+Let $A$ be a set with $a \in A$. For all $b \in A$ and $x \in \lists{A}$, we have $$\count(a)(\snoc(b,x)) = \bif{\beq(a,b)}{\next(\count(a)(x))}{\count(a)(x)}.$$
 </p></div>
 
 <div class="proof"><p>
-1. Note that
+Note that
 $$\begin{eqnarray*}
- &   & \count(a,\snoc(b,x)) \\
- & = & \foldr{\zero}{\varphi(a)}(\snoc(b,x)) \\
- & = & \foldr{\zero}{\varphi(a)}(\cons(b,x)) \\
- & = & \count(a,\cons(b,x))
+ &   & \count(a)(\snoc(b,x)) \\
+ & = & \addcount(a)(\zero,\snoc(b,x)) \\
+ & = & \bif{\beq(a,b)}{\next(\addcount(a)(\zero,x))}{\addcount(a)(\zero,x)} \\
+ & = & \bif{\beq(a,b)}{\next(\count(a)(x))}{\count(a)(x)}
 \end{eqnarray*}$$
 as claimed.
-2. We have
+</p></div>
+
+<div class="test"><p>
+
+> _test_count_snoc :: (List t, Equal a, Natural n, Equal n)
+>   => t a -> n -> Test (a -> a -> t a -> Bool)
+> _test_count_snoc _ k =
+>   testName "count(a)(snoc(b,x)) == count(a)(if(eq(a,b),next(k),k),x)" $
+>   \a b x -> eq
+>     ((count a (snoc b x)) `withTypeOf` k)
+>     (if eq a b then next (count a x) else count a x)
+
+</p></div>
+</div>
+
+$\count$ interacts with $\rev$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $a \in A$. For all $x \in \lists{A}$ we have $$\count(a)(\rev(x)) = \count(a)(x).$$
+</p></div>
+
+<div class="proof"><p>
+Note that
 $$\begin{eqnarray*}
- &   & \count(a,\rev(x)) \\
- & = & \foldr{\zero}{\varphi(a)}(\rev(x)) \\
- & = & \foldr{\zero}{\varphi(a)}(x) \\
- & = & \count(a,x)
+ &   & \count(a)(\rev(x)) \\
+ & = & \addcount(a)(\zero,\rev(x)) \\
+ & = & \addcount(a)(\zero,\x) \\
+ & = & \count(a)(x)
 \end{eqnarray*}$$
 as claimed.
-3. Note that
-$$\begin{eqnarray*}
- &   & \count(a,\cons(b,x)) \\
- & = & \foldr{\zero}{\varphi(a)}(\cons(b,x)) \\
- & = & \varphi(a)(b,\foldr{\zero}{\varphi(a)}(x)) \\
- & = & \varphi(a)(b,\count(a,x)) \\
- & = & \bif{\beq(a,b)}{\next(\count(a,x))}{\count(a,x)}
-\end{eqnarray*}$$
-as claimed.
-4. We proceed by list induction on $x$. For the base case $x = \nil$, we have
+</p></div>
+
+<div class="test"><p>
+
+> _test_count_rev :: (List t, Equal a, Natural n, Equal n)
+>   => t a -> n -> Test (a -> t a -> Bool)
+> _test_count_rev _ k =
+>   testName "count(a)(rev(x)) == count(a)(x)" $
+>   \a x -> eq (count a (rev x)) ((count a x) `withTypeOf` k)
+
+</p></div>
+</div>
+
+$\count$ interacts with $\cat$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $a \in A$ and $x,y \in \lists{A}$ we have $$\count(a,\cat(x,y)) = \nplus(\count(a,x),\count(a,y)).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \count(a,\cat(x,y)) \\
  & = & \count(a,\cat(\nil,y)) \\
@@ -388,9 +424,21 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_count_cat :: (List t, Equal a, Natural n, Equal n)
+>    => t a -> n -> Test (a -> t a -> t a -> Bool)
+> _test_count_cat _ k =
+>   testName "count(a,cat(x,y)) == plus(count(a,x),count(a,y))" $
+>   \a x y -> eq
+>     ((count a (cat x y)) `withTypeOf` k)
+>     (plus (count a x) (count a y))
+
+</p></div>
 </div>
 
-$\count$ is a $\length$:
+$\count$ is a $\length$.
 
 <div class="result">
 <div class="thm"><p>
@@ -428,9 +476,21 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_count_length :: (List t, Equal a, Natural n, Equal n)
+>   => t a -> n -> Test (a -> t a -> Bool)
+> _test_count_length t k =
+>   testName "count(a,x) == length(filter(eq(a,-),x))" $
+>   \a x -> eq
+>     (count a x `withTypeOf` k)
+>     (length (filter (eq a) x))
+
+</p></div>
 </div>
 
-And $\count$ interacts with $\map(f)$ if $f$ is injective.
+$\count$ interacts with $\map(f)$ when $f$ is injective.
 
 <div class="result">
 <div class="thm"><p>
@@ -471,59 +531,6 @@ as needed.
 Testing
 -------
 
-
-> 
-> 
-> _test_count_one :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (a -> Bool)
-> _test_count_one t k =
->  testName "count(a,cons(a,nil)) == next(zero)" $
->  \a -> let
->    nil' = nil `withTypeOf` t
->    one  = next zero `withTypeOf` k
->  in
->    eq (count a (cons a nil')) one
-> 
-> 
-> _test_count_rev :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (a -> t a -> Bool)
-> _test_count_rev t k =
->  testName "count(a,cons(a,nil)) == next(zero)" $
->  \a x -> let
->    cx = count a x `withTypeOf` k
->  in
->    eq (count a (rev x)) cx
-> 
-> 
-> _test_count_snoc_cons :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (a -> a -> t a -> Bool)
-> _test_count_snoc_cons t k =
->  testName "count(a,cons(a,nil)) == next(zero)" $
->  \a b x -> let
->    cbx = count a (cons b x) `withTypeOf` k
->  in
->    eq (count a (snoc b x)) cbx
-> 
-> 
-> _test_count_cat :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (a -> t a -> t a -> Bool)
-> _test_count_cat t k =
->  testName "count(a,cat(x,y)) == plus(count(a,x),count(a,y))" $
->  \a x y -> let
->    cx = count a x `withTypeOf` k
->  in
->    eq (count a (cat x y)) (plus cx (count a y))
-> 
-> 
-> _test_count_length :: (List t, Equal a, Natural n, Equal n)
->   => t a -> n -> Test (a -> t a -> Bool)
-> _test_count_length t k =
->  testName "count(a,x) == length(filter(eq(a,-),x))" $
->  \a x -> let
->    cx = count a x `withTypeOf` k
->  in
->    eq cx (length (filter (eq a) x))
-
 Suite:
 
 > _test_count ::
@@ -551,9 +558,8 @@ Suite:
 > 
 >   runTest args (_test_count_nil t n)
 >   runTest args (_test_count_cons t n)
-> 
 >   runTest args (_test_count_one t n)
->   runTest args (_test_count_snoc_cons t n)
+>   runTest args (_test_count_snoc t n)
 >   runTest args (_test_count_rev t n)
 >   runTest args (_test_count_cat t n)
 >   runTest args (_test_count_length t n)
