@@ -444,6 +444,23 @@ as needed.
 </p></div>
 </div>
 
+Note that $\rev$ is a nontrivial involution on $\lists{A}$ -- in particular, that means it is a bijection on $\lists{A}$ other than the identity. When this happens on a type with an induction principle, if we can show that our nontrivial bijection is actually an isomorphism, we get an alternative induction principle (almost) for free. And indeed, $\rev$ is an isomorphism taking $\cons$ to $\snoc$.
+
+<div class="result">
+<div class="thm"><p>
+(Snoc Induction.) Let $A$ be a set, and let $f : \lists{A} \rightarrow B$ be a map. Suppose $C \subseteq B$ is a subset with the property that
+
+1. $f(\nil) \in C$
+2. If $f(x) \in C$ and $a \in A$, then $f(\snoc(a,x)) \in C$.
+
+Then we have $f(x) \in C$ for all $x \in \lists{A}$.
+</p></div>
+
+<div class="proof"><p>
+This proof is analogous to that of the ordinary list induction principle. Define $T \subseteq \lists{A}$ by $$T = \{ x \in \lists{A} \mid f(x) \in C \}.$$ Note that $\nil \in T$ and if $x \in T$ and $a \in A$ then $\snoc(a,x) \in T$; that is, $(T,\nil,\snoc)$ is an $A$-iterative set. We define $\Theta : \lists{A} \rightarrow T$ to be the fold $$\Theta = \foldr{\nil}{\snoc}.$$ Now $\rev : T \rightarrow \lists{A}$ is an $A$-iterative homomorphism since $$\rev(\cons(a,x)) = \snoc(a,\rev(x)).$$ Thus $\rev \circ \Theta$ is an $A$-inductive homomorphism, which by uniqueness must be the identity on $\lists{A}$. If $x \in \lists{A}$, we have $$x = \rev(\rev(x)) = \rev(\id(\rev(x))) = \rev(\rev(\Theta(\rev(x))) = \Theta(\rev(x)) \in T,$$ so that $T = \lists{A}$ as claimed.
+</p></div>
+</div>
+
 
 Testing
 -------
