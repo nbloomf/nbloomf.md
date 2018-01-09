@@ -38,6 +38,7 @@ library
     DoubleFold,
     ConsumingFold,
     BailoutFold,
+    ListNatFold,
     Snoc,
     Reverse,
     Cat,
@@ -58,7 +59,8 @@ library
     Count,
     Repeat,
     Sublist,
-    Infix
+    Infix,
+    Select
   build-depends:
     base == 4.*,
     QuickCheck
@@ -436,6 +438,20 @@ test-suite amd-bfoldr
     NaturalNumbers,
     Lists,
     HeadAndTail
+
+test-suite amd-lnfoldr
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: ListNatFold.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options: -main-is ListNatFold.main_lnfoldr
+  other-modules:
+    Booleans,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    Lists
 
 test-suite amd-snoc
   default-language: Haskell2010
@@ -1089,29 +1105,60 @@ test-suite amd-infix
     Repeat,
     Sublist
 
-
-
-
-
-
-
-
-
-
 test-suite amd-select
   default-language: Haskell2010
   type: exitcode-stdio-1.0
   main-is: Select.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Select.main_select
-  other-modules: Booleans, Lists, NaturalNumbers, Unary,
-                 Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
-                 Times, At, Map, UnfoldN, MaxAndMin, Range,
-                 Tuples, Length, Zip, AllAndAny, Filter,
-                 LongestCommonPrefix, TailsAndInits, Elt,
-                 Count, Prefix, Repeat, Choose, Sublist,
-                 SimpleRecursion, BailoutRecursion,
-                 MutatingRecursion, DisjointUnions, DoubleNaturalRecursion, HeadAndTail, LeftFold, Snoc, DoubleFold, ConsumingFold, Predicates
+  other-modules:
+    Booleans,
+    Predicates,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    DoubleNaturalRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo,
+    MaxAndMin,
+    Choose,
+    Lists,
+    HeadAndTail,
+    LeftFold,
+    DoubleFold,
+    ConsumingFold,
+    BailoutFold,
+    Snoc,
+    Reverse,
+    Cat,
+    At,
+    Length,
+    Map,
+    UnfoldN,
+    Range,
+    Zip,
+    Prefix,
+    LongestCommonPrefix,
+    AllAndAny,
+    TailsAndInits,
+    Filter,
+    Elt,
+    Count,
+    Repeat,
+    Sublist,
+    Infix
+
+
+
+
+
+
+
 
 test-suite amd-unique
   default-language: Haskell2010

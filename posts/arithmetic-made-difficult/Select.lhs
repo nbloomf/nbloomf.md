@@ -10,12 +10,12 @@ slug: select
 >   ( select, _test_select, main_select
 >   ) where
 > 
+> import Prelude ()
 > import Booleans
 > import Tuples
 > import NaturalNumbers
 > import Plus
 > import Choose
-> 
 > import Lists
 > import Reverse
 > import Length
@@ -31,10 +31,8 @@ slug: select
 > import Count
 > import Repeat
 > import Sublist
-> 
-> import Prelude ()
-> import Test.QuickCheck hiding (choose)
-> import Text.Show.Functions
+
+(@@@)
 
 Today we'll define a function, $\select$, which takes a natural number $n$ and a list $x$ and constructs the list of all length $n$ sublists of $x$. The signature of $\select$ should be $$\nats \times \lists{A} \rightarrow \lists{\lists{A}},$$ which matches several of our recursion operators. Which one to use? We'll try a right fold first -- to make the types work out, we have to say $$\select(n,x) = \foldr{\varepsilon}{\varphi}(x)(n)$$ for some appropriate $\varepsilon$ and $\varphi$. Now $\varepsilon$ needs to have signature $$\varepsilon : \nats \rightarrow \lists{\lists{A}}$$ and $\varphi$ should have signature $$\varphi : A \times \lists{\lists{A}}^\nats \rightarrow \nats \rightarrow \lists{\lists{A}}.$$
 
@@ -71,7 +69,7 @@ With this in mind, we define $\select$ as follows.
 
 <div class="result">
 <div class="defn"><p>
-Let $A$ be a set. Define $\varepsilon : \nats \rightarrow \lists{\lists{A}}$ by $$\varepsilon(k) = \bif{\iszero(k)}{\cons(\nil,\nil)}{\nil}$$ and define $\varphi : A \times \lists{\lists{A}}^\nats \rightarrow \nats \rightarrow \lists{\lists{A}}$ by $$\varphi(a,f)(k) = \bif{\iszero(k)}{\cons(\nil,\nil)}{\cat(\map(\cons(a,-))(f(\prev(k))),f(k))}.$$ Now define $\select : \nats \times \lists{A} \rightarrow \lists{\lists{A}}$ by $$\select(n,x) = \foldr{\varepsilon}{\varphi}(x)(n).$$
+Let $A$ be a set. Define $\varepsilon : \nats \rightarrow \lists{\lists{A}}$ by $$\varepsilon(k) = \bif{\iszero(k)}{\cons(\nil,\nil)}{\nil}$$ and define $\varphi : A \times \lists{\lists{A}}^\nats \rightarrow {\lists{\lists{A}}}^\nats$ by $$\varphi(a,f)(k) = \bif{\iszero(k)}{\cons(\nil,\nil)}{\cat(\map(\cons(a,-))(f(\prev(k))),f(k))}.$$ Now define $\select : \nats \times \lists{A} \rightarrow \lists{\lists{A}}$ by $$\select(n,x) = \foldr{\varepsilon}{\varphi}(x)(n).$$
 
 In Haskell:
 
@@ -89,45 +87,25 @@ In Haskell:
 </p></div>
 </div>
 
-Let's make sure $\select$ does what we expected.
+Since $\select$ is defined as a $\foldr{\ast}{\ast}$, it can be characterized as the unique solution to a system of functional equations.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set. For all $n \in \nats$, $a \in A$, and $x \in \lists{A}$ we have the following.
+Let $A$ be a set. $\select$ is the unique map $f : \nats \times \lists{A} \rightarrow \lists{\lists{A}}$ satisfying the following equations for all
 
 1. $\select(n,\nil) = \bif{\iszero(n)}{\cons(\nil,\nil)}{\nil}$.
 2. $\select(\zero,\cons(a,x)) = \cons(\nil,\nil)$.
 3. $\select(\next(n),\cons(a,x)) = \cat(\map(\cons(a,-))(\select(n,x)),\select(\next(n),x))$.
 </p></div>
 
-<div class="proof"><p>
-1. Note that
-$$\begin{eqnarray*}
- &   & \select(n,\nil) \\
- & = & \foldr{\varepsilon}{\varphi}(\nil)(n) \\
- & = & \varepsilon(n) \\
- & = & \bif{\iszero(n)}{\cons(\nil,\nil)}{\nil}
-\end{eqnarray*}$$
-as claimed.
-2. Note that
-$$\begin{eqnarray*}
- &   & \select(\zero,\cons(a,x)) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\zero) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\zero) \\
- & = & \cons(\nil,\nil)
-\end{eqnarray*}$$
-as claimed.
-3. Note that
-$$\begin{eqnarray*}
- &   & \select(\next(n),\cons(a,x)) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\next(n)) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\next(n)) \\
- & = & \cat(\map(\cons(a,-))(\foldr{\varepsilon}{\varphi}(x)(n)),\foldr{\varepsilon}{\varphi}(x)(\next(n)) \\
- & = & \cat(\map(\cons(a,-))(\select(n,x)),\select(\next(n),x))
-\end{eqnarray*}$$
-as claimed.
+<div class="test"><p>
+
+
+
 </p></div>
 </div>
+
+(@@@)
 
 A special case.
 

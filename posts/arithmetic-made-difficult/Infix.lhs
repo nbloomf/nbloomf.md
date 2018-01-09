@@ -83,7 +83,7 @@ $$\left\{\begin{array}{l}
 </p></div>
 </div>
 
-$\infix$ is an $\or$.
+$\infix$ is an $\bor$.
 
 <div class="result">
 <div class="thm"><p>
@@ -97,7 +97,7 @@ $$\begin{eqnarray*}
  & = & \isnil(x) \\
  & = & \bor(\isnil(x),\isnil(x)) \\
  & = & \bor(\prefix(x,\nil),\infix(x,\nil)) \\
- & = & \bof(\prefix(x,\nil),\infix(x,\tail(\nil)))
+ & = & \bor(\prefix(x,\nil),\infix(x,\tail(\nil)))
 \end{eqnarray*}$$
 as needed. If $y = \cons(b,u)$, we have
 $$\begin{eqnarray*}
