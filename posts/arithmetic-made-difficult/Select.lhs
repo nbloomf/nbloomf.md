@@ -17,6 +17,7 @@ slug: select
 > import Plus
 > import Choose
 > import Lists
+> import DoubleBailoutFold
 > import Reverse
 > import Length
 > import Map
@@ -32,82 +33,95 @@ slug: select
 > import Repeat
 > import Sublist
 
-(@@@)
-
-Today we'll define a function, $\select$, which takes a natural number $n$ and a list $x$ and constructs the list of all length $n$ sublists of $x$. The signature of $\select$ should be $$\nats \times \lists{A} \rightarrow \lists{\lists{A}},$$ which matches several of our recursion operators. Which one to use? We'll try a right fold first -- to make the types work out, we have to say $$\select(n,x) = \foldr{\varepsilon}{\varphi}(x)(n)$$ for some appropriate $\varepsilon$ and $\varphi$. Now $\varepsilon$ needs to have signature $$\varepsilon : \nats \rightarrow \lists{\lists{A}}$$ and $\varphi$ should have signature $$\varphi : A \times \lists{\lists{A}}^\nats \rightarrow \nats \rightarrow \lists{\lists{A}}.$$
-
-But what should $\varepsilon$ and $\varphi$ be? First, let's think about what $\select(n,\nil)$ means. The nil list has no positive length sublists, so we expect that
-$$\begin{eqnarray*}
- &   & \nil \\
- & = & \select(\next(n),\nil) \\
- & = & \foldr{\varepsilon}{\varphi}(\nil)(\next(n)) \\
- & = & \varepsilon(\next(n)).
-\end{eqnarray*}$$
-But the nil list has exactly one length zero sublist, namely $\nil$. So we also expect that
-$$\begin{eqnarray*}
- &   & \cons(\nil,\nil) \\
- & = & \select(\zero,\nil) \\
- & = & \foldr{\varepsilon}{\varphi}(\nil)(\zero) \\
- & = & \varepsilon(\zero).
-\end{eqnarray*}$$
-Now let's think about $\select(n,\cons(a,x))$. Every list (particularly every non-nil list) has exactly one length zero sublist, namely $\nil$. So we expect that
-$$\begin{eqnarray*}
- &   & \cons(\nil,\nil) \\
- & = & \select(\zero,\cons(a,x)) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\zero) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\zero).
-\end{eqnarray*}$$
-Meanwhile, the length $\next(n)$ sublists of $\cons(a,x)$ come in two flavors: those of the form $\cons(a,u)$ where $u$ is a length $n$ sublist of $x$, and the length $\next(n)$ sublists of $x$. So we expect that
-$$\begin{eqnarray*}
- &   & \cat(\map(\cons(a,-))(\select(n,x)),\select(\next(n),x) \\
- & = & \select(\next(n),\cons(a,x)) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\next(n)) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\next(n)) \\
- & = & \varphi(a,\select(-,x))(\next(n)).
-\end{eqnarray*}$$
-With this in mind, we define $\select$ as follows.
+Today we'll define a function, $\select$, which takes a natural number $n$ and a list $x$ and constructs the list of all length $n$ sublists of $x$. The signature of $\select$ should be $$\nats \times \lists{A} \rightarrow \lists{\lists{A}},$$ which matches several of our recursion operators. After trying a few, we'll use double bailout fold.
 
 <div class="result">
 <div class="defn"><p>
-Let $A$ be a set. Define $\varepsilon : \nats \rightarrow \lists{\lists{A}}$ by $$\varepsilon(k) = \bif{\iszero(k)}{\cons(\nil,\nil)}{\nil}$$ and define $\varphi : A \times \lists{\lists{A}}^\nats \rightarrow {\lists{\lists{A}}}^\nats$ by $$\varphi(a,f)(k) = \bif{\iszero(k)}{\cons(\nil,\nil)}{\cat(\map(\cons(a,-))(f(\prev(k))),f(k))}.$$ Now define $\select : \nats \times \lists{A} \rightarrow \lists{\lists{A}}$ by $$\select(n,x) = \foldr{\varepsilon}{\varphi}(x)(n).$$
+Let $A$ be a set. Define $\delta : \nats \rightarrow \lists{\lists{A}}$ by $$\delta(n) = \bif{\iszero(n)}{\cons(\nil,\nil)}{\nil},$$ $\beta : A \times \lists{A} \times \nats \rightarrow \bool$ by $$\beta(a,x,n) = \iszero(n),$$ $\psi : A \times \lists{A} \times \nats \rightarrow \lists{\lists{A}}$ by $$\psi(a,x,n) = \cons(\nil,\nil),$$ and $\chi : A \times \lists{A} \times \nats \times \lists{\lists{A}} \times \lists{\lists{A}} \rightarrow \lists{\lists{A}}$ by $$\chi(a,x,n,u,v) = \cat(\map(\cons(a,-))(v),u).$$ Now define $\select : \nats \times \lists{A} \rightarrow \lists{\lists{A}}$ by $$\select(n,x) = \dbfoldr{\delta}{\beta}{\prev}{\psi}{\chi}(x,n).$$
 
 In Haskell:
 
 > select :: (List t, Natural n) => n -> t a -> t (t a)
-> select n x = foldr epsilon phi x n
+> select n x = dbfoldr delta beta prev psi chi x n
 >   where
->     epsilon k = if isZero k
->       then cons nil nil
->       else nil
-> 
->     phi a f n = case unnext n of
->       Left () -> cons nil nil
->       Right k -> cat (map (cons a) (f k)) (f n)
+>     delta n = if isZero n then cons nil nil else nil
+>     beta _ _ n = isZero n
+>     psi _ _ _ = cons nil nil
+>     chi a _ _ u v = cat (map (cons a) v) u
 
 </p></div>
 </div>
 
-Since $\select$ is defined as a $\foldr{\ast}{\ast}$, it can be characterized as the unique solution to a system of functional equations.
+Since $\select$ is defined as a double bailout fold, it can be characterized as the unique solution to a system of functional equations.
 
 <div class="result">
-<div class="thm"><p>
-Let $A$ be a set. $\select$ is the unique map $f : \nats \times \lists{A} \rightarrow \lists{\lists{A}}$ satisfying the following equations for all
+<div class="corollary"><p>
+Let $A$ be a set. $\select$ is the unique map $f : \nats \times \lists{A} \rightarrow \lists{\lists{A}}$ satisfying the following equations for all $n \in \nats$, $a \in A$, and $x \in \lists{A}$.
+$$\left\{\begin{array}{l}
+ f(n,\nil) = \bif{\iszero(n)}{\cons(\nil,\nil)}{\nil} \\
+ f(n,\cons(a,x)) = \bif{\iszero(n)}{\cons(\nil,\nil)}{\cat(\map(\cons(a,-))(f(\prev(n),x)),f(n,x))}
+\end{array}\right.$$
 
-1. $\select(n,\nil) = \bif{\iszero(n)}{\cons(\nil,\nil)}{\nil}$.
-2. $\select(\zero,\cons(a,x)) = \cons(\nil,\nil)$.
-3. $\select(\next(n),\cons(a,x)) = \cat(\map(\cons(a,-))(\select(n,x)),\select(\next(n),x))$.
+In particular, we have $$\select(\zero,\cons(a,x)) = \cons(\nil,\nil)$$ and $$\select(\next(n),\cons(a,x)) = \cat(\map(\cons(a,-))(\select(n,x)),\select(\next(n),x)).$$
 </p></div>
 
 <div class="test"><p>
 
-
+> _test_select_nil :: (List t, Equal a, Natural n, Equal n, Equal (t (t a)))
+>   => t a -> n -> Test (n -> Bool)
+> _test_select_nil t _ =
+>   testName "select(n,nil) == if(eq(n,zero),cons(nil,nil),nil)" $
+>   \n -> eq
+>     (select n (nil `withTypeOf` t))
+>     (if isZero n then cons nil nil else nil)
+> 
+> 
+> _test_select_cons :: (List t, Equal a, Natural n, Equal n, Equal (t (t a)))
+>   => t a -> n -> Test (n -> a -> t a -> Bool)
+> _test_select_cons _ _ =
+>   testName "select(n,cons(a,x)) == if(eq(n,zero),cons(nil,nil),cat(map(cons(a,-))(select(prev(n),x)),select(n,x)))" $
+>   \n a x -> eq
+>     (select n (cons a x))
+>     (if isZero n then cons nil nil else cat (map (cons a) (select (prev n) x)) (select n x))
 
 </p></div>
 </div>
 
-(@@@)
+We can directly compute $\select(\zero,-)$.
 
-A special case.
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $x \in \lists{A}$, we have $$\select(\zero,x) = \cons(\nil,\nil).$$
+</p></div>
+
+<div class="proof"><p>
+If $x = \nil$, then
+$$\begin{eqnarray*}
+ &   & \select(\zero,\nil) \\
+ & = & \bif{\iszero(\zero)}{\cons(\nil,\nil)}{\nil} \\
+ & = & \cons(\nil,\nil),
+\end{eqnarray*}$$
+and if $x = \cons(a,u)$, then
+$$\begin{eqnarray*}
+ &   & \select(\zero,\cons(a,u)) \\
+ & = & \bif{\iszero(\zero)}{\cons(\nil,\nil)}{\cat(\map(\cons(a,-))(\select(\prev(\zero),u)),\select(\zero,u))} \\
+ & = & \cons(\nil,\nil)
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_select_zero :: (List t, Equal a, Natural n, Equal n, Equal (t (t a)))
+>   => t a -> n -> Test (t a -> Bool)
+> _test_select_zero _ n =
+>   testName "select(zero,x) == cons(nil,nil)" $
+>   \x -> eq (select (zero `withTypeOf` n) x) (cons nil nil)
+
+</p></div>
+</div>
+
+We can directly compute $\select(\next(\zero),-)$.
 
 <div class="result">
 <div class="thm"><p>
@@ -139,9 +153,21 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_select_one :: (List t, Equal a, Natural n, Equal n, Equal (t (t a)))
+>   => t a -> n -> Test (t a -> Bool)
+> _test_select_one _ n =
+>   testName "select(next(zero),x) == map(cons(-,nil))(x)" $
+>   \x -> eq
+>     (select ((next zero) `withTypeOf` n) x)
+>     (map (\a -> cons a nil) x)
+
+</p></div>
 </div>
 
-$\length$:
+$\select$ interacts with $\length$.
 
 <div class="result">
 <div class="thm"><p>
@@ -183,9 +209,19 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_select_length :: (List t, Equal a, Natural n, Equal n, Equal (t a))
+>   => t a -> n -> Test (n -> t a -> Bool)
+> _test_select_length _ _ =
+>   testName "length(select(k,x)) == choose(length(x),k)" $
+>   \k x -> eq (length (select k x)) (choose (length x) k)
+
+</p></div>
 </div>
 
-$\sublist$:
+$\select$ is compatible with $\sublist$.
 
 <div class="result">
 <div class="thm"><p>
@@ -247,9 +283,21 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_select_sublist :: (List t, Equal a, Natural n, Equal n, Equal (t a))
+>   => t a -> n -> Test (n -> t a -> t a -> Bool)
+> _test_select_sublist _ _ =
+>   testName "sublist(x,y) == sublist(select(k,x),select(k,y))" $
+>   \k x y -> if sublist x y
+>     then sublist (select k x) (select k y)
+>     else True
+
+</p></div>
 </div>
 
-Selections are sublists:
+Selections are sublists.
 
 <div class="result">
 <div class="thm"><p>
@@ -302,9 +350,19 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_select_all_sublist :: (List t, Equal a, Natural n, Equal n, Equal (t a))
+>   => t a -> n -> Test (n -> t a -> Bool)
+> _test_select_all_sublist _ _ =
+>   testName "all(sublist(-,x),select(k,x))" $
+>   \k x -> all (\u -> sublist u x) (select k x)
+
+</p></div>
 </div>
 
-Selections have fixed length:
+Selections have fixed length.
 
 <div class="result">
 <div class="thm"><p>
@@ -346,78 +404,24 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
-</div>
 
+<div class="test"><p>
 
-Testing
--------
-
-Here are our property tests for $\select$:
-
-> _test_select_zero :: (List t, Equal a, Natural n, Equal n, Equal (t (t a)))
->   => t a -> n -> Test (t a -> Bool)
-> _test_select_zero _ n =
->   testName "select(zero,x) == cons(nil,nil)" $
->   \x -> let
->     zero' = zero `withTypeOf` n
->   in
->     eq (select zero' x) (cons nil nil)
-> 
-> 
-> _test_select_nil :: (List t, Equal a, Natural n, Equal n, Equal (t (t a)))
->   => t a -> n -> Test (n -> Bool)
-> _test_select_nil t _ =
->   testName "select(k,nil) == if k == 0 then cons(nil,nil) else nil" $
->   \k -> let
->     nil' = nil `withTypeOf` t
->   in
->     if isZero k
->       then eq (select k nil') (cons nil nil)
->       else eq (select k nil') nil
-> 
-> 
-> _test_select_one :: (List t, Equal a, Natural n, Equal n, Equal (t (t a)))
->   => t a -> n -> Test (t a -> Bool)
-> _test_select_one _ n =
->   testName "select(next(zero),x) == map(cons(-,nil))(x)" $
->   \x -> let
->     one' = (next zero) `withTypeOf` n
->   in
->     eq (select one' x) (map (\a -> cons a nil) x)
-> 
-> 
-> _test_select_length :: (List t, Equal a, Natural n, Equal n, Equal (t a))
->   => t a -> n -> Test (n -> t a -> Bool)
-> _test_select_length _ _ =
->   testName "length(select(k,x)) == choose(length(x),k)" $
->   \k x -> eq (length (select k x)) (choose (length x) k)
-> 
-> 
-> _test_select_sublist :: (List t, Equal a, Natural n, Equal n, Equal (t a))
->   => t a -> n -> Test (n -> t a -> t a -> Bool)
-> _test_select_sublist _ _ =
->   testName "sublist(x,y) == sublist(select(k,x),select(k,y))" $
->   \k x y -> if eq (sublist x y) True
->     then eq (sublist (select k x) (select k y)) True
->     else True
-> 
-> 
-> _test_select_all_sublist :: (List t, Equal a, Natural n, Equal n, Equal (t a))
->   => t a -> n -> Test (n -> t a -> Bool)
-> _test_select_all_sublist _ _ =
->   testName "all(sublist(-,x),select(k,x))" $
->   \k x -> all (\u -> sublist u x) (select k x)
-> 
-> 
 > _test_select_all_length :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> Bool)
 > _test_select_all_length _ _ =
 >   testName "all(eq(k,length(-)),select(k,x))" $
 >   \k x -> all (\u -> eq k (length u)) (select k x)
 
-And the suite:
+</p></div>
+</div>
 
-> -- run all tests for select
+
+Testing
+-------
+
+Suite:
+
 > _test_select ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName n, Natural n, Show n, Arbitrary n, Equal n
@@ -433,15 +437,16 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_select_zero t n)
 >   runTest args (_test_select_nil t n)
+>   runTest args (_test_select_cons t n)
+>   runTest args (_test_select_zero t n)
 >   runTest args (_test_select_one t n)
 >   runTest args (_test_select_length t n)
 >   runTest args (_test_select_sublist t n)
 >   runTest args (_test_select_all_sublist t n)
 >   runTest args (_test_select_all_length t n)
 
-And ``main``:
+Main:
 
 > main_select :: IO ()
 > main_select = do

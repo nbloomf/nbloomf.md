@@ -38,7 +38,7 @@ library
     DoubleFold,
     ConsumingFold,
     BailoutFold,
-    ListNatFold,
+    DoubleBailoutFold,
     Snoc,
     Reverse,
     Cat,
@@ -439,19 +439,20 @@ test-suite amd-bfoldr
     Lists,
     HeadAndTail
 
-test-suite amd-lnfoldr
+test-suite amd-dbfoldr
   default-language: Haskell2010
   type: exitcode-stdio-1.0
-  main-is: ListNatFold.lhs
+  main-is: DoubleBailoutFold.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -main-is ListNatFold.main_lnfoldr
+  ghc-options: -main-is DoubleBailoutFold.main_dbfoldr
   other-modules:
     Booleans,
     Tuples,
     DisjointUnions,
     Unary,
     NaturalNumbers,
-    Lists
+    Lists,
+    HeadAndTail
 
 test-suite amd-snoc
   default-language: Haskell2010
@@ -1133,6 +1134,7 @@ test-suite amd-select
     DoubleFold,
     ConsumingFold,
     BailoutFold,
+    DoubleBailoutFold,
     Snoc,
     Reverse,
     Cat,
