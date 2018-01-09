@@ -884,6 +884,40 @@ as claimed.
 </p></div>
 </div>
 
+$\bif{\ast}{\ast}{\ast}$ on booleans is equivalent to an or.
+
+<div class="result>
+<div class="thm"><p>
+$$\bif{p}{\btrue}{q} = \bor(p,q).$$
+</p></div
+
+<div class="proof"><p>
+If $p = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \bif{\btrue}{\btrue}{q} \\
+ & = & \btrue \\
+ & = & \bor(\btrue,q),
+\end{eqnarray*}$$
+and if $p = \bfalse we have
+$$\begin{eqnarray*}
+ &   & \bif{\bfalse}{\btrue}{q} \\
+ & = & q \\
+ & = & \bor(\bfalse,q)
+\end{eqnarray*}$$
+as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_if_or :: (Equal a)
+>   => a -> Test (Bool -> Bool -> Bool)
+> _test_if_or _ =
+>   testName "if(p,true,q) == or(p,q)" $
+>   \p q -> eq (if p then True else q) (or p q)
+
+</p></div>
+</div>
+
 
 Equality
 --------
@@ -1014,6 +1048,7 @@ And the suite:
 >   runTest args (_test_if_nest x)
 >   runTest args (_test_if_prune x)
 >   runTest args (_test_if_commute_left x)
+>   runTest args (_test_if_or x)
 
 Main:
 
