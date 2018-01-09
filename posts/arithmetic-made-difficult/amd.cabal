@@ -37,6 +37,7 @@ library
     LeftFold,
     DoubleFold,
     ConsumingFold,
+    BailoutFold,
     Snoc,
     Reverse,
     Cat,
@@ -420,6 +421,21 @@ test-suite amd-cfoldr
     DisjointUnions,
     Unary,
     Lists
+
+test-suite amd-bfoldr
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: BailoutFold.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options: -main-is BailoutFold.main_bfoldr
+  other-modules:
+    Booleans,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    Lists,
+    HeadAndTail
 
 test-suite amd-snoc
   default-language: Haskell2010
@@ -1041,6 +1057,8 @@ test-suite amd-infix
     DisjointUnions,
     Unary,
     NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
     Plus,
     Times,
     Minus,
@@ -1051,6 +1069,7 @@ test-suite amd-infix
     LeftFold,
     DoubleFold,
     ConsumingFold,
+    BailoutFold,
     Snoc,
     Reverse,
     Cat,

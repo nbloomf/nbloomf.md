@@ -17,6 +17,7 @@ slug: infix
 > import Plus
 > import Lists
 > import HeadAndTail
+> import BailoutFold
 > import Snoc
 > import Reverse
 > import Length
@@ -31,16 +32,36 @@ slug: infix
 > import Repeat
 > import Sublist
 
-Today we'll nail down ``infix``, a variant on ``sublist``.
+Today we'll nail down $\infix$, a variant on $\sublist$.
 
 <div class="result">
-<div class="defn"><p>
-Let $A$ be a set. We define $\infix : \lists{A} \times \lists{A} \rightarrow \bool$ by $$\infix(x,y) = \any(\prefix(x,-))(\tails(y)).$$
+<div class="dfn"><p>
+Let $A$ be a set. Define $\beta : A \times \lists{A} \times \lists{A} \rightarrow \bool$ by $$\beta(a,x,y) = \prefix(y,\cons(a,x)),$$ $\psi : A \times \lists{A} \times \lists{A} \rightarrow \bool$ by $$\beta(a,x,y) = \btrue,$$ and $\omega : A \times \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\omega(a,x,y) = y.$$ Then define $\infix : \lists{A} \times \lists{A} \rightarrow \bool$ by $$\infix(x,y) = \bfoldr{\isnil}{\beta}{\psi}{\omega}(y,x).$$
 
 In Haskell:
 
 > isInfix :: (List t, Equal a) => t a -> t a -> Bool
-> isInfix x y = any (prefix x) (tails y)
+> isInfix x y = bfoldr isNil beta psi omega y x
+>   where
+>     beta a x y = prefix y (cons a x)
+>     psi _ _ _ = True
+>     omega _ _ y = y
+
+</p></div>
+</div>
+
+(@@@)
+
+<div class="result">
+<div class="defn"><p>
+Let $A$ be a set. Define 
+
+ We define $\infix : \lists{A} \times \lists{A} \rightarrow \bool$ by $$\infix(x,y) = \any(\prefix(x,-))(\tails(y)).$$
+
+In Haskell:
+
+ > isInfix :: (List t, Equal a) => t a -> t a -> Bool
+ > isInfix x y = any (prefix x) (tails y)
 
 </p></div>
 </div>
@@ -550,5 +571,5 @@ Main:
 
 > main_isInfix :: IO ()
 > main_isInfix = do
->   _test_isInfix (nil :: ConsList Bool)  30 200
->   _test_isInfix (nil :: ConsList Unary) 30 200
+>   _test_isInfix (nil :: ConsList Bool)  30 1000
+>   _test_isInfix (nil :: ConsList Unary) 30 1000

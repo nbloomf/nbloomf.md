@@ -47,6 +47,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * [Left Fold](/posts/arithmetic-made-difficult/LeftFold.html)
         * [Double Fold](/posts/arithmetic-made-difficult/DoubleFold.html)
         * [Consuming Fold](/posts/arithmetic-made-difficult/ConsumingFold.html)
+        * [Bailout Fold](/posts/arithmetic-made-difficult/BailoutFold.html)
     * Arithmetic of Lists
         * [Snoc](/posts/arithmetic-made-difficult/Snoc.html)
         * [Reverse](/posts/arithmetic-made-difficult/Reverse.html)

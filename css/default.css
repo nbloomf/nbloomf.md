@@ -116,6 +116,17 @@ pre.literate {
   background: #f7f7f7;
 }
 
+/* reference labels */
+a[href^="#"] {
+  text-decoration: none;
+  position: absolute;
+  left: -20pt;
+}
+
+a[href^="#"]::before {
+  content: "⚓"
+}
+
 
 
 /************/
@@ -129,17 +140,6 @@ div.definition, div.theorem {
   padding-right: 12px;
   background: #f7f7f7;
   position: relative;
-}
-
-/* reference labels */
-a[href^="#"] {
-  text-decoration: none;
-  position: absolute;
-  left: -20pt;
-}
-
-a[href^="#"]::before {
-  content: "⚓"
 }
 
 div.definition p:first-child::before {
