@@ -24,7 +24,7 @@ slug: range
 > import Map
 > import UnfoldN
 
-For our first application of $\unfoldN$ we'll define a function, $\range$, that constructs lists of natural numbers. There are a few ways to do this. We could take an argument $n$ and construct the list of natural numbers from $\zero$ to $n$, but this is too specialized. We could instead take *two* arguments $a$ and $b$ and construct the list of natural numbers from $a$ to $b$, but we'll have to check whether or not the arguments are in order. A third option -- and the one we'll take -- is to take two arguments $a$ and $b$, and construct the list of the first $b$ natural numbers starting from $a$.
+For our first application of $\unfoldN{\ast}$ we'll define a function, $\range$, that constructs lists of natural numbers. There are a few ways to do this. We could take an argument $n$ and construct the list of natural numbers from $\zero$ to $n$, but this is too specialized. We could instead take *two* arguments $a$ and $b$ and construct the list of natural numbers from $a$ to $b$, but we'll have to check whether or not the arguments are in order. A third option -- and the one we'll take -- is to take two arguments $a$ and $b$, and construct the list of the first $b$ natural numbers starting from $a$.
 
 <div class="result">
 <div class="defn"><p>

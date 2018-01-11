@@ -13,11 +13,13 @@ slug: elt
 > import Prelude ()
 > import Booleans
 > import NaturalNumbers
+> import LessThanOrEqualTo
 > import Lists
 > import Snoc
 > import Reverse
 > import Length
 > import Map
+> import Range
 > import Cat
 > import Zip
 > import Prefix
@@ -91,6 +93,37 @@ $$\left\{\begin{array}{l}
 >   \a b x -> eq
 >     (elt a (cons b x))
 >     (if eq a b then True else elt a x)
+
+</p></div>
+</div>
+
+Special cases.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $a,b \in A$, we have $$\elt(a,\cons(b,\nil)) = \beq(a,b).$$
+</p></div>
+
+<div class="proof"><p>
+Note that
+$$\begin{eqnarray*}
+ &   & \elt(a,\cons(b,\nil)) \\
+ & = & \bif(\beq(a,b),\btrue,\elt(a,\nil)) \\
+ & = & \bif(\beq(a,b),\btrue,\bfalse) \\
+ & = & \beq(a,b)
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_elt_single :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (a -> a -> Bool)
+> _test_elt_single t =
+>   testName "elt(a)(cons(b,nil)) == eq(a,b)" $
+>   \a b -> eq
+>     (elt a (cons b (nil `withTypeOf` t)))
+>     (eq a b)
 
 </p></div>
 </div>
@@ -373,8 +406,6 @@ as claimed.
 </p></div>
 </div>
 
-(@@@)
-
 $\elt$ is an $\any$.
 
 <div class="result">
@@ -450,6 +481,71 @@ The contrapositive of this statement is trivial and kind of silly looking: If $x
 </p></div>
 </div>
 
+$\elt$ interacts with $\map(f)$ when $f$ is injective.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ and $B$ be sets with $f : A \rightarrow B$ injective. For all $a \in A$ and $x \in  \lists{A}$, we have $$\elt(a,x) = \elt(f(a),\map(f)(x)).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \elt(a,\nil) \\
+ & = & \bfalse \\
+ & = & \elt(f(a),\nil) \\
+ & = & \elt(f(a),\map(f)(\nil))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$, and let $b \in A$. Note that $\beq(a,b) = \beq(f(a),f(b))$, so we have
+$$\begin{eqnarray*}
+ &   & \elt(a,\cons(b,x)) \\
+ & = & \bif{\beq(a,b)}{\btrue}{\elt(a,x)} \\
+ & = & \bif{\beq(f(a),f(b))}{\btrue}{\elt(f(a),\map(f)(x))} \\
+ & = & \elt(f(a),\cons(f(b),\map(f)(x))) \\
+ & = & \elt(f(a),\map(f)(\cons(b,x)))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+</div>
+
+$\elt$ interacts with $\range$.
+
+<div class="result">
+<div class="thm"><p>
+Let $a,b,c \in \nats$. If $\nleq(a,c)$, then $$\elt(a,\range(\next(c),b)) = \bfalse.$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by induction on $b$. If $b = \zero$, we have
+$$\begin{eqnarray*}
+ &   & \elt(a,\range(\next(c),\zero)) \\
+ & = & \elt(a,\nil) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equation holds for all $a$ and $c$ for some $b$. Suppose $\nleq(a,c)$; then $\nleq(a,\next(c))$. Now
+$$\begin{eqnarray*}
+ &   & \elt(a,\range(\next(c),\next(b))) \\
+ & = & \elt(a,\cons(\next(c),\range(\next(\next(c)),b))) \\
+ & = & \bif{\beq(a,\next(c))}{\btrue}{\elt(a,\range(\next(\next(c)),b))} \\
+ & = & \elt(a,\range(\next(\next(c)),b)) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_elt_range :: (List t, Natural n, Equal n)
+>   => t a -> n -> Test (t n -> n -> n -> n -> Bool)
+> _test_elt_range _ _ =
+>   testName "if leq(a,c) then eq(elt(a,range(next(c),b)),false)" $
+>   \t a b c -> if leq a c
+>     then eq (elt a ((range (next c) b) `withTypeOf` t)) False
+>     else True
+
+</p></div>
+</div>
+
 
 Testing
 -------
@@ -458,10 +554,11 @@ Suite:
 
 > _test_elt ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
->   , TypeName (t a), List t
+>   , TypeName (t a), List t, Arbitrary (t n), Show (t n), Equal (t n)
 >   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (a,a))
->   ) => t a -> Int -> Int -> IO ()
-> _test_elt t maxSize numCases = do
+>   , TypeName n, Equal n, Show n, Arbitrary n, Natural n
+>   ) => t a -> n -> Int -> Int -> IO ()
+> _test_elt t n maxSize numCases = do
 >   testLabel ("elt: " ++ typeName t)
 > 
 >   let
@@ -472,6 +569,7 @@ Suite:
 > 
 >   runTest args (_test_elt_nil t)
 >   runTest args (_test_elt_cons t)
+>   runTest args (_test_elt_single t)
 >   runTest args (_test_elt_cat t)
 >   runTest args (_test_elt_snoc t)
 >   runTest args (_test_elt_rev t)
@@ -480,10 +578,11 @@ Suite:
 >   runTest args (_test_elt_filter_eq t)
 >   runTest args (_test_elt_any t)
 >   runTest args (_test_elt_distinct t)
+>   runTest args (_test_elt_range t n)
 
 Main:
 
 > main_elt :: IO ()
 > main_elt = do
->   _test_elt (nil :: ConsList Bool)  20 100
->   _test_elt (nil :: ConsList Unary) 20 100
+>   _test_elt (nil :: ConsList Bool)  (zero :: Unary) 20 100
+>   _test_elt (nil :: ConsList Unary) (zero :: Unary) 20 100

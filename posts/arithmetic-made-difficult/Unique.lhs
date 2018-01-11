@@ -10,18 +10,21 @@ slug: unique
 >   ( unique, _test_unique, main_unique
 >   ) where
 > 
+> import Prelude ()
 > import Booleans
 > import Tuples
 > import NaturalNumbers
 > import Plus
 > import LessThanOrEqualTo
-> 
 > import Lists
+> import ConsumingFold
+> import Snoc
 > import Reverse
 > import Length
 > import Map
 > import Cat
 > import UnfoldN
+> import Range
 > import Zip
 > import Prefix
 > import AllAndAny
@@ -32,79 +35,56 @@ slug: unique
 > import Repeat
 > import Sublist
 > import Select
-> 
-> import Prelude (uncurry)
 
 Today we'll introduce a boolean function $\unique$ to detect whether or not a list has any duplicate items. As usual, we'd like to define $\unique$ as a fold. The signature needs to be $$\lists{A} \rightarrow \bool.$$ How can we do this? Intuitively, we might say
 
 1. $\nil$ is unique, and
 2. $\cons(a,x)$ is unique if $x$ is unique and $a$ does not appear in $x$.
 
-Note that $\unique$ will need to "have it's cake and eat it too"; that is, when testing $\cons(a,x)$ for uniqueness we have to check that $x$ is unique (eat the cake) *and* check that $a$ does not appear in $x$ (have the cake). We had a similar problem when we defined $\tails$; the solution there was to define $\tails(x)$ as a fold on $x$ that constructs a function which destructs $x$ again. Taking this tack, we will look for suitable $\varepsilon$ and $\varphi$ so that $$\unique(x) = \foldr{\varepsilon}{\varphi}(x)(x)$$ does what we want.
+Note that $\unique$ will need to "have it's cake and eat it too"; that is, when testing $\cons(a,x)$ for uniqueness we have to check that $x$ is unique (eat the cake) *and* check that $a$ does not appear in $x$ (have the cake). We had a similar problem when we defined $\tails$; the solution there was to use consuming fold, so that's what we'll do here.
 
 <div class="result">
 <div class="defn"><p>
-Let $A$ be a set. Define $\varepsilon : \lists{A} \rightarrow \bool$ by $\varepsilon(x) = \btrue$, and define $\varphi : A \rightarrow \bool^{\lists{A}} \rightarrow \bool^{\lists{A}}$ by $$\varphi(a,f)(w) = \left\{\begin{array}{ll} \btrue & \mathrm{if}\ w = \nil \\ \band(\all(\bnot(\beq(a,-)),u),f(u)) & \mathrm{if}\ w = \cons(a,u) \end{array}\right.$$ Now we define $\unique : \lists{A} \rightarrow \bool$ by $$\unique(x) = \foldr{\varepsilon}{\varphi}(x)(x).$$
-
-In Haskell:
-
-> unique' :: (List t, Equal a) => t a -> Bool
-> unique' x = foldr epsilon phi x x
->   where
->     epsilon _ = True
-> 
->     phi a f w = case uncons w of
->       Left ()     -> True
->       Right (_,u) -> and (all (\b -> not (eq a b)) u) (f u)
-
-</p></div>
-</div>
-
-The following result suggests an alternative implementation.
-
-<div class="result">
-<div class="thm"><p>
-Let $A$ be a set.
-
-1. $\unique(\nil) = \btrue$.
-2. $\unique(\cons(a,x)) = \band(\all(\bnot(\beq(a,-)),x),\unique(x))$.
-3. $\unique(\cons(a,x)) = \band(\bnot(\elt(a,x)),\unique(x))$.
-</p></div>
-
-<div class="proof"><p>
-1. Note that
-$$\begin{eqnarray*}
- &   & \unique(\nil) \\
- & = & \foldr{\varepsilon}{\varphi}(\nil)(\nil) \\
- & = & \varepsilon(\nil) \\
- & = & \btrue
-\end{eqnarray*}$$
-as claimed.
-2. Note that
-$$\begin{eqnarray*}
- &   & \unique(\cons(a,x)) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(\cons(a,x)) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(\cons(a,x)) \\
- & = & \band(\all(\bnot(\beq(a,-)),x),\foldr{\varepsilon}{\varphi}(x)(x)) \\
- & = & \band(\all(\bnot(\beq(a,-)),x),\unique(x))
-\end{eqnarray*}$$
-as claimed.
-3. Note that
-$$\begin{eqnarray*}
- &   & \bnot(\elt(a,x)) \\
- & = & \bnot(\any(\beq(a,-),x)) \\
- & = & \all(\bnot(\beq(a,-)),x);
-\end{eqnarray*}$$
-the equality follows from (2).
-</p></div>
-</div>
+Let $A$ be a set. Define $\sigma : A \times \lists{A} \times \bool \rightarrow \bool$ by $$\sigma(a,x,p) = \band(\bnot(\elt(a,x)),p).$$ We then define $\unique : \lists{A} \rightarrow \bool$ by $$\unique = \cfoldr{\btrue}{\sigma}.$$
 
 In Haskell:
 
 > unique :: (List t, Equal a) => t a -> Bool
-> unique x = case uncons x of
->   Left ()     -> True
->   Right (a,u) -> and (all (not . eq a) u) (unique u)
+> unique = cfoldr True sigma
+>   where
+>     sigma a x p = and (not (elt a x)) p
+
+</p></div>
+</div>
+
+Since $\unique$ is defined as a $\cfoldr{\ast}{\ast}$, it can be characterized as the unique solution to a system of functional equations.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. $\unique$ is the unique map $f : \lists{A} \rightarrow \bool$ satisfying the following system of equations for all $a \in A$ and $x \in \lists{A}$.
+$$\left\{\begin{array}{l}
+ f(\nil) = \btrue \\
+ f(\cons(a,x)) = \band(\bnot(\elt(a,x)),f(x))
+\end{array}\right.$$
+</p></div>
+
+<div class="test"><p>
+
+> _test_unique_nil :: (List t, Equal a)
+>   => t a -> Test Bool
+> _test_unique_nil t =
+>   testName "unique(nil) == true" $
+>    eq (unique (nil `withTypeOf` t)) True
+> 
+> 
+> _test_unique_cons :: (List t, Equal a)
+>   => t a -> Test (a -> t a -> Bool)
+> _test_unique_cons _ =
+>   testName "unique(cons(a,x)) == and(not(elt(a,x)),unique(x))" $
+>    \a x -> eq (unique (cons a x)) (and (not (elt a x)) (unique x))
+
+</p></div>
+</div>
 
 Special cases.
 
@@ -120,7 +100,8 @@ Let $A$ be a set with $a,b \in A$. Then we have the following.
 1. Note that
 $$\begin{eqnarray*}
  &   & \unique(\cons(a,\nil)) \\
- & = & \band(\all(\bnot(\beq(a,-)),\nil),\unique(\nil)) \\
+ & = & \band(\bnot(\elt(a,\nil)),\unique(\nil)) \\
+ & = & \band(\bnot(\bfalse),\btrue) \\
  & = & \band(\btrue,\btrue) \\
  & = & \btrue
 \end{eqnarray*}$$
@@ -128,18 +109,34 @@ as claimed.
 2. Note that
 $$\begin{eqnarray*}
  &   & \unique(\cons(a,\cons(b,\nil))) \\
- & = & \band(\all(\bnot(\beq(a,-)),\cons(b,\nil)),\unique(\cons(b,\nil))) \\
- & = & \band(\all(\bnot(\beq(a,-)),\cons(b,\nil)),\btrue) \\
- & = & \all(\bnot(\beq(a,-)),\cons(b,\nil)) \\
- & = & \band(\bnot(\beq(a,b)),\all(\bnot(\beq(a,-)),\nil)) \\
- & = & \band(\bnot(\beq(a,b)),\btrue) \\
+ & = & \band(\bnot(\elt(a,\cons(b,\nil))),\unique(\cons(b,\nil))) \\
+ & = & \band(\bnot(\beq(a,b))),\btrue) \\
  & = & \bnot(\beq(a,b))
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_unique_single :: (List t, Equal a)
+>   => t a -> Test (a -> Bool)
+> _test_unique_single t =
+>   testName "unique(cons(a,nil)) == true" $
+>     \a -> unique (cons a (nil `withTypeOf` t))
+> 
+> 
+> _test_unique_double :: (List t, Equal a)
+>   => t a -> Test (a -> a -> Bool)
+> _test_unique_double t =
+>   testName "unique(cons(a,cons(b,nil))) == not(eq(a,b))" $
+>     \a b -> eq 
+>       (unique (cons a (cons b (nil `withTypeOf` t))))
+>       (not (eq a b))
+
+</p></div>
 </div>
 
-$\unique$ interacts with $\sublist$:
+$\unique$ is "down closed" with respect to $\sublist$.
 
 <div class="result">
 <div class="thm"><p>
@@ -147,7 +144,7 @@ Let $A$ be a set with $x,y \in \lists{A}$. If $\sublist(x,y) = \btrue$ and $\uni
 </p></div>
 
 <div class="proof"><p>
-We proceed by list induction on $y$. For the base case $y = \nil$, suppose $\sublist(x,y) = \btrue$. Then we have $y = \nil$ and $x = \nil$, and thus $\unique(x) = \btrue$. For the inductive step, suppose the implication holds for all $x$ for some $y$ and let $b \in A$. Suppose further that $\unique(\cons(b,y)) = \btrue$ and $\sublist(x,\cons(b,y)) = \btrue$. We consider two possibilities for $x$. If $x = \nil$, then $\unique(x) = \btrue$ as needed. Suppose instead that $x = \cons(a,u)$ for some $a \in A$ and $u \in \lists{A}$. Note first that since $\unique(\cons(b,y)) = \btrue$, we have $$\band(\all(\bnot(\beq(a,-)),x),\unique(y)) = \btrue;$$ in particular, $\unique(y) = \btrue$.  We now consider two possibilities. If $a \neq b$, we have
+We proceed by list induction on $y$. For the base case $y = \nil$, suppose $\sublist(x,y) = \btrue$. Then we have $x = \nil$, and thus $\unique(x) = \btrue$. For the inductive step, suppose the implication holds for all $x$ for some $y$ and let $b \in A$. Suppose further that $\unique(\cons(b,y)) = \btrue$ and $\sublist(x,\cons(b,y)) = \btrue$. We consider two possibilities for $x$. If $x = \nil$, then $\unique(x) = \btrue$ as needed. Suppose instead that $x = \cons(a,u)$ for some $a \in A$ and $u \in \lists{A}$. Note first that since $\unique(\cons(b,y)) = \btrue$, we have $$\band(\bnot(\elt(a,x)),\unique(y)) = \btrue;$$ in particular, $\unique(y) = \btrue$.  We now consider two possibilities. If $a \neq b$, we have
 $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \sublist(x,\cons(b,y)) \\
@@ -155,82 +152,38 @@ $$\begin{eqnarray*}
  & = & \sublist(\cons(a,u),y) \\
  & = & \sublist(x,y).
 \end{eqnarray*}$$
-By the inductive hypothesis we have $\unique(x) = \btrue$ as needed. Suppose instead that $a = b$. Now we have
+By the inductive hypothesis we have $\unique(x) = \btrue$ as needed. Suppose instead that $a = b$. Note that $\bnot(\elt(a,y))$, so $\bnot(\elt(a,u))$. Now we have
 $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \sublist(x,\cons(b,y)) \\
  & = & \sublist(\cons(a,u),\cons(b,y)) \\
  & = & \sublist(u,y).
 \end{eqnarray*}$$
-Again by the inductive hypothesis we have $\unique(u) = \btrue$. Since $\sublist(u,y) = \btrue$, we also have
-$$\begin{eqnarray*}
- &   & \btrue \\
- & = & \unique(\cons(b,y)) \\
- & = & \unique(\cons(a,y)) \\
- & = & \band(\all(\bnot(\beq(a,-)),y),\unique(y)) \\
- & = & \all(\bnot(\beq(a,-)),y) \\
- & = & \all(\bnot(\beq(a,-)),u).
-\end{eqnarray*}$$
-Thus we have
+Again by the inductive hypothesis we have $\unique(u) = \btrue$. So
 $$\begin{eqnarray*}
  &   & \unique(x) \\
  & = & \unique(\cons(a,u)) \\
- & = & \band(\all(\bnot(\beq(a,-)),u),\unique(u)) \\
+ & = & \band(\bnot(\elt(a,u)),\unique(u)) \\
  & = & \band(\btrue,\btrue) \\
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
 </p></div>
-</div>
 
-$\range$s are unique.
+<div class="test"><p>
 
-<div class="result">
-<div class="thm"><p>
-Let $a,b \in \nats$. We have the following.
+> _test_unique_sublist :: (List t, Equal a)
+>   => t a -> Test (t a -> t a -> Bool)
+> _test_unique_sublist _ =
+>   testName "if and(unique(x),sublist(y,x)) then unique(y)" $
+>    \x y -> if and (unique x) (sublist y x)
+>      then unique y
+>      else True
 
-1. If $\nleq(k,a) = \btrue$ then $\all(\bnot(\beq(k,-)),\range(\next(a),b)) = \btrue$.
-2. $\unique(\range(a,b)) = \btrue$.
-</p></div>
-
-<div class="proof"><p>
-1. We proceed by induction on $b$. For the base case $b = \zero$, we have
-$$\begin{eqnarray*}
- &   & \all(\bnot(\beq(k,-)),\range(\next(a),b)) \\
- & = & \all(\bnot(\beq(k,-)),\range(\next(a),\zero)) \\
- & = & \all(\bnot(\beq(k,-)),\nil) \\
- & = & \btrue
-\end{eqnarray*}$$
-as needed. For the inductive step, suppose the equality holds for all $k$ and $a$ for some $b$. Now let $a,k \in \nats$ with $\nleq(k,a) = \btrue$; now $\nleq(k,\next(a)) = \btrue$, and using the inductive hypothesis we have 
-$$\begin{eqnarray*}
- &   & \all(\bnot(\beq(k,-)),\range(\next(a),\next(b))) \\
- & = & \all(\bnot(\beq(k,-)),\cons(\next(a),\range(\next(\next(a))),b)) \\
- & = & \band(\bnot(\beq(k,\next(a))),\all(\bnot(\beq(k,-)),\range(\next(\next(a)),b))) \\
- & = & \band(\btrue,\btrue) \\
- & = & \btrue
-\end{eqnarray*}$$
-as needed.
-2. We proceed by induction on $b$. For the base case $b = \zero$, we have
-$$\begin{eqnarray*}
- &   & \unique(\range(a,b)) \\
- & = & \unique(\range(a,\zero)) \\
- & = & \unique(\nil) \\
- & = & \btrue
-\end{eqnarray*}$$
-as needed. For the inductive step, suppose the equality holds for all $a$ for some $b$. Using the inductive hypothesis and part (1), we have
-$$\begin{eqnarray*}
- &   & \unique(\range(a,\next(b))) \\
- & = & \unique(\cons(a,\range(\next(a),b))) \\
- & = & \band(\all(\bnot(\beq(a,-)),\range(\next(a),b)),\unique(\range(\next(a),b))) \\
- & = & \band(\all(\bnot(\beq(a,-)),\range(\next(a),b)),\btrue) \\
- & = & \all(\bnot(\beq(a,-)),\range(\next(a),b)) \\
- & = & \btrue
-\end{eqnarray*}$$
-as needed.
 </p></div>
 </div>
 
-If $f$ is injective, $\map(f)$ preserves uniqueness:
+If $f$ is injective, $\map(f)$ preserves uniqueness.
 
 <div class="result">
 <div class="thm"><p>
@@ -245,71 +198,14 @@ $$\begin{eqnarray*}
  & = & \unique(\nil) \\
  & = & \unique(x)
 \end{eqnarray*}$$
-as needed. For the inductive step, suppose the implication holds for all $f$ for some $x$ and let $a \in A$. Suppose further that $\unique(\cons(a,x)) = \btrue$. Now if $f$ is injective, we have $\beq(f(a),f(-)) = \beq(a,-)$. Using the inductive hypothesis, we have
+as needed. For the inductive step, suppose the implication holds for all $f$ for some $x$ and let $a \in A$. Suppose further that $\unique(\cons(a,x)) = \btrue$. Now if $f$ is injective, we have $\elt(f(a),\map(f)(x)) = \elt(a,x)$. Using the inductive hypothesis, we have
 $$\begin{eqnarray*}
  &   & \unique(\map(f)(\cons(a,x))) \\
  & = & \unique(\cons(f(a),\map(f)(x))) \\
- & = & \band(\all(\bnot(\beq(f(a),-)),\map(f)(x)),\unique(\map(f)(x))) \\
- & = & \band(\all(\bnot(\beq(f(a),-)) \circ f,x),\btrue) \\
- & = & \band(\all(\bnot(\beq(f(a),f(-))),x),\btrue) \\
- & = & \band(\all(\bnot(\beq(a,-)),x),\btrue) \\
- & = & \band(\btrue,\btrue) \\
- & = & \btrue
-\end{eqnarray*}$$
-as needed.
-</p></div>
-</div>
-
-$\unique$ and $\select$:
-
-<div class="result">
-<div class="thm"><p>
-Let $A$ be a set with $a \in A$ and $x \in \lists{A}$. We have the following.
-
-1. $\all(\bnot(\beq(a,-)),x) = \all(\unique(-),\map(\cons(a,\cons(-,\nil)))(x))$.
-2. $\unique(x) = \all(\unique(-),\select(\next(\next(\zero)),x))$.
-</p></div>
-
-<div class="proof"><p>
-1. We proceed by list induction on $x$. For the base case $x = \nil$, we have
-$$\begin{eqnarray*}
- &   & \all(\unique(-),\map(\cons(a,\cons(-,\nil)))(x)) \\
- & = & \all(\unique(-),\map(\cons(a,\cons(-,\nil)))(\nil)) \\
- & = & \all(\unique(-),\nil) \\
- & = & \btrue \\
- & = & \all(\bnot(\beq(a,-)),\nil) \\
- & = & \all(\bnot(\beq(a,-)),x)
-\end{eqnarray*}$$
-as needed. For the inductive step, suppose the equality holds for some $x$ and let $b \in A$. Using the inductive hypothesis we have
-$$\begin{eqnarray*}
- &   & \all(\unique(-),\map(\cons(a,\cons(-,\nil)))(\cons(b,x))) \\
- & = & \all(\unique(-),\cons(\cons(a,\cons(b,\nil)),\map(\cons(a,\cons(-,\nil)))(x))) \\
- & = & \band(\unique(\cons(a,\cons(b,\nil))),\all(\unique(-),\map(\cons(a,\cons(-,\nil)))(x))) \\
- & = & \band(\unique(\cons(a,\cons(b,\nil))),\all(\bnot(\beq(a,-)),x)) \\
- & = & \band(\bnot(\beq(a,b)),\all(\bnot(\beq(a,-)),x)) \\
- & = & \all(\bnot(\beq(a,-)),\cons(b,x))
-\end{eqnarray*}$$
-as needed.
-2. We proceed by list induction on $x$. For the base case $x = \nil$, we have
-$$\begin{eqnarray*}
- &   & \all(\unique(-),\select(\next(\next(\zero)),x)) \\
- & = & \all(\unique(-),\select(\next(\next(\zero)),\nil)) \\
- & = & \all(\unique(-),\nil) \\
- & = & \btrue \\
- & = & \unique(\nil) \\
- & = & \unique (x)
-\end{eqnarray*}$$
-as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Using the inductive hypothesis, we have
-$$\begin{eqnarray*}
- &   & \all(\unique(-),\select(\next(\next(\zero)),\cons(a,x))) \\
- & = & \all(\unique(-),\cat(\map(\cons(a,-))(\select(\next(\zero),x)),\select(\next(\next(\zero)),x))) \\
- & = & \band(\all(\unique(-),\map(\cons(a,-))(\select(\next(\zero),x))),\all(\unique(-),\select(\next(\next(\zero)),x))) \\
- & = & \band(\all(\unique(-),\map(\cons(a,-))(\select(\next(\zero),x))),\unique(x)) \\
- & = & \band(\all(\unique(-),\map(\cons(a,-))(\map(\cons(-,\nil))(x))),\unique(x)) \\
- & = & \band(\all(\unique(-),\map(\cons(a,-) \circ \cons(-,\nil))(x)),\unique(x)) \\
- & = & \band(\all(\unique(-),\map(\cons(a,\cons(-,\nil)))(x)),\unique(x)) \\
- & = & \band(\all(\bnot(\beq(a,-)),x),\unique(x)) \\
+ & = & \band(\bnot(\elt(f(a),\map(f)(x))),\unique(\map(f)(x))) \\
+ & = & \band(\bnot(\elt(a,x)),\unique(x)) \\
  & = & \unique(\cons(a,x))
+ & = & \btrue
 \end{eqnarray*}$$
 as needed.
 </p></div>
@@ -325,40 +221,68 @@ Let $A$ be a set with $x \in \lists{A}$ and $p : A \rightarrow \bool$. If $\uniq
 <div class="proof"><p>
 Note that $\sublist(\filter(p,x),x) = \btrue$; so we have $\unique(\filter(p,x)) = \btrue$ as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_unique_filter :: (List t, Equal a)
+>   => t a -> Test ((a -> Bool) -> t a -> Bool)
+> _test_unique_filter _ =
+>   testName "if unique(x) then unique(filter(p)(x))" $
+>    \p x -> if unique x
+>      then unique (filter p x)
+>      else True
+
+</p></div>
 </div>
 
-$\unique$ and $\snoc$:
+$\unique$ interacts with $\snoc$.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set with $a \in A$ and $x \in \lists{A}$. Then $$\unique(\snoc(a,x)) = \band(\all(\bnot(\beq(a,-)),x),\unique(x)).$$
+Let $A$ be a set with $a \in A$ and $x \in \lists{A}$. Then $$\unique(\snoc(a,x)) = \band(\bnot(\elt(a,x)),\unique(x)).$$
 </p></div>
 
 <div class="proof"><p>
 We proceed by list induction on $x$. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
- &   & \unique(\snoc(a,x)) \\
- & = & \unique(\snoc(a,\nil)) \\
+ &   & \unique(\snoc(a,\nil)) \\
  & = & \unique(\cons(a,\nil)) \\
- & = & \band(\all(\bnot(\beq(a,-)),\nil),\unique(\nil)) \\
- & = & \band(\all(\bnot(\beq(a,-)),x),\unique(x))
+ & = & \band(\bnot(\elt(a,\nil)),\unique(\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$ and let $b \in A$. Using the inductive hypothesis, we have
 $$\begin{eqnarray*}
  &   & \unique(\snoc(a,\cons(b,x))) \\
  & = & \unique(\cons(b,\snoc(a,x))) \\
- & = & \band(\all(\bnot(\beq(b,-)),\snoc(a,x)),\unique(\snoc(a,x))) \\
- & = & \band(\band(\bnot(\beq(b,a)),\all(\bnot(\beq(b,-)),x)),\unique(\snoc(a,x))) \\
- & = & \band(\band(\bnot(\beq(b,a)),\all(\bnot(\beq(b,-)),x)),\band(\all(\bnot(\beq(a,-)),x),\unique(x))) \\
- & = & \band(\band(\bnot(\beq(a,b)),\all(\bnot(\beq(a,-)),x)),\band(\all(\bnot(\beq(b,-)),x),\unique(x))) \\
- & = & \band(\band(\bnot(\beq(a,b)),\all(\bnot(\beq(a,-)),x)),\unique(\cons(b,x))) \\
- & = & \band(\all(\bnot(\beq(a,-)),\cons(b,x)),\unique(\cons(b,x)))
+ & = & \band(\bnot(\elt(b,\snoc(a,x))),\unique(\snoc(a,x))) \\
+ & = & \band(\bnot(\bif{\beq(b,a)}{\btrue}{\elt(b,x)}),\unique(\snoc(a,x))) \\
+ & = & \band(\bnot(\elt(b,\cons(a,x))),\band(\bnot(\elt(a,x))),\unique(x)) \\
+ & = & \band(\bnot(\bif{\beq(b,a)}{\btrue}{\elt(b,x)}),\band(\bnot(\elt(a,x)),\unique(x))) \\
+ & = & \band(\bif{\beq(b,a)}{\bfalse}{\bnot(\elt(b,x))},\band(\bnot(\elt(a,x)),\unique(x))) \\
+ & = & \bif{\beq(a,b)}{\band(\bfalse,\band(\bnot(\elt(a,x)),\unique(x)))}{\band(\bnot(\elt(b,x)),\band(\bnot(\elt(a,x)),\unique(x)))} \\
+ & = & \bif{\beq(a,b)}{\bfalse}{\band(\band(\bnot(\elt(b,x),\bnot(\elt(a,x))),\unique(x))} \\
+ & = & \bif{\beq(a,b)}{\bfalse}{\band(\band(\bnot(\elt(a,x),\bnot(\elt(b,x))),\unique(x))} \\
+ & = & \bif{\beq(a,b)}{\bfalse}{\band(\bnot(\elt(a,x)),\band(\bnot(\elt(b,x)),\unique(x))))} \\
+ & = & \bif{\beq(a,b)}{\band(\bfalse,\band(\bnot(\elt(b,x)),\unique(x)))}{\band(\bnot(\elt(a,x)),\band(\bnot(\elt(b,x)),\unique(x))))} \\
+ & = & \band(\bif{\beq(a,b)}{\bfalse}{\bnot(\elt(a,x))},\band(\bnot(\elt(b,x)),\unique(x))) \\
+ & = & \band(\bnot(\bif{\beq(a,b)}{\btrue}{\elt(a,x)}),\band(\bnot(\elt(b,x)),\unique(x))) \\
+ & = & \band(\bnot(\elt(a,\cons(b,x))),\band(\bnot(\elt(b,x)),\unique(x))) \\
+ & = & \band(\bnot(\elt(a,\cons(b,x))),\unique(\cons(b,x)))
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_unique_snoc :: (List t, Equal a)
+>   => t a -> Test (a -> t a -> Bool)
+> _test_unique_snoc _ =
+>   testName "unique(snoc(a,x)) == and(not(elt(a,x)),unique(x))" $
+>    \a x -> eq (unique (snoc a x)) (and (not (elt a x)) (unique x))
+
+</p></div>
 </div>
 
-$\unique$ and $\rev$:
+$\unique$ interacts with $\rev$.
 
 <div class="result">
 <div class="thm"><p>
@@ -377,11 +301,144 @@ as needed. For the inductive step, suppose the equality holds for some $x$ and l
 $$\begin{eqnarray*}
  &   & \unique(\rev(\cons(a,x))) \\
  & = & \unique(\snoc(a,\rev(x))) \\
- & = & \band(\all(\bnot(\beq(a,-)),\rev(x)),\unique(\rev(x))) \\
- & = & \band(\all(\bnot(\beq(a,-)),x),\unique(x)) \\
+ & = & \band(\bnot(\elt(a,\rev(x))),\unique(\rev(x))) \\
+ & = & \band(\bnot(\elt(a,x)),\unique(x)) \\
  & = & \unique(\cons(a,x))
 \end{eqnarray*}$$
 as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_unique_rev :: (List t, Equal a)
+>   => t a -> Test (t a -> Bool)
+> _test_unique_rev _ =
+>   testName "unique(x) == unique(rev(x))" $
+>   \x -> eq (unique x) (unique (rev x))
+
+</p></div>
+</div>
+
+$\range$s are unique.
+
+<div class="result">
+<div class="thm"><p>
+Let $a,b \in \nats$. We have $$\unique(\range(a,b)) = \btrue.$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by induction on $b$. For the base case $b = \zero$, we have
+$$\begin{eqnarray*}
+ &   & \unique(\range(a,\zero)) \\
+ & = & \unique(\nil) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $a$ for some $b$. Now
+$$\begin{eqnarray*}
+ &   & \unique(a,\next(b)) \\
+ & = & \unique(\cons(a,\range(\next(a),b))) \\
+ & = & \band(\bnot(\elt(a,\range(\next(a),b))),\unique(\range(\next(a),b))) \\
+ & = & \band(\bnot(\elt(a,\range(\next(a),b))),\btrue) \\
+ & = & \bnot(\elt(a,\range(\next(a),b))) \\
+ & = & \bnot(\bfalse) \\
+ & = & \btrue
+\end{eqnarray*}$$
+</p></div>
+
+<div class="test"><p>
+
+> _test_unique_range :: (List t, Natural n, Equal n)
+>   => t a -> n -> Test (t n -> n -> n -> Bool)
+> _test_unique_range _ n =
+>   testName "unique(range(a,b)) == true" $
+>   \t a b -> unique ((range a b) `withTypeOf` t)
+
+</p></div>
+</div>
+
+$\unique$ can detect $\elt$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $a \in A$ and $x \in X$, we have $$\all(\unique)(\map(\cons(a,\cons(-,\nil)))(x)) = \bnot(\elt(a,x)).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \all(\unique)(\map(\cons(a,\cons(-,x)))(\nil)) \\
+ & = & \all(\unique)(\nil) \\
+ & = & \btrue \\
+ & = & \bnot(\bfalse) \\
+ & = & \bnot(\elt(a,\nil))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$, and let $b \in A$. Now
+$$\begin{eqnarray*}
+ &   & \all(\unique)(\map(\cons(a,\cons(-,\nil)))(\cons(b,x))) \\
+ & = & \all(\unique)(\cons(\cons(a,\cons(b,\nil)),\map(\cons(a,\cons(-,\nil)))(x))) \\
+ & = & \band(\unique(\cons(a,\cons(b,\nil))),\all(\unique)(\map(\cons(a,\cons(-,\nil)))(x))) \\
+ & = & \band(\unique(\cons(a,\cons(b,\nil))),\bnot(\elt(a,x))) \\
+ & = & \band(\bnot(\eq(a,b)),\bnot(\elt(a,x))) \\
+ & = & \bnot(\bor(\eq(a,b),\elt(a,x))) \\
+ & = & \bnot(\elt(a,\cons(b,x)))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_unique_elt :: (List t, Equal a)
+>   => t a -> Test (a -> t a -> Bool)
+> _test_unique_elt t =
+>   testName "all(unique)(map(cons(a,cons(-,nil)))(x)) == not(elt(a,x))" $
+>   \a x -> eq
+>     (all unique (map (\b -> cons a (cons b (nil `withTypeOf` t))) x))
+>     (not (elt a x))
+
+</p></div>
+</div>
+
+$\unique$ and $\select$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $x \in \lists{A}$ we have $$\unique(x) = \all(\unique)(\select(\next(\next(\zero)),x)).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \all(\unique)(\select(\next(\next(\zero)),x)) \\
+ & = & \all(\unique)(\select(\next(\next(\zero)),\nil)) \\
+ & = & \all(\unique)(\nil) \\
+ & = & \btrue \\
+ & = & \unique(\nil) \\
+ & = & \unique(x)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Using the inductive hypothesis, we have
+$$\begin{eqnarray*}
+ &   & \all(\unique)(\select(\next(\next(\zero)),\cons(a,x))) \\
+ & = & \all(\unique)(\cat(\map(\cons(a,-))(\select(\next(\zero),x)),\select(\next(\next(\zero)),x))) \\
+ & = & \all(\unique)(\cat(\map(\cons(a,-))(\map(\cons(-,\nil))(x)),\select(\next(\next(\zero)),x))) \\
+ & = & \all(\unique)(\cat(\map(\cons(a,\cons(-,\nil)))(x),\select(\next(\next(\zero)),x))) \\
+ & = & \band(\all(\unique)(\map(\cons(a,\cons(-,\nil)))(x)),\all(\unique)(\select(\next(\next(\zero)),x))) \\
+ & = & \band(\all(\unique)(\map(\cons(a,\cons(-,\nil)))(x)),\unique(x)) \\
+ & = & \band(\bnot(\elt(a,x)),\unique(x)) \\
+ & = & \unique(\cons(a,x))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_unique_select_two :: (List t, Equal a, Natural n)
+>   => t a -> n -> Test (t a -> Bool)
+> _test_unique_select_two _ n =
+>   testName "unique(x) == unique(select(next(next(zero)),x))" $
+>   \x -> eq
+>     (unique x)
+>     (all unique (select (next (next zero) `withTypeOf` n) x))
+
 </p></div>
 </div>
 
@@ -389,47 +446,12 @@ as needed.
 Testing
 -------
 
-Here are our property tests for $\unique$:
+Suite:
 
-> _test_unique_alt :: (List t, Equal a)
->   => t a -> Test (t a -> Bool)
-> _test_unique_alt _ =
->   testName "unique'(x) == unique(x)" $
->    \x -> eq (unique x) (unique' x)
-> 
-> 
-> _test_unique_rev :: (List t, Equal a)
->   => t a -> Test (t a -> Bool)
-> _test_unique_rev _ =
->   testName "unique(x) == unique(rev(x))" $
->    \x -> eq (unique x) (unique (rev x))
-> 
-> 
-> _test_unique_sublist :: (List t, Equal a)
->   => t a -> Test (t a -> t a -> Bool)
-> _test_unique_sublist _ =
->   testName "unique(x) & sublist(y,x) ==> unique(y)" $
->    \x y -> if and (unique x) (sublist y x)
->      then eq (unique y) True
->      else True
-> 
-> 
-> _test_unique_select_two :: (List t, Equal a, Natural n)
->   => t a -> n -> Test (t a -> Bool)
-> _test_unique_select_two _ n =
->   testName "unique(x) == unique(select(next(next(zero)),x))" $
->    let
->      two = next (next zero) `withTypeOf` n
->    in
->      \x -> eq (unique x) (all unique (select two x))
-
-And the suite:
-
-> -- run all tests for unique
 > _test_unique ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
->   , TypeName (t a), List t
->   , TypeName n, Natural n, Show n, Arbitrary n
+>   , TypeName (t a), List t, Arbitrary (t n), Show (t n), Equal (t n)
+>   , TypeName n, Natural n, Show n, Arbitrary n, Equal n
 >   , Equal (t a), Show (t a), Arbitrary (t a), Equal (t (t a))
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_unique t n maxSize numCases = do
@@ -441,12 +463,19 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_unique_alt t)
->   runTest args (_test_unique_rev t)
+>   runTest args (_test_unique_nil t)
+>   runTest args (_test_unique_cons t)
+>   runTest args (_test_unique_single t)
+>   runTest args (_test_unique_double t)
 >   runTest args (_test_unique_sublist t)
+>   runTest args (_test_unique_filter t)
+>   runTest args (_test_unique_snoc t)
+>   runTest args (_test_unique_rev t)
+>   runTest args (_test_unique_range t n)
+>   runTest args (_test_unique_elt t)
 >   runTest args (_test_unique_select_two t n)
 
-And ``main``:
+Main:
 
 > main_unique :: IO ()
 > main_unique = do
