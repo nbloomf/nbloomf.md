@@ -10,11 +10,11 @@ slug: dedupe
 >   ( dedupeL, dedupeR, _test_dedupe, main_dedupe
 >   ) where
 > 
+> import Prelude ()
 > import Booleans
 > import Tuples
 > import NaturalNumbers
 > import Plus
-> 
 > import Lists
 > import Reverse
 > import Length
@@ -32,10 +32,6 @@ slug: dedupe
 > import Select
 > import Unique
 > import Delete
-> 
-> import Prelude ()
-> import Test.QuickCheck
-> import Text.Show.Functions
 
 Today we'll define a function ``dedupe`` which removes any "duplicate" items in a list. Before jumping in, let's think a little about what such a function should do. For example, say we run ``dedupe`` on the list $$\langle a, b, a, c, a \rangle.$$ The item $a$ appears three times, so after deduplicating it should only appear once. We'd prefer not to change the relative order of items in the list, so all we can do is remove two of the $a$s. There are three ways to do this, resulting in either $$\langle a, b, c \rangle,$$ $$\langle b, a, c \rangle,$$ or $$\langle b, c, a \rangle.$$ That is, we can keep the *first* copy of $a$, the *last* copy, or *some middle* copy. It seems to me that keeping some middle copy is not the most general solution. If an item appears only twice, there is no middle appearance, and if an item appears more than three times then there is no *unique* middle appearance to keep. So it appears the two most general options are to keep the first copy of an item or to keep the last copy. We will call these strategies $\dedupeL$ (**dedup**licate from the **L**eft) and $\dedupeR$ (**dedup**licate from the **R**ight), respectively. We'll see that these two options are related. We'll start with $\dedupeL$.
 
@@ -57,42 +53,34 @@ In Haskell:
 </p></div>
 </div>
 
-The following result suggests an alternative implementation.
+Since $\dedupeL$ is defined as a foldr, it can be characterized as the unique solution to a system of functional equations.
 
 <div class="result">
-<div class="thm"><p>
-Let $A$ be a set.
-
-1. $\dedupeL(\nil) = \nil$.
-2. $\dedupeL(\cons(a,x)) = \cons(a,\delete(a,\dedupeL(x)))$.
+<div class="corollary"><p>
+Let $A$ be a set. $\dedupeL$ is the unique map $f : \lists{A} \rightarrow \lists{A}$ satisfying the following equations for all $a \in A$ and $x \in \lists{A}$.
+$$\left\{\begin{eqnarray*}
+ f(\nil) = \nil \\
+ f(\cons(a,x)) = \cons(a,\delete(a)(f(x)))
+\end{array}\right.$$
 </p></div>
 
-<div class="proof"><p>
-1. Note that
-$$\begin{eqnarray*}
- &   & \dedupeL(\nil) \\
- & = & \foldr{\nil}{\varphi}(\nil) \\
- & = & \nil
-\end{eqnarray*}$$
-as claimed.
-2. Note that
-$$\begin{eqnarray*}
- &   & \dedupeL(\cons(a,x)) \\
- & = & \foldr{\nil}{\varphi}(\cons(a,x)) \\
- & = & \varphi(a,\foldr{\nil}{\varphi}(x)) \\
- & = & \varphi(a,\dedupeL(x)) \\
- & = & \cons(a,\delete(a,\dedupeL(x)))
-\end{eqnarray*}$$
-as claimed.
+<div class="test"><p>
+
+> _test_dedupeL_nil :: (List t, Equal a, Equal (t a))
+>   => t a -> Test Bool
+> _test_dedupeL_nil t =
+>   testName "dedupeL(nil) == nil" $
+>   eq (dedupeL nil) (nil `withTypeOf` t)
+> 
+> 
+> _test_dedupeL_cons :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (a -> t a -> Bool)
+> _test_dedupeL_cons _ =
+>   testName "dedupeL(cons(a,x)) == cons(a,delete(a)(dedupeL(x))" $
+>   \a x -> eq (dedupeL (cons a x)) (cons a (delete a (dedupeL x)))
+
 </p></div>
 </div>
-
-In Haskell:
-
-> dedupeL' :: (List t, Equal a) => t a -> t a
-> dedupeL' x = case uncons x of
->   Left ()     -> nil
->   Right (a,u) -> cons a (delete a (dedupeL' u))
 
 Now $\dedupeL$ and $\delete$ commute.
 
@@ -133,7 +121,19 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_dedupeL_delete :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (a -> t a -> Bool)
+> _test_dedupeL_delete _ =
+>   testName "dedupeL(delete(a,x)) == delete(a,dedupeL(x))" $
+>   \a x -> eq (dedupeL (delete a x)) (delete a (dedupeL x))
+
+</p></div>
 </div>
+
+(@@@)
 
 $\dedupeL$s are $\unique$:
 
@@ -346,13 +346,7 @@ as claimed.
 Testing
 -------
 
-Here are our property tests for $\dedupeL$ and $\dedupeR$:
 
-> _test_dedupeL_alt :: (List t, Equal a, Equal (t a))
->   => t a -> Test (t a -> Bool)
-> _test_dedupeL_alt _ =
->   testName "dedupeL(x) == dedupeL'(x)" $
->   \x -> eq (dedupeL x) (dedupeL' x)
 > 
 > 
 > _test_dedupeL_unique :: (List t, Equal a, Equal (t a))
@@ -362,11 +356,6 @@ Here are our property tests for $\dedupeL$ and $\dedupeR$:
 >   \x -> eq (unique (dedupeL x)) True
 > 
 > 
-> _test_dedupeL_delete :: (List t, Equal a, Equal (t a))
->   => t a -> Test (a -> t a -> Bool)
-> _test_dedupeL_delete _ =
->   testName "dedupeL(delete(a,x)) == delete(a,dedupeL(x))" $
->   \a x -> eq (dedupeL (delete a x)) (delete a (dedupeL x))
 > 
 > 
 > _test_dedupeL_idempotent :: (List t, Equal a, Equal (t a))
@@ -405,9 +394,8 @@ Here are our property tests for $\dedupeL$ and $\dedupeR$:
 >   testName "dedupeR(dedupeR(x)) == dedupeR(x)" $
 >   \x -> eq (dedupeR (dedupeR x)) (dedupeR x)
 
-And the suite:
+Suite:
 
-> -- run all tests for dedupe
 > _test_dedupe ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
@@ -422,9 +410,11 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_dedupeL_alt t)
->   runTest args (_test_dedupeL_unique t)
+>   runTest args (_test_dedupeL_nil t)
+>   runTest args (_test_dedupeL_cons t)
 >   runTest args (_test_dedupeL_delete t)
+> 
+>   runTest args (_test_dedupeL_unique t)
 >   runTest args (_test_dedupeL_idempotent t)
 >   runTest args (_test_dedupeL_eq_unique t)
 >   runTest args (_test_dedupeL_prefix t)
@@ -432,7 +422,7 @@ And the suite:
 >   runTest args (_test_dedupeR_unique t)
 >   runTest args (_test_dedupeR_idempotent t)
 
-And ``main``:
+Main:
 
 > main_dedupe :: IO ()
 > main_dedupe = do
