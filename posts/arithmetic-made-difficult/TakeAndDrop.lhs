@@ -10,13 +10,13 @@ slug: take-drop
 >   ( take, drop, _test_take_drop, main_take_drop
 >   ) where
 > 
+> import Prelude ()
 > import Booleans
 > import Tuples
 > import NaturalNumbers
 > import BailoutRecursion
 > import Plus
 > import MaxAndMin
-> 
 > import Lists
 > import HeadAndTail
 > import Snoc
@@ -25,6 +25,7 @@ slug: take-drop
 > import Map
 > import Cat
 > import UnfoldN
+> import Range
 > import Zip
 > import Prefix
 > import AllAndAny
@@ -33,22 +34,24 @@ slug: take-drop
 > import Elt
 > import Count
 > import Repeat
+> import Sublist
 > import Select
 > import Unique
 > import Delete
 > import Dedupe
-> 
-> import Prelude ()
-> import Test.QuickCheck
-> import Text.Show.Functions
 
-Today we'll define two functions, $\take$ and $\drop$, that split a list at a given index. For example, $\take(3,x)$ should return a list consisting of the first 3 items of $x$. The biggest question to think about is what $\take$ should do if $x$ doesn't have 3 items to take -- should $\take(3,-)$ mean take *exactly* 3 or take *at most* 3? The simplest interpretation is *at most*, since with *exactly* we'd need the return type to encode a failure case. That said, under the *at most* interpretation, the signature of $\take$ will be $$\take : \nats \times \lists{A} \rightarrow \lists{A}.$$ Usually we'd try to define such a function with a fold, but in this case $\unfoldN$ does exactly what we want.
+Today we'll define two functions, $\take$ and $\drop$, that split a list at a given index. For example, $\take(3)(x)$ should return a list consisting of the first 3 items of $x$. The biggest question to think about is what $\take$ should do if $x$ doesn't have 3 items to take -- should $\take(3)(-)$ mean take *exactly* 3 or take *at most* 3? The simplest interpretation is *at most*, since with *exactly* we'd need the return type to encode a failure case. That said, under the *at most* interpretation, the signature of $\take$ will be $$\take : \nats \rightarrow {\lists{A}}^{\lists{A}}.$$ Usually we'd try to define such a function with a fold, but in this case $\unfoldN{\ast}$ does exactly what we want.
 
-(Fundamentally, $\take$ and $\drop$ compute a kind of "$\cat$-factorization" of a list based on index from the left. This is not the only useful such factorization; we will address two others in future posts.)
+Essentially, $\take$ and $\drop$ compute a kind of "$\cat$-factorization" of a list based on index from the left. This is not the only useful such factorization; we will address two others in future posts.
 
 <div class="result">
 <div class="defn"><p>
-Let $A$ be a set. Define $f : \lists{A} \rightarrow \ast + \lists{A} \times A$ by $$f(x) = \left\{ \begin{array}{ll} \ast & \mathrm{if}\ x = \nil \\ (b,a) & \mathrm{if}\ x = \cons(a,b) \end{array}. \right.$$ We then define $$\take : \nats \times \lists{A} \rightarrow \lists{A}$$ by $$\take(k,x) = \unfoldN(f,k,x).$$
+Let $A$ be a set. Define $f : \lists{A} \rightarrow 1 + \lists{A} \times A$ by
+$$f(x) = \left\{ \begin{array}{ll}
+ \lft(\ast) & \mathrm{if}\ x = \nil \\
+ \rgt((b,a)) & \mathrm{if}\ x = \cons(a,b).
+\end{array}\right.$$
+We then define $$\take : \nats \rightarrow {\lists{A}}^{\lists{A}}$$ by $$\take(k)(x) = \unfoldN{f}(k,x).$$
 
 In Haskell:
 
@@ -56,60 +59,52 @@ In Haskell:
 > take = unfoldN f
 >   where
 >     f z = case uncons z of
->       Left ()    -> Left ()
+>       Left () -> Left ()
 >       Right (a,u) -> Right (u,a)
 
 </p></div>
 </div>
 
-The following result suggests an alternative implementation.
+Since $\take$ is defined as an $\unfoldN{\ast}$, it can be characterized as the unique solution to a system of functional equations.
 
 <div class="result">
-<div class="thm"><p>
-Let $A$ be a set, with $x \in \lists{A}$, $a \in A$, and $k \in \nats$. Then we have the following.
-
-1. $\take(\zero,x) = \nil$.
-2. $\take(k,\nil) = \nil$.
-3. $\take(\next(k),\cons(a,x)) = \cons(a,\take(k,x))$.
+<div class="corollary"><p>
+Let $A$ be a set. $\take$ is the unique map $f : \nats \rightarrow {\lists{A}}^{\lists{A}}$ satisfying the following equations for all $n \in \nats$, $a \in A$, and $x \in \lists{A}$.
+$$\left\{\begin{array}{l}
+ f(\zero,x) = \nil \\
+ f(\next(n),\nil) = \nil \\
+ f(\next(n),\cons(a,x)) = \cons(a,f(n,x))
+\end{array}\right.$$
 </p></div>
 
-<div class="proof"><p>
-1. We have
-$$\begin{eqnarray*}
- &   & \take(\zero,x) \\
- & = & \unfoldN(f,\zero,x) \\
- & = & \nil
-\end{eqnarray*}$$
-as claimed.
-2. Certainly the equality holds if $k = \zero$. Suppose instead that $k = \next(t)$. Now $$f(\nil) = \ast$$ since $\uncons(\nil) = \ast$, and thus
-$$\begin{eqnarray*}
- &   & \take(k,\nil) \\
- & = & \take(\next(t),\nil) \\
- & = & \unfoldN(f,\next(t),\nil) \\
- & = & \nil
-\end{eqnarray*}$$
-as claimed.
-3. Note that $$\uncons(\cons(a,x)) = (a,x).$$ Then we have
-$$\begin{eqnarray*}
- &   & \take(\next(k),\cons(a,x)) \\
- & = & \unfoldN(f,\next(k),\cons(a,x)) \\
- & = & \cons(a,\unfoldN(f,k,x)) \\
- & = & \cons(a,\take(k,x))
-\end{eqnarray*}$$
-as claimed.
+<div class="test"><p>
+
+> _test_take_zero :: (List t, Equal a, Natural n, Equal n, Equal (t a))
+>   => t a -> n -> Test (t a -> Bool)
+> _test_take_zero _ n =
+>   testName "take(zero,x) == nil" $
+>   \x -> eq (take (zero `withTypeOf` n) x) nil
+> 
+> 
+> _test_take_next_nil :: (List t, Equal a, Natural n, Equal n, Equal (t a))
+>   => t a -> n -> Test (n -> Bool)
+> _test_take_next_nil t _ =
+>   testName "take(next(n),nil) == nil" $
+>   \n -> eq (take (next n) (nil `withTypeOf` t)) nil
+> 
+> 
+> _test_take_next_cons :: (List t, Equal a, Natural n, Equal n, Equal (t a))
+>   => t a -> n -> Test (n -> a -> t a -> Bool)
+> _test_take_next_cons _ _ =
+>   testName "take(next(n),cons(a,x)) == cons(a,take(n,x))" $
+>   \n a x -> eq
+>     (take (next n) (cons a x))
+>     (cons a (take n x))
+
 </p></div>
 </div>
 
-In Haskell:
-
-> take' :: (Natural n, List t) => n -> t a -> t a
-> take' k x = case unnext k of
->   Left () -> nil
->   Right t -> case uncons x of
->     Left ()     -> nil
->     Right (a,u) -> cons a (take' t u)
-
-Now $\take$ is a prefix:
+$\take(n)$ is a prefix.
 
 <div class="result">
 <div class="thm"><p>
@@ -139,9 +134,19 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_take_prefix :: (List t, Equal a, Natural n, Equal n, Equal (t a))
+>   => t a -> n -> Test (n -> t a -> Bool)
+> _test_take_prefix _ _ =
+>   testName "prefix(take(k,x),x) == true" $
+>   \k x -> prefix (take k x) x
+
+</p></div>
 </div>
 
-So $\take$ is a sublist:
+$\take(n)$ gives a sublist.
 
 <div class="result">
 <div class="corollary"><p>
@@ -150,6 +155,16 @@ Let $A$ be a set, with $x \in \lists{A}$ and $k \in \nats$. Then we have $$\subl
 
 <div class="proof"><p>
 We have $$\prefix(\take(k,x),x) = \btrue,$$ so $$\infix(\take(k,x),x) = \btrue,$$ so $$\sublist(\take(k,x),x) = \btrue$$ as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_take_sublist :: (List t, Equal a, Natural n, Equal n, Equal (t a))
+>   => t a -> n -> Test (n -> t a -> Bool)
+> _test_take_sublist _ _ =
+>   testName "prefix(take(k,x),x) == true" $
+>   \k x -> sublist (take k x) x
+
 </p></div>
 </div>
 
@@ -191,9 +206,19 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_take_length :: (List t, Equal a, Natural n, Equal n, Equal (t a))
+>   => t a -> n -> Test (n -> t a -> Bool)
+> _test_take_length _ _ =
+>   testName "length(take(k,x)) == min(k,length(x))" $
+>   \k x -> eq (length (take k x)) (min k (length x))
+
+</p></div>
 </div>
 
-$\take$ "distributes over" $\zip$:
+$\take$ "distributes over" $\zip$.
 
 <div class="result">
 <div class="thm"><p>
@@ -242,9 +267,21 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_take_zip :: (List t, Natural n, Equal (t (a,b)))
+>   => t a -> t b -> n -> Test (n -> t a -> t b -> Bool)
+> _test_take_zip _ _ _ =
+>   testName "zip(take(n)(x),take(n)(y)) == take(n)(zip(x,y))" $
+>   \k x y -> eq
+>     (zip (take k x) (take k y))
+>     (take k (zip x y))
+
+</p></div>
 </div>
 
-$\take$ and $\range$:
+$\take$ interacts with $\range$.
 
 <div class="result">
 <div class="thm"><p>
@@ -284,9 +321,21 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_take_range :: (List t, Equal a, Natural n, Equal n, Equal (t n))
+>   => t a -> n -> Test (n -> n -> n -> t n -> Bool)
+> _test_take_range _ _ =
+>   testName "take(n)(range(a,b)) == range(a,min(n,b))" $
+>   \n a b t -> eq
+>     (take n ((range a b) `withTypeOf` t))
+>     (range a (min n b))
+
+</p></div>
 </div>
 
-And $\take$ is idempotent.
+$\take$ is idempotent.
 
 <div class="result">
 <div class="thm"><p>
@@ -321,13 +370,23 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_take_idempotent :: (List t, Equal a, Natural n, Equal n, Equal (t a))
+>   => t a -> n -> Test (n -> t a -> Bool)
+> _test_take_idempotent _ _ =
+>   testName "take(k,(take(k,x)) == take(k,take(k,x))" $
+>   \k x -> eq (take k (take k x)) (take k x)
+
+</p></div>
 </div>
 
 Now for $\drop$. For this function, $\unfoldN$ doesn't have quite the right shape; fundamentally $\unfoldN$ "builds up" a list from the iterated images of a function, but $\drop$ needs to "tear down" a list, with it's natural number argument acting as a countdown. One of our other $\nats$ recursion operators will work for this -- we'll use bailout recursion for efficiency.
 
 <div class="result">
 <div class="defn"><p>
-Let $A$ be a set. Define $\beta : \nats \times A \rightarrow \bool$ by $$\beta(m,x) = \isnil(x),$$ $\psi : \nats \times \lists{A} \rightarrow \lists{A}$ by $$\psi(m,x) = x,$$ and $\omega : \nats \times \lists{A} \rightarrow \lists{A}$ by $$\omega(k,x) = \tail(x).$$ We then define $\drop : \nats \times \lists{A} \rightarrow \lists{A}$ by $$\drop = \bailrec{\id}{\beta}{\psi}{\omega}.$$
+Let $A$ be a set. Define $\beta : \nats \times A \rightarrow \bool$ by $$\beta(m,x) = \isnil(x),$$ $\psi : \nats \times \lists{A} \rightarrow \lists{A}$ by $$\psi(m,x) = x,$$ and $\omega : \nats \times \lists{A} \rightarrow \lists{A}$ by $$\omega(k,x) = \tail(x).$$ We then define $\drop : \nats \rightarrow {\lists{A}}^{\lists{A}}$ by $$\drop(k)(x) = \bailrec{\id}{\beta}{\psi}{\omega}(k,x).$$
 
 In Haskell:
 
@@ -341,58 +400,46 @@ In Haskell:
 </p></div>
 </div>
 
-Alternatively:
+Since $\drop$ is defined in terms of bailout recursion, it can be characterized as the unique solution of a system of functional equations.
 
 <div class="result">
-<div class="thm"><p>
-Let $A$ be a set. For all $a \in A$, $x \in \lists{A}$, and $k \in \nats$, we have the following.
-
-1. $\drop(\zero,x) = x$.
-2. $\drop(k,\nil) = \nil$.
-3. $\drop(\next(k),\cons(a,x)) = \drop(k,x)$.
+<div class="corollary"><p>
+Let $A$ be a set. $\drop$ is the unique map $f : \nats \rightarrow {\lists{A}}^{\lists{A}}$ satisfying the following equations for all $k \in \nats$, $a \in A$, and $x \in \lists{A}$.
+$$\left\{\begin{array}{l}
+ f(\zero,x) = x \\
+ f(\next(n),\nil) = \nil \\
+ f(\next(n),\cons(a,x)) = f(n,x)
+\end{array}\right.$$
 </p></div>
 
-<div class="proof"><p>
-1. We have
-$$\begin{eqnarray*}
- &   & \drop(\zero,x) \\
- & = & \bailrec{\id}{\beta}{\psi}{\omega}(\zero,x) \\
- & = & \id(x) \\
- & = & x
-\end{eqnarray*}$$
-as claimed.
-2. Certainly if $k = \zero$ we have $$\drop(k,\nil) = \drop(\zero,\nil) = \nil$$ as claimed. Suppose then that $k = \next(m)$; now we have
-$$\begin{eqnarray*}
- &   & \drop(k,\nil) \\
- & = & \drop(\next(m),\nil) \\
- & = & \bailrec{\id}{\beta}{\psi}{\omega}(\next(m),\nil) \\
- & = & \psi(m,\nil) \\
- & = & \nil
-\end{eqnarray*}$$
-as claimed.
-3. We have
-$$\begin{eqnarray*}
- &   & \drop(\next(k),\cons(a,x)) \\
- & = & \bailrec{\id}{\beta}{\psi}{\omega}(\next(k),\cons(a,x)) \\
- & = & \bailrec{\id}{\beta}{\psi}{\omega}(k,\omega(k,\cons(a,x))) \\
- & = & \bailrec{\id}{\beta}{\psi}{\omega}(k,\tail(\cons(a,x))) \\
- & = & \bailrec{\id}{\beta}{\psi}{\omega}(k,x) \\
- & = & \drop(k,x)
-\end{eqnarray*}$$
-as claimed.
+<div class="test"><p>
+
+> _test_drop_zero :: (List t, Equal a, Natural n, Equal n, Equal (t a))
+>   => t a -> n -> Test (t a -> Bool)
+> _test_drop_zero _ n =
+>   testName "drop(zero,x) == x" $
+>   \x -> eq (drop (zero `withTypeOf` n) x) x
+> 
+> 
+> _test_drop_next_nil :: (List t, Equal a, Natural n, Equal n, Equal (t a))
+>   => t a -> n -> Test (n -> Bool)
+> _test_drop_next_nil t _ =
+>   testName "drop(next(n),nil) == nil" $
+>   \n -> eq (drop (next n) (nil `withTypeOf` t)) nil
+> 
+> 
+> _test_drop_next_cons :: (List t, Equal a, Natural n, Equal n, Equal (t a))
+>   => t a -> n -> Test (n -> a -> t a -> Bool)
+> _test_drop_next_cons _ _ =
+>   testName "drop(next(n),cons(a,x)) == cons(a,drop(n,x))" $
+>   \n a x -> eq
+>     (drop (next n) (cons a x))
+>     (drop n x)
+
 </p></div>
 </div>
 
-In Haskell:
-
-> drop' :: (Natural n, List t) => n -> t a -> t a
-> drop' k x = case unnext k of
->   Left () -> x
->   Right t -> case uncons x of
->     Left ()     -> nil
->     Right (_,u) -> drop' t u
-
-Now $\drop$ is a $\suffix$:
+$\drop$ gives a $\suffix$.
 
 <div class="result">
 <div class="thm"><p>
@@ -422,9 +469,19 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_drop_suffix :: (List t, Equal a, Natural n, Equal n, Equal (t a))
+>   => t a -> n -> Test (n -> t a -> Bool)
+> _test_drop_suffix _ _ =
+>   testName "suffix(drop(k,x),x) == true" $
+>   \k x -> eq (suffix (drop k x) x) True
+
+</p></div>
 </div>
 
-Finally, $\take$ and $\drop$ give a kind of $\cat$-factorization.
+$\take$ and $\drop$ give a kind of $\cat$-factorization.
 
 <div class="result">
 <div class="thm"><p>
@@ -456,57 +513,8 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
-</div>
 
-
-Testing
--------
-
-Here are our property tests for $\take$:
-
-> _test_take_alt :: (List t, Equal a, Natural n, Equal n, Equal (t a))
->   => t a -> n -> Test (n -> t a -> Bool)
-> _test_take_alt _ _ =
->   testName "take(k,x) == take'(k,x)" $
->   \k x -> eq (take k x) (take' k x)
-> 
-> 
-> _test_take_prefix :: (List t, Equal a, Natural n, Equal n, Equal (t a))
->   => t a -> n -> Test (n -> t a -> Bool)
-> _test_take_prefix _ _ =
->   testName "prefix(take(k,x),x) == true" $
->   \k x -> eq (prefix (take k x) x) True
-> 
-> 
-> _test_take_length :: (List t, Equal a, Natural n, Equal n, Equal (t a))
->   => t a -> n -> Test (n -> t a -> Bool)
-> _test_take_length _ _ =
->   testName "length(take(k,x)) == min(k,length(x))" $
->   \k x -> eq (length (take k x)) (min k (length x))
-> 
-> 
-> _test_take_idempotent :: (List t, Equal a, Natural n, Equal n, Equal (t a))
->   => t a -> n -> Test (n -> t a -> Bool)
-> _test_take_idempotent _ _ =
->   testName "take(k,(take(k,x)) == take(k,take(k,x))" $
->   \k x -> eq (take k (take k x)) (take k x)
-
-And for $\drop$:
-
-> _test_drop_alt :: (List t, Equal a, Natural n, Equal n, Equal (t a))
->   => t a -> n -> Test (n -> t a -> Bool)
-> _test_drop_alt _ _ =
->   testName "drop(k,x) == drop'(k,x)" $
->   \k x -> eq (drop k x) (drop' k x)
-> 
-> 
-> _test_drop_suffix :: (List t, Equal a, Natural n, Equal n, Equal (t a))
->   => t a -> n -> Test (n -> t a -> Bool)
-> _test_drop_suffix _ _ =
->   testName "suffix(drop(k,x),x) == true" $
->   \k x -> eq (suffix (drop k x) x) True
-
-And for both:
+<div class="test"><p>
 
 > _test_take_drop_cat :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> Bool)
@@ -514,16 +522,24 @@ And for both:
 >   testName "cat(take(k,x),drop(k,x)) == x" $
 >   \k x -> eq (cat (take k x) (drop k x)) x
 
-And the suite:
+</p></div>
+</div>
 
-> -- run all tests for take & drop
+
+Testing
+-------
+
+Suite:
+
 > _test_take_drop ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
 >   , TypeName n, Natural n, Show n, Arbitrary n, Equal n
 >   , Equal (t a), Show (t a), Arbitrary (t a)
->   ) => t a -> n -> Int -> Int -> IO ()
-> _test_take_drop t k maxSize numCases = do
+>   , Equal (t b), Show (t b), Arbitrary (t b), Equal (t (a,b))
+>   , Arbitrary (t n), Show (t n), Equal (t n)
+>   ) => t a -> t b -> n -> Int -> Int -> IO ()
+> _test_take_drop t u k maxSize numCases = do
 >   testLabel ("take & drop: " ++ typeName t)
 > 
 >   let
@@ -532,19 +548,28 @@ And the suite:
 >       , maxSize    = maxSize
 >       }
 > 
->   runTest args (_test_take_alt t k)
+>   runTest args (_test_take_zero t k)
+>   runTest args (_test_take_next_nil t k)
+>   runTest args (_test_take_next_cons t k)
 >   runTest args (_test_take_prefix t k)
+>   runTest args (_test_take_sublist t k)
 >   runTest args (_test_take_length t k)
+>   runTest args (_test_take_zip t u k)
+>   runTest args (_test_take_range t k)
 >   runTest args (_test_take_idempotent t k)
 > 
->   runTest args (_test_drop_alt t k)
+>   runTest args (_test_drop_zero t k)
+>   runTest args (_test_drop_next_nil t k)
+>   runTest args (_test_drop_next_cons t k)
 >   runTest args (_test_drop_suffix t k)
 > 
 >   runTest args (_test_take_drop_cat t k)
 
-And ``main``:
+Main:
 
 > main_take_drop :: IO ()
 > main_take_drop = do
->   _test_take_drop (nil :: ConsList Bool)  (zero :: Unary) 20 100
->   _test_take_drop (nil :: ConsList Unary) (zero :: Unary) 20 100
+>   _test_take_drop (nil :: ConsList Bool)  (nil :: ConsList Bool)  (zero :: Unary) 50 200
+>   _test_take_drop (nil :: ConsList Unary) (nil :: ConsList Unary) (zero :: Unary) 50 200
+>   _test_take_drop (nil :: ConsList Bool)  (nil :: ConsList Unary) (zero :: Unary) 50 200
+>   _test_take_drop (nil :: ConsList Unary) (nil :: ConsList Bool)  (zero :: Unary) 50 200
