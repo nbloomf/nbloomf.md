@@ -918,6 +918,45 @@ as needed.
 </p></div>
 </div>
 
+$\bif{\ast}{\ast}{\ast}$ interacts with $\bor$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $a,b \in A$, and let $p,q \in \bool$. Then we have $$\bif{p}{a}{\bif{q}{a}{b}} = \bif{\bor(p,q)}{a}{b}.$$
+</p></div>
+
+<div class="proof"><p>
+If $p = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \bif{\bor(p,q)}{a}{b} \\
+ & = & \bif{\btrue}{a}{b} \\
+ & = & a
+ & = & \bif{\btrue}{a}{\bif{q}{a}{b}} \\
+ & = & \bif{p}{a}{\bif{q}{a}{b}}
+\end{eqnarray*}$$
+as needed, and if $p = \bfalse$ we have
+$$\begin{eqnarray*}
+ &   & \bif{\bor(p,q)}{a}{b} \\
+ & = & \bif{q}{a}{b} \\
+ & = & \bif{\bfalse}{a}{\bif{q}{a}{b}} \\
+ & = & \bif{p}{a}{\bif{q}{a}{b}}
+\end{eqnarray*}$$
+as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_if_or_nest :: (Equal a)
+>   => a -> Test (a -> a -> Bool -> Bool -> Bool)
+> _test_if_or_nest _ =
+>   testName "if(or(p,q),a,b) == if(p,a,if(q,a,b))" $
+>   \a b p q -> eq
+>     (if or p q then a else b)
+>     (if p then a else if q then a else b)
+
+</p></div>
+</div>
+
 
 Equality
 --------
@@ -1049,6 +1088,7 @@ And the suite:
 >   runTest args (_test_if_prune x)
 >   runTest args (_test_if_commute_left x)
 >   runTest args (_test_if_or x)
+>   runTest args (_test_if_or_nest x)
 
 Main:
 

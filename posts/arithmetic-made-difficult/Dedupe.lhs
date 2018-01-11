@@ -16,6 +16,7 @@ slug: dedupe
 > import NaturalNumbers
 > import Plus
 > import Lists
+> import Snoc
 > import Reverse
 > import Length
 > import Map
@@ -133,9 +134,7 @@ as needed.
 </p></div>
 </div>
 
-(@@@)
-
-$\dedupeL$s are $\unique$:
+$\dedupeL$s are $\unique$.
 
 <div class="result">
 <div class="thm"><p>
@@ -153,16 +152,26 @@ as needed. For the inductive step, suppose the equality holds for some $x$ and l
 $$\begin{eqnarray*}
  &   & \unique(\dedupeL(\cons(a,x))) \\
  & = & \unique(\cons(a,\delete(a,\dedupeL(x)))) \\
- & = & \band(\all(\bnot(\beq(a,-)),\delete(a,\dedupeL(x))),\unique(\delete(a,\dedupeL(x)))) \\
+ & = & \band(\bnot(\elt(a,\delete(a,\dedupeL(x)))),\unique(\delete(a,\dedupeL(x)))) \\
  & = & \band(\btrue,\unique(\delete(a,\dedupeL(x)))) \\
  & = & \unique(\delete(a,\dedupeL(x))) \\
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_dedupeL_unique :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> Bool)
+> _test_dedupeL_unique _ =
+>   testName "unique(dedupeL(x)) == true" $
+>   \x -> unique (dedupeL x)
+
+</p></div>
 </div>
 
-$\dedupeL$ preserves $\prefix$:
+$\dedupeL$ preserves $\prefix$.
 
 <div class="result">
 <div class="thm"><p>
@@ -186,6 +195,18 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_dedupeL_prefix :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> t a -> Bool)
+> _test_dedupeL_prefix _ =
+>   testName "prefix(x,y) ==> prefix(dedupeL(x),dedupeL(y))" $
+>   \x y -> if prefix x y
+>     then prefix (dedupeL x) (dedupeL y)
+>     else True
+
 </p></div>
 </div>
 
@@ -241,6 +262,16 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_dedupeL_eq_unique :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> Bool)
+> _test_dedupeL_eq_unique _ =
+>   testName "eq(x,dedupeL(x)) == unique(x)" $
+>   \x -> eq (eq x (dedupeL x)) (unique x)
+
+</p></div>
 </div>
 
 $\dedupeL$ is idempotent.
@@ -253,9 +284,68 @@ Let $A$ be a set and $x \in \lists{A}$. Then $\dedupeL(\dedupeL(x)) = \dedupeL(x
 <div class="proof"><p>
 Note that $\unique(\dedupeL(x)) = \btrue$, so that $\dedupeL(\dedupeL(x)) = \dedupeL(x)$ as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_dedupeL_idempotent :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> Bool)
+> _test_dedupeL_idempotent _ =
+>   testName "dedupeL(dedupeL(x)) == dedupeL(x)" $
+>   \x -> eq (dedupeL (dedupeL x)) (dedupeL x)
+
+</p></div>
 </div>
 
-Now for $\dedupeR$:
+$\dedupeL$ interacts with $\snoc$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have $$\dedupeL(\snoc(a,x)) = \bif{\elt(a,x)}{\dedupeL(x)}{\snoc(a,\dedupeL(x))}.$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \dedupeL(\snoc(a,\nil)) \\
+ & = & \dedupeL(\cons(a,\nil)) \\
+ & = & \cons(a,\nil) \\
+ & = & \bif{\bfalse}{\nil}{\cons(a,\nil)} \\
+ & = & \bif{\elt(a,\nil)}{\nil}{\cons(a,\nil)} \\
+ & = & \bif{\elt(a,\nil)}{\dedupeL(\nil)}{\snoc(a,\nil)}
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$, and let $b \in A$. Now
+$$\begin{eqnarray*}
+ &   & \dedupeL(\snoc(a,\cons(b,x))) \\
+ & = & \dedupeL(\cons(b,\snoc(a,x))) \\
+ & = & \cons(b,\delete(b)(\dedupeL(\snoc(a,x)))) \\
+ & = & \cons(b,\delete(b)(\bif{\elt(a,x)}{\dedupeL(x)}{\snoc(a,\dedupeL(x))})) \\
+ & = & \bif{\elt(a,x)}{\cons(b,\delete(b)(\dedupeL(x)))}{\cons(b,\delete(b)(\snoc(a,\dedupeL(x))))} \\
+ & = & \bif{\elt(a,x)}{\dedupeL(\cons(b,x))}{\cons(b,\delete(b)(\snoc(a,\dedupeL(x))))} \\
+ & = & \bif{\elt(a,x)}{\dedupeL(\cons(b,x))}{\cons(b,\bif{\beq(a,b)}{\delete(b)(\dedupeL(x))}{\snoc(a,\delete(b)(\dedupeL(x))})} \\
+ & = & \bif{\elt(a,x)}{\dedupeL(\cons(b,x))}{\bif{\beq(a,b)}{\cons(b,\delete(b)(\dedupeL(x)))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x)))}} \\
+ & = & \bif{\elt(a,x)}{\dedupeL(\cons(b,x))}{\bif{\beq(a,b)}{\dedupeL(\cons(b,x))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x)))}} \\
+ & = & \bif{\bor(\beq(a,b),\elt(a,x))}{\dedupe(\cons(b,x))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x))))} \\
+ & = & \bif{\elt(a,\cons(b,x)}{\dedupe(\cons(b,x))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x))))} \\
+ & = & \bif{\elt(a,\cons(b,x)}{\dedupe(\cons(b,x))}{\snoc(a,\cons(b,\delete(b)(\dedupeL(x))))} \\
+ & = & \bif{\elt(a,\cons(b,x)}{\dedupe(\cons(b,x))}{\snoc(a,\dedupeL(\cons(b,x)))}
+\end{eqnarray*}$$
+as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_dedupeL_snoc :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (a -> t a -> Bool)
+> _test_dedupeL_snoc _ =
+>   testName "dedupeL(snoc(a,x)) == if(elt(a,x),dedupeL(x),snoc(a,dedupeL(x)))" $
+>   \a x -> eq
+>     (dedupeL (snoc a x))
+>     (if elt a x then dedupeL x else snoc a (dedupeL x))
+
+</p></div>
+</div>
+
+We define $\dedupeR$ in terms of $\dedupeL$.
 
 <div class="result">
 <div class="defn"><p>
@@ -269,30 +359,11 @@ In Haskell:
 </p></div>
 </div>
 
-$\dedupeR$s are unique:
+The defining equations for $\dedupeL$ have equivalents for $\dedupeR$.
 
 <div class="result">
 <div class="thm"><p>
-Let $A$ be a set with $x \in \lists{A}$. Then $\unique(\dedupeR(x)) = \btrue$.
-</p></div>
-
-<div class="proof"><p>
-Note that
-$$\begin{eqnarray*}
- &   & \unique(\dedupeR(x)) \\
- & = & \unique(\rev(\dedupeL(\rev(x)))) \\
- & = & \unique(\dedupeL(\rev(x))) \\
- & = & \btrue
-\end{eqnarray*}$$
-as claimed.
-</p></div>
-</div>
-
-blah...
-
-<div class="result">
-<div class="thm"><p>
-Let $A$ be a set.
+Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$ we have the following.
 
 1. $\dedupeR(\nil) = \nil$.
 2. $\dedupeR(\snoc(a,x)) = \snoc(a,\delete(a,\dedupeR(x)))$.
@@ -320,6 +391,52 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
+
+<div class="test"><p>
+
+> _test_dedupeR_nil :: (List t, Equal a, Equal (t a))
+>   => t a -> Test Bool
+> _test_dedupeR_nil t =
+>   testName "dedupeR(nil) == nil" $
+>   eq (dedupeR nil) (nil `withTypeOf` t)
+> 
+> 
+> _test_dedupeR_snoc :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (a -> t a -> Bool)
+> _test_dedupeR_snoc _ =
+>   testName "dedupeR(snoc(a,x)) == snoc(a,delete(a)(dedupeR(x))" $
+>   \a x -> eq (dedupeR (snoc a x)) (snoc a (delete a (dedupeR x)))
+
+</p></div>
+</div>
+
+$\dedupeR$s are unique.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set with $x \in \lists{A}$. Then $\unique(\dedupeR(x)) = \btrue$.
+</p></div>
+
+<div class="proof"><p>
+Note that
+$$\begin{eqnarray*}
+ &   & \unique(\dedupeR(x)) \\
+ & = & \unique(\rev(\dedupeL(\rev(x)))) \\
+ & = & \unique(\dedupeL(\rev(x))) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_dedupeR_unique :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> Bool)
+> _test_dedupeR_unique _ =
+>   testName "unique(dedupeR(x)) == true" $
+>   \x -> eq (unique (dedupeR x)) True
+
+</p></div>
 </div>
 
 $\dedupeR$ is idempotent.
@@ -340,59 +457,21 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed.
 </p></div>
-</div>
 
+<div class="test"><p>
 
-Testing
--------
-
-
-> 
-> 
-> _test_dedupeL_unique :: (List t, Equal a, Equal (t a))
->   => t a -> Test (t a -> Bool)
-> _test_dedupeL_unique _ =
->   testName "unique(dedupeL(x)) == true" $
->   \x -> eq (unique (dedupeL x)) True
-> 
-> 
-> 
-> 
-> _test_dedupeL_idempotent :: (List t, Equal a, Equal (t a))
->   => t a -> Test (t a -> Bool)
-> _test_dedupeL_idempotent _ =
->   testName "dedupeL(dedupeL(x)) == dedupeL(x)" $
->   \x -> eq (dedupeL (dedupeL x)) (dedupeL x)
-> 
-> 
-> _test_dedupeL_eq_unique :: (List t, Equal a, Equal (t a))
->   => t a -> Test (t a -> Bool)
-> _test_dedupeL_eq_unique _ =
->   testName "eq(x,dedupeL(x)) == unique(x)" $
->   \x -> eq (eq x (dedupeL x)) (unique x)
-> 
-> 
-> _test_dedupeL_prefix :: (List t, Equal a, Equal (t a))
->   => t a -> Test (t a -> t a -> Bool)
-> _test_dedupeL_prefix _ =
->   testName "prefix(x,y) ==> prefix(dedupeL(x),dedupeL(y))" $
->   \x y -> if prefix x y
->     then prefix (dedupeL x) (dedupeL y)
->     else True
-> 
-> 
-> _test_dedupeR_unique :: (List t, Equal a, Equal (t a))
->   => t a -> Test (t a -> Bool)
-> _test_dedupeR_unique _ =
->   testName "unique(dedupeR(x)) == true" $
->   \x -> eq (unique (dedupeR x)) True
-> 
-> 
 > _test_dedupeR_idempotent :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> Bool)
 > _test_dedupeR_idempotent _ =
 >   testName "dedupeR(dedupeR(x)) == dedupeR(x)" $
 >   \x -> eq (dedupeR (dedupeR x)) (dedupeR x)
+
+</p></div>
+</div>
+
+
+Testing
+-------
 
 Suite:
 
@@ -413,12 +492,14 @@ Suite:
 >   runTest args (_test_dedupeL_nil t)
 >   runTest args (_test_dedupeL_cons t)
 >   runTest args (_test_dedupeL_delete t)
-> 
 >   runTest args (_test_dedupeL_unique t)
->   runTest args (_test_dedupeL_idempotent t)
->   runTest args (_test_dedupeL_eq_unique t)
 >   runTest args (_test_dedupeL_prefix t)
+>   runTest args (_test_dedupeL_eq_unique t)
+>   runTest args (_test_dedupeL_idempotent t)
+>   runTest args (_test_dedupeL_snoc t)
 > 
+>   runTest args (_test_dedupeR_nil t)
+>   runTest args (_test_dedupeR_snoc t)
 >   runTest args (_test_dedupeR_unique t)
 >   runTest args (_test_dedupeR_idempotent t)
 
@@ -426,5 +507,5 @@ Main:
 
 > main_dedupe :: IO ()
 > main_dedupe = do
->   _test_dedupe (nil :: ConsList Bool)  20 100
->   _test_dedupe (nil :: ConsList Unary) 20 100
+>   _test_dedupe (nil :: ConsList Bool)  50 500
+>   _test_dedupe (nil :: ConsList Unary) 50 500
