@@ -20,7 +20,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * [Bailout Recursion](/posts/arithmetic-made-difficult/BailoutRecursion.html)
         * [Mutating Recursion](/posts/arithmetic-made-difficult/MutatingRecursion.html)
         * [Double Natural Recursion](/posts/arithmetic-made-difficult/DoubleNaturalRecursion.html)
-    * Arithmetic of Natural Numbers
+    * Arithmetic
         * [Addition](/posts/arithmetic-made-difficult/Plus.html)
         * [Multiplication](/posts/arithmetic-made-difficult/Times.html)
         * [Really Simple Equations](/posts/arithmetic-made-difficult/really-simple-equations.html)
@@ -49,7 +49,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * [Consuming Fold](/posts/arithmetic-made-difficult/ConsumingFold.html)
         * [Bailout Fold](/posts/arithmetic-made-difficult/BailoutFold.html)
         * [Double Bailout Fold](/posts/arithmetic-made-difficult/DoubleBailoutFold.html)
-    * Arithmetic of Lists
+    * Arithmetic
         * [Snoc](/posts/arithmetic-made-difficult/Snoc.html)
         * [Reverse](/posts/arithmetic-made-difficult/Reverse.html)
         * [Cat](/posts/arithmetic-made-difficult/Cat.html)
@@ -90,11 +90,15 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * Sums and Products
         * Fundamental Theorem of Arithmetic
         * Number Partitions
-4. Fixed Radix Numeral Systems
+4. Binary Trees
+    * Type
+    * Recursion Operators
+    * Arithmetic
+5. Fixed Radix Numeral Systems
     * CarryBase
     * PlusBase
     * TimesBase
-5. List of Arithmetics
+6. List of Arithmetics
     * [On Boring and Repetitive Proofs](/posts/arithmetic-made-difficult/on-boring-proofs.html)
     * Partial and Total Orders
         * Sorted
@@ -107,8 +111,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * Mproduct
     * Lattices
     * Semirings
-6. Binary Trees
-7. Sequences
+7. Streams
 
 > The old idea that there was no reasoning in Arithmetic is dead; the idea that the *general axioms* have no place in Arithmetic is no longer held by a progressive teacher... <cite>J.B.F. Showalter in "Arithmetic Made Easy", 1897</cite>
 

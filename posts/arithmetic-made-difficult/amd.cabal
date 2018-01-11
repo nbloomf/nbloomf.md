@@ -61,7 +61,8 @@ library
     Sublist,
     Infix,
     Select,
-    Unique
+    Unique,
+    Delete
   build-depends:
     base == 4.*,
     QuickCheck
@@ -968,6 +969,8 @@ test-suite amd-count
     Snoc,
     Reverse,
     Cat,
+    UnfoldN,
+    Range,
     At,
     Length,
     Map,
@@ -1208,26 +1211,62 @@ test-suite amd-unique
     Infix,
     Select
 
-
-
-
-
-
-
 test-suite amd-delete
   default-language: Haskell2010
   type: exitcode-stdio-1.0
   main-is: Delete.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Delete.main_delete
-  other-modules: Booleans, Lists, NaturalNumbers, Unary,
-                 Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
-                 Times, At, Map, UnfoldN, MaxAndMin, Range,
-                 Tuples, Length, Zip, AllAndAny, Filter,
-                 LongestCommonPrefix, TailsAndInits, Elt,
-                 Count, Prefix, Repeat, Select, Choose,
-                 Sublist, Unique, SimpleRecursion,
-                 BailoutRecursion, MutatingRecursion, DisjointUnions, DoubleNaturalRecursion, HeadAndTail, LeftFold, Snoc, DoubleFold, Predicates, ConsumingFold, DoubleBailoutFold
+  other-modules:
+    Booleans,
+    Predicates,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    DoubleNaturalRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo,
+    MaxAndMin,
+    Choose,
+    Lists,
+    HeadAndTail,
+    LeftFold,
+    DoubleFold,
+    ConsumingFold,
+    BailoutFold,
+    DoubleBailoutFold,
+    Snoc,
+    Reverse,
+    Cat,
+    At,
+    Length,
+    Map,
+    UnfoldN,
+    Range,
+    Zip,
+    Prefix,
+    LongestCommonPrefix,
+    AllAndAny,
+    TailsAndInits,
+    Filter,
+    Elt,
+    Count,
+    Repeat,
+    Sublist,
+    Infix,
+    Select,
+    Unique
+
+
+
+
+
+
 
 test-suite amd-dedupe
   default-language: Haskell2010
