@@ -24,7 +24,7 @@ First some boilerplate.
 > {-# LANGUAGE LambdaCase #-}
 > module SupervisedModels where
 > 
-> import Test.QuickCheck
+> import Test.QuickCheck hiding (Function)
 > import Test.QuickCheck.Test
 > 
 > import Indices

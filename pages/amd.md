@@ -92,6 +92,8 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * Number Partitions
 4. Binary Trees
     * Type
+        * Trees
+        * Leaf and Fork
     * Recursion Operators
     * Arithmetic
 5. Fixed Radix Numeral Systems

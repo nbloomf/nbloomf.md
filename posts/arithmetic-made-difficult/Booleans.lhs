@@ -63,8 +63,7 @@ In Haskell:
 Where $\bnot$ is an involution.
 
 :::: theorem ::::
-[](#not-involution)
-For all $a \in \bool$ we have $\bnot(\bnot(a)) = a$.
+[](#not-involution) For all $a \in \bool$ we have $\bnot(\bnot(a)) = a$.
 
 ::: proof :::
 If $a = \btrue$ we have $$\bnot(\bnot(\btrue)) = \bnot(\bfalse) = \btrue,$$ and if $a = \bfalse$, we have $$\bnot(\bnot(\bfalse)) = \bnot(\btrue) = \bfalse$$ as claimed.
@@ -957,6 +956,40 @@ as needed.
 </p></div>
 </div>
 
+$\bif{\ast}{\ast}{\ast}$ interacts with functions of two arguments.
+
+<div class="result">
+<div class="thm"><p>
+We have $$f(\bif{p}{a}{c},\bif{p}{b}{d}) = \bif{p}{f(a,b)}{f(c,d)}.$$
+</p></div>
+
+<div class="proof"><p>
+If $p = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & f(\bif{p}{a}{c},\bif{p}{b}{d}) \\
+ & = & f(a,b)
+\end{eqnarray*}$$
+and if $p = \bfalse,
+$$\begin{eqnarray*}
+ &   & f(\bif{p}{a}{c},\bif{p}{b}{d}) \\
+ & = & f(c,d)
+\end{eqnarray*}$$
+as claimed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_if_two_args :: (Equal a)
+>   => a -> Test ((a -> a -> a) -> Bool -> a -> a -> a -> a -> Bool)
+> _test_if_two_args _ =
+>   testName "f(if(p,a,c),if(p,b,x)) == if(p,f(a,b),f(c,d))" $
+>   \f p a b c d -> eq
+>     (f (if p then a else c) (if p then b else d))
+>     (if p then f a b else f c d)
+
+</p></div>
+</div>
+
 
 Equality
 --------
@@ -1089,6 +1122,7 @@ And the suite:
 >   runTest args (_test_if_commute_left x)
 >   runTest args (_test_if_or x)
 >   runTest args (_test_if_or_nest x)
+>   runTest args (_test_if_two_args x)
 
 Main:
 

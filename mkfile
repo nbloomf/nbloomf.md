@@ -47,6 +47,15 @@ test:VQ:
   shelltest test/ --color --threads=16 --execdir
   stack test
 
+test-info:VQ:
+  echo 'amd' | doppler lightgreen
+  AMD="$(stack test amd 2> /dev/null)"
+  AMDTESTS="$(echo "${AMD}" | grep '^+++' | wc -l)"
+  echo '  tests: ' ${AMDTESTS} | doppler lightblue
+  AMDCASES="$(echo "${AMD}" | grep '^+++' | awk '{t+=$4}; END {print t}')"
+  echo '  cases: ' ${AMDCASES} | doppler lightblue
+
+
 
 
 #===================#

@@ -10,7 +10,7 @@ Boilerplate.
 > module GradientDescent where
 > 
 > import Control.Applicative
-> import Test.QuickCheck
+> import Test.QuickCheck hiding (Function)
 > import Test.QuickCheck.Test
 > 
 > import Indices
