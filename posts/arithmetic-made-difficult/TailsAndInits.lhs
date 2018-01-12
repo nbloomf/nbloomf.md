@@ -22,7 +22,7 @@ slug: tails-inits
 > import Map
 > import Cat
 > import Zip
-> import Prefix
+> import PrefixAndSuffix
 > import LongestCommonPrefix
 > import AllAndAny
 

@@ -22,7 +22,7 @@ slug: elt
 > import Range
 > import Cat
 > import Zip
-> import Prefix
+> import PrefixAndSuffix
 > import AllAndAny
 > import TailsAndInits
 > import Filter

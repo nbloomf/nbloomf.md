@@ -21,7 +21,7 @@ slug: filter
 > import Map
 > import Cat
 > import Zip
-> import Prefix
+> import PrefixAndSuffix
 > import AllAndAny
 > import TailsAndInits
 

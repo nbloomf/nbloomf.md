@@ -27,7 +27,7 @@ slug: take-drop
 > import UnfoldN
 > import Range
 > import Zip
-> import Prefix
+> import PrefixAndSuffix
 > import AllAndAny
 > import TailsAndInits
 > import Filter

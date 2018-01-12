@@ -1,13 +1,13 @@
 ---
-title: Prefix
+title: Prefix and Suffix
 author: nbloomf
 date: 2017-05-08
 tags: arithmetic-made-difficult, literate-haskell
 slug: prefix-suffix
 ---
 
-> module Prefix
->   ( prefix, suffix, _test_prefix, main_prefix
+> module PrefixAndSuffix
+>   ( prefix, suffix, _test_prefix_suffix, main_prefix_suffix
 >   ) where
 > 
 > import Prelude ()
@@ -708,13 +708,13 @@ Testing
 
 Suite:
 
-> _test_prefix ::
+> _test_prefix_suffix ::
 >   ( TypeName a, Show a, Equal a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
 >   , TypeName n, Equal n, Natural n, Show n, Arbitrary n
 >   , Show (t a), Equal (t a), Arbitrary (t a)
 >   ) => t a -> n -> Int -> Int -> IO ()
-> _test_prefix t n maxSize numCases = do
+> _test_prefix_suffix t n maxSize numCases = do
 >   testLabel ("prefix & suffix: " ++ typeName t ++ " & " ++ typeName n)
 > 
 >   let
@@ -751,7 +751,7 @@ Suite:
 
 Main:
 
-> main_prefix :: IO ()
-> main_prefix = do
->   _test_prefix (nil :: ConsList Bool)  (zero :: Unary) 20 100
->   _test_prefix (nil :: ConsList Unary) (zero :: Unary) 20 100
+> main_prefix_suffix :: IO ()
+> main_prefix_suffix = do
+>   _test_prefix_suffix (nil :: ConsList Bool)  (zero :: Unary) 20 100
+>   _test_prefix_suffix (nil :: ConsList Unary) (zero :: Unary) 20 100

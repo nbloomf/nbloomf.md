@@ -20,7 +20,7 @@ slug: lcp-lcs
 > import Cat
 > import Map
 > import Zip
-> import Prefix
+> import PrefixAndSuffix
 
 Today we'll compute the *longest common prefix* of two lists (and while we're at it, the *longest common suffix*). Given two lists $x$ and $y$, their longest common prefix is the longest list which is a prefix of both, just like it says on the tin. We'll denote this function $\lcp$, and we want it to have a signature like $$\lists{A} \times \lists{A} \rightarrow \lists{A}.$$ Double fold was made for situations like this.
 

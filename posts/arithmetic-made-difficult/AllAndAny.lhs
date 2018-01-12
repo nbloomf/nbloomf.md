@@ -20,7 +20,7 @@ slug: all-any
 > import Map
 > import Cat
 > import Zip
-> import Prefix
+> import PrefixAndSuffix
 
 Today we'll define two boolean functions for lists called $\all$ and $\any$. Each one takes as an argument a predicate $A \rightarrow \bool$, and then tests whether all or any of the items in a list of type $\lists{A}$ satisfy the predicate.
 

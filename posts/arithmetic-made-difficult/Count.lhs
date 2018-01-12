@@ -23,7 +23,7 @@ slug: count
 > import Map
 > import Cat
 > import Zip
-> import Prefix
+> import PrefixAndSuffix
 > import AllAndAny
 > import TailsAndInits
 > import Filter

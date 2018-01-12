@@ -23,7 +23,7 @@ slug: infix
 > import Length
 > import Map
 > import Cat
-> import Prefix
+> import PrefixAndSuffix
 > import AllAndAny
 > import TailsAndInits
 > import Filter

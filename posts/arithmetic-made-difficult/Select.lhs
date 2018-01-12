@@ -24,7 +24,7 @@ slug: select
 > import Cat
 > import UnfoldN
 > import Zip
-> import Prefix
+> import PrefixAndSuffix
 > import AllAndAny
 > import TailsAndInits
 > import Filter
