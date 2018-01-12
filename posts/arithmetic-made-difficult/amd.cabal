@@ -64,7 +64,8 @@ library
     Unique,
     Delete,
     Dedupe,
-    TakeAndDrop
+    TakeAndDrop,
+    TakeButAndDropBut
   build-depends:
     base == 4.*,
     QuickCheck
@@ -1369,26 +1370,66 @@ test-suite amd-take-drop
     Delete,
     Dedupe
 
-
-
-
-
-
-
 test-suite amd-takebut-dropbut
   default-language: Haskell2010
   type: exitcode-stdio-1.0
   main-is: TakeButAndDropBut.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is TakeButAndDropBut.main_takebut_dropbut
-  other-modules: Booleans, Lists, NaturalNumbers, Unary,
-                 Reverse, Cat, Plus, LessThanOrEqualTo, Minus,
-                 Times, At, Map, UnfoldN, MaxAndMin, Range,
-                 Tuples, Length, Zip, AllAndAny, Filter,
-                 LongestCommonPrefix, TailsAndInits, Elt,
-                 Count, Prefix, Repeat, Select, Delete,
-                 Dedupe, Choose, Sublist, Unique, TakeAndDrop,
-                 SimpleRecursion, BailoutRecursion, MutatingRecursion, DisjointUnions, DoubleNaturalRecursion, HeadAndTail, LeftFold, Snoc, DoubleFold, Predicates, ConsumingFold, DoubleBailoutFold
+  other-modules:
+    Booleans,
+    Predicates,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    DoubleNaturalRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo,
+    MaxAndMin,
+    Choose,
+    Lists,
+    HeadAndTail,
+    LeftFold,
+    DoubleFold,
+    ConsumingFold,
+    BailoutFold,
+    DoubleBailoutFold,
+    Snoc,
+    Reverse,
+    Cat,
+    At,
+    Length,
+    Map,
+    UnfoldN,
+    Range,
+    Zip,
+    Prefix,
+    LongestCommonPrefix,
+    AllAndAny,
+    TailsAndInits,
+    Filter,
+    Elt,
+    Count,
+    Repeat,
+    Sublist,
+    Infix,
+    Select,
+    Unique,
+    Delete,
+    Dedupe,
+    TakeAndDrop
+
+
+
+
+
+
+
 
 test-suite amd-takewhile-dropwhile
   default-language: Haskell2010
