@@ -213,7 +213,7 @@ Suite:
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
 > _test_prime n maxSize numCases = do
->   testLabel ("mindiv & prime: " ++ typeName n)
+>   testLabel1 "mindiv & prime" n
 > 
 >   let
 >     args = stdArgs

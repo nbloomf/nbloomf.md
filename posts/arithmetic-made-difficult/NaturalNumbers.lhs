@@ -129,7 +129,7 @@ Suite.
 > _test_nats :: (TypeName n, Natural n, Show n, Arbitrary n, Equal n)
 >   => n -> Int -> Int -> IO ()
 > _test_nats n maxSize numCases = do
->   testLabel ("plus: " ++ typeName n)
+>   testLabel1 "nats" n
 > 
 >   let
 >     args = stdArgs

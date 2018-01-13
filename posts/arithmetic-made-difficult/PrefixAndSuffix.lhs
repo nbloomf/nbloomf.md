@@ -716,7 +716,7 @@ Suite:
 >   , Show (t a), Equal (t a), Arbitrary (t a)
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_prefix_suffix t n maxSize numCases = do
->   testLabel ("prefix & suffix: " ++ typeName t ++ " & " ++ typeName n)
+>   testLabel2 "prefix & suffix" t n
 > 
 >   let
 >     args = stdArgs

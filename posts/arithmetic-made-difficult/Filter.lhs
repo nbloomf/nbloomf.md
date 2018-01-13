@@ -399,14 +399,13 @@ Testing
 
 Suite:
 
-> -- run all tests for filter
 > _test_filter ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
 >   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (a,a))
 >   ) => t a -> Int -> Int -> IO ()
 > _test_filter t maxSize numCases = do
->   testLabel ("filter: " ++ typeName t)
+>   testLabel1 "filter" t
 > 
 >   let
 >     args = stdArgs

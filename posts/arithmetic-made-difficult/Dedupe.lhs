@@ -482,7 +482,7 @@ Suite:
 >   , Equal (t a), Show (t a), Arbitrary (t a), Equal (t (t a))
 >   ) => t a -> Int -> Int -> IO ()
 > _test_dedupe t maxSize numCases = do
->   testLabel ("dedupeL & dedupeR: " ++ typeName t)
+>   testLabel1 "dedupeL & dedupeR" t
 > 
 >   let
 >     args = stdArgs

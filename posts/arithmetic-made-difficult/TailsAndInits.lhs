@@ -550,7 +550,7 @@ Suite:
 >   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (a,a)), Equal (t (t a))
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_tails_inits t n maxSize numCases = do
->   testLabel ("tails & inits: " ++ typeName t ++ " & " ++ typeName n)
+>   testLabel2 "tails & inits" t n
 > 
 >   let
 >     args = stdArgs

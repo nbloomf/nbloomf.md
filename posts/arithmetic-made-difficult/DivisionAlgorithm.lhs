@@ -297,7 +297,7 @@ Suite.
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
 > _test_divalg n maxSize numCases = do
->   testLabel ("divalg: " ++ typeName n)
+>   testLabel1 "divalg" n
 > 
 >   let
 >     args = stdArgs

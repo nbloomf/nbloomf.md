@@ -413,7 +413,7 @@ Suite:
 >   , Equal (t a), Show (t a), Arbitrary (t a)
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_takewhile_dropwhile t k maxSize numCases = do
->   testLabel ("takeWhile & dropWhile: " ++ typeName t)
+>   testLabel1 "takeWhile & dropWhile" t
 > 
 >   let
 >     args = stdArgs

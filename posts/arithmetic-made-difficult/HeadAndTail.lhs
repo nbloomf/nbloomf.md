@@ -222,7 +222,7 @@ Suite:
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a)
 >   ) => t a -> Int -> Int -> IO ()
 > _test_head_tail t maxSize numCases = do
->   testLabel ("head and tail: " ++ typeName t)
+>   testLabel1 "head and tail" t
 > 
 >   let
 >     args = stdArgs

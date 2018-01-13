@@ -430,7 +430,7 @@ Suite:
 >   , Equal (t a), Show (t a), Arbitrary (t a), Equal (t (t a))
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_select t n maxSize numCases = do
->   testLabel ("select: " ++ typeName t)
+>   testLabel1 "select" t
 > 
 >   let
 >     args = stdArgs

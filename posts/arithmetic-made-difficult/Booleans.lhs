@@ -7,7 +7,6 @@ slug: booleans
 ---
 
 > {-# LANGUAGE NoImplicitPrelude #-}
-> {-# LANGUAGE NoImplicitPrelude #-}
 > module Booleans
 >   ( Bool(..), not, and, or, impl, ifThenElse
 >   , Equal, eq
@@ -66,9 +65,8 @@ If $a = \btrue$ we have $$\bnot(\bnot(\btrue)) = \bnot(\bfalse) = \btrue,$$ and 
 
 Next, $\band$:
 
-<div class="result">
-<div class="defn"><p><a name="def-and" />
-We define a map $\band : \bool \times \bool \rightarrow \bool$ by
+:::: definition ::::
+[](#def-and) We define a map $\band : \bool \times \bool \rightarrow \bool$ by
 $$\begin{eqnarray*}
 \band(\btrue,\btrue)   & = & \btrue \\
 \band(\btrue,\bfalse)  & = & \bfalse \\
@@ -82,13 +80,11 @@ In Haskell:
 > and True True = True
 > and _    _    = False
 
-</p></div>
-</div>
+::::::::::::::::::::
 
 And $\band$ satisfies the usual properties.
 
-<div class="result">
-<div class="thm"><p>
+:::: theorem ::::
 The following hold for all $a,b,c \in \bool$.
 
 1. $\band(\bfalse,a) = \band(a,\bfalse) = \bfalse$.
@@ -97,9 +93,8 @@ The following hold for all $a,b,c \in \bool$.
 4. $\band(a,a) = a$.
 5. $\band(a,b) = \band(b,a)$.
 6. $\band(\band(a,b),c) = \band(a,\band(b,c))$.
-</p></div>
 
-<div class="proof"><p>
+::: proof :::
 1. If $a = \btrue$ we have $$\band(\bfalse,\btrue) = \bfalse = \band(\btrue,\bfalse),$$ and if $a = \bfalse$ we have $$\band(\bfalse,\bfalse) = \bfalse$$ as claimed.
 2. If $a = \btrue$ we have $$\band(\btrue,\btrue) = \btrue,$$ and if $a = \bfalse$ we have $$\band(\btrue,\bfalse) = \bfalse = \band(\bfalse,\btrue)$$ as claimed.
 3. If $a = \btrue$, we have $\band(\btrue,\bnot(\btrue)) = \band(\btrue,\bfalse) = \bfalse,$$ and if $a = \bfalse$, we have $$\band(\bfalse,\bnot(\bfalse)) = \bfalse$$ as claimed.
@@ -122,9 +117,9 @@ $$\begin{eqnarray*}
  & = & \band(\bfalse,\band(b,c))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+:::::::::::::
 
-<div class="test"><p>
+::: test :::
 
 > _test_and_false :: Test (Bool -> Bool)
 > _test_and_false =
@@ -161,8 +156,8 @@ as claimed.
 >   testName "and(and(p,q),r) == and(p,and(q,r))" $
 >   \p q r -> eq (and (and p q) r) (and p (and q r))
 
-</p></div>
-</div>
+::::::::::::
+:::::::::::::::::
 
 Finally, $\bor$:
 
@@ -1022,7 +1017,7 @@ Suite:
 > _test_boolean :: (Equal a, Arbitrary a, CoArbitrary a, Show a)
 >   => a -> Int -> Int -> IO ()
 > _test_boolean x size num = do
->   testLabel "Bool"
+>   testLabel0 "Bool"
 > 
 >   let
 >     args = stdArgs

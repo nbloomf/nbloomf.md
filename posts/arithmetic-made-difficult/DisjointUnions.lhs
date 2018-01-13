@@ -650,10 +650,11 @@ The suite:
 >   :: ( Show a, Show b, Show c
 >      , Equal a, Equal b, Equal c
 >      , Arbitrary a, Arbitrary b, Arbitrary c
+>      , TypeName a, TypeName b, TypeName c
 >      , CoArbitrary a, CoArbitrary b )
 >   => a -> b -> c -> Int -> Int -> IO ()
 > _test_disjoint_union a b c size num = do
->   testLabel "Disjoint Union"
+>   testLabel3 "Disjoint Union" a b c
 > 
 >   let
 >     args = stdArgs

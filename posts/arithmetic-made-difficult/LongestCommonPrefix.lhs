@@ -857,7 +857,7 @@ Suite:
 >   , Arbitrary (t (t a)), Show (t (t a)), Equal (t (t a))
 >   ) => t a -> Int -> Int -> IO ()
 > _test_lcp t maxSize numCases = do
->   testLabel ("lcp & lcs: " ++ typeName t)
+>   testLabel1 "lcp & lcs" t
 > 
 >   let
 >     args = stdArgs

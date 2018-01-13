@@ -290,7 +290,7 @@ Suite:
 >   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (a,a)), Equal (t b)
 >   ) => t a -> t b -> n -> Int -> Int -> IO ()
 > _test_repeat t u n maxSize numCases = do
->   testLabel ("repeat: " ++ typeName t ++ " & " ++ typeName n)
+>   testLabel2 "repeat" t n
 > 
 >   let
 >     args = stdArgs

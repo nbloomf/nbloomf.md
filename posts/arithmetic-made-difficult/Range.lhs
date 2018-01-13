@@ -315,7 +315,7 @@ Suite:
 >   , TypeName (t n), List t, Equal (t n), Show (t n), Arbitrary (t n)
 >   ) => t n -> Int -> Int -> IO ()
 > _test_range t maxSize numCases = do
->   testLabel ("range: " ++ typeName t)
+>   testLabel1 "range" t
 > 
 >   let
 >     args = stdArgs

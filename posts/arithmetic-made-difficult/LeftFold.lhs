@@ -100,7 +100,7 @@ Suite:
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a)
 >   ) => t a -> Int -> Int -> IO ()
 > _test_foldl t maxSize numCases = do
->   testLabel ("foldl: " ++ typeName t)
+>   testLabel1 "foldl" t
 > 
 >   let
 >     args = stdArgs

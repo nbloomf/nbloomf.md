@@ -403,7 +403,7 @@ Suite:
 >   , TypeName (t a), List t, Equal (t a), Show (t a), Arbitrary (t a)
 >   ) => t a -> Int -> Int -> IO ()
 > _test_cat t maxSize numCases = do
->   testLabel ("cat:" ++ typeName t)
+>   testLabel1 "cat" t
 > 
 >   let
 >     args = stdArgs

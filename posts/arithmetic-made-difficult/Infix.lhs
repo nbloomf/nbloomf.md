@@ -669,7 +669,7 @@ Suite:
 >   , Equal (t a), Show (t a), Arbitrary (t a)
 >   ) => t a -> Int -> Int -> IO ()
 > _test_isInfix t maxSize numCases = do
->   testLabel ("infix: " ++ typeName t)
+>   testLabel1 "infix" t
 > 
 >   let
 >     args = stdArgs

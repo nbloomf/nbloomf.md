@@ -104,7 +104,7 @@ Suite:
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a), CoArbitrary (t a)
 >   ) => t a -> Int -> Int -> IO ()
 > _test_cfoldr t maxSize numCases = do
->   testLabel ("cfoldr: " ++ typeName t)
+>   testLabel1 "cfoldr" t
 > 
 >   let
 >     args = stdArgs

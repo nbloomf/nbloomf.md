@@ -7,8 +7,8 @@ tags: arithmetic-made-difficult, literate-haskell
 
 > {-# LANGUAGE NoImplicitPrelude #-}
 > module Testing
->   ( Test, runTest, testName, testLabel, withTypeOf, TypeName(..)
->   , testLabel1, testLabel2, testLabel3
+>   ( Test, runTest, testName, withTypeOf, TypeName(..)
+>   , testLabel0, testLabel1, testLabel2, testLabel3
 > 
 >   , module Prelude
 >   , module Test.QuickCheck
@@ -45,6 +45,9 @@ One of our main uses for ``Bool`` will be checking the results of tests, so this
 > 
 > testLabel :: String -> IO ()
 > testLabel msg = putStrLn ("\n\x1b[1;32m" ++ msg ++ "\x1b[0;39;49m")
+> 
+> testLabel0 :: String -> IO ()
+> testLabel0 = testLabel
 > 
 > testLabel1 :: (TypeName a) => String -> a -> IO ()
 > testLabel1 str a = testLabel $ concat

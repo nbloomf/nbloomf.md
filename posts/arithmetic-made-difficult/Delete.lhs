@@ -505,7 +505,7 @@ Suite:
 >   , Equal (t a), Show (t a), Arbitrary (t a), Equal (t (t a))
 >   ) => t a -> Int -> Int -> IO ()
 > _test_delete t maxSize numCases = do
->   testLabel ("delete: " ++ typeName t)
+>   testLabel1 "delete" t
 > 
 >   let
 >     args = stdArgs

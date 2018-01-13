@@ -116,7 +116,7 @@ Suite:
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
 > _test_coprime n maxSize numCases = do
->   testLabel ("coprime: " ++ typeName n)
+>   testLabel1 "coprime" n
 > 
 >   let
 >     args = stdArgs

@@ -646,7 +646,7 @@ Suite:
 >   , Show (t a), Equal (t a), Arbitrary (t a)
 >   ) => t a -> Int -> Int -> IO ()
 > _test_all_any t maxSize numCases = do
->   testLabel ("all & any: " ++ typeName t)
+>   testLabel1 "all & any" t
 > 
 >   let
 >     args = stdArgs

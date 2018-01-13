@@ -366,11 +366,12 @@ That's enough.
 Testing
 -------
 
-> -- run all tests for leq
+Suite:
+
 > _test_leq :: (TypeName n, Natural n, Equal n, Arbitrary n, Show n)
 >   => n -> Int -> Int -> IO ()
 > _test_leq n maxSize numCases = do
->   testLabel ("leq: " ++ typeName n)
+>   testLabel1 "leq" n
 > 
 >   let
 >     args = stdArgs
@@ -395,7 +396,7 @@ Testing
 >   runTest args (_test_leq_next_squeeze n)
 >   runTest args (_test_leq_times_compatible n)
 
-And main.
+Main:
 
 > main_leq :: IO ()
 > main_leq = do

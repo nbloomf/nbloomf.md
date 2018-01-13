@@ -508,7 +508,7 @@ Suite:
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
 > _test_lcm n maxSize numCases = do
->   testLabel ("lcm: " ++ typeName n)
+>   testLabel1 "lcm" n
 > 
 >   let
 >     args = stdArgs

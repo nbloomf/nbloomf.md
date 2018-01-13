@@ -483,10 +483,10 @@ Testing
 
 Suite:
 
-> _test_predicate :: (Equal a, Arbitrary a, CoArbitrary a, Show a)
+> _test_predicate :: (Equal a, Arbitrary a, CoArbitrary a, Show a, TypeName a)
 >   => a -> Int -> Int -> IO ()
 > _test_predicate x size num = do
->   testLabel "Bool"
+>   testLabel1 "predicate" x
 > 
 >   let
 >     args = stdArgs

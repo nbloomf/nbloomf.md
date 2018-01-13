@@ -473,7 +473,7 @@ Suite:
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a)
 >   ) => t a -> Int -> Int -> IO ()
 > _test_rev t maxSize numCases = do
->   testLabel ("rev: " ++ typeName t)
+>   testLabel1 "rev" t
 > 
 >   let
 >     args = stdArgs

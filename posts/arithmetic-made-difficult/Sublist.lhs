@@ -1059,7 +1059,7 @@ Suite:
 >   , Natural n
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_sublist t n maxSize numCases = do
->   testLabel ("sublist: " ++ typeName t)
+>   testLabel1 "sublist" t
 > 
 >   let
 >     args = stdArgs

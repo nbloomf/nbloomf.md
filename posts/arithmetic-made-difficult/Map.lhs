@@ -407,7 +407,7 @@ Suite:
 >   , TypeName n, Show n, Equal n, Natural n, Arbitrary n
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_map t n maxSize numCases = do
->   testLabel ("map: " ++ typeName t)
+>   testLabel1 "map" t
 > 
 >   let
 >     args = stdArgs

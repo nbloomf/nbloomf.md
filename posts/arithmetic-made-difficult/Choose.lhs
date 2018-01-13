@@ -254,7 +254,7 @@ Suite:
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
 > _test_choose n maxSize numCases = do
->   testLabel ("choose: " ++ typeName n)
+>   testLabel1 "choose" n
 > 
 >   let
 >     args = stdArgs

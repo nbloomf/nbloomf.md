@@ -473,7 +473,7 @@ Testing
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
 > _test_minus n maxSize numCases = do
->   testLabel ("minus: " ++ typeName n)
+>   testLabel1 "minus" n
 > 
 >   let
 >     args = stdArgs

@@ -524,16 +524,17 @@ as claimed.
 Testing
 -------
 
-The suite:
+Suite:
 
 > _test_tuple
 >   :: ( Show a, Show b, Show c
 >      , Equal a, Equal b, Equal c
 >      , Arbitrary a, Arbitrary b, Arbitrary c
+>      , TypeName a, TypeName b, TypeName c
 >      , CoArbitrary a, CoArbitrary b )
 >   => a -> b -> c -> Int -> Int -> IO ()
 > _test_tuple a b c size num = do
->   testLabel "Tuple"
+>   testLabel3 "Tuple" a b c
 > 
 >   let
 >     args = stdArgs
@@ -559,7 +560,7 @@ The suite:
 >   runTest args (_test_tpair_tupL a b)
 >   runTest args (_test_tpair_tupR a b)
 
-And ``main``:
+Main:
 
 > main_tuple :: IO ()
 > main_tuple = _test_tuple True True True 20 100

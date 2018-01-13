@@ -211,7 +211,7 @@ Suite:
 >   :: (TypeName n, Natural n, Equal n, Show n, Arbitrary n)
 >   => n -> (n -> n -> n) -> Int -> Int -> IO ()
 > _test_plus n f maxSize numCases = do
->   testLabel ("plus: " ++ typeName n)
+>   testLabel1 "plus" n
 > 
 >   let
 >     args = stdArgs

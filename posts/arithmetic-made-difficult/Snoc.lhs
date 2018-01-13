@@ -316,7 +316,7 @@ Suite:
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a)
 >   ) => t a -> Int -> Int -> IO ()
 > _test_snoc t maxSize numCases = do
->   testLabel ("snoc: " ++ typeName t)
+>   testLabel1 "snoc" t
 > 
 >   let
 >     args = stdArgs

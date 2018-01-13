@@ -419,7 +419,7 @@ Suite:
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
 > _test_gcd n maxSize numCases = do
->   testLabel ("gcd: " ++ typeName n)
+>   testLabel1 "gcd" n
 > 
 >   let
 >     args = stdArgs

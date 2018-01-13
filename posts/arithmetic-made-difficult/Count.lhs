@@ -541,7 +541,7 @@ Suite:
 >   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (a,a))
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_count t n maxSize numCases = do
->   testLabel ("count: " ++ typeName t ++ " & " ++ typeName n)
+>   testLabel2 "count" t n
 > 
 >   let
 >     args = stdArgs

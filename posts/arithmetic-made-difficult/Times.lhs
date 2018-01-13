@@ -357,7 +357,7 @@ Testing
 > _test_times :: (TypeName n, Natural n, Equal n, Arbitrary n, Show n)
 >   => n -> (n -> n -> n) -> Int -> Int -> IO ()
 > _test_times n f maxSize numCases = do
->   testLabel ("times: " ++ typeName n)
+>   testLabel1 "times" n
 > 
 >   let
 >     args = stdArgs

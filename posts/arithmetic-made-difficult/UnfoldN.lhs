@@ -366,7 +366,7 @@ Suite:
 >   , TypeName n, Equal n, Show n, Arbitrary n, Natural n
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_unfoldN t n maxSize numCases = do
->   testLabel ("unfoldN: " ++ typeName t)
+>   testLabel1 "unfoldN" t
 > 
 >   let
 >     args = stdArgs

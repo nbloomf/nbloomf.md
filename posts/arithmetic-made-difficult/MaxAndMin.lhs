@@ -512,7 +512,7 @@ Suite:
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
 > _test_max_min n maxSize numCases = do
->   testLabel ("min & max: " ++ typeName n)
+>   testLabel1 "min & max" n
 > 
 >   let
 >     args = stdArgs

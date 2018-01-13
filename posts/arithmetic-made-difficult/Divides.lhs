@@ -337,7 +337,7 @@ Suite:
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
 > _test_div n maxSize numCases = do
->   testLabel ("div: " ++ typeName n)
+>   testLabel1 "div" n
 > 
 >   let
 >     args = stdArgs

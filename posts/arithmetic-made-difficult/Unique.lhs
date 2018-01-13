@@ -456,7 +456,7 @@ Suite:
 >   , Equal (t a), Show (t a), Arbitrary (t a), Equal (t (t a))
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_unique t n maxSize numCases = do
->   testLabel ("unique: " ++ typeName t)
+>   testLabel1 "unique" t
 > 
 >   let
 >     args = stdArgs

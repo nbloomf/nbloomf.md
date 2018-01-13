@@ -227,7 +227,7 @@ Suite:
 >   , Show (t (a,b)), Arbitrary (t (a,b)), Equal (t b), Equal (t a)
 >   ) => t a -> t b -> Int -> Int -> IO ()
 > _test_unzip t u maxSize numCases = do
->   testLabel ("unzip: " ++ typeName t ++ " & " ++ typeName u)
+>   testLabel2 "unzip" t u
 > 
 >   let
 >     args = stdArgs

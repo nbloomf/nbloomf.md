@@ -295,7 +295,7 @@ Suite:
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, CoArbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
 > _test_findSmallest n maxSize numCases = do
->   testLabel ("findSmallest: " ++ typeName n)
+>   testLabel1 "findSmallest" n
 > 
 >   let
 >     args = stdArgs

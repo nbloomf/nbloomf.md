@@ -541,7 +541,7 @@ Suite:
 >   , Arbitrary (t n), Show (t n), Equal (t n)
 >   ) => t a -> t b -> n -> Int -> Int -> IO ()
 > _test_take_drop t u k maxSize numCases = do
->   testLabel ("take & drop: " ++ typeName t)
+>   testLabel1 "take & drop" t
 > 
 >   let
 >     args = stdArgs

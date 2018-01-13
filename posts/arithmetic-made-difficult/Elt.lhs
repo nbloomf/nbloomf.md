@@ -560,7 +560,7 @@ Suite:
 >   , TypeName n, Equal n, Show n, Arbitrary n, Natural n
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_elt t n maxSize numCases = do
->   testLabel ("elt: " ++ typeName t)
+>   testLabel1 "elt" t
 > 
 >   let
 >     args = stdArgs
