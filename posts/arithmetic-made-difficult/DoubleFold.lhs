@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: dfoldr
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module DoubleFold (
 >   dfoldr
 > ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import DisjointUnions
 > import Lists

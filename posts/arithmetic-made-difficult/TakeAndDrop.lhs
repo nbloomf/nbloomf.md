@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: take-drop
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module TakeAndDrop
 >   ( take, drop, _test_take_drop, main_take_drop
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import Tuples
 > import NaturalNumbers

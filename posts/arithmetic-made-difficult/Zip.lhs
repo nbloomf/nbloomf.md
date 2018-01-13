@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: zip
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Zip
 >   ( zip, _test_zip, main_zip
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import Tuples
 > import DisjointUnions

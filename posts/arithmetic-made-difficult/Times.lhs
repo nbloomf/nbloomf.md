@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: times
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Times
 >  ( times, _test_times, main_times
 >  ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import NaturalNumbers
 > import SimpleRecursion

@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: count
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Count
 >   ( count, addcount, _test_count, main_count
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import NaturalNumbers
 > import Plus

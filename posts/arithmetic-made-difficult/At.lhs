@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: at
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module At
 >   ( at, _test_at, main_at
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import DisjointUnions
 > import NaturalNumbers

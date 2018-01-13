@@ -7,11 +7,12 @@ slug: lists
 ---
 
 > {-# LANGUAGE ScopedTypeVariables #-}
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Lists
 >   ( List(..), ConsList(), foldr
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import DisjointUnions
 

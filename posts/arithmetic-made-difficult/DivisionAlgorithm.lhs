@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: divalg
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module DivisionAlgorithm
 >   ( divalg, quo, rem, _test_divalg, main_divalg
 >   ) where
 >
-> import Prelude ()
+> import Testing
 > import Booleans
 > import Tuples
 > import NaturalNumbers

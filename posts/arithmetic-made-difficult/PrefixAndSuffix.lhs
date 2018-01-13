@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: prefix-suffix
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module PrefixAndSuffix
 >   ( prefix, suffix, _test_prefix_suffix, main_prefix_suffix
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import NaturalNumbers
 > import LessThanOrEqualTo

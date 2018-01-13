@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: unique
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Unique
 >   ( unique, _test_unique, main_unique
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import Tuples
 > import NaturalNumbers

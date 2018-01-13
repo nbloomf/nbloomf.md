@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: leq
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module LessThanOrEqualTo
 >  ( leq, _test_leq, main_leq
 >  ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import DisjointUnions
 > import NaturalNumbers

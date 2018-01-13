@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: sublist
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Sublist
 >   ( sublist, _test_sublist, main_sublist
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import Tuples
 > import NaturalNumbers

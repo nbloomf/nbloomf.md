@@ -7,10 +7,14 @@ slug: bailrec
 ---
 
 > {-# LANGUAGE BangPatterns #-}
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module BailoutRecursion
 >   ( bailoutRec
 >   ) where
 > 
+> import Testing
+> import Booleans
+> import Tuples
 > import NaturalNumbers
 
 So far we have defined two special *recursion operators*, $\natrec{\ast}{\ast}$ and $\simprec{\ast}{\ast}$. These act like program skeletons: fill in the slots with functions of the right signatures and get a computable function out. In this post we'll define another operator, which we will call *bailout recursion*.

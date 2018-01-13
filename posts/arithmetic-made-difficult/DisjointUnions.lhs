@@ -7,12 +7,13 @@ slug: disjoint-unions
 ---
 
 > {-# LANGUAGE ScopedTypeVariables #-}
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module DisjointUnions
 >   ( lft, rgt, either, uswap, upair , uassocL, uassocR, isLft, isRgt
 >   , _test_disjoint_union, main_disjoint_union
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 
 Dual to sets of tuples are disjoint sums.

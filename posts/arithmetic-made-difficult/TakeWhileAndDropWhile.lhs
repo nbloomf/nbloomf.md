@@ -6,12 +6,13 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: takewhile-dropwhile
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module TakeWhileAndDropWhile
 >   ( takeWhile, dropWhile
 >   , _test_takewhile_dropwhile, main_takewhile_dropwhile
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import Tuples
 > import DisjointUnions

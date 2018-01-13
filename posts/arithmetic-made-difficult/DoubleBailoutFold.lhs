@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: dbfoldr
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module DoubleBailoutFold (
 >   dbfoldr, _test_dbfoldr, main_dbfoldr
 > ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import NaturalNumbers
 > import Lists

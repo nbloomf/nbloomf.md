@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: div
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Divides
 >   ( div, _test_div, main_div
 >   ) where
 >
-> import Prelude ()
+> import Testing
 > import Booleans
 > import NaturalNumbers
 > import Plus

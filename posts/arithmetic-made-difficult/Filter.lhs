@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: filter
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Filter
 >   ( filter, _test_filter, main_filter
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import NaturalNumbers
 > import Lists

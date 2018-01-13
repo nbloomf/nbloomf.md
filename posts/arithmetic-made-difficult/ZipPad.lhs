@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: zippad
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module ZipPad
 >   ( zipPad, _test_zipPad, main_zipPad
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import Tuples
 > import DisjointUnions

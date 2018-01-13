@@ -7,6 +7,7 @@ library
   default-language:
     Haskell2010
   exposed-modules:
+    Testing,
     Booleans,
     Predicates,
     Tuples,
@@ -79,6 +80,8 @@ test-suite amd-booleans
   main-is: Booleans.lhs
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Booleans.main_boolean
+  other-modules:
+    Testing
 
 test-suite amd-predicates
   default-language: Haskell2010
@@ -87,6 +90,7 @@ test-suite amd-predicates
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Predicates.main_predicate
   other-modules:
+    Testing,
     Booleans
 
 test-suite amd-tuple
@@ -96,6 +100,7 @@ test-suite amd-tuple
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Tuples.main_tuple
   other-modules:
+    Testing,
     Booleans
 
 test-suite amd-disjoint-union
@@ -105,6 +110,7 @@ test-suite amd-disjoint-union
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is DisjointUnions.main_disjoint_union
   other-modules:
+    Testing,
     Booleans
 
 test-suite amd-nats
@@ -114,6 +120,7 @@ test-suite amd-nats
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is NaturalNumbers.main_nats
   other-modules:
+    Testing,
     Booleans,
     Unary,
     DisjointUnions
@@ -125,6 +132,7 @@ test-suite amd-plus
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Plus.main_plus
   other-modules:
+    Testing,
     Booleans,
     DisjointUnions,
     Unary,
@@ -138,6 +146,7 @@ test-suite amd-times
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Times.main_times
   other-modules:
+    Testing,
     Booleans,
     DisjointUnions,
     Unary,
@@ -152,6 +161,7 @@ test-suite amd-minus
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Minus.main_minus
   other-modules:
+    Testing,
     Booleans,
     DisjointUnions,
     Unary,
@@ -168,6 +178,7 @@ test-suite amd-leq
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is LessThanOrEqualTo.main_leq
   other-modules:
+    Testing,
     Booleans,
     DisjointUnions,
     Unary,
@@ -185,6 +196,7 @@ test-suite amd-max-min
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is MaxAndMin.main_max_min
   other-modules:
+    Testing,
     Booleans,
     DisjointUnions,
     Unary,
@@ -203,6 +215,7 @@ test-suite amd-divalg
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is DivisionAlgorithm.main_divalg
   other-modules:
+    Testing,
     Booleans,
     Tuples,
     DisjointUnions,
@@ -222,6 +235,7 @@ test-suite amd-div
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Divides.main_div
   other-modules:
+    Testing,
     Booleans,
     Tuples,
     DisjointUnions,
@@ -242,6 +256,7 @@ test-suite amd-gcd
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is GreatestCommonDivisor.main_gcd
   other-modules:
+    Testing,
     Booleans,
     Tuples,
     DisjointUnions,
@@ -264,6 +279,7 @@ test-suite amd-coprime
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is CoprimeTo.main_coprime
   other-modules:
+    Testing,
     Booleans,
     Tuples,
     DisjointUnions,
@@ -287,6 +303,7 @@ test-suite amd-lcm
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is LeastCommonMultiple.main_lcm
   other-modules:
+    Testing,
     Booleans,
     Tuples,
     DisjointUnions,
@@ -311,6 +328,7 @@ test-suite amd-findsmallest
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is FindSmallest.main_findSmallest
   other-modules:
+    Testing,
     Booleans,
     DisjointUnions,
     Unary,
@@ -329,6 +347,7 @@ test-suite amd-prime
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is IsPrime.main_prime
   other-modules:
+    Testing,
     Booleans,
     Tuples,
     DisjointUnions,
@@ -355,6 +374,7 @@ test-suite amd-power
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Exponentiation.main_power
   other-modules:
+    Testing,
     Booleans,
     Tuples,
     DisjointUnions,
@@ -380,6 +400,7 @@ test-suite amd-choose
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Choose.main_choose
   other-modules:
+    Testing,
     Booleans,
     DisjointUnions,
     Unary,
@@ -399,6 +420,7 @@ test-suite amd-head-tail
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is HeadAndTail.main_head_tail
   other-modules:
+    Testing,
     Booleans,
     Tuples,
     DisjointUnions,
@@ -413,6 +435,7 @@ test-suite amd-foldl
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is LeftFold.main_foldl
   other-modules:
+    Testing,
     Booleans,
     DisjointUnions,
     Unary,
@@ -425,6 +448,7 @@ test-suite amd-cfoldr
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is ConsumingFold.main_cfoldr
   other-modules:
+    Testing,
     Booleans,
     DisjointUnions,
     Unary,
@@ -437,6 +461,7 @@ test-suite amd-bfoldr
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is BailoutFold.main_bfoldr
   other-modules:
+    Testing,
     Booleans,
     Tuples,
     DisjointUnions,
@@ -452,6 +477,7 @@ test-suite amd-dbfoldr
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is DoubleBailoutFold.main_dbfoldr
   other-modules:
+    Testing,
     Booleans,
     Tuples,
     DisjointUnions,
@@ -467,6 +493,7 @@ test-suite amd-snoc
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Snoc.main_snoc
   other-modules:
+    Testing,
     Booleans,
     Tuples,
     DisjointUnions,
@@ -483,6 +510,7 @@ test-suite amd-rev
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Reverse.main_rev
   other-modules:
+    Testing,
     Booleans,
     Tuples,
     DisjointUnions,
@@ -500,6 +528,7 @@ test-suite amd-cat
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Cat.main_cat
   other-modules:
+    Testing,
     Booleans,
     Tuples,
     DisjointUnions,
@@ -518,6 +547,7 @@ test-suite amd-length
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Length.main_length
   other-modules:
+    Testing,
     Booleans,
     Tuples,
     DisjointUnions,
@@ -540,6 +570,7 @@ test-suite amd-at
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is At.main_at
   other-modules:
+    Testing,
     Booleans,
     Tuples,
     DisjointUnions,
@@ -566,6 +597,7 @@ test-suite amd-map
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Map.main_map
   other-modules:
+    Testing,
     Booleans,
     Tuples,
     DisjointUnions,
@@ -593,6 +625,7 @@ test-suite amd-unfoldN
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is UnfoldN.main_unfoldN
   other-modules:
+    Testing,
     Booleans,
     Tuples,
     DisjointUnions,
@@ -621,6 +654,7 @@ test-suite amd-range
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Range.main_range
   other-modules:
+    Testing,
     Booleans,
     Tuples,
     DisjointUnions,
@@ -650,6 +684,7 @@ test-suite amd-zip
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Zip.main_zip
   other-modules:
+    Testing,
     Booleans,
     Tuples,
     DisjointUnions,
@@ -680,6 +715,7 @@ test-suite amd-zippad
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is ZipPad.main_zipPad
   other-modules:
+    Testing,
     Booleans,
     Tuples,
     DisjointUnions,
@@ -710,6 +746,7 @@ test-suite amd-unzip
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Unzip.main_unzip
   other-modules:
+    Testing,
     Booleans,
     Tuples,
     DisjointUnions,
@@ -741,6 +778,7 @@ test-suite amd-prefix-suffix
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is PrefixAndSuffix.main_prefix_suffix
   other-modules:
+    Testing,
     Booleans,
     Tuples,
     DisjointUnions,
@@ -774,6 +812,7 @@ test-suite amd-lcp
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is LongestCommonPrefix.main_lcp
   other-modules:
+    Testing,
     Booleans,
     Tuples,
     DisjointUnions,
@@ -806,6 +845,7 @@ test-suite amd-all-any
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is AllAndAny.main_all_any
   other-modules:
+    Testing,
     Booleans,
     Predicates,
     Tuples,
@@ -839,6 +879,7 @@ test-suite amd-tails-inits
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is TailsAndInits.main_tails_inits
   other-modules:
+    Testing,
     Booleans,
     Predicates,
     Tuples,
@@ -875,6 +916,7 @@ test-suite amd-filter
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Filter.main_filter
   other-modules:
+    Testing,
     Booleans,
     Predicates,
     Tuples,
@@ -912,6 +954,7 @@ test-suite amd-elt
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Elt.main_elt
   other-modules:
+    Testing,
     Booleans,
     Predicates,
     Tuples,
@@ -952,6 +995,7 @@ test-suite amd-count
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Count.main_count
   other-modules:
+    Testing,
     Booleans,
     Predicates,
     Tuples,
@@ -993,6 +1037,7 @@ test-suite amd-repeat
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Repeat.main_repeat
   other-modules:
+    Testing,
     Booleans,
     Predicates,
     Tuples,
@@ -1035,6 +1080,7 @@ test-suite amd-sublist
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Sublist.main_sublist
   other-modules:
+    Testing,
     Booleans,
     Predicates,
     Tuples,
@@ -1078,6 +1124,7 @@ test-suite amd-infix
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Infix.main_isInfix
   other-modules:
+    Testing,
     Booleans,
     Predicates,
     Tuples,
@@ -1123,6 +1170,7 @@ test-suite amd-select
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Select.main_select
   other-modules:
+    Testing,
     Booleans,
     Predicates,
     Tuples,
@@ -1172,6 +1220,7 @@ test-suite amd-unique
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Unique.main_unique
   other-modules:
+    Testing,
     Booleans,
     Predicates,
     Tuples,
@@ -1222,6 +1271,7 @@ test-suite amd-delete
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Delete.main_delete
   other-modules:
+    Testing,
     Booleans,
     Predicates,
     Tuples,
@@ -1273,6 +1323,7 @@ test-suite amd-dedupe
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is Dedupe.main_dedupe
   other-modules:
+    Testing,
     Booleans,
     Predicates,
     Tuples,
@@ -1325,6 +1376,7 @@ test-suite amd-take-drop
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is TakeAndDrop.main_take_drop
   other-modules:
+    Testing,
     Booleans,
     Predicates,
     Tuples,
@@ -1378,6 +1430,7 @@ test-suite amd-takebut-dropbut
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is TakeButAndDropBut.main_takebut_dropbut
   other-modules:
+    Testing,
     Booleans,
     Predicates,
     Tuples,
@@ -1432,6 +1485,7 @@ test-suite amd-takewhile-dropwhile
   build-depends: base == 4.*, QuickCheck
   ghc-options: -main-is TakeWhileAndDropWhile.main_takewhile_dropwhile
   other-modules:
+    Testing,
     Booleans,
     Predicates,
     Tuples,

@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: unzip
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Unzip
 >   ( unzip, _test_unzip, main_unzip
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import Tuples
 > import NaturalNumbers

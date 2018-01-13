@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: range
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Range
 >   ( range, _test_range, main_range
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import DisjointUnions
 > import NaturalNumbers

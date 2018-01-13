@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: coprime
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module CoprimeTo
 >   ( coprime, _test_coprime, main_coprime
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import NaturalNumbers
 > import Plus

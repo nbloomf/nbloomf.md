@@ -6,6 +6,7 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > {-# LANGUAGE BangPatterns #-}
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module NaturalNumbers
 >   ( Natural(..), Unary()
 >   , isZero, prev, naturalRec
@@ -13,7 +14,7 @@ tags: arithmetic-made-difficult, literate-haskell
 >   , _test_nats, main_nats
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import DisjointUnions
 > import Unary

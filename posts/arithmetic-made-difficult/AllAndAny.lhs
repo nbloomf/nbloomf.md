@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: all-any
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module AllAndAny
 >   ( all, any, _test_all_any, main_all_any
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import Predicates
 > import NaturalNumbers

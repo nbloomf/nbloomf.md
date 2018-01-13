@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: rev
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Reverse
 >   ( revcat, rev, _test_rev, main_rev
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import NaturalNumbers
 > import Lists

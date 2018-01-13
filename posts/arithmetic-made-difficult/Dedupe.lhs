@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: dedupe
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Dedupe
 >   ( dedupeL, dedupeR, _test_dedupe, main_dedupe
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import Tuples
 > import NaturalNumbers

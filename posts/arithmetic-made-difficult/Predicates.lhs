@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: predicates
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Predicates (
 >   pnot, pand, por, ptrue, pfalse, _test_predicate, main_predicate
 > ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 
 In the last post we defined the algebra of boolean values, true and false. Today we'll look at *predicates* -- functions from some set $A$ to $\bool$. It turns out the algebra on $\bool$ can be lifted to predicates, and is useful enough to collect some definitions and properties in one place.

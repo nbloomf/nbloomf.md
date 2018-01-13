@@ -7,12 +7,14 @@ slug: unary
 ---
 
 > {-# LANGUAGE BangPatterns #-}
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Unary
 >   ( Unary(Z,N), mkUnary, natRec
 >   ) where
 > 
 > import Prelude (Integer, (-), (<=))
 > import Test.QuickCheck.Modifiers (NonNegative(..))
+> import Testing
 > import Booleans
 
 A nice consequence of wrapping up recursion in the $\natrec{\ast}{\ast}$ function is that it allows us to write programs, independent of any implementation, and prove things about them. We'll see lots of examples of this, but first we need to establish some structural results.

@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: findsmallest
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module FindSmallest (
 >   findSmallest, _test_findSmallest, main_findSmallest
 > ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import DisjointUnions
 > import NaturalNumbers

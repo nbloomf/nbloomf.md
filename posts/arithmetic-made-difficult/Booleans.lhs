@@ -6,30 +6,15 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: booleans
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Booleans
 >   ( Bool(..), not, and, or, impl, ifThenElse
 >   , Equal, eq
 >   , _test_boolean, main_boolean
+>   ) where
 > 
->   , Test, runTest, testName, testLabel, withTypeOf, TypeName(..)
->   , testLabel1, testLabel2, testLabel3
-> 
->   , module Prelude
->   , module Test.QuickCheck
->   , module Test.QuickCheck.Test
-> ) where
-> 
-> import Prelude
->   ( Show(show), IO, Bool(..), Int, Maybe(..), Either(..), id, undefined, concat
->   , putStrLn, (>>), return, (++), String, (.), ($), Integer, const, uncurry
->   )
-> import Test.QuickCheck
->   ( Testable(..), Args(..), Arbitrary(..), CoArbitrary(..)
->   , quickCheckWithResult, stdArgs, variant
->   )
-> import Test.QuickCheck.Test (isSuccess)
-> import Text.Show.Functions
-> import System.Exit
+> import Testing
 
 Before we think about numbers or writing programs, let's start by nailing down some important ideas about truth values. In math there can be a kind of other-worldness about True and False, since they live in the "metalanguage" of mathematical logic rather than the "object language" of whatever we are studying. But it will turn out to be useful to algebraify the truth values themselves.
 
@@ -1032,47 +1017,7 @@ Now that we've algebraified truth values, we will also algebraify equality. Typi
 Testing
 -------
 
-One of our main uses for ``Bool`` will be checking the results of tests, so this is as good a place as any to introduce a couple of QuickCheck helper functions for this.
-
-> type Test prop = (String, prop)
-> 
-> testName :: String -> prop -> Test prop
-> testName name prop = (name, prop)
-> 
-> runTest :: Testable prop => Args -> Test prop -> IO ()
-> runTest args (name, prop) = do
->   putStrLn ("\x1b[1;34m" ++ name ++ "\x1b[0;39;49m")
->   result <- quickCheckWithResult args prop
->   if isSuccess result
->     then return ()
->     else putStrLn (show result) >> exitFailure
-> 
-> testLabel :: String -> IO ()
-> testLabel msg = putStrLn ("\n\x1b[1;32m" ++ msg ++ "\x1b[0;39;49m")
-> 
-> testLabel1 :: (TypeName a) => String -> a -> IO ()
-> testLabel1 str a = testLabel $ concat
->   [ str, ": ", typeName a ]
-> 
-> testLabel2 :: (TypeName a, TypeName b) => String -> a -> b -> IO ()
-> testLabel2 str a b = testLabel $ concat
->   [ str, ": ", typeName a, ", ", typeName b ]
-> 
-> testLabel3 :: (TypeName a, TypeName b, TypeName c) => String -> a -> b -> c -> IO ()
-> testLabel3 str a b c = testLabel $ concat
->   [ str, ": ", typeName a, ", ", typeName b, ", ", typeName c ]
->
-> 
-> withTypeOf :: a -> a -> a
-> withTypeOf x _ = x
-> 
-> class TypeName t where
->   typeName :: t -> String
-> 
-> instance TypeName Bool where
->   typeName _ = "Bool"
-
-And the suite:
+Suite:
 
 > _test_boolean :: (Equal a, Arbitrary a, CoArbitrary a, Show a)
 >   => a -> Int -> Int -> IO ()

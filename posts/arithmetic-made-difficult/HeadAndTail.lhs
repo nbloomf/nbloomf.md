@@ -5,11 +5,12 @@ date: 2018-01-03
 tags: arithmetic-made-difficult, literate-haskell
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module HeadAndTail (
 >   head, tail, isNil, _test_head_tail, main_head_tail
 > ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import Tuples
 > import DisjointUnions

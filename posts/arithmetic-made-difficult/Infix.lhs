@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: infix
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Infix
 >   ( isInfix, _test_isInfix, main_isInfix
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import Tuples
 > import NaturalNumbers

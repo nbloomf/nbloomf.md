@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: bfoldr
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module BailoutFold (
 >   bfoldr, _test_bfoldr, main_bfoldr
 > ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import NaturalNumbers
 > import Lists

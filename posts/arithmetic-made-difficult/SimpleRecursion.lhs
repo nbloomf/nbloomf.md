@@ -6,10 +6,14 @@ tags: arithmetic-made-difficult, literate-haskell
 ---
 
 > {-# LANGUAGE BangPatterns #-}
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module SimpleRecursion
 >   ( simpleRec
 >   ) where
 > 
+> import Testing
+> import Booleans
+> import Tuples
 > import NaturalNumbers
 
 So far we've defined the natural numbers as an iterative set with a special *universal property*, which was encapsulated in the existence of a simple recursion operator $\natrec{\ast}{\ast}$. Anything we will wish to do with the natural numbers can be done using this operator alone. However, in practice, it will be handy to define synonyms for some more complicated recursive functions; the first of these is *simple recursion with a parameter*.

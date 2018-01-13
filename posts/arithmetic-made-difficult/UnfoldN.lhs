@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: unfoldn
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module UnfoldN
 >   ( unfoldN, tacunfoldN, _test_unfoldN, main_unfoldN
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import DisjointUnions
 > import NaturalNumbers

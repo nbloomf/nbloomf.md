@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: gcd
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module GreatestCommonDivisor
 >   ( gcd, _test_gcd, main_gcd
 >   ) where
 >
-> import Prelude ()
+> import Testing
 > import Booleans
 > import Tuples
 > import NaturalNumbers

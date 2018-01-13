@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: mutrec
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module MutatingRecursion
 >   ( mutatingRec
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import DisjointUnions
 > import NaturalNumbers

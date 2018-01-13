@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: minus
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Minus
 >   ( minus, _test_minus, main_minus
 >   ) where
 >
-> import Prelude ()
+> import Testing
 > import Booleans
 > import DisjointUnions
 > import NaturalNumbers

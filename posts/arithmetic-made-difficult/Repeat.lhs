@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: repeat
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Repeat
 >   ( repeat, _test_repeat, main_repeat
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import DisjointUnions
 > import NaturalNumbers

@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: isprime
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module IsPrime
 >   ( mindiv, prime, _test_prime, main_prime
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import DisjointUnions
 > import NaturalNumbers

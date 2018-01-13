@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: length
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Length
 >   ( addlength, length, _test_length, main_length
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import NaturalNumbers
 > import Plus

@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: plus
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Plus
 >   ( plus, _test_plus, main_plus
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import NaturalNumbers
 > import SimpleRecursion

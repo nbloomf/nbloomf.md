@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: lcm
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module LeastCommonMultiple
 >   ( lcm, _test_lcm, main_lcm
 >   ) where
 >
-> import Prelude ()
+> import Testing
 > import Booleans
 > import NaturalNumbers
 > import Plus

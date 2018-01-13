@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: tails-inits
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module TailsAndInits
 >   ( tails, inits, _test_tails_inits, main_tails_inits
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import NaturalNumbers
 > import Lists

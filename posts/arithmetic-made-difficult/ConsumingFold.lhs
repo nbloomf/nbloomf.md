@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: cfoldr
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module ConsumingFold (
 >   cfoldr, _test_cfoldr, main_cfoldr
 > ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import Unary
 > import Lists

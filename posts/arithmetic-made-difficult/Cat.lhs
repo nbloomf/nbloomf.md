@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: cat
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Cat
 >   ( cat, _test_cat, main_cat
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import NaturalNumbers
 > import Lists

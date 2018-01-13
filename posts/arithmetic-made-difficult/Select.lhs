@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: select
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Select
 >   ( select, _test_select, main_select
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import Tuples
 > import NaturalNumbers

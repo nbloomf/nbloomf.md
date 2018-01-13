@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: dnaturalrec
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module DoubleNaturalRecursion (
 >   dnaturalRec
 > ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import NaturalNumbers
 

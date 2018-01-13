@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: power
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Exponentiation
 >   ( power, _test_power, main_power
 >   ) where
 >
-> import Prelude ()
+> import Testing
 > import Booleans
 > import NaturalNumbers
 > import SimpleRecursion

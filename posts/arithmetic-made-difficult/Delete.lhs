@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: delete
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Delete
 >   ( delete, _test_delete, main_delete
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import Tuples
 > import NaturalNumbers

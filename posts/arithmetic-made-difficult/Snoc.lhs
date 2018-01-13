@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: snoc
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Snoc (
 >   snoc, _test_snoc, main_snoc
 > ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import Unary
 > import NaturalNumbers

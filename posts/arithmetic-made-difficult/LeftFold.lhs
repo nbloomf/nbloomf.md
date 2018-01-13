@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: foldl
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module LeftFold (
 >   foldl, _test_foldl, main_foldl
 > ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import DisjointUnions
 > import Unary

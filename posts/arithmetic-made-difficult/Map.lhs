@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: map
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Map
 >   ( map, _test_map, main_map
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import DisjointUnions
 > import NaturalNumbers

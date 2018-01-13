@@ -6,9 +6,10 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: normrec
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module NormRecursion where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import NaturalNumbers
 > import BailoutRecursion

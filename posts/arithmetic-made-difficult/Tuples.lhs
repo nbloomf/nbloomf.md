@@ -6,12 +6,13 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: tuples
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Tuples
 >   ( fst, snd, dup, tswap, tpair, tassocL, tassocR, tupL, tupR
 >   , _test_tuple, main_tuple
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 
 Today we'll establish a few basic utility functions on *tuples*. First, recall some definitions.

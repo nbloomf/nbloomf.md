@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: lcp-lcs
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module LongestCommonPrefix
 >   ( lcp, lcs, _test_lcp, main_lcp
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import NaturalNumbers
 > import Lists

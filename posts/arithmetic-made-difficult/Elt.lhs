@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: elt
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module Elt
 >   ( elt, _test_elt, main_elt
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import NaturalNumbers
 > import LessThanOrEqualTo

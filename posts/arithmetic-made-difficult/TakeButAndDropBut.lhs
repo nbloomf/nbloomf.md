@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: takebut-dropbut
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module TakeButAndDropBut
 >   ( takeBut, dropBut, _test_takebut_dropbut, main_takebut_dropbut
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import Tuples
 > import NaturalNumbers

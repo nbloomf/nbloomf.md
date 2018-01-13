@@ -6,11 +6,12 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: max-min
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module MaxAndMin
 >   ( max, min, _test_max_min, main_max_min
 >   ) where
 > 
-> import Prelude ()
+> import Testing
 > import Booleans
 > import NaturalNumbers
 > import Plus
