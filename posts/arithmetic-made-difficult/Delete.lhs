@@ -493,6 +493,48 @@ as needed.
 </p></div>
 </div>
 
+$\delete$ distributes over $\cat$.
+
+<div class="result">
+<div class="thm"><p>
+Let $A$ be a set. For all $a \in A$ and $x,y \in \lists{A}$, we have $$\delete(a)(\cat(x,y)) = \cat(\delete(a)(x),\delete(a)(y)).$$
+</p></div>
+
+<div class="proof"><p>
+We proceed by list induction on $y$. For the base case $y = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \delete(a)(\cat(x,\nil)) \\
+ & = & \delete(a)(x) \\
+ & = & \cat(\delete(a)(x),\nil) \\
+ & = & \cat(\delete(a)(x),\delete(a)(\nil))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $a$ and $x$ for some  $y$, and let $b \in A$. Now
+$$\begin{eqnarray*}
+ &   & \delete(a)(\cat(x,\cons(b,y))) \\
+ & = & \delete(a)(\cat(\snoc(b,x),y)) \\
+ & = & \cat(\delete(a)(\snoc(b,x)),\delete(a)(y)) \\
+ & = & \cat(\bif{\beq(a,b)}{\delete(a)(x)}{\snoc(b,\delete(a)(x))},\delete(a)(y)) \\
+ & = & \bif{\beq(a,b)}{\cat(\delete(a)(x),\delete(a)(y))}{\cat(\snoc(b,\delete(a)(x)),\delete(a)(y))} \\
+ & = & \bif{\beq(a,b)}{\cat(\delete(a)(x),\delete(a)(y))}{\cat(\delete(a)(x),\cons(b,\delete(a)(y)))} \\
+ & = & \cat(\delete(a)(x),\bif{\beq(a,b)}{\delete(a)(y)}{\cons(b,\delete(a)(y))}) \\
+ & = & \cat(\delete(a)(x),\delete(a)(\cons(b,y)))
+\end{eqnarray*}$$
+as needed.
+</p></div>
+
+<div class="test"><p>
+
+> _test_delete_cat :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (a -> t a -> t a -> Bool)
+> _test_delete_cat _ =
+>   testName "delete(a)(cat(x,y)) == cat(delete(a)(x),delete(a)(y))" $
+>   \a x y -> eq
+>     (delete a (cat x y))
+>     (cat (delete a x) (delete a y))
+
+</p></div>
+</div>
+
 
 Testing
 -------
@@ -526,6 +568,7 @@ Suite:
 >   runTest args (_test_delete_prefix t)
 >   runTest args (_test_delete_snoc t)
 >   runTest args (_test_delete_rev t)
+>   runTest args (_test_delete_cat t)
 
 Main:
 
