@@ -8,7 +8,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > {-# LANGUAGE BangPatterns #-}
 > {-# LANGUAGE NoImplicitPrelude #-}
 > module SimpleRecursion
->   ( simpleRec
+>   ( simpleRec, _test_simplerec, main_simplerec
 >   ) where
 > 
 > import Testing
@@ -140,6 +140,20 @@ And the tail recursive strategy:
 >       Right k -> tau (mu h a x) (next h) k
 >   in tau (phi a) zero n
 
+While we're at it, we should test that these implementations are equivalent.
+
+> _test_simplerec_equiv_def :: (Natural n, Equal b)
+>   => n -> a -> b -> Test ((a -> b) -> (n -> a -> b -> b) -> n -> a -> Bool)
+> _test_simplerec_equiv_def _ _ _ =
+>   testName "simpleRec(phi,mu)(n,a) == simpleRec'(phi,mu)(n,a)" $
+>   \phi mu n a -> eq (simpleRec phi mu n a) (simpleRec' phi mu n a)
+> 
+> _test_simplerec_equiv_naive :: (Natural n, Equal b)
+>   => n -> a -> b -> Test ((a -> b) -> (n -> a -> b -> b) -> n -> a -> Bool)
+> _test_simplerec_equiv_naive _ _ _ =
+>   testName "simpleRec(phi,mu)(n,a) == simpleRec''(phi,mu)(n,a)" $
+>   \phi mu n a -> eq (simpleRec phi mu n a) (simpleRec'' phi mu n a)
+
 Some simple testing again shows that the tail recursive form is more efficient -- both of the other forms run out of space on medium-sized numbers. All we need to do is verify that the efficient ``simpRec`` is equivalent to the inefficient, but obviously correct, ``simpRec''``. We will (eventually) do this by induction.
 
 First, though, we need a lemma about ``tau``. Note that in the definition of ``tau`` there are two implicit parameters, ``mu`` and ``a``. With ``mu`` and ``phi`` fixed, we define supplementary functions ``mu'`` and ``phi'`` as follows:
@@ -235,3 +249,35 @@ $$\left\{\begin{array}{l}
 \end{array}\right.$$
 </div>
 </div>
+
+
+Testing
+-------
+
+Suite:
+
+> _test_simplerec
+>   :: (TypeName n, Natural n, Equal n, Show n, Arbitrary n
+>   , Equal b, Arbitrary a, CoArbitrary a, Arbitrary b, CoArbitrary b
+>   , Show a, Show b, TypeName a, TypeName b, CoArbitrary n)
+>   => n -> a -> b -> Int -> Int -> IO ()
+> _test_simplerec n a b maxSize numCases = do
+>   testLabel3 "simpleRec" n a b
+> 
+>   let
+>     args = stdArgs
+>       { maxSuccess = numCases
+>       , maxSize    = maxSize
+>       }
+> 
+>   runTest args (_test_simplerec_equiv_def n a b)
+>   runTest args (_test_simplerec_equiv_naive n a b)
+
+Main:
+
+> main_simplerec :: IO ()
+> main_simplerec = do
+>   _test_simplerec (zero :: Unary) True            True            100 100
+>   _test_simplerec (zero :: Unary) (zero :: Unary) True            100 100
+>   _test_simplerec (zero :: Unary) True            (zero :: Unary) 100 100
+>   _test_simplerec (zero :: Unary) (zero :: Unary) (zero :: Unary) 100 100
