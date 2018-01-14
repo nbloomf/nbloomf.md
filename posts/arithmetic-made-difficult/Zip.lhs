@@ -13,6 +13,10 @@ slug: zip
 > 
 > import Testing
 > import Booleans
+> import Not
+> import And
+> import Or
+> import Implies
 > import Tuples
 > import DisjointUnions
 > import NaturalNumbers

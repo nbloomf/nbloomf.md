@@ -16,6 +16,10 @@ slug: unary
 > import Test.QuickCheck.Modifiers (NonNegative(..))
 > import Testing
 > import Booleans
+> import Not
+> import And
+> import Or
+> import Implies
 
 A nice consequence of wrapping up recursion in the $\natrec{\ast}{\ast}$ function is that it allows us to write programs, independent of any implementation, and prove things about them. We'll see lots of examples of this, but first we need to establish some structural results.
 

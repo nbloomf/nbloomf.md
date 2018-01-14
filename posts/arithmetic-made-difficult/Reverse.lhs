@@ -13,6 +13,10 @@ slug: rev
 > 
 > import Testing
 > import Booleans
+> import Not
+> import And
+> import Or
+> import Implies
 > import NaturalNumbers
 > import Lists
 > import HeadAndTail

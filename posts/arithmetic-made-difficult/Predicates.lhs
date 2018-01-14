@@ -13,6 +13,10 @@ slug: predicates
 > 
 > import Testing
 > import Booleans
+> import Not
+> import And
+> import Or
+> import Implies
 
 In the last post we defined the algebra of boolean values, true and false. Today we'll look at *predicates* -- functions from some set $A$ to $\bool$. It turns out the algebra on $\bool$ can be lifted to predicates, and is useful enough to collect some definitions and properties in one place.
 

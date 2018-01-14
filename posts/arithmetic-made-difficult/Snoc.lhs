@@ -13,6 +13,10 @@ slug: snoc
 > 
 > import Testing
 > import Booleans
+> import Not
+> import And
+> import Or
+> import Implies
 > import Unary
 > import NaturalNumbers
 > import Lists

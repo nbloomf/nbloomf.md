@@ -7,6 +7,10 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
 
 1. First Steps
     * [Booleans](/posts/arithmetic-made-difficult/Booleans.html)
+        * [Not](/posts/arithmetic-made-difficult/Not.html)
+        * [And](/posts/arithmetic-made-difficult/And.html)
+        * [Or](/posts/arithmetic-made-difficult/Or.html)
+        * [Implies](/posts/arithmetic-made-difficult/Implies.html)
     * [Predicates](/posts/arithmetic-made-difficult/Predicates.html)
     * [Tuples](/posts/arithmetic-made-difficult/Tuples.html)
     * [Disjoint Unions](/posts/arithmetic-made-difficult/DisjointUnions.html)
@@ -78,7 +82,11 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * [Take and Drop](/posts/arithmetic-made-difficult/TakeAndDrop.html)
         * [TakeBut and DropBut](/posts/arithmetic-made-difficult/TakeButAndDropBut.html)
         * [TakeWhile and DropWhile](/posts/arithmetic-made-difficult/TakeWhileAndDropWhile.html)
-        * ChunksOf and ChunksBy
+        * ChunksOf
+        * ChunksBy
+        * Sublists
+        * Infixes
+        * Transpose
         * Cycle
         * InsertAt
         * DeleteAt

@@ -14,6 +14,10 @@ slug: tuples
 > 
 > import Testing
 > import Booleans
+> import Not
+> import And
+> import Or
+> import Implies
 
 Today we'll establish a few basic utility functions on *tuples*. First, recall some definitions.
 
@@ -92,6 +96,9 @@ In Haskell we can model $A \times B$ with the tuple type ``(a,b)``, and the maps
 > 
 > dup :: (x -> a) -> (x -> b) -> x -> (a,b)
 > dup f g x = (f x, g x)
+> 
+> instance (Equal a, Equal b) => Equal (a,b) where
+>   eq (a1,b1) (a2,b2) = and (eq a1 a2) (eq b1 b2)
 
 For example, $\id_{A \times B}$ is a $\dup$.
 

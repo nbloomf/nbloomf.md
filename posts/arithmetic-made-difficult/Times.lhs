@@ -13,6 +13,10 @@ slug: times
 > 
 > import Testing
 > import Booleans
+> import Not
+> import And
+> import Or
+> import Implies
 > import NaturalNumbers
 > import SimpleRecursion
 > import Plus

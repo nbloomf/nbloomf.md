@@ -13,6 +13,10 @@ slug: coprime
 > 
 > import Testing
 > import Booleans
+> import Not
+> import And
+> import Or
+> import Implies
 > import NaturalNumbers
 > import Plus
 > import Times

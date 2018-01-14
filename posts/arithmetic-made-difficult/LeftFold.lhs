@@ -13,6 +13,10 @@ slug: foldl
 > 
 > import Testing
 > import Booleans
+> import Not
+> import And
+> import Or
+> import Implies
 > import DisjointUnions
 > import Unary
 > import Lists

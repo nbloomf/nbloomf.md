@@ -15,6 +15,10 @@ slug: disjoint-unions
 > 
 > import Testing
 > import Booleans
+> import Not
+> import And
+> import Or
+> import Implies
 
 Dual to sets of tuples are disjoint sums.
 

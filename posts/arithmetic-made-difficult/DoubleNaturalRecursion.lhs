@@ -13,6 +13,10 @@ slug: dnaturalrec
 > 
 > import Testing
 > import Booleans
+> import Not
+> import And
+> import Or
+> import Implies
 > import NaturalNumbers
 
 Today we'll implement a slight generalization of natural recursion that allows recursion on two arguments.

@@ -13,6 +13,10 @@ slug: gcd
 >
 > import Testing
 > import Booleans
+> import Not
+> import And
+> import Or
+> import Implies
 > import Tuples
 > import NaturalNumbers
 > import Plus
