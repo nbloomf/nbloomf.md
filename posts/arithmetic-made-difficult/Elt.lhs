@@ -64,9 +64,9 @@ Let $A$ be a set and let $a \in A$. Define $\varphi : A \rightarrow \bool \right
 In Haskell:
 
 > elt :: (List t, Equal a) => a -> t a -> Bool
-> elt a = foldr False phi
+> elt a = foldr false phi
 >   where
->     phi b p = if eq a b then True else p
+>     phi b p = if eq a b then true else p
 
 </p></div>
 </div>
@@ -88,7 +88,7 @@ $$\left\{\begin{array}{l}
 >   => t a -> Test (a -> Bool)
 > _test_elt_nil t =
 >   testName "elt(a)(nil) == false" $
->   \a -> eq (elt a (nil `withTypeOf` t)) False
+>   \a -> eq (elt a (nil `withTypeOf` t)) false
 > 
 > 
 > _test_elt_cons :: (List t, Equal a, Equal (t a))
@@ -97,7 +97,7 @@ $$\left\{\begin{array}{l}
 >   testName "elt(a)(cons(b,x)) == if(eq(a,b),true,elt(a)(x))" $
 >   \a b x -> eq
 >     (elt a (cons b x))
->     (if eq a b then True else elt a x)
+>     (if eq a b then true else elt a x)
 
 </p></div>
 </div>
@@ -216,7 +216,7 @@ as needed.
 >   => t a -> Test (a -> a -> t a -> Bool)
 > _test_elt_snoc _ =
 >   testName "elt(a)(snoc(b,x)) == if(eq(a,b),true,elt(a)(x))" $
->   \a b x -> eq (elt a (snoc b x)) (if eq a b then True else elt a x)
+>   \a b x -> eq (elt a (snoc b x)) (if eq a b then true else elt a x)
 
 </p></div>
 </div>
@@ -406,7 +406,7 @@ as claimed.
 >   => t a -> Test (a -> t a -> Bool)
 > _test_elt_filter_eq _ =
 >   testName "elt(a)(filter(eq(a,-),x)) == false" $
->   \a x -> eq (elt a (filter (not . eq a) x)) False
+>   \a x -> eq (elt a (filter (not . eq a) x)) false
 
 </p></div>
 </div>
@@ -481,7 +481,7 @@ The contrapositive of this statement is trivial and kind of silly looking: If $x
 >   testName "if elt(a)(x) /= elt(a)(y) then x /= y" $
 >   \a x y -> if not (eq (elt a x) (elt a y))
 >     then not (eq x y)
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -545,8 +545,8 @@ as needed.
 > _test_elt_range _ _ =
 >   testName "if leq(a,c) then eq(elt(a,range(next(c),b)),false)" $
 >   \t a b c -> if leq a c
->     then eq (elt a ((range (next c) b) `withTypeOf` t)) False
->     else True
+>     then eq (elt a ((range (next c) b) `withTypeOf` t)) false
+>     else true
 
 </p></div>
 </div>

@@ -49,7 +49,7 @@ In Haskell:
 > isInfix x y = bfoldr isNil beta psi omega y x
 >   where
 >     beta a x y = prefix y (cons a x)
->     psi _ _ _ = True
+>     psi _ _ _ = true
 >     omega _ _ y = y
 
 </p></div>
@@ -83,7 +83,7 @@ $$\left\{\begin{array}{l}
 >   testName "infix(x,cons(b,y)) == if(prefix(x,cons(b,y)),true,infix(x,y))" $
 >   \x b y -> eq
 >     (isInfix x (cons b y))
->     (if prefix x (cons b y) then True else isInfix x y)
+>     (if prefix x (cons b y) then true else isInfix x y)
 
 </p></div>
 </div>
@@ -150,7 +150,7 @@ as claimed.
 >   => t a -> Test (t a -> Bool)
 > _test_infix_reflexive _ =
 >   testName "infix(x,x) == true" $
->   \x -> eq (isInfix x x) True
+>   \x -> eq (isInfix x x) true
 
 </p></div>
 </div>
@@ -235,14 +235,14 @@ Let $A$ be a set. The following hold for all $x,y \in \lists{A}$.
 >   => t a -> Test (t a -> t a -> Bool)
 > _test_infix_prefix _ =
 >   testName "if prefix(x,y) then infix(x,y)" $
->   \x y -> if prefix x y then isInfix x y else True
+>   \x y -> if prefix x y then isInfix x y else true
 > 
 > 
 > _test_infix_suffix :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> Bool)
 > _test_infix_suffix _ =
 >   testName "if suffix(x,y) then infix(x,y)" $
->   \x y -> if suffix x y then isInfix x y else True
+>   \x y -> if suffix x y then isInfix x y else true
 
 </p></div>
 </div>
@@ -271,7 +271,7 @@ as claimed.
 >   => t a -> Test (t a -> t a -> a -> Bool)
 > _test_infix_cond_cons _ =
 >   testName "if infix(x,y) then infix(x,cons(a,y))" $
->   \x y a -> if isInfix x y then isInfix x (cons a y) else True
+>   \x y a -> if isInfix x y then isInfix x (cons a y) else true
 
 </p></div>
 </div>
@@ -305,7 +305,7 @@ as needed.
 >   => t a -> Test (t a -> t a -> a -> Bool)
 > _test_infix_cond_snoc _ =
 >   testName "if infix(x,y) then infix(x,snoc(a,y))" $
->   \x y a -> if isInfix x y then isInfix x (snoc a y) else True
+>   \x y a -> if isInfix x y then isInfix x (snoc a y) else true
 
 </p></div>
 </div>
@@ -347,14 +347,14 @@ as needed.
 >   => t a -> Test (t a -> t a -> t a -> Bool)
 > _test_infix_cat_right_compatible_right _ =
 >   testName "if infix(x,y) then infix(x,cat(y,z))" $
->   \x y z -> if isInfix x y then isInfix x (cat y z) else True
+>   \x y z -> if isInfix x y then isInfix x (cat y z) else true
 > 
 > 
 > _test_infix_cat_right_compatible_left :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> t a -> Bool)
 > _test_infix_cat_right_compatible_left _ =
 >   testName "if infix(x,y) then infix(x,cat(z,y))" $
->   \x y z -> if isInfix x y then isInfix x (cat z y) else True
+>   \x y z -> if isInfix x y then isInfix x (cat z y) else true
 
 </p></div>
 </div>
@@ -455,7 +455,7 @@ as claimed.
 >   => t a -> Test (a -> t a -> Bool)
 > _test_infix_snoc_nil _ =
 >   testName "infix(snoc(a,x),nil) == false" $
->   \a x -> eq (isInfix (snoc a x) nil) False
+>   \a x -> eq (isInfix (snoc a x) nil) false
 
 </p></div>
 </div>
@@ -528,7 +528,7 @@ as claimed.
 >   testName "infix(x,y) & infix(y,x) ==> eq(x,y)" $
 >   \x y -> if and (isInfix x y) (isInfix y x)
 >     then eq x y
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -560,7 +560,7 @@ so that $\infix(x,z) = \btrue$ as claimed.
 >   testName "infix(x,y) & infix(y,z) ==> sublist(x,z)" $
 >   \x y z -> if and (isInfix x y) (isInfix y z)
 >     then isInfix x z
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -602,21 +602,21 @@ as needed. Now suppose $\infix(x,y) = \btrue$. By the induction hypothesis, we h
 >   => t a -> Test (t a -> t a -> Bool)
 > _test_infix_sublist _ =
 >   testName "if infix(x,y) then sublist(x,y)" $
->   \x y -> if isInfix x y then sublist x y else True
+>   \x y -> if isInfix x y then sublist x y else true
 > 
 > 
 > _test_prefix_sublist :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> Bool)
 > _test_prefix_sublist _ =
 >   testName "if prefix(x,y) then sublist(x,y)" $
->   \x y -> if prefix x y then sublist x y else True
+>   \x y -> if prefix x y then sublist x y else true
 > 
 > 
 > _test_suffix_sublist :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> Bool)
 > _test_suffix_sublist _ =
 >   testName "if suffix(x,y) then sublist(x,y)" $
->   \x y -> if suffix x y then sublist x y else True
+>   \x y -> if suffix x y then sublist x y else true
 
 </p></div>
 </div>

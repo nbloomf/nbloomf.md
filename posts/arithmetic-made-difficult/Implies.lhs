@@ -153,25 +153,25 @@ as claimed.
 > _test_impl_false :: Test (Bool -> Bool)
 > _test_impl_false =
 >   testName "impl(false,p) == true" $
->   \p -> eq (impl False p) True
+>   \p -> eq (impl false p) true
 > 
 > 
 > _test_impl_true :: Test (Bool -> Bool)
 > _test_impl_true =
 >   testName "impl(true,p) == p" $
->   \p -> eq (impl True p) p
+>   \p -> eq (impl true p) p
 > 
 > 
 > _test_impl_reflexive :: Test (Bool -> Bool)
 > _test_impl_reflexive =
 >   testName "impl(p,p) == true" $
->   \p -> eq (impl p p) True
+>   \p -> eq (impl p p) true
 > 
 > 
 > _test_impl_total :: Test (Bool -> Bool -> Bool)
 > _test_impl_total =
 >   testName "or(impl(p,q),impl(q,p)) == true" $
->   \p q -> eq (or (impl p q) (impl q p)) True
+>   \p q -> eq (or (impl p q) (impl q p)) true
 > 
 > 
 > _test_impl_antecedents_commute :: Test (Bool -> Bool -> Bool -> Bool)
@@ -233,7 +233,7 @@ as claimed.
 >   testName "if and(impl(p,r),impl(q,s)) then impl(and(p,q),and(r,s))" $
 >   \p q r s -> if and (impl p r) (impl q s)
 >     then impl (and p q) (and r s)
->     else True
+>     else true
 
 </p></div>
 </div>

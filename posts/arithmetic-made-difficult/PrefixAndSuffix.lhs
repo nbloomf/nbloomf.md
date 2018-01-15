@@ -41,9 +41,9 @@ In Haskell:
 > prefix :: (List t, Equal a) => t a -> t a -> Bool
 > prefix = dfoldr delta psi chi
 >   where
->     delta _ = True
->     psi _ _ = False
->     chi a b _ p _ = if eq a b then p else False
+>     delta _ = true
+>     psi _ _ = false
+>     chi a b _ p _ = if eq a b then p else false
 
 </p></div>
 </div>
@@ -66,14 +66,14 @@ $$\left\{\begin{array}{l}
 >   => t a -> Test (t a -> Bool)
 > _test_prefix_nil_list _ =
 >   testName "prefix(nil,y) == true" $
->   \y -> eq (prefix nil y) True
+>   \y -> eq (prefix nil y) true
 > 
 > 
 > _test_prefix_cons_nil :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
 > _test_prefix_cons_nil _ =
 >   testName "prefix(cons(a,x),nil) == false" $
->   \a x -> eq (prefix (cons a x) nil) False
+>   \a x -> eq (prefix (cons a x) nil) false
 > 
 > 
 > _test_prefix_cons_cons :: (List t, Equal a)
@@ -82,7 +82,7 @@ $$\left\{\begin{array}{l}
 >   testName "prefix((cons(a,x),cons(b,y)) == if(eq(a,b),prefix(x,y),false)" $
 >   \a x b y -> eq
 >     (prefix (cons a x) (cons b y))
->     (if eq a b then prefix x y else False)
+>     (if eq a b then prefix x y else false)
 
 </p></div>
 </div>
@@ -153,7 +153,7 @@ If $\prefix(x,y) = \btrue$, then $y = \cat(x,z)$ for some $z$. Now $$\snoc(a,y) 
 >   testName "if prefix(x,y) then prefix(x,snoc(a,y))" $
 >   \a x y -> if prefix x y
 >     then prefix x (snoc a y)
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -204,7 +204,7 @@ Since $\cat$ is cancellative, we have $\nil = \cat(u,v)$, so that $u = \nil$, an
 >   testName "prefix(x,y) & prefix(y,x) ==> eq(x,y)" $
 >   \x y -> if and (prefix x y) (prefix y x)
 >     then eq x y
->     else True
+>     else true
 > 
 > 
 > _test_prefix_transitive :: (List t, Equal a)
@@ -213,7 +213,7 @@ Since $\cat$ is cancellative, we have $\nil = \cat(u,v)$, so that $u = \nil$, an
 >   testName "prefix(x,y) & prefix(y,z) ==> prefix(x,z)" $
 >   \x y z -> if and (prefix x y) (prefix y z)
 >     then prefix x z
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -265,7 +265,7 @@ as claimed.
 >   testName "if prefix(x,y) then prefix(map(f)(x),map(f)(y))" $
 >   \f x y -> if prefix x y
 >     then prefix (map f x) (map f y)
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -311,7 +311,7 @@ as claimed.
 >   testName "prefix(x,y) & prefix(u,v) ==> prefix(zip(x,u),zip(y,v))" $
 >   \x y u v -> if and (prefix x y) (prefix u v)
 >     then prefix (zip x u) (zip y v)
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -343,7 +343,7 @@ as claimed.
 >   testName "if prefix(x,y) then leq(length(x),length(y))" $
 >   \x y -> if prefix x y
 >     then leq ((length x) `withTypeOf` k) (length y)
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -442,14 +442,14 @@ as claimed.
 >   => t a -> Test (t a -> Bool)
 > _test_suffix_nil_list _ =
 >   testName "suffix(nil,y) == true" $
->   \y -> eq (suffix nil y) True
+>   \y -> eq (suffix nil y) true
 > 
 > 
 > _test_suffix_snoc_nil :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
 > _test_suffix_snoc_nil _ =
 >   testName "suffix(snoc(a,x),y) == true" $
->   \a x -> eq (suffix (snoc a x) nil) False
+>   \a x -> eq (suffix (snoc a x) nil) false
 > 
 > 
 > _test_suffix_snoc_snoc :: (List t, Equal a)
@@ -458,7 +458,7 @@ as claimed.
 >   testName "suffix((snoc(a,x),snoc(b,y)) == if(eq(a,b),suffix(x,y),false)" $
 >   \a x b y -> eq
 >     (suffix (snoc a x) (snoc b y))
->     (if eq a b then suffix x y else False)
+>     (if eq a b then suffix x y else false)
 
 </p></div>
 </div>
@@ -532,7 +532,7 @@ as claimed.
 >   testName "if suffix(x,y) then suffix(x,cons(a,y))" $
 >   \a x y -> if suffix x y
 >     then suffix x (cons a y)
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -574,7 +574,7 @@ Since $\cat$ is cancellative, we have $\nil = \cat(v,u)$, so that $u = \nil$, an
 >   => t a -> Test (t a -> Bool)
 > _test_suffix_reflexive _ =
 >   testName "suffix(x,x) == true" $
->   \x -> eq (suffix x x) True
+>   \x -> eq (suffix x x) true
 > 
 > 
 > _test_suffix_symmetric :: (List t, Equal a, Equal (t a))
@@ -583,7 +583,7 @@ Since $\cat$ is cancellative, we have $\nil = \cat(v,u)$, so that $u = \nil$, an
 >   testName "suffix(x,y) & suffix(y,x) ==> eq(x,y)" $
 >   \x y -> if and (suffix x y) (suffix y x)
 >     then eq x y
->     else True
+>     else true
 > 
 > 
 > _test_suffix_transitive :: (List t, Equal a)
@@ -592,7 +592,7 @@ Since $\cat$ is cancellative, we have $\nil = \cat(v,u)$, so that $u = \nil$, an
 >   testName "suffix(x,y) & suffix(y,z) ==> suffix(x,z)" $
 >   \x y z -> if and (suffix x y) (suffix y z)
 >     then suffix x z
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -623,7 +623,7 @@ as claimed.
 >   testName "if suffix(x,y) then suffix(map(f)(x),map(f)(y))" $
 >   \f x y -> if suffix x y
 >     then suffix (map f x) (map f y)
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -653,7 +653,7 @@ as claimed.
 >   testName "if suffix(x,y) then leq(length(x),length(y))" $
 >   \x y -> if suffix x y
 >     then leq ((length x) `withTypeOf` k) (length y)
->     else True
+>     else true
 
 </p></div>
 </div>

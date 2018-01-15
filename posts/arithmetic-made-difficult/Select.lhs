@@ -297,7 +297,7 @@ as needed.
 >   testName "sublist(x,y) == sublist(select(k,x),select(k,y))" $
 >   \k x y -> if sublist x y
 >     then sublist (select k x) (select k y)
->     else True
+>     else true
 
 </p></div>
 </div>

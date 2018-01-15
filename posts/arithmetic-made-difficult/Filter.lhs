@@ -55,7 +55,7 @@ In Haskell:
 > filter :: (List t) => (a -> Bool) -> t a -> t a
 > filter p x = foldr nil phi x
 >   where
->     phi a w = if eq (p a) True
+>     phi a w = if eq (p a) true
 >       then cons a w
 >       else w
 
@@ -130,7 +130,7 @@ as claimed.
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
 > _test_filter_all _ =
 >   testName "all(p,filter(p)(x)) == true" $
->   \p x -> eq (all p (filter p x)) True
+>   \p x -> eq (all p (filter p x)) true
 
 </p></div>
 </div>

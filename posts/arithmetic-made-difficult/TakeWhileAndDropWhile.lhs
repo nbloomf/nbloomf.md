@@ -80,7 +80,7 @@ In Haskell:
 > takeWhile :: (List t) => (a -> Bool) -> t a -> t a
 > takeWhile p = foldr nil phi
 >   where
->     phi a x = if eq (p a) True
+>     phi a x = if eq (p a) true
 >       then cons a x
 >       else nil
 
@@ -150,7 +150,7 @@ as needed.
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
 > _test_takeWhile_prefix _ =
 >   testName "prefix(takeWhile(p,x),x) == true" $
->   \p x -> eq (prefix (takeWhile p x) x) True
+>   \p x -> eq (prefix (takeWhile p x) x) true
 
 </p></div>
 </div>
@@ -172,7 +172,7 @@ We have $$\prefix(\takeWhile(k,x),x) = \btrue,$$ so $$\infix(\takeWhile(k,x),x) 
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
 > _test_takeWhile_sublist _ =
 >   testName "sublist(takeWhile(p,x),x) == true" $
->   \p x -> eq (sublist (takeWhile p x) x) True
+>   \p x -> eq (sublist (takeWhile p x) x) true
 
 </p></div>
 </div>
@@ -362,7 +362,7 @@ as needed.
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
 > _test_dropWhile_suffix _ =
 >   testName "suffix(dropWhile(p)(x),x) == true" $
->   \p x -> eq (suffix (dropWhile p x) x) True
+>   \p x -> eq (suffix (dropWhile p x) x) true
 
 </p></div>
 </div>

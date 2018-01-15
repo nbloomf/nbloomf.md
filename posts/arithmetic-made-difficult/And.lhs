@@ -95,19 +95,19 @@ as claimed.
 > _test_and_false :: Test (Bool -> Bool)
 > _test_and_false =
 >   testName "and(false,p) == false" $
->   \p -> eq (and False p) False
+>   \p -> eq (and false p) false
 > 
 > 
 > _test_and_true :: Test (Bool -> Bool)
 > _test_and_true =
 >   testName "and(true,p) == p" $
->   \p -> eq (and True p) p
+>   \p -> eq (and true p) p
 > 
 > 
 > _test_and_not :: Test (Bool -> Bool)
 > _test_and_not =
 >   testName "and(p,not(p)) == false" $
->   \p -> eq (and p (not p)) False
+>   \p -> eq (and p (not p)) false
 > 
 > 
 > _test_and_idempotent :: Test (Bool -> Bool)

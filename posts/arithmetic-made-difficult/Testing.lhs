@@ -17,7 +17,7 @@ tags: arithmetic-made-difficult, literate-haskell
 > 
 > 
 > import Prelude
->   ( Show(show), IO, Bool(..), Int, Maybe(..), Either(..), id, undefined, concat
+>   ( Show(show), IO, Bool(), Int, Maybe(..), Either(..), id, undefined, concat
 >   , putStrLn, (>>), return, (++), String, (.), ($), Integer, const, uncurry
 >   )
 > import Test.QuickCheck

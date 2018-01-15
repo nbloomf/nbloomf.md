@@ -55,7 +55,7 @@ In Haskell:
 > sublist x y = dfoldr delta psi chi y x
 >   where
 >     delta y = isNil y
->     psi _ _ = True
+>     psi _ _ = true
 >     chi a b _ p q = if eq a b then p else q
 
 </p></div>
@@ -86,7 +86,7 @@ $$\left\{\begin{array}{l}
 >   => t a -> Test (a -> t a -> Bool)
 > _test_sublist_nil_cons _ =
 >   testName "sublist(nil,cons(b,y)) == true" $
->   \b y -> eq (sublist nil (cons b y)) True
+>   \b y -> eq (sublist nil (cons b y)) true
 > 
 > 
 > _test_sublist_cons_cons :: (List t, Equal a, Equal (t a))
@@ -124,7 +124,7 @@ as needed.
 >   => t a -> Test (t a -> Bool)
 > _test_sublist_reflexive _ =
 >   testName "sublist(x,x) == true" $
->   \x -> eq (sublist x x) True
+>   \x -> eq (sublist x x) true
 
 </p></div>
 </div>
@@ -196,7 +196,7 @@ as needed.
 >   => t a -> Test (a -> t a -> Bool)
 > _test_sublist_nil_snoc _ =
 >   testName "sublist(nil,snoc(b,y)) == true" $
->   \b y -> eq (sublist nil (snoc b y)) True
+>   \b y -> eq (sublist nil (snoc b y)) true
 > 
 > 
 > _test_sublist_snoc_cancel :: (List t, Equal a, Equal (t a))
@@ -330,7 +330,7 @@ as needed.
 >   testName "sublist(x,y) ==> sublist(x,cons(a,y))" $
 >   \a x y -> if sublist x y
 >     then sublist x (cons a y)
->     else True
+>     else true
 > 
 > 
 > _test_sublist_cons_left :: (List t, Equal a, Equal (t a))
@@ -339,7 +339,7 @@ as needed.
 >   testName "sublist(cons(a,x),y) ==> sublist(x,y)" $
 >   \a x y -> if sublist (cons a x) y
 >     then sublist x y
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -418,7 +418,7 @@ as needed.
 >   testName "if sublist(x,y) then leq(length(x),length(y))" $
 >   \x y -> if sublist x y
 >     then leq ((length x) `withTypeOf` k) (length y)
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -538,7 +538,7 @@ By the inductive hypothesis, $\sublist(u,z)$, so that $\sublist(x,\cons(c,z))$ a
 >   testName "if and(sublist(x,y),sublist(y,z)) then sublist(x,z)" $
 >   \x y z -> if and (sublist x y) (sublist y z)
 >     then sublist x z
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -562,7 +562,7 @@ If $\sublist(x,u) = \btrue$, then $\sublist(\cat(x,y),\cat(u,y)) = \btrue$. Simi
 >   testName "if and(sublist(x,y),sublist(u,v)) then sublist(cat(x,u),cat(y,v))" $
 >   \x y u v -> if and (sublist x y) (sublist u v)
 >     then sublist (cat x u) (cat y v)
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -736,7 +736,7 @@ as claimed.
 >   testName "sublist(x,y) ==> sublist(x,snoc(a,y))" $
 >   \a x y -> if sublist x y
 >     then sublist x (snoc a y)
->     else True
+>     else true
 > 
 > 
 > _test_sublist_snoc_left :: (List t, Equal a, Equal (t a))
@@ -745,7 +745,7 @@ as claimed.
 >   testName "sublist(snoc(a,x),y) ==> sublist(x,y)" $
 >   \a x y -> if sublist (snoc a x) y
 >     then sublist x y
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -825,7 +825,7 @@ as needed.
 >   testName "if sublist(x,y) then sublist(x,cat(z,y))" $
 >   \x y z -> if sublist x y
 >     then sublist x (cat z y)
->     else True
+>     else true
 > 
 > 
 > _test_sublist_right_cat_right :: (List t, Equal a, Equal (t a))
@@ -834,7 +834,7 @@ as needed.
 >   testName "if sublist(x,y) then sublist(x,cat(y,z))" $
 >   \x y z -> if sublist x y
 >     then sublist x (cat y z)
->     else True
+>     else true
 > 
 > 
 > _test_sublist_left_cat_left :: (List t, Equal a, Equal (t a))
@@ -843,7 +843,7 @@ as needed.
 >   testName "if sublist(cat(z,x),y) then sublist(x,y)" $
 >   \x y z -> if sublist (cat z x) y
 >     then sublist x y
->     else True
+>     else true
 > 
 > 
 > _test_sublist_right_cat_left :: (List t, Equal a, Equal (t a))
@@ -852,7 +852,7 @@ as needed.
 >   testName "if sublist(cat(x,z),y) then sublist(x,y)" $
 >   \x y z -> if sublist (cat x z) y
 >     then sublist x y
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -914,7 +914,7 @@ as needed.
 >   => t a -> Test ((a -> a) -> t a -> t a -> Bool)
 > _test_sublist_map _ =
 >   testName "if sublist(x,y) then sublist(map(f)(x),map(f)(y))" $
->   \f x y -> if sublist x y then sublist (map f x) (map f y) else True
+>   \f x y -> if sublist x y then sublist (map f x) (map f y) else true
 
 </p></div>
 </div>
@@ -1011,8 +1011,8 @@ as needed.
 > _test_sublist_all _ =
 >   testName "if sublist(x,y) then if all(p)(y) then all(p)(x)" $
 >   \p x y -> if sublist x y
->     then if all p y then all p x else True
->     else True
+>     then if all p y then all p x else true
+>     else true
 > 
 > 
 > _test_sublist_any :: (List t, Equal a, Equal (t a))
@@ -1020,8 +1020,8 @@ as needed.
 > _test_sublist_any _ =
 >   testName "if sublist(x,y) then if any(p)(x) then any(p)(y)" $
 >   \p x y -> if sublist x y
->     then if any p x then any p y else True
->     else True
+>     then if any p x then any p y else true
+>     else true
 
 </p></div>
 </div>
@@ -1044,8 +1044,8 @@ Suppose to the contrary that $\sublist(\cons(a,y),x) = \btrue$. By transitivity 
 > _test_sublist_cons_not _ =
 >   testName "if sublist(x,y) then eq(sublist(cons(a,y),x),false)" $
 >   \p a x y -> if sublist x y
->     then eq (sublist (cons a y) x) False
->     else True
+>     then eq (sublist (cons a y) x) false
+>     else true
 
 </p></div>
 </div>

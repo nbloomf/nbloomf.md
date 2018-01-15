@@ -155,7 +155,7 @@ as needed.
 >   testName "if div(c,a) and div(c,b) then div(c,gcd(a,b))" $
 >   \a b c -> if and (div c a) (div c b)
 >     then div c (gcd a b)
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -260,7 +260,7 @@ For all $a \in \nats$ we have the following.
 >   testName "if iszero(gcd(a,b)) then and(iszero(a),iszero(b))" $
 >   \a b -> if isZero (gcd a b)
 >     then and (isZero a) (isZero b)
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -371,7 +371,7 @@ Thus $\ndiv(\ngcd(a,c),\ngcd(b,c))$ as claimed.
 >   testName "if div(a,b) then div(gcd(a,c),gcd(b,c))" $
 >   \a b c -> if div a b
 >     then div (gcd a c) (gcd b c)
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -408,7 +408,7 @@ By the uniqueness of quotients by nonzero divisors, $$\nquo(\ngcd(a,b),c) = \ngc
 >   testName "if div(c,a) and div(c,b) then gcd(quo(a,c),quo(b,c)) == quo(gcd(a,b),c)" $
 >   \a b c -> if and (div c a) (div c b)
 >     then eq (gcd (quo a c) (quo b c)) (quo (gcd a b) c)
->     else True
+>     else true
 
 </p></div>
 </div>

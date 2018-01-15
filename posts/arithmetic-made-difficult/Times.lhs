@@ -340,7 +340,7 @@ as needed.
 >   testName "if times(next(c),a) == times(next(c),b) then a == b" $
 >   \a b c -> if eq (f (next c) a) (f (next c) b)
 >     then eq a b
->     else True
+>     else true
 > 
 > 
 > _test_times_cancellative_right :: (Natural n, Equal n)
@@ -349,7 +349,7 @@ as needed.
 >   testName "if times(a,next(c)) == plus(b,next(c)) then a == b" $
 >   \a b c -> if eq (f a (next c)) (f b (next c))
 >     then eq a b
->     else True
+>     else true
 
 </p></div>
 </div>

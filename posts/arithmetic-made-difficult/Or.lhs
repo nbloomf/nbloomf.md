@@ -33,7 +33,8 @@ In Haskell:
 We can compute $\bor$ explicitly.
 
 <div class="result">
-<div class="thm"><p><a name="def-or" />
+<div class="thm"><p>
+<a name="def-or" />
 We have
 $$\begin{eqnarray*}
 \bor(\btrue,\btrue)   & = & \btrue \\
@@ -97,19 +98,19 @@ as claimed.
 > _test_or_true :: Test (Bool -> Bool)
 > _test_or_true =
 >   testName "or(true,p) == true" $
->   \p -> eq (or True p) True
+>   \p -> eq (or true p) true
 > 
 > 
 > _test_or_false :: Test (Bool -> Bool)
 > _test_or_false =
 >   testName "or(false,p) == p" $
->   \p -> eq (or False p) p
+>   \p -> eq (or false p) p
 > 
 > 
 > _test_or_not :: Test (Bool -> Bool)
 > _test_or_not =
 >   testName "or(p,not(p)) == true" $
->   \p -> eq (or p (not p)) True
+>   \p -> eq (or p (not p)) true
 > 
 > 
 > _test_or_idempotent :: Test (Bool -> Bool)
@@ -280,7 +281,7 @@ as needed.
 >   => a -> Test (Bool -> Bool -> Bool)
 > _test_if_or _ =
 >   testName "if(p,true,q) == or(p,q)" $
->   \p q -> eq (if p then True else q) (or p q)
+>   \p q -> eq (if p then true else q) (or p q)
 
 </p></div>
 </div>

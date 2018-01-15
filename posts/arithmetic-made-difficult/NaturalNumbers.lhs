@@ -43,7 +43,7 @@ Now every inductive set isomorphic to $\nats$ is characterized by (1) its zero e
 Our helpers $\iszero$ and $\prev$ can be written against this interface:
 
 > isZero :: (Natural n) => n -> Bool
-> isZero = (either (const True) (const False)) . unnext
+> isZero = (either (const true) (const false)) . unnext
 > 
 > prev :: (Natural n) => n -> n
 > prev = (either (const zero) id) . unnext
@@ -118,14 +118,14 @@ We proved some theorems about $\unnext$, $\prev$, and $\iszero$ in the last post
 >   testName "isZero(0) == true" $
 >   eq
 >     (isZero (zero `withTypeOf` m))
->     True
+>     true
 > 
 > 
 > _test_isZero_next :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
 > _test_isZero_next _ =
 >   testName "isZero(next(m)) == false" $
->   \m -> eq (isZero (next m)) False
+>   \m -> eq (isZero (next m)) false
 
 
 Suite.

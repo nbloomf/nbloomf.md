@@ -121,7 +121,7 @@ as claimed.
 >   testName "leq(next(n),k) ==> choose(n,k) == 0" $
 >   \n k -> if leq (next n) k
 >     then eq (choose n k) zero
->     else True
+>     else true
 
 </p></div>
 </div>

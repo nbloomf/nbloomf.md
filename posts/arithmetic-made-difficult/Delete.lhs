@@ -318,7 +318,7 @@ Note that $\sublist(\delete(a)(x),x) = \btrue$, so that $\unique(\delete(a)(x)) 
 >   => t a -> Test (a -> t a -> Bool)
 > _test_delete_unique _ =
 >   testName "if unique(x) then unique(delete(a)(x))" $
->   \a x -> if unique x then unique (delete a x) else True
+>   \a x -> if unique x then unique (delete a x) else true
 
 </p></div>
 </div>
@@ -360,7 +360,7 @@ as needed.
 >   => t a -> Test (a -> t a -> Bool)
 > _test_delete_elt _ =
 >   testName "elt(a,delete(a)(x)) == false" $
->   \a x -> eq (elt a (delete a x)) False
+>   \a x -> eq (elt a (delete a x)) false
 
 </p></div>
 </div>
@@ -404,7 +404,7 @@ as needed.
 >   => t a -> Test (a -> t a -> t a -> Bool)
 > _test_delete_prefix _ =
 >   testName "if prefix(x,y) then prefix(delete(a)(x),delete(a)(y))" $
->   \a x y -> if prefix x y then prefix (delete a x) (delete a y) else True
+>   \a x y -> if prefix x y then prefix (delete a x) (delete a y) else true
 
 </p></div>
 </div>

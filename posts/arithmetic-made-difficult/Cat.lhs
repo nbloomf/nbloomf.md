@@ -294,18 +294,22 @@ By (1), we have $\rev(x) = \rev(y)$, and thus $x = y$ as claimed.
 
 <div class="test"><p>
 
-> _test_cat_left_cancellative :: (List t, Equal (t a))
->   => t a -> Test (t a -> t a -> t a -> Bool)
-> _test_cat_left_cancellative _ =
+> _test_cat_left_cancellative :: (List t, Equal (t a), Boolean b, Equal b)
+>   => t a -> b -> Test (t a -> t a -> t a -> Bool)
+> _test_cat_left_cancellative _ p =
 >   testName "eq(cat(z,x),cat(z,y)) == eq(x,y)" $
->   \x y z -> eq (eq (cat z x) (cat z y)) (eq x y)
+>   \x y z -> eq
+>     (eq (cat z x) (cat z y))
+>     ((eq x y) `withTypeOf` p)
 > 
 > 
-> _test_cat_right_cancellative :: (List t, Equal (t a))
->   => t a -> Test (t a -> t a -> t a -> Bool)
-> _test_cat_right_cancellative _ =
+> _test_cat_right_cancellative :: (List t, Equal (t a), Boolean b, Equal b)
+>   => t a -> b -> Test (t a -> t a -> t a -> Bool)
+> _test_cat_right_cancellative _ p =
 >   testName "eq(cat(x,z),cat(y,z)) == eq(x,y)" $
->   \x y z -> eq (eq (cat x z) (cat y z)) (eq x y)
+>   \x y z -> eq
+>     (eq (cat x z) (cat y z))
+>     ((eq x y) `withTypeOf` p)
 
 </p></div>
 </div>
@@ -375,14 +379,14 @@ so that $v = u = \nil$ as claimed.
 >   => t a -> Test (t a -> t a -> Bool)
 > _test_cat_right_identity_unique _ =
 >   testName "if eq(cat(x,v),x) then eq(v,nil)" $
->   \x v -> if eq (cat x v) x then eq v nil else True
+>   \x v -> if eq (cat x v) x then eq v nil else true
 > 
 > 
 > _test_cat_left_identity_unique :: (List t, Equal (t a))
 >   => t a -> Test (t a -> t a -> Bool)
 > _test_cat_left_identity_unique _ =
 >   testName "if eq(cat(u,x),x) then eq(u,nil)" $
->   \x u -> if eq (cat u x) x then eq u nil else True
+>   \x u -> if eq (cat u x) x then eq u nil else true
 > 
 > 
 > _test_cat_nil_list_nil :: (List t, Equal (t a))
@@ -391,7 +395,7 @@ so that $v = u = \nil$ as claimed.
 >   testName "if eq(cat(u,x),x) then eq(u,nil)" $
 >   \x u v -> if eq (cat u (cat x v)) x
 >     then and (eq u nil) (eq v nil)
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -405,9 +409,10 @@ Suite:
 > _test_cat ::
 >   ( TypeName a, Show a, Equal a, Arbitrary a
 >   , TypeName (t a), List t, Equal (t a), Show (t a), Arbitrary (t a)
->   ) => t a -> Int -> Int -> IO ()
-> _test_cat t maxSize numCases = do
->   testLabel1 "cat" t
+>   , TypeName b, Boolean b, Equal b
+>   ) => t a -> b -> Int -> Int -> IO ()
+> _test_cat t p maxSize numCases = do
+>   testLabel2 "cat" t p
 > 
 >   let
 >     args = stdArgs
@@ -423,15 +428,15 @@ Suite:
 >   runTest args (_test_cat_nil_nil t)
 >   runTest args (_test_cat_associative t)
 >   runTest args (_test_cat_rev t)
->   runTest args (_test_cat_left_cancellative t)
->   runTest args (_test_cat_right_cancellative t)
+>   runTest args (_test_cat_left_cancellative t p)
+>   runTest args (_test_cat_right_cancellative t p)
 >   runTest args (_test_cat_right_identity_unique t)
 >   runTest args (_test_cat_left_identity_unique t)
 >   runTest args (_test_cat_nil_list_nil t)
 
-And ``main``:
+Main:
 
 > main_cat :: IO ()
 > main_cat = do
->   _test_cat (nil :: ConsList Bool)  20 100
->   _test_cat (nil :: ConsList Unary) 20 100
+>   _test_cat (nil :: ConsList Bool)  (true :: Bool) 20 100
+>   _test_cat (nil :: ConsList Unary) (true :: Bool) 20 100

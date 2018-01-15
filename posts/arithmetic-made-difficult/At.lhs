@@ -307,7 +307,7 @@ as needed.
 >   testName "if leq(k,length(x)) then at(snoc(a,cons(b,x)),k) == at(cons(b,x),k)" $
 >   \x a b k -> if leq k (length x)
 >     then eq (at (snoc a (cons b x)) k) (at (cons b x) k)
->     else True
+>     else true
 > 
 > 
 > _test_at_snoc_length
@@ -360,7 +360,7 @@ as needed.
 >   testName "if eq(next(plus(u,v)),length(x)) then eq(at(x,u),at(rev(x),v))" $
 >   \x u v -> if eq (next (plus u v)) (length x)
 >     then eq (at x u) (at (rev x) v)
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -418,7 +418,7 @@ as needed.
 >   testName "if leq(k,length(x)) then eq(at(cat(cons(a,x),y),k),at(cons(a,x),k))" $
 >   \a x y k -> if leq k (length x)
 >     then eq (at (cat (cons a x) y) k) (at (cons a x) k)
->     else True
+>     else true
 > 
 > 
 > _test_at_cat_right :: (List t, Equal a, Equal (t a), Natural n, Equal n)
@@ -484,7 +484,7 @@ for some $c$ by the inductive hypothesis, as needed.
 >   testName "if leq(length(x),k) then isLft(at(x,k))" $
 >   \x k -> if leq (length x) k
 >     then isLft (at x k)
->     else True
+>     else true
 > 
 > 
 > _test_at_isright :: (List t, Equal a, Equal (t a), Natural n, Equal n)
@@ -493,7 +493,7 @@ for some $c$ by the inductive hypothesis, as needed.
 >   testName "if leq(k,length(x)) then isRgt(at(cons(a,x),k))" $
 >   \a x k -> if leq k (length x)
 >     then isRgt (at (cons a x) k)
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -543,7 +543,7 @@ By the inductive hypothesis, $x = z$, so that $\cons(a,x) = y$ as needed.
 >   testName "if eq(x,y) then eq(at(x,k),at(y,k))" $
 >   \x y k -> if eq x y
 >     then eq (at x k) (at y k)
->     else True
+>     else true
 
 </p></div>
 </div>

@@ -35,8 +35,8 @@ Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. Define $\varphi : A 
 
 In Haskell:
 
-> all :: (List t) => (a -> Bool) -> t a -> Bool
-> all p = foldr True phi
+> all :: (Boolean b, List t) => (a -> b) -> t a -> b
+> all p = foldr true phi
 >   where
 >     phi a q = and (p a) q
 
@@ -145,7 +145,7 @@ as needed.
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
 > _test_all_fold_and _ =
 >   testName "all(p,x) == foldr(true,and)(map(p)(x))" $
->   \p x -> eq (all p x) (foldr True and (map p x))
+>   \p x -> eq (all p x) (foldr true and (map p x))
 
 </p></div>
 </div>
@@ -192,19 +192,19 @@ as needed.
 
 <div class="test"><p>
 
-> _test_all_const_true :: (List t, Equal a)
->   => t a -> Test (t a -> Bool)
-> _test_all_const_true _ =
+> _test_all_const_true :: (List t, Equal a, Boolean b, Equal b)
+>   => t a -> b -> Test (t a -> Bool)
+> _test_all_const_true _ p =
 >   testName "all(ptrue)(x) == true" $
->   \x -> eq (all ptrue x) True
+>   \x -> eq (all ptrue x) (true `withTypeOf` p)
 > 
 > 
-> _test_all_const_false :: (List t, Equal a, Equal (t a))
->   => t a -> Test (t a -> Bool)
-> _test_all_const_false _ =
+> _test_all_const_false :: (List t, Equal a, Equal (t a), Boolean b, Equal b)
+>   => t a -> b -> Test (t a -> Bool)
+> _test_all_const_false _ p =
 >   testName "all(pfalse)(x) == false iff x /= nil" $
 >   \x -> eq
->     (eq (all pfalse x) False)
+>     ((eq (all pfalse x) (false `withTypeOf` p)) `withTypeOf` p)
 >     (not (eq x nil))
 
 </p></div>
@@ -361,8 +361,8 @@ Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. Define $\varphi : A 
 
 In Haskell:
 
-> any :: (List t) => (a -> Bool) -> t a -> Bool
-> any p = foldr False phi
+> any :: (Boolean b, List t) => (a -> b) -> t a -> b
+> any p = foldr false phi
 >   where
 >     phi a q = or (p a) q
 
@@ -386,7 +386,7 @@ $$\left\{\begin{array}{l}
 >   => t a -> Test ((a -> Bool) -> Bool)
 > _test_any_nil t =
 >   testName "any(p)(nil) == false" $
->   \p -> eq (any p (nil `withTypeOf` t)) False
+>   \p -> eq (any p (nil `withTypeOf` t)) false
 > 
 > 
 > _test_any_cons :: (List t, Equal a)
@@ -432,7 +432,7 @@ as needed.
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
 > _test_any_fold_or _ =
 >   testName "any(p,x) == foldr(false,or)(map(p)(x))" $
->   \p x -> eq (any p x) (foldr False or (map p x))
+>   \p x -> eq (any p x) (foldr false or (map p x))
 
 </p></div>
 </div>
@@ -531,19 +531,19 @@ as needed.
 
 <div class="test"><p>
 
-> _test_any_const_false :: (List t, Equal a)
->   => t a -> Test (t a -> Bool)
-> _test_any_const_false _ =
+> _test_any_const_false :: (List t, Equal a, Boolean b, Equal b)
+>   => t a -> b -> Test (t a -> Bool)
+> _test_any_const_false _ p =
 >   testName "any(pfalse,x) == false" $
->   \x -> eq (any pfalse x) False
+>   \x -> eq (any pfalse x) (false `withTypeOf` p)
 > 
 > 
-> _test_any_const_true :: (List t, Equal a, Equal (t a))
->   => t a -> Test (t a -> Bool)
-> _test_any_const_true _ =
+> _test_any_const_true :: (List t, Equal a, Equal (t a), Boolean b, Equal b)
+>   => t a -> b -> Test (t a -> Bool)
+> _test_any_const_true _ p =
 >   testName "any(ptrue,x) == true iff x /= nil" $
 >   \x -> eq
->     (eq (any ptrue x) True)
+>     ((eq (any ptrue x) (true `withTypeOf` p)) `withTypeOf` p)
 >     (not (eq x nil))
 
 </p></div>
@@ -648,8 +648,9 @@ Suite:
 >   ( TypeName a, Show a, Equal a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
 >   , Show (t a), Equal (t a), Arbitrary (t a)
->   ) => t a -> Int -> Int -> IO ()
-> _test_all_any t maxSize numCases = do
+>   , TypeName b, Boolean b, Equal b
+>   ) => t a -> b -> Int -> Int -> IO ()
+> _test_all_any t p maxSize numCases = do
 >   testLabel1 "all & any" t
 > 
 >   let
@@ -662,8 +663,8 @@ Suite:
 >   runTest args (_test_all_cons t)
 >   runTest args (_test_all_snoc t)
 >   runTest args (_test_all_fold_and t)
->   runTest args (_test_all_const_true t)
->   runTest args (_test_all_const_false t)
+>   runTest args (_test_all_const_true t p)
+>   runTest args (_test_all_const_false t p)
 >   runTest args (_test_all_cat t)
 >   runTest args (_test_all_rev t)
 >   runTest args (_test_all_map t)
@@ -673,8 +674,8 @@ Suite:
 >   runTest args (_test_any_fold_or t)
 >   runTest args (_test_any_not_all t)
 >   runTest args (_test_all_not_any t)
->   runTest args (_test_all_const_false t)
->   runTest args (_test_all_const_true t)
+>   runTest args (_test_all_const_false t p)
+>   runTest args (_test_all_const_true t p)
 >   runTest args (_test_any_cat t)
 >   runTest args (_test_any_rev t)
 >   runTest args (_test_any_map t)
@@ -683,5 +684,5 @@ Main:
 
 > main_all_any :: IO ()
 > main_all_any = do
->   _test_all_any (nil :: ConsList Bool)  20 100
->   _test_all_any (nil :: ConsList Unary) 20 100
+>   _test_all_any (nil :: ConsList Bool)  (true :: Bool) 20 100
+>   _test_all_any (nil :: ConsList Unary) (true :: Bool) 20 100

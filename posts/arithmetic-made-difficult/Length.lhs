@@ -437,13 +437,13 @@ in particular, $\length(x) \neq \zero$.
 <div class="test"><p>
 
 > _test_length_zero
->   :: (List t, Equal (t a), Natural n, Equal n)
->   => t a -> n -> Test (t a -> Bool)
-> _test_length_zero _ k =
+>   :: (List t, Equal (t a), Natural n, Equal n, Boolean b, Equal b)
+>   => t a -> n -> b -> Test (t a -> Bool)
+> _test_length_zero _ k p =
 >   testName "eq(length(x),zero) == eq(x,nil)" $
 >   \x -> eq
 >     (eq (length x) (zero `withTypeOf` k))
->     (eq x nil)
+>     ((eq x nil) `withTypeOf` p)
 
 </p></div>
 </div>
@@ -458,8 +458,9 @@ Suite:
 >   ( TypeName a, Show a, Equal a, Arbitrary a
 >   , TypeName n, Natural n, Equal n, Show n, Arbitrary n
 >   , TypeName (t a), List t, Equal (t a), Show (t a), Arbitrary (t a)
->   ) => t a -> n -> Int -> Int -> IO ()
-> _test_length t n maxSize numCases = do
+>   , TypeName b, Boolean b, Equal b
+>   ) => t a -> n -> b -> Int -> Int -> IO ()
+> _test_length t n p maxSize numCases = do
 >   testLabel2 "length" t n
 > 
 >   let
@@ -482,11 +483,11 @@ Suite:
 >   runTest args (_test_length_snoc t n)
 >   runTest args (_test_length_rev t n)
 >   runTest args (_test_length_cat t n)
->   runTest args (_test_length_zero t n)
+>   runTest args (_test_length_zero t n p)
 
 Main:
 
 > main_length :: IO ()
 > main_length = do
->   _test_length (nil :: ConsList Bool)  (zero :: Unary) 20 100
->   _test_length (nil :: ConsList Unary) (zero :: Unary) 20 100
+>   _test_length (nil :: ConsList Bool)  (zero :: Unary) (true :: Bool) 20 100
+>   _test_length (nil :: ConsList Unary) (zero :: Unary) (true :: Bool) 20 100

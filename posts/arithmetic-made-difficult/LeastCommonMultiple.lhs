@@ -210,7 +210,7 @@ as claimed.
 >   testName "if div(a,c) and div(b,c) then div(lcm(a,b),c)" $
 >   \a b c -> if and (div a c) (div b c)
 >     then div (lcm a b) c
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -349,7 +349,7 @@ so that $\ndiv(\nlcm(a,c),\nlcm(b,c))$ as claimed.
 >   testName "if div(a,b) then div(lcm(a,c),lcm(b,c))" $
 >   \a b c -> if div a b
 >     then div (lcm a c) (lcm b c)
->     else True
+>     else true
 
 </p></div>
 </div>

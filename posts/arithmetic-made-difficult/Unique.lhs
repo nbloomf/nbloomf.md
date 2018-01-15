@@ -55,7 +55,7 @@ Let $A$ be a set. Define $\sigma : A \times \lists{A} \times \bool \rightarrow \
 In Haskell:
 
 > unique :: (List t, Equal a) => t a -> Bool
-> unique = cfoldr True sigma
+> unique = cfoldr true sigma
 >   where
 >     sigma a x p = and (not (elt a x)) p
 
@@ -79,7 +79,7 @@ $$\left\{\begin{array}{l}
 >   => t a -> Test Bool
 > _test_unique_nil t =
 >   testName "unique(nil) == true" $
->    eq (unique (nil `withTypeOf` t)) True
+>    eq (unique (nil `withTypeOf` t)) true
 > 
 > 
 > _test_unique_cons :: (List t, Equal a)
@@ -183,7 +183,7 @@ as needed.
 >   testName "if and(unique(x),sublist(y,x)) then unique(y)" $
 >    \x y -> if and (unique x) (sublist y x)
 >      then unique y
->      else True
+>      else true
 
 </p></div>
 </div>
@@ -235,7 +235,7 @@ Note that $\sublist(\filter(p,x),x) = \btrue$; so we have $\unique(\filter(p,x))
 >   testName "if unique(x) then unique(filter(p)(x))" $
 >    \p x -> if unique x
 >      then unique (filter p x)
->      else True
+>      else true
 
 </p></div>
 </div>

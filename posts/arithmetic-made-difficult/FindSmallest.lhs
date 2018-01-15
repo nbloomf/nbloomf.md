@@ -93,8 +93,8 @@ We proceed by induction on $n$. For the base case $n = \zero$, note that $$\find
 > _test_findSmallest_satisfies _ =
 >   testName "if findSmallest(sigma)(n,k) == rgt(t) then sigma(t) == true" $
 >   \sigma n k -> case findSmallest sigma n k of
->     Right t -> eq (sigma t) True
->     Left () -> True
+>     Right t -> eq (sigma t) true
+>     Left () -> true
 
 </p></div>
 </div>
@@ -132,7 +132,7 @@ We have two possibilities. If $\sigma(k) = \btrue$, then $\rgt(t) = \rgt(k)$, so
 >   testName "if findSmallest(sigma)(next(n),k) == rgt(t) then leq(k,t) and leq(t,plus(n,k))" $
 >   \sigma n k -> case findSmallest sigma (next n) k of
 >     Right t -> and (leq k t) (leq t (plus n k))
->     Left () -> True
+>     Left () -> true
 
 </p></div>
 </div>
@@ -187,9 +187,9 @@ as needed.
 >   testName "if eq(findSmallest(sigma)(next(n),k),lft(*)) and leq(k,t) and leq(t,plus(n,k)) then eq(sigma(t),false)" $
 >   \sigma n k t -> if and (leq k t) (leq t (plus n k))
 >     then if eq (findSmallest sigma (next n) k) (lft ())
->       then eq (sigma t) False
->       else True
->     else True
+>       then eq (sigma t) false
+>       else true
+>     else true
 
 </p></div>
 </div>
@@ -232,7 +232,7 @@ as needed.
 >   testName "if findSmallest(sigma)(n,k) == rgt(plus(k,next(t))) then findSmallest(sigma)(t,k) = lft(*)" $
 >   \sigma n k t -> if eq (findSmallest sigma n k) (rgt (plus k (next t)))
 >     then eq (findSmallest sigma t k) (lft ())
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -272,8 +272,8 @@ If $\sigma(k) = \btrue$, then $t = k$, and we again have $\nleq(t,u)$ as needed.
 >   \sigma n k t u -> case findSmallest sigma (next n) k of
 >     Right t -> if and (sigma u) (and (leq k u) (leq u (plus n k)))
 >       then leq t u
->       else True
->     Left () -> True
+>       else true
+>     Left () -> true
 
 </p></div>
 </div>

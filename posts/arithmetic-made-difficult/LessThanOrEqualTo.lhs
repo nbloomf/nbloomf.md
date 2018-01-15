@@ -84,28 +84,28 @@ as claimed.
 >   => n -> Test (n -> Bool)
 > _test_leq_next_nat_zero _ =
 >   testName "leq(next(a),zero) == false" $
->   \a -> eq (leq (next a) zero) False
+>   \a -> eq (leq (next a) zero) false
 > 
 > 
 > _test_leq_next_next_nat_one :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
 > _test_leq_next_next_nat_one _ =
 >   testName "leq(next(next(a)),next(zero)) == false" $
->   \a -> eq (leq (next (next a)) (next zero)) False
+>   \a -> eq (leq (next (next a)) (next zero)) false
 > 
 > 
 > _test_leq_next_nat :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
 > _test_leq_next_nat _ =
 >   testName "leq(next(a),a) == false" $
->   \a -> eq (leq (next a) a) False
+>   \a -> eq (leq (next a) a) false
 > 
 > 
 > _test_leq_right_plus :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
 > _test_leq_right_plus _ =
 >   testName "leq(a,plus(a,b)) == true" $
->   \a b -> eq (leq a (plus a b)) True
+>   \a b -> eq (leq a (plus a b)) true
 
 </p></div>
 </div>
@@ -189,7 +189,7 @@ as needed.
 >   => n -> Test (n -> Bool)
 > _test_leq_reflexive _ =
 >   testName "leq(a,a) == true" $
->   \a -> eq (leq a a) True
+>   \a -> eq (leq a a) true
 > 
 > 
 > _test_leq_antisymmetric :: (Natural n, Equal n)
@@ -198,7 +198,7 @@ as needed.
 >   testName "if and(leq(a,b),leq(b,a)) then eq(a,b)" $
 >   \a b -> if and (leq a b) (leq b a)
 >     then eq a b
->     else True
+>     else true
 > 
 > 
 > _test_leq_transitive :: (Natural n, Equal n)
@@ -207,7 +207,7 @@ as needed.
 >   testName "if and(leq(a,b),leq(b,c)) then leq(a,c)" $
 >   \a b c -> if and (leq a b) (leq b c)
 >     then leq a c
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -258,7 +258,7 @@ as needed.
 >   testName "if and(leq(a,b),leq(c,d)) then leq(plus(a,c),plus(b,d))" $
 >   \a b c d -> if and (leq a b) (leq c d)
 >     then leq (plus a c) (plus b d)
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -290,7 +290,7 @@ The following hold for all $a,b \in \nats$.
 >   testName "if not(leq(a,b)) then leq(b,a)" $
 >   \a b -> if not (leq a b)
 >     then leq b a
->     else True
+>     else true
 > 
 > 
 > _test_leq_trichotomy :: (Natural n, Equal n)
@@ -306,7 +306,7 @@ The following hold for all $a,b \in \nats$.
 >   testName "if leq(a,next(b)) then or(leq(a,b),eq(a,next(b)))" $
 >   \a b -> if leq a (next b)
 >     then or (leq a b) (eq a (next b))
->     else True
+>     else true
 > 
 > 
 > _test_leq_next_squeeze :: (Natural n, Equal n)
@@ -315,7 +315,7 @@ The following hold for all $a,b \in \nats$.
 >   testName "if and(leq(b,a),leq(a,next(b))) then or(eq(a,b),eq(a,next(b)))" $
 >   \a b -> if and (leq b a) (leq a (next b))
 >     then or (eq a b) (eq a (next b))
->     else True
+>     else true
 
 </p></div>
 </div>

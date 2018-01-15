@@ -161,5 +161,5 @@ Main:
 > main_dbfoldr = do
 >   _test_dbfoldr (nil :: ConsList Bool)  (zero :: Unary) (zero :: Unary) 50 500
 >   _test_dbfoldr (nil :: ConsList Unary) (zero :: Unary) (zero :: Unary) 50 500
->   _test_dbfoldr (nil :: ConsList Bool)  (zero :: Unary) (True)          50 500
->   _test_dbfoldr (nil :: ConsList Unary) (zero :: Unary) (True)          50 500
+>   _test_dbfoldr (nil :: ConsList Bool)  (zero :: Unary) (true :: Bool)  50 500
+>   _test_dbfoldr (nil :: ConsList Unary) (zero :: Unary) (true :: Bool)  50 500

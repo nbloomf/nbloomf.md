@@ -76,7 +76,7 @@ Let $a \in \nats$. We have the following.
 >   => n -> Test (n -> Bool)
 > _test_div_zero_right _ =
 >   testName "div(a,0) == true" $
->   \a -> eq (div a zero) True
+>   \a -> eq (div a zero) true
 > 
 > 
 > _test_div_zero_left :: (Natural n, Equal n)
@@ -85,7 +85,7 @@ Let $a \in \nats$. We have the following.
 >   testName "if div(0,a) then eq(a,0)" $
 >   \a -> if div zero a
 >     then eq a zero
->     else True
+>     else true
 > 
 > 
 > _test_div_one_left :: (Natural n, Equal n)
@@ -101,7 +101,7 @@ Let $a \in \nats$. We have the following.
 >   testName "if div(a,next(0)) then eq(a,next(0))" $
 >   \a -> if div a (next zero)
 >     then eq a (next zero)
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -137,7 +137,7 @@ so we have $\ntimes(h,k) = \next(\zero)$, and thus $h = k = \next(\zero)$, so th
 >   => n -> Test (n -> Bool)
 > _test_div_reflexive _ =
 >   testName "div(a,a) == true" $
->   \a -> eq (div a a) True
+>   \a -> eq (div a a) true
 > 
 > 
 > _test_div_antisymmetric :: (Natural n, Equal n)
@@ -146,7 +146,7 @@ so we have $\ntimes(h,k) = \next(\zero)$, and thus $h = k = \next(\zero)$, so th
 >   testName "if and(div(a,b),div(b,a)) then eq(a,b)" $
 >   \a b -> if and (div a b) (div b a)
 >     then eq a b
->     else True
+>     else true
 > 
 > 
 > _test_div_transitive :: (Natural n, Equal n)
@@ -155,7 +155,7 @@ so we have $\ntimes(h,k) = \next(\zero)$, and thus $h = k = \next(\zero)$, so th
 >   testName "if and(div(a,b),div(b,c)) then div(a,c)" $
 >   \a b c -> if and (div a b) (div b c)
 >     then div a c
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -217,7 +217,7 @@ so that $\nleq(a,b)$.
 >   testName "if div(c,a) and not(isZero(c)) and eq(times(a,b),times(c,d)) then div(b,d)" $
 >   \a b c d -> if and (and (div c a) (not (isZero c))) (eq (times a b) (times c d))
 >     then div b d
->     else True
+>     else true
 > 
 > 
 > _test_div_plus :: (Natural n, Equal n)
@@ -226,7 +226,7 @@ so that $\nleq(a,b)$.
 >   testName "if and(div(c,a),div(c,b)) then div(c,plus(a,b))" $
 >   \a b c -> if and (div c a) (div c b)
 >     then div c (plus a b)
->     else True
+>     else true
 > 
 > 
 > _test_div_plus_transfer :: (Natural n, Equal n)
@@ -235,7 +235,7 @@ so that $\nleq(a,b)$.
 >   testName "if div(d,a) and div(d,c) and eq(plus(a,b),c) then div(d,b)" $
 >   \a b c d -> if and (and (div d a) (div d c)) (eq c (plus a b))
 >     then div d b
->     else True
+>     else true
 > 
 > 
 > _test_div_leq :: (Natural n, Equal n)
@@ -244,7 +244,7 @@ so that $\nleq(a,b)$.
 >   testName "if div(a,b) and not(isZero(b)) then leq(a,b)" $
 >   \a b -> if and (div a b) (not (isZero b))
 >     then leq a b
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -293,7 +293,7 @@ as claimed.
 >   testName "if div(b,a) and not(isZero(c)) then quo(times(a,c),times(b,c)) == quo(a,b)" $
 >   \a b c -> if and (div b a) (not (isZero c))
 >     then eq (quo (times c a) (times c b)) (quo a b)
->     else True
+>     else true
 > 
 > 
 > _test_div_quo_times_interchange :: (Natural n, Equal n)
@@ -302,7 +302,7 @@ as claimed.
 >   testName "if div(b,a) then quo(times(c,a),b) == times(c,quo(a,b))" $
 >   \a b c -> if div b a
 >     then eq (quo (times c a) b) (times c (quo a b))
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -320,13 +320,15 @@ Since $b$ and $d$ are both not zero, using the uniqueness of quotients by nonzer
 
 <div class="test"><p>
 
-> _test_div_cross_multiplication :: (Natural n, Equal n)
->   => n -> Test (n -> n -> n -> n -> Bool)
-> _test_div_cross_multiplication _ =
+> _test_div_cross_multiplication :: (Natural n, Equal n, Boolean b, Equal b)
+>   => n -> b -> Test (n -> n -> n -> n -> Bool)
+> _test_div_cross_multiplication _ p =
 >   testName "if div(b,a) and div(d,c) and b /= 0 and d /= 0 then times(a,d) == times(b,c) iff quo(a,b) == quo(c,d)" $
 >   \a b c d -> if and (and (div b a) (div d c)) (and (not (isZero b)) (not (isZero d)))
->     then eq (eq (times a d) (times b c)) (eq (quo a b) (quo c d))
->     else True
+>     then eq
+>       ((eq (times a d) (times b c)) `withTypeOf` p)
+>       (eq (quo a b) (quo c d))
+>     else true
 
 </p></div>
 </div>
@@ -339,9 +341,10 @@ Suite:
 
 > _test_div ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
->   ) => n -> Int -> Int -> IO ()
-> _test_div n maxSize numCases = do
->   testLabel1 "div" n
+>   , TypeName b, Equal b, Boolean b
+>   ) => n -> b -> Int -> Int -> IO ()
+> _test_div n p maxSize numCases = do
+>   testLabel2 "div" n p
 > 
 >   let
 >     args = stdArgs
@@ -363,10 +366,10 @@ Suite:
 >   runTest args (_test_div_leq n)
 >   runTest args (_test_div_quo_times_cancel n)
 >   runTest args (_test_div_quo_times_interchange n)
->   runTest args (_test_div_cross_multiplication n)
+>   runTest args (_test_div_cross_multiplication n p)
 
 Main:
 
 > main_div :: IO ()
 > main_div = do
->   _test_div (zero :: Unary) 50 100
+>   _test_div (zero :: Unary) (true :: Bool) 50 100

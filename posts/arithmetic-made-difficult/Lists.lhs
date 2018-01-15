@@ -147,9 +147,9 @@ And the concrete type:
 > 
 > 
 > instance (Equal a) => Equal (ConsList a) where
->   eq N       N       = True
->   eq N       (C _ _) = False
->   eq (C _ _) N       = False
+>   eq N       N       = true
+>   eq N       (C _ _) = false
+>   eq (C _ _) N       = false
 >   eq (C a x) (C b y) = and (eq a b) (eq x y)
 > 
 > 

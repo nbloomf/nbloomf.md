@@ -107,7 +107,7 @@ Again by the properties of $\findsmallest{\sigma(a)}$, there does not exist $k$ 
 >   testName "if leq(next(next(zero)),a) then leq(next(next(zero)),mindiv(a)) and div(mindiv(a),a)" $
 >   \a -> if leq (next (next zero)) a
 >     then and (leq (next (next zero)) (mindiv a)) (div (mindiv a) a)
->     else True
+>     else true
 > 
 > 
 > _test_mindiv_min :: (Natural n, Equal n)
@@ -116,7 +116,7 @@ Again by the properties of $\findsmallest{\sigma(a)}$, there does not exist $k$ 
 >   testName "if leq(next(next(zero)),k) and div(k,a) then leq(mindiv(a),k)" $
 >   \a k -> if and (leq (next (next zero)) k) (div k a)
 >     then leq (mindiv a) k
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -131,7 +131,7 @@ In Haskell:
 
 > prime :: (Natural n, Equal n) => n -> Bool
 > prime a = if leq a (next zero)
->   then False
+>   then false
 >   else eq a (mindiv a)
 
 </p></div>
@@ -175,8 +175,8 @@ Let $a \in \nats$ with $a \neq \zero$ and $a \neq \next(\zero)$, and let $d = \n
 > _test_prime_mindiv _ =
 >   testName "if leq(next(next(zero)),a) then prime(mindiv(a)) == true" $
 >   \a -> if leq (next (next zero)) a
->     then eq (prime (mindiv a)) True
->     else True
+>     then eq (prime (mindiv a)) true
+>     else true
 
 </p></div>
 </div>
@@ -202,7 +202,7 @@ Let $d = \ngcd(a,p)$. Now $\ndiv(d,p)$, so that either $d = \next(\zero)$ or $d 
 >     then if div p a
 >       then eq (gcd a p) p
 >       else eq (gcd a p) (next zero)
->     else True
+>     else true
 
 </p></div>
 </div>

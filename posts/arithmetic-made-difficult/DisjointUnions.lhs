@@ -116,6 +116,12 @@ The previous results suggest that we can model $A + B$ with the Haskell type ``E
 > either :: (a -> x) -> (b -> x) -> Either a b -> x
 > either f _ (Left  a) = f a
 > either _ g (Right b) = g b
+> 
+> instance (Equal a, Equal b) => Equal (Either a b) where
+>   eq (Left a1)  (Left a2)  = eq a1 a2
+>   eq (Left a1)  (Right b2) = false
+>   eq (Right b1) (Left a2)  = false
+>   eq (Right b1) (Right b2) = eq b1 b2
 
 For example, $\id_{A + B}$ is an $\either$.
 
@@ -557,10 +563,10 @@ Let $A$ and $B$ be sets. We define $\isLft : A + B \rightarrow \bool$ by $$\isLf
 In Haskell:
 
 > isLft :: Either a b -> Bool
-> isLft = either (const True) (const False)
+> isLft = either (const true) (const false)
 > 
 > isRgt :: Either a b -> Bool
-> isRgt = either (const False) (const True)
+> isRgt = either (const false) (const true)
 
 </div>
 </div>
@@ -618,28 +624,28 @@ as claimed.
 >   => a -> b -> Test (a -> Bool)
 > _test_isLft_lft _ y =
 >   testName "isLft(lft(a)) == true" $
->   \a -> eq (isLft ((lft a) `withTypeOf` (rgt y))) True
+>   \a -> eq (isLft ((lft a) `withTypeOf` (rgt y))) true
 > 
 > 
 > _test_isLft_rgt :: (Equal a, Equal b)
 >   => a -> b -> Test (b -> Bool)
 > _test_isLft_rgt x _ =
 >   testName "isLft(rgt(b)) == false" $
->   \b -> eq (isLft ((rgt b) `withTypeOf` (lft x))) False
+>   \b -> eq (isLft ((rgt b) `withTypeOf` (lft x))) false
 > 
 > 
 > _test_isRgt_lft :: (Equal a, Equal b)
 >   => a -> b -> Test (a -> Bool)
 > _test_isRgt_lft _ y =
 >   testName "isRgt(lft(a)) == false" $
->   \a -> eq (isRgt ((lft a) `withTypeOf` (rgt y))) False
+>   \a -> eq (isRgt ((lft a) `withTypeOf` (rgt y))) false
 > 
 > 
 > _test_isRgt_rgt :: (Equal a, Equal b)
 >   => a -> b -> Test (b -> Bool)
 > _test_isRgt_rgt x _ =
 >   testName "isRgt(rgt(b)) == true" $
->   \b -> eq (isRgt ((rgt b) `withTypeOf` (lft x))) True
+>   \b -> eq (isRgt ((rgt b) `withTypeOf` (lft x))) true
 
 </p></div>
 </div>
@@ -648,7 +654,7 @@ as claimed.
 Testing
 -------
 
-The suite:
+Suite:
 
 > _test_disjoint_union
 >   :: ( Show a, Show b, Show c
@@ -691,7 +697,7 @@ The suite:
 >   runTest args (_test_isRgt_rgt a b)
 
 
-And ``main``:
+Main:
 
 > main_disjoint_union :: IO ()
-> main_disjoint_union = _test_disjoint_union True True True 20 100
+> main_disjoint_union = _test_disjoint_union (true :: Bool) (true :: Bool) (true :: Bool) 20 100

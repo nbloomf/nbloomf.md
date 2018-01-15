@@ -112,3 +112,33 @@ blankpost:VQ:
   echo 'tags: '
   echo '---'
   echo
+
+sniff-amd:VQ: \
+  sniff-amd-fencediv \
+  sniff-amd-plaindiv
+
+sniff-amd-fencediv:VQ:
+  FENCEDIV=$( grep '^:::' posts/arithmetic-made-difficult/* \
+    | grep -v ':::::: definition ::' \
+    | grep -v ':::::: theorem :::::' \
+    | grep -v ':::::: corollary :::' \
+    | grep -v '::: proof ::::::::::' \
+    | grep -v '::: test :::::::::::' \
+    | grep -v '::::::::::::::::::::' )
+  if [ -z "$FENCEDIV" ]; then
+    echo 'Fenced Divs OK' | doppler lightgreen
+  else
+    echo 'Fenced Divs' | doppler lightred
+    echo $(echo "$FENCEDIV" | wc -l) 'problems found' | doppler lightred
+    echo "$FENCEDIV"
+  fi
+
+sniff-amd-plaindiv:VQ:
+  PLAINDIV=$( grep -e '<div class' -e '</div>' posts/arithmetic-made-difficult/* )
+  if [ -z "$PLAINDIV" ]; then
+    echo 'Plain Divs OK' | doppler lightgreen
+  else
+    echo 'Plain Divs' | doppler lightred
+    echo $(echo "$PLAINDIV" | wc -l) 'problems found' | doppler lightred
+    echo "$PLAINDIV"
+  fi

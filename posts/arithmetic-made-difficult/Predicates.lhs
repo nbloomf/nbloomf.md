@@ -26,11 +26,11 @@ Let $A$ be a set. A *predicate* on $A$ is just a function $p : A \rightarrow \bo
 
 In Haskell:
 
-> ptrue :: a -> Bool
-> ptrue _ = True
+> ptrue :: (Boolean b) => a -> b
+> ptrue _ = true
 > 
-> pfalse :: a -> Bool
-> pfalse _ = False
+> pfalse :: (Boolean b) => a -> b
+> pfalse _ = false
 
 </p></div>
 </div>
@@ -43,7 +43,7 @@ Let $A$ be a set. We define $\pnot : \bool^A \rightarrow \bool^A$ by $$\pnot(p)(
 
 In Haskell:
 
-> pnot :: (a -> Bool) -> a -> Bool
+> pnot :: (Boolean b) => (a -> b) -> a -> b
 > pnot p a = not (p a)
 
 </p></div>
@@ -69,11 +69,11 @@ as needed.
 
 <div class="test"><p>
 
-> _test_pnot_involutive
->   :: a -> Test ((a -> Bool) -> a -> Bool)
-> _test_pnot_involutive _ =
+> _test_pnot_involutive :: (Boolean b, Equal b)
+>   => a -> b -> Test ((a -> b) -> a -> Bool)
+> _test_pnot_involutive _ b =
 >   testName "pnot(pnot(p)) == p" $
->   \p x -> eq (pnot (pnot p) x) (p x)
+>   \p x -> eq (pnot (pnot p) x) ((p x) `withTypeOf` b)
 
 </p></div>
 </div>
@@ -134,32 +134,32 @@ $$\begin{eqnarray*}
 
 <div class="test"><p>
 
-> _test_pnot_ptrue
->   :: a -> Test (a -> Bool)
-> _test_pnot_ptrue _ =
+> _test_pnot_ptrue :: (Boolean b, Equal b)
+>   => a -> b -> Test (a -> Bool)
+> _test_pnot_ptrue _ b =
 >   testName "pnot(ptrue) == pfalse" $
->   \a -> eq ((pnot ptrue) a) (pfalse a)
+>   \a -> eq ((pnot ptrue) a) ((pfalse a) `withTypeOf` b)
 > 
 > 
-> _test_pnot_pfalse
->   :: a -> Test (a -> Bool)
-> _test_pnot_pfalse _ =
+> _test_pnot_pfalse :: (Boolean b, Equal b)
+>   => a -> b -> Test (a -> Bool)
+> _test_pnot_pfalse _ b =
 >   testName "pnot(pfalse) == ptrue" $
->   \a -> eq ((pnot pfalse) a) (ptrue a)
+>   \a -> eq ((pnot pfalse) a) ((ptrue a) `withTypeOf` b)
 > 
 > 
-> _test_not_ptrue
->   :: a -> Test (a -> Bool)
-> _test_not_ptrue _ =
+> _test_not_ptrue :: (Boolean b, Equal b)
+>   => a -> b -> Test (a -> Bool)
+> _test_not_ptrue _ b =
 >   testName "(not . ptrue) == pfalse" $
->   \a -> eq ((not . ptrue) a) (pfalse a)
+>   \a -> eq ((not . ptrue) a) ((pfalse a) `withTypeOf` b)
 > 
 > 
-> _test_not_pfalse
->   :: a -> Test (a -> Bool)
-> _test_not_pfalse _ =
+> _test_not_pfalse :: (Boolean b, Equal b)
+>   => a -> b -> Test (a -> Bool)
+> _test_not_pfalse _ b =
 >   testName "(not . pfalse) == ptrue" $
->   \a -> eq ((not . pfalse) a) (ptrue a)
+>   \a -> eq ((not . pfalse) a) ((ptrue a) `withTypeOf` b)
 
 </p></div>
 </div>
@@ -349,23 +349,23 @@ as needed.
 
 <div class="test"><p>
 
-> _test_por_ptrue
->   :: a -> Test ((a -> Bool) -> a -> Bool)
-> _test_por_ptrue _ =
+> _test_por_ptrue :: (Boolean b, Equal b)
+>   => a -> b -> Test ((a -> Bool) -> a -> Bool)
+> _test_por_ptrue _ b =
 >   testName "por(ptrue,p) == ptrue" $
 >   \p a -> eq ((por ptrue p) a) (ptrue a)
 > 
 > 
-> _test_por_pfalse
->   :: a -> Test ((a -> Bool) -> a -> Bool)
-> _test_por_pfalse _ =
+> _test_por_pfalse :: (Boolean b, Equal b)
+>   => a -> b -> Test ((a -> Bool) -> a -> Bool)
+> _test_por_pfalse _ b =
 >   testName "por(pfalse,p) == p" $
 >   \p a -> eq ((por pfalse p) a) (p a)
 > 
 > 
-> _test_por_idempotent
->   :: a -> Test ((a -> Bool) -> a -> Bool)
-> _test_por_idempotent _ =
+> _test_por_idempotent :: (Boolean b, Equal b)
+>   => a -> b -> Test ((a -> Bool) -> a -> Bool)
+> _test_por_idempotent _ b =
 >   testName "por(p,p) == p" $
 >   \p a -> eq ((por p p) a) (p a)
 > 
@@ -487,9 +487,11 @@ Testing
 
 Suite:
 
-> _test_predicate :: (Equal a, Arbitrary a, CoArbitrary a, Show a, TypeName a)
->   => a -> Int -> Int -> IO ()
-> _test_predicate x size num = do
+> _test_predicate ::
+>   ( Equal a, Arbitrary a, CoArbitrary a, Show a, TypeName a
+>   , TypeName b, Boolean b, Equal b, Arbitrary b
+>   ) => a -> b -> Int -> Int -> IO ()
+> _test_predicate x p size num = do
 >   testLabel1 "predicate" x
 > 
 >   let
@@ -498,11 +500,11 @@ Suite:
 >       , maxSize = size
 >       }
 > 
->   runTest args (_test_pnot_involutive x)
->   runTest args (_test_pnot_ptrue x)
->   runTest args (_test_pnot_pfalse x)
->   runTest args (_test_not_ptrue x)
->   runTest args (_test_not_pfalse x)
+>   runTest args (_test_pnot_involutive x p)
+>   runTest args (_test_pnot_ptrue x p)
+>   runTest args (_test_pnot_pfalse x p)
+>   runTest args (_test_not_ptrue x p)
+>   runTest args (_test_not_pfalse x p)
 > 
 >   runTest args (_test_pand_pfalse x)
 >   runTest args (_test_pand_ptrue x)
@@ -510,9 +512,9 @@ Suite:
 >   runTest args (_test_pand_commutative x)
 >   runTest args (_test_pand_associative x)
 > 
->   runTest args (_test_por_ptrue x)
->   runTest args (_test_por_pfalse x)
->   runTest args (_test_por_idempotent x)
+>   runTest args (_test_por_ptrue x p)
+>   runTest args (_test_por_pfalse x p)
+>   runTest args (_test_por_idempotent x p)
 >   runTest args (_test_por_commutative x)
 >   runTest args (_test_por_associative x)
 > 
@@ -524,4 +526,4 @@ Suite:
 Main:
 
 > main_predicate :: IO ()
-> main_predicate = _test_predicate True 20 100
+> main_predicate = _test_predicate (true :: Bool) (true :: Bool) 20 100

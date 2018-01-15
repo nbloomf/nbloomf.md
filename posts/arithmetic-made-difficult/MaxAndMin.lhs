@@ -399,7 +399,7 @@ Let $a,b,c \in \nats$. Then we have the following.
 >   testName "if leq(a,c) and leq(b,c) then leq(max(a,b),c)" $
 >   \a b c -> if and (leq a c) (leq b c)
 >     then leq (max a b) c
->     else True
+>     else true
 > 
 > 
 > _test_min_glb :: (Natural n, Equal n)
@@ -408,7 +408,7 @@ Let $a,b,c \in \nats$. Then we have the following.
 >   testName "if leq(c,a) and leq(c,b) then leq(c,min(a,b))" $
 >   \a b c -> if and (leq c a) (leq c b)
 >     then leq c (min a b)
->     else True
+>     else true
 > 
 > 
 > _test_max_min_leq :: (Natural n, Equal n)

@@ -84,7 +84,7 @@ $$\left\{\begin{array}{l}
 >   => n -> Test (n -> Bool)
 > _test_minus_zero_left _ =
 >   testName "minus(0,b) == if(isZero(b),rgt(0),lft(*))" $
->   \b -> if eq (isZero b) True
+>   \b -> if eq (isZero b) true
 >     then eq (minus zero b) (rgt zero)
 >     else eq (minus zero b) (lft ())
 > 
@@ -94,7 +94,7 @@ $$\left\{\begin{array}{l}
 > _test_minus_next_left _ =
 >   testName
 >     "minus(next(a),b) == if(isZero(b),rgt(next(a)),minus(a,prev(b)))" $
->   \a b -> if eq (isZero b) True
+>   \a b -> if eq (isZero b) true
 >     then eq (minus (next a) b) (rgt (next a))
 >     else eq (minus (next a) b) (minus a (prev b))
 
@@ -265,12 +265,12 @@ as needed.
 
 <div class="test"><p>
 
-> _test_minus_plus_equiv :: (Natural n, Equal n)
->   => n -> Test (n -> n -> n -> Bool)
-> _test_minus_plus_equiv _ =
+> _test_minus_plus_equiv :: (Natural n, Equal n, Boolean b, Equal b)
+>   => n -> b -> Test (n -> n -> n -> Bool)
+> _test_minus_plus_equiv _ p =
 >   testName "(minus(b,a) == rgt(c)) == (plus(a,c) == b)" $
 >   \a b c -> eq
->     (eq (minus b a) (rgt c))
+>     ((eq (minus b a) (rgt c)) `withTypeOf` p)
 >     (eq (plus a c) b)
 
 </p></div>
@@ -299,7 +299,7 @@ Let $a,b,c \in \nats$. Then the following are equivalent.
 >   testName "if minus(b,a) == minus(b,c) == rgt(d) then a == c" $
 >   \a b c -> if and (eq (minus b a) (minus b c)) (isRgt (minus b a))
 >     then eq a c
->     else True
+>     else true
 > 
 > 
 > _test_minus_cancellative_right :: (Natural n, Equal n)
@@ -308,7 +308,7 @@ Let $a,b,c \in \nats$. Then the following are equivalent.
 >   testName "if minus(a,b) == minus(c,b) == rgt(d) then a == c" $
 >   \a b c -> if and (eq (minus a b) (minus c b)) (isRgt (minus a b))
 >     then eq a c
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -371,7 +371,7 @@ Let $a,b,c,d \in \nats$. Then the following hold.
 >   testName "if minus(b,a) == rgt(c) then minus(next(b),a) == rgt(next(c))" $
 >   \a b -> case minus b a of
 >     Right c -> eq (minus (next b) a) (rgt (next c))
->     Left () -> True
+>     Left () -> true
 > 
 > 
 > _test_minus_swap :: (Natural n, Equal n)
@@ -380,7 +380,7 @@ Let $a,b,c,d \in \nats$. Then the following hold.
 >   testName "if minus(b,a) == rgt(c) then minus(b,c) == rgt(a)" $
 >   \a b -> case minus b a of
 >     Right c -> eq (minus b c) (rgt a)
->     Left () -> True
+>     Left () -> true
 > 
 > 
 > _test_minus_plus :: (Natural n, Equal n)
@@ -389,7 +389,7 @@ Let $a,b,c,d \in \nats$. Then the following hold.
 >   testName "if minus(b,a) == rgt(c) then minus(plus(b,d),a) == rgt(plus(c,d))" $
 >   \a b d -> case minus b a of
 >     Right c -> eq (minus (plus b d) a) (rgt (plus c d))
->     Left () -> True
+>     Left () -> true
 
 </p></div>
 </div>
@@ -415,7 +415,7 @@ For the inductive step, suppose the implication holds for all $b$ for some $a$. 
 >   testName "if minus(a,b) == lft(*) then isRgt(minus(b,a))" $
 >   \a b -> if eq (minus a b) (lft ())
 >     then isRgt (minus b a)
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -464,7 +464,7 @@ as needed.
 >     Right d -> eq
 >       (minus (times c a) (times c b))
 >       (rgt (times c d))
->     Left () -> True
+>     Left () -> true
 
 </p></div>
 </div>
@@ -475,9 +475,10 @@ Testing
 
 > _test_minus ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
->   ) => n -> Int -> Int -> IO ()
-> _test_minus n maxSize numCases = do
->   testLabel1 "minus" n
+>   , TypeName b, Boolean b, Equal b
+>   ) => n -> b -> Int -> Int -> IO ()
+> _test_minus n p maxSize numCases = do
+>   testLabel2 "minus" n p
 > 
 >   let
 >     args = stdArgs
@@ -491,7 +492,7 @@ Testing
 >   runTest args (_test_minus_zero_next n)
 >   runTest args (_test_minus_next_next n)
 >   runTest args (_test_minus_nat_next n)
->   runTest args (_test_minus_plus_equiv n)
+>   runTest args (_test_minus_plus_equiv n p)
 >   runTest args (_test_minus_cancellative_left n)
 >   runTest args (_test_minus_cancellative_right n)
 >   runTest args (_test_minus_plus_right n)
@@ -506,4 +507,4 @@ Main:
 
 > main_minus :: IO ()
 > main_minus = do
->   _test_minus (zero :: Unary) 30 50
+>   _test_minus (zero :: Unary) (true :: Bool) 30 50

@@ -131,5 +131,5 @@ Main:
 > main_bfoldr = do
 >   _test_bfoldr (nil :: ConsList Bool)  (zero :: Unary) (zero :: Unary) 50 1000
 >   _test_bfoldr (nil :: ConsList Unary) (zero :: Unary) (zero :: Unary) 50 1000
->   _test_bfoldr (nil :: ConsList Bool)  (True)          (zero :: Unary) 50 1000
->   _test_bfoldr (nil :: ConsList Unary) (True)          (zero :: Unary) 50 1000
+>   _test_bfoldr (nil :: ConsList Bool)  (true :: Bool)  (zero :: Unary) 50 1000
+>   _test_bfoldr (nil :: ConsList Unary) (true :: Bool)  (zero :: Unary) 50 1000

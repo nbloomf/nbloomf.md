@@ -570,4 +570,4 @@ Suite:
 Main:
 
 > main_tuple :: IO ()
-> main_tuple = _test_tuple True True True 20 100
+> main_tuple = _test_tuple (true :: Bool) (true :: Bool) (true :: Bool) 20 100

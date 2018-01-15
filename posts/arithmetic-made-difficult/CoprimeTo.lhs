@@ -66,7 +66,7 @@ But now $\ndiv(a,\ntimes(a,c))$ and $\ndiv(a,\ntimes(b,c))$, so that $\ndiv(a,c)
 >   testName "if coprime(a,b) and div(a,times(b,c)) then div(a,c)" $
 >   \a b c -> if and (coprime a b) (div a (times b c))
 >     then div a c
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -105,7 +105,7 @@ In particular, $\ntimes(k,\ngcd(a,b))$ is a common divisor of $a$ and $b$, and t
 >     b = next y
 >     u = quo a (gcd a b)
 >     v = quo b (gcd a b)
->   in eq (coprime u v) True
+>   in eq (coprime u v) true
 
 </p></div>
 </div>

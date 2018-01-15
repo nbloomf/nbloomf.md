@@ -197,7 +197,7 @@ So we have $k = \zero$, and thus $$\ntimes(q_1,\next(b)) = \ntimes(q_2,\next(b))
 >   testName "if and(eq(a,plus(times(q,next(b)),r),leq(r,b)) then (q,r) = divalg(a,b)" $
 >   \a b q r -> if and (eq a (plus (times q (next b)) r)) (leq r b)
 >     then eq (q,r) (divalg a (next b))
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -257,7 +257,7 @@ Since $\next(a) \neq \zero$, by the uniqueness of the division algorithm, we hav
 >   testName "if leq(a,b) then divalg(a,next(b)) = (0,a)" $
 >   \a b -> if leq a b
 >     then eq (divalg a (next b)) (zero, a)
->     else True
+>     else true
 > 
 > 
 > _test_divalg_self_next :: (Natural n, Equal n)

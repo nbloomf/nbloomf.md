@@ -16,7 +16,7 @@ slug: not
 
 In the last post, we defined the booleans $\bool$. We can define the usual logical operators in terms of $\bif{\ast}{\ast}{\ast}$. First, $\bnot$.
 
-:::: definition ::::
+:::::: definition ::
 [](#def-not) We define $\bnot : \bool \rightarrow \bool$ by $$\bnot(p) = \bif{p}{\bfalse}{\btrue}.$$
 
 In Haskell:
@@ -28,10 +28,10 @@ In Haskell:
 
 We can compute $\bnot$ explicitly.
 
-:::: theorem ::::
+:::::: theorem :::::
 [](#not-eval) We have $\bnot(\btrue) = \bfalse$ and $\bnot(\bfalse) = \btrue$.
 
-::: proof :::
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \bnot(\btrue) \\
@@ -45,9 +45,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.
-:::::::::::::
+::::::::::::::::::::
 
-::: test :::
+::: test :::::::::::
 
 > _test_not_true :: (Boolean b, Equal b)
 >   => b -> Test Bool
@@ -62,19 +62,19 @@ as claimed.
 >   testName "not(true) == false" $
 >   eq (not (true `withTypeOf` p)) false
 
-::::::::::::
-:::::::::::::::::
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\bnot$ is an involution.
 
-:::: theorem ::::
+:::::: theorem :::::
 [](#not-involution) For all $a \in \bool$ we have $\bnot(\bnot(a)) = a$.
 
-::: proof :::
+::: proof ::::::::::
 If $a = \btrue$ we have $$\bnot(\bnot(\btrue)) = \bnot(\bfalse) = \btrue,$$ and if $a = \bfalse$, we have $$\bnot(\bnot(\bfalse)) = \bnot(\btrue) = \bfalse$$ as claimed.
-:::::::::::::
+::::::::::::::::::::
 
-::: test :::
+::: test :::::::::::
 
 > _test_not_involutive :: (Boolean b, Equal b)
 >   => b -> Test (b -> Bool)
@@ -82,17 +82,15 @@ If $a = \btrue$ we have $$\bnot(\bnot(\btrue)) = \bnot(\bfalse) = \btrue,$$ and 
 >   testName "not(not(p)) == p" $
 >   \p -> eq (not (not p)) p
 
-::::::::::::
-:::::::::::::::::
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\bif{\ast}{\ast}{\ast}$ interacts with $\bnot$.
 
-<div class="result">
-<div class="thm"><p><a name="thm-ifnot" />
-Let $A$ be a set with $p \in \bool$ and $a,b \in A$. We have $$\bif{\bnot(p)}{a}{b} = \bif{p}{b}{a}.$$
-</p></div>
+::: theorem ::::::::
+[](#thm-ifnot) Let $A$ be a set with $p \in \bool$ and $a,b \in A$. We have $$\bif{\bnot(p)}{a}{b} = \bif{p}{b}{a}.$$
 
-<div class="proof"><p>
+::: proof ::::::::::
 If $p = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bif{\bnot(p)}{a}{b} \\
@@ -112,17 +110,17 @@ $$\begin{eqnarray*}
  & = & \bif{p}{b}{a},
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_if_not :: (Equal a) => a -> Test (Bool -> a -> a -> Bool)
 > _test_if_not _ =
 >   testName "if(not(p),a,b) == if(p,b,a)" $
 >   \p a b -> eq (ifThenElse (not p) a b) (ifThenElse p b a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

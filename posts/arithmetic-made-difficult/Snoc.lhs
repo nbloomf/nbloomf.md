@@ -174,12 +174,12 @@ as needed.
 
 <div class="test"><p>
 
-> _test_snoc_eq :: (List t, Equal (t a), Equal a)
->   => t a -> Test (a -> a -> t a -> t a -> Bool)
-> _test_snoc_eq _ =
+> _test_snoc_eq :: (List t, Equal (t a), Equal a, Boolean b, Equal b)
+>   => t a -> b -> Test (a -> a -> t a -> t a -> Bool)
+> _test_snoc_eq _ p =
 >   testName "eq(snoc(a,x),snoc(b,y) iff and(eq(a,b),eq(x,y))" $
 >   \a b x y -> eq
->     (eq (snoc a x) (snoc b y))
+>     ((eq (snoc a x) (snoc b y)) `withTypeOf` p)
 >     (and (eq a b) (eq x y))
 
 </p></div>
@@ -218,7 +218,9 @@ as needed.
 >   => t a -> Test ((a -> a -> a) -> a -> a -> t a -> Bool)
 > _test_snoc_foldl _ =
 >   testName "foldl(phi)(e,snoc(a,x)) == phi(foldl(phi)(e,x),a)" $
->   \phi e a x -> eq (foldl phi e (snoc a x)) (phi (foldl phi e x) a)
+>   \phi e a x -> eq
+>     (foldl phi e (snoc a x))
+>     (phi (foldl phi e x) a)
 
 </p></div>
 </div>
@@ -252,7 +254,7 @@ as needed.
 >   => t a -> Test (a -> t a -> Bool)
 > _test_snoc_isnil _ =
 >   testName "eq(isnil(snoc(a,x)),false)" $
->   \a x -> eq (isNil (snoc a x)) False
+>   \a x -> eq (isNil (snoc a x)) false
 
 </p></div>
 </div>
@@ -318,8 +320,9 @@ Suite:
 > _test_snoc ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a)
->   ) => t a -> Int -> Int -> IO ()
-> _test_snoc t maxSize numCases = do
+>   , TypeName b, Equal b, Boolean b
+>   ) => t a -> b -> Int -> Int -> IO ()
+> _test_snoc t p maxSize numCases = do
 >   testLabel1 "snoc" t
 > 
 >   let
@@ -330,7 +333,7 @@ Suite:
 > 
 >   runTest args (_test_snoc_nil t)
 >   runTest args (_test_snoc_cons t)
->   runTest args (_test_snoc_eq t)
+>   runTest args (_test_snoc_eq t p)
 >   runTest args (_test_snoc_foldl t)
 >   runTest args (_test_snoc_isnil t)
 
@@ -338,5 +341,5 @@ Main:
 
 > main_snoc :: IO ()
 > main_snoc = do
->   _test_snoc (nil :: ConsList Bool)  20 100
->   _test_snoc (nil :: ConsList Unary) 20 100
+>   _test_snoc (nil :: ConsList Bool)  (true :: Bool) 20 100
+>   _test_snoc (nil :: ConsList Unary) (true :: Bool) 20 100

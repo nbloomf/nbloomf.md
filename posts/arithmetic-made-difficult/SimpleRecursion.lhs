@@ -281,7 +281,7 @@ Main:
 
 > main_simplerec :: IO ()
 > main_simplerec = do
->   _test_simplerec (zero :: Unary) True            True            100 100
->   _test_simplerec (zero :: Unary) (zero :: Unary) True            100 100
->   _test_simplerec (zero :: Unary) True            (zero :: Unary) 100 100
+>   _test_simplerec (zero :: Unary) (true :: Bool)  (true :: Bool)  100 100
+>   _test_simplerec (zero :: Unary) (zero :: Unary) (true :: Bool)  100 100
+>   _test_simplerec (zero :: Unary) (true :: Bool)  (zero :: Unary) 100 100
 >   _test_simplerec (zero :: Unary) (zero :: Unary) (zero :: Unary) 100 100

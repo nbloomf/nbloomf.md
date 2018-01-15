@@ -260,9 +260,9 @@ Establishing that every natural number is either $\zero$ or of the form $\next(m
 >   typeName _ = "Unary"
 > 
 > instance Equal Unary where
->   eq Z     Z     = True
->   eq Z     (N _) = False
->   eq (N _) Z     = False
+>   eq Z     Z     = true
+>   eq Z     (N _) = false
+>   eq (N _) Z     = false
 >   eq (N x) (N y) = eq x y
 
 (That ``show`` instance is so we can display elements of ``Nat`` without too many parentheses.) We also define a helper function to convert integers into ``Nat``s as follows.
@@ -284,14 +284,14 @@ And we can also give a straightforward implementation of $\natrec{\ast}{\ast}$.
 
 For example:
 
-    let theta' = natRec' True not
+    let theta' = natRec' true not
 
 and we can test out this map by evaluating it on several natural numbers:
 
     > theta' $ mkUnary 10
-    True
+    true
     > theta' $ mkUnary 11
-    False
+    false
 
 Now this ``theta'`` is pretty silly (though not *that* silly, it detects the parity of a natural number, which we haven't defined yet). But in the next section we'll define a more interesting recursive function.
 

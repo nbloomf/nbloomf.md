@@ -182,7 +182,7 @@ as needed.
 >   testName "if and(prefix(z,x),prefix(z,y)) then prefix(z,lcp(x,y))" $
 >   \x y z -> if and (prefix z x) (prefix z y)
 >     then prefix z (lcp x y)
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -556,7 +556,7 @@ as needed.
 >   testName "if a /= b then lcp(map(cons(a,-))(x),map(cons(b,-))(y)) == nil" $
 >   \a b x y -> if not (eq a b)
 >     then eq (lcp (map (cons a) x) (map (cons b) y)) nil
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -678,7 +678,7 @@ as claimed.
 >   testName "if and(suffix(z,x),suffix(z,y)) then suffix(z,lcs(x,y))" $
 >   \x y z -> if and (suffix z x) (suffix z y)
 >     then suffix z (lcs x y)
->     else True
+>     else true
 
 </p></div>
 </div>

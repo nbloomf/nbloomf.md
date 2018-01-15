@@ -481,7 +481,7 @@ as needed.
 >   => t a -> n -> Test (n -> t a -> Bool)
 > _test_drop_suffix _ _ =
 >   testName "suffix(drop(k,x),x) == true" $
->   \k x -> eq (suffix (drop k x) x) True
+>   \k x -> eq (suffix (drop k x) x) true
 
 </p></div>
 </div>

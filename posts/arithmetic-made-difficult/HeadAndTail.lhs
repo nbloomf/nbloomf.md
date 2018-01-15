@@ -30,7 +30,7 @@ Let $A$ be a set. We define $\isnil : \lists{A} \rightarrow \bool$ by $$\isnil =
 In Haskell:
 
 > isNil :: (List t) => t a -> Bool
-> isNil = (either (const True) (const False)) . uncons
+> isNil = (either (const true) (const false)) . uncons
 > 
 > 
 > head :: (List t) => t a -> Either () a
@@ -88,7 +88,7 @@ as claimed.
 >   => t a -> Test (a -> t a -> Bool)
 > _test_isNil_cons z =
 >   testName "isNil(cons(a,x)) == false" $
->   \a x -> eq (isNil (cons a x)) False
+>   \a x -> eq (isNil (cons a x)) false
 
 </p></div>
 </div>

@@ -189,7 +189,7 @@ The following hold for all natural numbers $a$, $b$, and $c$.
 >   testName "if plus(c,a) == plus(c,b) then a == b" $
 >   \a b c -> if eq (f c a) (f c b)
 >     then eq a b
->     else True
+>     else true
 > 
 > 
 > _test_plus_cancellative_right :: (Natural n, Equal n)
@@ -198,7 +198,7 @@ The following hold for all natural numbers $a$, $b$, and $c$.
 >   testName "if plus(a,c) == plus(b,c) then a == b" $
 >   \a b c -> if eq (f a c) (f b c)
 >     then eq a b
->     else True
+>     else true
 
 </p></div>
 </div>

@@ -210,7 +210,7 @@ as needed.
 >   testName "prefix(x,y) ==> prefix(dedupeL(x),dedupeL(y))" $
 >   \x y -> if prefix x y
 >     then prefix (dedupeL x) (dedupeL y)
->     else True
+>     else true
 
 </p></div>
 </div>
@@ -439,7 +439,7 @@ as claimed.
 >   => t a -> Test (t a -> Bool)
 > _test_dedupeR_unique _ =
 >   testName "unique(dedupeR(x)) == true" $
->   \x -> eq (unique (dedupeR x)) True
+>   \x -> eq (unique (dedupeR x)) true
 
 </p></div>
 </div>

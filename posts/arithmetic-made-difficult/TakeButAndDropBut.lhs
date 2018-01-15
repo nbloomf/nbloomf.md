@@ -152,7 +152,7 @@ as needed.
 >   => t a -> n -> Test (n -> t a -> Bool)
 > _test_takeBut_prefix _ m =
 >   testName "prefix(takeBut(k,x),x) == true" $
->   \k x -> eq (prefix (takeBut k x) x) True
+>   \k x -> eq (prefix (takeBut k x) x) true
 
 </p></div>
 </div>
@@ -174,7 +174,7 @@ We have $$\prefix(\takeBut(k,x),x) = \btrue,$$ so $$\infix(\takeBut(k,x),x) = \b
 >   => t a -> n -> Test (n -> t a -> Bool)
 > _test_takeBut_sublist _ m =
 >   testName "sublist(takeBut(k,x),x) == true" $
->   \k x -> eq (sublist (takeBut k x) x) True
+>   \k x -> eq (sublist (takeBut k x) x) true
 
 </p></div>
 </div>
@@ -272,7 +272,7 @@ as claimed.
 >   => t a -> n -> Test (n -> t a -> Bool)
 > _test_dropBut_suffix _ _ =
 >   testName "suffix(dropBut(k,x),x) == true" $
->   \k x -> eq (suffix (dropBut k x) x) True
+>   \k x -> eq (suffix (dropBut k x) x) true
 
 </p></div>
 </div>
