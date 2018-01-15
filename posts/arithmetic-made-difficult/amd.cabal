@@ -141,7 +141,11 @@ test-suite amd-predicates
   ghc-options: -main-is Predicates.main_predicate
   other-modules:
     Testing,
-    Booleans
+    Booleans,
+    Not,
+    And,
+    Or,
+    Implies
 
 test-suite amd-tuple
   default-language: Haskell2010
@@ -180,6 +184,10 @@ test-suite amd-nats
   other-modules:
     Testing,
     Booleans,
+    Not,
+    And,
+    Or,
+    Implies,
     DisjointUnions,
     Unary
 
