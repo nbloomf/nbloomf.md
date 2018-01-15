@@ -41,35 +41,174 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 
 ::: proof ::::::::::
-(@@@)
+Note that
+$$\begin{eqnarray*}
+ &   & \bor(\btrue,\btrue) \\
+ & = & \bif{\btrue}{\btrue}{\bif{\btrue}{\btrue}{\bfalse}} \\
+ & = & \btrue,
+\end{eqnarray*}$$
+that
+$$\begin{eqnarray*}
+ &   & \bor(\btrue,\bfalse) \\
+ & = & \bif{\btrue}{\btrue}{\bif{\bfalse}{\btrue}{\bfalse}} \\
+ & = & \btrue,
+\end{eqnarray*}$$
+that
+$$\begin{eqnarray*}
+ &   & \bor(\bfalse,\btrue) \\
+ & = & \bif{\bfalse}{\btrue}{\bif{\btrue}{\btrue}{\bfalse}} \\
+ & = & \bif{\bfalse}{\btrue}{\btrue} \\
+ & = & \btrue,
+\end{eqnarray*}$$
+and that
+$$\begin{eqnarray*}
+ &   & \bor(\bfalse,\bfalse) \\
+ & = & \bif{\bfalse}{\btrue}{\bif{\bfalse}{\btrue}{\bfalse}} \\
+ & = & \bif{\bfalse}{\btrue}{\bfalse} \\
+ & = & \bfalse,
+\end{eqnarray*}$$
+as claimed.
 ::::::::::::::::::::
 
 ::: test :::::::::::
 
-(@@@)
+> _test_or_true_true :: (Boolean b, Equal b)
+>   => b -> Test Bool
+> _test_or_true_true p =
+>   testName "or(true,true) == true" $
+>   eq (or true true) (true `withTypeOf` p)
+> 
+> 
+> _test_or_true_false :: (Boolean b, Equal b)
+>   => b -> Test Bool
+> _test_or_true_false p =
+>   testName "or(true,false) == true" $
+>   eq (or true false) (true `withTypeOf` p)
+> 
+> 
+> _test_or_false_true :: (Boolean b, Equal b)
+>   => b -> Test Bool
+> _test_or_false_true p =
+>   testName "or(false,true) == true" $
+>   eq (or false true) (true `withTypeOf` p)
+> 
+> 
+> _test_or_false_false :: (Boolean b, Equal b)
+>   => b -> Test Bool
+> _test_or_false_false p =
+>   testName "or(false,false) == false" $
+>   eq (or false false) (false `withTypeOf` p)
 
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-And $\bor$ satisfies the usual properties.
+$\btrue$ absorbs under $\bor$.
 
 :::::: theorem :::::
-The following hold for all $a,b,c \in \bool$.
-
-1. $\bor(\btrue,a) = \bor(a,\btrue) = \btrue$.
-2. $\bor(\bfalse,a) = \bor(a,\bfalse) = a$.
-3. $\bor(p,\bnot(p)) = \btrue$.
-4. $\bor(a,a) = a$.
-5. $\bor(a,b) = \bor(b,a)$.
-6. $\bor(\bor(a,b),c) = \bor(a,\bor(b,c))$.
+For all $a \in \bool$, we have $$\bor(\btrue,a) = \bor(a,\btrue) = \btrue.$$
 
 ::: proof ::::::::::
-1. If $a = \btrue$, we have $$\bor(\btrue,\btrue) = \btrue,$$ and if $a = \bfalse$ we have $$\bor(\btrue,\bfalse) = \btrue = \bor(\bfalse,\btrue)$$ as claimed.
-2. If $a = \btrue$, we have $$\bor(\bfalse,\btrue) = \btrue = \bor(\btrue,\bfalse),$$ and if $a = \bfalse$ we have $$\bor(\bfalse,\bfalse) = \bfalse$$ as claimed.
-3. If $a = \btrue$, we have $$\bor(\btrue,\bnot(\btrue)) = \btrue,$$ and if $a = \bfalse$ we have $$\bor(\bfalse,\bnot(\bfalse)) = \bor(\bfalse,\btrue) = \btrue$$ as claimed.
-4. If $a = \btrue$ we have $$\bor(\btrue,\btrue) = \btrue,$$ and if $a = \bfalse$ then $$\bor(\bfalse,\bfalse) = \bfalse$$ as claimed.
-5. If $a = \btrue$ we have $$\bor(\btrue,b) = \btrue = \bor(b,\btrue),$$ and if $a = \bfalse$ we have $$\bor(\bfalse,b) = b = \bor(b,\bfalse)$$ as claimed.
-6. If $a = \btrue$ we have
+If $a = \btrue$, we have $$\bor(\btrue,\btrue) = \btrue,$$ and if $a = \bfalse$ we have $$\bor(\btrue,\bfalse) = \btrue = \bor(\bfalse,\btrue)$$ as claimed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_or_true :: (Boolean b, Equal b)
+>   => b -> Test (b -> Bool)
+> _test_or_true b =
+>   testName "or(true,p) == true" $
+>   \p -> eq (or true p) (true `withTypeOf` b)
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+$\bfalse$ is neutral under $\bor$.
+
+:::::: theorem :::::
+For all $a \in \bool$, we have $$\bor(\bfalse,a) = \bor(a,\bfalse) = a.$$
+
+::: proof ::::::::::
+If $a = \btrue$, we have $$\bor(\bfalse,\btrue) = \btrue = \bor(\btrue,\bfalse),$$ and if $a = \bfalse$ we have $$\bor(\bfalse,\bfalse) = \bfalse$$ as claimed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_or_false :: (Boolean b, Equal b)
+>   => b -> Test (b -> Bool)
+> _test_or_false _ =
+>   testName "or(false,p) == p" $
+>   \p -> eq (or false p) p
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+$\bor$ interacts with $\bnot$.
+
+:::::: theorem :::::
+For all $a \in \bool$, we have $\bor(p,\bnot(p)) = \btrue$.
+
+::: proof ::::::::::
+If $a = \btrue$, we have $$\bor(\btrue,\bnot(\btrue)) = \btrue,$$ and if $a = \bfalse$ we have $$\bor(\bfalse,\bnot(\bfalse)) = \bor(\bfalse,\btrue) = \btrue$$ as claimed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_or_not :: (Boolean b, Equal b)
+>   => b -> Test (b -> Bool)
+> _test_or_not b =
+>   testName "or(p,not(p)) == true" $
+>   \p -> eq (or p (not p)) (true `withTypeOf` b)
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+$\bor$ is idempotent.
+
+:::::: theorem :::::
+For all $a \in \bool$, we have $\bor(a,a) = a$.
+
+::: proof ::::::::::
+If $a = \btrue$ we have $$\bor(\btrue,\btrue) = \btrue,$$ and if $a = \bfalse$ then $$\bor(\bfalse,\bfalse) = \bfalse$$ as claimed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_or_idempotent :: (Boolean b, Equal b)
+>   => b -> Test (b -> Bool)
+> _test_or_idempotent _ =
+>   testName "or(p,p) == p" $
+>   \p -> eq (or p p) p
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+$\bor$ is commutative.
+
+:::::: theorem :::::
+For all $a,b \in \bool$, we have $\bor(a,b) = \bor(b,a)$.
+
+::: proof ::::::::::
+If $a = \btrue$ we have $$\bor(\btrue,b) = \btrue = \bor(b,\btrue),$$ and if $a = \bfalse$ we have $$\bor(\bfalse,b) = b = \bor(b,\bfalse)$$ as claimed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_or_commutative :: (Boolean b, Equal b)
+>   => b -> Test (b -> b -> Bool)
+> _test_or_commutative _ =
+>   testName "or(p,q) == or(q,p)" $
+>   \p q -> eq (or p q) (or q p)
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+$\bor$ is associative.
+
+:::::: theorem :::::
+For all $a,b,c \in \bool$, we have $$\bor(\bor(a,b),c) = \bor(a,\bor(b,c)).$$
+
+::: proof ::::::::::
+If $a = \btrue$ we have
 $$\begin{eqnarray*}
  &   & \bor(\bor(a,b),c) \\
  & = & \bor(\bor(\btrue,b),c) \\
@@ -89,53 +228,22 @@ as claimed.
 
 ::: test :::::::::::
 
-> _test_or_true :: Test (Bool -> Bool)
-> _test_or_true =
->   testName "or(true,p) == true" $
->   \p -> eq (or true p) true
-> 
-> 
-> _test_or_false :: Test (Bool -> Bool)
-> _test_or_false =
->   testName "or(false,p) == p" $
->   \p -> eq (or false p) p
-> 
-> 
-> _test_or_not :: Test (Bool -> Bool)
-> _test_or_not =
->   testName "or(p,not(p)) == true" $
->   \p -> eq (or p (not p)) true
-> 
-> 
-> _test_or_idempotent :: Test (Bool -> Bool)
-> _test_or_idempotent =
->   testName "or(p,p) == p" $
->   \p -> eq (or p p) p
-> 
-> 
-> _test_or_commutative :: Test (Bool -> Bool -> Bool)
-> _test_or_commutative =
->   testName "or(p,q) == or(q,p)" $
->   \p q -> eq (or p q) (or q p)
-> 
-> 
-> _test_or_associative :: Test (Bool -> Bool -> Bool -> Bool)
-> _test_or_associative =
+> _test_or_associative :: (Boolean b, Equal b)
+>   => b -> Test (b -> b -> b -> Bool)
+> _test_or_associative _ =
 >   testName "or(or(p,q),r) == or(p,or(q,r))" $
 >   \p q r -> eq (or (or p q) r) (or p (or q r))
 
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-Now $\bnot$, $\band$, and $\bor$ interact in the usual way.
+DeMorgan's laws hold for $\bor$, $\band$, and $\bnot$.
 
 :::::: theorem :::::
 The following hold for all $a,b,c \in \bool$.
 
 1. $\bnot(\band(a,b)) = \bor(\bnot(a),\bnot(b))$.
 2. $\bnot(\bor(a,b)) = \band(\bnot(a),\bnot(b))$.
-3. $\band(a,\bor(b,c)) = \bor(\band(a,b),\band(a,c))$.
-4. $\bor(a,\band(b,c)) = \band(\bor(a,b),\bor(a,c))$.
 
 ::: proof ::::::::::
 1. If $a = \btrue$, we have
@@ -178,7 +286,36 @@ $$\begin{eqnarray*}
  & = & \band(\bnot(a),\bnot(b))
 \end{eqnarray*}$$
 as claimed.
-3. If $a = \btrue$, we have
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_not_and :: (Boolean b, Equal b)
+>   => b -> Test (b -> b -> Bool)
+> _test_not_and _ =
+>   testName "not(and(p,q)) == or(not(p),not(q))" $
+>   \p q -> eq (not (and p q)) (or (not p) (not q))
+> 
+> 
+> _test_not_or :: (Boolean b, Equal b)
+>   => b -> Test (b -> b -> Bool)
+> _test_not_or _ =
+>   testName "not(or(p,q)) == and(not(p),not(q))" $
+>   \p q -> eq (not (or p q)) (and (not p) (not q))
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+$\band$ and $\bor$ distribute over each other.
+
+:::::: theorem :::::
+The following hold for all $a,b,c \in \bool$.
+
+1. $\band(a,\bor(b,c)) = \bor(\band(a,b),\band(a,c))$.
+2. $\bor(a,\band(b,c)) = \band(\bor(a,b),\bor(a,c))$.
+
+::: proof ::::::::::
+1. If $a = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \band(a,\bor(b,c)) \\
  & = & \band(\btrue,\bor(b,c)) \\
@@ -196,7 +333,7 @@ $$\begin{eqnarray*}
  & = & \bor(\band(a,b),\band(a,c))
 \end{eqnarray*}$$
 as claimed.
-4. If $a = \btrue$, we have
+2. If $a = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bor(a,\band(b,c)) \\
  & = & \bor(\btrue,\band(b,c)) \\
@@ -218,26 +355,16 @@ as claimed.
 
 ::: test :::::::::::
 
-> _test_not_and :: Test (Bool -> Bool -> Bool)
-> _test_not_and =
->   testName "not(and(p,q)) == or(not(p),not(q))" $
->   \p q -> eq (not (and p q)) (or (not p) (not q))
-> 
-> 
-> _test_not_or :: Test (Bool -> Bool -> Bool)
-> _test_not_or =
->   testName "not(or(p,q)) == and(not(p),not(q))" $
->   \p q -> eq (not (or p q)) (and (not p) (not q))
-> 
-> 
-> _test_and_or :: Test (Bool -> Bool -> Bool -> Bool)
-> _test_and_or =
+> _test_and_or :: (Boolean b, Equal b)
+>   => b -> Test (b -> b -> b -> Bool)
+> _test_and_or _ =
 >   testName "and(p,or(q,r)) == or(and(p,q),and(p,r))" $
 >   \p q r -> eq (and p (or q r)) (or (and p q) (and p r))
 > 
 > 
-> _test_or_and :: Test (Bool -> Bool -> Bool -> Bool)
-> _test_or_and =
+> _test_or_and :: (Boolean b, Equal b)
+>   => b -> Test (b -> b -> b -> Bool)
+> _test_or_and _ =
 >   testName "or(p,and(q,r)) == and(or(p,q),or(p,r))" $
 >   \p q r -> eq (or p (and q r)) (and (or p q) (or p r))
 
@@ -333,17 +460,22 @@ Suite:
 >       , maxSize = size
 >       }
 > 
->   runTest args _test_or_true
->   runTest args _test_or_false
->   runTest args _test_or_not
->   runTest args _test_or_idempotent
->   runTest args _test_or_commutative
->   runTest args _test_or_associative
+>   runTest args (_test_or_true_true p)
+>   runTest args (_test_or_true_false p)
+>   runTest args (_test_or_false_true p)
+>   runTest args (_test_or_false_false p)
 > 
->   runTest args _test_not_and
->   runTest args _test_not_or
->   runTest args _test_and_or
->   runTest args _test_or_and
+>   runTest args (_test_or_true p)
+>   runTest args (_test_or_false p)
+>   runTest args (_test_or_not p)
+>   runTest args (_test_or_idempotent p)
+>   runTest args (_test_or_commutative p)
+>   runTest args (_test_or_associative p)
+> 
+>   runTest args (_test_not_and p)
+>   runTest args (_test_not_or p)
+>   runTest args (_test_and_or p)
+>   runTest args (_test_or_and p)
 > 
 >   runTest args (_test_if_or x)
 >   runTest args (_test_if_or_nest x)
