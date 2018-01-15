@@ -44,8 +44,6 @@ In Haskell:
 >       Left ()     -> psi a (f nil)
 >       Right (b,y) -> chi a b y (f y) (f (cons b y))
 
-::::::::::::::::::::
-
 ::: proof ::::::::::
 Define a map $\varphi : A \times C^{\lists{B}} \rightarrow C^{\lists{B}}$ casewise by
 $$\left\{\begin{array}{l}

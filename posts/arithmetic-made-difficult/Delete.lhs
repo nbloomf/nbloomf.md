@@ -52,7 +52,6 @@ In Haskell:
 >     phi b x = if eq a b then x else cons b x
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\delete(a)$ is defined as a fold, it can be characterized as the unique solution to a system of functional equations.
 
@@ -62,7 +61,6 @@ $$\left\{\begin{array}{l}
  f(\nil) = \nil \\
  f(\cons(b,x)) = \bif{\beq(a,b)}{f(x)}{\cons(b,f(x))}
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -88,7 +86,6 @@ $\delete$ is a filter.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have $$\delete(a)(x) = \filter(\bnot(\beq(a,-)))(x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -123,7 +120,6 @@ $\delete$ is idempotent.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$ we have $$\delete(a)(\delete(a)(x)) = \delete(a)(x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that, since $\filter(p)$ is idempotent for any predicate $p$, we have
@@ -151,7 +147,6 @@ $\delete$ can detect $\elt$.
 
 :::::: theorem :::::
 Let $A$ be a set with $a \in A$ and $x \in \lists{A}$. Then we have $$\beq(x,\delete(a,x)) = \bnot(\elt(a,x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -180,7 +175,6 @@ $\delete$ commutes with itself.
 
 :::::: theorem :::::
 Let $A$ be a set with $a,b \in A$ and $x \in \lists{A}$. Then $$\delete(a,\delete(b,x)) = \delete(b,\delete(a,x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -243,7 +237,6 @@ $\delete$ removes elements.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ and $a \in A$, we have $$\all(\bnot(\beq(a,-)))(\delete(a,x)) = \btrue.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -270,7 +263,6 @@ $\delete$ yields a sublist.
 
 :::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$ and $a \in A$. Then $$\sublist(\delete(a,x),x) = \btrue.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -297,7 +289,6 @@ $\delete$ and $\unique$.
 
 :::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$ and $a \in A$. If $\unique(x) = \btrue$, then $\unique(\delete(a,x)) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that $\sublist(\delete(a)(x),x) = \btrue$, so that $\unique(\delete(a)(x)) = \btrue$ as claimed.
@@ -318,7 +309,6 @@ $\delete$ interacts with $\elt$.
 
 :::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$ and $a \in A$. Then $\elt(a,\delete(a,x)) = \bfalse$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -359,7 +349,6 @@ $\delete$ preserves $\prefix$.
 
 :::::: theorem :::::
 Let $A$ be a set with $x,y \in \lists{A}$ and $a \in A$. If $\prefix(x,y) = \btrue$, then $\prefix(\delete(a)(x),\delete(a)(y)) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that $$\prefix(x,y) = \prefix(\nil,y) = \btrue$$ and
@@ -402,7 +391,6 @@ $\delete$ interacts with $\snoc$.
 
 :::::: theorem :::::
 Let $A$ be a set with $a,b \in A$ and $x \in \lists{A}$. Then we have $$\delete(a,\snoc(b,x)) = \bif{\beq(a,b)}{\delete(a,x)}{\snoc(b,\delete(a,x))}.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that
@@ -449,7 +437,6 @@ $\delete$ commutes with $\rev$.
 
 :::::: theorem :::::
 Let $A$ be a set with $a \in A$ and $x \in \lists{A}$. Then we have $$\delete(a,\rev(x)) = \rev(\delete(a,x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that
@@ -488,7 +475,6 @@ $\delete$ distributes over $\cat$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x,y \in \lists{A}$, we have $$\delete(a)(\cat(x,y)) = \cat(\delete(a)(x),\delete(a)(y)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $y$. For the base case $y = \nil$, we have

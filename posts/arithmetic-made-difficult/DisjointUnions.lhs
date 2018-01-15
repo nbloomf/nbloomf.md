@@ -36,7 +36,6 @@ We will denote this unique $\Theta : A + B \rightarrow X$ by $\either(\sigma,\ta
 
 More concretely, if $f : A + B \rightarrow X$ such that $f(\lft(a)) = \sigma(a)$ and $f(\rgt(b)) = \tau(b)$ for all $a \in A$ and $b \in B$, then $f = \either(\sigma,\tau)$.
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Now every element of $A+B$ is uniquely either of the form $\lft(a)$ or $\rgt(b)$ for some $a \in A$ or $b \in B$; this allows us to use case analysis on $A + B$. This set is sometimes called a *tagged union*, because it behaves like an ordinary set-theoretic union where elements are "tagged" with the set they came from (so, for instance, if $x \in A$ and $x \in B$, the $x$ from $A$ and the $x$ from $B$ are distinct in $A+B$).
 
@@ -46,7 +45,6 @@ Let $A$ and $B$ be sets.
 1. If $x \in A + B$, then either $x = \lft(a)$ for some $a \in A$ or $x = \rgt(b)$ for some $b \in B$.
 2. There does not exist $x \in A + B$ such that $x = \lft(a)$ and $x = \rgt(b)$ for some $a \in A$ and $b \in B$.
 3. $\lft : A \rightarrow A+B$ and $\rgt : B \rightarrow A+B$ are injective.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. Suppose to the contrary that there exists some $z \in A+B$ which is not of the form $\lft(a)$ or $\rgt(b)$ for any $a$ or $b$. Now consider the following two functions $A+B \rightarrow \bool$: $$\Psi(x) = \btrue$$ and
@@ -125,7 +123,6 @@ For example, $\id_{A + B}$ is an $\either$.
 
 :::::: theorem :::::
 Provided the types match up, we have $$\either(\lft,\rgt) = \id_{A + B}.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 If $a \in A$, we have
@@ -174,7 +171,6 @@ Let $A$ and $B$ be sets. Then we have the following for all $a \in A$ and $b \in
 1. $\uSwap(\lft(a)) = \rgt(a)$.
 2. $\uSwap(\rgt(b)) = \lft(b)$.
 3. $\uSwap \circ \uSwap = \id_{A + B}$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. Note that
@@ -248,7 +244,6 @@ In Haskell:
 > upair f g = either (lft . f) (rgt . g)
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 $\uPair$ has some nice properties.
 
@@ -258,7 +253,6 @@ For all $f$, $g$, $h$, $k$, $a$, and $b$ we have the following.
 1. $\uPair(f,g)(\lft(a)) = \lft(f(a))$.
 2. $\uPair(f,g)(\rgt(b)) = \rgt(g(b))$.
 2. $\uPair(f,g) \circ \uPair(h,k) = \uPair(f \circ h, g \circ k)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. Note that

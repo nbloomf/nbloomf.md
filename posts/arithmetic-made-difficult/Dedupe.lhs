@@ -56,7 +56,6 @@ In Haskell:
 >     phi a x = cons a (delete a x)
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\dedupeL$ is defined as a foldr, it can be characterized as the unique solution to a system of functional equations.
 
@@ -66,7 +65,6 @@ $$\left\{\begin{eqnarray*}
  f(\nil) = \nil \\
  f(\cons(a,x)) = \cons(a,\delete(a)(f(x)))
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -90,7 +88,6 @@ Now $\dedupeL$ and $\delete$ commute.
 
 :::::: theorem :::::
 Let $A$ be a set, with $a \in A$ and $x \in \lists{A}$. Then $$\delete(a,\dedupeL(x)) = \dedupeL(\delete(a,x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -140,7 +137,6 @@ $\dedupeL$s are $\unique$.
 
 :::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$. Then $\unique(\dedupeL(x)) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -176,7 +172,6 @@ $\dedupeL$ preserves $\prefix$.
 
 :::::: theorem :::::
 Let $A$ be a set with $x,y \in \lists{A}$. If $\prefix(x,y) = \btrue$ then $\prefix(\dedupeL(x),\dedupeL(y)) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that $$\prefix(x,y) = \prefix(\nil,y) = \btrue$$ and
@@ -214,7 +209,6 @@ $\dedupeL$ fixes $\unique$s.
 
 :::::: theorem :::::
 Let $A$ be a set and $x \in \lists{A}$. Then $\beq(x,\dedupeL(x)) = \unique(x)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -275,9 +269,8 @@ as needed.
 
 $\dedupeL$ is idempotent.
 
-:::::: corollary :::
+:::::: theorem :::::
 Let $A$ be a set and $x \in \lists{A}$. Then $\dedupeL(\dedupeL(x)) = \dedupeL(x)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that $\unique(\dedupeL(x)) = \btrue$, so that $\dedupeL(\dedupeL(x)) = \dedupeL(x)$ as claimed.
@@ -298,7 +291,6 @@ $\dedupeL$ interacts with $\snoc$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have $$\dedupeL(\snoc(a,x)) = \bif{\elt(a,x)}{\dedupeL(x)}{\snoc(a,\dedupeL(x))}.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -353,7 +345,6 @@ In Haskell:
 > dedupeR = rev . dedupeL . rev
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 The defining equations for $\dedupeL$ have equivalents for $\dedupeR$.
 
@@ -362,7 +353,6 @@ Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$ we have the following.
 
 1. $\dedupeR(\nil) = \nil$.
 2. $\dedupeR(\snoc(a,x)) = \snoc(a,\delete(a,\dedupeR(x)))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. Note that
@@ -409,7 +399,6 @@ $\dedupeR$s are unique.
 
 :::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$. Then $\unique(\dedupeR(x)) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -437,7 +426,6 @@ $\dedupeR$ is idempotent.
 
 :::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$. Then $\dedupeR(\dedupeR(x)) = \dedupeR(x)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that

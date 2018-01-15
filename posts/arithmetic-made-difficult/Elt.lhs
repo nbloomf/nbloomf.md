@@ -68,7 +68,6 @@ In Haskell:
 >     phi b p = if eq a b then true else p
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\elt$ is defined as a $\foldr{\ast}{\ast}$, it can be characterized as the unique solution to a system of functional equations.
 
@@ -78,7 +77,6 @@ $$\left\{\begin{array}{l}
  f(\nil) = \bfalse \\
  f(\cons(b,x)) = \bif{\beq(a,b)}{\btrue}{f(x)}
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -104,7 +102,6 @@ Special cases.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $a,b \in A$, we have $$\elt(a,\cons(b,\nil)) = \beq(a,b).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -134,7 +131,6 @@ $\elt$ interacts with $\cat$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x,y \in \lists{A}$ we have $$\elt(a)(\cat(x,y)) = \bor(\elt(a)(x),\elt(a)(y)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -184,7 +180,6 @@ $\elt$ interacts with $\snoc$.
 
 :::::: theorem :::::
 Let $A$ be a set, with $a \in A$. For all $b \in A$ and $x \in \lists{A}$ we have $$\elt(a)(\snoc(b,x)) = \bif{\beq(a,b)}{\btrue}{\elt(a)(x)}.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -220,7 +215,6 @@ $\elt$ interacts with $\rev$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$ we have $$\elt(a)(x) = \elt(a)(\rev(x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -256,7 +250,6 @@ $\elt$ interacts with $\map(f)$ when $f$ is injective.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets and suppose $f : A \rightarrow B$ is injective. Then for all $a \in A$ and $x \in \lists{A}$ we have $$\elt(a)(x) = \elt(f(a),\map(f)(x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$ we have
@@ -285,7 +278,6 @@ Let $A$ be a set with $x,y \in \lists{A}$. We have the following.
 
 1. $\elt(y,\tails(x)) = \suffix(y,x)$.
 2. $\elt(y,\inits(x)) = \prefix(y,x)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by list induction on $x$. For the base case $x = \nil$, we consider two cases. If $y = \nil$ we have
@@ -366,7 +358,6 @@ If we filter $a$ out of a list, it is no longer an item there.
 
 :::::: theorem :::::
 Let $A$ be a set, with $a \in A$ and $x \in \lists{A}$. Then $$\elt(a)(\filter(\bnot(\beq(a,-)),x)) = \bfalse.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -406,7 +397,6 @@ $\elt$ is an $\any$.
 
 :::::: theorem :::::
 Let $A$ be a set, with $a \in A$ and $x \in \lists{A}$. Then $$\elt(a)(x) = \any(\beq(a,-),x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -456,7 +446,6 @@ $\elt$ can detect when two lists are distinct.
 
 :::::: theorem :::::
 Let $A$ be a set, with $a \in A$ and $x,y \in \lists{A}$. If $\elt(a)(x) \neq \elt(a)(y)$, then $x \neq y$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 The contrapositive of this statement is trivial and kind of silly looking: If $x = y$, then $\elt(a)(x) = \elt(a)(y)$. But notice that this theorem gives us a simple way to detect when two lists are distinct from each other.
@@ -479,7 +468,6 @@ $\elt$ interacts with $\map(f)$ when $f$ is injective.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets with $f : A \rightarrow B$ injective. For all $a \in A$ and $x \in  \lists{A}$, we have $$\elt(a,x) = \elt(f(a),\map(f)(x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -505,7 +493,6 @@ $\elt$ interacts with $\range$.
 
 :::::: theorem :::::
 Let $a,b,c \in \nats$. If $\nleq(a,c)$, then $$\elt(a,\range(\next(c),b)) = \bfalse.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $b$. If $b = \zero$, we have

@@ -42,7 +42,6 @@ In Haskell:
 >     mu  _ a b = times b a
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Because $\npower$ is defined in terms of simple recursion, it is the unique solution to a system of functional equations.
 
@@ -52,7 +51,6 @@ $$\left\{\begin{array}{l}
  f(a,\zero) = \next(\zero) \\
  f(a,\next(b)) = \ntimes(f(a,b),a).
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -80,7 +78,6 @@ Let $a \in \nats$. Then we have the following.
 1. $\npower(a,\next(\zero)) = a$.
 2. $\npower(\zero,\next(a)) = \zero$.
 3. $\npower(\next(\zero),a) = \next(\zero)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We have
@@ -139,7 +136,6 @@ Let $a,b,c \in \nats$. Then we have the following.
 1. $\npower(a,\nplus(b,c)) = \ntimes(\npower(a,b),\npower(a,c))$.
 2. $\npower(a,\ntimes(b,c)) = \npower(\npower(a,b),c)$.
 3. $\npower(\ntimes(a,b),c) = \ntimes(\npower(a,c),\npower(b,c))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by induction on $c$. For the base case $c = \zero$, note that

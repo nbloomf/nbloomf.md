@@ -34,7 +34,6 @@ In Haskell:
 > cat x y = foldr y cons x
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Because $\cat$ is defined in terms of fold, it is the unique solution to a system of functional equations.
 
@@ -44,7 +43,6 @@ $$\left\{\begin{array}{l}
  f(\nil,y) = y \\
  f(\cons(a,x),y) = \cons(a,f(x,y)).
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -68,7 +66,6 @@ Note that $\cat$ works a lot like $\snoc$; it marches down the list $x$ until it
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$, we have $\cat(x,\nil) = x$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -99,7 +96,6 @@ Let $A$ be a set. The following hold for all $a \in A$ and $x,y \in \lists{A}$.
 
 1. $\cat(\snoc(a,x),y) = \cat(x,\cons(a,y))$.
 2. $\cat(x,\snoc(a,y)) = \snoc(a,\cat(x,y))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We have
@@ -148,9 +144,8 @@ as needed.
 
 We can "solve" a simple list equation.
 
-:::::: corollary :::
+:::::: theorem :::::
 We have $\nil = \cat(x,y)$ if and only if $x = y = \nil$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 The "only if" direction is clear. To see the "if" direction, suppose we have $x,y \in \lists{A}$ such that $\cat(x,y) = \nil$. If $x = \cons(a,u)$, then
@@ -186,7 +181,6 @@ And $\cat$ is associative.
 
 :::::: theorem :::::
 Let $A$ be a set and $x,y,z \in \lists{A}$. Then $$\cat(\cat(x,y),z) = \cat(x,\cat(y,z)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $z$. For the base case $z = \nil$, we have
@@ -221,7 +215,6 @@ And $\rev$ is antidistributive over $\cat$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x,y \in \lists{A}$ we have $$\rev(\cat(x,y)) = \cat(\rev(y),\rev(x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $y$. For the base case $y = \nil$, we have
@@ -261,7 +254,6 @@ Let $A$ be a set. For all $x,y,z \in \lists{A}$ we have the following.
 
 1. $\cat(z,x) = \cat(z,y)$ if and only if $x = y$.
 2. $\cat(x,z) = \cat(y,z)$ if and only if $x = y$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. The "only if" direction is clear. For the "if" direction we proceed by list induction on $z$. For the base case $z = \nil$, suppose $\cat(z,x) = \cat(z,y)$. Then we have
@@ -314,7 +306,6 @@ Let $A$ be a set. The following hold for all $x,u,v \in \lists{A}$.
 1. If $x = \cat(x,v)$ then $v = \nil$.
 2. If $x = \cat(u,x)$ then $u = \nil$.
 3. If $x = \cat(u,\cat(x,v))$ then $u = v = \nil$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. Note that

@@ -40,7 +40,6 @@ In Haskell:
 > tail = (either (const nil) snd) . uncons
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Now $\isnil$ detects $\nil$:
 
@@ -49,7 +48,6 @@ Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have the following
 
 1. $\isnil(\nil) = \btrue$.
 2. $\isnil(\cons(a,x)) = \bfalse$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We have
@@ -72,7 +70,7 @@ $$\begin{eqnarray*}
 as claimed.
 ::::::::::::::::::::
 
-:::::: theorem :::::
+::: test :::::::::::
 
 > _test_isNil_nil :: (List t, Equal (t a))
 >   => t a -> Test Bool
@@ -98,7 +96,6 @@ Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have the following
 
 1. $\head(\nil) = \lft(\ast)$.
 2. $\head(\cons(a,x)) = \rgt(a)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We have
@@ -121,7 +118,7 @@ $$\begin{eqnarray*}
 as claimed.
 ::::::::::::::::::::
 
-:::::: theorem :::::
+::: test :::::::::::
 
 > _test_head_nil :: (List t, Equal (t a), Equal a)
 >   => t a -> Test Bool
@@ -147,7 +144,6 @@ Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have the following
 
 1. $\tail(\nil) = \nil$.
 2. $\tail(\cons(a,x)) = x$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We have
@@ -170,7 +166,7 @@ $$\begin{eqnarray*}
 as claimed.
 ::::::::::::::::::::
 
-:::::: theorem :::::
+::: test :::::::::::
 
 > _test_tail_nil :: (List t, Equal (t a))
 >   => t a -> Test Bool
@@ -193,7 +189,6 @@ While we're at it, no cons can be its own tail.
 
 :::::: theorem :::::
 Let $A$ be a set with $a \in A$ and $x \in \lists{A}$. Then $\cons(a,x) \neq x$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have $\nil \neq \cons(a,\nil)$ for all $a$ as needed. For the inductive step, suppose the inequality holds for some $x$ and let $b \in A$. Suppose further by way of contradiction that $\cons(b,x) = \cons(a,\cons(b,x))$. Then we have $a = b$ and $x = \cons(b,x)$, a contradiction. So in fact $\cons(b,x) \neq \cons(a,\cons(b,x))$ as needed.

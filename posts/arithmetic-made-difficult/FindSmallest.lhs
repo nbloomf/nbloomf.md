@@ -41,7 +41,6 @@ In Haskell:
 >     omega _ k = next k
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Because $\findsmallest{\sigma}$ is defined in terms of bailout recursion, it is the unique solution to a system of functional equations.
 
@@ -76,7 +75,6 @@ First, if $\findsmallest{\sigma}$ returns a result $\rgt(t)$, then $t$ satisfies
 
 :::::: theorem :::::
 Let $\sigma : \nats \rightarrow \bool$, with $n,k,t \in \nats$. If $\findsmallest{\sigma}(n,k) = \rgt(t)$, then $\sigma(t) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$, note that $$\findsmallest{\sigma}(\zero,k) = \lft(\ast),$$ so the implication holds vacuously. For the inductive step, suppose we have $n$ such that for all $k$ and $t$, if $\findsmallest{\sigma}(n,k) = \rgt(t)$ then $\sigma(t) = \btrue$. Suppose further that $\findsmallest{\sigma}(\next(n),k) = \rgt(t)$. Now we have $$\findsmallest{\sigma}(\next(n),k) = \bif{\sigma(k)}{\rgt(k)}{\findsmallest{\sigma}(n,\next(k))}.$$ We have two possibilities. If $\sigma(k) = \btrue$, then $$\findsmallest{\sigma}(n,k) = \rgt(k),$$ with $\sigma(k) = \btrue$ as needed. If $\sigma(k) = \bfalse,$ we have $$\rgt(t) = \findsmallest{\sigma}(\next(n),k) = \findsmallest{\sigma}(n,\next(k)),$$ and by the inductive hypothesis, $\sigma(t) = \btrue$ as needed.
@@ -99,7 +97,6 @@ Next, if $\findsmallest{\sigma}(\next(n),k)$ returns a result $\rgt(t)$, then $t
 
 :::::: theorem :::::
 If $\findsmallest{\sigma}(\next(n),k) = \rgt(t)$, then $\nleq(k,t)$ and $\nleq(t,\nplus(n,k))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$, if $\findsmallest{\sigma}(\next(n),k) = \rgt(t)$ we have
@@ -136,7 +133,6 @@ $\findsmallest{\sigma}(\next(n),k)$ returns $\lft(\ast)$ if and only if $\sigma$
 
 :::::: theorem :::::
 Let $\sigma : \nats \rightarrow \bool$ and $n,k \in \nats$. Then $\findsmallest{\sigma}(\next(n),k) = \lft(\ast)$ if and only if $\sigma(t) = \bfalse$ for all $t$ with $\nleq(k,t)$ and $\nleq(t,\nplus(n,k))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We prove the "only if" direction by induction on $n$. For the base case $n = \zero$, suppose $\findsmallest{\sigma}(\next(\zero),k) = \lft(\ast)$. Expanding, we have
@@ -192,7 +188,6 @@ If $\findsmallest{\sigma}(n,k)$ returns a value, then $\findsmallest{\sigma}(t,k
 
 :::::: theorem :::::
 If $\findsmallest{\sigma}(n,k) = \rgt(\nplus(k,\next(t)))$, then $\findsmallest{\sigma}(t,k) = \lft(\ast)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $t$. For the base case $t = \zero$, note that $$\findsmallest{\sigma}(\zero,k) = \lft(\ast),$$ so the implication holds regardless of $n$ and $k$. For the inductive step, suppose the implication holds for all $n$ and $k$ for some $t$, and suppose further that $$\findsmallest{\sigma}(n,k) = \rgt(\nplus(k,\next(\next(t)))).$$ Now we must have $n = \next(m)$ for some $m$, and moreover
@@ -234,7 +229,6 @@ Finally, $\findsmallest{\sigma}$ returns a least value.
 
 :::::: theorem :::::
 If $\findsmallest{\sigma}(\next(n),k) = \rgt(t)$, and if $u \in \nats$ such that $\sigma(u) = \btrue$, $\nleq(k,u)$, and $\nleq(u,\nplus(n,k))$, then $\nleq(t,u)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$, suppose
@@ -277,7 +271,6 @@ Let $\sigma : \nats \rightarrow \bool$ and $n,k \in \nats$.
 
 1. If $\findsmallest{\sigma}(\next(n),k) = \rgt(t)$, then $\sigma(t)$, $\nleq(k,t)$, and $\nleq(t,\nplus(n,k))$, and if $u \in \nats$ such that $\sigma(u)$, $\nleq(k,u)$, and $\nleq(u,\nplus(n,k))$, then $\nleq(t,u)$.
 2. If $\findsmallest{\sigma}(\next(n),k) = \lft(\ast)$, then there does not exist $u \in \nats$ such that $\sigma(u)$, $\nleq(k,u)$, and $\nleq(u,\nplus(n,k))$.
-::::::::::::::::::::
 ::::::::::::::::::::
 
 

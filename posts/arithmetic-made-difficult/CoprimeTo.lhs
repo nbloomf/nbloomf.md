@@ -30,7 +30,6 @@ Today we'll take a break from reasoning about $\ngcd$ to name a special relation
 
 :::::: definition ::
 We define $\ncoprime : \nats \times \nats \rightarrow \bool$ by $$\ncoprime(a,b) = \beq(\ngcd(a,b),\next(\zero)).$$
-::::::::::::::::::::
 
 In Haskell:
 
@@ -43,7 +42,6 @@ Simple though it is, coprimality has some nice properties. We only need these tw
 
 :::::: theorem :::::
 Let $a,b,c \in \nats$ such that $\ncoprime(a,b)$ and $\ndiv(a,\ntimes(b,c))$. Then $\ndiv(a,c)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Since $\next(\zero) = \ngcd(a,b)$, we have
@@ -73,7 +71,6 @@ The second result doesn't have a name as far as I know, but is still handy. The 
 
 :::::: theorem :::::
 Let $a,b,u,v \in \nats$ such that $a,b \neq \zero$, $$a = \ntimes(u,\ngcd(a,b))$$ and $$b = \ntimes(v,\ngcd(a,b)).$$ Then $\ncoprime(u,v)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Let $k = \ngcd(u,v)$, and say $u = \ntimes(s,k)$ and $v = \ntimes(t,k)$. Now

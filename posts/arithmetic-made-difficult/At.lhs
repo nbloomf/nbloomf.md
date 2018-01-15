@@ -45,7 +45,6 @@ In Haskell:
 >     omega _ x = tail x
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\at$ is defined in terms of $\bailrec{\ast}{\ast}{\ast}{\ast}$, it is the unique solution to a system of functional equations.
 
@@ -55,7 +54,6 @@ $$\left\{\begin{array}{l}
  f(x,\zero) = \head(x) \\
  f(x,\next(n)) = \bif{\isnil(x)}{\lft(\ast)}{f(\tail(x),n)}
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -85,7 +83,6 @@ $\at$ interacts with $\cons$ and $\next$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $a \in A$, $x \in \lists{A}$, and $k \in \nats$, we have $$\at(\cons(a,x),\next(k)) = \at(x,k).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -118,7 +115,6 @@ Let $A$ be a set. The following hold for all $a,b \in A$, $x \in \lists{A}$, and
 1. $\at(\nil,k) = \lft(\ast)$.
 2. $\at(\cons(a,x),\zero) = \rgt(a)$.
 3. $\at(\cons(a,\cons(b,x)),\next(\zero)) = \rgt(b)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We consider two cases: $k = \zero$ and $k \neq \zero$. If $k = \zero$, we of course have
@@ -188,7 +184,6 @@ Let $A$ be a set and let $z \in \lists{A}$.
 
 1. $\at(\cons(a,x),\length(x)) = \head(\rev(\cons(a,x)))$.
 2. $\at(x,\length(x)) = \lft(\ast)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -255,7 +250,6 @@ Let $A$ be a set. Let $a,b \in A$ and $x \in \lists{A}$.
 
 1. If $\nleq(k,\length(x))$ then $\at(\snoc(a,\cons(b,x)),k) = \at(\cons(b,x),k)$.
 2. $\at(\snoc(a,x),\length(x)) = \rgt(a)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by induction on $k$. For the base case $k = \zero$, note that $\nleq(k,\length(x))$, and we have
@@ -318,7 +312,6 @@ $\at$ interacts with $\rev$.
 
 :::::: theorem :::::
 Let $A$ be a set. Let $x \in \lists{A}$ and $u,v \in \nats$. If $\next(\nplus(u,v)) = \length(x)$, then we have $$\at(\rev(x),v) = \at(x,u).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that $\length(x) = \zero$, so that $\next(\nplus(u,v)) = \length(x)$ is false for all $u$ and $v$, and thus the implication holds vacuously. For the inductive step, suppose the implication holds for all $u$ and $v$ for some $x$ and let $a \in A$. Suppose further that $\next(\nplus(u,v)) = \length(\cons(a,x))$. We have two possibilities for $u$. If $u = \zero$, we have $\next(v) = \length(\cons(a,x))$ and thus $v = \length(x)$. In this case, we have
@@ -365,7 +358,6 @@ Let $A$ be a set. For all $a \in A$, $x,y \in \lists{A}$ and $k \in \nats$, we h
 
 1. If $\nleq(k,\length(x))$, then $\at(\cat(\cons(a,x),y),k) = \at(\cons(a,x),k)$.
 2. If $\at(\cat(\cons(a,x),y),\nplus(\next(\length(x)),k)) = \at(y,k)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by list induction on $y$. For the base case $y = \nil$, we have
@@ -431,7 +423,6 @@ Let $A$ be a set. For all $x \in \lists{A}$ and $k \in \nats$ we have the follow
 
 1. If $\nleq(\length(x),k)$, then $\at(x,k) = \lft(\ast)$.
 2. If $\nleq(k,\length(x))$, then $\at(\cons(a,x),k) = \rgt(b)$ for some $b \in A$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by list induction on $x$. For the base case $x = \nil$, note that for any $k$ we have $\nleq(\zero,k)$ and
@@ -493,7 +484,6 @@ Finally, $\at$ detects equality for lists.
 
 :::::: theorem :::::
 Let $A$ be a set, and let $x,y \in \lists{A}$. Then $x = y$ if and only if $\at(x,k) = \at(y,k)$ for all $k \in \nats$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 The "only if" direction is clear. We show the "if" part by list induction on $x$. For the base case $x = \nil$, suppose we have $\at(x,k) = \at(y,k)$ for all $k \in \nats$. If $y = \cons(a,z)$ for some $z$, then we have

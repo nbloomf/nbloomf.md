@@ -23,7 +23,6 @@ Today we'll implement a slight generalization of natural recursion that allows r
 
 :::::: theorem :::::
 Let $A$ be a set. Let $\delta : \nats \rightarrow A$, $\psi : A \rightarrow A$, and $\chi : \nats \times A \times A \rightarrow A$. Then there is a unique map $\Theta : \nats \times \nats \rightarrow A$ such that $$\Theta(\zero,k) = \delta(k),$$ $$\Theta(\next(n),\zero) = \psi(\Theta(n,\zero)),$$ and $$\Theta(\next(n),\next(k)) = \chi(k,\Theta(n,k),\Theta(n,\next(k)).$$ We denote this map by $\dnatrec{\delta}{\psi}{\chi}.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Define $\varphi : A^\nats \rightarrow A^\nats$ casewise by
@@ -113,12 +112,11 @@ And there's the definition from the universal property:
 
 The "uniqueness" part of double natural recursion is also handy. To be a little more explicit, it says the following.
 
-:::::: theorem :::::
+:::::: corollary :::
 Let $A$ be a set, with $\delta : \nats \rightarrow A$, and $\psi : A \rightarrow A$, and $\chi : \nats \times A \times A \rightarrow A$. Then $\dnatrec{\delta}{\psi}{\chi}$ is the unique solution $f : \nats \times \nats \rightarrow A$ to the following system of functional equations for all $n,k \in \nats$:
 $$\left\{\begin{array}{l}
  f(\zero,k) = \delta(k) \\
  f(\next(n),\zero) = \psi(f(n,\zero)) \\
  f(\next(n),\next(k)) = \chi(k,f(n,k),f(n,\next(k)))
 \end{array}\right.$$
-::::::::::::::::::::
 ::::::::::::::::::::

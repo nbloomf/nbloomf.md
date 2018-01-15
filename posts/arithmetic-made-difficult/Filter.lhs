@@ -59,7 +59,6 @@ In Haskell:
 >       else w
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\filter(p)$ is defined as a $\foldr{\ast}{\ast}$, it can be characterized as the unique solution to a system of functional equations.
 
@@ -69,7 +68,6 @@ $$\left\{\begin{array}{ll}
  f(\nil) = \nil \\
  f(\cons(a,x)) = \bif{p(a)}{\cons(a,f(x))}{f(x)}
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -95,7 +93,6 @@ As we might expect, the items in $\filter(p)(x)$ all satisfy $p$.
 
 :::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $x \in \lists{A}$ we have $$\all(p,\filter(p)(x)) = \btrue.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -136,7 +133,6 @@ $\filter$ interacts with $\snoc$.
 
 :::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $a \in A$ and $x \in \lists{A}$, we have $$\filter(p)(\snoc(a,x)) = \bif{p(a)}{\snoc(a,\filter(p)(x))}{\filter(p)(x)}.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, if $p(a) = \btrue$ we have
@@ -207,7 +203,6 @@ $\filter$ interacts with $\rev$.
 
 :::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $x \in \lists{A}$, we have $$\filter(p)(\rev(x)) = \rev(\filter(p)(x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -253,7 +248,6 @@ $\filter(p)$ distributes over $\cat$.
 
 :::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $x,y \in \lists{A}$ we have $$\filter(p)(\cat(x,y)) = \cat(\filter(p)(x),\filter(p)(y)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -300,7 +294,6 @@ $\filter(p)$ is idempotent.
 
 :::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $x \in \lists{A}$ we have $$\filter(p)(\filter(p)(x)) = \filter(p)(x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -338,7 +331,6 @@ A list $x$ is invariant under $\filter(p)$ if and only if $\all(p)(x)$.
 
 :::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate with $x \in \lists{A}$. We have $$\beq(x,\filter(p)(x)) = \all(p,x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have

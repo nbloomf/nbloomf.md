@@ -63,7 +63,6 @@ In Haskell:
 > rem a b = snd (divalg a b)
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\ndivalg$ is defined in terms of simple recursion, it is the unique solution to a system of functional equations.
 
@@ -73,7 +72,6 @@ $$\left\{\begin{array}{l}
  f(\zero,b) = (\zero,\zero) \\
  f(\next(a),b) = \bif{\beq(b,\next(r))}{(\next(q),\zero)}{(q,\next(r))}\ \mathrm{where}\ (q,r) = f(q,r).
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -119,7 +117,6 @@ Let $a,b \in \nats$ and let $(q,r) = \ndivalg(a,\next(b))$. Then we have the fol
 
 1. $a = \nplus(\ntimes(q,\next(b)),r)$.
 2. $\nleq(r,b) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $a$. For the base case, $a = \zero$, note that $$\ndivalg(\zero,\next(b)) = \varphi(\next(b)) = (\zero,\zero).$$ Now we have $$\nplus(\ntimes(\zero,\next(b)),\zero) = \zero = a$$ and $\nleq(\zero,\next(b))$ as needed.
@@ -161,7 +158,6 @@ Also the output of the division algorithm is unique.
 
 :::::: theorem :::::
 Let $a,b \in \nats$ and suppose we have $q,r \in \nats$ such that $$a = \nplus(\ntimes(q,\next(b)),r)$$ and $\nleq(r,b) = \btrue$. Then $(q,r) = \ndivalg(a,b)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 It suffices to show that if $(q_1,r_1)$ and $(q_2,r_2)$ both satisfy the conditions of the division algorithm, then $q_1 = q_2$ and $r_1 = r_2$. To this end, suppose we have $$\begin{eqnarray*} & & \nplus(\ntimes(q_1,\next(b)),r_1) \\ & = & a \\ & = & \nplus(\ntimes(q_2,\next(b)),r_2). \end{eqnarray*}$$ Without loss of generality, we have $\nleq(r_1,r_2)$; say $r_2 = \nplus(r_1,k)$. Now $$\begin{eqnarray*} & & \nplus(\ntimes(q_1,\next(b)),r_1) \\ & = & \nplus(\ntimes(q_2,\next(b)),r_2) \\ & = & \nplus(\ntimes(q_2,\next(b)),\nplus(r_1,k))) \\ & = & \nplus(\nplus(\ntimes(q_2,\next(b)),k),r_1), \end{eqnarray*}$$ and thus $$\ntimes(q_1,\next(b)) = \nplus(\ntimes(q_2,\next(b)),k).$$ Note that $\nleq(k,r_2)$, and thus $\nleq(k,b)$.
@@ -207,7 +203,6 @@ If $a \in \nats$ we have the following.
 2. $\ndivalg(a,\next(\zero)) = (a,\zero)$.
 3. If $\nleq(a,b)$, then $\ndivalg(a,\next(b)) = (\zero,a)$.
 4. $\ndivalg(\next(a),\next(a)) = (\next(\zero),\zero)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by induction on $a$. For the base case $a = \zero$, note that $$\ndivalg(\zero,\zero) = (\zero, \zero)$$ as needed. For the inductive step, suppose the equation holds for some $a$. Now
@@ -268,7 +263,6 @@ $\nquo$ interacts with $\ntimes$.
 
 :::::: theorem :::::
 Let $a,b \in \nats$. If $b \neq \zero$, then $\nquo(\ntimes(a,b),b) = a$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Say $b = \next(m)$. Note that $\nleq(\zero,m)$. Now $$\ntimes(a,b) = \nplus(\ntimes(a,b),\zero),$$ and by the uniqueness of quotients by nonzero divisors, we have $a = \nquo(\ntimes(a,b),b)$ as claimed.

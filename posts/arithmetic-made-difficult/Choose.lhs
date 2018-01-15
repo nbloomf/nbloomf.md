@@ -36,7 +36,6 @@ In Haskell:
 >     chi _ a b = plus a b
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Because $\nchoose$ is implemented in terms of double natural recursion, it is the unique solution to a system of equations.
 
@@ -47,7 +46,6 @@ $$\left\{\begin{array}{l}
  f(\next(n),\zero) = \next(\zero) \\
  f(\next(n),\next(k)) = \nplus(f(n,k),f(n,\next(k))).
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -82,7 +80,6 @@ We can show that $\nchoose$ satisfies the usual properties of binomial coefficie
 
 :::::: theorem :::::
 Let $n,k \in \nats$. If $\nleq(\next(n),k) = \btrue$, then $\nchoose(n,k) = \zero$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$, note that if $\nleq(\next(n),k) = \btrue$ then $k \neq \zero$. Then we have
@@ -130,7 +127,6 @@ For all $n \in \nats$, we have the following.
 
 1. $\nchoose(n,\zero) = \next(\zero)$.
 2. $\nchoose(n,n) = \next(\zero)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We have two possibilities for $n$. If $n = \zero$, we have
@@ -185,7 +181,6 @@ $\nchoose$ is kind of symmetric:
 
 :::::: theorem :::::
 Let $n \in \nats$, and suppose $n = \nplus(k,m)$. Then $$\nchoose(n,k) = \nchoose(n,m).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$, note that $k = m = \zero$. Then we have $\nchoose(n,k) = \nchoose(n,m)$ as needed. For the inductive step, suppose the equality holds for some $n$. Say $\next(n) = \nplus(k,m)$. We now consider two possibilities for $k$. If $k = \zero$, we have $m = \next(n)$, so that

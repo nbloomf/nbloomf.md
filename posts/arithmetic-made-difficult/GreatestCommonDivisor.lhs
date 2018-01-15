@@ -40,7 +40,6 @@ To this end:
 
 :::::: theorem :::::
 Define $\varphi : \nats \times \nats \rightarrow \nats \times \nats$ by $$\varphi(a,b) = \bif{\iszero(b)}{(a,\zero)}{(b,\nrem(a,b))}.$$ Then $\eta : \nats \times \nats \rightarrow \nats$ given by $$\eta(a,b) = \bif{\iszero(b)}{\zero}{\bif{\nleq(a,b)}{\next(\nplus(a,b))}{\nplus(a,b)}}$$ is an iterative norm on $(A,(\zero,\zero),\varphi)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Suppose $\eta(a,b) = \zero$. We have two possibilities; either $b = \zero$, or $\nplus(a,b) = \zero$, so that $a = b = \zero$. In either case we have $b = \zero$. So we have $\varphi(a,b) = (a,\zero)$, so that $\eta(\varphi(a,b)) = \zero$.
@@ -95,13 +94,11 @@ In Haskell:
 > gcd a b = normRec phi eta fst (a,b)
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\ngcd$ is defined in terms of norm recursion, we can also characterize it as the unique solution to a functional equation. Note that here we use the fact that $$\bif{p}{a}{\bif{p}{b}{c}} = \bif{p}{a}{c}.$$
 
 :::::: corollary :::
 $\ngcd$ is the unique mapping $f : \nats \times \nats \rightarrow \nats$ such that for all $a,b \in \nats$, we have $$f(a,b) = \bif{\iszero(b)}{a}{f(b,\nrem(a,b))}.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -123,7 +120,6 @@ Let $a,b,c \in \nats$. Then we have the following.
 
 1. $\ndiv(\ngcd(a,b),a)$ and $\ndiv(\ngcd(a,b),b)$.
 2. If $\ndiv(c,a)$ and $\ndiv(c,b)$, then $\ndiv(c,\ngcd(a,b))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by strong induction on $b$. For the base case $b = \zero$, note that $\ngcd(a,b) = a$, and we have $$\ndiv(\ngcd(a,b),a) = \ndiv(a,a) = \btrue$$ and $$\ndiv(\ngcd(a,b),b) = \ndiv(a,\zero) = \btrue$$ as needed. For the inductive step, suppose the conclusion holds for all $a$ and for all $b$ such that $\nleq(b,m)$, and let $b = \next(m)$ and $a \in \nats$. In this case we have $\ngcd(a,b) = \ngcd(b,\nrem(a,b))$. By the induction hypothesis, we have $\ndiv(\ngcd(a,b),b)$ and $\ndiv(\ngcd(a,b),\nrem(a,b))$. Now $\ndiv(\ngcd(a,b),\ntimes(b,\nquo(a,b))$, so we have
@@ -165,7 +161,6 @@ Let $a,b,c \in \nats$. Suppose $m \in \nats$ satisfies the following.
 2. If $\ndiv(c,a)$ and $\ndiv(c,b)$, then $\ndiv(c,m)$.
 
 Then $m = \ngcd(a,b)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Since $\ndiv(m,a)$ and $\ndiv(m,b)$, we have $\ndiv(m,\ngcd(a,b))$. But a similar argument shows that $\ndiv(\ngcd(a,b),m)$. By antisymmetry we have $m = \ngcd(a,b)$ as claimed.
@@ -174,9 +169,8 @@ Since $\ndiv(m,a)$ and $\ndiv(m,b)$, we have $\ndiv(m,\ngcd(a,b))$. But a simila
 
 Then $\ngcd$ is commutative.
 
-:::::: corollary :::
+:::::: theorem :::::
 Let $a,b \in \nats$. Then $\ngcd(a,b) = \ngcd(b,a)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that $\ngcd(b,a)$ divides $a$ and $\ngcd(b,a)$ divides $b$, and if $c$ is a common divisor of $a$ and $b$ then $c$ divides $\ngcd(b,a)$. By the uniqueness of GCD we have $\ngcd(b,a) = \ngcd(a,b)$.
@@ -195,9 +189,8 @@ Note that $\ngcd(b,a)$ divides $a$ and $\ngcd(b,a)$ divides $b$, and if $c$ is a
 
 And $\ngcd$ is idempotent:
 
-:::::: corollary :::
+:::::: theorem :::::
 Let $a \in \nats$. Then $$\ngcd(a,a) = a.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 $a$ divides $a$ and $a$ divides $a$, and if $c$ divides both $a$ and $a$ then $c$ divides $a$.
@@ -280,7 +273,6 @@ $\ngcd$ detects $\ndiv$.
 
 :::::: theorem :::::
 Let $a,b \in \nats$. Then $\ngcd(a,b) = a$ if and only if $\ndiv(a,b)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Certainly if $\ngcd(a,b) = a$, then $\ndiv(a,b)$. Suppose conversely that $\ndiv(a,b)$. We consider two cases: either $a = \zero$ or $a = \next(t)$ for some $t$. If $a = \zero$, then $b = \zero$, and we have $$\ngcd(a,b) = \zero = a$$ as claimed. Suppose now that $a = \next(t)$. Since $\ndiv(a,b)$, we have $$b = \ntimes(q,a) = \nplus(\ntimes(q,a),\zero)$$ for some $q$. Now $\nleq(\zero,t)$, and by the uniqueness of remainders by nonzero divisors, we have $\nrem(b,a) = \zero$. So we have
@@ -309,7 +301,6 @@ $\ngcd$ distributes over $\ntimes$.
 
 :::::: theorem :::::
 Let $a,b,c \in \nats$. Then $\ngcd(\ntimes(a,c),\ntimes(b,c)) = \ntimes(\ngcd(a,b),c)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We consider two cases: either $c = \zero$ or $c \neq \zero$. If $c = \zero$, we have
@@ -337,7 +328,6 @@ $\ngcd$ is compatible with $\ndiv$.
 
 :::::: theorem :::::
 Let $a,b,c \in \nats$. If $\ndiv(a,b)$, then $\ndiv(\ngcd(a,c),\ngcd(b,c))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -366,7 +356,6 @@ $\nquo$ kind of distributes over $\ngcd$.
 
 :::::: theorem :::::
 Let $a,b,c \in \nats$. If $\ndiv(c,a)$ and $\ndiv(c,b)$, then $$\ngcd(\nquo(a,c),\nquo(b,c)) = \nquo(\ngcd(a,b),c).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We consider two cases: either $c = \zero$ or $c \neq \zero$. If $c = \zero$, then $\nquo(a,c) = \zero$ and $\nquo(b,c) = \zero$, so we have

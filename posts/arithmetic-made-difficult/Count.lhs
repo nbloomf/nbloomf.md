@@ -49,7 +49,6 @@ In Haskell:
 >     phi k b = if eq a b then next k else k
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\addcount$ is defined as a left fold, it can be characterized as the unique solution to a system of functional equations.
 
@@ -59,7 +58,6 @@ $$\left\{\begin{array}{l}
  f(k,\nil) = k \\
  f(k,\cons(b,x)) = f(\bif{\beq(a,b)}{\next(k)}{k},x)
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -83,7 +81,6 @@ $\addcount$ interacts with $\next$.
 
 :::::: theorem :::::
 Let $A$ be a set with $a \in A$. For all $k \in \nats$ and $x \in \lists{A}$, we have $$\addcount(a)(\next(k),x) = \next(\addcount(a)(k,x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -117,7 +114,6 @@ Now $\addcount$ interacts with $\snoc$.
 
 :::::: theorem :::::
 Let $A$ be a set with $a \in A$. For all $b \in A$ and $x \in \lists{A}$, we have $$\addcount(a)(k,\snoc(b,x)) = \addcount(a)(\bif{\beq(a,b)}{\next(k)}{k},x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -155,7 +151,6 @@ $\addcount$ interacts with $\rev$.
 
 :::::: theorem :::::
 Let $A$ be a set with $a \in A$. For all $k \in \nats$ and $x \in \lists{A}$, we have $$\addcount(a)(k,\rev(x)) = \addcount(a)(k,x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -189,7 +184,6 @@ We can also characterize $\addcount$ as a right fold.
 
 :::::: theorem :::::
 Let $A$ be a set with $a \in A$, and define $\psi : A \times \nats \rightarrow \nats$ by $$\psi(b,k) = \bif{\beq(a,b)}{\next(k)}{k}.$$ Then we have $$\addcount(a)(k,x) = \foldr{k}{\psi}(x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -230,7 +224,6 @@ $$\left\{\begin{array}{l}
  f(k,\nil) = k \\
  f(k,\cons(b,x)) = \bif{\beq(a,b)}{\next(f(k,x))}{f(k,x)}
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -256,7 +249,6 @@ In Haskell:
 > count a = addcount a zero
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\count$ is defined in terms of $\addcount$, it is also the unique solution to a system of functional equations.
 
@@ -266,7 +258,6 @@ $$\left\{\begin{array}{l}
  f(\nil) = \zero \\
  f(\cons(b,x)) = \bif{\beq(a,b)}{\next(f(x))}{f(x)}
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -292,7 +283,6 @@ A special case.
 
 :::::: theorem :::::
 Let $A$ be a set, with $a,b \in A$. Then $$\count(a,\cons(b,\nil)) = \bif{\beq(a,b)}{\next(\zero)}{\zero}.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -323,7 +313,6 @@ $\count$ interacts with $\snoc$.
 
 :::::: theorem :::::
 Let $A$ be a set with $a \in A$. For all $b \in A$ and $x \in \lists{A}$, we have $$\count(a)(\snoc(b,x)) = \bif{\beq(a,b)}{\next(\count(a)(x))}{\count(a)(x)}.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -353,7 +342,6 @@ $\count$ interacts with $\rev$.
 
 :::::: theorem :::::
 Let $A$ be a set with $a \in A$. For all $x \in \lists{A}$ we have $$\count(a)(\rev(x)) = \count(a)(x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -381,7 +369,6 @@ $\count$ interacts with $\cat$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x,y \in \lists{A}$ we have $$\count(a,\cat(x,y)) = \nplus(\count(a,x),\count(a,y)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -434,7 +421,6 @@ $\count$ is a $\length$.
 
 :::::: theorem :::::
 Let $A$ be a set. We have $$\count(a,x) = \length(\filter(\beq(a,-),x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -485,7 +471,6 @@ $\count$ interacts with $\map(f)$ when $f$ is injective.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets and $f : A \rightarrow B$ an injective map. Then $$\count(a,x) = \count(f(a),\map(f)(x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have

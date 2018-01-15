@@ -34,13 +34,11 @@ In Haskell:
 > div a b = isZero (rem b a)
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Now $\ndiv$ is to $\ntimes$ as $\nleq$ is to $\nplus$ as follows.
 
 :::::: theorem :::::
 Let $a,b \in \nats$. Then $\ndiv(a,b) = \btrue$ if and only if there exists $c \in \nats$ such that $b = \ntimes(c,a)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Suppose first that $\ndiv(a,b) = \btrue$. Letting $(q,r) = \ndivalg(b,a)$, we have $r = \zero$, so that $$b = \nplus(\ntimes(q,a),r) = \ntimes(q,a)$$ as claimed.
@@ -58,7 +56,6 @@ Let $a \in \nats$. We have the following.
 2. If $\ndiv(\zero,a)$, then $a = \zero$.
 3. $\ndiv(\next(\zero),a)$.
 4. If $\ndiv(a,\next(\zero))$, then $a = \next(\zero)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. Note that $\zero = \ntimes(\zero,a)$.
@@ -111,7 +108,6 @@ Let $a,b,c \in \nats$. We have the following.
 1. $\ndiv(a,a)$.
 2. If $\ndiv(a,b)$ and $\ndiv(b,a)$, then $a = b$.
 3. If $\ndiv(a,b)$ and $\ndiv(b,c)$, then $\ndiv(a,c)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. Note that $a = \ntimes(\next(\zero),a)$.
@@ -166,7 +162,6 @@ Let $a,b,c,d \in \nats$. We have the following.
 3. If $\ndiv(c,a)$ and $\ndiv(c,b)$ then $\ndiv(c,\nplus(a,b))$.
 4. If $\ndiv(d,a)$ and $\ndiv(d,c)$ and $\nplus(a,b) = c$, then $\ndiv(d,b)$.
 5. If $b \neq \zero$ and $\ndiv(a,b)$ then $\nleq(a,b)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We have $\ntimes(b,a) = \ntimes(b,a)$.
@@ -251,7 +246,6 @@ Let $a,b,c \in \nats$. Then we have the following.
 
 1. If $\ndiv(b,a)$ and $c \neq \zero$, then $$\nquo(\ntimes(a,c),\ntimes(b,c)) = \nquo(a,b).$$
 2. If $\ndiv(b,a)$, then $\nquo(\ntimes(c,a),b) = \ntimes(c,\nquo(a,b))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We consider two cases: either $b = \zero$ or $b \neq \zero$. If $b = \zero$ then we have $a = \zero$, and
@@ -305,7 +299,6 @@ We'll call the next result the Cross Multiplication Theorem.
 
 :::::: theorem :::::
 Let $a,b,c,d \in \nats$ such that $\ndiv(b,a)$ and $\ndiv(d,c)$ and $b,d \neq \zero$. Then $$\ntimes(a,d) = \ntimes(b,c)$$ if and only if $\nquo(a,b) = \nquo(c,d).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Since $b$ and $d$ are both not zero, using the uniqueness of quotients by nonzero divisors we have $$\ntimes(a,d) = \ntimes(b,c)$$ if and only if $$\nquo(\ntimes(a,d),b) = c$$ if and only if $$\ntimes(d,\nquo(a,b)) = c$$ if and only if $$\nquo(a,b) = \nquo(c,d)$$ as claimed.

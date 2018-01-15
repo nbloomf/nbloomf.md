@@ -52,7 +52,6 @@ In Haskell:
 >     omega _ _ y = y
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 (``infix`` is a reserved word in Haskell, so we'll call this function ``isInfix``.)
 
@@ -64,7 +63,6 @@ $$\left\{\begin{array}{l}
  f(x,\nil) = \isnil(x) \\
  f(x,\cons(b,y)) = \bif{\prefix(x,\cons(b,y))}{\btrue}{f(x,y)}
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -90,7 +88,6 @@ $\infix$ is an $\bor$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x,y \in \lists{A}$, we have $$\infix(x,y) = \bor(\prefix(x,y),\infix(x,\tail(y))).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We consider two possibilities for $y$. If $y = \nil$, we have
@@ -126,7 +123,6 @@ $\infix$ is reflexive.
 
 :::::: theorem :::::
 Let $A$ be a set. If $x \in \lists{A}$, then $\infix(x,x) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We consider two cases for $x$. If $x = \nil$, we have $$\infix(x,x) = \infix(\nil,\nil) = \btrue$$ as claimed. If $x = \cons(a,u)$, we have
@@ -158,7 +154,6 @@ Let $A$ be a set and $x,y \in \lists{A}$.
 
 1. $\infix(x,\cat(y,x)) = \btrue$.
 2. $\infix(x,\cat(x,y)) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by list induction on $y$. For the base case, note that
@@ -211,12 +206,11 @@ as needed.
 
 Prefixes and suffixes are also infixes.
 
-:::::: corollary :::
+:::::: theorem :::::
 Let $A$ be a set. The following hold for all $x,y \in \lists{A}$.
 
 1. If $\prefix(x,y) = \btrue$, then $\infix(x,y) = \btrue$.
 2. If $\suffix(x,y) = \btrue$, then $\infix(x,y) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. Recall that $\prefix(x,y) = \btrue$ if and only if $y = \cat(x,z)$ for some $z$. Then $$\infix(x,y) = \infix(x,\cat(x,z)) = \btrue$$ as claimed.
@@ -245,7 +239,6 @@ $\infix$ interacts conditionally with $\cons$.
 
 :::::: theorem :::::
 Let $A$ be a set with $a \in A$ and $x,y \in \lists{A}$. If $\infix(x,y) = \btrue$, then $\infix(x,\cons(a,y)) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -273,7 +266,6 @@ $\infix$ interacts conditionally with $\snoc$.
 
 :::::: theorem :::::
 Let $A$ be a set with $a \in A$ and $x,y \in \lists{A}$. If $\infix(x,y) = \btrue$, then $\infix(x,\snoc(a,y)) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $y$. For the base case $y = \nil$, note that we must have $x = \nil$. Now $$\infix(x,\snoc(a,y)) = \infix(\nil,\snoc(a,y)) = \btrue$$ as needed. For the inductive step, suppose the implication holds for some $y$ and let $b \in A$. Suppose further that $\infix(x,\cons(b,y)) = \btrue$. Now
@@ -309,7 +301,6 @@ Let $A$ be a set and $x,y \in \lists{A}$.
 
 1. If $\infix(x,y) = \btrue$, then $\infix(x,\cat(y,z)) = \btrue$.
 2. If $\infix(x,y) = \btrue$, then $\infix(x,\cat(z,y)) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by list induction on $z$. For the base case $z = \nil$, we have $$\infix(x,\cat(y,z)) = \infix(x,\cat(y,\nil)) = \infix(x,y) = \btrue.$$ For the inductive step, suppose the implication holds for some $z$ and let $a \in A$. Now
@@ -357,7 +348,6 @@ Let $A$ be a set. Then the following hold for all $x,y \in \lists{A}$.
 
 1. $\infix(x,\cat(u,\cat(x,v))) = \btrue$ for all $u,v \in \lists{A}$.
 2. If $\infix(x,y) = \btrue$, then $y = \cat(u,\cat(x,v))$ for some $u,v \in \lists{A}$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We have
@@ -398,7 +388,6 @@ $\infix$ interacts with $\rev$.
 
 :::::: theorem :::::
 Let $A$ be a set. If $x \in \lists{A}$, we have $\infix(\rev(x),\rev(y)) = \infix(x,y)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that, for all $x,u,v \in \lists{A}$, we have
@@ -426,7 +415,6 @@ $\snoc(a,x)$ is not an infix of $\nil$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have $$\infix(\snoc(a,x),\nil) = \bfalse.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 $$\begin{eqnarray*}
@@ -452,7 +440,6 @@ $\infix$ interacts with $\snoc$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x,y \in \lists{A}$ and $b \in A$, we have $$\infix(x,\snoc(b,y)) = \bor(\suffix(x,\snoc(b,y)),\infix(x,y)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -484,7 +471,6 @@ $\infix$ is antisymmetric.
 
 :::::: theorem :::::
 Let $A$ be a set with $x,y \in \lists{A}$. If $\infix(x,y) = \btrue$ and $\infix(y,x) = \btrue$, then $x = y$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Suppose $\infix(x,y) = \btrue$; then we have $u$ and $v$ such that $$y = \cat(u,\cat(x,v)).$$ Similarly, if $\infix(y,x) = \btrue$ we have $h$ and $k$ such that $$x = \cat(h,\cat(y,k)).$$ Now
@@ -523,7 +509,6 @@ $\infix$ is transitive.
 
 :::::: theorem :::::
 Let $A$ be a set with $x,y,z \in \lists{A}$. If $\infix(x,y) = \btrue$ and $\infix(y,z) = \btrue$, then $\infix(x,z) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 If $\infix(x,y) = \btrue$, we have $$y = \cat(u,\cat(x,v))$ for some $u$ and $v$, and if $\infix(y,z) = \btrue$ we have $$z = \cat(h,cat(y,k))$ for some $h$ and $k$. Now
@@ -558,7 +543,6 @@ Let $A$ be a set and $x,y \in \lists{A}$.
 1. If $\infix(x,y) = \btrue$, then $\sublist(x,y) = \btrue$.
 2. If $\prefix(x,y) = \btrue$, then $\sublist(x,y) = \btrue$.
 3. If $\suffix(x,y) = \btrue$, then $\sublist(x,y) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by list induction on $y$. For the base case $y = \nil$, note that if $$\btrue = \infix(x,y) = \infix(x,\nil),$$ we have $x = \nil$. Then $$\sublist(x,y) = \sublist(\nil,y) = \btrue$$ as needed. For the inductive step, suppose the implication holds for all $x$ for some $y$, and let $a \in A$. Suppose further that $\infix(x,\cons(a,y)) = \btrue$. Now
@@ -607,9 +591,8 @@ as needed. Now suppose $\infix(x,y) = \btrue$. By the induction hypothesis, we h
 
 $\infix$ is an $\any$.
 
-:::::: definition ::
+:::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$, we have $$\infix(x,y) = \any(\prefix(x,-))(\tails(y)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $y$. For the base case $y = \nil$, we have
