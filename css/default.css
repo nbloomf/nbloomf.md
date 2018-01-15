@@ -134,12 +134,17 @@ a[href^="#"]::before {
 /************/
 
 /* main style */
-div.definition, div.theorem {
+div.axiom, div.definition, div.theorem, div.corollary {
   border-left: solid 1px gray;
   padding-left: 12px;
   padding-right: 12px;
   background: #f7f7f7;
   position: relative;
+}
+
+div.axiom p:first-child::before {
+  content: "Axiom:\0000a0";
+  font-style: italic;
 }
 
 div.definition p:first-child::before {
@@ -149,6 +154,11 @@ div.definition p:first-child::before {
 
 div.theorem p:first-child::before {
   content: "Theorem:\0000a0";
+  font-style: italic;
+}
+
+div.corollary p:first-child::before {
+  content: "Corollary:\0000a0";
   font-style: italic;
 }
 
