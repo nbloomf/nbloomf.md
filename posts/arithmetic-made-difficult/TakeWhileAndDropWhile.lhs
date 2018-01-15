@@ -84,17 +84,15 @@ In Haskell:
 >       else nil
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 As usual, since $\takeWhile$ is defined directly in terms of foldr it is the unique solution to a system of functional equations.
 
-:::::: theorem :::::
+:::::: corollary :::
 Let $A$ be a set. Then $\takeWhile$ is the unique function $$f : \bool^A \times \lists{A} \rightarrow \lists{A}$$ satisfying the following system of equations for all $p : A \rightarrow \bool$, $a \in A$, and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(p,\nil) = \nil \\
  f(p,\cons(a,x)) = \bif{p(a)}{\cons(a,f(p,x)}{\nil}.
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -120,7 +118,6 @@ $\takeWhile$ gives prefixes.
 
 :::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$. For all $x \in \lists{A}$, we have $$\prefix(\takeWhile(p,x),x) = \btrue.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -154,9 +151,8 @@ as needed.
 
 So $\takeWhile$ also gives a sublists.
 
-:::::: corollary :::
+:::::: theorem :::::
 Let $A$ be a set, with $p : A \rightarrow \bool$ and $x \in \lists{A}$. Then we have $$\sublist(\takeWhile(k,x),x) = \btrue.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We have $$\prefix(\takeWhile(k,x),x) = \btrue,$$ so $$\infix(\takeWhile(k,x),x) = \btrue,$$ so $$\sublist(\takeWhile(k,x),x) = \btrue$$ as claimed.
@@ -177,7 +173,6 @@ $\takeWhile$ is idempotent.
 
 :::::: theorem :::::
 Let $A$ be a set with $p : A \rightarrow \bool$. Then for all $x \in \lists{A}$ we have $$\takeWhile(p,\takeWhile(p,x)) = \takeWhile(p,x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that
@@ -220,7 +215,6 @@ $\takeWhile$ commutes with itself (kind of).
 
 :::::: theorem :::::
 Let $A$ be a set with $p$ and $q$ mappings $A \rightarrow \bool$. Then for all $x \in \lists{A}$ we have $$\takeWhile(p,\takeWhile(q,x)) = \takeWhile(q,\takeWhile(p,x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that
@@ -291,7 +285,6 @@ In Haskell:
 >     sigma a x y = if p a then y else cons a x
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Because $\dropWhile$ is defined as a consuming fold, it can be characterized as the unique solution to a system of functional equations.
 
@@ -301,7 +294,6 @@ $$\left\{\begin{array}{l}
  f(\nil) = \nil \\
  f(\cons(a,x)) = \bif{p(a)}{f(x)}{\cons(a,x)}
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -327,7 +319,6 @@ Now $\dropBut$ is a $\suffix$:
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ and $p : A \rightarrow \bool$, we have $$\suffix(\dropWhile(p)(x),x) = \btrue.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -362,7 +353,6 @@ Like $\take$ and $\drop$, $\takeWhile$ and $\dropWhile$ give a kind of $\cat$-fa
 
 :::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$. For all $x \in \lists{A}$ we have $$x = \cat(\takeWhile(p)(x),\dropWhile(p)(x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
