@@ -39,7 +39,33 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 
 ::: proof ::::::::::
-(@@@)
+Note that
+$$\begin{eqnarray*}
+ &   & \band(\btrue,\btrue) \\
+ & = & \bif{\btrue}{\bif{\btrue}{\btrue}{\bfalse}}{\bfalse} \\
+ & = & \bif{\btrue}{\btrue}{\bfalse} \\
+ & = & \btrue,
+\end{eqnarray*}$$
+that
+$$\begin{eqnarray*}
+ &   & \band(\btrue,\bfalse) \\
+ & = & \bif{\btrue}{\bif{\bfalse}{\btrue}{\bfalse}}{\bfalse} \\
+ & = & \bif{\btrue}{\bfalse}{\bfalse} \\
+ & = & \bfalse,
+\end{eqnarray*}$$
+that
+$$\begin{eqnarray*}
+ &   & \band(\bfalse,\btrue) \\
+ & = & \bif{\bfalse}{\bif{\btrue}{\btrue}{\bfalse}}{\bfalse} \\
+ & = & \bfalse,
+\end{eqnarray*}$$
+and that
+$$\begin{eqnarray*}
+ &   & \band(\bfalse,\bfalse) \\
+ & = & \bif{\bfalse}{\bif{\bfalse}{\btrue}{\bfalse}}{\bfalse} \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as claimed.
 ::::::::::::::::::::
 
 ::: test :::::::::::
@@ -49,29 +75,138 @@ $$\begin{eqnarray*}
 > _test_and_true_true p =
 >   testName "and(true,true) == true" $
 >   eq (and true true) (true `withTypeOf` p)
+> 
+> 
+> _test_and_true_false :: (Boolean b, Equal b)
+>   => b -> Test Bool
+> _test_and_true_false p =
+>   testName "and(true,false) == false" $
+>   eq (and true false) (false `withTypeOf` p)
+> 
+> 
+> _test_and_false_true :: (Boolean b, Equal b)
+>   => b -> Test Bool
+> _test_and_false_true p =
+>   testName "and(false,true) == false" $
+>   eq (and false true) (false `withTypeOf` p)
+> 
+> 
+> _test_and_false_false :: (Boolean b, Equal b)
+>   => b -> Test Bool
+> _test_and_false_false p =
+>   testName "and(false,false) == false" $
+>   eq (and false false) (false `withTypeOf` p)
 
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-And $\band$ satisfies the usual properties.
+$\bfalse$ absorbs under $\band$.
 
 :::::: theorem :::::
-The following hold for all $a,b,c \in \bool$.
-
-1. $\band(\bfalse,a) = \band(a,\bfalse) = \bfalse$.
-2. $\band(\btrue,a) = \band(a,\btrue) = a$.
-3. $\band(a,\bnot(a)) = \bfalse$.
-4. $\band(a,a) = a$.
-5. $\band(a,b) = \band(b,a)$.
-6. $\band(\band(a,b),c) = \band(a,\band(b,c))$.
+If $a \in \bool$, we have $$\band(\bfalse,a) = \band(a,\bfalse) = \bfalse.$$
 
 ::: proof ::::::::::
-1. If $a = \btrue$ we have $$\band(\bfalse,\btrue) = \bfalse = \band(\btrue,\bfalse),$$ and if $a = \bfalse$ we have $$\band(\bfalse,\bfalse) = \bfalse$$ as claimed.
-2. If $a = \btrue$ we have $$\band(\btrue,\btrue) = \btrue,$$ and if $a = \bfalse$ we have $$\band(\btrue,\bfalse) = \bfalse = \band(\bfalse,\btrue)$$ as claimed.
-3. If $a = \btrue$, we have $\band(\btrue,\bnot(\btrue)) = \band(\btrue,\bfalse) = \bfalse,$$ and if $a = \bfalse$, we have $$\band(\bfalse,\bnot(\bfalse)) = \bfalse$$ as claimed.
-4. If $a = \btrue$ we have $$\band(\btrue,\btrue) = \btrue,$$ and if $a = \bfalse$ we have $$\band(\bfalse,\bfalse) = \bfalse$$ as claimed.
-5. If $a = \btrue$ we have $$\band(\btrue,b) = b = \band(b,\btrue),$$ and if $a = \bfalse$ we have $$\band(\bfalse,b) = \bfalse = \band(b,\bfalse)$$ as claimed.
-6. If $a = \btrue$, we have
+If $a = \btrue$ we have $$\band(\bfalse,\btrue) = \bfalse = \band(\btrue,\bfalse),$$ and if $a = \bfalse$ we have $$\band(\bfalse,\bfalse) = \bfalse$$ as claimed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_and_false :: (Boolean b, Equal b)
+>   => b -> Test (b -> Bool)
+> _test_and_false b =
+>   testName "and(false,p) == false" $
+>   \p -> eq (and false p) (false `withTypeOf` b)
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+$\btrue$ is neutral under $\band$.
+
+:::::: theorem :::::
+If $a \in \bool$, we have $$\band(\btrue,a) = \band(a,\btrue) = a.$$
+
+::: proof ::::::::::
+If $a = \btrue$ we have $$\band(\btrue,\btrue) = \btrue,$$ and if $a = \bfalse$ we have $$\band(\btrue,\bfalse) = \bfalse = \band(\bfalse,\btrue)$$ as claimed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_and_true :: (Boolean b, Equal b)
+>   => b -> Test (b -> Bool)
+> _test_and_true _ =
+>   testName "and(true,p) == p" $
+>   \p -> eq (and true p) p
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+$\band$ interacts with $\bnot$.
+
+:::::: theorem :::::
+If $a \in \bool$, we have $\band(a,\bnot(a)) = \bfalse$.
+
+::: proof ::::::::::
+If $a = \btrue$, we have $\band(\btrue,\bnot(\btrue)) = \band(\btrue,\bfalse) = \bfalse,$$ and if $a = \bfalse$, we have $$\band(\bfalse,\bnot(\bfalse)) = \bfalse$$ as claimed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_and_not :: (Boolean b, Equal b)
+>  => b -> Test (b -> Bool)
+> _test_and_not b =
+>   testName "and(p,not(p)) == false" $
+>   \p -> eq (and p (not p)) (false `withTypeOf` b)
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+$\band$ is idempotent.
+
+:::::: theorem :::::
+If $a \in \bool$, we have $\band(a,a) = a$.
+
+::: proof ::::::::::
+If $a = \btrue$ we have $$\band(\btrue,\btrue) = \btrue,$$ and if $a = \bfalse$ we have $$\band(\bfalse,\bfalse) = \bfalse$$ as claimed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_and_idempotent :: (Boolean b, Equal b)
+>   => b -> Test (b -> Bool)
+> _test_and_idempotent _ =
+>   testName "and(p,p) == p" $
+>   \p -> eq (and p p) p
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+$\band$ is commutative.
+
+:::::: theorem :::::
+If $a,b \in \bool$, we have $\band(a,b) = \band(b,a)$.
+
+::: proof ::::::::::
+If $a = \btrue$ we have $$\band(\btrue,b) = b = \band(b,\btrue),$$ and if $a = \bfalse$ we have $$\band(\bfalse,b) = \bfalse = \band(b,\bfalse)$$ as claimed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_and_commutative :: (Boolean b, Equal b)
+>   => b -> Test (b -> b -> Bool)
+> _test_and_commutative _ =
+>   testName "and(p,q) == and(q,p)" $
+>   \p q -> eq (and p q) (and q p)
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+$\band$ is associative.
+
+:::::: theorem :::::
+For all $a,b,c \in \bool$, we have $$\band(\band(a,b),c) = \band(a,\band(b,c)).$$
+
+::: proof ::::::::::
+If $a = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \band(\band(a,b),c) \\
  & = & \band(\band(\btrue,b),c) \\
@@ -92,38 +227,9 @@ as claimed.
 
 ::: test :::::::::::
 
-> _test_and_false :: Test (Bool -> Bool)
-> _test_and_false =
->   testName "and(false,p) == false" $
->   \p -> eq (and false p) false
-> 
-> 
-> _test_and_true :: Test (Bool -> Bool)
-> _test_and_true =
->   testName "and(true,p) == p" $
->   \p -> eq (and true p) p
-> 
-> 
-> _test_and_not :: Test (Bool -> Bool)
-> _test_and_not =
->   testName "and(p,not(p)) == false" $
->   \p -> eq (and p (not p)) false
-> 
-> 
-> _test_and_idempotent :: Test (Bool -> Bool)
-> _test_and_idempotent =
->   testName "and(p,p) == p" $
->   \p -> eq (and p p) p
-> 
-> 
-> _test_and_commutative :: Test (Bool -> Bool -> Bool)
-> _test_and_commutative =
->   testName "and(p,q) == and(q,p)" $
->   \p q -> eq (and p q) (and q p)
-> 
-> 
-> _test_and_associative :: Test (Bool -> Bool -> Bool -> Bool)
-> _test_and_associative =
+> _test_and_associative :: (Boolean b, Equal b)
+>   => b -> Test (b -> b -> b -> Bool)
+> _test_and_associative _ =
 >   testName "and(and(p,q),r) == and(p,and(q,r))" $
 >   \p q r -> eq (and (and p q) r) (and p (and q r))
 
@@ -151,13 +257,15 @@ Suite:
 >       }
 > 
 >   runTest args (_test_and_true_true p)
-> 
->   runTest args _test_and_false
->   runTest args _test_and_true
->   runTest args _test_and_not
->   runTest args _test_and_idempotent
->   runTest args _test_and_commutative
->   runTest args _test_and_associative
+>   runTest args (_test_and_true_false p)
+>   runTest args (_test_and_false_true p)
+>   runTest args (_test_and_false_false p)
+>   runTest args (_test_and_false p)
+>   runTest args (_test_and_true p)
+>   runTest args (_test_and_not p)
+>   runTest args (_test_and_idempotent p)
+>   runTest args (_test_and_commutative p)
+>   runTest args (_test_and_associative p)
 
 Main:
 
