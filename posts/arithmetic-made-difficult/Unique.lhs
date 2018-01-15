@@ -59,17 +59,15 @@ In Haskell:
 >     sigma a x p = and (not (elt a x)) p
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\unique$ is defined as a $\cfoldr{\ast}{\ast}$, it can be characterized as the unique solution to a system of functional equations.
 
-:::::: theorem :::::
+:::::: corollary :::
 Let $A$ be a set. $\unique$ is the unique map $f : \lists{A} \rightarrow \bool$ satisfying the following system of equations for all $a \in A$ and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(\nil) = \btrue \\
  f(\cons(a,x)) = \band(\bnot(\elt(a,x)),f(x))
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -96,7 +94,6 @@ Let $A$ be a set with $a,b \in A$. Then we have the following.
 
 1. $\unique(\cons(a,\nil)) = \btrue$.
 2. $\unique(\cons(a,\cons(b,\nil))) = \bnot(\beq(a,b))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. Note that
@@ -142,7 +139,6 @@ $\unique$ is "down closed" with respect to $\sublist$.
 
 :::::: theorem :::::
 Let $A$ be a set with $x,y \in \lists{A}$. If $\sublist(x,y) = \btrue$ and $\unique(y) = \btrue$, then $\unique(x) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $y$. For the base case $y = \nil$, suppose $\sublist(x,y) = \btrue$. Then we have $x = \nil$, and thus $\unique(x) = \btrue$. For the inductive step, suppose the implication holds for all $x$ for some $y$ and let $b \in A$. Suppose further that $\unique(\cons(b,y)) = \btrue$ and $\sublist(x,\cons(b,y)) = \btrue$. We consider two possibilities for $x$. If $x = \nil$, then $\unique(x) = \btrue$ as needed. Suppose instead that $x = \cons(a,u)$ for some $a \in A$ and $u \in \lists{A}$. Note first that since $\unique(\cons(b,y)) = \btrue$, we have $$\band(\bnot(\elt(a,x)),\unique(y)) = \btrue;$$ in particular, $\unique(y) = \btrue$.  We now consider two possibilities. If $a \neq b$, we have
@@ -188,7 +184,6 @@ If $f$ is injective, $\map(f)$ preserves uniqueness.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets with $x \in \lists{A}$ and $f : A \rightarrow B$. If $f$ is injective then $\unique(x) = \unique(\map(f)(x))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that
@@ -215,7 +210,6 @@ $\unique$ and $\filter$.
 
 :::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$ and $p : A \rightarrow \bool$. If $\unique(x) = \btrue$, then $\unique(\filter(p,x)) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that $\sublist(\filter(p,x),x) = \btrue$; so we have $\unique(\filter(p,x)) = \btrue$ as claimed.
@@ -238,7 +232,6 @@ $\unique$ interacts with $\snoc$.
 
 :::::: theorem :::::
 Let $A$ be a set with $a \in A$ and $x \in \lists{A}$. Then $$\unique(\snoc(a,x)) = \band(\bnot(\elt(a,x)),\unique(x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that
@@ -284,7 +277,6 @@ $\unique$ interacts with $\rev$.
 
 :::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$. Then $\unique(x) = \unique(\rev(x))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that
@@ -320,7 +312,6 @@ $\range$s are unique.
 
 :::::: theorem :::::
 Let $a,b \in \nats$. We have $$\unique(\range(a,b)) = \btrue.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $b$. For the base case $b = \zero$, we have
@@ -356,7 +347,6 @@ $\unique$ can detect $\elt$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x \in X$, we have $$\all(\unique)(\map(\cons(a,\cons(-,\nil)))(x)) = \bnot(\elt(a,x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -397,7 +387,6 @@ $\unique$ and $\select$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ we have $$\unique(x) = \all(\unique)(\select(\next(\next(\zero)),x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have

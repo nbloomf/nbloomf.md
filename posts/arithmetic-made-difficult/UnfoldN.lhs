@@ -52,7 +52,6 @@ $$\Theta(x,\next(n),a) = \left\{\begin{array}{ll}
  \Theta(\snoc(b,x),n,c) & \mathrm{if}\ f(a) = \rgt((c,b)).
 \end{array}\right.$$
 We denote this unique map $\tacunfoldN{f}$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We define $\varphi : A \times \lists{B} \rightarrow \lists{B}$ by $$\varphi(a,x) = x,$$ $\beta : \nats \times (A \times \lists{B}) \rightarrow \bool$ by $$\beta(n,(a,x)) = \isLft(f(a)),$$ $\psi : \nats \times (A \times \lists{B}) \rightarrow \lists{B}$ by $$\psi(n,(a,x)) = x,$$ and $\omega : \nats \times (A \times \lists{B}) \rightarrow A \times \lists{B}$ by
@@ -165,7 +164,6 @@ $\tacunfoldN{f}$ interacts with $\cons$.
 
 :::::: theorem :::::
 We have $$\tacunfoldN{f}(\cons(b,x),n,a) = \cons(b,\tacunfoldN{f}(x,n,a)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$, we have
@@ -206,7 +204,6 @@ $\tacunfoldN{f}$ interacts with $\cat$.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets with $f : A \rightarrow 1 + (A \times B)$. For all $a \in A$, $x,y \in \lists{B}$, and $n \in \nats$, we have $$\tacunfoldN{f}(\cat(x,y),n,a) = \cat(x,\tacunfoldN{f}(y,n,a).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$, we have
@@ -256,11 +253,10 @@ In Haskell:
 > unfoldN f = tacunfoldN f nil
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 And $\unfoldN{\ast}$ can be characterized as the unique solution of a system of functional equations.
 
-:::::: corollary :::
+:::::: theorem :::::
 Let $A$ and $B$ be sets with $f : A \rightarrow 1 + (A \times B)$. Then $\unfoldN{f}$ is the unique map $g : \nats \times A \rightarrow B$ such that the following hold for all $a \in A$ and $n \in \nats$.
 $$\left\{\begin{array}{l}
  g(\zero,a) = \nil \\
@@ -269,7 +265,6 @@ $$\left\{\begin{array}{l}
   \cons(b,g(n,c)) & \mathrm{if}\ f(a) = \rgt((c,b)). 
 \end{array}\right.
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 To see that $\unfoldN{\ast}$ satisfies the first equation, note that

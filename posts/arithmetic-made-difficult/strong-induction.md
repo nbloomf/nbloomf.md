@@ -14,7 +14,6 @@ In this post we'll take a break from defining programs to establish two importan
 2. If $f(k) \in B$ whenever $\nleq(k,n)$, then $f(\next(n)) \in B$.
 
 Then $f(n) \in B$ for all $n \in \nats$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Let $B$ be such a subset.
@@ -38,7 +37,6 @@ Note that condition (2) in the Strong Induction theorem appears to be much stron
 2. If we have $n \in \nats$ such that if $f(a) = k$ with $\nleq(k,n)$ then $a \in B$, then if $f(a) = \next(n)$ then $a \in B$.
 
 Then we have $B = A$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Let $B$ be such a subset. We define $T \subseteq \nats$ by $$T = \{n \in \nats \mid \forall a \in A, \mathrm{if}\ f(a) = n\ \mathrm{then}\ a \in B\}.$$ We will show that $T = \nats$ by strong induction.
@@ -55,7 +53,6 @@ Again, when using this principle we will say we're using "strong induction *on* 
 
 :::::: theorem :::::
 (Well-Ordering Property.) Let $A$ be a nonempty set and $f : A \rightarrow \nats$. Then there exists $a \in A$ such that $\nleq(f(a),f(b))$ for all $b \in A$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Suppose to the contrary that some set $A$ and map $f : A \rightarrow \nats$ exist which do not have this property; that is, for all $a \in A$, there exists $b \in A$ such that $\nleq(f(a),f(b))$ is false.

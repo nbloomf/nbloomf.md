@@ -43,7 +43,6 @@ In Haskell:
 >     chi a b _ z _ = cons (a,b) z
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\zipPad(u,v)$ is defined as a $\dfoldr{\ast}{\ast}{\ast}$, it is the unique solution to a system of functional equations.
 
@@ -54,7 +53,6 @@ $$\left\{\begin{array}{l}
  f(\cons(a,x),\nil) = \cons((a,v),f(x,nil)) \\
  f(\cons(a,x),\cons(b,y)) = \cons((a,b),f(x,y))
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -85,10 +83,9 @@ $$\left\{\begin{array}{l}
 
 $\zipPad$ with a nil right argument is a $\map$.
 
-:::::: definition ::
+:::::: theorem :::::
 Let $A$ and $B$ be sets, with $u \in A$ and $v \in B$. For all $x \in \lists{A}$, we have 
 $$\zipPad(u,v)(x,\nil) = \map(\tupR(v))(x)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -125,7 +122,6 @@ $\zipPad$ interacts with $\tSwap$.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets. Then for all $u \in A$, $v \in B$, $x \in \lists{A}$, and $y \in \lists{B}$ we have $$\map(\tSwap)(\zipPad(u,v)(x,y)) = \zipPad(v,u)(y,x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -178,7 +174,6 @@ $\zipPad$ interacts with $\tPair$.
 
 :::::: theorem :::::
 Let $A$, $B$, $U$, and $V$ be sets, with functions $f : A \rightarrow U$ and $g : B \rightarrow V$. Then for all $u \in A$, $v \in B$, $x \in \lists{A}$, and $y \in \lists{B}$, we have $$\map(\tPair(f,g))(\zipPad(u,v)(x,y)) = \zipPad(f(u),g(v))(\map(f)(x),\map(g)(y)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -235,7 +230,6 @@ $\zipPad$ interacts with $\length$.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets, with $u \in A$, $v \in B$, $x \in \lists{A}$, and $y \in \lists{B}$. Then $$\length(\zipPad(u,v)(x,y)) = \nmax(\length(x),\length(y)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -298,7 +292,6 @@ Let $A$, $B$, and $C$ be sets, with $u \in A$, $v \in B$, $w \in C$, $x \in \lis
  &   & \zipPad(u,(v,w))(x,\zipPad(v,w)(y,z)) \\
  & = & \map(\tAssocR)(\zipPad((u,v),w)(\zipPad(u,v)(x,y),z)).
 \end{eqnarray*}$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by list induction on $x$. For the base case $x = \nil$, we have

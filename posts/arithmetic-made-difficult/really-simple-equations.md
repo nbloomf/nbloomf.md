@@ -11,7 +11,6 @@ Our strategy is based on two of the Peano axioms. Specifically, (1) $\zero = \ne
 
 :::::: theorem :::::
 Let $a,b \in \nats$. If $\nplus(a,b) = \zero$, then $a = b = \zero$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Suppose $\nplus(a,b) = \zero$. Note that either $a = \zero$ or $a = \next(m)$ for some $m \in \nats$. If $a = \next(m)$, then $$\zero = \nplus(a,b) = \nplus(\next(m),b) = \next(\nplus(m,b)),$$ a contradiction. So we have $a = \zero$. But now $\zero = \nplus(\zero,b) = b$ as claimed.
@@ -25,7 +24,6 @@ We have the following.
 
 1. Every natural number is either $\zero$, $\next(\zero)$, or of the form $\next(\next(m))$ for some $m \in \nats$.
 2. Every natural number is either $\zero$, $\next(\zero)$, $\next(\next(\zero))$, or of the form $\next(\next(\next(m)))$ for some $m \in \nats$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. Let $n \in \nats$. Either $n = \zero$ or $n = \next(k)$ for some $k \in \nats$; but now either $k = \zero$ or $k = \next(m)$ for some $m \in \nats$. So either $n = \zero$, $n = \next(\zero)$, of $n = \next(\next(m))$ for some $m \in \nats$.
@@ -37,7 +35,6 @@ This will allow us to use more detailed case analysis on $\nats$.
 
 :::::: theorem :::::
 Let $a,b \in \nats$. If $\nplus(a,b) = \next(\zero)$, then $(a,b)$ is either $(\zero,\next(\zero))$ or $(\next(\zero),\zero)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that either $a = \zero$, $a = \next(\zero)$, or $a = \next(\next(m))$ for some $m \in \nats$.
@@ -52,7 +49,6 @@ Ain't this fun!
 
 :::::: theorem :::::
 Let $a,b \in \nats$. If $\nplus(a,b) = \next(\next(\zero))$, then $(a,b)$ is either $(\zero,\next(\next(\zero)))$ or $(\next(\zero),\next(\zero))$ or $(\next(\next(\zero)),\zero)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that either $a = \zero$, $a = \next(\zero)$, $a = \next(\next(\zero))$, or $a = \next(\next(\next(m)))$ for some $m \in \nats$.
@@ -68,7 +64,6 @@ And another.
 
 :::::: theorem :::::
 Let $a,b \in \nats$. If $\nplus(a,b) = \next(\next(\next(\zero)))$, then $(a,b)$ is either $(\zero,\next(\next(\next(\zero))))$ or $(\next(\zero),\next(\next(\zero)))$ or $(\next(\next(\zero)),\next(\zero))$, or $(\next(\next(\next(\zero))),\zero)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 If $a = \zero$, then $b = \next(\next(\next(\zero)))$ as claimed.
@@ -87,7 +82,6 @@ Okay this is boring. How about some equations with $\ntimes$?
 
 :::::: theorem :::::
 Let $a,b \in \nats$. If $\ntimes(a,b) = \zero$, then either $a = \zero$ or $b = \zero$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Suppose that neither $a$ nor $b$ is $\zero$; then we have $a = \next(h)$ and $b = \next(k)$ for some $h,k \in \nats$. Now $$\begin{eqnarray*} & & \zero \\ & = & \ntimes(a,b) \\ & = & \ntimes(\next(h),\next(k)) \\ & = & \nplus(\ntimes(h,\next(k)),\next(k)) \\ & = & \next(\nplus(\ntimes(h,\next(k)),k)), \end{eqnarray*}$$ a contradiction. So we must have either $a = \zero$ or $b = \zero$. Note also that in either case we indeed have $\ntimes(a,b) = \zero$.
@@ -98,7 +92,6 @@ woo
 
 :::::: theorem :::::
 Let $a,b \in \nats$. If $\ntimes(a,b) = \next(\zero)$, then $(a,b)$ is $(\next(\zero),\next(\zero))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Suppose we have $\ntimes(a,b) = \next(\zero)$. Note that either $a = \zero$ or $a = \next(\zero)$ or $a = \next(\next(m))$ for some $m \in \nats$.
@@ -113,7 +106,6 @@ One more:
 
 :::::: theorem :::::
 Let $a,b \in \nats$. If $\ntimes(a,b) = \next(\next(\zero))$, then $(a,b)$ is either $(\next(\next(\zero)),\next(\zero))$ or $(\next(\zero),\next(\next(\zero)))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Suppose we have $\ntimes(a,b) = \next(\next(\zero))$. Note that either $a = \zero$ or $a = \next(\zero)$ or $a = \next(\next(\zero))$ or $a = \next(\next(\next(m)))$ for some $m \in \nats$.

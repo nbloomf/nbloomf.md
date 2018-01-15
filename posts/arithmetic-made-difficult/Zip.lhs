@@ -51,7 +51,6 @@ In Haskell:
 >     chi a b _ z _ = cons (a,b) z
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\zip$ is defined in terms of $\dfoldr{\ast}{\ast}{\ast}$, it is the unique solution to a system of functional equations.
 
@@ -62,7 +61,6 @@ $$\left\{\begin{array}{l}
  f(\cons(a,x),\nil) = \nil \\
  f(\cons(a,x),\cons(b,y)) = \cons((a,b),f(x,y))
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -93,7 +91,6 @@ Now $\map(\tSwap) \circ \zip = \zip \circ \tSwap$.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets. Then for all $x \in \lists{A}$ and $y \in \lists{B}$ we have $$\map(\tSwap)(\zip(x,y)) = \zip(y,x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -142,7 +139,6 @@ And $\map(\tPair(f,g)) \circ \zip = \zip \circ \tPair(\map(f),\map(g))$.
 
 :::::: theorem :::::
 Let $A$, $B$, $U$, and $V$ be sets, with functions $f : A \rightarrow U$ and $g : B \rightarrow V$. Then for all $x \in \lists{A}$ and $y \in \lists{B}$, we have $$\map(\tPair(f,g))(\zip(x,y)) = \zip(\map(f)(x),\map(g)(y)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -195,7 +191,6 @@ $\zip$ interacts with $\length$.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets, with $x \in \lists{A}$ and $y \in \lists{B}$. Then $$\length(\zip(x,y)) = \nmin(\length(x),\length(y)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $y$. For the base case $y = \nil$ we have
@@ -252,7 +247,6 @@ Let $A$, $B$, and $C$ be sets, with $x \in \lists{A}$, $y \in \lists{B}$, and $z
 
 1. $\zip(\zip(x,y),z) = \map(\tAssocL)(\zip(x,\zip(y,z)))$.
 2. $\zip(x,\zip(y,z)) = \map(\tAssocR)(\zip(\zip(x,y),z))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by list induction on $x$. For the base case $x = \nil$, note that

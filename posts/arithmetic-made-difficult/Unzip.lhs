@@ -57,7 +57,6 @@ In Haskell:
 >     phi (a,b) (u,v) = (cons a u, cons b v)
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Because $\unzip$ is defined as a $\foldr{\ast}{\ast}$, it is the unique solution to a system of functional equations.
 
@@ -67,7 +66,6 @@ $$\left\{\begin{array}{l}
  f(\nil) = (\nil,\nil) \\
  f(\cons(a,b),z) = (\cons(a,\fst(z)),\cons(b,\snd(z))).
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -91,7 +89,6 @@ Now $\zip$ undoes $\unzip$ as expected.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets. For all $x \in \lists{A \times B}$, we have $$\zip(\unzip(x)) = x.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -130,7 +127,6 @@ $\unzip$ interacts with $\tSwap$:
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets and $x \in \lists{A \times B}$. Then we have $$\tSwap(\unzip(x)) = \unzip(\map(\tSwap)(x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -170,7 +166,6 @@ $\unzip$ interacts with $\tPair$.
 
 :::::: theorem :::::
 Let $A$, $B$, $U$, and $V$ be sets, with $f : A \rightarrow U$ and $g : B \rightarrow V$. For all $x \in \lists{A \times B}$ we have $$\unzip(\map(\tPair(f,g))(x)) = \tPair(\map(f),\map(g))(\unzip(x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have

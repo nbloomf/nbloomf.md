@@ -115,8 +115,10 @@ blankpost:VQ:
 
 sniff-amd:VQ: \
   sniff-amd-fencediv \
-  sniff-amd-plaindiv
+  sniff-amd-plaindiv \
+  sniff-amd-nestdiv
 
+#-- use consistent syntax for fenced divs --#
 sniff-amd-fencediv:VQ:
   FENCEDIV=$( grep '^:::' posts/arithmetic-made-difficult/* \
     | grep -v ':::::: axiom :::::::' \
@@ -134,6 +136,7 @@ sniff-amd-fencediv:VQ:
     echo "$FENCEDIV"
   fi
 
+#-- do not use literal divs --#
 sniff-amd-plaindiv:VQ:
   PLAINDIV=$( grep -e '<div[> ]' -e '</div>' posts/arithmetic-made-difficult/* || true )
   if [ -z "$PLAINDIV" ]; then
@@ -142,4 +145,32 @@ sniff-amd-plaindiv:VQ:
     echo 'Plain Divs' | doppler lightred
     echo $(echo "$PLAINDIV" | wc -l) 'problems found' | doppler lightred
     echo "$PLAINDIV"
+  fi
+
+#-- use consistent structure for divs --#
+sniff-amd-nestdiv:VQ:
+  NESTDIV=$( grep '^:::' posts/arithmetic-made-difficult/* \
+    | sed 's/posts\/arithmetic-made-difficult\///' \
+    | sed 's/:::::: axiom :::::::$/axm/' \
+    | sed 's/:::::: definition ::$/def/' \
+    | sed 's/:::::: theorem :::::$/thm/' \
+    | sed 's/:::::: corollary :::$/cor/' \
+    | sed 's/::: proof ::::::::::$/prf/' \
+    | sed 's/::: test :::::::::::$/tst/' \
+    | sed 's/::::::::::::::::::::$/cls/' \
+    | sed '$!N;/^\([^:]*:\)\(.*\)\(\n\)\1/!P;s//\3\1\2 /;D' \
+    | sed 's/def cls//g' \
+    | sed 's/axm cls//g' \
+    | sed 's/cor cls//g' \
+    | sed 's/thm prf cls tst cls cls//g' \
+    | sed 's/thm prf cls cls//g' \
+    | sed 's/cor tst cls cls//g' \
+    | sed 's/ *$//' \
+    | sed '/:$/d' )
+  if [ -z "$NESTDIV" ]; then
+    echo 'Nested Divs OK' | doppler lightgreen
+  else
+    echo 'Nested Divs' | doppler lightred
+    echo $( echo "$NESTDIV" | wc -l ) 'problems found' | doppler lightred
+    echo "$NESTDIV"
   fi

@@ -123,7 +123,7 @@ As we'll see, the function $\natrec{\ast}{\ast}$ essentially characterizes the n
 
 But wait, there's more! The "uniqueness" part of natural recursion is also handy. To be a little more explicit, it says the following.
 
-:::::: theorem :::::
+:::::: corollary :::
 Let $(A,e,\varphi)$ be an inductive set. Then $\natrec{e}{\varphi}$ is the unique solution $f : \nats \rightarrow A$ to the following system of functional equations for all $k \in \nats$:
 $$\left\{\begin{array}{l}
  f(\zero) = e \\

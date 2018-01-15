@@ -21,7 +21,6 @@ To see how this works let's revisit our old friends the *iterative sets* again, 
 :::::: definition ::
 A set $A$ with a distinguished element $e$ and a distinguished function $\varphi : A \rightarrow A$ is called an *iterative set*.
 ::::::::::::::::::::
-::::::::::::::::::::
 
 So an iterative set is (1) a set, with (2) an element, and (3) a function. It turns out we can think of *elements* of sets as *functions* from the one-element set $1 = \{\ast\}$. More precisely, if $e \in A$, we can identify $e$ with the map $e^\prime : 1 \rightarrow A$ given by $e^\prime(\ast) = e$. From now on I'll make this identification implicitly.
 
@@ -29,7 +28,6 @@ So an iterative set is (1) a set $A$, with (2) a map $1 \rightarrow A$, and (3) 
 
 :::::: definition ::
 An *iterative set* is a set $A$ with a mapping $\theta : 1+A \rightarrow A$.
-::::::::::::::::::::
 ::::::::::::::::::::
 
 All we've done here is recast the iterative set data in terms of mappings. And in this language, iterative set homomorphisms have a nice characterization as well:
@@ -42,7 +40,6 @@ $$\require{AMScd}
 @V{\theta_A}VV @VV{\theta_B}V \\
 A @>>{\varphi}> B
 \end{CD}$$
-::::::::::::::::::::
 ::::::::::::::::::::
 
 Let's stick this in our back pocket for now.

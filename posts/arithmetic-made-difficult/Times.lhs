@@ -39,7 +39,6 @@ In Haskell:
 >     mu _ a b = plus b a
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\ntimes$ is defined in terms of simple recursion, it is the unique solution to a set of functional equations.
 
@@ -49,7 +48,6 @@ $$\left\{\begin{array}{l}
  f(\zero,b) = \zero \\
  f(\next(a),b) = \nplus(f(a,b),b).
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -76,7 +74,6 @@ The following hold for all natural numbers $a$ and $b$.
 
 1. $\ntimes(a,\zero) = \zero$.
 2. $\ntimes(a,\next(b)) = \nplus(\ntimes(a,b),a)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by induction on $a$. For the base case, note that $\ntimes(\zero,\zero) = \zero$. For the inductive step, suppose we have $\ntimes(a,\zero) = \zero$ for some $a$. Then
@@ -134,7 +131,6 @@ For all $a \in \nats$, we have
 
 1. $\ntimes(\next(\zero),a) = a$.
 2. $\ntimes(a,\next(\zero)) = a$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. Note first that for all $a$, we have
@@ -177,7 +173,6 @@ $\ntimes$ is commutative.
 
 :::::: theorem :::::
 For all $a,b \in \nats$ we have $\ntimes(a,b) = \ntimes(b,a)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $a$. For the base case, note that $$\ntimes(\zero,b) = \zero = \ntimes(b,\zero)$$ as needed. For the inductive step, suppose we have $\ntimes(a,b) = \ntimes(b,a)$ for some $a$. Now
@@ -208,7 +203,6 @@ For all $a,b,c, \in \nats$, we have the following.
 
 1. $\ntimes(a,\nplus(b,c)) = \nplus(\ntimes(a,b),\ntimes(a,c))$.
 2. $\ntimes(\nplus(a,b),c) = \nplus(\ntimes(a,c),\ntimes(b,c))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by induction on $a$. For the base case, we have $$\ntimes(\zero,\nplus(b,c)) = \zero = \nplus(\zero,\zero) = \nplus(\ntimes(\zero,b),\ntimes(\zero,c))$$ as needed. For the inductive step, suppose we have $\ntimes(a,\nplus(b,c)) = \nplus(\ntimes(a,b),\ntimes(a,c))$ for all $b$ and $c$ for some $a$. Now
@@ -256,7 +250,6 @@ $\ntimes$ is associative,
 
 :::::: theorem :::::
 For all $a,b,c \in \nats$, we have $$\ntimes(\ntimes(a,b),c) = \ntimes(a,\ntimes(b,c)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $a$. For the base case, we have
@@ -295,7 +288,6 @@ For all $a,b,c \in \nats$, we have the following.
 
 1. If $\ntimes(\next(a),b) = \ntimes(\next(a),c)$ then $b = c$.
 2. If $\ntimes(b,\next(a)) = \ntimes(c,\next(a))$ then $b = c$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. This proof will be a little different: we will use induction twice; first on $b$, and then on $c$. To this end, let $$B = \{ b \in \nats \mid \forall c, \forall a,\ \mathrm{if}\ \ntimes(\next(a),b) = \ntimes(\next(a),c)\ \mathrm{then}\ b = c \}$$ and given $b \in \nats$ let $$C(b) = \{ c \in \nats \mid \forall a,\ \mathrm{if}\ \ntimes(\next(a),b) = \ntimes(\next(a),c)\ \mathrm{then}\ b = c \}.$$ We wish to show that $B = \nats$ by induction. For the base case, we need to show that $b = \zero \in B$; for this it suffices to show that $C(\zero) = \nats$, which we do by induction. For the base case $c = \zero$, we have $b = c$ regardless of $a$. For the inductive step suppose we have $c \in C(\zero)$ for some $c$. Note that
