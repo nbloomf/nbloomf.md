@@ -387,7 +387,6 @@ Let $A$ be a set. The following hold for all $p,q,r \in \bool^A$.
 2. $\pnot(\por(p,q)) = \pand(\pnot(p),\pnot(q))$.
 3. $\pand(p,\por(q,r)) = \por(\pand(p,q),\pand(p,r))$.
 4. $\bor(p,\pand(q,r)) = \pand(\por(p,q),\por(p,r))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. For all $a \in A$, we have
@@ -466,10 +465,8 @@ as needed.
 
 Implication lifts to predicates.
 
-<div class="result>
 :::::: definition ::
 Let $A$ be a set. We define $\pimpl : \bool^A \times \bool^A \rightarrow \bool^A$ by $\pimpl(p,q) = \btrue$ if $\pimpl(p(a),q(a)) = \btrue$ for all $a \in A$, and $\bfalse$ otherwise.
-::::::::::::::::::::
 ::::::::::::::::::::
 
 

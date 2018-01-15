@@ -216,13 +216,12 @@ $a$ divides $a$ and $a$ divides $a$, and if $c$ divides both $a$ and $a$ then $c
 
 And some special cases.
 
-<div class="lemma">
+:::::: theorem :::::
 For all $a \in \nats$ we have the following.
 
 1. $\ngcd(a,\zero) = a$.
 2. $\ngcd(a,\next(\zero)) = \next(\zero)$.
 3. If $\ngcd(a,b) = \zero$, then $a = b = \zero$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. Note that $a$ divides $a$ and $a$ divides $\zero$, and if $c$ divides both $a$ and $\zero$ then $c$ divides $a$.
@@ -261,7 +260,6 @@ $\ngcd$ is associative.
 
 :::::: theorem :::::
 Let $a,b,c \in \nats$. Then we have $\ngcd(\ngcd(a,b),c) = \ngcd(a,\ngcd(b,c))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Let $h = \ngcd(\ngcd(a,b),c)$, $k = \ngcd(a,\ngcd(b,c))$, $u = \ngcd(a,b)$, and $v = \ngcd(b,c)$. First we show that $\ndiv(h,k)$. Note that $\ndiv(h,u)$, so that $\ndiv(h,a)$ and $\ndiv(h,b)$. Now $\ndiv(h,c)$, so that $\ndiv(h,v)$. Thus $\ndiv(h,k)$. The proof that $\ndiv(k,h)$ is similar; thus $h = k$ as claimed.

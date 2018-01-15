@@ -119,6 +119,7 @@ sniff-amd:VQ: \
 
 sniff-amd-fencediv:VQ:
   FENCEDIV=$( grep '^:::' posts/arithmetic-made-difficult/* \
+    | grep -v ':::::: axiom :::::::' \
     | grep -v ':::::: definition ::' \
     | grep -v ':::::: theorem :::::' \
     | grep -v ':::::: corollary :::' \
@@ -134,7 +135,7 @@ sniff-amd-fencediv:VQ:
   fi
 
 sniff-amd-plaindiv:VQ:
-  PLAINDIV=$( grep -e '<div class' -e '</div>' posts/arithmetic-made-difficult/* )
+  PLAINDIV=$( grep -e '<div[> ]' -e '</div>' posts/arithmetic-made-difficult/* || true )
   if [ -z "$PLAINDIV" ]; then
     echo 'Plain Divs OK' | doppler lightgreen
   else

@@ -26,9 +26,8 @@ For this situation we introduce yet another recursion operator on $\nats$, which
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets, and suppose we have mappings $$\varphi : A \rightarrow B,$$ $$\omega : A \rightarrow A,$$ and $$\chi : A \times B^A \rightarrow B.$$ There is a unique map $\Theta : \nats \rightarrow A \rightarrow B$ such that $$\Theta(\zero)(a) = \varphi(a)$$ and $$\Theta(\next(n))(a) = \chi(\omega(a),\Theta(n)).$$ We will call such functions *mutating recursive*, and denote this $\Theta$ by $\mutrec{\varphi}{\omega}{\chi}$.
-::::::::::::::::::::
 
-<div class="proof">
+::: proof ::::::::::
 Define $\Omega : B^A \rightarrow B^A$ by $$\Omega(f)(a) = \chi(\omega(a),f).$$ Now $(B^A, \varphi, \Omega)$ is an inductive set; define $\Theta = \natrec{\varphi}{\Omega}$. Then $\Theta$ is unique such that
 $$\begin{eqnarray*}
  &   & \Theta(\zero)(a) \\

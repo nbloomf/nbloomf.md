@@ -215,12 +215,11 @@ $$\left\{\begin{array}{l}
 
 Special cases:
 
-<div class="lemma"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a,b \in A$ we have the following.
 
 1. $\rev(\cons(a,\nil)) = \cons(a,\nil)$.
 2. $\rev(\cons(a,\cons(b,\nil))) = \cons(b,\cons(a,\nil))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. Note that
@@ -268,7 +267,7 @@ as claimed.
 
 Now $\rev$ and $\snoc$ interact:
 
-<div class="lemma"><p>
+:::::: theorem :::::
 Let $A$ be a set. Then for all $a \in A$ and $x \in \lists{A}$, we have $$\rev(\snoc(a,x)) = \cons(a,\rev(x)).$$
 ::::::::::::::::::::
 
@@ -296,9 +295,8 @@ as claimed.
 
 And $\rev$ is an involution.
 
-<div class="lemma"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$, we have $\rev(\rev(x)) = x$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction. For the base case $x = \nil$, note that
@@ -335,7 +333,6 @@ Let $A$ be a set with $x,y \in \lists{A}$. Then we have the following.
 
 1. $\isnil(x) = \isnil(\rev(x))$.
 2. $\beq(x,y) = \beq(\rev(x),\rev(y))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We consider two possibilities. If $x = \nil$, we have $$x = \nil = \rev(\nil) = \rev(x),$$ so that $\isnil(x) = \isnil(\rev(x))$ as claimed. Suppose instead that $x = \cons(a,u)$ for some $u$; then $x = \snoc(b,v)$ for some $v$. Now we have
@@ -405,7 +402,6 @@ And left fold is a reversed right fold.
 
 :::::: theorem :::::
 Let $\varphi : B \times A \rightarrow B$, and define $\psi : A \times B \rightarrow B$ by $$\psi(a,b) = \varphi(b,a).$$ Now $$\foldl{\varphi}(e,x) = \foldr{e,\psi}(\rev(x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have

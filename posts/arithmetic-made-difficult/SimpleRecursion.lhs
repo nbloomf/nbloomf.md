@@ -26,9 +26,8 @@ So far we've defined the natural numbers as an iterative set with a special *uni
 Suppose we have sets $A$ and $B$ and functions $\varphi : A \rightarrow B$ and $\mu : \nats \times A \times B \rightarrow B$. Then there is a unique function $\Theta : \nats \times A \rightarrow B$ such that, for all $n \in \nats$ and $a \in A$, $$\Theta(\zero, a) = \varphi(a)$$ and $$\Theta(\next(n), a) = \mu(n, a, \Theta(n, a)).$$
 
 This function $\Theta$ will be denoted $\simprec{\varphi}{\mu}$.
-::::::::::::::::::::
 
-<div class="proof">
+::: proof ::::::::::
 First we establish existence. Define a mapping $t : \nats \times {}^AB \rightarrow \nats \times {}^AB$ by $$t(n,h) = (\next(n), \lambda x : \mu(n, x, h(x))).$$ Note that we are using the $\lambda$ notation to define an anonymous function $A \rightarrow B$ on the right hand side; specifically, $\lambda x : \mu(n, x, h(x))$ is the function $q : A \rightarrow B$ such that $q(x) = \mu(n,x,h(x))$.
 
 Now we define $\Theta$ as follows: $$\Theta(n,a) = (\snd \circ \natrec{(\zero, \varphi)}{t})(n)(a).$$

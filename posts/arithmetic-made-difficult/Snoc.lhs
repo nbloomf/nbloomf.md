@@ -72,9 +72,8 @@ $$\left\{ \begin{array}{ll}
 
 Now $\snoc$ interacts with $\foldr{\ast}{\ast}$.
 
-<div class="lemma"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets with $e \in B$ and $\varphi : A \times B \rightarrow B$. Then for all $a \in A$ and $x \in \lists{A}$ we have $$\foldr{e}{\varphi}(\snoc(a,x)) = \foldr{\varphi(a,e)}{\varphi}(x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction. For the base case $x = \nil$, note that
@@ -118,7 +117,6 @@ Also, $\snoc$ interacts with $\beq$.
 
 :::::: theorem :::::
 Let $A$ be a set with $a,b \in A$ and $x,y \in \lists{A}$. Then $$\beq(\snoc(a,x),\snoc(b,y)) = \band(\beq(a,b),\beq(x,y)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case, set $x = \nil$. We consider two possibilities for $y$. If $y = \nil$, we have
@@ -184,7 +182,6 @@ Now $\foldl{\ast}$ interacts with $\snoc$.
 
 :::::: theorem :::::
 We have $$\foldl{\varphi}(e,\snoc(a,x)) = \varphi(\foldl{\varphi}(e,x),a).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case we have
@@ -223,7 +220,6 @@ And $\snoc$ is not $\nil$.
 
 :::::: theorem :::::
 We have $$\isnil(\snoc(a,x)) = \bfalse.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -259,7 +255,6 @@ Let $A$ and $B$ be sets, and suppose $\varphi : A \times B \rightarrow B$ has th
 
 1. $\foldl{\psi}(e,\snoc(a,x)) = \foldl{\psi}(e,\cons(a,x))$.
 2. $\foldr{e}{\varphi}(x) = \foldl{\psi}(e,x)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by list induction on $x$. For the base case $x = \nil$ we have

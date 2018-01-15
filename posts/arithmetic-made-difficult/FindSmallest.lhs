@@ -45,13 +45,12 @@ In Haskell:
 
 Because $\findsmallest{\sigma}$ is defined in terms of bailout recursion, it is the unique solution to a system of functional equations.
 
-<div class="cor"><p>
+:::::: corollary :::
 Let $\sigma : \nats \rightarrow \bool$ be a map. Then $\findsmallest{\sigma} : \nats \times \nats \rightarrow 1 + \nats$ is the unique solution $f : \nats \times \nats \rightarrow 1 + \nats$ to the following system of equations for all $n,k \in \nats$.
 $$\left\{\begin{array}{l}
  f(\zero,k) = \lft(\ast) \\
  f(\next(n),k) = \bif{\sigma(k)}{\rgt(k)}{f(n,\next(k))}
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 

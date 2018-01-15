@@ -35,9 +35,8 @@ $$\begin{eqnarray*}
 Then there is a unique function $\Theta : \nats \times A \rightarrow B$ such that, for all $n \in \nats$ and $a \in A$, $$\Theta(\zero, a) = \varphi(a)$$ and $$\Theta(\next(m), a) = \left\{ \begin{array}{ll} \psi(m,a) & \mathrm{if}\ \beta(m,a) \\ \Theta(m, \omega(m,a)) & \mathrm{otherwise}. \end{array}\right.$$
 
 This function $\Theta$ will be denoted $\bailrec{\varphi}{\beta}{\psi}{\omega}$.
-::::::::::::::::::::
 
-<div class="proof">
+::: proof ::::::::::
 This proof will be very similar to the analogous proof for simple recursion.
 
 First we establish existence. To this end, define a map $W : \nats \times {}^AB \rightarrow {}^AB$ by $$W(m,h)(x) = \left\{ \begin{array}{ll} \psi(m,x) & \mathrm{if}\ \beta(m,x) \\ h(\omega(m,x)) & \mathrm{otherwise}, \end{array} \right.$$ and define $t : \nats \times {}^AB \rightarrow \nats \times {}^AB$ by $$t(m,h) = (\next(m), W(m,h)).$$

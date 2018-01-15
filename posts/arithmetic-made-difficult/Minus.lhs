@@ -99,12 +99,11 @@ $$\left\{\begin{array}{l}
 
 Here are some special cases:
 
-<div class="lemma">
+:::::: theorem :::::
 For all $n \in \nats$ we have the following.
 
 1. $\nminus(n,\zero) = \rgt(n)$.
 2. $\nminus(\zero,\next(n)) = \lft(\ast)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. If $n = \zero$, then

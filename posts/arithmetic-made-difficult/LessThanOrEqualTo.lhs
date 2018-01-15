@@ -38,14 +38,13 @@ In Haskell:
 
 First some basic (but important!) special cases.
 
-<div class="lemma">
+:::::: theorem :::::
 Let $a,b \in \nats$. Then we have the following.
 
 1. $\nleq(\next(a),\zero) = \bfalse$.
 2. $\nleq(\next(\next(a)),\next(\zero)) = \bfalse$.
 3. $\nleq(\next(a),a) = \bfalse$.
 4. $\nleq(a,\nplus(a,b)) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We have
@@ -110,9 +109,8 @@ as claimed.
 
 This lemma will also come in handy.
 
-<div class="lemma">
+:::::: theorem :::::
 For all $a,b \in \nats$ we have $\nleq(\next(a),\next(b)) = \nleq(a,b)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We have
@@ -140,7 +138,6 @@ We can characterize $\nleq(a,b)$ in terms of the solubility of the equation $b =
 
 :::::: theorem :::::
 Let $a,b \in \nats$. Then $\nleq(a,b) = \btrue$ if and only if there exists a $c \in \nats$ such that $b = \nplus(a,c)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We have $\nleq(a,b) = \btrue$ if and only if $\nminus(b,a) = \rgt(c)$ for some $c \in \nats$, if and only if $b = \nplus(a,c)$ for some $c \in \nats$.

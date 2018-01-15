@@ -250,10 +250,8 @@ as claimed.
 
 $\bif{\ast}{\ast}{\ast}$ on booleans is equivalent to an or.
 
-<div class="result>
 :::::: theorem :::::
 $$\bif{p}{\btrue}{q} = \bor(p,q).$$
-</p></div
 
 ::: proof ::::::::::
 If $p = \btrue$, we have
@@ -286,7 +284,6 @@ $\bif{\ast}{\ast}{\ast}$ interacts with $\bor$.
 
 :::::: theorem :::::
 Let $A$ be a set with $a,b \in A$, and let $p,q \in \bool$. Then we have $$\bif{p}{a}{\bif{q}{a}{b}} = \bif{\bor(p,q)}{a}{b}.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 If $p = \btrue$, we have

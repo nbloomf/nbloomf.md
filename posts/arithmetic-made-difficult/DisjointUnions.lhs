@@ -22,8 +22,8 @@ slug: disjoint-unions
 
 Dual to sets of tuples are disjoint sums.
 
-<div class="defn"><a name="dfn-disjoint-union" />
-Let $A$ and $B$ be sets. There is a set $A + B$ together with two functions $\lft : A \rightarrow A + B$ and $\rgt : B \rightarrow A + B$ having the property that if $X$ is a set and $\sigma : A \rightarrow X$ and $\tau : B \rightarrow X$ functions then there is a unique map $\Theta : A + B \rightarrow X$ such that $\Theta \circ \lft = \sigma$ and $\Theta \circ \rgt = \tau$. That is, there is a unique $\Theta$ such that the following diagram commutes.
+:::::: definition ::
+[](#dfn-disjoint-union) Let $A$ and $B$ be sets. There is a set $A + B$ together with two functions $\lft : A \rightarrow A + B$ and $\rgt : B \rightarrow A + B$ having the property that if $X$ is a set and $\sigma : A \rightarrow X$ and $\tau : B \rightarrow X$ functions then there is a unique map $\Theta : A + B \rightarrow X$ such that $\Theta \circ \lft = \sigma$ and $\Theta \circ \rgt = \tau$. That is, there is a unique $\Theta$ such that the following diagram commutes.
 
 $$\require{AMScd}
 \begin{CD}
@@ -156,15 +156,14 @@ Since $\either(\lft,\rgt)$ is unique with this property, we have $\either(\lft,\
 
 We define $\uSwap$ on disjoint unions like so.
 
-<div class="defn"><a name="dfn-uswap" />
-Let $A$ and $B$ be sets. We define $\uSwap : A + B \rightarrow B + A$ by $$\uSwap = \either(\rgt,\lft).$$
+:::::: definition ::
+[](#dfn-uswap) Let $A$ and $B$ be sets. We define $\uSwap : A + B \rightarrow B + A$ by $$\uSwap = \either(\rgt,\lft).$$
 
 In Haskell:
 
 > uswap :: Either a b -> Either b a
 > uswap = either rgt lft
 
-::::::::::::::::::::
 ::::::::::::::::::::
 
 Now $\uSwap$ effectively toggles the tag of its argument.
@@ -333,7 +332,7 @@ as needed.
 
 Finally, note that although as sets $A + (B + C)$ and $(A + B) + C$ cannot possibly be equal to each other in general, they are naturally isomorphic via $\uAssocL$ and $\uAssocR$.
 
-<div class="defn">
+:::::: definition ::
 Let $A$, $B$, and $C$ be sets. We define $\uAssocL : A + (B + C) \rightarrow (A + B) + C$ by $$\uAssocL = \either(\lft \circ \lft, \either(\lft \circ \rgt, \rgt))$$ and define $\uAssocR : (A + B) + C \rightarrow A + (B + C)$ by $$\uAssocR = \either(\either(\lft,\rgt \circ \lft),\rgt \circ \rgt).$$
 
 In Haskell:
@@ -344,7 +343,6 @@ In Haskell:
 > uassocR :: Either (Either a b) c -> Either a (Either b c)
 > uassocR = either (either lft (rgt . lft)) (rgt . rgt)
 
-::::::::::::::::::::
 ::::::::::::::::::::
 
 Now $\uAssocL$ and $\uAssocR$ have some nice properties.
@@ -360,7 +358,6 @@ The following hold whenever everything has the appropriate type.
 6. $\uAssocR(\rgt(c)) = \rgt(\rgt(c))$.
 7. $\uAssocR \circ \uAssocL = \id_{A + (B + C)}$.
 8. $\uAssocL \circ \uAssocR = \id_{(A + B) + C}$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We have
@@ -547,7 +544,7 @@ as needed.
 
 We also define some helper functions which detect whether an element of $A + B$ is a $\lft$ or a $\rgt$.
 
-<div class="defn">
+:::::: definition ::
 Let $A$ and $B$ be sets. We define $\isLft : A + B \rightarrow \bool$ by $$\isLft = \either(\const(\btrue),\const(\bfalse))$$ and $\isRgt : A + B \rightarrow \bool$ by $$\isRgt = \either(\const(\bfalse),\const(\btrue)).$$
 
 In Haskell:
@@ -559,7 +556,6 @@ In Haskell:
 > isRgt = either (const false) (const true)
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Now $\isLft$ and $\isRgt$ have some nice properties.
 
@@ -570,7 +566,6 @@ Let $A$ and $B$ be sets. Then we have the following for all $a \in A$ and $b \in
 2. $\isLft(\rgt(b)) = \bfalse$.
 3. $\isRgt(\lft(a)) = \bfalse$.
 4. $\isRgt(\rgt(b)) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We have
