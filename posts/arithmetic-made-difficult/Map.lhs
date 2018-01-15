@@ -40,17 +40,15 @@ In Haskell:
 >     phi g a x = cons (g a) x
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\map$ is defined as a $\foldr{\ast}{\ast}$, it is the unique solution to a system of functional equations.
 
-:::::: theorem :::::
+:::::: corollary :::
 $\map(\alpha)$ is the unique solution $f : \lists{A} \rightarrow \lists{B}$ of the following equations for all $a \in A$ and $x \in \lists{A}$:
 $$\left\{\begin{array}{l}
  f(\nil) = \nil \\
  f(\cons(a,x)) = \cons(\alpha(a),f(x))
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -83,7 +81,6 @@ $\map$ takes $\id_A$ to $\id_{\lists{A}}$.
 
 :::::: theorem :::::
 Let $A$ be a set. Then we have $$\map(\id_A)(x) = x.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -115,7 +112,6 @@ $\map$ preserves composition.
 
 :::::: theorem :::::
 Let $A$, $B$, and $C$ be sets, with maps $f : A \rightarrow B$ and $g : B \rightarrow C$. For all $x \in \lists{A}$ we have $$\map(g \circ f)(x) = (\map(g) \circ \map(f))(x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -155,7 +151,6 @@ $\map(f)$ respects $\tail$.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. For all $x \in \lists{A}$, we have $$\map(f)(\tail(x)) = \tail(\map(f)(x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -191,7 +186,6 @@ $\map(f)$ respects $\cat$.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. For all $x,y \in \lists{A}$, we have $$\map(f)(\cat(x,y)) = \cat(\map(f)(x),\map(f)(y)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -230,7 +224,6 @@ $\map(f)$ respects $\snoc$.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. For all $a \in A$ and $x \in \lists{A}$, we have $$\map(f)(\snoc(a,x)) = \snoc(f(a),\map(f)(x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -269,7 +262,6 @@ $\map(f)$ respects $\rev$.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. For all $x \in \lists{A}$, we have $$\map(f)(\rev(x)) = \rev(\map(f)(x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -311,7 +303,6 @@ $\map(f)$ interacts with $\at$:
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets with a map $f : A \rightarrow B$ and $x \in \lists{A}$. Then we have $$\at(\map(f)(x),k) = \upair(\id,f)(\at(x,k)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 There are two possibilities for $x$. If $x = \nil$, we have
@@ -357,7 +348,6 @@ And $\map$ preserves $\length$.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. Then for all $x \in \lists{A}$ we have $$\length(\map(f)(x)) = \length(x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$ we have

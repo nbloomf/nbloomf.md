@@ -58,7 +58,6 @@ In Haskell:
 >     chi a b _ p q = if eq a b then p else q
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\sublist$ is defined as a $\dfoldr{\ast}{\ast}{\ast}$, it can be characterized as the unique solution to a system of functional equations.
 
@@ -69,7 +68,6 @@ $$\left\{\begin{array}{l}
  f(\nil,\cons(b,y)) = \btrue \\
  f(\cons(a,x),\cons(b,y)) = \bif{\beq(a,b)}{\sublist(x,y)}{\sublist(\cons(a,x),y)}
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -102,7 +100,6 @@ $\sublist$ is reflexive.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ we have $\sublist(x,x)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, certainly $$\sublist(\nil,\nil) = \btrue.$$ For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
@@ -133,7 +130,6 @@ Let $A$ be a set. For all $a \in A$ and $x,y \in \lists{A}$, we have the followi
 
 1. $\sublist(nil,\snoc(b,y)) = \btrue$.
 2. $\sublist(\snoc(a,x),\snoc(a,y)) = \sublist(x,y)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. There are two possibilities for $y$. If $y = \nil$, we have
@@ -211,7 +207,6 @@ Let $A$ be a set. For all $x,y,z \in \lists{A}$ we have the following.
 
 1. $\sublist(\cat(z,x),\cat(z,y)) = \sublist(x,y)$.
 2. $\sublist(\cat(x,z),\cat(y,z)) = \sublist(x,y)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by list induction on $z$. For the base case $z = \nil$, of course
@@ -267,7 +262,6 @@ Let $A$ be a set with $a,b \in A$ and $x,y \in \lists{A}$. Then we have the foll
 
 1. If $\sublist(x,y) = \btrue$, then $\sublist(x,\cons(b,y)) = \btrue$.
 2. If $\sublist(\cons(a,x),y) = \btrue$, then $\sublist(x,y) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 This proof is a little different: we will prove both (1) and (2) simultaneously by list induction on $x$. For the base case $x = \nil$, to see (1), note that for all $b \in A$ and $y \in \lists{A}$ we have $$\sublist(\nil,y) = \btrue = \sublist(\nil,\cons(b,y))$$ as needed. To see (2), note that $\sublist(\nil,y)$, so the implication holds regardless of the values of $a$ and $y$.
@@ -342,7 +336,6 @@ $\sublist$ interacts with $\length$.
 
 :::::: theorem :::::
 Let $A$ be a set, with $x,y \in \lists{A}$. If $\sublist(x,y) = \btrue$, then $\nleq(\length(x),\length(y))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $y$. For the base case $y = \nil$, note that $\length(y) = \zero$. Now if
@@ -420,7 +413,6 @@ $\sublist$ is antisymmetric.
 
 :::::: theorem :::::
 Let $A$ be a set, and $x,y \in \lists{A}$. We have $\sublist(x,y)$ and $\sublist(y,x)$ if and only if $x = y$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 The "if" direction is trivial. To see the "only if" direction we proceed by list induction on $x$. For the base case $x = \nil$, note that
@@ -491,7 +483,6 @@ $\sublist$ is transitive.
 
 :::::: theorem :::::
 Let $A$ be a set, with $x,y,z \in \lists{A}$. If $\sublist(x,y)$ and $\sublist(y,z)$, then $\sublist(x,z)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $z$. For the base case $z = \nil$, note that if $\sublist(y,z) = \btrue$ we have $y = \nil$, and then if $\sublist(x,y) = \btrue$ we also have $x = \nil$. In particular, $\sublist(x,z) = \btrue$ as needed. For the inductive step, suppose the implication holds for all $x$ and $y$ for some $z$, and let $c \in A$. Suppose further that $\sublist(x,y)$ and $\sublist(y,\cons(c,z))$. We consider two cases for $y$. If $y = \nil$, note that $x = \nil$, so we have $\sublist(x,\cons(c,z))$ as claimed. Suppose instead that $y = \cons(b,v)$. If $b \neq c$, we have
@@ -538,7 +529,6 @@ $\sublist$ is compatible with $\cat$.
 
 :::::: theorem :::::
 Let $A$ be a set. The following hold for all $x,y,u,v \in \lists{A}$. If $\sublist(x,u)$ and $\sublist(y,v)$, then $\sublist(\cat(x,y),\cat(u,v))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 If $\sublist(x,u) = \btrue$, then $\sublist(\cat(x,y),\cat(u,y)) = \btrue$. Similarly, if $\sublist(y,v) = \btrue$, then $\sublist(\cat(u,y),\cat(u,v)) = \btrue$. By transitivity, we have $$\sublist(\cat(x,y),cat(u,v)) = \btrue$$ as claimed.
@@ -561,7 +551,6 @@ $\sublist$ interacts with $\snoc$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $a,b \in A$ and $x,y \in \lists{A}$ we have $$\sublist(\snoc(a,x),\snoc(b,y)) = \bif{\beq(a,b)}{\sublist(x,y)}{\sublist(\snoc(a,x),y)}.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We've already seen that $$\sublist(\snoc(a,x),\snoc(a,y)) = \sublist(x,y).$$ So it suffices to show that if $a \neq b$ we have $$\sublist(\snoc(a,x),\snoc(b,y)) = \sublist(\snoc(a,x),y).$$ We proceed by list induction on $y$. For the base case $y = \nil$, note that
@@ -636,7 +625,6 @@ $\sublist$ interacts with $\rev$:
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x,y \in \lists{A}$ we have $$\sublist(x,y) = \sublist(\rev(x),\rev(y)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $y$. For the base case $y = \nil$, we have
@@ -690,7 +678,6 @@ Let $A$ be a set with $a \in A$ and $x,y \in \lists{A}$. Then we have the follow
 
 1. If $\sublist(x,y) = \btrue$, then $\sublist(x,\snoc(a,y)) = \btrue$.
 2. If $\sublist(\snoc(a,x),y) = \btrue$, then $\sublist(x,y) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. Suppose $\sublist(x,y) = \btrue$. Then we have
@@ -746,7 +733,6 @@ Let $A$ be a set, with $x,y,z \in \lists{A}$.
 2. If $\sublist(x,y) = \btrue$, then $\sublist(x,\cat(y,z)) = \btrue$.
 3. If $\sublist(\cat(z,x),y) = \btrue$, then $\sublist(x,y) = \btrue$.
 4. If $\sublist(\cat(x,z),y) = \btrue$, then $\sublist(x,y) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by list induction on $z$. For the base case $z = \nil$, suppose $\sublist(x,y) = \btrue$. Then
@@ -847,7 +833,6 @@ $\sublist$ interacts with $\map$.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets with $x,y \in \lists{A}$ and $f : A \rightarrow B$ injective. If $\sublist(x,y) = \btrue$, then $\sublist(\map(f)(x),\map(f)(y)) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $y$. For the base case $y = \nil$, suppose $\sublist(x,y) = \btrue$. Then in fact $x = \nil$. In this case we have
@@ -908,7 +893,6 @@ $\sublist$ interacts with $\filter$.
 
 :::::: theorem :::::
 Let $A$ be a set, let $p : A \rightarrow \bool$, and let $x \in \lists{A}$. Then we have $$\sublist(\filter(p,x),x) = \btrue.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -954,7 +938,6 @@ Let $A$ be a set, let $x,y \in \lists{A}$, and let $p : A \rightarrow \bool$. If
 
 1. If $\all(p,y) = \btrue$ then $\all(p,x) = \btrue$.
 2. If $\any(p,x) = \btrue$ then $\any(p,y) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by list induction on $y$. For the base case $y = \nil$, since $\sublist(x,y) = \btrue$ we have $x = \nil$. Now $$\all(p,y) = \all(p,\nil) = \btrue$$ and $$\all(p,x) = \all(p,\nil) = \btrue$$ as needed. For the inductive step, suppose the result holds for all $x$ for some $y$, and let $b \in A$. Suppose $\sublist(x,\cons(b,y)) = \btrue$, and further suppose that $\all(p,\cons(b,y)) = \btrue$. In particular, note that $p(b) = \btrue$. We consider two possibilities for $x$. If $x = \nil$, note that $$\all(p,x) = \all(p,\nil) = \btrue,$$ so the implication holds regardless of $y$. Suppose instead that $x = \cons(a,u)$. Now
@@ -1013,7 +996,6 @@ $\sublist$ is destroyed by $\cons$.
 
 :::::: theorem :::::
 Let $A$ be a set with $x,y \in \lists{A}$. If $\sublist(x,y)$, then $\sublist(\cons(a,y),x) = \bfalse$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Suppose to the contrary that $\sublist(\cons(a,y),x) = \btrue$. By transitivity we have $\sublist(\cons(a,y),y)$, and we also have $\sublist(y,\cons(a,y))$, so by antisymmetry we have $y = \cons(a,y)$ -- a contradiction.

@@ -67,7 +67,6 @@ In Haskell:
 >       Right (a,u) -> Right (u,a)
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\take$ is defined as an $\unfoldN{\ast}$, it can be characterized as the unique solution to a system of functional equations.
 
@@ -78,7 +77,6 @@ $$\left\{\begin{array}{l}
  f(\next(n),\nil) = \nil \\
  f(\next(n),\cons(a,x)) = \cons(a,f(n,x))
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -111,7 +109,6 @@ $\take(n)$ is a prefix.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ and $k \in \nats$, we have $$\prefix(\take(k,x),x) = \btrue.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $k$. For the base case $k = \zero$, we have
@@ -150,9 +147,8 @@ as needed.
 
 $\take(n)$ gives a sublist.
 
-:::::: corollary :::
+:::::: theorem :::::
 Let $A$ be a set, with $x \in \lists{A}$ and $k \in \nats$. Then we have $$\sublist(\take(k,x),x) = \btrue.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We have $$\prefix(\take(k,x),x) = \btrue,$$ so $$\infix(\take(k,x),x) = \btrue,$$ so $$\sublist(\take(k,x),x) = \btrue$$ as claimed.
@@ -173,7 +169,6 @@ $\take$ has bounded length:
 
 :::::: theorem :::::
 Let $A$ be a set, with $x \in \lists{A}$ and $k \in \nats$. Then we have $$\length(\take(k,x) = \nmin(k,\length(x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $k$. For the base case $k = \zero$, we have
@@ -222,7 +217,6 @@ $\take$ "distributes over" $\zip$.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets with $x \in \lists{A}$, $y \in \lists{B}$, and $k \in \nats$. Then $$\zip(\take(k,x),\take(k,y)) = \take(k,\zip(x,y)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $k$. For the base case $k = \zero$, we have
@@ -284,7 +278,6 @@ $\take$ interacts with $\range$.
 
 :::::: theorem :::::
 For all $a,b,k \in \nats$, we have $$\take(k,\range(a,b)) = \range(a,\nmin(k,b)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $k$. For the base case $k = \zero$, we have
@@ -337,7 +330,6 @@ $\take$ is idempotent.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $k \in \nats$ and $x \in \lists{A}$, we have $$\take(k,\take(k,x)) = \take(k,x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $k$. For the base case $k = \zero$, we have
@@ -394,7 +386,6 @@ In Haskell:
 >     omega _ x = tail x
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\drop$ is defined in terms of bailout recursion, it can be characterized as the unique solution of a system of functional equations.
 
@@ -405,7 +396,6 @@ $$\left\{\begin{array}{l}
  f(\next(n),\nil) = \nil \\
  f(\next(n),\cons(a,x)) = f(n,x)
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -438,7 +428,6 @@ $\drop$ gives a $\suffix$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ and $k \in \nats$, we have $$\suffix(\drop(k,x),x) = \btrue.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $k$. For the base case $k = \zero$, we have
@@ -479,7 +468,6 @@ $\take$ and $\drop$ give a kind of $\cat$-factorization.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ and $k \in \nats$, we have $$x = \cat(\take(k,x),\drop(k,x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $k$. For the base case $k = \zero$, we have

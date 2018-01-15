@@ -38,7 +38,6 @@ In Haskell:
 > snoc a = foldr (cons a nil) cons
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Because $\snoc$ is defined directly as a fold, it is the unique solution to a system of functional equations.
 
@@ -48,7 +47,6 @@ $$\left\{ \begin{array}{ll}
  f(a,\nil) = \cons(a,\nil) \\
  f(a,\cons(b,x)) = \cons(b,f(a,x)).
 \end{array} \right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -100,7 +98,6 @@ We can perform case analysis on lists with $\snoc$.
 
 :::::: theorem :::::
 Let $A$ be a set and let $x \in \lists{A}$. Then either $x = \nil$ or $x = \snoc(a,w)$ for some $w \in \lists{A}$ and $a \in A$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, the conclusion holds trivially. For the inductive step, suppose the conclusion holds for some $x$ and let $a \in A$. Now $\cons(a,x) \neq \nil$. We have two cases for $x$; if $x = \nil$, then $$\cons(a,x) = \cons(a,\nil) = \snoc(a,\nil)$$ as needed. Suppose instead that $x \neq \nil$; by the inductive hypothesis we have $x = \snoc(b,w)$ for some $b \in A$ and $w \in \lists{A}$. Then we have

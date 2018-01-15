@@ -183,7 +183,7 @@ By the way, I think it's helpful to compare the difference between arbitrary rec
 
 As with natural and simple recursion, the "uniqueness" part of bailout recursion is also handy. To be a little more explicit, it says the following.
 
-:::::: theorem :::::
+:::::: corollary :::
 Let $A$ and $B$ be sets, with mappings
 $$\begin{eqnarray*}
 \varphi & : & A \rightarrow B \\
@@ -196,5 +196,4 @@ $$\left\{\begin{array}{l}
  f(\zero,a) = \varphi(a) \\
  f(\next(k),a) = \bif{\beta(k,a)}{\psi(m,a)}{f(k,\omega(k,a))}
 \end{array}\right.$$
-::::::::::::::::::::
 ::::::::::::::::::::

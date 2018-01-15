@@ -57,7 +57,6 @@ In Haskell:
 > dropBut k x = rev (take k (rev x))
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 The defining equations for $\drop$ have $\takeBut$ equivalents.
 
@@ -67,7 +66,6 @@ Let $A$ be a set, with $x \in \lists{A}$, $a \in A$, and $k \in \nats$. Then we 
 1. $\takeBut(\zero)(x) = x$.
 2. $\takeBut(\next(k))(\nil) = \nil$.
 3. $\takeBut(\next(k))(\snoc(a,x)) = \takeBut(k)(x)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We have
@@ -129,7 +127,6 @@ $\takeBut$ is a prefix.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ and $k \in \nats$, we have $$\prefix(\takeBut(k,x),x) = \btrue.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We have
@@ -156,9 +153,8 @@ as needed.
 
 So $\takeBut$ is a sublist:
 
-:::::: corollary :::
+:::::: theorem :::::
 Let $A$ be a set, with $x \in \lists{A}$ and $k \in \nats$. Then we have $$\sublist(\takeBut(k,x),x) = \btrue.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We have $$\prefix(\takeBut(k,x),x) = \btrue,$$ so $$\infix(\takeBut(k,x),x) = \btrue,$$ so $$\sublist(\takeBut(k,x),x) = \btrue$$ as claimed.
@@ -183,7 +179,6 @@ Let $A$ be a set. For all $a \in A$, $x \in \lists{A}$, and $k \in \nats$, we ha
 1. $\dropBut(\zero,x) = \nil$.
 2. $\dropBut(\next(k),\nil) = \nil$.
 3. $\dropBut(\next(k),\snoc(a,x)) = \snoc(a,\dropBut(k,x))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We have
@@ -246,7 +241,6 @@ $\dropBut$ is a $\suffix$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ and $k \in \nats$, we have $$\suffix(\dropBut(k,x),x) = \btrue.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We have
@@ -275,7 +269,6 @@ $\dropBut$ is idempotent.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $k \in \nats$ and $x \in \lists{A}$, we have $$\dropBut(k,\dropBut(k,x)) = \dropBut(k,x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -305,7 +298,6 @@ Like $\take$ and $\drop$, $\takeBut$ and $\dropBut$ give a kind of $\cat$-factor
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ and $k \in \nats$, we have $$x = \cat(\takeBut(k,x),\dropBut(k,x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We have

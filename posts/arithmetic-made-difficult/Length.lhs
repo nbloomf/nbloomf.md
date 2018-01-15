@@ -38,7 +38,6 @@ In Haskell:
 >   where phi k _ = next k
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\addlength$ is defined as a $\foldl{\ast}$, it is the unique solution to a system of functional equations.
 
@@ -48,7 +47,6 @@ $$\left\{\begin{array}{l}
  f(n,\nil) = n \\
  f(n,\cons(a,x)) = f(\next(n),x)
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -80,7 +78,6 @@ Let $A$ be a set. For all $n \in \nats$, $a \in A$, and $x \in \lists{A}$, we ha
 
 1. $\addlength(n,\snoc(a,x)) = \next(\addlength(n,x))$.
 2. $\addlength(n,\cons(a,x)) = \next(\addlength(n,x))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. Letting $\varphi$ be as defined in the definition of $\addlength$, we have
@@ -135,7 +132,6 @@ $\addlength$ interacts with $\rev$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $n \in \nats$ and $x \in \lists{A}$, we have $$\addlength(n,\rev(x)) = \addlength(n,x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -178,13 +174,11 @@ In Haskell:
 > length = addlength zero
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Although $\length$ is essentially defined as a left fold, it can be characterized as a right fold.
 
 :::::: theorem :::::
 Let $A$ be a set, and define $\psi : A \times \nats \rightarrow \nats$ by $\psi(a,k) = \next(k)$. If $x \in \lists{A}$, then $$\length(x) = \foldr{\zero}{\psi}(x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -231,7 +225,6 @@ $$\left\{\begin{array}{l}
  f(\nil) = \zero \\
  f(\cons(a,x)) = \next(f(x))
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -262,7 +255,6 @@ For all $a,b \in A$, we have:
 
 1. $\length(\cons(a,\nil)) = \next(\zero)$.
 2. $\length(\cons(a,\cons(b,\nil))) = \next(\next(\zero))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We have
@@ -309,7 +301,6 @@ $\length$ interacts with $\snoc$.
 
 :::::: theorem :::::
 For all $a \in A$ and $x \in \lists{A}$, we have $$\length(\snoc(a,x)) = \next(\length(x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We have
@@ -339,7 +330,6 @@ $\length$ is invariant over $\rev$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ we have $$\length(\rev(x)) = \length(x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -370,7 +360,6 @@ $\length$ turns $\cat$ into $\nplus$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x,y \in \lists{A}$ we have $$\length(\cat(x,y)) = \nplus(\length(x),\length(y)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $y$. For the base case $y = \nil$, note that
@@ -410,7 +399,6 @@ And $\length$ detects $\nil$.
 
 :::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$. Then $x = \nil$ if and only if $\length(x) = 0$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We've already seen that $\length(\nil) = \zero$. Suppose then that $x = \cons(a,u)$; then

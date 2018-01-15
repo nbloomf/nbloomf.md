@@ -242,13 +242,12 @@ This page is already long enough, so I'll save examples of simple recursion for 
 
 As with natural recursion, the "uniqueness" part of simple recursion is also handy. To be a little more explicit, it says the following.
 
-:::::: theorem :::::
+:::::: corollary :::
 Let $A$ and $B$ be sets, with $\varphi : \nats \times A \rightarrow B$ and $\mu : \nats \times A \times B \rightarrow B$. Then $\simprec{\varphi}{\mu}$ is the unique solution $f : \nats \times A \rightarrow B$ to the following system of functional equations for all $k \in \nats$, $a \in A$, and $b \in B$:
 $$\left\{\begin{array}{l}
  f(\zero,a) = \varphi(a) \\
  f(\next(k),a) = \mu(k,a,f(k,a))
 \end{array}\right.$$
-::::::::::::::::::::
 ::::::::::::::::::::
 
 

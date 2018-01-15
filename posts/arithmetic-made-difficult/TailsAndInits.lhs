@@ -45,7 +45,6 @@ In Haskell:
 >     sigma a x z = cons (cons a x) z
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\tails$ is defined as a $\cfoldr{\ast}{\ast}$, it is the unique solution to a system of functional equations.
 
@@ -55,7 +54,6 @@ $$\left\{\begin{array}{l}
  f(\nil) = \cons(\nil,\nil) \\
  f(\cons(a,x)) = \cons(\cons(a,x),f(x))
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -82,7 +80,6 @@ Let $A$ be a sets. For all $a,b \in A$ we have the following.
 
 1. $\tails(\cons(a,\nil)) = \cons(\cons(a,\nil),\cons(\nil,\nil))$.
 2. $\tails(\cons(a,\cons(b,\nil))) = \cons(\cons(a,\cons(b,\nil)),\cons(\cons(b,\nil),\cons(\nil,\nil)))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. Note that
@@ -127,7 +124,6 @@ $\tails$ interacts with $\map$.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets with $f : A \rightarrow B$. For all $x \in \lists{A}$ we have $$\tails(\map(f)(x)) = \map(\map(f))(\tails(x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -166,7 +162,6 @@ $\tails$ interacts with $\length$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ we have $$\length(\tails(x)) = \next(\length(x)).$$ In particular, $\tails{x} \neq \nil$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction. For the base case $x = \nil$, we have
@@ -203,7 +198,6 @@ $\tails$ interacts with $\snoc$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ and $a \in A$ we have $$\tails(\snoc(a,x)) = \snoc(\nil,\map(\snoc(a,-))(\tails(x))).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -248,7 +242,6 @@ And $\tails(x)$ consists of suffixes.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ we have $$\all(\suffix(-,x),\tails(x)) = \btrue.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that
@@ -285,7 +278,7 @@ as needed.
 
 Next we'll define $\inits$ in terms of $\tails$.
 
-:::::: theorem :::::
+:::::: definition ::
 Let $A$ be a sets. We define $\inits : \lists{A} \rightarrow \lists{\lists{A}}$ by $$\inits(x) = \rev(\map(\rev)(\tails(\rev(x)))).$$
 
 In Haskell:
@@ -294,15 +287,11 @@ In Haskell:
 > inits = rev . map rev . tails . rev
 
 ::::::::::::::::::::
-::::::::::::::::::::
-
-(@@@)
 
 And likewise, $\tails$ has an expression in terms of $\inits$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ we have $$\tails(x) = \map(\rev)(\rev(\inits(\rev(x)))).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -332,7 +321,6 @@ $\inits$ interacts with $\cons$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have $$\inits(\cons(a,x)) = \cons(\nil,\map(\cons(a,-))(\inits(x))).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -368,7 +356,6 @@ $\inits$ interacts with $\map$.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets with $f : A \rightarrow B$. For all $x \in \lists{A}$, we have $$\inits(\map(f)(x)) = \map(\map(f))(\inits(x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -401,7 +388,6 @@ $\inits$ interacts with $\length$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$, we have $$\length(\inits(x)) = \next(\length(x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -431,7 +417,6 @@ $\inits$ distributes over $\lcp$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x,y \in \lists{A}$, we have $$\inits(\lcp(x,y)) = \lcp(\inits(x),\inits(y)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have two possibilities for $y$. If $y = \nil$ we have
@@ -499,7 +484,6 @@ And $\tails$ distributes over $\lcs$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x,y \in \lists{A}$, we have $$\tails(\lcs(x,y)) = \lcs(\tails(x),\tails(y)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that $\rev$ is injective, so that

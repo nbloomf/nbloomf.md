@@ -152,7 +152,6 @@ We can "cancel" $\next$s on both arguments of a $\nminus$.
 
 :::::: theorem :::::
 Let $a,b \in \nats$. Then we have $$\nminus(\next(b),\next(a)) = \nminus(b,a).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We have
@@ -181,7 +180,6 @@ Another important special case.
 
 :::::: theorem :::::
 Let $a \in \nats$. Then we have $$\nminus(a,\next(a)) = \lft(\ast).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $a$. For the base case $a = \zero$ we have $$\nminus(\zero,\next(\zero)) = \lft(\ast)$$ as needed. For the inductive step, suppose the equality holds for some $a$; now
@@ -211,7 +209,6 @@ Let $a,b,c \in \nats$. Then the following are equivalent.
 
 1. $\nminus(b,a) = \rgt(c)$.
 2. $b = \nplus(a,c)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 First we show (1) implies (2) by induction on $b$. For the base case, suppose we have $\nminus(\zero,a) = \rgt(c)$. Now
@@ -274,7 +271,6 @@ Let $a,b,c \in \nats$. Then the following are equivalent.
 
 1. If $\nminus(b,a) = \nminus(b,c)$ and $\isRgt(\nminus(b,a)) = \btrue$, then $a = c$.
 2. If $\nminus(a,b) = \nminus(c,b)$ and $\isRgt(\nminus(a,b)) = \btrue$, then $a = c$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. Say $$\nminus(b,a) = \rgt(d) = \nminus(b,c).$$ Now $$\nplus(a,d) = b = \nplus(c,d)$$ and thus $a = c$ as claimed.
@@ -310,7 +306,6 @@ Let $a,b \in \nats$. Then the following are equivalent.
 
 1. $\nminus(\nplus(b,a),b) = \rgt(a)$.
 2. $\nminus(\nplus(a,b),b) = \rgt(a)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We have $\nplus(b,a) = \nplus(b,a)$, so that $\nminus(\nplus(b,a),b) = \rgt(a)$ as claimed.
@@ -343,7 +338,6 @@ Let $a,b,c,d \in \nats$. Then the following hold.
 1. If $\nminus(b,a) = \rgt(c)$, then $\nminus(\next(b),a) = \rgt(\next(c))$.
 2. If $\nminus(b,a) = \rgt(c)$, then $\nminus(b,c) = \rgt(a)$.
 3. If $\nminus(b,a) = \rgt(c)$, then $\nminus(\nplus(b,d),a) = \rgt(\nplus(c,d))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. Since $\nminus(b,a) = \rgt(c)$, we have $\nplus(a,c) = b$, so that $$\nplus(a,\next(c)) = \next(\nplus(a,c)) = \next(b).$$ Thus we have $$\nminus(\next(b),a) = \rgt(\next(c))$$ as claimed.
@@ -386,7 +380,6 @@ Given natural numbers $a$ and $b$, either $\nminus(a,b)$ or $\nminus(b,a)$ is of
 
 :::::: theorem :::::
 Let $a,b \in \nats$. If $\nminus(a,b) = \lft(\ast)$, then $\nminus(b,a) = \rgt(c)$ for some $c$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $a$. For the base case $a = \zero$, if $\nminus(\zero,b) = \lft(\ast)$ we have $b \neq \zero$ and $\nminus(b,\zero) = \rgt(b)$ as needed.
@@ -411,7 +404,6 @@ $\ntimes$ distributes over $\nminus$.
 
 :::::: theorem :::::
 Let $a,b,c \in \nats$. If $\nminus(a,b) = \rgt(d)$ for some $d \in \nats$, then $$\nminus(\ntimes(c,a),\ntimes(c,b)) = \rgt(\ntimes(c,d)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $a$. For the base case $a = \zero$, suppose we have $\nminus(\zero,b) = \rgt(d)$; then $d = \zero$ and $b = \zero$. Now

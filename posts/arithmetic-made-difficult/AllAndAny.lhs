@@ -40,7 +40,6 @@ In Haskell:
 >     phi a q = and (p a) q
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\all(p)$ is defined as a $\foldr{\ast}{\ast}$, it is the unique solution to a system of functional equations.
 
@@ -50,7 +49,6 @@ $$\left\{\begin{array}{l}
  f(\nil) = \btrue \\
  f(\cons(a,x)) = \band(p(a),f(x))
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -74,7 +72,6 @@ $\all$ interacts with $\snoc$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $p : A \rightarrow \bool$, $a \in A$, and $x \in \lists{A}$, we have $$\all(p,\snoc(a,x)) = \band(p(a),\all(p,x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -110,9 +107,8 @@ as needed.
 
 $\all$ can also be characterized as a folded map.
 
-:::::: corollary :::
+:::::: theorem :::::
 $$\all(p,x) = \foldr{\btrue}{\band}(\map(p)(x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -153,7 +149,6 @@ Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. The following hold f
 
 1. $\all(\ptrue)(x) = \btrue$.
 2. $\all(\pfalse)(x) = \bfalse$ if and only if $x \neq \nil$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -209,7 +204,6 @@ $\all$ interacts with $\cat$.
 
 :::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$. For all $x,y \in \lists{A}$ we have $$\all(p,\cat(x,y)) = \band(\all(p)(x),\all(p)(y)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -248,7 +242,6 @@ $\all$ interacts with $\rev$.
 
 :::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$. For all $x \in \lists{A}$ we have $$\all(p,\rev(x)) = \all(p,x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -287,7 +280,6 @@ $\all$ interacts with $\pimpl$.
 
 :::::: theorem :::::
 Let $A$ be a set and $p,q : A \rightarrow \bool$. If $\pimpl(p,q)$, then $$\bimpl(\all(p,x),\all(q,x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -310,7 +302,6 @@ $\all$ interacts with $\map$.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets with $f : A \rightarrow B$ and $p : B \rightarrow \bool$. Then for all $x \in \lists{A}$ we have $$\all(p)(\map(f)(x)) = \all(p \circ f)(x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -357,7 +348,6 @@ In Haskell:
 >     phi a q = or (p a) q
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\any$ is defined as a fold, it is the unique solution to a system of functional equations.
 
@@ -367,7 +357,6 @@ $$\left\{\begin{array}{l}
  f(\nil) = \bfalse \\
  f(\cons(a,x)) = \bor(p(a),f(x))
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -391,7 +380,6 @@ $\any$ can also be characterized as a folded map.
 
 :::::: theorem :::::
 Let $A$ be a set with $p$ a predicate on $A$. Then $$\any(p,x) = \foldr{\bfalse}{\bor}(\map(p)(x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -427,12 +415,11 @@ as needed.
 
 A version of DeMorgan's law holds for $\any$ and $\all$.
 
-:::::: corollary :::
+:::::: theorem :::::
 Let $A$ be a set with $p : A \rightarrow \bool$. Then the following hold for all $x \in \lists{A}$.
 
 1. $\any(p,x) = \bnot(\all(\bnot \circ p,x))$.
 2. $\all(p,x) = \bnot(\any(\bnot \circ p,x))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -487,7 +474,6 @@ Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. The following hold f
 
 1. $\any(\pfalse)(x) = \bfalse$.
 2. $\any(\ptrue)(x) = \btrue$ if and only if $x \neq \nil$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. Note that
@@ -539,7 +525,6 @@ $\any$ interacts with $\cat$.
 
 :::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$. For all $x,y \in \lists{A}$ we have $$\any(p,\cat(x,y)) = \bor(\any(p)(x),\any(p)(y)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -568,7 +553,6 @@ $\any$ interacts with $\rev$.
 
 :::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$. For all $x,y \in \lists{A}$ we have $$\any(p,\rev(x)) = \any(p,x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -596,7 +580,6 @@ $\any$ interacts with $\map$.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets with $f : A \rightarrow B$ and $p : B \rightarrow \bool$. Then for all $x \in \lists{A}$ we have $$\any(p)(\map(f)(x)) = \any(p \circ f)(x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that

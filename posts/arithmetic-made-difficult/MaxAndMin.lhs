@@ -37,7 +37,6 @@ In Haskell:
 > min a b = if leq a b then a else b
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Special cases.
 
@@ -48,7 +47,6 @@ Let $a \in \nats$. Then we have the following.
 2. $\nmax(a,a) = a$.
 3. $\nmin(\zero,a) = \zero$.
 4. $\nmin(a,a) = a$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We have
@@ -124,7 +122,6 @@ Let $a,b \in \nats$. Then we have the following.
 
 1. $\nmax(a,b) = \nmax(b,a)$.
 2. $\nmin(a,b) = \nmin(b,a)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. If $\nleq(a,b) = \bfalse, we have
@@ -176,7 +173,6 @@ Let $a,b,c \in \nats$. Then we have the following.
 2. $\nmax(\nplus(c,a),\nplus(c,b)) = \nplus(c,\nmax(a,b))$.
 3. $\nmin(\next(a),\next(b)) = \next(\nmin(a,b))$.
 4. $\nmin(\nplus(c,a),\nplus(c,b)) = \nplus(c,\nmin(a,b))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We have
@@ -256,7 +252,6 @@ Let $a,b,c \in \nats$. Then we have the following.
 
 1. $\nmax(\ntimes(c,a),\ntimes(c,b)) = \ntimes(c,\nmax(a,b))$.
 2. $\nmin(\ntimes(c,a),\ntimes(c,b)) = \ntimes(c,\nmin(a,b))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We consider two possibilities. If $c = \zero$, we have
@@ -324,7 +319,6 @@ Let $a,b,c \in \nats$. Then we have the following.
 
 1. $\nmax(a,\nmax(b,c)) = \nmax(\nmax(a,b),c)$.
 2. $\nmin(a,\nmin(b,c)) = \nmin(\nmin(a,b),c)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. Set
@@ -376,7 +370,6 @@ Let $a,b,c \in \nats$. Then we have the following.
 1. If $\nleq(a,c)$ and $\nleq(b,c)$, then $\nleq(\nmax(a,b),c)$.
 2. If $\nleq(c,a)$ and $\nleq(c,b)$, then $\nleq(c,\nmin(a,b))$.
 3. $\nleq(\nmin(a,b),\nmax(a,b)) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. If $\nleq(a,b) = \btrue$, then $\nmax(a,b) = b$, and if $\nleq(a,b) = \bfalse$, then $\nleq(b,a) = \btrue$, so that $\nmax(a,b) = a$. In either case we have $\nleq(\nmax(a,b),c)$.
@@ -420,7 +413,6 @@ Let $a,b,c \in \nats$. Then we have the following.
 
 1. $\nplus(\nmin(a,b),\nmax(a,b)) = \nplus(a,b)$.
 2. $\ntimes(\nmin(a,b),\nmax(a,b)) = \ntimes(a,b)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We'll prove both of these at once. Suppose $\nleq(a,b)$. Now $\nmin(a,b) = a$ and $\nmax(a,b) = b$, so that $$\nplus(\nmin(a,b),\nmax(a,b)) = \nplus(a,b)$$ and $$\ntimes(\nmin(a,b),\nmax(a,b)) = \ntimes(a,b)$$ as claimed. Now if $\nleq(a,b) = \bfalse$, then $\nleq(b,a) = \btrue$, and we instead have $\nmin(a,b) = b$ and $\nmax(a,b) = a$. Then $$\nplus(\nmin(a,b),\nmax(a,b)) = \nplus(b,a) = \nplus(a,b)$$ and $$\ntimes(\nmin(a,b),\nmax(a,b)) = \ntimes(b,a) = \ntimes(a,b)$$ as claimed.
@@ -453,7 +445,6 @@ Let $a,b,c \in \nats$. Then we have the following.
 2. $\nmax(a,\nmin(b,c)) = \nmin(\nmax(a,b),\nmax(a,c))$.
 3. $\nmin(\nmax(b,c),a) = \nmax(\nmin(b,a),\nmin(c,a))$.
 4. $\nmax(\nmin(b,c),a) = \nmin(\nmax(b,a),\nmax(c,a))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 4. Brute force time! Suppose $\nleq(a,b) = \btrue$. If $\nleq(a,c) = \btrue$, then $\nleq(a,\nmin(b,c))$, so that $\nleq(a,\nmax(b,c))$. Now we have $$\begin{eqnarray*} & & \nmax(\nmin(a,b),\nmin(a,c)) \\ & = & \nmax(a,a) \\ & = & a \\ & = & \nmin(a,\nmax(b,c)). \end{eqnarray*}$$ Suppose $\nleq(a,c) = \bfalse$; then $\nleq(c,a) = \btrue$, and by transitivity $\nleq(c,b) = \btrue$ so that $\nmax(b,c) = b$. Now $$\begin{eqnarray*} & & \nmax(\nmin(a,b),\nmin(a,c)) \\ & = & \nmax(a,c) \\ & = & a \\ & = & \nmin(a,b) \\ & = & \nmin(a,\nmax(b,c)). \end{eqnarray*}$$ Now suppose $\nleq(a,b) = \bfalse$, so that $\nleq(b,a) = \btrue$. If $\nleq(a,c)$, then $\nleq(b,c)$ by transitivity. So we have $$\begin{eqnarray*} & & \nmax(\nmin(a,b),\nmin(a,c)) \\ & = & \nmax(b,a) \\ & = & a \\ & = & \nmin(a,c) \\ & = & \nmin(a,\nmax(b,c)). \end{eqnarray*}$$ If $\nleq(a,c) = \bfalse$, then $\nleq(c,a) = \btrue$. In this case we have $\nleq(\nmax(b,c),a)$, so that $$\begin{eqnarray*} & & \nmax(\nmin(a,b),\nmin(a,c)) \\ & = & \nmax(b,c) \\ & = & \nmin(a,\nmax(b,c)). \end{eqnarray*}$$

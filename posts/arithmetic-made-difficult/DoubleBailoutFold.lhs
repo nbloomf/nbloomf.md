@@ -30,7 +30,6 @@ $$\Theta(\cons(a,x),b) = \left\{\begin{array}{ll}
  \chi(a,x,b,\Theta(x,b),\Theta(x,\mu(b))) & \mathrm{otherwise}.
 \end{array}\right.$$
 We denote this $\Theta$ by $\dbfoldr{\delta}{\beta}{\mu}{\psi}{\chi}$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Define $\varepsilon : B \times \lists{A} \rightarrow C$ by $$\varepsilon(b,x) = \delta(b)$$ and $\varphi : A \times C^{B \times \lists{A}} \rightarrow C^{B \times \lists{A}}$ casewise by

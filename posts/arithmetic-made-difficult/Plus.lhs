@@ -44,7 +44,6 @@ In Haskell:
 >   where mu _ _ b = next b
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\nplus$ is defined in terms of simple recursion, it is the unique solution to a set of functional equations.
 

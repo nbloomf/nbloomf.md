@@ -17,7 +17,7 @@ slug: and
 
 Next, $\band$.
 
-:::: definition ::::
+:::::: definition ::
 [](#def-and) We define a map $\band : \bool \times \bool \rightarrow \bool$ by $$\band(p,q) = \bif{p}{\bif{q}{\btrue}{\bfalse}}{\bfalse}.$$
 
 In Haskell: 
@@ -29,7 +29,7 @@ In Haskell:
 
 We can compute $\band$ explicitly.
 
-:::: theorem ::::
+:::::: theorem :::::
 [](#and-eval) We have
 $$\begin{eqnarray*}
 \band(\btrue,\btrue)   & = & \btrue \\
@@ -38,11 +38,11 @@ $$\begin{eqnarray*}
 \band(\bfalse,\bfalse) & = & \bfalse.
 \end{eqnarray*}$$
 
-::: proof :::
+::: proof ::::::::::
 (@@@)
-:::::::::::::
+::::::::::::::::::::
 
-::: test :::
+::: test :::::::::::
 
 > _test_and_true_true :: (Boolean b, Equal b)
 >   => b -> Test Bool
@@ -50,12 +50,12 @@ $$\begin{eqnarray*}
 >   testName "and(true,true) == true" $
 >   eq (and true true) (true `withTypeOf` p)
 
-::::::::::::
-:::::::::::::::::
+::::::::::::::::::::
+::::::::::::::::::::
 
 And $\band$ satisfies the usual properties.
 
-:::: theorem ::::
+:::::: theorem :::::
 The following hold for all $a,b,c \in \bool$.
 
 1. $\band(\bfalse,a) = \band(a,\bfalse) = \bfalse$.
@@ -65,7 +65,7 @@ The following hold for all $a,b,c \in \bool$.
 5. $\band(a,b) = \band(b,a)$.
 6. $\band(\band(a,b),c) = \band(a,\band(b,c))$.
 
-::: proof :::
+::: proof ::::::::::
 1. If $a = \btrue$ we have $$\band(\bfalse,\btrue) = \bfalse = \band(\btrue,\bfalse),$$ and if $a = \bfalse$ we have $$\band(\bfalse,\bfalse) = \bfalse$$ as claimed.
 2. If $a = \btrue$ we have $$\band(\btrue,\btrue) = \btrue,$$ and if $a = \bfalse$ we have $$\band(\btrue,\bfalse) = \bfalse = \band(\bfalse,\btrue)$$ as claimed.
 3. If $a = \btrue$, we have $\band(\btrue,\bnot(\btrue)) = \band(\btrue,\bfalse) = \bfalse,$$ and if $a = \bfalse$, we have $$\band(\bfalse,\bnot(\bfalse)) = \bfalse$$ as claimed.
@@ -88,9 +88,9 @@ $$\begin{eqnarray*}
  & = & \band(\bfalse,\band(b,c))
 \end{eqnarray*}$$
 as claimed.
-:::::::::::::
+::::::::::::::::::::
 
-::: test :::
+::: test :::::::::::
 
 > _test_and_false :: Test (Bool -> Bool)
 > _test_and_false =
@@ -127,8 +127,8 @@ as claimed.
 >   testName "and(and(p,q),r) == and(p,and(q,r))" $
 >   \p q r -> eq (and (and p q) r) (and p (and q r))
 
-::::::::::::
-:::::::::::::::::
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

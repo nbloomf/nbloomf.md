@@ -87,7 +87,7 @@ If $a = \btrue$ we have $$\bnot(\bnot(\btrue)) = \bnot(\bfalse) = \btrue,$$ and 
 
 $\bif{\ast}{\ast}{\ast}$ interacts with $\bnot$.
 
-::: theorem ::::::::
+:::::: theorem :::::
 [](#thm-ifnot) Let $A$ be a set with $p \in \bool$ and $a,b \in A$. We have $$\bif{\bnot(p)}{a}{b} = \bif{p}{b}{a}.$$
 
 ::: proof ::::::::::

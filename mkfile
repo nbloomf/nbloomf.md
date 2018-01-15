@@ -127,7 +127,8 @@ sniff-amd-fencediv:VQ:
     | grep -v ':::::: corollary :::' \
     | grep -v '::: proof ::::::::::' \
     | grep -v '::: test :::::::::::' \
-    | grep -v '::::::::::::::::::::' )
+    | grep -v '::::::::::::::::::::' \
+    || true )
   if [ -z "$FENCEDIV" ]; then
     echo 'Fenced Divs OK' | doppler lightgreen
   else
@@ -138,7 +139,8 @@ sniff-amd-fencediv:VQ:
 
 #-- do not use literal divs --#
 sniff-amd-plaindiv:VQ:
-  PLAINDIV=$( grep -e '<div[> ]' -e '</div>' posts/arithmetic-made-difficult/* || true )
+  PLAINDIV=$( grep -e '<div[> ]' -e '</div>' posts/arithmetic-made-difficult/* \
+    || true )
   if [ -z "$PLAINDIV" ]; then
     echo 'Plain Divs OK' | doppler lightgreen
   else
@@ -166,7 +168,8 @@ sniff-amd-nestdiv:VQ:
     | sed 's/thm prf cls cls//g' \
     | sed 's/cor tst cls cls//g' \
     | sed 's/ *$//' \
-    | sed '/:$/d' )
+    | sed '/:$/d' \
+    || true )
   if [ -z "$NESTDIV" ]; then
     echo 'Nested Divs OK' | doppler lightgreen
   else

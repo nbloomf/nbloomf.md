@@ -27,7 +27,6 @@ In Haskell:
 > or p q = ifThenElse p true (ifThenElse q true false)
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 We can compute $\bor$ explicitly.
 
@@ -40,10 +39,9 @@ $$\begin{eqnarray*}
 \bor(\bfalse,\btrue)  & = & \btrue \\
 \bor(\bfalse,\bfalse) & = & \bfalse.
 \end{eqnarray*}$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
-
+(@@@)
 ::::::::::::::::::::
 
 ::: test :::::::::::
@@ -64,7 +62,6 @@ The following hold for all $a,b,c \in \bool$.
 4. $\bor(a,a) = a$.
 5. $\bor(a,b) = \bor(b,a)$.
 6. $\bor(\bor(a,b),c) = \bor(a,\bor(b,c))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. If $a = \btrue$, we have $$\bor(\btrue,\btrue) = \btrue,$$ and if $a = \bfalse$ we have $$\bor(\btrue,\bfalse) = \btrue = \bor(\bfalse,\btrue)$$ as claimed.
@@ -139,7 +136,6 @@ The following hold for all $a,b,c \in \bool$.
 2. $\bnot(\bor(a,b)) = \band(\bnot(a),\bnot(b))$.
 3. $\band(a,\bor(b,c)) = \bor(\band(a,b),\band(a,c))$.
 4. $\bor(a,\band(b,c)) = \band(\bor(a,b),\bor(a,c))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. If $a = \btrue$, we have

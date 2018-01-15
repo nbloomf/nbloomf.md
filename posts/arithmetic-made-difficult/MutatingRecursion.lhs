@@ -84,7 +84,7 @@ What it does
 
 As with the other recursion operators, the "uniqueness" part of mutating recursion is also handy. To be a little more explicit, it says the following.
 
-:::::: theorem :::::
+:::::: corollary :::
 Let $A$ and $B$ be sets, with mappings
 $$\begin{eqnarray*}
  \varphi & : & A \rightarrow B \\
@@ -96,5 +96,4 @@ $$\left\{\begin{array}{l}
  f(\zero)(a) = \varphi(a) \\
  f(\next(n))(a) = \chi(\omega(a),f(n))
 \end{array}\right.$$
-::::::::::::::::::::
 ::::::::::::::::::::

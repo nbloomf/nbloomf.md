@@ -54,7 +54,6 @@ In Haskell:
 >     chi a _ _ u v = cat (map (cons a) v) u
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\select$ is defined as a double bailout fold, it can be characterized as the unique solution to a system of functional equations.
 
@@ -66,7 +65,6 @@ $$\left\{\begin{array}{l}
 \end{array}\right.$$
 
 In particular, we have $$\select(\zero,\cons(a,x)) = \cons(\nil,\nil)$$ and $$\select(\next(n),\cons(a,x)) = \cat(\map(\cons(a,-))(\select(n,x)),\select(\next(n),x)).$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -94,7 +92,6 @@ We can directly compute $\select(\zero,-)$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$, we have $$\select(\zero,x) = \cons(\nil,\nil).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 If $x = \nil$, then
@@ -127,7 +124,6 @@ We can directly compute $\select(\next(\zero),-)$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$, we have $$\select(\next(\zero),x) = \map(\cons(-,\nil))(x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -172,7 +168,6 @@ $\select$ interacts with $\length$.
 
 :::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$. For all $k \in \nats$, we have $$\length(\select(k,x)) = \nchoose(\length(x),k).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -225,7 +220,6 @@ $\select$ is compatible with $\sublist$.
 
 :::::: theorem :::::
 Let $A$ be a set and let $x,y \in \lists{A}$. If $\sublist(x,y) = \btrue$, then $\sublist(\select(k,x),\select(k,y)) = \btrue$ for all $k \in \nats$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $k$. For the base case $k = \zero$, suppose $\sublist(x,y) = \btrue$. Now
@@ -300,7 +294,6 @@ Selections are sublists.
 
 :::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$ and $k \in \nats$. Then $$\all(\sublist(-,x),\select(k,x)) = \btrue.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We consider two possibilities for $k$. If $k = \zero$, we have
@@ -364,7 +357,6 @@ Selections have fixed length.
 
 :::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$ and $k \in \nats$. Then $$\all(\beq(k,\length(-)),\select(k,x)) = \btrue.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We consider two possibilities for $k$. If $k = \zero$, we have

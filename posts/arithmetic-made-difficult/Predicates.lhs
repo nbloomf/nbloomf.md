@@ -32,7 +32,6 @@ In Haskell:
 > pfalse _ = false
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 First, the basic logic operators lift.
 
@@ -45,13 +44,11 @@ In Haskell:
 > pnot p a = not (p a)
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 $\pnot$ is an involution.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $p : A \rightarrow \bool$, we have $$\pnot(\pnot(p)) = p.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Let $a \in A$. Then we have
@@ -84,7 +81,6 @@ Let $A$ be a set. Then we have the following.
 2. $\pnot(\pfalse) = \ptrue$.
 3. $\bnot \circ \ptrue = \pfalse$.
 4. $\bnot \circ \pfalse = \ptrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. If $a \in A$, we have
@@ -171,7 +167,6 @@ In Haskell:
 > pand p q a = and (p a) (q a)
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 The usual properties of $\band$ lift to $\pand$.
 
@@ -183,7 +178,6 @@ Let $A$ be a set. The following hold for all p,q,r \in \bool^A$.
 3. $\pand(p,p) = p$.
 4. $\pand(p,q) = \pand(q,p)$.
 5. $\pand(\pand(p,q),r) = \pand(p,\pand(q,r))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. For all $a \in A$ we have
@@ -280,7 +274,6 @@ In Haskell:
 > por p q a = or (p a) (q a)
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 The usual properties of $\bor$ lift to $\por$.
 
@@ -292,7 +285,6 @@ Let $A$ be a set. The following hold for all $p,q,r \in \bool^A$.
 3. $\por(p,p) = p$.
 4. $\por(p,q) = \por(q,p)$.
 5. $\por(\por(p,q),r) = \por(p,\por(q,r))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. For all $a \in A$, we have

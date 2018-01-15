@@ -58,7 +58,6 @@ In Haskell:
 >     sigma n a = div a n
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Almost by definition, $\nmindiv(a)$ is the smallest divisor of $a$ in a precise sense.
 
@@ -67,7 +66,6 @@ Let $a \in \nats$ with $\nleq(\next(\next(\zero)),a)$. Then we have the followin
 
 1. $\nleq(\next(\next(\zero)),\nmindiv(a))$ and $\ndiv(\nmindiv(a),a)$.
 2. If $\nleq(\next(\next(\zero)),k)$ and $\ndiv(k,a)$, then $\nleq(\nmindiv(a),k)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 If $a = \next(\next(m))$ for some $m$, we have
@@ -132,7 +130,6 @@ In Haskell:
 >   else eq a (mindiv a)
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 It is straightforward to show that $\nisprime$ is equivalent to the usual definition.
 
@@ -142,7 +139,6 @@ Let $a \in \nats$. Then the following are equivalent.
 1. $\nisprime(a) = \btrue$.
 2. $a \neq \zero$ and $a \neq \next(\zero)$, and if $u,v \in \nats$ such that $a = \ntimes(u,v)$, then $(u,v)$ is either $(\next(\zero),a)$ or $(a,\next(\zero))$.
 3. $a \neq \zero$ and $a \neq \next(\zero)$, and if $u,v \in \nats$ such that $\ndiv(a,\ntimes(u,v))$, then either $\ndiv(a,u)$ or $\ndiv(a,v)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 $(1)$ implies $(2)$: Suppose $\nisprime(a) = \btrue$. Certainly $a \neq \zero$ and $a \neq \next(\zero)$ (by definition), and we have $a = \nmindiv(a)$. Suppose now that $a = \ntimes(u,v)$; we consider three cases for $u$. If $u = \zero$ we have $a = \zero$, a contradiction. If $u = \next(\zero)$, then $v = a$. If $a \neq \zero$ and $a \neq \next(\zero)$, we have $\ndiv(u,a)$, so that $\nleq(\nmindiv(a),u)$; thus $\nleq(a,u)$. But also $\nleq(u,a)$, so that $u = a$, and thus $v = \next(\zero)$ as claimed.
@@ -157,7 +153,6 @@ Minimal divisors are prime.
 
 :::::: theorem :::::
 Let $a \in \nats$ with $a \neq \zero$ and $a \neq \next(\zero)$. Then $$\nisprime(\nmindiv(a)) = \btrue.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Let $a \in \nats$ with $a \neq \zero$ and $a \neq \next(\zero)$, and let $d = \nmindiv(a)$. Suppose now that $d = \ntimes(u,v)$. Since $d \neq \zero$, we have $u \neq \zero$. If $u = \next(\zero)$, we have $v = d$. If $u \neq \next(\zero)$, we have $\ndiv(u,a)$ and thus $\nleq(d,u)$; but $\nleq(u,d)$, so that $d = u$ by antisymmetry and thus $v = \next(\zero)$. Thus $\nisprime(\nmindiv(a))$ as claimed.
@@ -180,7 +175,6 @@ Primes interact with $\ngcd$ as expected.
 
 :::::: theorem :::::
 Let $p,a \in \nats$ with $\nisprime(p)$. Then $$\ngcd(a,p) = \left\{ \begin{array}{ll} p & \mathrm{if}\ \ndiv(p,a) \\ \next(\zero) & \mathrm{otherwise}. \end{array} \right.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Let $d = \ngcd(a,p)$. Now $\ndiv(d,p)$, so that either $d = \next(\zero)$ or $d = p$. If $\ndiv(p,a) = \bfalse$, we thus have $d = \next(\zero)$.

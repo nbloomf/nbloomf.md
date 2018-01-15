@@ -112,7 +112,7 @@ as claimed.
 
 Nested $\bif{\ast}{\ast}{\ast}$s commute (sort of).
 
-:::: theorem :::::::
+:::::: theorem :::::
 [](#thm-ifnest) Let $A$ be a set with $p,q \in \bool$ and $a,b,c,d \in A$. Then we have
 $$\begin{eqnarray*}
  &   & \bif{p}{\bif{q}{a}{b}}{\bif{q}{c}{d}} \\

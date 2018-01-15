@@ -42,7 +42,6 @@ In Haskell:
 >     chi a b _ z _ = if eq a b then cons a z else nil
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\lcp$ is defined as a double fold, it is the unique solution to a system of functional equations.
 
@@ -53,7 +52,6 @@ $$\left\{\begin{array}{l}
  f(\cons(a,x),\nil) = \nil \\
  f(\cons(a,x),\cons(b,y)) = \bif{\beq(a,b)}{\cons(a,f(x,y))}{\nil}
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -89,7 +87,6 @@ Let $A$ be a set. The following hold for all $x,y,z \in \lists{A}$.
 
 1. $\prefix(\lcp(x,y),x)$ and $\prefix(\lcp(x,y),y)$.
 2. If $\prefix(z,x)$ and $\prefix(z,y)$, then $\prefix(z,\lcp(x,y))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -188,7 +185,6 @@ $\lcp$ is idempotent.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ we have $\lcp(x,x) = x$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -222,7 +218,6 @@ $\lcp$ is commutative.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x,y \in \lists{A}$ we have $\lcp(x,y) = \lcp(y,x)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -268,7 +263,6 @@ $\lcp$ is associative.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x,y,z \in \lists{A}$ we have $\lcp(\lcp(x,y),z) = \lcp(x,\lcp(y,z))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Let $h = \lcp(\lcp(x,y),z)$, $k = \lcp(x,\lcp(y,z))$, $u = \lcp(x,y)$, and $v = \lcp(y,z)$. First we show that $\prefix(h,k)$. Note that $\prefix(h,u)$, so that $\prefix(h,x)$ and $\prefix(h,y)$. Now $\prefix(h,z)$, so that $\prefix(h,v)$. Thus $\prefix(h,k)$. The proof that $\prefix(k,h)$ is similar; thus $h = k$ as claimed.
@@ -289,7 +283,6 @@ $\cat$ distributes over $\lcp$ from the left.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x,y,z \in \lists{A}$ we have $\cat(x,\lcp(y,z)) = \lcp(\cat(x,y),\cat(x,z))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -326,7 +319,6 @@ $\lcp$ detects prefixes.
 
 :::::: theorem :::::
 Let $A$ be a set with $x,y \in \lists{A}$. Then $\lcp(x,y) = x$ if and only if $\prefix(x,y) = \btrue$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 To see the "if" part, suppose $\prefix(x,y)$. Then we have $y = \cat(x,z)$ for some $z$. Now
@@ -361,7 +353,6 @@ And $\lcp$ interacts with $\zip$.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets with $x,y \in \lists{A}$ and $u,v \in \lists{B}$. Then $$\lcp(\zip(x,u),\zip(y,v)) = \zip(\lcp(x,y),\lcp(u,v)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -455,7 +446,6 @@ $\lcp$ interacts with $\map(f)$ if $f$ is injective.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets with $f : A \rightarrow B$ an injective map. For all $x,y \in \lists{A}$ we have $$\map(f)(\lcp(x,y)) = \lcp(\map(f)(x),\map(f)(y)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$ we have
@@ -512,7 +502,6 @@ Let $A$ and $B$ be sets
 
 1. Suppose $f,g : A \rightarrow B$ are functions with the property that $f(a) \neq g(b)$ for all $a,b \in A$. Then $\lcp(\map(f)(x),\map(g)(y)) = \nil$ for all $x,y \in \lists{A}$.
 2. In particular, $f(x) = \cons(a,x)$ and $g(x) = \cons(b,x)$ have this property if $a \neq b$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by list induction on $x$. For the base case $x = \nil$, note that
@@ -561,7 +550,6 @@ In Haskell:
 > lcs x y = rev (lcp (rev x) (rev y))
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Many properties of $\lcp$ have analogues for $\lcs$.
 
@@ -571,7 +559,6 @@ Let $A$ be a set. For all $a,b \in A$ and $x,y \in \lists{A}$, we have the follo
 1. $\lcs(\nil,y) = \nil$.
 2. $\lcs(\snoc(a,x),\nil) = \nil$.
 3. $\lcs(\snoc(a,x),\snoc(b,y)) = \bif{\beq(a,b)}{\snoc(a,\lcs(x,y))}{\nil}$.
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -607,7 +594,6 @@ Let $A$ be a set with $x,y,z \in \lists{A}$. Then we have the following.
 
 1. $\suffix(\lcs(x,y),x)$ and $\suffix(\lcs(x,y),y)$.
 2. If $\suffix(z,x)$ and $\suffix(z,y)$, then $\suffix(z,\lcs(x,y))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. Note that
@@ -673,7 +659,6 @@ $\lcs$ is idempotent.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ we have $\lcs(x,x) = x$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -701,7 +686,6 @@ $\lcs$ is commutative.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x,y \in \lists{A}$ we have $\lcs(x,y) = \lcs(y,x)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We have
@@ -729,7 +713,6 @@ $\lcs$ is associative.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x,y,z \in \lists{A}$ we have $\lcs(\lcs(x,y),z) = \lcs(x,\lcs(y,z))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We have
@@ -761,7 +744,6 @@ $\cat$ distributes over $\lcs$ from the right.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $x,y,z \in \lists{A}$ we have $\cat(\lcs(x,y),z) = \lcs(\cat(x,z),\cat(y,z))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that
@@ -791,7 +773,6 @@ $\lcs$ detects suffixes.
 
 :::::: theorem :::::
 Let $A$ be a set with $x,y \in \lists{A}$. Then $\lcs(x,y) = x$ if and only if $\suffix(x,y)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that $$\lcs(x,y) = x$$ if and only if $$\rev(\lcp(\rev(x),\rev(y))) = x$$ if and only if $$\rev(\rev(\lcp(\rev(x),\rev(y)))) = \rev(x)$$ if and only if $$\lcp(\rev(x),\rev(y)) = \rev(x)$$ if and only if $$\prefix(\rev(x),\rev(y)) = \btrue$$ if and only if $$\suffix(x,y) = \btrue$$ as claimed.
@@ -812,7 +793,6 @@ And $\lcs$ also interacts with $\map(f)$ if $f$ is injective.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets with $f : A \rightarrow B$ an injective map. For all $x,y \in \lists{A}$ we have $$\map(f)(\lcs(x,y)) = \lcs(\map(f)(x),\map(f)(y)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Note that

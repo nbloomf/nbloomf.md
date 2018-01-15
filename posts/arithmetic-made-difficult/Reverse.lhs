@@ -38,7 +38,6 @@ In Haskell:
 >     phi x a = cons a x
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\revcat$ is defined as a $\foldl{\ast}$, it can be characterized as the unique solution to a system of functional equations.
 
@@ -48,7 +47,6 @@ $$\left\{\begin{array}{l}
  f(x,\nil) = x \\
  f(x,\cons(a,y)) = f(\cons(a,x),y)
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -77,7 +75,6 @@ Let $A$ be a set. For all $a \in A$ and $x,y \in \lists{A}$ we have the followin
 
 1. $\revcat(\snoc(a,x),y) = \snoc(a,\revcat(x,y))$.
 2. $\revcat(x,\snoc(a,y)) = \cons(a,\revcat(x,y))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by list induction on $y$. For the base case $y = \nil$, we have
@@ -143,13 +140,11 @@ In Haskell:
 > rev = revcat nil
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Now $\rev$ is essentially defined here as a left fold, but it can also be characterized as a right fold.
 
 :::::: theorem :::::
 We have $$\rev(x) = \foldr{\nil}{\snoc}(x).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 Let $\varphi$ be as defined in the definition of $\rev$. We proceed by list induction on $x$. For the base case $x = \nil$, note that
@@ -192,7 +187,6 @@ $$\left\{\begin{array}{l}
  f(\nil) = \nil \\
  f(\cons(a,x)) = \snoc(a,f(x)).
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -269,7 +263,6 @@ Now $\rev$ and $\snoc$ interact:
 
 :::::: theorem :::::
 Let $A$ be a set. Then for all $a \in A$ and $x \in \lists{A}$, we have $$\rev(\snoc(a,x)) = \cons(a,\rev(x)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We have
@@ -445,7 +438,6 @@ Note that $\rev$ is a nontrivial involution on $\lists{A}$ -- in particular, tha
 2. If $f(x) \in C$ and $a \in A$, then $f(\snoc(a,x)) \in C$.
 
 Then we have $f(x) \in C$ for all $x \in \lists{A}$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 This proof is analogous to that of the ordinary list induction principle. Define $T \subseteq \lists{A}$ by $$T = \{ x \in \lists{A} \mid f(x) \in C \}.$$ Note that $\nil \in T$ and if $x \in T$ and $a \in A$ then $\snoc(a,x) \in T$; that is, $(T,\nil,\snoc)$ is an $A$-iterative set. We define $\Theta : \lists{A} \rightarrow T$ to be the fold $$\Theta = \foldr{\nil}{\snoc}.$$ Now $\rev : T \rightarrow \lists{A}$ is an $A$-iterative homomorphism since $$\rev(\cons(a,x)) = \snoc(a,\rev(x)).$$ Thus $\rev \circ \Theta$ is an $A$-inductive homomorphism, which by uniqueness must be the identity on $\lists{A}$. If $x \in \lists{A}$, we have $$x = \rev(\rev(x)) = \rev(\id(\rev(x))) = \rev(\rev(\Theta(\rev(x))) = \Theta(\rev(x)) \in T,$$ so that $T = \lists{A}$ as claimed.

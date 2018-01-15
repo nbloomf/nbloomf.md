@@ -34,7 +34,6 @@ In Haskell:
 > leq a b = isRgt (minus b a)
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 First some basic (but important!) special cases.
 
@@ -152,7 +151,6 @@ We have the following.
 1. (Reflexivity) Let $a \in \nats$. Then $\nleq(a,a)$.
 2. (Antisymmetry) Let $a,b \in \nats$. If $\nleq(a,b)$ and $\nleq(b,a)$, then $a = b$.
 3. (Transitivity) Let $a,b,c \in \nats$. If $\nleq(a,b)$ and $\nleq(b,c)$, then $\nleq(a,c)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We have $a = \nplus(a,\zero)$, so that $\nminus(a,a) = \zero$, thus $\nleq(a,a) = \btrue$.
@@ -212,7 +210,6 @@ The following hold for all $a,b,c,d \in \nats$.
 1. $\nleq(a,b) = \nleq(\nplus(a,c),\nplus(b,c))$.
 2. $\nleq(a,b) = \nleq(\nplus(c,a),\nplus(c,b))$.
 3. If $\nleq(a,b)$ and $\nleq(c,d)$, then $\nleq(\nplus(a,c),\nplus(b,d))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by induction on $c$. For the base case, note that $$\nleq(\nplus(a,\zero),\nplus(b,\zero)) = \nleq(a,b)$$ as needed. For the inductive step, suppose the result holds for some $c$. Now
@@ -263,7 +260,6 @@ The following hold for all $a,b \in \nats$.
 2. Precisely one of the following is true: (i) $a = b$, (ii) $a \neq b$ and $\nleq(a,b)$, and (iii) $a \neq b$ and $\nleq(b,a)$.
 3. If $\nleq(a,\next(b))$, then either $\nleq(a,b)$ or $a = \next(b)$.
 4. If $\nleq(b,a)$ and $\nleq(a,\next(b))$, then either $a = b$ or $a = \next(b)$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. If $\nleq(a,b)$ is false, we have $\nminus(b,a) = \lft(\ast)$. Now $\nminus(a,b) \rgt(c)$ for some $c$, so that $\nminus(b,a)$ is true.
@@ -317,7 +313,6 @@ The following hold.
 
 1. Let $a,b,c \in \nats$. Then $$\nleq(a,b) = \nleq(\ntimes(a,\next(c)),\nplus(b,\next(c))).$$
 2. Let $a,b,c,d \in \nats$. If $\nleq(a,b)$ and $\nleq(c,d)$, then $$\nleq(\ntimes(a,c),\ntimes(b,d)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We proceed by induction on $c$. For the base case, note that $$\nleq(\ntimes(a,\next(\zero)),\ntimes(b,\next(\zero))) = \nleq(a,b).$$ For the inductive step, suppose the result holds for some $c$. We consider three possibilities. First suppose $a = b$; in this case we have $\nleq(a,b) = \btrue$ and $$\ntimes(a,\next(\next(c))) = \ntimes(b,\next(\next(c))),$$ so the conclusion holds. Next, suppose $a \neq b$ and $\nleq(a,b) = \btrue$. By the inductive hypothesis we have $$\nleq(\ntimes(a,\next(c)),\nplus(b,\next(c))) = \btrue,$$ and so

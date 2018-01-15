@@ -49,7 +49,6 @@ In Haskell:
 >     f x = rgt (x,x)
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 Since $\repeat$ is defined as an unfoldN, it is the unique solution to a system of functional equations.
 
@@ -59,7 +58,6 @@ $$\left\{\begin{array}{l}
  f(\zero)(a) = \nil \\
  f(\next(n))(a) = \cons(a,f(n)(a))
 \end{array}\right.$$
-::::::::::::::::::::
 
 ::: test :::::::::::
 
@@ -89,7 +87,6 @@ $\repeat$ and $\length$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $n \in \nats$ and $a \in A$ we have $$\length(\repeat(n,a)) = n.$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$ we have
@@ -123,7 +120,6 @@ $\repeat$ and $\map$.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets with $f : A \rightarrow B$ a map. For all $n \in \nats$ and $a \in A$, we have $$\map(f)(\repeat(n,a)) = \repeat(n,f(a)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$ we have
@@ -161,7 +157,6 @@ $\repeat$ and $\nplus$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $m,n \in \nats$ and $a \in A$, we have $$\repeat(\nplus(m,n),a) = \cat(\repeat(m,a),\repeat(n,a)).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $m$. For the base case $m = \zero$, we have
@@ -200,7 +195,6 @@ $\repeat$ and $\snoc$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $n \in \nats$ and $a \in A$, we have $$\snoc(a,\repeat(n,a)) = \repeat(\next(n),a).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$, we have
@@ -239,7 +233,6 @@ $\repeat$ and $\rev$.
 
 :::::: theorem :::::
 Let $A$ be a set. For all $n \in \nats$ and $a \in A$, we have $$\rev(\repeat(n,a)) = \repeat(n,a).$$
-::::::::::::::::::::
 
 ::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$, we have

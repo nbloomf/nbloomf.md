@@ -30,7 +30,6 @@ In Haskell:
 > impl p q = ifThenElse p (ifThenElse q true false) true
 
 ::::::::::::::::::::
-::::::::::::::::::::
 
 And implication has its own properties.
 
@@ -44,7 +43,6 @@ For all $p,q,r,s \in \bool$ we have the following.
 5. $\bimpl(p,\bimpl(q,r)) = \bimpl(q,\bimpl(p,r))$.
 6. $\bimpl(\bimpl(p,q),\bimpl(\bimpl(q,r),\bimpl(p,r)))$.
 7. $\bimpl(\bimpl(p,\bimpl(q,r)),\bimpl(\bimpl(p,q),\bimpl(p,r)))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 1. We have
@@ -196,7 +194,6 @@ $\bimpl$ interacts with $\band$.
 
 :::::: theorem :::::
 For all $p,q,r,s \in \bool$, if $\bimpl(p,r)$ and $\bimpl(q,s)$, then $\bimpl(\band(p,q),\band(r,s))$.
-::::::::::::::::::::
 
 ::: proof ::::::::::
 If $p = \bfalse$, then
