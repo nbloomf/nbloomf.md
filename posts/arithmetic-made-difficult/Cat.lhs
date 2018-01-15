@@ -25,8 +25,7 @@ slug: cat
 
 In this post we'll consider the function that takes two lists and appends one to the "end" of the other. This function is known as $\cat$, which is short for *catenate* -- a jargony word that means *to connect in a series*.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 We define a map $\cat : \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\cat(x,y) = \foldr{y}{\cons}(x).$$
 
 In Haskell:
@@ -34,21 +33,20 @@ In Haskell:
 > cat :: (List t) => t a -> t a -> t a
 > cat x y = foldr y cons x
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Because $\cat$ is defined in terms of fold, it is the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set. Then $\cat$ is the unique mapping $f : \lists{A} \times \lists{A} \rightarrow \lists{A}$ with the property that for all $a \in A$ and $x,y \in \lists{A}$ we have
 $$\left\{\begin{array}{l}
  f(\nil,y) = y \\
  f(\cons(a,x),y) = \cons(a,f(x,y)).
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_cat_nil_left :: (List t, Equal (t a))
 >   => t a -> Test (t a -> Bool)
@@ -63,17 +61,16 @@ $$\left\{\begin{array}{l}
 >   testName "cat(cons(a,x),y) == cons(a,cat(x,y))" $
 >   \a x y -> eq (cat (cons a x) y) (cons a (cat x y))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Note that $\cat$ works a lot like $\snoc$; it marches down the list $x$ until it reaches the end, and then sticks $y$ there. In some ways, $\cat$ is like $\nplus$ for lists, and $\nil$ is the $\zero$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$, we have $\cat(x,\nil) = x$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \cat(x,\nil) \\
@@ -82,9 +79,9 @@ $$\begin{eqnarray*}
  & = & x
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_cat_nil_right :: (List t, Equal (t a))
 >   => t a -> Test (t a -> Bool)
@@ -92,20 +89,19 @@ as claimed.
 >   testName "cat(x,nil) == x" $
 >   \a -> eq (cat a nil) a
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\cat$ interacts with $\snoc$:
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. The following hold for all $a \in A$ and $x,y \in \lists{A}$.
 
 1. $\cat(\snoc(a,x),y) = \cat(x,\cons(a,y))$.
 2. $\cat(x,\snoc(a,y)) = \snoc(a,\cat(x,y))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We have
 $$\begin{eqnarray*}
  &   & \cat(x,\cons(a,y)) \\
@@ -130,9 +126,9 @@ $$\begin{eqnarray*}
  & = & \cat(x,\snoc(a,\cons(b,y)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_cat_snoc_left :: (List t, Equal (t a))
 >   => t a -> Test (a -> t a -> t a -> Bool)
@@ -147,17 +143,16 @@ as needed.
 >   testName "snoc(a,cat(x,y)) == cat(x,snoc(a,y))" $
 >   \a x y -> eq (snoc a (cat x y)) (cat x (snoc a y))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 We can "solve" a simple list equation.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 We have $\nil = \cat(x,y)$ if and only if $x = y = \nil$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 The "only if" direction is clear. To see the "if" direction, suppose we have $x,y \in \lists{A}$ such that $\cat(x,y) = \nil$. If $x = \cons(a,u)$, then
 $$\begin{eqnarray*}
  &   & \btrue \\
@@ -174,9 +169,9 @@ $$\begin{eqnarray*}
  & = & \isnil(y)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_cat_nil_nil :: (List t, Equal (t a))
 >   => t a -> Test (t a -> t a -> Bool)
@@ -184,17 +179,16 @@ as claimed.
 >   testName "isNil(cat(x,y)) == and(isNil(x),isNil(y))" $
 >   \x y -> eq (isNil (cat x y)) (and (isNil x) (isNil y))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And $\cat$ is associative.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set and $x,y,z \in \lists{A}$. Then $$\cat(\cat(x,y),z) = \cat(x,\cat(y,z)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $z$. For the base case $z = \nil$, we have
 $$\begin{eqnarray*}
  &   & \cat(\cat(x,y),\nil) \\
@@ -210,9 +204,9 @@ $$\begin{eqnarray*}
  & = & \cat(x,\cat(y,\cons(a,z)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_cat_associative :: (List t, Equal (t a))
 >   => t a -> Test (t a -> t a -> t a -> Bool)
@@ -220,17 +214,16 @@ as needed.
 >   testName "cat(cat(x,y),z) == cat(x,cat(y,z))" $
 >   \x y z -> eq (cat (cat x y) z) (cat x (cat y z))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And $\rev$ is antidistributive over $\cat$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x,y \in \lists{A}$ we have $$\rev(\cat(x,y)) = \cat(\rev(y),\rev(x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $y$. For the base case $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \rev(\cat(x,\nil)) \\
@@ -248,9 +241,9 @@ $$\begin{eqnarray*}
  & = & \cat(\rev(\cons(a,y)),\rev(x))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_cat_rev :: (List t, Equal (t a))
 >   => t a -> Test (t a -> t a -> Bool)
@@ -258,20 +251,19 @@ as needed.
 >   testName "rev(cat(x,y)) == cat(rev(y),rev(x))" $
 >   \x y -> eq (rev (cat x y)) (cat (rev y) (rev x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Finally, $\cat$ is cancellative.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x,y,z \in \lists{A}$ we have the following.
 
 1. $\cat(z,x) = \cat(z,y)$ if and only if $x = y$.
 2. $\cat(x,z) = \cat(y,z)$ if and only if $x = y$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. The "only if" direction is clear. For the "if" direction we proceed by list induction on $z$. For the base case $z = \nil$, suppose $\cat(z,x) = \cat(z,y)$. Then we have
 $$\begin{eqnarray*}
  &   & x \\
@@ -290,9 +282,9 @@ $$\begin{eqnarray*}
  & = & \cat(\rev(z),\rev(y)).
 \end{eqnarray*}$$
 By (1), we have $\rev(x) = \rev(y)$, and thus $x = y$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_cat_left_cancellative :: (List t, Equal (t a), Boolean b, Equal b)
 >   => t a -> b -> Test (t a -> t a -> t a -> Bool)
@@ -311,21 +303,20 @@ By (1), we have $\rev(x) = \rev(y)$, and thus $x = y$ as claimed.
 >     (eq (cat x z) (cat y z))
 >     ((eq x y) `withTypeOf` p)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 One more.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. The following hold for all $x,u,v \in \lists{A}$.
 
 1. If $x = \cat(x,v)$ then $v = \nil$.
 2. If $x = \cat(u,x)$ then $u = \nil$.
 3. If $x = \cat(u,\cat(x,v))$ then $u = v = \nil$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Note that
 $$\begin{eqnarray*}
  &   & \cat(x,\nil) \\
@@ -371,9 +362,9 @@ $$\begin{eqnarray*}
  & = & \cat(\cons(a,x),v)
 \end{eqnarray*}$$
 so that $v = u = \nil$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_cat_right_identity_unique :: (List t, Equal (t a))
 >   => t a -> Test (t a -> t a -> Bool)
@@ -397,8 +388,8 @@ so that $v = u = \nil$ as claimed.
 >     then and (eq u nil) (eq v nil)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

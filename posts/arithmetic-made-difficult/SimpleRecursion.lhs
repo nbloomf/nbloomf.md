@@ -22,12 +22,11 @@ tags: arithmetic-made-difficult, literate-haskell
 
 So far we've defined the natural numbers as an iterative set with a special *universal property*, which was encapsulated in the existence of a simple recursion operator $\natrec{\ast}{\ast}$. Anything we will wish to do with the natural numbers can be done using this operator alone. However, in practice, it will be handy to define synonyms for some more complicated recursive functions; the first of these is *simple recursion with a parameter*.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Suppose we have sets $A$ and $B$ and functions $\varphi : A \rightarrow B$ and $\mu : \nats \times A \times B \rightarrow B$. Then there is a unique function $\Theta : \nats \times A \rightarrow B$ such that, for all $n \in \nats$ and $a \in A$, $$\Theta(\zero, a) = \varphi(a)$$ and $$\Theta(\next(n), a) = \mu(n, a, \Theta(n, a)).$$
 
 This function $\Theta$ will be denoted $\simprec{\varphi}{\mu}$.
-</div>
+::::::::::::::::::::
 
 <div class="proof">
 First we establish existence. Define a mapping $t : \nats \times {}^AB \rightarrow \nats \times {}^AB$ by $$t(n,h) = (\next(n), \lambda x : \mu(n, x, h(x))).$$ Note that we are using the $\lambda$ notation to define an anonymous function $A \rightarrow B$ on the right hand side; specifically, $\lambda x : \mu(n, x, h(x))$ is the function $q : A \rightarrow B$ such that $q(x) = \mu(n,x,h(x))$.
@@ -105,8 +104,8 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 
 for all $a \in A$. Thus $\Psi = \Theta$ as needed.
-</div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 That proof may look complicated, but structurally it's very simple. We defined $\Theta$ and showed it has the claimed properties with induction, then we showed it is unique by induction.
 
@@ -244,15 +243,14 @@ This page is already long enough, so I'll save examples of simple recursion for 
 
 As with natural recursion, the "uniqueness" part of simple recursion is also handy. To be a little more explicit, it says the following.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $A$ and $B$ be sets, with $\varphi : \nats \times A \rightarrow B$ and $\mu : \nats \times A \times B \rightarrow B$. Then $\simprec{\varphi}{\mu}$ is the unique solution $f : \nats \times A \rightarrow B$ to the following system of functional equations for all $k \in \nats$, $a \in A$, and $b \in B$:
 $$\left\{\begin{array}{l}
  f(\zero,a) = \varphi(a) \\
  f(\next(k),a) = \mu(k,a,f(k,a))
 \end{array}\right.$$
-</div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

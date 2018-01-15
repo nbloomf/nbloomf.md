@@ -25,8 +25,7 @@ slug: max-min
 
 With $\nleq$ in hand we can also define max and min functions. These are less interesting since they do not have to be defined recursively. :)
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 We define $\nmax : \nats \times \nats \rightarrow \nats$ by $$\nmax(a,b) = \bif{\nleq(a,b)}{b}{a}$$ and $\nmin : \nats \times \nats \rightarrow \nats$ by $$\nmin(a,b) = \bif{\nleq(a,b)}{a}{b}.$$
 
 In Haskell:
@@ -37,22 +36,21 @@ In Haskell:
 > min :: (Natural n) => n -> n -> n
 > min a b = if leq a b then a else b
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Special cases.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a \in \nats$. Then we have the following.
 
 1. $\nmax(\zero,a) = a$.
 2. $\nmax(a,a) = a$.
 3. $\nmin(\zero,a) = \zero$.
 4. $\nmin(a,a) = a$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We have
 $$\begin{eqnarray*}
  &   & \nmax(\zero,a) \\
@@ -85,9 +83,9 @@ $$\begin{eqnarray*}
  & = & a
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_max_zero :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
@@ -116,20 +114,19 @@ as claimed.
 >   testName "a == min(a,a)" $
 >   \a -> eq (min a a) a
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\nmax$ and $\nmin$ are commutative.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b \in \nats$. Then we have the following.
 
 1. $\nmax(a,b) = \nmax(b,a)$.
 2. $\nmin(a,b) = \nmin(b,a)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. If $\nleq(a,b) = \bfalse, we have
 $$\begin{eqnarray*}
  &   & \nmax(a,b) \\
@@ -150,9 +147,9 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed; similarly, if $\nleq(b,a) = \bfalse$ then $\nmin(a,b) = \nmin(b,a)$. Suppose then that $\nleq(a,b) = \nleq(b,a) = \btrue$. By antisymmetry we have $a = b$, and thus
 $\nmin(a,b) = \nmin(b,a)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_max_commutative :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
@@ -167,22 +164,21 @@ $\nmin(a,b) = \nmin(b,a)$.
 >   testName "min(a,b) == min(b,a)" $
 >   \a b -> eq (min a b) (min b a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\nplus$ and $\next$ distribute over $\nmax$ and $\nmin$.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c \in \nats$. Then we have the following.
 
 1. $\nmax(\next(a),\next(b)) = \next(\nmax(a,b))$.
 2. $\nmax(\nplus(c,a),\nplus(c,b)) = \nplus(c,\nmax(a,b))$.
 3. $\nmin(\next(a),\next(b)) = \next(\nmin(a,b))$.
 4. $\nmin(\nplus(c,a),\nplus(c,b)) = \nplus(c,\nmin(a,b))$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We have
 $$\begin{eqnarray*}
  &   & \nmax(\next(a),\next(b)) \\
@@ -219,9 +215,9 @@ $$\begin{eqnarray*}
  & = & \nplus(c,\nmin(a,b))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_max_next :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
@@ -250,20 +246,19 @@ as claimed.
 >   testName "min(plus(c,a),plus(c,b)) == plus(c,min(a,b))" $
 >   \a b c -> eq (min (plus c a) (plus c b)) (plus c (min a b))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\ntimes$ distributes over $\nmax$ and $\nmin$.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c \in \nats$. Then we have the following.
 
 1. $\nmax(\ntimes(c,a),\ntimes(c,b)) = \ntimes(c,\nmax(a,b))$.
 2. $\nmin(\ntimes(c,a),\ntimes(c,b)) = \ntimes(c,\nmin(a,b))$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We consider two possibilities. If $c = \zero$, we have
 $$\begin{eqnarray*}
  &   & \nmax(\ntimes(c,a),\ntimes(c,b)) \\
@@ -302,9 +297,9 @@ $$\begin{eqnarray*}
  & = & \ntimes(c,\nmin(a,b))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_max_times :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> n -> Bool)
@@ -319,20 +314,19 @@ as claimed.
 >   testName "min(times(c,a),times(c,b)) == times(c,min(a,b))" $
 >   \a b c -> eq (min (times c a) (times c b)) (times c (min a b))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\nmax$ and $\nmin$ are associative.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c \in \nats$. Then we have the following.
 
 1. $\nmax(a,\nmax(b,c)) = \nmax(\nmax(a,b),c)$.
 2. $\nmin(a,\nmin(b,c)) = \nmin(\nmin(a,b),c)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Set
 $$\begin{eqnarray*}
  &   & \nmax(a,\nmax(b,c)) \\
@@ -354,9 +348,9 @@ $$\begin{eqnarray*}
 as claimed. If $\nleq(a,b) = \btrue$ and $\nleq(b,c) = \btrue$, by transitivity we have $\nleq(a,c) = \btrue$ and $$Q = \bif{\nleq(a,c)}{c}{a} = c = \bif{\nleq(b,c)}{c}{b} = R.$$ If $\nleq(a,b) = \btrue$ and $\nleq(b,c) = \bfalse$, we have $$Q = \bif{\nleq(a,b)}{b}{a} = b = \bif{\nleq(b,c)}{c}{b} = R.$$
 Suppose $\nleq(a,b) = \bfalse$; then $\nleq(b,a) = \btrue$. If $\nleq(a,c) = \btrue$, we have $\nleq(b,c) = \btrue$ and $$Q = \bif{\nleq(a,c)}{c}{a} = R,$$ and if $\nleq(a,c) = \bfalse$, then $\nleq(c,a) = \btrue$ and $$Q = \bif{\bfalse}{\bif{\nleq(b,c)}{c}{b}}{a} = a = \bif{\nleq(a,c)}{c}{a} = R.$$
 2. Analogous to (1).
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_max_associative :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> n -> Bool)
@@ -371,27 +365,26 @@ Suppose $\nleq(a,b) = \bfalse$; then $\nleq(b,a) = \btrue$. If $\nleq(a,c) = \bt
 >   testName "min(min(a,b),c) == min(a,min(b,c))" $
 >   \a b c -> eq (min (min a b) c) (min a (min b c))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\nmax$ and $\nmin$ satisfy a "least upper bound" and "greatest lower bound" property, respectively, with respect to $\nleq$.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c \in \nats$. Then we have the following.
 
 1. If $\nleq(a,c)$ and $\nleq(b,c)$, then $\nleq(\nmax(a,b),c)$.
 2. If $\nleq(c,a)$ and $\nleq(c,b)$, then $\nleq(c,\nmin(a,b))$.
 3. $\nleq(\nmin(a,b),\nmax(a,b)) = \btrue$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. If $\nleq(a,b) = \btrue$, then $\nmax(a,b) = b$, and if $\nleq(a,b) = \bfalse$, then $\nleq(b,a) = \btrue$, so that $\nmax(a,b) = a$. In either case we have $\nleq(\nmax(a,b),c)$.
 2. If $\nleq(a,b) = \btrue$, then $\nmin(a,b) = a$, and if $\nleq(a,b) = \bfalse$, then $\nleq(b,a) = \btrue$, so that $\nmin(a,b) = b$. In either case we have $\nleq(c,\nmin(a,b))$.
 3. Suppose $\nleq(a,b)$. Now $\nmin(a,b) = a$ and $\nmax(a,b) = b$, so that $$\nleq(\nmin(a,b),\nmax(a,b)) = \nleq(a,b) = \btrue$$ as claimed. Now if $\nleq(a,b) = \bfalse$, then $\nleq(b,a) = \btrue$, and we instead have $\nmin(a,b) = b$ and $\nmax(a,b) = a$.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_max_lub :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> n -> Bool)
@@ -417,24 +410,23 @@ Let $a,b,c \in \nats$. Then we have the following.
 >   testName "leq(min(a,b),max(a,b))" $
 >   \a b -> leq (min a b) (max a b)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\nmax$ and $\nmin$ interact with $\nplus$ and $\ntimes$.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c \in \nats$. Then we have the following.
 
 1. $\nplus(\nmin(a,b),\nmax(a,b)) = \nplus(a,b)$.
 2. $\ntimes(\nmin(a,b),\nmax(a,b)) = \ntimes(a,b)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We'll prove both of these at once. Suppose $\nleq(a,b)$. Now $\nmin(a,b) = a$ and $\nmax(a,b) = b$, so that $$\nplus(\nmin(a,b),\nmax(a,b)) = \nplus(a,b)$$ and $$\ntimes(\nmin(a,b),\nmax(a,b)) = \ntimes(a,b)$$ as claimed. Now if $\nleq(a,b) = \bfalse$, then $\nleq(b,a) = \btrue$, and we instead have $\nmin(a,b) = b$ and $\nmax(a,b) = a$. Then $$\nplus(\nmin(a,b),\nmax(a,b)) = \nplus(b,a) = \nplus(a,b)$$ and $$\ntimes(\nmin(a,b),\nmax(a,b)) = \ntimes(b,a) = \ntimes(a,b)$$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_max_min_plus :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
@@ -449,29 +441,28 @@ We'll prove both of these at once. Suppose $\nleq(a,b)$. Now $\nmin(a,b) = a$ an
 >   testName "times(min(a,b),max(a,b)) == times(a,b)" $
 >   \a b -> eq (times (min a b) (max a b)) (times a b)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And $\nmax$ and $\nmin$ distribute over each other.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c \in \nats$. Then we have the following.
 
 1. $\nmin(a,\nmax(b,c)) = \nmax(\nmin(a,b),\nmin(a,c))$.
 2. $\nmax(a,\nmin(b,c)) = \nmin(\nmax(a,b),\nmax(a,c))$.
 3. $\nmin(\nmax(b,c),a) = \nmax(\nmin(b,a),\nmin(c,a))$.
 4. $\nmax(\nmin(b,c),a) = \nmin(\nmax(b,a),\nmax(c,a))$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 4. Brute force time! Suppose $\nleq(a,b) = \btrue$. If $\nleq(a,c) = \btrue$, then $\nleq(a,\nmin(b,c))$, so that $\nleq(a,\nmax(b,c))$. Now we have $$\begin{eqnarray*} & & \nmax(\nmin(a,b),\nmin(a,c)) \\ & = & \nmax(a,a) \\ & = & a \\ & = & \nmin(a,\nmax(b,c)). \end{eqnarray*}$$ Suppose $\nleq(a,c) = \bfalse$; then $\nleq(c,a) = \btrue$, and by transitivity $\nleq(c,b) = \btrue$ so that $\nmax(b,c) = b$. Now $$\begin{eqnarray*} & & \nmax(\nmin(a,b),\nmin(a,c)) \\ & = & \nmax(a,c) \\ & = & a \\ & = & \nmin(a,b) \\ & = & \nmin(a,\nmax(b,c)). \end{eqnarray*}$$ Now suppose $\nleq(a,b) = \bfalse$, so that $\nleq(b,a) = \btrue$. If $\nleq(a,c)$, then $\nleq(b,c)$ by transitivity. So we have $$\begin{eqnarray*} & & \nmax(\nmin(a,b),\nmin(a,c)) \\ & = & \nmax(b,a) \\ & = & a \\ & = & \nmin(a,c) \\ & = & \nmin(a,\nmax(b,c)). \end{eqnarray*}$$ If $\nleq(a,c) = \bfalse$, then $\nleq(c,a) = \btrue$. In this case we have $\nleq(\nmax(b,c),a)$, so that $$\begin{eqnarray*} & & \nmax(\nmin(a,b),\nmin(a,c)) \\ & = & \nmax(b,c) \\ & = & \nmin(a,\nmax(b,c)). \end{eqnarray*}$$
 5. Similar to (4), which we can agree was super tedious.
 6. Follows from (4) and commutativity.
 7. Follows from (5) and commutativity.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_max_min_distributive_left :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> n -> Bool)
@@ -500,8 +491,8 @@ Let $a,b,c \in \nats$. Then we have the following.
 >   testName "min(max(b,c),a) == max(min(b,a),min(c,a))" $
 >   \a b c -> eq (min (max b c) a) (max (min b a) (min c a))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 woo!
 

@@ -38,12 +38,11 @@ The signature of $\ngcd$ is $$\nats \times \nats \rightarrow \nats,$$ while norm
 
 To this end:
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Define $\varphi : \nats \times \nats \rightarrow \nats \times \nats$ by $$\varphi(a,b) = \bif{\iszero(b)}{(a,\zero)}{(b,\nrem(a,b))}.$$ Then $\eta : \nats \times \nats \rightarrow \nats$ given by $$\eta(a,b) = \bif{\iszero(b)}{\zero}{\bif{\nleq(a,b)}{\next(\nplus(a,b))}{\nplus(a,b)}}$$ is an iterative norm on $(A,(\zero,\zero),\varphi)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Suppose $\eta(a,b) = \zero$. We have two possibilities; either $b = \zero$, or $\nplus(a,b) = \zero$, so that $a = b = \zero$. In either case we have $b = \zero$. So we have $\varphi(a,b) = (a,\zero)$, so that $\eta(\varphi(a,b)) = \zero$.
 
 Suppose instead that $\eta(a,b) = \next(m)$. In particular $b \neq \zero$, so we have $\varphi(a,b) = (b,\nrem(a,b))$. Since $\nleq(\nrem(a,b),b)$ and $\nrem(a,b) \neq b$, we have
@@ -55,9 +54,9 @@ $$\begin{eqnarray*}
  & = & \bif{\iszero(\nrem(a,b))}{\zero}{\nplus(b,\nrem(a,b))}; \\
 \end{eqnarray*}$$
 in particular, $$\nleq(\eta(\varphi(a,b)),\nplus(b,\nrem(a,b))).$$ Now if $\nleq(a,b) = \btrue$, we have $\eta(a,b) = \next(\nplus(a,b))$ and $\nleq(a,\nrem(a,b))$, so that $$\nleq(\nplus(b,\nrem(a,b)),\next(\nplus(a,b)))$$ as needed. If $\nleq(a,b) = \bfalse$, then $\nleq(b,a) = \btrue$, so that $\nleq(\nrem(a,b),a)$ and $\nrem(a,b) \neq a$, and we have $$\nleq(\nplus(b,\nrem(a,b)),\nplus(a,b))$$ as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > phi :: (Natural n, Equal n) => (n,n) -> (n,n)
 > phi (a,b) = if isZero b
@@ -81,13 +80,12 @@ in particular, $$\nleq(\eta(\varphi(a,b)),\nplus(b,\nrem(a,b))).$$ Now if $\nleq
 >     Left () -> isZero (eta (phi x))
 >     Right m -> leq (eta (phi x)) m
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now we can define $\ngcd$ in terms of norm recursion.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $\varphi$ and $\eta$ be as defined in the previous theorem. We then define a map $\ngcd : \nats \times \nats \rightarrow \nats$ by $$\ngcd = \normrec{\varphi}{\eta}{\fst}.$$
 
 In Haskell:
@@ -96,17 +94,16 @@ In Haskell:
 >   => n -> n -> n
 > gcd a b = normRec phi eta fst (a,b)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\ngcd$ is defined in terms of norm recursion, we can also characterize it as the unique solution to a functional equation. Note that here we use the fact that $$\bif{p}{a}{\bif{p}{b}{c}} = \bif{p}{a}{c}.$$
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 $\ngcd$ is the unique mapping $f : \nats \times \nats \rightarrow \nats$ such that for all $a,b \in \nats$, we have $$f(a,b) = \bif{\iszero(b)}{a}{f(b,\nrem(a,b))}.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_gcd_equation :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
@@ -116,20 +113,19 @@ $\ngcd$ is the unique mapping $f : \nats \times \nats \rightarrow \nats$ such th
 >     (gcd a b)
 >     (if isZero b then a else gcd b (rem a b))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 The next theorem characterizes $\ngcd(a,b)$ in terms of a useful "universal property": it is a common divisor of $a$ and $b$, and among the common divisors of $a$ and $b$, it is the "largest" in an appropriate sense.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c \in \nats$. Then we have the following.
 
 1. $\ndiv(\ngcd(a,b),a)$ and $\ndiv(\ngcd(a,b),b)$.
 2. If $\ndiv(c,a)$ and $\ndiv(c,b)$, then $\ndiv(c,\ngcd(a,b))$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by strong induction on $b$. For the base case $b = \zero$, note that $\ngcd(a,b) = a$, and we have $$\ndiv(\ngcd(a,b),a) = \ndiv(a,a) = \btrue$$ and $$\ndiv(\ngcd(a,b),b) = \ndiv(a,\zero) = \btrue$$ as needed. For the inductive step, suppose the conclusion holds for all $a$ and for all $b$ such that $\nleq(b,m)$, and let $b = \next(m)$ and $a \in \nats$. In this case we have $\ngcd(a,b) = \ngcd(b,\nrem(a,b))$. By the induction hypothesis, we have $\ndiv(\ngcd(a,b),b)$ and $\ndiv(\ngcd(a,b),\nrem(a,b))$. Now $\ndiv(\ngcd(a,b),\ntimes(b,\nquo(a,b))$, so we have
 $$\begin{eqnarray*}
  &   & \btrue \\
@@ -138,9 +134,9 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 2. We again proceed by strong induction on $b$. For the base case $b = \zero$, suppose $\ndiv(c,a)$ and $\ndiv(c,b)$; now $\ngcd(a,b) = a$, so that $\ndiv(c,\ngcd(a,b))$ trivially. For the inductive step, suppose the implication holds for all $a$ and $c$ when $\nleq(b,m)$, and let $b = \next(m)$ with $a,c \in \nats$. Suppose further that $\ndiv(c,a)$ and $\ndiv(c,b)$. Now $\ndiv(c,\ntimes(b,\nquo(a,b))$, so that $\ndiv(c,\nrem(a,b))$, and thus $\ndiv(c,\ngcd(a,b))$ as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_gcd_common_div :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
@@ -157,38 +153,36 @@ as needed.
 >     then div c (gcd a b)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And $\ngcd(a,b)$ is unique with this property.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c \in \nats$. Suppose $m \in \nats$ satisfies the following.
 
 1. $\ndiv(m,a)$ and $\ndiv(m,b)$.
 2. If $\ndiv(c,a)$ and $\ndiv(c,b)$, then $\ndiv(c,m)$.
 
 Then $m = \ngcd(a,b)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Since $\ndiv(m,a)$ and $\ndiv(m,b)$, we have $\ndiv(m,\ngcd(a,b))$. But a similar argument shows that $\ndiv(\ngcd(a,b),m)$. By antisymmetry we have $m = \ngcd(a,b)$ as claimed.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Then $\ngcd$ is commutative.
 
-<div class="result">
-<div class="corollary">
+:::::: corollary :::
 Let $a,b \in \nats$. Then $\ngcd(a,b) = \ngcd(b,a)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that $\ngcd(b,a)$ divides $a$ and $\ngcd(b,a)$ divides $b$, and if $c$ is a common divisor of $a$ and $b$ then $c$ divides $\ngcd(b,a)$. By the uniqueness of GCD we have $\ngcd(b,a) = \ngcd(a,b)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_gcd_commutative :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
@@ -196,21 +190,20 @@ Note that $\ngcd(b,a)$ divides $a$ and $\ngcd(b,a)$ divides $b$, and if $c$ is a
 >   testName "gcd(a,b) == gcd(b,a)" $
 >   \a b -> eq (gcd a b) (gcd b a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And $\ngcd$ is idempotent:
 
-<div class="result">
-<div class="corollary">
+:::::: corollary :::
 Let $a \in \nats$. Then $$\ngcd(a,a) = a.$$
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 $a$ divides $a$ and $a$ divides $a$, and if $c$ divides both $a$ and $a$ then $c$ divides $a$.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_gcd_idempotent :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
@@ -218,27 +211,26 @@ $a$ divides $a$ and $a$ divides $a$, and if $c$ divides both $a$ and $a$ then $c
 >   testName "gcd(a,a) == a" $
 >   \a -> eq (gcd a a) a
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And some special cases.
 
-<div class="result">
 <div class="lemma">
 For all $a \in \nats$ we have the following.
 
 1. $\ngcd(a,\zero) = a$.
 2. $\ngcd(a,\next(\zero)) = \next(\zero)$.
 3. If $\ngcd(a,b) = \zero$, then $a = b = \zero$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Note that $a$ divides $a$ and $a$ divides $\zero$, and if $c$ divides both $a$ and $\zero$ then $c$ divides $a$.
 2. Note that $\next(\zero)$ divides $a$ and $\next(\zero)$ divides $\next(\zero)$, and if $c$ divides $\next(\zero)$ then $c = \next(\zero)$.
 3. We proceed by strong induction on $b$. For the base case $b = \zero$, note that $$a = \ngcd(a,\zero) = \zero$$ as claimed. Now suppose we have $n$ such that the implication holds for all $b$ with $\nleq(b,n)$, and that $b = \next(n)$. Now $$\zero = \ngcd(a,b) = \ngcd(b,\nrem(a,b)),$$ where $\nleq(\nrem(a,b),b)$. By the induction hypothesis we have $b = \zero$ and $\nrem(a,b) = \zero$, so that $$a = \nplus(\ntimes(\nquo(a,b),b),\nrem(a,b)) = \zero$$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_gcd_zero :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
@@ -262,21 +254,20 @@ For all $a \in \nats$ we have the following.
 >     then and (isZero a) (isZero b)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\ngcd$ is associative.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c \in \nats$. Then we have $\ngcd(\ngcd(a,b),c) = \ngcd(a,\ngcd(b,c))$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Let $h = \ngcd(\ngcd(a,b),c)$, $k = \ngcd(a,\ngcd(b,c))$, $u = \ngcd(a,b)$, and $v = \ngcd(b,c)$. First we show that $\ndiv(h,k)$. Note that $\ndiv(h,u)$, so that $\ndiv(h,a)$ and $\ndiv(h,b)$. Now $\ndiv(h,c)$, so that $\ndiv(h,v)$. Thus $\ndiv(h,k)$. The proof that $\ndiv(k,h)$ is similar; thus $h = k$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_gcd_associative :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> n -> Bool)
@@ -284,17 +275,16 @@ Let $h = \ngcd(\ngcd(a,b),c)$, $k = \ngcd(a,\ngcd(b,c))$, $u = \ngcd(a,b)$, and 
 >   testName "gcd(gcd(a,b),c) == gcd(a,gcd(b,c))" $
 >   \a b c -> eq (gcd (gcd a b) c) (gcd a (gcd b c))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\ngcd$ detects $\ndiv$.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b \in \nats$. Then $\ngcd(a,b) = a$ if and only if $\ndiv(a,b)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Certainly if $\ngcd(a,b) = a$, then $\ndiv(a,b)$. Suppose conversely that $\ndiv(a,b)$. We consider two cases: either $a = \zero$ or $a = \next(t)$ for some $t$. If $a = \zero$, then $b = \zero$, and we have $$\ngcd(a,b) = \zero = a$$ as claimed. Suppose now that $a = \next(t)$. Since $\ndiv(a,b)$, we have $$b = \ntimes(q,a) = \nplus(\ntimes(q,a),\zero)$$ for some $q$. Now $\nleq(\zero,t)$, and by the uniqueness of remainders by nonzero divisors, we have $\nrem(b,a) = \zero$. So we have
 $$\begin{eqnarray*}
  &   & \ngcd(a,b) \\
@@ -304,9 +294,9 @@ $$\begin{eqnarray*}
  & = & a
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_gcd_div :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
@@ -314,17 +304,16 @@ as claimed.
 >   testName "eq(gcd(a,b),a) == div(a,b)" $
 >   \a b -> eq (eq (gcd a b) a) (div a b)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\ngcd$ distributes over $\ntimes$.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c \in \nats$. Then $\ngcd(\ntimes(a,c),\ntimes(b,c)) = \ntimes(\ngcd(a,b),c)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We consider two cases: either $c = \zero$ or $c \neq \zero$. If $c = \zero$, we have
 $$\begin{eqnarray*}
  &   & \ntimes(\ngcd(a,b),c) \\
@@ -333,9 +322,9 @@ $$\begin{eqnarray*}
  & = & \ngcd(\ntimes(a,c),\ntimes(b,c))
 \end{eqnarray*}$$
 as claimed. Now suppose $c \neq \zero$. First note that $\ndiv(\ngcd(a,b),a)$, so that $$\ndiv(\ntimes(\ngcd(a,b),c),\ntimes(a,c)).$$ Similarly, we have $$\ndiv(\ntimes(\ngcd(a,b),c),\ntimes(b,c)).$$ Thus $$\ndiv(\ntimes(\ngcd(a,b),c), \ngcd(\ntimes(a,c),\ntimes(b,c))).$$ Now note that $\ndiv(c,\ntimes(a,c))$ and $\ndiv(c,\ntimes(b,c))$, so that $$\ndiv(c,\ngcd(\ntimes(a,c),\ntimes(b,c))).$$ Say $$\ntimes(u,c) = \ngcd(\ntimes(a,c),\ntimes(b,c)).$$ Now $\ndiv(\ntimes(u,c),\ntimes(a,c))$, so that $\ndiv(u,a)$; similarly, $\ndiv(u,b)$. Thus $\ndiv(u,\ngcd(a,b))$, and we have $$\ndiv(\ngcd(\ntimes(a,c),\ntimes(b,c)),\ntimes(\ngcd(a,b),c)).$$ By the antisymmetry of $\ndiv$, we have $$\ngcd(\ntimes(a,c),\ntimes(b,c) = \ntimes(\ngcd(a,b),c)$$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_gcd_distributive_times :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> n -> Bool)
@@ -343,17 +332,16 @@ as claimed. Now suppose $c \neq \zero$. First note that $\ndiv(\ngcd(a,b),a)$, s
 >   testName "times(gcd(a,b),c) == gcd(times(a,c),times(b,c))" $
 >   \a b c -> eq (times (gcd a b) c) (gcd (times a c) (times b c))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\ngcd$ is compatible with $\ndiv$.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c \in \nats$. If $\ndiv(a,b)$, then $\ndiv(\ngcd(a,c),\ngcd(b,c))$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \ngcd(\ngcd(a,c),\ngcd(b,c)) \\
@@ -361,9 +349,9 @@ $$\begin{eqnarray*}
  & = & \ngcd(a,c).
 \end{eqnarray*}$$
 Thus $\ndiv(\ngcd(a,c),\ngcd(b,c))$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_gcd_div_compatible :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> n -> Bool)
@@ -373,17 +361,16 @@ Thus $\ndiv(\ngcd(a,c),\ngcd(b,c))$ as claimed.
 >     then div (gcd a c) (gcd b c)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\nquo$ kind of distributes over $\ngcd$.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c \in \nats$. If $\ndiv(c,a)$ and $\ndiv(c,b)$, then $$\ngcd(\nquo(a,c),\nquo(b,c)) = \nquo(\ngcd(a,b),c).$$
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We consider two cases: either $c = \zero$ or $c \neq \zero$. If $c = \zero$, then $\nquo(a,c) = \zero$ and $\nquo(b,c) = \zero$, so we have
 $$\begin{eqnarray*}
  &   & \ngcd(\nquo(a,c),\nquo(b,c)) \\
@@ -398,9 +385,9 @@ $$\begin{eqnarray*}
  & = & \ngcd(a,b).
 \end{eqnarray*}$$
 By the uniqueness of quotients by nonzero divisors, $$\nquo(\ngcd(a,b),c) = \ngcd(\nquo(a,c),\nquo(b,c))$$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_gcd_div_quo :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> n -> Bool)
@@ -410,8 +397,8 @@ By the uniqueness of quotients by nonzero divisors, $$\nquo(\ngcd(a,b),c) = \ngc
 >     then eq (gcd (quo a c) (quo b c)) (quo (gcd a b) c)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

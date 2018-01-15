@@ -39,8 +39,7 @@ slug: infix
 
 Today we'll nail down $\infix$, a variant on $\sublist$.
 
-<div class="result">
-<div class="dfn"><p>
+:::::: definition ::
 Let $A$ be a set. Define $\beta : A \times \lists{A} \times \lists{A} \rightarrow \bool$ by $$\beta(a,x,y) = \prefix(y,\cons(a,x)),$$ $\psi : A \times \lists{A} \times \lists{A} \rightarrow \bool$ by $$\beta(a,x,y) = \btrue,$$ and $\omega : A \times \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\omega(a,x,y) = y.$$ Then define $\infix : \lists{A} \times \lists{A} \rightarrow \bool$ by $$\infix(x,y) = \bfoldr{\isnil}{\beta}{\psi}{\omega}(y,x).$$
 
 In Haskell:
@@ -52,23 +51,22 @@ In Haskell:
 >     psi _ _ _ = true
 >     omega _ _ y = y
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 (``infix`` is a reserved word in Haskell, so we'll call this function ``isInfix``.)
 
 Since $\infix$ is defined in terms of bailout fold, it can be characterized as the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set. $\infix$ is the unique map $f : \lists{A} \times \lists{A} \rightarrow \bool$ satisfying the following equations for all $b \in A$ and $x,y \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(x,\nil) = \isnil(x) \\
  f(x,\cons(b,y)) = \bif{\prefix(x,\cons(b,y))}{\btrue}{f(x,y)}
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_infix_list_nil :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> Bool)
@@ -85,17 +83,16 @@ $$\left\{\begin{array}{l}
 >     (isInfix x (cons b y))
 >     (if prefix x (cons b y) then true else isInfix x y)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\infix$ is an $\bor$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x,y \in \lists{A}$, we have $$\infix(x,y) = \bor(\prefix(x,y),\infix(x,\tail(y))).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We consider two possibilities for $y$. If $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \infix(x,\nil) \\
@@ -112,9 +109,9 @@ $$\begin{eqnarray*}
  & = & \bor(\prefix(x,y),\infix(x,\tail(y)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_infix_prefix_or :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> Bool)
@@ -122,17 +119,16 @@ as needed.
 >   testName "infix(x,y) == or(prefix(x,y),infix(x,tail(y)))" $
 >   \x y -> eq (isInfix x y) (or (prefix x y) (isInfix x (tail y)))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\infix$ is reflexive.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. If $x \in \lists{A}$, then $\infix(x,x) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We consider two cases for $x$. If $x = \nil$, we have $$\infix(x,x) = \infix(\nil,\nil) = \btrue$$ as claimed. If $x = \cons(a,u)$, we have
 $$\begin{eqnarray*}
  &   & \infix(x,x) \\
@@ -142,9 +138,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_infix_reflexive :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> Bool)
@@ -152,20 +148,19 @@ as claimed.
 >   testName "infix(x,x) == true" $
 >   \x -> eq (isInfix x x) true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\infix$ interacts with $\cat$:
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set and $x,y \in \lists{A}$.
 
 1. $\infix(x,\cat(y,x)) = \btrue$.
 2. $\infix(x,\cat(x,y)) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by list induction on $y$. For the base case, note that
 $$\begin{eqnarray*}
  &   & \infix(x,\cat(y,x)) \\
@@ -194,9 +189,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_infix_cat_right :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> Bool)
@@ -211,25 +206,24 @@ as needed.
 >   testName "infix(x,cat(y,x)) == true" $
 >   \x y -> isInfix x (cat y x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Prefixes and suffixes are also infixes.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set. The following hold for all $x,y \in \lists{A}$.
 
 1. If $\prefix(x,y) = \btrue$, then $\infix(x,y) = \btrue$.
 2. If $\suffix(x,y) = \btrue$, then $\infix(x,y) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Recall that $\prefix(x,y) = \btrue$ if and only if $y = \cat(x,z)$ for some $z$. Then $$\infix(x,y) = \infix(x,\cat(x,z)) = \btrue$$ as claimed.
 2. Recall that $\suffix(x,y) = \btrue$ if and only if $y = \cat(z,x)$ for some $z$. Then $$\infix(x,y) = \infix(x,\cat(z,x)) = \btrue$$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_infix_prefix :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> Bool)
@@ -244,17 +238,16 @@ Let $A$ be a set. The following hold for all $x,y \in \lists{A}$.
 >   testName "if suffix(x,y) then infix(x,y)" $
 >   \x y -> if suffix x y then isInfix x y else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\infix$ interacts conditionally with $\cons$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $a \in A$ and $x,y \in \lists{A}$. If $\infix(x,y) = \btrue$, then $\infix(x,\cons(a,y)) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \infix(x,\cons(a,y)) \\
@@ -263,9 +256,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_infix_cond_cons :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> a -> Bool)
@@ -273,17 +266,16 @@ as claimed.
 >   testName "if infix(x,y) then infix(x,cons(a,y))" $
 >   \x y a -> if isInfix x y then isInfix x (cons a y) else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\infix$ interacts conditionally with $\snoc$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $a \in A$ and $x,y \in \lists{A}$. If $\infix(x,y) = \btrue$, then $\infix(x,\snoc(a,y)) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $y$. For the base case $y = \nil$, note that we must have $x = \nil$. Now $$\infix(x,\snoc(a,y)) = \infix(\nil,\snoc(a,y)) = \btrue$$ as needed. For the inductive step, suppose the implication holds for some $y$ and let $b \in A$. Suppose further that $\infix(x,\cons(b,y)) = \btrue$. Now
 $$\begin{eqnarray*}
  &   & \btrue \\
@@ -297,9 +289,9 @@ $$\begin{eqnarray*}
  & = & \infix(x,\snoc(a,\cons(b,y)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_infix_cond_snoc :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> a -> Bool)
@@ -307,20 +299,19 @@ as needed.
 >   testName "if infix(x,y) then infix(x,snoc(a,y))" $
 >   \x y a -> if isInfix x y then isInfix x (snoc a y) else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\infix$ is right-compatible with $\cat$ (from both sides).
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set and $x,y \in \lists{A}$.
 
 1. If $\infix(x,y) = \btrue$, then $\infix(x,\cat(y,z)) = \btrue$.
 2. If $\infix(x,y) = \btrue$, then $\infix(x,\cat(z,y)) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by list induction on $z$. For the base case $z = \nil$, we have $$\infix(x,\cat(y,z)) = \infix(x,\cat(y,\nil)) = \infix(x,y) = \btrue.$$ For the inductive step, suppose the implication holds for some $z$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \btrue \\
@@ -339,9 +330,9 @@ $$\begin{eqnarray*}
  & = & \infix(x,\cat(\cons(a,z),y))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_infix_cat_right_compatible_right :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> t a -> Bool)
@@ -356,20 +347,19 @@ as needed.
 >   testName "if infix(x,y) then infix(x,cat(z,y))" $
 >   \x y z -> if isInfix x y then isInfix x (cat z y) else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\infix$ perfectly detects two-sided $\cat$-factorizations.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. Then the following hold for all $x,y \in \lists{A}$.
 
 1. $\infix(x,\cat(u,\cat(x,v))) = \btrue$ for all $u,v \in \lists{A}$.
 2. If $\infix(x,y) = \btrue$, then $y = \cat(u,\cat(x,v))$ for some $u,v \in \lists{A}$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We have
 $$\begin{eqnarray*}
  &   & \btrue \\
@@ -391,9 +381,9 @@ $$\begin{eqnarray*}
  & = & \cat(\cons(a,u),\cat(x,v))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_infix_cat_factor :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> t a -> Bool)
@@ -401,17 +391,16 @@ as needed.
 >   testName "infix(x,cat(u,cat(x,v)))" $
 >   \x u v -> isInfix x (cat u (cat x v))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\infix$ interacts with $\rev$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. If $x \in \lists{A}$, we have $\infix(\rev(x),\rev(y)) = \infix(x,y)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that, for all $x,u,v \in \lists{A}$, we have
 $$\begin{eqnarray*}
  &   & \rev(\cat(u,\cat(x,v))) \\
@@ -420,9 +409,9 @@ $$\begin{eqnarray*}
  & = & \cat(\rev(v),\cat(\rev(x),\rev(u))).
 \end{eqnarray*}$$
 In particular, $$y = \cat(u,\cat(x,v))$$ for some $u$ and $v$ if and only if $$\rev(y) = \cat(h,\cat(\rev(x),k))$$ for some $h$ and $k$. So $\infix(x,y) = \btrue$ if and only if $\infix(\rev(x),\rev(y)) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_infix_rev :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> Bool)
@@ -430,26 +419,25 @@ In particular, $$y = \cat(u,\cat(x,v))$$ for some $u$ and $v$ if and only if $$\
 >   testName "infix(rev(x),rev(y)) == infix(x,y)" $
 >   \x y -> eq (isInfix (rev x) (rev y)) (isInfix x y)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\snoc(a,x)$ is not an infix of $\nil$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have $$\infix(\snoc(a,x),\nil) = \bfalse.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 $$\begin{eqnarray*}
  &   & \infix(\snoc(a,x),\nil) \\
  & = & \isnil(\snoc(a,x)) \\
  & = & \bfalse
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_infix_snoc_nil :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
@@ -457,17 +445,16 @@ as claimed.
 >   testName "infix(snoc(a,x),nil) == false" $
 >   \a x -> eq (isInfix (snoc a x) nil) false
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\infix$ interacts with $\snoc$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x,y \in \lists{A}$ and $b \in A$, we have $$\infix(x,\snoc(b,y)) = \bor(\suffix(x,\snoc(b,y)),\infix(x,y)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \infix(x,\snoc(b,y)) \\
@@ -478,9 +465,9 @@ $$\begin{eqnarray*}
  & = & \bor(\suffix(x,\snoc(b,y)),\infix(x,y))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_infix_snoc :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> a -> t a -> Bool)
@@ -490,17 +477,16 @@ as claimed.
 >     (isInfix x (snoc b y))
 >     (or (suffix x (snoc b y)) (isInfix x y))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\infix$ is antisymmetric.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $x,y \in \lists{A}$. If $\infix(x,y) = \btrue$ and $\infix(y,x) = \btrue$, then $x = y$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Suppose $\infix(x,y) = \btrue$; then we have $u$ and $v$ such that $$y = \cat(u,\cat(x,v)).$$ Similarly, if $\infix(y,x) = \btrue$ we have $h$ and $k$ such that $$x = \cat(h,\cat(y,k)).$$ Now
 $$\begin{eqnarray*}
  &   & x \\
@@ -518,9 +504,9 @@ $$\begin{eqnarray*}
  & = & y
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_infix_antisymmetric :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> Bool)
@@ -530,17 +516,16 @@ as claimed.
 >     then eq x y
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\infix$ is transitive.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $x,y,z \in \lists{A}$. If $\infix(x,y) = \btrue$ and $\infix(y,z) = \btrue$, then $\infix(x,z) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 If $\infix(x,y) = \btrue$, we have $$y = \cat(u,\cat(x,v))$ for some $u$ and $v$, and if $\infix(y,z) = \btrue$ we have $$z = \cat(h,cat(y,k))$ for some $h$ and $k$. Now
 $$\begin{eqnarray*}
  &   & z \\
@@ -550,9 +535,9 @@ $$\begin{eqnarray*}
  & = & \cat(\cat(h,u),\cat(x,\cat(v,k)))
 \end{eqnarray*}$$
 so that $\infix(x,z) = \btrue$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_infix_transitive :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> t a -> Bool)
@@ -562,21 +547,20 @@ so that $\infix(x,z) = \btrue$ as claimed.
 >     then isInfix x z
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Infixes are also sublists:
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set and $x,y \in \lists{A}$.
 
 1. If $\infix(x,y) = \btrue$, then $\sublist(x,y) = \btrue$.
 2. If $\prefix(x,y) = \btrue$, then $\sublist(x,y) = \btrue$.
 3. If $\suffix(x,y) = \btrue$, then $\sublist(x,y) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by list induction on $y$. For the base case $y = \nil$, note that if $$\btrue = \infix(x,y) = \infix(x,\nil),$$ we have $x = \nil$. Then $$\sublist(x,y) = \sublist(\nil,y) = \btrue$$ as needed. For the inductive step, suppose the implication holds for all $x$ for some $y$, and let $a \in A$. Suppose further that $\infix(x,\cons(a,y)) = \btrue$. Now
 $$\begin{eqnarray*}
  &   & \btrue \\
@@ -594,9 +578,9 @@ $$\begin{eqnarray*}
 as needed. Now suppose $\infix(x,y) = \btrue$. By the induction hypothesis, we have $\sublist(x,y) = \btrue$, so that $\sublist(x,\cons(b,y)) = \btrue$ as needed.
 2. If $\prefix(x,y) = \btrue$, then $\infix(x,y) = \btrue$.
 3. If $\suffix(x,y) = \btrue$, then $\infix(x,y) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_infix_sublist :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> Bool)
@@ -618,17 +602,16 @@ as needed. Now suppose $\infix(x,y) = \btrue$. By the induction hypothesis, we h
 >   testName "if suffix(x,y) then sublist(x,y)" $
 >   \x y -> if suffix x y then sublist x y else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\infix$ is an $\any$.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set. For all $x \in \lists{A}$, we have $$\infix(x,y) = \any(\prefix(x,-))(\tails(y)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $y$. For the base case $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \any(\prefix(x,-))(\tails(\nil)) \\
@@ -648,9 +631,9 @@ $$\begin{eqnarray*}
  & = & \any(\prefix(x,-))(\tails(\cons(a,y)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_infix_any :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> Bool)
@@ -658,8 +641,8 @@ as needed.
 >   testName "infix(x,y) == any(prefix(x,-))(tails(y))" $
 >   \x y -> eq (isInfix x y) (any (prefix x) (tails y))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

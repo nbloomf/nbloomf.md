@@ -46,8 +46,7 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 Intuitively, if $p(a)$ is $\btrue$ we want $$\filter(p)(\cons(a,x)) = \cons(a,\filter(p)(x)),$$ while if $p(a)$ is $\bfalse$ we want $$\filter(p)(\cons(a,x)) = \filter(p)(x).$$ With this in mind we define $\filter$ like so.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set. Define $\varphi : A \times \lists{A} \rightarrow \lists{A}$ by $$\varphi(a,w) = \left\{ \begin{array}{ll} \cons(a,w) & \mathrm{if}\ p(a) = \btrue \\ w & \mathrm{if}\ p(a) = \bfalse. \end{array}\right.$$ Now define $$\filter : \bool^A \rightarrow {\lists{A}}^{\lists{A}}$$ by $$\filter(p)(x) = \foldr{\nil}{\varphi}(x).$$
 
 In Haskell:
@@ -59,21 +58,20 @@ In Haskell:
 >       then cons a w
 >       else w
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\filter(p)$ is defined as a $\foldr{\ast}{\ast}$, it can be characterized as the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. $\filter(p)$ is the unique map $f : \lists{A} \rightarrow \lists{A}$ satisfying the following for all $a \in A$ and $x \in \lists{A}$.
 $$\left\{\begin{array}{ll}
  f(\nil) = \nil \\
  f(\cons(a,x)) = \bif{p(a)}{\cons(a,f(x))}{f(x)}
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_filter_nil :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> Bool)
@@ -90,17 +88,16 @@ $$\left\{\begin{array}{ll}
 >     (filter p (cons a x))
 >     (if p a then cons a (filter p x) else filter p x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 As we might expect, the items in $\filter(p)(x)$ all satisfy $p$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $x \in \lists{A}$ we have $$\all(p,\filter(p)(x)) = \btrue.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \all(p,\filter(p)(\nil)) \\
@@ -122,9 +119,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_filter_all :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
@@ -132,17 +129,16 @@ as claimed.
 >   testName "all(p,filter(p)(x)) == true" $
 >   \p x -> eq (all p (filter p x)) true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\filter$ interacts with $\snoc$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $a \in A$ and $x \in \lists{A}$, we have $$\filter(p)(\snoc(a,x)) = \bif{p(a)}{\snoc(a,\filter(p)(x))}{\filter(p)(x)}.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, if $p(a) = \btrue$ we have
 $$\begin{eqnarray*}
  &   & \filter(p)(\snoc(a,\nil)) \\
@@ -192,9 +188,9 @@ $$\begin{eqnarray*}
  & = & \filter(p)(\cons(b,x))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_filter_snoc :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> a -> t a -> Bool)
@@ -204,17 +200,16 @@ as needed.
 >     (filter p (snoc a x))
 >     (if p a then snoc a (filter p x) else filter p x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\filter$ interacts with $\rev$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $x \in \lists{A}$, we have $$\filter(p)(\rev(x)) = \rev(\filter(p)(x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \filter(p)(\rev(\nil)) \\
@@ -241,9 +236,9 @@ $$\begin{eqnarray*}
  & = & \filter(p)(\rev(\cons(a,x)))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_filter_rev :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
@@ -251,17 +246,16 @@ as claimed.
 >   testName "filter(p)(rev(x)) == rev(filter(p)(x))" $
 >   \p x -> eq (filter p (rev x)) (rev (filter p x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\filter(p)$ distributes over $\cat$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $x,y \in \lists{A}$ we have $$\filter(p)(\cat(x,y)) = \cat(\filter(p)(x),\filter(p)(y)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \filter(p)(\cat(x,y)) \\
@@ -289,9 +283,9 @@ $$\begin{eqnarray*}
  & = & \cat(\filter(p)(\cons(a,x)),\filter(p)(y))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_filter_cat :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> t a -> t a -> Bool)
@@ -299,17 +293,16 @@ as needed.
 >   testName "filter(p)(cat(x,y)) == cat(filter(p)(x),filter(p)(y))" $
 >   \p x y -> eq (filter p (cat x y)) (cat (filter p x) (filter p y))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\filter(p)$ is idempotent.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $x \in \lists{A}$ we have $$\filter(p)(\filter(p)(x)) = \filter(p)(x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \filter(p)(\filter(p)(x)) \\
@@ -328,9 +321,9 @@ $$\begin{eqnarray*}
  & = & \filter(p)(\cons(a,x))
 \end{eqnarray*}$$
 as needed
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_filter_idempotent :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
@@ -338,17 +331,16 @@ as needed
 >   testName "filter(p)(filter(p)(x)) == filter(p)(x)" $
 >   \p x -> eq (filter p (filter p x)) (filter p x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 A list $x$ is invariant under $\filter(p)$ if and only if $\all(p)(x)$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate with $x \in \lists{A}$. We have $$\beq(x,\filter(p)(x)) = \all(p,x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \beq(x,\filter(p)(x)) \\
@@ -384,9 +376,9 @@ $$\begin{eqnarray*}
  & = & \all(p,\cons(a,x))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_filter_eq_all :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
@@ -394,8 +386,8 @@ as needed.
 >   testName "eq(x,filter(p)(x)) == all(p,x)" $
 >   \p x -> eq (eq x (filter p x)) (all p x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

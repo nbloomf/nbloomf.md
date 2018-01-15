@@ -30,8 +30,7 @@ slug: power
 
 We defined $\ntimes$ as iterated addition; similarly, exponentiation is iterated multiplication. We'll call this function $\npower$.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Define $\varphi : \nats \rightarrow \nats$ by $\varphi(a) = \next(\zero)$, and define $\mu : \nats \times \nats \times \nats \rightarrow \nats$ by $\mu(k,a,b) = \ntimes(b,a)$. We define $\npower : \nats \times \nats \rightarrow \nats$ by $$\npower(a,b) = \simprec{\varphi}{\mu}(b,a).$$
 
 In Haskell:
@@ -42,21 +41,20 @@ In Haskell:
 >     phi _     = next zero
 >     mu  _ a b = times b a
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Because $\npower$ is defined in terms of simple recursion, it is the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 $\npower$ is the unique map $f : \nats \times \nats \rightarrow \nats$ with the property that for all $a,b \in \nats$, we have
 $$\left\{\begin{array}{l}
  f(a,\zero) = \next(\zero) \\
  f(a,\next(b)) = \ntimes(f(a,b),a).
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_power_zero_right :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
@@ -71,21 +69,20 @@ $$\left\{\begin{array}{l}
 >   testName "power(a,next(b)) == times(power(a,b),a)" $
 >   \a b -> eq (power a (next b)) (times (power a b) a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Some special cases.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a \in \nats$. Then we have the following.
 
 1. $\npower(a,\next(\zero)) = a$.
 2. $\npower(\zero,\next(a)) = \zero$.
 3. $\npower(\next(\zero),a) = \next(\zero)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We have
 $$\begin{eqnarray*}
  &   & \npower(a,\next(\zero)) \\
@@ -107,9 +104,9 @@ $$\begin{eqnarray*}
  & = & \next(\zero)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_power_one_right :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
@@ -131,21 +128,20 @@ as needed.
 >   testName "power(1,a) == 1" $
 >   \a -> eq (power (next zero) a) (next zero)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And interaction with $\nplus$ and $\ntimes$.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c \in \nats$. Then we have the following.
 
 1. $\npower(a,\nplus(b,c)) = \ntimes(\npower(a,b),\npower(a,c))$.
 2. $\npower(a,\ntimes(b,c)) = \npower(\npower(a,b),c)$.
 3. $\npower(\ntimes(a,b),c) = \ntimes(\npower(a,c),\npower(b,c))$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by induction on $c$. For the base case $c = \zero$, note that
 $$\begin{eqnarray*}
  &   & \npower(a,\nplus(b,c)) \\
@@ -201,9 +197,9 @@ $$\begin{eqnarray*}
  & = & \ntimes(\npower(a,\next(c)),\npower(b,\next(c)))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_power_plus_right :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> n -> Bool)
@@ -225,8 +221,8 @@ as claimed.
 >   testName "power(times(a,b),c) == times(power(a,c),power(b,c))" $
 >   \a b c -> eq (power (times a b) c) (times (power a c) (power b c))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

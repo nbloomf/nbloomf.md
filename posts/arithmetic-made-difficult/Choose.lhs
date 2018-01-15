@@ -24,8 +24,7 @@ slug: choose
 
 Today we'll define the binomial coefficient operator, $\nchoose$.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Define $\delta : \nats \rightarrow \nats$ by $$\delta(k) = \bif{\iszero(k)}{\next(\zero)}{\zero},$$ $\psi : \nats \rightarrow \nats$ by $$\psi(m) = \next(\zero),$$ and $\chi : \nats \times \nats \times \nats$ by $$\chi(t,a,b) = \nplus(a,b).$$ Now define $\nchoose : \nats \times \nats \rightarrow \nats$ by $$\nchoose = \dnatrec{\delta}{\psi}{\chi}.$$
 
 In Haskell:
@@ -36,22 +35,21 @@ In Haskell:
 >     delta k = if isZero k then next zero else zero
 >     chi _ a b = plus a b
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Because $\nchoose$ is implemented in terms of double natural recursion, it is the unique solution to a system of equations.
 
-<div class="result">
-<div class="corollary">
+:::::: corollary :::
 $\nchoose$ is the unique solution $f : \nats \times \nats \rightarrow \nats$ to the following system of functional equations for all $n,k \in \nats$.
 $$\left\{\begin{array}{l}
  f(\zero,k) = \bif{\iszero(k)}{\next(\zero)}{\zero} \\
  f(\next(n),\zero) = \next(\zero) \\
  f(\next(n),\next(k)) = \nplus(f(n,k),f(n,\next(k))).
 \end{array}\right.$$
-</div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_choose_zero_nat :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
@@ -77,17 +75,16 @@ $$\left\{\begin{array}{l}
 >     (choose (next n) (next k))
 >     (plus (choose n (next k)) (choose n k))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 We can show that $\nchoose$ satisfies the usual properties of binomial coefficients. First, if $k$ is large enough then $\nchoose(n,k) = \zero$.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $n,k \in \nats$. If $\nleq(\next(n),k) = \btrue$, then $\nchoose(n,k) = \zero$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$, note that if $\nleq(\next(n),k) = \btrue$ then $k \neq \zero$. Then we have
 $$\begin{eqnarray*}
  &   & \nchoose(n,k) \\
@@ -111,9 +108,9 @@ $$\begin{eqnarray*}
  & = & \zero
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_choose_big_k :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
@@ -123,20 +120,19 @@ as claimed.
 >     then eq (choose n k) zero
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 The special cases:
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 For all $n \in \nats$, we have the following.
 
 1. $\nchoose(n,\zero) = \next(\zero)$.
 2. $\nchoose(n,n) = \next(\zero)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We have two possibilities for $n$. If $n = \zero$, we have
 $$\begin{eqnarray*}
  &   & \nchoose(n,\zero) \\
@@ -165,9 +161,9 @@ $$\begin{eqnarray*}
  & = & \next(\zero)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_choose_nat_zero :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
@@ -182,17 +178,16 @@ as needed.
 >   testName "choose(n,n) == 1" $
 >   \n -> eq (choose n n) (next zero)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\nchoose$ is kind of symmetric:
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $n \in \nats$, and suppose $n = \nplus(k,m)$. Then $$\nchoose(n,k) = \nchoose(n,m).$$
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$, note that $k = m = \zero$. Then we have $\nchoose(n,k) = \nchoose(n,m)$ as needed. For the inductive step, suppose the equality holds for some $n$. Say $\next(n) = \nplus(k,m)$. We now consider two possibilities for $k$. If $k = \zero$, we have $m = \next(n)$, so that
 $$\begin{eqnarray*}
  &   & \nchoose(\next(n),k) \\
@@ -235,9 +230,9 @@ $$\begin{eqnarray*}
  & = & \nplus(\next(n),m)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_choose_plus :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
@@ -245,8 +240,8 @@ as needed.
 >   testName "choose(plus(a,b),a) == choose(plus(a,b),b)" $
 >   \a b -> eq (choose (plus a b) a) (choose (plus a b) b)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

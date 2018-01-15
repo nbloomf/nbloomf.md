@@ -21,8 +21,7 @@ slug: tuples
 
 Today we'll establish a few basic utility functions on *tuples*. First, recall some definitions.
 
-<div class="result">
-<div class="defn">
+:::::: definition ::
 Let $A$ and $B$ be sets. There is a set $A \times B$ together with two functions $\fst : A \times B \rightarrow A$ and $\snd : A \times B \rightarrow B$ having the property that if $X$ is a set and $\sigma : X \rightarrow A$ and $\tau : X \rightarrow B$ functions then there is a unique map $\Theta : X \rightarrow A \times B$ such that $\fst \circ \Theta = \sigma$ and $\snd \circ \Theta = \tau$. That is, there is a unique $\Theta$ such that the following diagram commutes.
 
 $$\require{AMScd}
@@ -35,20 +34,17 @@ A @<<{\fst}< A \times B @>>{\snd}> B
 We will denote this unique $\Theta : X \rightarrow A \times B$ by $\dup(\sigma,\tau)$.
 
 More concretely, if $f : X \rightarrow A \times B$ such that $\fst(f(x)) = \sigma(x)$ and $\snd(f(x)) = \tau(x)$ for all $x \in X$, then $f = \dup(\sigma,\tau)$.
-</div>
-</div>
+::::::::::::::::::::
 
 Now $A \times B$ uniquely represents all possible pairs of elements of $A$ and $B$ in a precise sense.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $A$ and $B$ be sets.
 
 1. If $a \in A$ and $b \in B$, then there exists $w \in A \times B$ such that $\fst(w) = a$ and $\snd(w) = b$.
 2. If $x,y \in A \times B$ such that $\fst(x) = \fst(y)$ and $\snd(x) = \snd(y)$, then $x = y$.
-</div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Let $a \in A$ and $b \in B$. Define $\sigma : \{\ast\} \rightarrow A$ by $\sigma(\ast) = a$, and $\tau : \{\ast\} \rightarrow B$ by $\tau(\ast) = b$. Let $\Theta = \dup(\sigma,\tau)$, and consider $w = \Theta(\ast) \in A \times B$. In particular, note that
 $$\begin{eqnarray*}
  &   & \fst(w) \\
@@ -83,8 +79,8 @@ $$\begin{eqnarray*}
  & = & \snd(g(\ast)).
 \end{eqnarray*}$$
 In particular, we have $$f = \dup(\sigma,\tau) = g$$ and thus $$x = f(\ast) = g(\ast) = y$$ as claimed.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 In Haskell we can model $A \times B$ with the tuple type ``(a,b)``, and the maps in the universal property like so.
 
@@ -102,12 +98,10 @@ In Haskell we can model $A \times B$ with the tuple type ``(a,b)``, and the maps
 
 For example, $\id_{A \times B}$ is a $\dup$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Provided the types match up, we have $$\dup(\fst,\snd) = \id_{A \times B}.$$
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that for all $(a,b) \in A \times B$ we have
 $$\begin{eqnarray*}
  &   & \dup(\fst,\snd)(a,b) \\
@@ -115,9 +109,9 @@ $$\begin{eqnarray*}
  & = & (a,b)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_dup_fst_snd :: (Equal a, Equal b)
 >   => a -> b -> Test ((a,b) -> Bool)
@@ -125,13 +119,12 @@ as claimed.
 >   testName "dup(fst,snd) == id" $
 >   \x -> eq (dup fst snd x) x
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 We define $\tSwap$ on tuples like so.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ and $B$ be sets. We define $\tSwap : A \times B \rightarrow B \times A$ by $$\tSwap = \dup(\snd,\fst).$$
 
 In Haskell,
@@ -139,20 +132,17 @@ In Haskell,
 > tswap :: (a,b) -> (b,a)
 > tswap = dup snd fst
 
-</p></div>
-</div>
+::::::::::::::::::::
 
 Elements of $A \times B$ act like "ordered pairs", and $\tSwap$ effectively reverses the order of the pair.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets. Then we have the following.
 
 1. $\tSwap(a,b) = (b,a)$.
 2. $\tSwap(\tSwap(a,b)) = (a,b)$.
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Note that
 $$\begin{eqnarray*}
  &   & \tSwap(a,b) \\
@@ -168,9 +158,9 @@ $$\begin{eqnarray*}
  & = & (a,b)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_tswap_entries :: (Equal a, Equal b)
 >   => a -> b -> Test ((a,b) -> Bool)
@@ -185,13 +175,12 @@ as claimed.
 >   testName "tswap(tswap(x)) == x" $
 >   \x -> eq (tswap (tswap x)) x
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Next, the utility $\tPair$ facilitates defining functions from one tuple to another.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$, $B$, $U$, and $V$ be sets. We define $\tPair : U^A \times V^B \rightarrow (U \times V)^{A \times B}$ by $$\tPair(f,g) = \dup(f \circ \fst, g \circ \snd).$$
 
 In Haskell:
@@ -199,20 +188,17 @@ In Haskell:
 > tpair :: (a -> u) -> (b -> v) -> (a,b) -> (u,v)
 > tpair f g = dup (f . fst) (g . snd)
 
-</p></div>
-</div>
+::::::::::::::::::::
 
 $\tPair$ has some nice properties.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 For all $f$, $g$, $h$, $k$, $a$, and $b$ we have the following.
 
 1. $\tPair(f,g)(a,b) = (f(a),g(b))$.
 2. $\tPair(f,g) \circ \tPair(h,k) = \tPair(f \circ h, g \circ k)$.
-</div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Note that
 $$\begin{eqnarray*}
  &   & \tPair(f,g)(a,b) \\
@@ -232,9 +218,9 @@ $$\begin{eqnarray*}
  & = & \tPair(f \circ h, g \circ k)(a,b)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_tpair_apply :: (Equal a, Equal b)
 >   => a -> b -> Test ((a -> a) -> (b -> b) -> (a,b) -> Bool)
@@ -253,13 +239,12 @@ as claimed.
 >       (tpair f g (tpair h k x))
 >       (tpair (f . h) (g . k) x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Finally, note that although as sets $A \times (B \times C)$ and $(A \times B) \times C$ cannot possibly be equal to each other in general, they are naturally isomorphic via $\tAssocL$ and $\tAssocR$.
 
-<div class="result">
-<div class="defn">
+:::::: definition ::
 Let $A$, $B$, and $C$ be sets. We define $\tAssocL : A \times (B \times C) \rightarrow (A \times B) \times C$ by $$\tAssocL = \dup(\dup(\fst, \fst \circ \snd), \snd \circ \snd)$$ and define $\tAssocR : (A \times B) \times C \rightarrow A \times (B \times C)$ by $$\tAssocR = \dup(\fst \circ \fst, \dup(\snd \circ \fst, \snd)).$$
 
 In Haskell:
@@ -270,22 +255,19 @@ In Haskell:
 > tassocR :: ((a,b),c) -> (a,(b,c))
 > tassocR = dup (fst . fst) (dup (snd . fst) snd)
 
-</div>
-</div>
+::::::::::::::::::::
 
 Now $\tAssocL$ and $\tAssocR$ have some nice properties.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 The following hold whenever everything has the appropriate type.
 
 1. $\tAssocL(a,(b,c)) = ((a,b),c)$.
 2. $\tAssocR((a,b),c) = (a,(b,c))$.
 3. $\tAssocR \circ \tAssocL = \id$.
 4. $\tAssocL \circ \tAssocR = \id$.
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Note that
 $$\begin{eqnarray*}
  &   & \tAssocL(a,(b,c)) \\
@@ -322,9 +304,9 @@ $$\begin{eqnarray*}
  & = & ((a,b),c)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_tassocL_entries :: (Equal a, Equal b, Equal c)
 >   => a -> b -> c -> Test (a -> b -> c -> Bool)
@@ -353,13 +335,12 @@ as claimed.
 >   testName "tassocR . tassocL == id" $
 >   \x -> eq (tassocR (tassocL x)) x
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 We also define a pair of helper functions for constructing tuples.
 
-<div class="result">
-<div class="dfn"><p>
+:::::: definition ::
 Let $A$ and $B$ be sets. We define $\tupL : A \rightarrow (A \times B)^B$ by $$\tup(a)(b) = (a,b)$$ and $\tupR : B \rightarrow (A \times B)^B$ by $$\tupR(b)(a) = (a,b).$$
 
 In Haskell:
@@ -371,29 +352,26 @@ In Haskell:
 > tupR :: b -> a -> (a,b)
 > tupR b a = (a,b)
 
-</p></div>
-</div>
+::::::::::::::::::::
 
 $\tupL$ and $\tupR$ interact with $\fst$ and $\snd$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets. For all $a \in A$ and $b \in B$ we have the following.
 
 1. $\fst(\tupL(a)(b)) = a$.
 2. $\snd(\tupL(a)(b)) = b$.
 3. $\fst(\tupR(b)(a)) = a$.
 4. $\snd(\tupR(b)(a)) = b$.
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. $\fst(\tupL(a)(b)) = \fst(a,b) = a$.
 2. $\snd(\tupL(a)(b)) = \snd(a,b) = b$.
 3. $\fst(\tupR(b)(a)) = \fst(a,b) = a$.
 4. $\snd(\tupR(b)(a)) = \snd(a,b) = b$.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_fst_tupL :: (Equal a, Equal b)
 >   => a -> b -> Test (a -> b -> Bool)
@@ -422,20 +400,18 @@ Let $A$ and $B$ be sets. For all $a \in A$ and $b \in B$ we have the following.
 >   testName "snd(tupR(b)(a)) == b" $
 >   \a b -> eq (snd (tupR b a)) b
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\tupL$ and $\tupR$ interact with $\tSwap$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets with $a \in A$ and $b \in B$. Then we have the following.
 
 1. $\tSwap \circ \tupL(a) = \tupR(a)$.
 2. $\tSwap \circ \tupR(b) = \tupL(b)$.
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Note that
 $$\begin{eqnarray*}
  &   & (\tSwap \circ \tupL(a))(b) \\
@@ -452,9 +428,9 @@ $$\begin{eqnarray*}
  & = & (b,a) \\
  & = & \tupL(b)(a).
 \end{eqnarray*}$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_tswap_tupL :: (Equal a, Equal b)
 >   => a -> b -> Test (a -> b -> Bool)
@@ -469,20 +445,18 @@ $$\begin{eqnarray*}
 >   testName "tswap . tupR(b) == tupL(b)" $
 >   \a b -> eq (tswap (tupR b a)) (tupL b a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\tupL$ and $\tupR$ interact with $\tPair$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $f : A \rightarrow U$ and $g : B \rightarrow V$, with $a \in A$ and $b \in B$. Then we have the following.
 
 1. $\tPair(f,g) \circ \tupL(a) = \tupL(f(a)) \circ g$.
 2. $\tPair(f,g) \circ \tupR(b) = \tupR(g(b)) \circ f$.
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Let $b \in B$. Then
 $$\begin{eqnarray*}
  &   & (\tPair(f,g) \circ \tupL(a))(b) \\
@@ -503,9 +477,9 @@ $$\begin{eqnarray*}
  & = & (\tupR(g(b)) \circ f)(a)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_tpair_tupL :: (Equal a, Equal b)
 >   => a -> b -> Test ((a -> a) -> (b -> b) -> a -> b -> Bool)
@@ -524,8 +498,8 @@ as claimed.
 >     (((tpair f g) . (tupR b)) a)
 >     (((tupR (g b)) . f) a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

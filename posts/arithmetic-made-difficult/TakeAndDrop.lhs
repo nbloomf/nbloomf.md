@@ -49,8 +49,7 @@ Today we'll define two functions, $\take$ and $\drop$, that split a list at a gi
 
 Essentially, $\take$ and $\drop$ compute a kind of "$\cat$-factorization" of a list based on index from the left. This is not the only useful such factorization; we will address two others in future posts.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set. Define $f : \lists{A} \rightarrow 1 + \lists{A} \times A$ by
 $$f(x) = \left\{ \begin{array}{ll}
  \lft(\ast) & \mathrm{if}\ x = \nil \\
@@ -67,22 +66,21 @@ In Haskell:
 >       Left () -> Left ()
 >       Right (a,u) -> Right (u,a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\take$ is defined as an $\unfoldN{\ast}$, it can be characterized as the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set. $\take$ is the unique map $f : \nats \rightarrow {\lists{A}}^{\lists{A}}$ satisfying the following equations for all $n \in \nats$, $a \in A$, and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(\zero,x) = \nil \\
  f(\next(n),\nil) = \nil \\
  f(\next(n),\cons(a,x)) = \cons(a,f(n,x))
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_take_zero :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (t a -> Bool)
@@ -106,17 +104,16 @@ $$\left\{\begin{array}{l}
 >     (take (next n) (cons a x))
 >     (cons a (take n x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\take(n)$ is a prefix.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ and $k \in \nats$, we have $$\prefix(\take(k,x),x) = \btrue.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $k$. For the base case $k = \zero$, we have
 $$\begin{eqnarray*}
  &   & \prefix(\take(k,x),x) \\
@@ -138,9 +135,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_take_prefix :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> Bool)
@@ -148,21 +145,20 @@ as needed.
 >   testName "prefix(take(k,x),x) == true" $
 >   \k x -> prefix (take k x) x
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\take(n)$ gives a sublist.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set, with $x \in \lists{A}$ and $k \in \nats$. Then we have $$\sublist(\take(k,x),x) = \btrue.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We have $$\prefix(\take(k,x),x) = \btrue,$$ so $$\infix(\take(k,x),x) = \btrue,$$ so $$\sublist(\take(k,x),x) = \btrue$$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_take_sublist :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> Bool)
@@ -170,17 +166,16 @@ We have $$\prefix(\take(k,x),x) = \btrue,$$ so $$\infix(\take(k,x),x) = \btrue,$
 >   testName "prefix(take(k,x),x) == true" $
 >   \k x -> sublist (take k x) x
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\take$ has bounded length:
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set, with $x \in \lists{A}$ and $k \in \nats$. Then we have $$\length(\take(k,x) = \nmin(k,\length(x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $k$. For the base case $k = \zero$, we have
 $$\begin{eqnarray*}
  &   & \length(\take(k,x)) \\
@@ -210,9 +205,9 @@ $$\begin{eqnarray*}
  & = & \nmin(\next(k),\length(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_take_length :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> Bool)
@@ -220,17 +215,16 @@ as needed.
 >   testName "length(take(k,x)) == min(k,length(x))" $
 >   \k x -> eq (length (take k x)) (min k (length x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\take$ "distributes over" $\zip$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets with $x \in \lists{A}$, $y \in \lists{B}$, and $k \in \nats$. Then $$\zip(\take(k,x),\take(k,y)) = \take(k,\zip(x,y)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $k$. For the base case $k = \zero$, we have
 $$\begin{eqnarray*}
  &   & \zip(\take(k,x),\take(k,y)) \\
@@ -271,9 +265,9 @@ $$\begin{eqnarray*}
  & = & \take(\next(k),\zip(x,y))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_take_zip :: (List t, Natural n, Equal (t (a,b)))
 >   => t a -> t b -> n -> Test (n -> t a -> t b -> Bool)
@@ -283,17 +277,16 @@ as needed.
 >     (zip (take k x) (take k y))
 >     (take k (zip x y))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\take$ interacts with $\range$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 For all $a,b,k \in \nats$, we have $$\take(k,\range(a,b)) = \range(a,\nmin(k,b)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $k$. For the base case $k = \zero$, we have
 $$\begin{eqnarray*}
  &   & \take(k,\range(a,b)) \\
@@ -325,9 +318,9 @@ $$\begin{eqnarray*}
  & = & \range(a,\nmin(\next(k),b))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_take_range :: (List t, Equal a, Natural n, Equal n, Equal (t n))
 >   => t a -> n -> Test (n -> n -> n -> t n -> Bool)
@@ -337,17 +330,16 @@ as needed.
 >     (take n ((range a b) `withTypeOf` t))
 >     (range a (min n b))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\take$ is idempotent.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $k \in \nats$ and $x \in \lists{A}$, we have $$\take(k,\take(k,x)) = \take(k,x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $k$. For the base case $k = \zero$, we have
 $$\begin{eqnarray*}
  &   & \take(k,\take(k,x)) \\
@@ -374,9 +366,9 @@ $$\begin{eqnarray*}
  & = & \take(\next(k),x)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_take_idempotent :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> Bool)
@@ -384,13 +376,12 @@ as needed.
 >   testName "take(k,(take(k,x)) == take(k,take(k,x))" $
 >   \k x -> eq (take k (take k x)) (take k x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now for $\drop$. For this function, $\unfoldN$ doesn't have quite the right shape; fundamentally $\unfoldN$ "builds up" a list from the iterated images of a function, but $\drop$ needs to "tear down" a list, with it's natural number argument acting as a countdown. One of our other $\nats$ recursion operators will work for this -- we'll use bailout recursion for efficiency.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set. Define $\beta : \nats \times A \rightarrow \bool$ by $$\beta(m,x) = \isnil(x),$$ $\psi : \nats \times \lists{A} \rightarrow \lists{A}$ by $$\psi(m,x) = x,$$ and $\omega : \nats \times \lists{A} \rightarrow \lists{A}$ by $$\omega(k,x) = \tail(x).$$ We then define $\drop : \nats \rightarrow {\lists{A}}^{\lists{A}}$ by $$\drop(k)(x) = \bailrec{\id}{\beta}{\psi}{\omega}(k,x).$$
 
 In Haskell:
@@ -402,22 +393,21 @@ In Haskell:
 >     psi   _ x = x
 >     omega _ x = tail x
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\drop$ is defined in terms of bailout recursion, it can be characterized as the unique solution of a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set. $\drop$ is the unique map $f : \nats \rightarrow {\lists{A}}^{\lists{A}}$ satisfying the following equations for all $k \in \nats$, $a \in A$, and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(\zero,x) = x \\
  f(\next(n),\nil) = \nil \\
  f(\next(n),\cons(a,x)) = f(n,x)
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_drop_zero :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (t a -> Bool)
@@ -441,17 +431,16 @@ $$\left\{\begin{array}{l}
 >     (drop (next n) (cons a x))
 >     (drop n x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\drop$ gives a $\suffix$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ and $k \in \nats$, we have $$\suffix(\drop(k,x),x) = \btrue.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $k$. For the base case $k = \zero$, we have
 $$\begin{eqnarray*}
  &   & \suffix(\drop(k,x),x) \\
@@ -473,9 +462,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_drop_suffix :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> Bool)
@@ -483,17 +472,16 @@ as needed.
 >   testName "suffix(drop(k,x),x) == true" $
 >   \k x -> eq (suffix (drop k x) x) true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\take$ and $\drop$ give a kind of $\cat$-factorization.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ and $k \in \nats$, we have $$x = \cat(\take(k,x),\drop(k,x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $k$. For the base case $k = \zero$, we have
 $$\begin{eqnarray*}
  &   & \cat(\take(k,x),\drop(k,x)) \\
@@ -517,9 +505,9 @@ $$\begin{eqnarray*}
  & = & \cons(a,x)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_take_drop_cat :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> Bool)
@@ -527,8 +515,8 @@ as needed.
 >   testName "cat(take(k,x),drop(k,x)) == x" $
 >   \k x -> eq (cat (take k x) (drop k x)) x
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

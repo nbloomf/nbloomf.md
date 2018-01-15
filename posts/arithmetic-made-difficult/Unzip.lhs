@@ -46,8 +46,7 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 With this in mind, we define $\unzip$ like so.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ and $B$ be sets. Define $\varphi : (A \times B) \times (\lists{A} \times \lists{B}) \rightarrow \lists{A} \times \lists{B}$ by $$\varphi((a,b),(u,v)) = (\cons(a,u),\cons(b,v).$$ We then define $\unzip : \lists{A \times B} \rightarrow \lists{A} \times \lists{B}$ by $$\unzip(x) = \foldr{(\nil,\nil)}{\varphi}(x).$$
 
 In Haskell:
@@ -57,21 +56,20 @@ In Haskell:
 >   where
 >     phi (a,b) (u,v) = (cons a u, cons b v)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Because $\unzip$ is defined as a $\foldr{\ast}{\ast}$, it is the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ and $B$ be sets. Then $\unzip$ is the unique map $f : \lists{A \times B} \rightarrow \lists{A} \times \lists{B}$ such that the following hold for all $a \in A$, $b \in B$, $x \in \lists{A}$, and $y \in \lists{B}$.
 $$\left\{\begin{array}{l}
  f(\nil) = (\nil,\nil) \\
  f(\cons(a,b),z) = (\cons(a,\fst(z)),\cons(b,\snd(z))).
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_unzip_nil :: (List t, Equal (t a), Equal (t b))
 >   => t a -> t b -> Test Bool
@@ -86,17 +84,16 @@ $$\left\{\begin{array}{l}
 >   testName "unzip(cons((a,b),z)) == (cons(a,fst(unzip(z))),cons(b,snd(unzip(z))))" $
 >   \a b z -> eq (unzip (cons (a,b) z)) (cons a (fst (unzip z)), cons b (snd (unzip z)))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now $\zip$ undoes $\unzip$ as expected.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets. For all $x \in \lists{A \times B}$, we have $$\zip(\unzip(x)) = x.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \zip(\unzip(x)) \\
@@ -114,9 +111,9 @@ $$\begin{eqnarray*}
  & = & \cons((a,b),x)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_unzip_zip :: (List t, Equal a, Equal b, Equal (t (a,b)))
 >   => t a -> t b -> Test (t (a,b) -> Bool)
@@ -124,19 +121,18 @@ as needed.
 >   testName "zip(unzip(x)) == x" $
 >   \x -> eq ((uncurry zip) (unzip x)) x
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 (Note that the reverse composition $\unzip(\zip(x,y)) = (x,y),$ although it makes sense type-wise, does not hold for all $x$ and $y$ since $\zip$ truncates its longer argument.)
 
 $\unzip$ interacts with $\tSwap$:
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets and $x \in \lists{A \times B}$. Then we have $$\tSwap(\unzip(x)) = \unzip(\map(\tSwap)(x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \tSwap(\unzip(x)) \\
@@ -157,9 +153,9 @@ $$\begin{eqnarray*}
  & = & \tSwap(\unzip(\cons((a,b),x)))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_unzip_tswap :: (List t, Equal (t b), Equal (t a))
 >   => t a -> t b -> Test (t (a,b) -> Bool)
@@ -167,17 +163,16 @@ as claimed.
 >   testName "tswap(unzip(x)) == unzip(map(tswap)(x))" $
 >   \x -> eq (unzip (map tswap x)) (tswap (unzip x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\unzip$ interacts with $\tPair$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$, $B$, $U$, and $V$ be sets, with $f : A \rightarrow U$ and $g : B \rightarrow V$. For all $x \in \lists{A \times B}$ we have $$\unzip(\map(\tPair(f,g))(x)) = \tPair(\map(f),\map(g))(\unzip(x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \unzip(\map(\tPair(f,g))(\nil)) \\
@@ -204,9 +199,9 @@ $$\begin{eqnarray*}
  & = & \unzip(\map(\tPair(f,g))(\cons((a,b),x)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_unzip_tpair :: (List t, Equal (t b), Equal (t a))
 >   => t a -> t b -> Test ((a -> a) -> (b -> b) -> t (a,b) -> Bool)
@@ -214,8 +209,8 @@ as needed.
 >   testName "unzip(map(tpair(f,g))(x)) == tpair(map(f),map(g))(unzip(x))" $
 >   \f g x -> eq (unzip (map (tpair f g) x)) (tpair (map f) (map g) (unzip x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

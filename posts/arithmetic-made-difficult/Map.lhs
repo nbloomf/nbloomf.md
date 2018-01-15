@@ -29,8 +29,7 @@ slug: map
 
 Today we'll explore one of the most useful functions on $\lists{A}$: $\map$. What $\map$ does is take a function $A \rightarrow B$ and a $\lists{A}$, and apply the function "itemwise" to get a $\lists{B}$.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ and $B$ be sets. Define $\varphi : B^A \rightarrow A \times \lists{B} \rightarrow \lists{B}$ by $$\varphi(f)(a,x) = \cons(f(a),x).$$ We then define $\map : B^A \rightarrow \lists{A} \rightarrow \lists{B}$ by $$\map(f) = \foldr{\nil}{\varphi(f)}.$$
 
 In Haskell:
@@ -40,21 +39,20 @@ In Haskell:
 >   where
 >     phi g a x = cons (g a) x
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\map$ is defined as a $\foldr{\ast}{\ast}$, it is the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 $\map(\alpha)$ is the unique solution $f : \lists{A} \rightarrow \lists{B}$ of the following equations for all $a \in A$ and $x \in \lists{A}$:
 $$\left\{\begin{array}{l}
  f(\nil) = \nil \\
  f(\cons(a,x)) = \cons(\alpha(a),f(x))
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_map_nil :: (List t, Equal (t a))
 >   => t a -> Test ((a -> a) -> Bool)
@@ -69,8 +67,8 @@ $$\left\{\begin{array}{l}
 >   testName "map(f)(cons(a,x)) == cons(f(a),map(f)(x))" $
 >   \f a x -> eq (map f (cons a x)) (cons (f a) (map f x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 One way to think about $\map$ is that it fills in the following diagram.
 $$\require{AMScd}
@@ -83,12 +81,11 @@ This looks an awful lot like a functor diagram. Recall that given two categories
 
 $\map$ takes $\id_A$ to $\id_{\lists{A}}$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. Then we have $$\map(\id_A)(x) = x.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \map(\id)(\nil) \\
@@ -101,9 +98,9 @@ $$\begin{eqnarray*}
  & = & \cons(a,x)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_map_id :: (List t, Equal (t a))
 >   => t a -> Test (t a -> Bool)
@@ -111,17 +108,16 @@ as needed.
 >   testName "map(id)(x) == x" $
 >   \x -> eq (map id x) x
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\map$ preserves composition.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$, $B$, and $C$ be sets, with maps $f : A \rightarrow B$ and $g : B \rightarrow C$. For all $x \in \lists{A}$ we have $$\map(g \circ f)(x) = (\map(g) \circ \map(f))(x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & (\map(g) \circ \map(f))(x) \\
@@ -142,9 +138,9 @@ $$\begin{eqnarray*}
  & = & \map(g \circ f)(\cons(a,x))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_map_compose :: (List t, Equal (t a))
 >   => t a -> Test ((a -> a) -> (a -> a) -> t a -> Bool)
@@ -152,17 +148,16 @@ as needed.
 >   testName "map(g . f)(x) == (map(g) . map(f))(x)" $
 >   \g f x -> eq (map (g . f) x) (((map g) . (map f)) x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\map(f)$ respects $\tail$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. For all $x \in \lists{A}$, we have $$\map(f)(\tail(x)) = \tail(\map(f)(x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \map(f)(\tail(\nil)) \\
@@ -179,9 +174,9 @@ $$\begin{eqnarray*}
  & = & \tail(\map(f)(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_map_tail :: (List t, Equal (t a))
 >   => t a -> Test ((a -> a) -> t a -> Bool)
@@ -189,17 +184,16 @@ as needed.
 >   testName "map(f)(tail(x)) == tail(map(f)(x))" $
 >   \f x -> eq (map f (tail x)) (tail (map f x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\map(f)$ respects $\cat$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. For all $x,y \in \lists{A}$, we have $$\map(f)(\cat(x,y)) = \cat(\map(f)(x),\map(f)(y)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \map(f)(\cat(x,y)) \\
@@ -219,9 +213,9 @@ $$\begin{eqnarray*}
  & = & \cat(\map(f)(\cons(a,x)),\map(f)(y))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_map_cat :: (List t, Equal (t a))
 >   => t a -> Test ((a -> a) -> t a -> t a -> Bool)
@@ -229,17 +223,16 @@ as needed.
 >   testName "map(f)(cat(x,y)) == cat(map(f)(x),map(f)(y))" $
 >   \f x y -> eq (map f (cat x y)) (cat (map f x) (map f y))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\map(f)$ respects $\snoc$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. For all $a \in A$ and $x \in \lists{A}$, we have $$\map(f)(\snoc(a,x)) = \snoc(f(a),\map(f)(x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \map(f)(\snoc(a,\nil)) \\
@@ -259,9 +252,9 @@ $$\begin{eqnarray*}
  & = & \snoc(f(a),\map(f)(\cons(b,x)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_map_snoc :: (List t, Equal (t a))
 >   => t a -> Test ((a -> a) -> a -> t a -> Bool)
@@ -269,17 +262,16 @@ as needed.
 >   testName "map(f)(snoc(a,x)) == snoc(f(a),map(f)(x))" $
 >   \f a x -> eq (map f (snoc a x)) (snoc (f a) (map f x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\map(f)$ respects $\rev$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. For all $x \in \lists{A}$, we have $$\map(f)(\rev(x)) = \rev(\map(f)(x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \map(f)(\rev(x)) \\
@@ -300,9 +292,9 @@ $$\begin{eqnarray*}
  & = & \rev(\map(f)(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_map_rev :: (List t, Equal (t a))
 >   => t a -> Test ((a -> a) -> t a -> Bool)
@@ -310,19 +302,18 @@ as needed.
 >   testName "map(f)(rev(x)) == rev(map(f)(x))" $
 >   \f x -> eq (map f (rev x)) (rev (map f x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 (@@@)
 
 $\map(f)$ interacts with $\at$:
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets with a map $f : A \rightarrow B$ and $x \in \lists{A}$. Then we have $$\at(\map(f)(x),k) = \upair(\id,f)(\at(x,k)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 There are two possibilities for $x$. If $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \at(\map(f)(\nil),k) \\
@@ -349,9 +340,9 @@ $$\begin{eqnarray*}
  & = & \upair(\id,f)(\at(\cons(a,y),\next(k)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_map_at :: (List t, Equal (t a), Natural n, Equal n, Equal a)
 >   => t a -> n -> Test ((a -> a) -> t a -> n -> Bool)
@@ -359,17 +350,16 @@ as needed.
 >   testName "at(map(f)(x),k) == upair(id,f)(at(x,k))" $
 >   \f x k -> eq (at (map f x) k) (upair id f (at x k))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And $\map$ preserves $\length$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. Then for all $x \in \lists{A}$ we have $$\length(\map(f)(x)) = \length(x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$ we have
 $$\begin{eqnarray*}
  &   & \length(\map(f)(x)) \\
@@ -386,9 +376,9 @@ $$\begin{eqnarray*}
  & = & \length(\cons(a,x))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_map_length :: (List t, Equal (t a), Natural n, Equal n, Equal a)
 >   => t a -> n -> Test ((a -> a) -> t a -> Bool)
@@ -396,8 +386,8 @@ as claimed.
 >   testName "length(map(f)(x)) == length(x)" $
 >   \f x -> eq (length (map f x)) ((length x) `withTypeOf` k)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

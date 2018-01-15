@@ -20,8 +20,7 @@ slug: predicates
 
 In the last post we defined the algebra of boolean values, true and false. Today we'll look at *predicates* -- functions from some set $A$ to $\bool$. It turns out the algebra on $\bool$ can be lifted to predicates, and is useful enough to collect some definitions and properties in one place.
 
-<div class="result">
-<div class="dfn"><p>
+:::::: definition ::
 Let $A$ be a set. A *predicate* on $A$ is just a function $p : A \rightarrow \bool$. We define two special predicates, $\ptrue = \const(\btrue)$ and $\pfalse = \const(\bfalse)$.
 
 In Haskell:
@@ -32,13 +31,12 @@ In Haskell:
 > pfalse :: (Boolean b) => a -> b
 > pfalse _ = false
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 First, the basic logic operators lift.
 
-<div class="result">
-<div class="dfn"><p>
+:::::: definition ::
 Let $A$ be a set. We define $\pnot : \bool^A \rightarrow \bool^A$ by $$\pnot(p)(a) = \bnot(p(a)).$$
 
 In Haskell:
@@ -46,17 +44,16 @@ In Haskell:
 > pnot :: (Boolean b) => (a -> b) -> a -> b
 > pnot p a = not (p a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\pnot$ is an involution.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $p : A \rightarrow \bool$, we have $$\pnot(\pnot(p)) = p.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Let $a \in A$. Then we have
 $$\begin{eqnarray*}
  &   & \pnot(\pnot(p))(a) \\
@@ -65,9 +62,9 @@ $$\begin{eqnarray*}
  & = & p(a)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_pnot_involutive :: (Boolean b, Equal b)
 >   => a -> b -> Test ((a -> b) -> a -> Bool)
@@ -75,22 +72,21 @@ as needed.
 >   testName "pnot(pnot(p)) == p" $
 >   \p x -> eq (pnot (pnot p) x) ((p x) `withTypeOf` b)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Special cases.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. Then we have the following.
 
 1. $\pnot(\ptrue) = \pfalse$.
 2. $\pnot(\pfalse) = \ptrue$.
 3. $\bnot \circ \ptrue = \pfalse$.
 4. $\bnot \circ \pfalse = \ptrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. If $a \in A$, we have
 $$\begin{eqnarray*}
  &   & \pnot(\ptrue)(a) \\
@@ -130,9 +126,9 @@ $$\begin{eqnarray*}
  & = & \btrue \\
  & = & \ptrue(a)
 \end{eqnarray*}$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_pnot_ptrue :: (Boolean b, Equal b)
 >   => a -> b -> Test (a -> Bool)
@@ -161,13 +157,12 @@ $$\begin{eqnarray*}
 >   testName "(not . pfalse) == ptrue" $
 >   \a -> eq ((not . pfalse) a) ((ptrue a) `withTypeOf` b)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Next, $\pand$.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set. We define $\pand : \bool^A \times \bool^A \rightarrow \bool^A$ by $$\pand(p,q)(a) = \band(p(a),q(a)).$$
 
 In Haskell:
@@ -175,13 +170,12 @@ In Haskell:
 > pand :: (a -> Bool) -> (a -> Bool) -> a -> Bool
 > pand p q a = and (p a) (q a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 The usual properties of $\band$ lift to $\pand$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. The following hold for all p,q,r \in \bool^A$.
 
 1. $\pand(\pfalse,p) = \pand(p,\pfalse) = \pfalse$.
@@ -189,9 +183,9 @@ Let $A$ be a set. The following hold for all p,q,r \in \bool^A$.
 3. $\pand(p,p) = p$.
 4. $\pand(p,q) = \pand(q,p)$.
 5. $\pand(\pand(p,q),r) = \pand(p,\pand(q,r))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. For all $a \in A$ we have
 $$\begin{eqnarray*}
  &   & \pand(\pfalse,p)(a) \\
@@ -234,9 +228,9 @@ $$\begin{eqnarray*}
  & = & \pand(p,\band(q,r))(a)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_pand_pfalse
 >   :: a -> Test ((a -> Bool) -> a -> Bool)
@@ -272,13 +266,12 @@ as needed.
 >   testName "pand(pand(p,q),r) == pand(p,pand(q,r))" $
 >   \p q r a -> eq ((pand (pand p q) r) a) ((pand p (pand q r)) a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Then $\por$.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set. We define $\por : \bool^A \times \bool^A \rightarrow \bool^A$ by $$\por(p,q)(a) = \bor(p(a),q(a)).$$
 
 In Haskell:
@@ -286,13 +279,12 @@ In Haskell:
 > por :: (a -> Bool) -> (a -> Bool) -> a -> Bool
 > por p q a = or (p a) (q a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 The usual properties of $\bor$ lift to $\por$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. The following hold for all $p,q,r \in \bool^A$.
 
 1. $\por(\ptrue,p) = \por(p,\ptrue) = \ptrue$.
@@ -300,9 +292,9 @@ Let $A$ be a set. The following hold for all $p,q,r \in \bool^A$.
 3. $\por(p,p) = p$.
 4. $\por(p,q) = \por(q,p)$.
 5. $\por(\por(p,q),r) = \por(p,\por(q,r))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. For all $a \in A$, we have
 $$\begin{eqnarray*}
  &   & \por(\ptrue,p)(a) \\
@@ -345,9 +337,9 @@ $$\begin{eqnarray*}
  & = & \por(p,\por(q,r))(a)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_por_ptrue :: (Boolean b, Equal b)
 >   => a -> b -> Test ((a -> Bool) -> a -> Bool)
@@ -383,22 +375,21 @@ as needed.
 >   testName "por(por(p,q),r) == por(p,por(q,r))" $
 >   \p q r a -> eq ((por (por p q) r) a) ((por p (por q r)) a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And $\pnot$, $\pand$, and $\por$ interact.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. The following hold for all $p,q,r \in \bool^A$.
 
 1. $\pnot(\pand(p,q)) = \por(\pnot(p),\pnot(q))$.
 2. $\pnot(\por(p,q)) = \pand(\pnot(p),\pnot(q))$.
 3. $\pand(p,\por(q,r)) = \por(\pand(p,q),\pand(p,r))$.
 4. $\bor(p,\pand(q,r)) = \pand(\por(p,q),\por(p,r))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. For all $a \in A$, we have
 $$\begin{eqnarray*}
  &   & \pnot(\pand(p,q))(a) \\
@@ -439,9 +430,9 @@ $$\begin{eqnarray*}
  & = & \pand(\por(p,q),\por(p,r))(a)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_pnot_pand
 >   :: a -> Test ((a -> Bool) -> (a -> Bool) -> a -> Bool)
@@ -470,16 +461,16 @@ as needed.
 >   testName "por(p,pand(q,r)) == pand(por(p,q),por(p,r))" $
 >   \p q r a -> eq ((por p (pand q r)) a) ((pand (por p q) (por p r)) a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Implication lifts to predicates.
 
 <div class="result>
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set. We define $\pimpl : \bool^A \times \bool^A \rightarrow \bool^A$ by $\pimpl(p,q) = \btrue$ if $\pimpl(p(a),q(a)) = \btrue$ for all $a \in A$, and $\bfalse$ otherwise.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

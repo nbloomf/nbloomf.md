@@ -18,8 +18,7 @@ slug: or
 
 Finally, $\bor$.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 We define $\bor : \bool \times \bool \rightarrow \bool$ by $$\bor(p,q) = \bif{p}{\btrue}{\bif{q}{\btrue}{\ptrue}}.$$
 
 In Haskell:
@@ -27,13 +26,12 @@ In Haskell:
 > or :: (Boolean b) => b -> b -> b
 > or p q = ifThenElse p true (ifThenElse q true false)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 We can compute $\bor$ explicitly.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 <a name="def-or" />
 We have
 $$\begin{eqnarray*}
@@ -42,23 +40,22 @@ $$\begin{eqnarray*}
 \bor(\bfalse,\btrue)  & = & \btrue \\
 \bor(\bfalse,\bfalse) & = & \bfalse.
 \end{eqnarray*}$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 (@@@)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And $\bor$ satisfies the usual properties.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 The following hold for all $a,b,c \in \bool$.
 
 1. $\bor(\btrue,a) = \bor(a,\btrue) = \btrue$.
@@ -67,9 +64,9 @@ The following hold for all $a,b,c \in \bool$.
 4. $\bor(a,a) = a$.
 5. $\bor(a,b) = \bor(b,a)$.
 6. $\bor(\bor(a,b),c) = \bor(a,\bor(b,c))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. If $a = \btrue$, we have $$\bor(\btrue,\btrue) = \btrue,$$ and if $a = \bfalse$ we have $$\bor(\btrue,\bfalse) = \btrue = \bor(\bfalse,\btrue)$$ as claimed.
 2. If $a = \btrue$, we have $$\bor(\bfalse,\btrue) = \btrue = \bor(\btrue,\bfalse),$$ and if $a = \bfalse$ we have $$\bor(\bfalse,\bfalse) = \bfalse$$ as claimed.
 3. If $a = \btrue$, we have $$\bor(\btrue,\bnot(\btrue)) = \btrue,$$ and if $a = \bfalse$ we have $$\bor(\bfalse,\bnot(\bfalse)) = \bor(\bfalse,\btrue) = \btrue$$ as claimed.
@@ -91,9 +88,9 @@ $$\begin{eqnarray*}
  & = & \bor(\bfalse,\bor(b,c))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_or_true :: Test (Bool -> Bool)
 > _test_or_true =
@@ -130,22 +127,21 @@ as claimed.
 >   testName "or(or(p,q),r) == or(p,or(q,r))" $
 >   \p q r -> eq (or (or p q) r) (or p (or q r))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now $\bnot$, $\band$, and $\bor$ interact in the usual way.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 The following hold for all $a,b,c \in \bool$.
 
 1. $\bnot(\band(a,b)) = \bor(\bnot(a),\bnot(b))$.
 2. $\bnot(\bor(a,b)) = \band(\bnot(a),\bnot(b))$.
 3. $\band(a,\bor(b,c)) = \bor(\band(a,b),\band(a,c))$.
 4. $\bor(a,\band(b,c)) = \band(\bor(a,b),\bor(a,c))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. If $a = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bnot(\band(a,b)) \\
@@ -222,9 +218,9 @@ $$\begin{eqnarray*}
  & = & \band(\bor(a,b),\bor(a,c))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_not_and :: Test (Bool -> Bool -> Bool)
 > _test_not_and =
@@ -249,17 +245,17 @@ as claimed.
 >   testName "or(p,and(q,r)) == and(or(p,q),or(p,r))" $
 >   \p q r -> eq (or p (and q r)) (and (or p q) (or p r))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\bif{\ast}{\ast}{\ast}$ on booleans is equivalent to an or.
 
 <div class="result>
-<div class="thm"><p>
+:::::: theorem :::::
 $$\bif{p}{\btrue}{q} = \bor(p,q).$$
 </p></div
 
-<div class="proof"><p>
+::: proof ::::::::::
 If $p = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bif{\btrue}{\btrue}{q} \\
@@ -273,9 +269,9 @@ $$\begin{eqnarray*}
  & = & \bor(\bfalse,q)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_if_or :: (Equal a)
 >   => a -> Test (Bool -> Bool -> Bool)
@@ -283,17 +279,16 @@ as needed.
 >   testName "if(p,true,q) == or(p,q)" $
 >   \p q -> eq (if p then true else q) (or p q)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\bif{\ast}{\ast}{\ast}$ interacts with $\bor$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $a,b \in A$, and let $p,q \in \bool$. Then we have $$\bif{p}{a}{\bif{q}{a}{b}} = \bif{\bor(p,q)}{a}{b}.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 If $p = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bif{\bor(p,q)}{a}{b} \\
@@ -310,9 +305,9 @@ $$\begin{eqnarray*}
  & = & \bif{p}{a}{\bif{q}{a}{b}}
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_if_or_nest :: (Equal a)
 >   => a -> Test (a -> a -> Bool -> Bool -> Bool)
@@ -322,8 +317,8 @@ as needed.
 >     (if or p q then a else b)
 >     (if p then a else if q then a else b)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

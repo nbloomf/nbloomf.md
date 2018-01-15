@@ -38,8 +38,7 @@ slug: repeat
 
 So far we've defined a bunch of functions that operate on lists, but still only one that can create one out of nothing, namely $\range$. ($\tails$ and $\inits$ create lists, but only if we have one to start with.) Today we'll nail down another list-creating utility, $\repeat$.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set, and define $f : A \rightarrow 1 + A \times A$ by $f(x) = \rgt((x,x))$. Now define $\repeat : \nats \rightarrow {\lists{A}}^A$ by $$\repeat(n)(a) = \unfoldN(f)(n,a).$$
 
 In Haskell:
@@ -49,21 +48,20 @@ In Haskell:
 >   where
 >     f x = rgt (x,x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\repeat$ is defined as an unfoldN, it is the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set. Then $\repeat$ is the unique map $f : \nats \rightarrow {\lists{A}}^A$ satisfying the following equations for all $n \in \nats$ and $a \in A$.
 $$\left\{\begin{array}{l}
  f(\zero)(a) = \nil \\
  f(\next(n))(a) = \cons(a,f(n)(a))
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_repeat_zero :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (a -> Bool)
@@ -82,19 +80,18 @@ $$\left\{\begin{array}{l}
 >     (repeat (next n) a)
 >     ((cons a (repeat n a)) `withTypeOf` t)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\repeat$ is kind of boring. I'm not sure if we'll actually need these, but here are some interactions using $\repeat$.
 
 $\repeat$ and $\length$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $n \in \nats$ and $a \in A$ we have $$\length(\repeat(n,a)) = n.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$ we have
 $$\begin{eqnarray*}
  &   & \length(\repeat(\zero,a)) \\
@@ -109,9 +106,9 @@ $$\begin{eqnarray*}
  & = & \next(n)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_repeat_length :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> a -> Bool)
@@ -119,17 +116,16 @@ as claimed.
 >  testName "length(repeat(n,a)) == n" $
 >  \n a -> eq (length (repeat n a `withTypeOf` t)) n
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\repeat$ and $\map$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets with $f : A \rightarrow B$ a map. For all $n \in \nats$ and $a \in A$, we have $$\map(f)(\repeat(n,a)) = \repeat(n,f(a)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$ we have
 $$\begin{eqnarray*}
  &   & \map(f)(\repeat(\zero,a)) \\
@@ -146,9 +142,9 @@ $$\begin{eqnarray*}
  & = & \repeat(\next(n),f(a))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_repeat_map :: (List t, Equal a, Equal b, Natural n, Equal n, Equal (t b))
 >   => t a -> t b -> n -> Test ((a -> b) -> n -> a -> Bool)
@@ -158,17 +154,16 @@ as needed.
 >     (repeat k (f a))
 >     (map f (repeat k a `withTypeOf` t))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\repeat$ and $\nplus$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $m,n \in \nats$ and $a \in A$, we have $$\repeat(\nplus(m,n),a) = \cat(\repeat(m,a),\repeat(n,a)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $m$. For the base case $m = \zero$, we have
 $$\begin{eqnarray*}
  &   & \repeat(\nplus(\zero,n),a) \\
@@ -186,9 +181,9 @@ $$\begin{eqnarray*}
  & = & \cat(\repeat(\next(m),a),\repeat(n,a))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_repeat_plus :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> n -> a -> Bool)
@@ -198,17 +193,16 @@ as needed.
 >     ((repeat (plus m n) a) `withTypeOf` t)
 >     (cat (repeat m a) (repeat n a))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\repeat$ and $\snoc$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $n \in \nats$ and $a \in A$, we have $$\snoc(a,\repeat(n,a)) = \repeat(\next(n),a).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$, we have
 $$\begin{eqnarray*}
  &   & \snoc(a,\repeat(\zero)(a)) \\
@@ -226,9 +220,9 @@ $$\begin{eqnarray*}
  & = & \repeat(\next(\next(n)))(a)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_repeat_snoc :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> a -> Bool)
@@ -238,17 +232,16 @@ as needed.
 >     (snoc a ((repeat n a) `withTypeOf` t))
 >     (repeat (next n) a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\repeat$ and $\rev$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $n \in \nats$ and $a \in A$, we have $$\rev(\repeat(n,a)) = \repeat(n,a).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$, we have
 $$\begin{eqnarray*}
  &   & \rev(\repeat(\zero,a)) \\
@@ -265,9 +258,9 @@ $$\begin{eqnarray*}
  & = & \repeat(\next(n),a)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_repeat_rev :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> a -> Bool)
@@ -277,8 +270,8 @@ as needed.
 >     (rev (repeat n a))
 >     (repeat n a `withTypeOf` t)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

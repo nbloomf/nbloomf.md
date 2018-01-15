@@ -45,8 +45,7 @@ So we have two related but distinct concepts, sublists and infixes, that will ne
 
 Blah blah, define $\sublist$ like this.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set. Define $\psi : A \times \bool \rightarrow \bool$ by $$\psi(a,p) = \btrue,$$ and $\chi : A \times A \times \lists{A} \times \bool \times \bool \rightarrow \lists{A}$ by $$\chi(a,b,y,p,q) = \bif{\beq(a,b)}{p}{q}.$$ We now define $\sublist : \lists{A} \times \lists{A} \rightarrow \bool$ by $$\sublist(x,y) = \dfoldr{\isnil}{\psi}{\chi}(y,x).$$
 
 In Haskell:
@@ -58,22 +57,21 @@ In Haskell:
 >     psi _ _ = true
 >     chi a b _ p q = if eq a b then p else q
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\sublist$ is defined as a $\dfoldr{\ast}{\ast}{\ast}$, it can be characterized as the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set. $\sublist$ is the unique map $f : \lists{A} \times \lists{A} \rightarrow \bool$ satisfying the following system of functional equations for all $a,b \in A$ and $x,y \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(x,\nil) = \isnil(x) \\
  f(\nil,\cons(b,y)) = \btrue \\
  f(\cons(a,x),\cons(b,y)) = \bif{\beq(a,b)}{\sublist(x,y)}{\sublist(\cons(a,x),y)}
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_sublist_list_nil :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> Bool)
@@ -97,17 +95,16 @@ $$\left\{\begin{array}{l}
 >     (sublist (cons a x) (cons b y))
 >     (if eq a b then sublist x y else sublist (cons a x) y)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\sublist$ is reflexive.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ we have $\sublist(x,x)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, certainly $$\sublist(\nil,\nil) = \btrue.$$ For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \sublist(\cons(a,x),\cons(a,x)) \\
@@ -116,9 +113,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_sublist_reflexive :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> Bool)
@@ -126,20 +123,19 @@ as needed.
 >   testName "sublist(x,x) == true" $
 >   \x -> eq (sublist x x) true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\snoc$ is cancellative inside $\sublist$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x,y \in \lists{A}$, we have the following.
 
 1. $\sublist(nil,\snoc(b,y)) = \btrue$.
 2. $\sublist(\snoc(a,x),\snoc(a,y)) = \sublist(x,y)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. There are two possibilities for $y$. If $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \sublist(\nil,\snoc(b,\nil)) \\
@@ -188,9 +184,9 @@ $$\begin{eqnarray*}
  & = & \sublist(\cons(c,x),\cons(b,y))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_sublist_nil_snoc :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
@@ -205,20 +201,19 @@ as needed.
 >   testName "sublist(snoc(a,x),snoc(a,y)) == sublist(x,y)" $
 >   \a x y -> eq (sublist (snoc a x) (snoc a y)) (sublist x y)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\cat$ is cancellative inside $\sublist$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x,y,z \in \lists{A}$ we have the following.
 
 1. $\sublist(\cat(z,x),\cat(z,y)) = \sublist(x,y)$.
 2. $\sublist(\cat(x,z),\cat(y,z)) = \sublist(x,y)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by list induction on $z$. For the base case $z = \nil$, of course
 $$\begin{eqnarray*}
  &   & \sublist(\cat(\nil,x),\cat(\nil,y)) \\
@@ -245,9 +240,9 @@ $$\begin{eqnarray*}
  & = & \sublist(x,y)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_sublist_cat_left_cancel :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> t a -> Bool)
@@ -262,20 +257,19 @@ as needed.
 >   testName "sublist(cat(x,z),cat(y,z)) == sublist(x,y)" $
 >   \x y z -> eq (sublist (cat x z) (cat y z)) (sublist x y)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Sublist conditionally interacts with $\cons$. This one seems like it should be obvious, but the only proof I could find was kind of complicated -- nested induction of two statements at once.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $a,b \in A$ and $x,y \in \lists{A}$. Then we have the following.
 
 1. If $\sublist(x,y) = \btrue$, then $\sublist(x,\cons(b,y)) = \btrue$.
 2. If $\sublist(\cons(a,x),y) = \btrue$, then $\sublist(x,y) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 This proof is a little different: we will prove both (1) and (2) simultaneously by list induction on $x$. For the base case $x = \nil$, to see (1), note that for all $b \in A$ and $y \in \lists{A}$ we have $$\sublist(\nil,y) = \btrue = \sublist(\nil,\cons(b,y))$$ as needed. To see (2), note that $\sublist(\nil,y)$, so the implication holds regardless of the values of $a$ and $y$.
 
 For the inductive step, suppose both (1) and (2) hold for all $a,b \in A$ and $y \in \lists{A}$ for some $x \in \lists{A}$, and let $c \in A$.
@@ -320,9 +314,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_sublist_cons_right :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> t a -> Bool)
@@ -341,17 +335,16 @@ as needed.
 >     then sublist x y
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\sublist$ interacts with $\length$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set, with $x,y \in \lists{A}$. If $\sublist(x,y) = \btrue$, then $\nleq(\length(x),\length(y))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $y$. For the base case $y = \nil$, note that $\length(y) = \zero$. Now if
 $$\begin{eqnarray*}
  &   & \btrue \\
@@ -408,9 +401,9 @@ $$\begin{eqnarray*}
  & = & \nleq(\length(x),\length(\cons(b,y)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_sublist_length :: (List t, Equal a, Equal (t a), Natural n)
 >   => t a -> n -> Test (t a -> t a -> Bool)
@@ -420,17 +413,16 @@ as needed.
 >     then leq ((length x) `withTypeOf` k) (length y)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\sublist$ is antisymmetric.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set, and $x,y \in \lists{A}$. We have $\sublist(x,y)$ and $\sublist(y,x)$ if and only if $x = y$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 The "if" direction is trivial. To see the "only if" direction we proceed by list induction on $x$. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \btrue \\
@@ -482,9 +474,9 @@ $$\begin{eqnarray*}
  & = & y
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_sublist_antisymmetric :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> Bool)
@@ -492,17 +484,16 @@ as needed.
 >   testName "and(sublist(x,y),sublist(y,x)) == eq(x,y)" $
 >   \x y -> eq (and (sublist x y) (sublist y x)) (eq x y)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\sublist$ is transitive.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set, with $x,y,z \in \lists{A}$. If $\sublist(x,y)$ and $\sublist(y,z)$, then $\sublist(x,z)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $z$. For the base case $z = \nil$, note that if $\sublist(y,z) = \btrue$ we have $y = \nil$, and then if $\sublist(x,y) = \btrue$ we also have $x = \nil$. In particular, $\sublist(x,z) = \btrue$ as needed. For the inductive step, suppose the implication holds for all $x$ and $y$ for some $z$, and let $c \in A$. Suppose further that $\sublist(x,y)$ and $\sublist(y,\cons(c,z))$. We consider two cases for $y$. If $y = \nil$, note that $x = \nil$, so we have $\sublist(x,\cons(c,z))$ as claimed. Suppose instead that $y = \cons(b,v)$. If $b \neq c$, we have
 $$\begin{eqnarray*}
  &   & \btrue \\
@@ -528,9 +519,9 @@ $$\begin{eqnarray*}
  & = & \sublist(u,v).
 \end{eqnarray*}$$
 By the inductive hypothesis, $\sublist(u,z)$, so that $\sublist(x,\cons(c,z))$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_sublist_transitive :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> t a -> Bool)
@@ -540,21 +531,20 @@ By the inductive hypothesis, $\sublist(u,z)$, so that $\sublist(x,\cons(c,z))$ a
 >     then sublist x z
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\sublist$ is compatible with $\cat$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. The following hold for all $x,y,u,v \in \lists{A}$. If $\sublist(x,u)$ and $\sublist(y,v)$, then $\sublist(\cat(x,y),\cat(u,v))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 If $\sublist(x,u) = \btrue$, then $\sublist(\cat(x,y),\cat(u,y)) = \btrue$. Similarly, if $\sublist(y,v) = \btrue$, then $\sublist(\cat(u,y),\cat(u,v)) = \btrue$. By transitivity, we have $$\sublist(\cat(x,y),cat(u,v)) = \btrue$$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_sublist_cat_compatible :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> t a -> t a -> Bool)
@@ -564,17 +554,16 @@ If $\sublist(x,u) = \btrue$, then $\sublist(\cat(x,y),\cat(u,y)) = \btrue$. Simi
 >     then sublist (cat x u) (cat y v)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\sublist$ interacts with $\snoc$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a,b \in A$ and $x,y \in \lists{A}$ we have $$\sublist(\snoc(a,x),\snoc(b,y)) = \bif{\beq(a,b)}{\sublist(x,y)}{\sublist(\snoc(a,x),y)}.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We've already seen that $$\sublist(\snoc(a,x),\snoc(a,y)) = \sublist(x,y).$$ So it suffices to show that if $a \neq b$ we have $$\sublist(\snoc(a,x),\snoc(b,y)) = \sublist(\snoc(a,x),y).$$ We proceed by list induction on $y$. For the base case $y = \nil$, note that
 $$\begin{eqnarray*}
  &   & \sublist(\snoc(a,x),y) \\
@@ -628,9 +617,9 @@ $$\begin{eqnarray*}
  & = & \sublist(\snoc(a,x),\cons(d,y))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_sublist_snoc_snoc :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> a -> t a -> t a -> Bool)
@@ -640,17 +629,16 @@ as needed.
 >     (sublist (snoc a x) (snoc b y))
 >     (if eq a b then sublist x y else sublist (snoc a x) y)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\sublist$ interacts with $\rev$:
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x,y \in \lists{A}$ we have $$\sublist(x,y) = \sublist(\rev(x),\rev(y)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $y$. For the base case $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \sublist(x,y) \\
@@ -682,9 +670,9 @@ $$\begin{eqnarray*}
  & = & \sublist(x,\cons(b,y))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_sublist_rev :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> Bool)
@@ -692,20 +680,19 @@ as needed.
 >   testName "sublist(x,y) == sublist(rev(x),rev(y))" $
 >   \x y -> eq (sublist x y) (sublist (rev x) (rev y))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\sublist$ interacts conditionally with $\snoc$ in one argument.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $a \in A$ and $x,y \in \lists{A}$. Then we have the following.
 
 1. If $\sublist(x,y) = \btrue$, then $\sublist(x,\snoc(a,y)) = \btrue$.
 2. If $\sublist(\snoc(a,x),y) = \btrue$, then $\sublist(x,y) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Suppose $\sublist(x,y) = \btrue$. Then we have
 $$\begin{eqnarray*}
  &   & \btrue \\
@@ -726,9 +713,9 @@ $$\begin{eqnarray*}
  & = & \sublist(x,y)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_sublist_snoc_right :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> t a -> Bool)
@@ -747,22 +734,21 @@ as claimed.
 >     then sublist x y
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\sublist$ interacts conditionally with $\cat$ in one argument.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set, with $x,y,z \in \lists{A}$.
 
 1. If $\sublist(x,y) = \btrue$, then $\sublist(x,\cat(z,y)) = \btrue$.
 2. If $\sublist(x,y) = \btrue$, then $\sublist(x,\cat(y,z)) = \btrue$.
 3. If $\sublist(\cat(z,x),y) = \btrue$, then $\sublist(x,y) = \btrue$.
 4. If $\sublist(\cat(x,z),y) = \btrue$, then $\sublist(x,y) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by list induction on $z$. For the base case $z = \nil$, suppose $\sublist(x,y) = \btrue$. Then
 $$\begin{eqnarray*}
  &   & \sublist(x,\cat(z,y)) \\
@@ -815,9 +801,9 @@ $$\begin{eqnarray*}
  & = & \sublist(x,y)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_sublist_left_cat_right :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> t a -> Bool)
@@ -854,17 +840,16 @@ as needed.
 >     then sublist x y
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\sublist$ interacts with $\map$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets with $x,y \in \lists{A}$ and $f : A \rightarrow B$ injective. If $\sublist(x,y) = \btrue$, then $\sublist(\map(f)(x),\map(f)(y)) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $y$. For the base case $y = \nil$, suppose $\sublist(x,y) = \btrue$. Then in fact $x = \nil$. In this case we have
 $$\begin{eqnarray*}
  &   & \sublist(\map(f)(x),\map(f)(y)) \\
@@ -906,9 +891,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_sublist_map :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> a) -> t a -> t a -> Bool)
@@ -916,17 +901,16 @@ as needed.
 >   testName "if sublist(x,y) then sublist(map(f)(x),map(f)(y))" $
 >   \f x y -> if sublist x y then sublist (map f x) (map f y) else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\sublist$ interacts with $\filter$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set, let $p : A \rightarrow \bool$, and let $x \in \lists{A}$. Then we have $$\sublist(\filter(p,x),x) = \btrue.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \sublist(\filter(p,x),x) \\
@@ -950,9 +934,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_sublist_filter :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
@@ -960,20 +944,19 @@ as needed.
 >   testName "sublist(filter(p)(x),x)" $
 >   \p x -> sublist (filter p x) x
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\sublist$ interacts conditionally with $\any$ and $\all$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set, let $x,y \in \lists{A}$, and let $p : A \rightarrow \bool$. If $\sublist(x,y) = \btrue$, then we have the following.
 
 1. If $\all(p,y) = \btrue$ then $\all(p,x) = \btrue$.
 2. If $\any(p,x) = \btrue$ then $\any(p,y) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by list induction on $y$. For the base case $y = \nil$, since $\sublist(x,y) = \btrue$ we have $x = \nil$. Now $$\all(p,y) = \all(p,\nil) = \btrue$$ and $$\all(p,x) = \all(p,\nil) = \btrue$$ as needed. For the inductive step, suppose the result holds for all $x$ for some $y$, and let $b \in A$. Suppose $\sublist(x,\cons(b,y)) = \btrue$, and further suppose that $\all(p,\cons(b,y)) = \btrue$. In particular, note that $p(b) = \btrue$. We consider two possibilities for $x$. If $x = \nil$, note that $$\all(p,x) = \all(p,\nil) = \btrue,$$ so the implication holds regardless of $y$. Suppose instead that $x = \cons(a,u)$. Now
 $$\begin{eqnarray*}
  &   & \btrue \\
@@ -1002,9 +985,9 @@ $$\begin{eqnarray*}
  & = & \any(p,x)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_sublist_all :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> t a -> t a -> Bool)
@@ -1023,21 +1006,20 @@ as needed.
 >     then if any p x then any p y else true
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\sublist$ is destroyed by $\cons$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $x,y \in \lists{A}$. If $\sublist(x,y)$, then $\sublist(\cons(a,y),x) = \bfalse$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Suppose to the contrary that $\sublist(\cons(a,y),x) = \btrue$. By transitivity we have $\sublist(\cons(a,y),y)$, and we also have $\sublist(y,\cons(a,y))$, so by antisymmetry we have $y = \cons(a,y)$ -- a contradiction.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_sublist_cons_not :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> a -> t a -> t a -> Bool)
@@ -1047,8 +1029,8 @@ Suppose to the contrary that $\sublist(\cons(a,y),x) = \btrue$. By transitivity 
 >     then eq (sublist (cons a y) x) false
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

@@ -28,8 +28,7 @@ slug: length
 
 Today we'll measure the sizes of lists with $\length$. Intuitively this function should "count" the "number" of "items" in a list. Thinking recursively, it is reasonable to want the length of $\nil$ to be zero, and the length of $\cons(a,x)$ to be one more than the length of $x$. $\foldr{\ast}{\ast}$ was made for situations like this. But wait! Remember that $\foldr{\ast}{\ast}$ is not tail recursive, so on large lists it may have problems. But $\foldl{\ast}$ is tail recursive, and is interchangeable with $\foldr{\ast}{\ast}$ as long as whatever we're doing to the list doesn't care what *order* the items come in. And it seems reasonable to say that the length of a list is not dependent on the order of its items. So we'll use $\foldl{\ast}$. Recall from $\rev$ that $\foldl{\ast}$ is easier to reason about if it remains parameterized on the "base case". With that in mind, we start with a helper function $\addlength$.
 
-<div class="result">
-<div class="dfn"><p>
+:::::: definition ::
 Let $A$ be a set. Define $\varphi : \nats \times A \rightarrow \nats$ by $\varphi(k,a) = \next(k)$, and define $\addlength : \nats \rightarrow \lists{A} \rightarrow \nats$ by $\addlength = \foldl{\varphi}$.
 
 In Haskell:
@@ -38,21 +37,20 @@ In Haskell:
 > addlength = foldl phi
 >   where phi k _ = next k
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\addlength$ is defined as a $\foldl{\ast}$, it is the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set. Then $\addlength$ is the unique map $f : \nats \times \lists{A} \rightarrow \nats$ such that for all $n \in \nats$, $a \in A$, and $x \in \lists{A}$, we have
 $$\left\{\begin{array}{l}
  f(n,\nil) = n \\
  f(n,\cons(a,x)) = f(\next(n),x)
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_addlength_nil_right
 >   :: (List t, Equal (t a), Natural n, Equal n)
@@ -72,20 +70,19 @@ $$\left\{\begin{array}{l}
 >   \n a x ->
 >     eq (addlength n (cons a x)) (addlength (next n) x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\addlength$ interacts with $\cons$ and $\snoc$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $n \in \nats$, $a \in A$, and $x \in \lists{A}$, we have the following.
 
 1. $\addlength(n,\snoc(a,x)) = \next(\addlength(n,x))$.
 2. $\addlength(n,\cons(a,x)) = \next(\addlength(n,x))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Letting $\varphi$ be as defined in the definition of $\addlength$, we have
 $$\begin{eqnarray*}
  &   & \addlength(n,\snoc(a,x)) \\
@@ -110,9 +107,9 @@ $$\begin{eqnarray*}
  & = & \next(\addlength(n,\cons(b,x)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_addlength_snoc_next
 >   :: (List t, Equal (t a), Natural n, Equal n)
@@ -131,17 +128,16 @@ as needed.
 >   \n a x ->
 >     eq (addlength n (cons a x)) (next (addlength n x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\addlength$ interacts with $\rev$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $n \in \nats$ and $x \in \lists{A}$, we have $$\addlength(n,\rev(x)) = \addlength(n,x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \addlength(n,\rev(\nil)) \\
@@ -156,9 +152,9 @@ $$\begin{eqnarray*}
  & = & \addlength(n,\cons(a,x))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_addlength_rev
 >   :: (List t, Equal (t a), Natural n, Equal n)
@@ -168,13 +164,12 @@ as needed.
 >   \n x ->
 >     eq (addlength n (rev x)) (addlength n x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now we define $\length$ as follows.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set. Define $\length : \lists{A} \rightarrow \nats$ by $$\length(x) = \addlength(\zero,x).$$
 
 In Haskell:
@@ -182,17 +177,16 @@ In Haskell:
 > length :: (List t, Natural n) => t a -> n
 > length = addlength zero
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Although $\length$ is essentially defined as a left fold, it can be characterized as a right fold.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set, and define $\psi : A \times \nats \rightarrow \nats$ by $\psi(a,k) = \next(k)$. If $x \in \lists{A}$, then $$\length(x) = \foldr{\zero}{\psi}(x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \foldr{\zero}{\psi}(\nil) \\
@@ -210,9 +204,9 @@ $$\begin{eqnarray*}
  & = & \addlength(\zero,\cons(a,x))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_length_foldr
 >   :: (List t, Equal (t a), Natural n, Equal n)
@@ -226,21 +220,20 @@ as needed.
 >     in
 >       eq (length x) (foldr zero' psi x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\length$ is equivalent to a right fold, it is the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set. $\length$ is the unique solution $f : \lists{A} \rightarrow \nats$ to the following system of equations for all $a \in A$ and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(\nil) = \zero \\
  f(\cons(a,x)) = \next(f(x))
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_length_nil
 >   :: (List t, Equal (t a), Natural n, Equal n)
@@ -259,20 +252,19 @@ $$\left\{\begin{array}{l}
 >     ((length (cons a x)) `withTypeOf` k)
 >     (next (length x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Special cases.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 For all $a,b \in A$, we have:
 
 1. $\length(\cons(a,\nil)) = \next(\zero)$.
 2. $\length(\cons(a,\cons(b,\nil))) = \next(\next(\zero))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We have
 $$\begin{eqnarray*}
  &   & \length(\cons(a,\nil)) \\
@@ -287,9 +279,9 @@ $$\begin{eqnarray*}
  & = & \next(\next(\zero))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_length_single
 >   :: (List t, Equal (t a), Natural n, Equal n)
@@ -310,17 +302,16 @@ as claimed.
 >     ((next (next zero)) `withTypeOf` k)
 >     (length (cons a (cons b (nil `withTypeOf` t))))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\length$ interacts with $\snoc$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 For all $a \in A$ and $x \in \lists{A}$, we have $$\length(\snoc(a,x)) = \next(\length(x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We have
 $$\begin{eqnarray*}
  &   & \length(\snoc(a,x)) \\
@@ -329,9 +320,9 @@ $$\begin{eqnarray*}
  & = & \next(\length(x))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_length_snoc :: (List t, Equal (t a), Natural n, Equal n)
 >   => t a -> n -> Test (a -> t a -> Bool)
@@ -341,17 +332,16 @@ as claimed.
 >     ((length (snoc a x)) `withTypeOf` k)
 >     (next (length x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\length$ is invariant over $\rev$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ we have $$\length(\rev(x)) = \length(x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \length(\rev(x)) \\
@@ -360,9 +350,9 @@ $$\begin{eqnarray*}
  & = & \length(x)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_length_rev
 >   :: (List t, Equal (t a), Natural n, Equal n)
@@ -373,17 +363,16 @@ as claimed.
 >     ((length (rev x)) `withTypeOf` k)
 >     (length x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\length$ turns $\cat$ into $\nplus$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x,y \in \lists{A}$ we have $$\length(\cat(x,y)) = \nplus(\length(x),\length(y)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $y$. For the base case $y = \nil$, note that
 $$\begin{eqnarray*}
  &   & \length(\cat(x,\nil)) \\
@@ -401,9 +390,9 @@ $$\begin{eqnarray*}
  & = & \nplus(\length(x),\length(\cons(a,y)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_length_cat
 >   :: (List t, Equal (t a), Natural n, Equal n)
@@ -414,17 +403,16 @@ as needed.
 >     ((length (cat x y)) `withTypeOf` k)
 >     (plus (length x) (length y))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And $\length$ detects $\nil$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$. Then $x = \nil$ if and only if $\length(x) = 0$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We've already seen that $\length(\nil) = \zero$. Suppose then that $x = \cons(a,u)$; then
 $$\begin{eqnarray*}
  &   & \length(x) \\
@@ -432,9 +420,9 @@ $$\begin{eqnarray*}
  & = & \next(\length(u));
 \end{eqnarray*}$$
 in particular, $\length(x) \neq \zero$.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_length_zero
 >   :: (List t, Equal (t a), Natural n, Equal n, Boolean b, Equal b)
@@ -445,8 +433,8 @@ in particular, $\length(x) \neq \zero$.
 >     (eq (length x) (zero `withTypeOf` k))
 >     ((eq x nil) `withTypeOf` p)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

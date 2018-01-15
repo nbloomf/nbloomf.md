@@ -23,12 +23,11 @@ slug: bfoldr
 
 In this post we'll develop a list-flavored version of bailout recursion.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$, $B$, and $C$ be sets. Suppose we have mappings $$\delta : B \rightarrow C,$$ $$\beta : A \times \lists{A} \rightarrow B \rightarrow \bool,$$ $$\psi : A \times \lists{A} \times B \rightarrow C,$$ and $$\omega : A \times \lists{A} \times B \rightarrow B.$$ Then there is a unique mapping $\Theta : \lists{A} \times B \rightarrow C$ such that $$\Theta(\nil,u) = \delta(u)$$ and $$\Theta(\cons(a,x),u) = \bif{\beta(a,x,u)}{\psi(a,x,u)}{\Theta(x,\omega(a,x,u))}.$$ We denote this $\Theta$ by $\bfoldr{\delta}{\beta}{\psi}{\omega}$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Define $\varepsilon : B \times \lists{A} \rightarrow C$ by $$\varepsilon(u,x) = \delta(u)$$ and $\varphi : A \times C^{B \times \lists{A}} \rightarrow C^{B \times \lists{A}}$ by $$\varphi(a,g)(u,x) = \bif{\beta(a,\tail(x),u)}{\psi(a,\tail(x),u)}{g(\omega(a,\tail(x),u),\tail(x))},$$ and let $\Theta : \lists{A} \times B \rightarrow C$ be given by $$\Theta(x,u) = \foldr{\varepsilon}{\varphi}(x)(u,x).$$ Note that
 $$\begin{eqnarray*}
  &   & \Theta(\nil,u) \\
@@ -59,8 +58,8 @@ $$\begin{eqnarray*}
  & = & \Theta(\cons(a,x),u)
 \end{eqnarray*}$$
 so that $\Psi = \Theta$.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Implementation

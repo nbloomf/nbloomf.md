@@ -69,8 +69,7 @@ $$\begin{eqnarray*}
 
 With this in mind, we define $\takeWhile$ like so.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set, with $p : A \rightarrow \bool$. Define $\varphi(p) : A \times \lists{A} \rightarrow \lists{A}$ by $$\varphi(p)(a,x) = \left\{ \begin{array}{ll} \cons(a,x) & \mathrm{if}\ p(a) = \btrue \\ \nil & \mathrm{otherwise}. \end{array} \right.$$
 
 We define $\takeWhile : \bool^A \times \lists{A} \rightarrow \lists{A}$ by $$\takeWhile(p,x) = \foldr{\nil}{\varphi(p)}(x).$$
@@ -84,21 +83,20 @@ In Haskell:
 >       then cons a x
 >       else nil
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 As usual, since $\takeWhile$ is defined directly in terms of foldr it is the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $A$ be a set. Then $\takeWhile$ is the unique function $$f : \bool^A \times \lists{A} \rightarrow \lists{A}$$ satisfying the following system of equations for all $p : A \rightarrow \bool$, $a \in A$, and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(p,\nil) = \nil \\
  f(p,\cons(a,x)) = \bif{p(a)}{\cons(a,f(p,x)}{\nil}.
 \end{array}\right.$$
-</div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_takeWhile_nil :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> Bool)
@@ -115,17 +113,16 @@ $$\left\{\begin{array}{l}
 >     (takeWhile p (cons a x))
 >     (if p a then cons a (takeWhile p x) else nil)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\takeWhile$ gives prefixes.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$. For all $x \in \lists{A}$, we have $$\prefix(\takeWhile(p,x),x) = \btrue.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \prefix(\takeWhile(p,\nil),\nil) \\
@@ -142,9 +139,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_takeWhile_prefix :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
@@ -152,21 +149,20 @@ as needed.
 >   testName "prefix(takeWhile(p,x),x) == true" $
 >   \p x -> eq (prefix (takeWhile p x) x) true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 So $\takeWhile$ also gives a sublists.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set, with $p : A \rightarrow \bool$ and $x \in \lists{A}$. Then we have $$\sublist(\takeWhile(k,x),x) = \btrue.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We have $$\prefix(\takeWhile(k,x),x) = \btrue,$$ so $$\infix(\takeWhile(k,x),x) = \btrue,$$ so $$\sublist(\takeWhile(k,x),x) = \btrue$$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_takeWhile_sublist :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
@@ -174,17 +170,16 @@ We have $$\prefix(\takeWhile(k,x),x) = \btrue,$$ so $$\infix(\takeWhile(k,x),x) 
 >   testName "sublist(takeWhile(p,x),x) == true" $
 >   \p x -> eq (sublist (takeWhile p x) x) true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\takeWhile$ is idempotent.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $p : A \rightarrow \bool$. Then for all $x \in \lists{A}$ we have $$\takeWhile(p,\takeWhile(p,x)) = \takeWhile(p,x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \takeWhile(p,\takeWhile(p,x)) \\
@@ -208,9 +203,9 @@ $$\begin{eqnarray*}
  & = & \takeWhile(p,\cons(a,x))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_takeWhile_idempotent :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
@@ -218,17 +213,16 @@ as needed.
 >   testName "takeWhile(p,takeWhile(p,x)) == takeWhile(p,x)" $
 >   \p x -> eq (takeWhile p (takeWhile p x)) (takeWhile p x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\takeWhile$ commutes with itself (kind of).
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $p$ and $q$ mappings $A \rightarrow \bool$. Then for all $x \in \lists{A}$ we have $$\takeWhile(p,\takeWhile(q,x)) = \takeWhile(q,\takeWhile(p,x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \takeWhile(p,\takeWhile(q,x)) \\
@@ -253,9 +247,9 @@ $$\begin{eqnarray*}
  & = & \takeWhile(q,\takeWhile(p,\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_takeWhile_commutes :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> (a -> Bool) -> t a -> Bool)
@@ -264,8 +258,8 @@ as needed.
 >   \p q x ->
 >     eq (takeWhile p (takeWhile q x)) (takeWhile q (takeWhile p x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now for $\dropWhile$. This function should drop the longest prefix satisfying some predicate, again with signature $\bool^A \times \lists{A} \rightarrow \lists{A}$. If we try defining this using foldr in the "obvious" way, we run into trouble, where the $\varphi$ parameter needs to have its argument and eat it too. (try it!) One way around this is the trick we used to define $\zip$.
 
@@ -286,8 +280,7 @@ $$\begin{eqnarray*}
 
 (that last line is why using a plain fold doesn't work.) In cases like this, the consuming fold is handy.
 
-<div class="result">
-<div class="dfn">
+:::::: definition ::
 Let $A$ be a set with $p : A \rightarrow \bool$. Define $\sigma : A \times \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\sigma(a,x,y) = \bif{p(a)}{y}{\cons(a,x)}.$$ Now define $\dropWhile : \bool^A \rightarrow {\lists{A}}^{\lists{A}}$ by $$\dropWhile(p) = \cfoldr{\nil}{\sigma}.$$
 
 In Haskell:
@@ -297,21 +290,20 @@ In Haskell:
 >   where
 >     sigma a x y = if p a then y else cons a x
 
-</div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Because $\dropWhile$ is defined as a consuming fold, it can be characterized as the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set, with $p$ a predicate on $A$. Then $\dropWhile(p)$ is the unique map $f : \lists{A} \rightarrow \lists{A}$ satisfying the following equations for all $a \in A$ and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(\nil) = \nil \\
  f(\cons(a,x)) = \bif{p(a)}{f(x)}{\cons(a,x)}
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_dropWhile_nil :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> Bool)
@@ -328,17 +320,16 @@ $$\left\{\begin{array}{l}
 >     (dropWhile p (cons a x))
 >     (if p a then dropWhile p x else cons a x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now $\dropBut$ is a $\suffix$:
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ and $p : A \rightarrow \bool$, we have $$\suffix(\dropWhile(p)(x),x) = \btrue.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \suffix(\dropWhile(p)(\nil),\nil) \\
@@ -354,9 +345,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_dropWhile_suffix :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
@@ -364,17 +355,16 @@ as needed.
 >   testName "suffix(dropWhile(p)(x),x) == true" $
 >   \p x -> eq (suffix (dropWhile p x) x) true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Like $\take$ and $\drop$, $\takeWhile$ and $\dropWhile$ give a kind of $\cat$-factorization.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$. For all $x \in \lists{A}$ we have $$x = \cat(\takeWhile(p)(x),\dropWhile(p)(x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \cat(\takeWhile(p)(\nil),\dropWhile(p)(\nil)) \\
@@ -391,9 +381,9 @@ $$\begin{eqnarray*}
  & = & \cons(a,x)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_takeWhile_dropWhile_cat :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
@@ -401,8 +391,8 @@ as needed.
 >   testName "cat(takeWhile(p)(x),dropWhile(p)(x)) == x" $
 >   \p x -> eq (cat (takeWhile p x) (dropWhile p x)) x
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

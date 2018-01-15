@@ -25,8 +25,7 @@ slug: div
 
 With the division algorithm in hand we can define what it means for one natural number to divide another.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 We define $\ndiv : \nats \times \nats \rightarrow \bool$ by $$\ndiv(a,b) = \iszero(\nrem(b,a)).$$
 
 In Haskell:
@@ -34,43 +33,41 @@ In Haskell:
 > div :: (Natural n, Equal n) => n -> n -> Bool
 > div a b = isZero (rem b a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now $\ndiv$ is to $\ntimes$ as $\nleq$ is to $\nplus$ as follows.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b \in \nats$. Then $\ndiv(a,b) = \btrue$ if and only if there exists $c \in \nats$ such that $b = \ntimes(c,a)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Suppose first that $\ndiv(a,b) = \btrue$. Letting $(q,r) = \ndivalg(b,a)$, we have $r = \zero$, so that $$b = \nplus(\ntimes(q,a),r) = \ntimes(q,a)$$ as claimed.
 
 Conversely, suppose there is a natural number $c$ such that $b = \ntimes(c,a)$. If $a = \zero$, then in fact $b = \zero$, and we have $\nrem(b,a) = \zero$, so that $\ndiv(a,b)$. Suppose instead that $a = \next(d)$. Since $$b = \nplus(\ntimes(c,\next(d)),\zero)$$ and $$\nleq(\zero,\next(d)),$$ we have $$(c,\zero) = \ndivalg(b,a).$$ Thus $\nrem(b,a) = \zero$ as needed.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 From here the usual properties of divisibility are straightforward. First, $\ndiv$ interacts with $\zero$ and $\next(\zero)$.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a \in \nats$. We have the following.
 
 1. $\ndiv(a,\zero)$.
 2. If $\ndiv(\zero,a)$, then $a = \zero$.
 3. $\ndiv(\next(\zero),a)$.
 4. If $\ndiv(a,\next(\zero))$, then $a = \next(\zero)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Note that $\zero = \ntimes(\zero,a)$.
 2. We have $c \in \nats$ such that $a = \ntimes(c,\zero) = \zero$.
 3. Note that $a = \ntimes(a,\next(\zero))$.
 4. We've seen that if $\ntimes(a,b) = \next(\zero)$ then $a = b = \next(\zero)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_div_zero_right :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
@@ -103,21 +100,20 @@ Let $a \in \nats$. We have the following.
 >     then eq a (next zero)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And $\ndiv$ is reflexive, antisymmetric, and transitive.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c \in \nats$. We have the following.
 
 1. $\ndiv(a,a)$.
 2. If $\ndiv(a,b)$ and $\ndiv(b,a)$, then $a = b$.
 3. If $\ndiv(a,b)$ and $\ndiv(b,c)$, then $\ndiv(a,c)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Note that $a = \ntimes(\next(\zero),a)$.
 2. First suppose $a = \zero$. Since $\ndiv(a,b)$, we have $b = 0$ as needed. Now suppose $a = \next(d)$. We have $h,k \in \nats$ such that $a = \ntimes(h,b)$ and $b = \ntimes(k,a)$; now
 $$\begin{eqnarray*}
@@ -129,9 +125,9 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 so we have $\ntimes(h,k) = \next(\zero)$, and thus $h = k = \next(\zero)$, so that $a = b$ as claimed.
 3. We have $h,k \in \nats$ such that $b = \ntimes(h,a)$ and $c = \ntimes(k,b)$. now $$c = \ntimes(\ntimes(h,k),a),$$ and thus $\ndiv(a,c)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_div_reflexive :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
@@ -157,13 +153,12 @@ so we have $\ntimes(h,k) = \next(\zero)$, and thus $h = k = \next(\zero)$, so th
 >     then div a c
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And $\ndiv$ interacts with the rest of arithmetic.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c,d \in \nats$. We have the following.
 
 1. $\ndiv(a,\ntimes(b,a))$.
@@ -171,9 +166,9 @@ Let $a,b,c,d \in \nats$. We have the following.
 3. If $\ndiv(c,a)$ and $\ndiv(c,b)$ then $\ndiv(c,\nplus(a,b))$.
 4. If $\ndiv(d,a)$ and $\ndiv(d,c)$ and $\nplus(a,b) = c$, then $\ndiv(d,b)$.
 5. If $b \neq \zero$ and $\ndiv(a,b)$ then $\nleq(a,b)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We have $\ntimes(b,a) = \ntimes(b,a)$.
 2. Say $a = \ntimes(c,u)$. Now $$\ntimes(c,\ntimes(u,b)) = \ntimes(c,d),$$ so that $d = \ntimes(u,b)$. Thus $\ndiv(b,d)$ as claimed.
 3. Say $a = \ntimes(h,c)$ and $b = \ntimes(k,c)$. Then by distributivity we have
@@ -200,9 +195,9 @@ $$\begin{eqnarray*}
  & = & \nplus(\ntimes(k,a),a)
 \end{eqnarray*}$$
 so that $\nleq(a,b)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_div_times :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
@@ -246,20 +241,19 @@ so that $\nleq(a,b)$.
 >     then leq a b
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\ndiv$ interacts with $\nquo$.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c \in \nats$. Then we have the following.
 
 1. If $\ndiv(b,a)$ and $c \neq \zero$, then $$\nquo(\ntimes(a,c),\ntimes(b,c)) = \nquo(a,b).$$
 2. If $\ndiv(b,a)$, then $\nquo(\ntimes(c,a),b) = \ntimes(c,\nquo(a,b))$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We consider two cases: either $b = \zero$ or $b \neq \zero$. If $b = \zero$ then we have $a = \zero$, and
 $$\begin{eqnarray*}
  &   & \nquo(a,b) \\
@@ -283,9 +277,9 @@ $$\begin{eqnarray*}
  & = & \ntimes(c,\nquo(a,b))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_div_quo_times_cancel :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> n -> Bool)
@@ -304,21 +298,20 @@ as claimed.
 >     then eq (quo (times c a) b) (times c (quo a b))
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 We'll call the next result the Cross Multiplication Theorem.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c,d \in \nats$ such that $\ndiv(b,a)$ and $\ndiv(d,c)$ and $b,d \neq \zero$. Then $$\ntimes(a,d) = \ntimes(b,c)$$ if and only if $\nquo(a,b) = \nquo(c,d).$$
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Since $b$ and $d$ are both not zero, using the uniqueness of quotients by nonzero divisors we have $$\ntimes(a,d) = \ntimes(b,c)$$ if and only if $$\nquo(\ntimes(a,d),b) = c$$ if and only if $$\ntimes(d,\nquo(a,b)) = c$$ if and only if $$\nquo(a,b) = \nquo(c,d)$$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_div_cross_multiplication :: (Natural n, Equal n, Boolean b, Equal b)
 >   => n -> b -> Test (n -> n -> n -> n -> Bool)
@@ -330,8 +323,8 @@ Since $b$ and $d$ are both not zero, using the uniqueness of quotients by nonzer
 >       (eq (quo a b) (quo c d))
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

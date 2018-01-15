@@ -41,8 +41,7 @@ slug: delete
 
 Today we'll establish a function $\delete$ that removes all copies of a given item from a list. $\delete$ is a special case of $\filter$.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set, with $a \in A$. Define $\varphi : A \times \lists{A} \rightarrow \lists{A}$ by $$\varphi(b,x) = \bif{\beq(a,b)}{x}{\cons(b,x)},$$ and define $\delete : A \rightarrow \lists{A}^{\lists{A}}$ by $$\delete(a) = \foldr{\nil}{\varphi}.$$
 
 In Haskell:
@@ -52,21 +51,20 @@ In Haskell:
 >   where
 >     phi b x = if eq a b then x else cons b x
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\delete(a)$ is defined as a fold, it can be characterized as the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set. Then $\delete(a)$ is the unique map $f : \lists{A} \rightarrow \lists{A}$ satisfying the following equations for all $b \in A$ and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(\nil) = \nil \\
  f(\cons(b,x)) = \bif{\beq(a,b)}{f(x)}{\cons(b,f(x))}
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_delete_nil :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> Bool)
@@ -83,17 +81,16 @@ $$\left\{\begin{array}{l}
 >     (delete a (cons b x))
 >     (if eq a b then delete a x else cons b (delete a x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\delete$ is a filter.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have $$\delete(a)(x) = \filter(\bnot(\beq(a,-)))(x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \filter(\bnot(\beq(a,-)))(\nil) \\
@@ -109,9 +106,9 @@ $$\begin{eqnarray*}
  & = & \delete(a)(\cons(b,x))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_delete_filter :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
@@ -119,17 +116,16 @@ as needed.
 >   testName "delete(a)(x) == filter(not(eq(a,-)))(x)" $
 >   \a x -> eq (delete a x) (filter (\b -> not (eq a b)) x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\delete$ is idempotent.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$ we have $$\delete(a)(\delete(a)(x)) = \delete(a)(x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that, since $\filter(p)$ is idempotent for any predicate $p$, we have
 $$\begin{eqnarray*}
  &   & \delete(a,\delete(a,x)) \\
@@ -138,9 +134,9 @@ $$\begin{eqnarray*}
  & = & \delete(a,x)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_delete_idempotent :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
@@ -148,17 +144,16 @@ as claimed.
 >   testName "delete(a)(delete(a)(x)) == delete(a)(x)" $
 >   \a x -> eq (delete a (delete a x)) (delete a x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\delete$ can detect $\elt$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $a \in A$ and $x \in \lists{A}$. Then we have $$\beq(x,\delete(a,x)) = \bnot(\elt(a,x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \beq(x,\delete(a,x)) \\
@@ -168,9 +163,9 @@ $$\begin{eqnarray*}
  & = & \bnot(\elt(a,x))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_delete_eq_not_elt :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
@@ -178,17 +173,16 @@ as claimed.
 >   testName "eq(x,delete(a,x)) == not(elt(a,x))" $
 >   \a x -> eq (eq x (delete a x)) (not (elt a x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\delete$ commutes with itself.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $a,b \in A$ and $x \in \lists{A}$. Then $$\delete(a,\delete(b,x)) = \delete(b,\delete(a,x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \delete(a,\delete(b,\nil)) \\
@@ -230,9 +224,9 @@ $$\begin{eqnarray*}
  & = & \delete(b,\delete(a,\cons(c,x)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_delete_commutative :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> a -> t a -> Bool)
@@ -242,17 +236,16 @@ as needed.
 >     (delete a (delete b x))
 >     (delete b (delete a x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\delete$ removes elements.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ and $a \in A$, we have $$\all(\bnot(\beq(a,-)))(\delete(a,x)) = \btrue.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \btrue \\
@@ -260,9 +253,9 @@ $$\begin{eqnarray*}
  & = & \all(\bnot(\beq(a,-)),\delete(a,x))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_delete_all_not_eq :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
@@ -270,17 +263,16 @@ as claimed.
 >   testName "all(not(eq(a,-)))(delete(a)(x))" $
 >   \a x -> all (\b -> not (eq a b)) (delete a x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\delete$ yields a sublist.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$ and $a \in A$. Then $$\sublist(\delete(a,x),x) = \btrue.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \btrue \\
@@ -288,9 +280,9 @@ $$\begin{eqnarray*}
  & = & \sublist(\delete(a,x),x)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_delete_sublist :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
@@ -298,21 +290,20 @@ as claimed.
 >   testName "sublist(delete(a)(x),x)" $
 >   \a x -> sublist (delete a x) x
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\delete$ and $\unique$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$ and $a \in A$. If $\unique(x) = \btrue$, then $\unique(\delete(a,x)) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that $\sublist(\delete(a)(x),x) = \btrue$, so that $\unique(\delete(a)(x)) = \btrue$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_delete_unique :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
@@ -320,17 +311,16 @@ Note that $\sublist(\delete(a)(x),x) = \btrue$, so that $\unique(\delete(a)(x)) 
 >   testName "if unique(x) then unique(delete(a)(x))" $
 >   \a x -> if unique x then unique (delete a x) else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\delete$ interacts with $\elt$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$ and $a \in A$. Then $\elt(a,\delete(a,x)) = \bfalse$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \elt(a,\delete(a,\nil)) \\
@@ -352,9 +342,9 @@ $$\begin{eqnarray*}
  & = & \bfalse
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_delete_elt :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
@@ -362,17 +352,16 @@ as needed.
 >   testName "elt(a,delete(a)(x)) == false" $
 >   \a x -> eq (elt a (delete a x)) false
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\delete$ preserves $\prefix$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $x,y \in \lists{A}$ and $a \in A$. If $\prefix(x,y) = \btrue$, then $\prefix(\delete(a)(x),\delete(a)(y)) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that $$\prefix(x,y) = \prefix(\nil,y) = \btrue$$ and
 $$\begin{eqnarray*}
  &   & \prefix(\delete(a,x),\delete(a,y)) \\
@@ -396,9 +385,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_delete_prefix :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> t a -> Bool)
@@ -406,17 +395,16 @@ as needed.
 >   testName "if prefix(x,y) then prefix(delete(a)(x),delete(a)(y))" $
 >   \a x y -> if prefix x y then prefix (delete a x) (delete a y) else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\delete$ interacts with $\snoc$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $a,b \in A$ and $x \in \lists{A}$. Then we have $$\delete(a,\snoc(b,x)) = \bif{\beq(a,b)}{\delete(a,x)}{\snoc(b,\delete(a,x))}.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \delete(a,\snoc(b,x)) \\
@@ -442,9 +430,9 @@ $$\begin{eqnarray*}
  & = & \bif{\beq(a,b)}{\delete(a,\cons(c,x))}{\snoc(b,\delete(a,\cons(c,x)))} \\
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_delete_snoc :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> a -> t a -> Bool)
@@ -454,17 +442,16 @@ as needed.
 >     (delete a (snoc b x))
 >     (if eq a b then delete a x else snoc b (delete a x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\delete$ commutes with $\rev$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $a \in A$ and $x \in \lists{A}$. Then we have $$\delete(a,\rev(x)) = \rev(\delete(a,x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \delete(a,\rev(\nil)) \\
@@ -484,9 +471,9 @@ $$\begin{eqnarray*}
  & = & \rev(\delete(a,\cons(b,x)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_delete_rev :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
@@ -494,17 +481,16 @@ as needed.
 >   testName "delete(a)(rev(x)) == rev(delete(a)(x))" $
 >   \a x -> eq (delete a (rev x)) (rev (delete a x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\delete$ distributes over $\cat$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x,y \in \lists{A}$, we have $$\delete(a)(\cat(x,y)) = \cat(\delete(a)(x),\delete(a)(y)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $y$. For the base case $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \delete(a)(\cat(x,\nil)) \\
@@ -524,9 +510,9 @@ $$\begin{eqnarray*}
  & = & \cat(\delete(a)(x),\delete(a)(\cons(b,y)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_delete_cat :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> t a -> Bool)
@@ -536,8 +522,8 @@ as needed.
 >     (delete a (cat x y))
 >     (cat (delete a x) (delete a y))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

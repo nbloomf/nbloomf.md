@@ -38,8 +38,7 @@ Today we'll define $\count$, which takes an $A$ and a $\lists{A}$ and returns th
 
 When dealing with left folds, it is often handier to parameterize on the base case, so that's what we'll do.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set with $a \in A$, and define $\varphi : \nats \times A \rightarrow \nats$ by $$\varphi(k,b) = \bif{\beq(a,b)}{\next(k)}{k}.$$ Now we define $\addcount(a) : \nats \times \lists{A} \rightarrow \nats$ by $$\addcount(a)(n,x) = \foldl{\varphi}(n)(x).$$
 
 In Haskell:
@@ -49,21 +48,20 @@ In Haskell:
 >   where
 >     phi k b = if eq a b then next k else k
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\addcount$ is defined as a left fold, it can be characterized as the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set with $a \in A$. Then $\addcount$ is the unique map $f : \nats \times \lists{A} \rightarrow \nats$ satisfying the following system of equations for all $k \in \nats$, $b \in A$, and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(k,\nil) = k \\
  f(k,\cons(b,x)) = f(\bif{\beq(a,b)}{\next(k)}{k},x)
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_addcount_nil :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (a -> n -> Bool)
@@ -78,17 +76,16 @@ $$\left\{\begin{array}{l}
 >   testName "addcount(a)(k,cons(b,x)) == addcount(a)(if(eq(a,b),next(k),k),x)" $
 >   \a k b x -> eq (addcount a k (cons b x)) (addcount a (if eq a b then next k else k) x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\addcount$ interacts with $\next$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $a \in A$. For all $k \in \nats$ and $x \in \lists{A}$, we have $$\addcount(a)(\next(k),x) = \next(\addcount(a)(k,x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \addcount(a)(\next(k),\nil) \\
@@ -103,9 +100,9 @@ $$\begin{eqnarray*}
  & = & \next(\addcount(a)(k,\cons(b,x)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_addcount_next :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (a -> n -> t a -> Bool)
@@ -113,17 +110,16 @@ as needed.
 >   testName "addcount(a)(next(k),x) == next(addcount(a)(k,x))" $
 >   \a k x -> eq (addcount a (next k) x) (next (addcount a k x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now $\addcount$ interacts with $\snoc$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $a \in A$. For all $b \in A$ and $x \in \lists{A}$, we have $$\addcount(a)(k,\snoc(b,x)) = \addcount(a)(\bif{\beq(a,b)}{\next(k)}{k},x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \addcount(a)(k,\snoc(b,\nil)) \\
@@ -142,9 +138,9 @@ $$\begin{eqnarray*}
  & = & \addcount(a)(\bif{\beq(a,b)}{\next(k)}{k},\cons(c,x))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_addcount_snoc :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (a -> n -> a -> t a -> Bool)
@@ -152,17 +148,16 @@ as needed.
 >   testName "addcount(a)(k,snoc(b,x)) == addcount(a)(if(eq(a,b),next(k),k),x)" $
 >   \a k b x -> eq (addcount a k (snoc b x)) (addcount a (if eq a b then next k else k) x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\addcount$ interacts with $\rev$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $a \in A$. For all $k \in \nats$ and $x \in \lists{A}$, we have $$\addcount(a)(k,\rev(x)) = \addcount(a)(k,x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \addcount(a)(k,\rev(\nil)) \\
@@ -177,9 +172,9 @@ $$\begin{eqnarray*}
  & = & \addcount(a)(k,\cons(b,x))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_addcount_rev :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (a -> n -> t a -> Bool)
@@ -187,17 +182,16 @@ as needed.
 >   testName "addcount(a)(k,rev(x)) == addcount(a)(k,x)" $
 >   \a k x -> eq (addcount a k (rev x)) (addcount a k x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 We can also characterize $\addcount$ as a right fold.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $a \in A$, and define $\psi : A \times \nats \rightarrow \nats$ by $$\psi(b,k) = \bif{\beq(a,b)}{\next(k)}{k}.$$ Then we have $$\addcount(a)(k,x) = \foldr{k}{\psi}(x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \addcount(a)(k,\nil) \\
@@ -213,9 +207,9 @@ $$\begin{eqnarray*}
  & = & \psi(b,\addcount(a)(k,x)).
 \end{eqnarray*}$$
 By the universal property of right fold, the equality holds for all $x$.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_addcount_foldr :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (a -> n -> t a -> Bool)
@@ -225,21 +219,20 @@ By the universal property of right fold, the equality holds for all $x$.
 >     let psi b k = if eq a b then next k else k in
 >     eq (addcount a k x) (foldr k psi x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 So we can evaluate $\addcount$ as a left fold, but reason about $\count$ as a right fold. Since $\addcount(a)$ is also a right fold, it can be characterized as the unique solution to a (different) system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set with $a \in A$. Now $\addcount(a)$ is the unique map $f : \nats \times \lists{A} \rightarrow \nats$ satisfying the following equations for all $b \in A$ and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(k,\nil) = k \\
  f(k,\cons(b,x)) = \bif{\beq(a,b)}{\next(f(k,x))}{f(k,x)}
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_addcount_foldr_cons :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (a -> n -> a -> t a -> Bool)
@@ -249,13 +242,12 @@ $$\left\{\begin{array}{l}
 >     (addcount a k (cons b x))
 >     (if eq a b then next (addcount a k x) else addcount a k x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 We define $\count$ in terms of $\addcount$.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set with $a \in A$. We define $\count : A \rightarrow \nats^{\lists{A}}$ by $$\count(a)(x) = \addcount(a)(\zero,x).$$
 
 In Haskell:
@@ -263,21 +255,20 @@ In Haskell:
 > count :: (List t, Equal a, Natural n) => a -> t a -> n
 > count a = addcount a zero
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\count$ is defined in terms of $\addcount$, it is also the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set with $a \in A$. Then $\count(a)$ is the unique map $f : \lists{A} \rightarrow \nats$ which satisfies the following system of equations for all $b \in A$ and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(\nil) = \zero \\
  f(\cons(b,x)) = \bif{\beq(a,b)}{\next(f(x))}{f(x)}
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_count_nil :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (a -> Bool)
@@ -294,17 +285,16 @@ $$\left\{\begin{array}{l}
 >     ((count a (cons b x)) `withTypeOf` k)
 >     (if eq a b then next (count a x) else count a x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 A special case.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set, with $a,b \in A$. Then $$\count(a,\cons(b,\nil)) = \bif{\beq(a,b)}{\next(\zero)}{\zero}.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \count(a,\cons(b,\nil)) \\
@@ -314,9 +304,9 @@ $$\begin{eqnarray*}
  & = & \bif{\beq(a,b)}{\next(\zero)}{\zero}
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_count_one :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (a -> a -> Bool)
@@ -326,17 +316,16 @@ as claimed.
 >     (count a (cons b (nil `withTypeOf` t)))
 >     (if eq a b then (next zero `withTypeOf` k) else zero)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\count$ interacts with $\snoc$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $a \in A$. For all $b \in A$ and $x \in \lists{A}$, we have $$\count(a)(\snoc(b,x)) = \bif{\beq(a,b)}{\next(\count(a)(x))}{\count(a)(x)}.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \count(a)(\snoc(b,x)) \\
@@ -345,9 +334,9 @@ $$\begin{eqnarray*}
  & = & \bif{\beq(a,b)}{\next(\count(a)(x))}{\count(a)(x)}
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_count_snoc :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (a -> a -> t a -> Bool)
@@ -357,17 +346,16 @@ as claimed.
 >     ((count a (snoc b x)) `withTypeOf` k)
 >     (if eq a b then next (count a x) else count a x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\count$ interacts with $\rev$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $a \in A$. For all $x \in \lists{A}$ we have $$\count(a)(\rev(x)) = \count(a)(x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \count(a)(\rev(x)) \\
@@ -376,9 +364,9 @@ $$\begin{eqnarray*}
  & = & \count(a)(x)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_count_rev :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (a -> t a -> Bool)
@@ -386,17 +374,16 @@ as claimed.
 >   testName "count(a)(rev(x)) == count(a)(x)" $
 >   \a x -> eq (count a (rev x)) ((count a x) `withTypeOf` k)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\count$ interacts with $\cat$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x,y \in \lists{A}$ we have $$\count(a,\cat(x,y)) = \nplus(\count(a,x),\count(a,y)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \count(a,\cat(x,y)) \\
@@ -428,9 +415,9 @@ $$\begin{eqnarray*}
  & = & \nplus(\count(a,\cons(b,x)),\count(a,y))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_count_cat :: (List t, Equal a, Natural n, Equal n)
 >    => t a -> n -> Test (a -> t a -> t a -> Bool)
@@ -440,17 +427,16 @@ as needed.
 >     ((count a (cat x y)) `withTypeOf` k)
 >     (plus (count a x) (count a y))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\count$ is a $\length$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. We have $$\count(a,x) = \length(\filter(\beq(a,-),x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \count(a,x) \\
@@ -480,9 +466,9 @@ $$\begin{eqnarray*}
  & = & \length(\filter(\beq(a,-),\cons(b,x)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_count_length :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (a -> t a -> Bool)
@@ -492,17 +478,16 @@ as needed.
 >     (count a x `withTypeOf` k)
 >     (length (filter (eq a) x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\count$ interacts with $\map(f)$ when $f$ is injective.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets and $f : A \rightarrow B$ an injective map. Then $$\count(a,x) = \count(f(a),\map(f)(x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \count(a,x) \\
@@ -529,8 +514,8 @@ $$\begin{eqnarray*}
  & = & \count(f(a),\map(f)(\cons(b,x)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

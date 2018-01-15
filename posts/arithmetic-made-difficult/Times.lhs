@@ -27,8 +27,7 @@ Similarly, we want $\Theta(\next(n),m) = \nplus(\Theta(n,m),m)$, but we also hav
 
 With this in mind, we define a binary operation $\ntimes$ on $\nats$ as follows.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $\varphi : \nats \rightarrow \nats$ be given by $\varphi(m) = \zero$, and let $\mu : \nats \times \nats \times \nats \rightarrow \nats$ be given by $\mu(k,a,b) = \nplus(b,a)$. We then define $\ntimes : \nats \times \nats \rightarrow \nats$ by $$\ntimes = \simprec{\varphi}{\mu}.$$
 
 In Haskell:
@@ -39,21 +38,20 @@ In Haskell:
 >     phi _ = zero
 >     mu _ a b = plus b a
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\ntimes$ is defined in terms of simple recursion, it is the unique solution to a set of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 $\ntimes$ is the unique map $f : \nats \times \nats \rightarrow \nats$ with the property that for all $a,b \in \nats$, we have
 $$\left\{\begin{array}{l}
  f(\zero,b) = \zero \\
  f(\next(a),b) = \nplus(f(a,b),b).
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_times_zero_left :: (Natural n, Equal n)
 >   => n -> (n -> n -> n) -> Test (n -> Bool)
@@ -68,20 +66,19 @@ $$\left\{\begin{array}{l}
 >   testName "times(next(a),b) == plus(times(a,b),b)" $
 >   \a b -> eq (f (next a) b) (plus (f a b) b)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Next we establish a version of the universal property of $\ntimes$ with the arguments reversed.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 The following hold for all natural numbers $a$ and $b$.
 
 1. $\ntimes(a,\zero) = \zero$.
 2. $\ntimes(a,\next(b)) = \nplus(\ntimes(a,b),a)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by induction on $a$. For the base case, note that $\ntimes(\zero,\zero) = \zero$. For the inductive step, suppose we have $\ntimes(a,\zero) = \zero$ for some $a$. Then
 $$\begin{eqnarray*}
  &   & \ntimes(\next(a),\zero) \\
@@ -110,9 +107,9 @@ $$\begin{eqnarray*}
  & = & \nplus(\ntimes(\next(a),b),\next(a))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_times_zero_right :: (Natural n, Equal n)
 >   => n -> (n -> n -> n) -> Test (n -> Bool)
@@ -127,20 +124,19 @@ as needed.
 >   testName "times(a,next(b)) == plus(times(a,b),a)" $
 >   \a b -> eq (f a (next b)) (plus (f a b) a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\next(\zero)$ is neutral under $\ntimes$.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 For all $a \in \nats$, we have
 
 1. $\ntimes(\next(\zero),a) = a$.
 2. $\ntimes(a,\next(\zero)) = a$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Note first that for all $a$, we have
 $$\begin{eqnarray*}
  &   & \ntimes(\next(\zero),a) \\
@@ -157,9 +153,9 @@ $$\begin{eqnarray*}
  & = & \next(a)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_times_one_left :: (Natural n, Equal n)
 >   => n -> (n -> n -> n) -> Test (n -> Bool)
@@ -174,17 +170,16 @@ as needed.
 >   testName "a == times(a,1)" $
 >   \a -> eq a (f a (next zero))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\ntimes$ is commutative.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 For all $a,b \in \nats$ we have $\ntimes(a,b) = \ntimes(b,a)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $a$. For the base case, note that $$\ntimes(\zero,b) = \zero = \ntimes(b,\zero)$$ as needed. For the inductive step, suppose we have $\ntimes(a,b) = \ntimes(b,a)$ for some $a$. Now
 $$\begin{eqnarray*}
  &   & \ntimes(\next(a),b) \\
@@ -193,9 +188,9 @@ $$\begin{eqnarray*}
  & = & \ntimes(b,\next(a))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_times_commutative :: (Natural n, Equal n)
 >   => n -> (n -> n -> n) -> Test (n -> n -> Bool)
@@ -203,20 +198,19 @@ as needed.
 >   testName "times(a,b) == times(b,a)" $
 >   \a b -> eq (f a b) (f b a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\ntimes$ distributes over $\nplus$.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 For all $a,b,c, \in \nats$, we have the following.
 
 1. $\ntimes(a,\nplus(b,c)) = \nplus(\ntimes(a,b),\ntimes(a,c))$.
 2. $\ntimes(\nplus(a,b),c) = \nplus(\ntimes(a,c),\ntimes(b,c))$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by induction on $a$. For the base case, we have $$\ntimes(\zero,\nplus(b,c)) = \zero = \nplus(\zero,\zero) = \nplus(\ntimes(\zero,b),\ntimes(\zero,c))$$ as needed. For the inductive step, suppose we have $\ntimes(a,\nplus(b,c)) = \nplus(\ntimes(a,b),\ntimes(a,c))$ for all $b$ and $c$ for some $a$. Now
 $$\begin{eqnarray*}
  &   & \ntimes(\next(a),\nplus(b,c)) \\
@@ -238,9 +232,9 @@ $$\begin{eqnarray*}
  & = & \nplus(\ntimes(a,c),\ntimes(b,c))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_times_distributive_left :: (Natural n, Equal n)
 >   => n -> (n -> n -> n) -> Test (n -> n -> n -> Bool)
@@ -255,17 +249,16 @@ as claimed.
 >   testName "times(plus(a,b),c) == plus(times(a,c),times(b,c))" $
 >   \a b c -> eq (f (plus a b) c) (plus (f a c) (f b c))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\ntimes$ is associative,
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 For all $a,b,c \in \nats$, we have $$\ntimes(\ntimes(a,b),c) = \ntimes(a,\ntimes(b,c)).$$
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $a$. For the base case, we have
 $$\begin{eqnarray*}
  &   & \ntimes(\zero,\ntimes(b,c)) \\
@@ -282,9 +275,9 @@ $$\begin{eqnarray*}
  & = & \ntimes(\next(a),\ntimes(b,c))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_times_associative :: (Natural n, Equal n)
 >   => n -> (n -> n -> n) -> Test (n -> n -> n -> Bool)
@@ -292,20 +285,19 @@ as needed.
 >   testName "times(times(a,b),c) == times(a,times(b,c))" $
 >   \a b c -> eq (f (f a b) c) (f a (f b c))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Finally, $\ntimes$ is *almost* cancellative.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 For all $a,b,c \in \nats$, we have the following.
 
 1. If $\ntimes(\next(a),b) = \ntimes(\next(a),c)$ then $b = c$.
 2. If $\ntimes(b,\next(a)) = \ntimes(c,\next(a))$ then $b = c$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. This proof will be a little different: we will use induction twice; first on $b$, and then on $c$. To this end, let $$B = \{ b \in \nats \mid \forall c, \forall a,\ \mathrm{if}\ \ntimes(\next(a),b) = \ntimes(\next(a),c)\ \mathrm{then}\ b = c \}$$ and given $b \in \nats$ let $$C(b) = \{ c \in \nats \mid \forall a,\ \mathrm{if}\ \ntimes(\next(a),b) = \ntimes(\next(a),c)\ \mathrm{then}\ b = c \}.$$ We wish to show that $B = \nats$ by induction. For the base case, we need to show that $b = \zero \in B$; for this it suffices to show that $C(\zero) = \nats$, which we do by induction. For the base case $c = \zero$, we have $b = c$ regardless of $a$. For the inductive step suppose we have $c \in C(\zero)$ for some $c$. Note that
 $$\begin{eqnarray*}
  &   & \ntimes(\next(a),\next(c)) \\
@@ -330,9 +322,9 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 2. Suppose $$\ntimes(b,\next(a)) = \ntimes(c,\next(a)).$$ Then we have $$\ntimes(\next(a),b) = \ntimes(\next(a),c),$$ so that b = c$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_times_cancellative_left :: (Natural n, Equal n)
 >   => n -> (n -> n -> n) -> Test (n -> n -> n -> Bool)
@@ -351,8 +343,8 @@ as needed.
 >     then eq a b
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

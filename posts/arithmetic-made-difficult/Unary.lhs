@@ -23,20 +23,16 @@ slug: unary
 
 A nice consequence of wrapping up recursion in the $\natrec{\ast}{\ast}$ function is that it allows us to write programs, independent of any implementation, and prove things about them. We'll see lots of examples of this, but first we need to establish some structural results.
 
-<div class="result">
-<div class="defn">
+:::::: definition ::
 Let $1 = \{\ast\}$, and define $\varphi : 1 + \nats \rightarrow 1 + \nats$ by $$\varphi = \rgt \circ \either(\const(\zero),\next).$$ In this post we consider $$(1 + \nats, \lft(\ast), \varphi)$$ as an inductive set.
-</div>
-</div>
+::::::::::::::::::::
 
 It turns out that $1 + \nats$ is isomorphic to $\nats$, and the map that achieves this is useful.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 The natural recursion map $\Theta : \nats \rightarrow 1 + \nats$ is an isomorphism; in particular, the inverse of $\Theta$ is $$\Omega = \either(\const(\zero),\next).$$ We denote this $\Theta$ by $\unnext$.
-</div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 We need to show two results: first that $\Omega$ is an inductive set homomorphism, and second that $\Omega$ and $\Theta$ are mutual inverses. To the first point, note that
 $$\begin{eqnarray*}
  &   & \Omega(\lft(\ast)) \\
@@ -133,30 +129,26 @@ $$\begin{eqnarray*}
  & = & \rgt(\next(n))
 \end{eqnarray*}$$
 as needed.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 From $\unnext$ we define two helper functions.
 
-<div class="result">
-<div class="defn">
+:::::: definition ::
 We define $\prev : \nats \rightarrow \nats$ by $$\prev = \either(\const(\zero),\id) \circ \unnext$$ and $\iszero : \nats \rightarrow \bool$ by $$\iszero = \either(\const(\btrue),\const(\bfalse)) \circ \unnext.$$
-</div>
-</div>
+::::::::::::::::::::
 
 Now $\unnext$, $\prev$, and $\iszero$ have some useful properties.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 1. $\unnext(\zero) = \lft(\ast)$.
 2. $\unnext(\next(n)) = \rgt(n)$.
 3. $\prev(\zero) = \zero$.
 4. $\prev(\next(n)) = n$.
 5. $\iszero(\zero) = \btrue$.
 6. $\iszero(\next(n)) = \bfalse$.
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Note that
 $$\begin{eqnarray*}
  &   & \unnext(\zero) \\
@@ -213,19 +205,17 @@ $$\begin{eqnarray*}
  & = & \bfalse
 \end{eqnarray*}$$
 as claimed.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 We're now ready to finish off the Peano axioms.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 1. Every natural number is either $\zero$ or of the form $\next(m)$ for some natural number $m$,
 2. No natural number is both $\zero$ and $\next(m)$ for some $m$, and
 3. $\next(n) = \next(m)$ if and only if $n = m$.
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Let $n \in \nats$ and let $\Omega$ be the inverse of $\unnext$. Consider $\unnext(n) \in 1 + \nats$; we have either $\unnext(n) = \lft(\ast)$ or $\unnext(n) = \rgt(m)$ for some $m \in \nats$. In the first case we have
 $$\begin{eqnarray*}
  &   & n \\
@@ -244,8 +234,8 @@ $$\begin{eqnarray*}
 as claimed.
 2. If $\zero = \next(n)$, we have $$\btrue = \iszero(\zero) = \iszero(\next(n)) = \bfalse,$$ which is absurd.
 3. The "if" part is trivial. To see the "only if" part, suppose we have $\next(n) = \next(m)$; then $$n = \prev(\next(n)) = \prev(\next(m)) = m$$ as claimed.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Establishing that every natural number is either $\zero$ or of the form $\next(m)$ for some $m$ also justifies our use of the following Haskell type to model the natural numbers.
 

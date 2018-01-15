@@ -27,8 +27,7 @@ The Well-Ordering Principle on $\nats$ gives a sufficient condition under which 
 
 More precisely, given a predicate $\sigma : \nats \rightarrow \bool$ and two natural numbers $k$ and $n$, we'll define an operator $\Theta$ such that $\Theta(\next(n),k)$ is the *smallest* number $t$ between $k$ and $\nplus(k,n)$ such that $\sigma(t) = \btrue$, if any such number exists, and $\ast$ otherwise.
 
-<div class="result">
-<div class="dfn"><p>
+:::::: definition ::
 Let $\sigma : \nats \rightarrow \bool$. Define $\varphi : \nats \rightarrow 1 + \nats$ by $$\varphi(k) = \lft(\ast),$$ $\beta : \nats \times \nats \rightarrow \bool$ by $$\beta(n,k) = \sigma(k),$$ $\psi : \nats \times \nats \rightarrow 1 + \nats$ by $$\psi(n,k) = \rgt(k),$$ and $\omega : \nats \times \nats \rightarrow \nats$ by $$\omega(n,k) = \next(k).$$ We then define $$\findsmallest{} : \bool^\nats \rightarrow \nats \times \nats \rightarrow 1 + \nats$$ by $$\findsmallest{\sigma}(n,k) = \bailrec{\varphi}{\beta}{\psi}{\omega}(n,k).$$
 
 In Haskell:
@@ -41,21 +40,20 @@ In Haskell:
 >     psi _ k = rgt k
 >     omega _ k = next k
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Because $\findsmallest{\sigma}$ is defined in terms of bailout recursion, it is the unique solution to a system of functional equations.
 
-<div class="result">
 <div class="cor"><p>
 Let $\sigma : \nats \rightarrow \bool$ be a map. Then $\findsmallest{\sigma} : \nats \times \nats \rightarrow 1 + \nats$ is the unique solution $f : \nats \times \nats \rightarrow 1 + \nats$ to the following system of equations for all $n,k \in \nats$.
 $$\left\{\begin{array}{l}
  f(\zero,k) = \lft(\ast) \\
  f(\next(n),k) = \bif{\sigma(k)}{\rgt(k)}{f(n,\next(k))}
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_findSmallest_zero_left :: (Natural n, Equal n)
 >   => n -> Test ((n -> Bool) -> n -> Bool)
@@ -72,21 +70,20 @@ $$\left\{\begin{array}{l}
 >     (findSmallest sigma (next n) k)
 >     (if sigma k then rgt k else findSmallest sigma n (next k))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 First, if $\findsmallest{\sigma}$ returns a result $\rgt(t)$, then $t$ satisfies $\sigma$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $\sigma : \nats \rightarrow \bool$, with $n,k,t \in \nats$. If $\findsmallest{\sigma}(n,k) = \rgt(t)$, then $\sigma(t) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$, note that $$\findsmallest{\sigma}(\zero,k) = \lft(\ast),$$ so the implication holds vacuously. For the inductive step, suppose we have $n$ such that for all $k$ and $t$, if $\findsmallest{\sigma}(n,k) = \rgt(t)$ then $\sigma(t) = \btrue$. Suppose further that $\findsmallest{\sigma}(\next(n),k) = \rgt(t)$. Now we have $$\findsmallest{\sigma}(\next(n),k) = \bif{\sigma(k)}{\rgt(k)}{\findsmallest{\sigma}(n,\next(k))}.$$ We have two possibilities. If $\sigma(k) = \btrue$, then $$\findsmallest{\sigma}(n,k) = \rgt(k),$$ with $\sigma(k) = \btrue$ as needed. If $\sigma(k) = \bfalse,$ we have $$\rgt(t) = \findsmallest{\sigma}(\next(n),k) = \findsmallest{\sigma}(n,\next(k)),$$ and by the inductive hypothesis, $\sigma(t) = \btrue$ as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_findSmallest_satisfies :: (Natural n, Equal n)
 >   => n -> Test ((n -> Bool) -> n -> n -> Bool)
@@ -96,17 +93,16 @@ We proceed by induction on $n$. For the base case $n = \zero$, note that $$\find
 >     Right t -> eq (sigma t) true
 >     Left () -> true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Next, if $\findsmallest{\sigma}(\next(n),k)$ returns a result $\rgt(t)$, then $t$ is bounded; specifically, $\nleq(k,t)$ and $\nleq(t,\nplus(n,k))$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 If $\findsmallest{\sigma}(\next(n),k) = \rgt(t)$, then $\nleq(k,t)$ and $\nleq(t,\nplus(n,k))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$, if $\findsmallest{\sigma}(\next(n),k) = \rgt(t)$ we have
 $$\begin{eqnarray*}
  &   & \findsmallest{\sigma}(\next(\zero),k) \\
@@ -122,9 +118,9 @@ $$\begin{eqnarray*}
  & = & \bif{\sigma(k)}{\rgt(k)}{\findsmallest{\sigma}(\next(n),\next(k))}.
 \end{eqnarray*}$$
 We have two possibilities. If $\sigma(k) = \btrue$, then $\rgt(t) = \rgt(k)$, so that $\nleq(k,t)$ and $\nleq(t,\nplus(n,k))$ as needed. If $\sigma(k) = \bfalse$, we have $\rgt(t) = \findsmallest{\sigma}(\next(n),\next(k))$. By the inductive hypothesis, we have $\nleq(\next(k),t)$ and $\nleq(t,\nplus(\next(n),\next(k))$. By transitivity we thus have $\nleq(k,t)$ and $\nleq(t,\nplus(\next(\next(n)),k)$ as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_findSmallest_bounded :: (Natural n, Equal n)
 >   => n -> Test ((n -> Bool) -> n -> n -> Bool)
@@ -134,17 +130,16 @@ We have two possibilities. If $\sigma(k) = \btrue$, then $\rgt(t) = \rgt(k)$, so
 >     Right t -> and (leq k t) (leq t (plus n k))
 >     Left () -> true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\findsmallest{\sigma}(\next(n),k)$ returns $\lft(\ast)$ if and only if $\sigma$ is false for all $u$ between $k$ and $\nplus(n,k)$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $\sigma : \nats \rightarrow \bool$ and $n,k \in \nats$. Then $\findsmallest{\sigma}(\next(n),k) = \lft(\ast)$ if and only if $\sigma(t) = \bfalse$ for all $t$ with $\nleq(k,t)$ and $\nleq(t,\nplus(n,k))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We prove the "only if" direction by induction on $n$. For the base case $n = \zero$, suppose $\findsmallest{\sigma}(\next(\zero),k) = \lft(\ast)$. Expanding, we have
 $$\begin{eqnarray*}
  &   & \lft(\ast) \\
@@ -177,9 +172,9 @@ $$\begin{eqnarray*}
  & = & \lft(\ast)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_findSmallest_return_lft :: (Natural n, Equal n)
 >   => n -> Test ((n -> Bool) -> n -> n -> n -> Bool)
@@ -191,17 +186,16 @@ as needed.
 >       else true
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 If $\findsmallest{\sigma}(n,k)$ returns a value, then $\findsmallest{\sigma}(t,k)$ does not, where $t$ is the difference between $k$ and the returned value.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 If $\findsmallest{\sigma}(n,k) = \rgt(\nplus(k,\next(t)))$, then $\findsmallest{\sigma}(t,k) = \lft(\ast)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $t$. For the base case $t = \zero$, note that $$\findsmallest{\sigma}(\zero,k) = \lft(\ast),$$ so the implication holds regardless of $n$ and $k$. For the inductive step, suppose the implication holds for all $n$ and $k$ for some $t$, and suppose further that $$\findsmallest{\sigma}(n,k) = \rgt(\nplus(k,\next(\next(t)))).$$ Now we must have $n = \next(m)$ for some $m$, and moreover
 $$\begin{eqnarray*}
  &   & \rgt(\nplus(\next(k),\next(t))) \\
@@ -222,9 +216,9 @@ $$\begin{eqnarray*}
  & = & \lft(\ast)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_findSmallest_value_lft :: (Natural n, Equal n)
 >   => n -> Test ((n -> Bool) -> n -> n -> n -> Bool)
@@ -234,17 +228,16 @@ as needed.
 >     then eq (findSmallest sigma t k) (lft ())
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Finally, $\findsmallest{\sigma}$ returns a least value.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 If $\findsmallest{\sigma}(\next(n),k) = \rgt(t)$, and if $u \in \nats$ such that $\sigma(u) = \btrue$, $\nleq(k,u)$, and $\nleq(u,\nplus(n,k))$, then $\nleq(t,u)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$, suppose
 $$\begin{eqnarray*}
  &   & \rgt(t) \\
@@ -261,9 +254,9 @@ $$\begin{eqnarray*}
  & = & \bif{\sigma(k)}{\rgt(k)}{\findsmallest{\sigma}(\next(n),\next(k))}.
 \end{eqnarray*}$$
 If $\sigma(k) = \btrue$, then $t = k$, and we again have $\nleq(t,u)$ as needed. If instead $\sigma(k) = \bfalse$, we have $$\rgt(t) = \findsmallest{\sigma}(\next(n),\next(k)).$$ By the inductive hypothesis, if $\sigma(u) = \btrue$ and $\nleq(\next(k),u)$ and $\nleq(u,\nplus(n,\next(k))$, then $\nleq(t,u)$. Suppose $\sigma(u) = \btrue$, $\nleq(k,u)$, and $\nleq(u,\nplus(\next(n),k))$. Since $\sigma(k) = \bfalse$, we have $\nleq(\next(k),u)$, so by the inductive hypothesis, $\nleq(t,u)$ as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_findSmallest_minimal :: (Natural n, Equal n)
 >   => n -> Test ((n -> Bool) -> n -> n -> n -> n -> Bool)
@@ -275,19 +268,18 @@ If $\sigma(k) = \btrue$, then $t = k$, and we again have $\nleq(t,u)$ as needed.
 >       else true
 >     Left () -> true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 To summarize:
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $\sigma : \nats \rightarrow \bool$ and $n,k \in \nats$.
 
 1. If $\findsmallest{\sigma}(\next(n),k) = \rgt(t)$, then $\sigma(t)$, $\nleq(k,t)$, and $\nleq(t,\nplus(n,k))$, and if $u \in \nats$ such that $\sigma(u)$, $\nleq(k,u)$, and $\nleq(u,\nplus(n,k))$, then $\nleq(t,u)$.
 2. If $\findsmallest{\sigma}(\next(n),k) = \lft(\ast)$, then there does not exist $u \in \nats$ such that $\sigma(u)$, $\nleq(k,u)$, and $\nleq(u,\nplus(n,k))$.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

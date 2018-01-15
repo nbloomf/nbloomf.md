@@ -45,8 +45,7 @@ We want to implement $\dedupeL$ as either a right fold or a left fold. But which
 
 With this handwavy mess in mind, we define $\dedupeL$ as follows.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set. Define $\varphi : A \times \lists{A} \rightarrow \lists{A}$ by $$\varphi(a,x) = \cons(a,\delete(a,x)).$$ Now define $\dedupeL : \lists{A} \rightarrow \lists{A}$ by $$\dedupeL(x) = \foldr{\nil}{\varphi}(x).$$
 
 In Haskell:
@@ -56,21 +55,20 @@ In Haskell:
 >   where
 >     phi a x = cons a (delete a x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\dedupeL$ is defined as a foldr, it can be characterized as the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set. $\dedupeL$ is the unique map $f : \lists{A} \rightarrow \lists{A}$ satisfying the following equations for all $a \in A$ and $x \in \lists{A}$.
 $$\left\{\begin{eqnarray*}
  f(\nil) = \nil \\
  f(\cons(a,x)) = \cons(a,\delete(a)(f(x)))
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_dedupeL_nil :: (List t, Equal a, Equal (t a))
 >   => t a -> Test Bool
@@ -85,17 +83,16 @@ $$\left\{\begin{eqnarray*}
 >   testName "dedupeL(cons(a,x)) == cons(a,delete(a)(dedupeL(x))" $
 >   \a x -> eq (dedupeL (cons a x)) (cons a (delete a (dedupeL x)))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now $\dedupeL$ and $\delete$ commute.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set, with $a \in A$ and $x \in \lists{A}$. Then $$\delete(a,\dedupeL(x)) = \dedupeL(\delete(a,x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \delete(a,\dedupeL(\nil)) \\
@@ -126,9 +123,9 @@ $$\begin{eqnarray*}
  & = & \dedupeL(\delete(a,\cons(b,x)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_dedupeL_delete :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
@@ -136,17 +133,16 @@ as needed.
 >   testName "dedupeL(delete(a,x)) == delete(a,dedupeL(x))" $
 >   \a x -> eq (dedupeL (delete a x)) (delete a (dedupeL x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\dedupeL$s are $\unique$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$. Then $\unique(\dedupeL(x)) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \unique(\dedupeL(\nil)) \\
@@ -163,9 +159,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_dedupeL_unique :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> Bool)
@@ -173,17 +169,16 @@ as needed.
 >   testName "unique(dedupeL(x)) == true" $
 >   \x -> unique (dedupeL x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\dedupeL$ preserves $\prefix$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $x,y \in \lists{A}$. If $\prefix(x,y) = \btrue$ then $\prefix(\dedupeL(x),\dedupeL(y)) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that $$\prefix(x,y) = \prefix(\nil,y) = \btrue$$ and
 $$\begin{eqnarray*}
  &   & \prefix(\dedupeL(x),\dedupeL(y)) \\
@@ -200,9 +195,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_dedupeL_prefix :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> Bool)
@@ -212,17 +207,16 @@ as needed.
 >     then prefix (dedupeL x) (dedupeL y)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\dedupeL$ fixes $\unique$s.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set and $x \in \lists{A}$. Then $\beq(x,\dedupeL(x)) = \unique(x)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \beq(x,\dedupeL(x)) \\
@@ -266,9 +260,9 @@ $$\begin{eqnarray*}
  & = & \unique(\cons(a,x))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_dedupeL_eq_unique :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> Bool)
@@ -276,21 +270,20 @@ as needed.
 >   testName "eq(x,dedupeL(x)) == unique(x)" $
 >   \x -> eq (eq x (dedupeL x)) (unique x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\dedupeL$ is idempotent.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set and $x \in \lists{A}$. Then $\dedupeL(\dedupeL(x)) = \dedupeL(x)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that $\unique(\dedupeL(x)) = \btrue$, so that $\dedupeL(\dedupeL(x)) = \dedupeL(x)$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_dedupeL_idempotent :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> Bool)
@@ -298,17 +291,16 @@ Note that $\unique(\dedupeL(x)) = \btrue$, so that $\dedupeL(\dedupeL(x)) = \ded
 >   testName "dedupeL(dedupeL(x)) == dedupeL(x)" $
 >   \x -> eq (dedupeL (dedupeL x)) (dedupeL x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\dedupeL$ interacts with $\snoc$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have $$\dedupeL(\snoc(a,x)) = \bif{\elt(a,x)}{\dedupeL(x)}{\snoc(a,\dedupeL(x))}.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \dedupeL(\snoc(a,\nil)) \\
@@ -335,9 +327,9 @@ $$\begin{eqnarray*}
  & = & \bif{\elt(a,\cons(b,x)}{\dedupe(\cons(b,x))}{\snoc(a,\dedupeL(\cons(b,x)))}
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_dedupeL_snoc :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
@@ -347,13 +339,12 @@ as needed.
 >     (dedupeL (snoc a x))
 >     (if elt a x then dedupeL x else snoc a (dedupeL x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 We define $\dedupeR$ in terms of $\dedupeL$.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set. Define $\dedupeL : \lists{A} \rightarrow \lists{A}$ by $$\dedupeL(x) = \rev(\dedupeR(\rev(x))).$$
 
 In Haskell:
@@ -361,20 +352,19 @@ In Haskell:
 > dedupeR :: (List t, Equal a) => t a -> t a
 > dedupeR = rev . dedupeL . rev
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 The defining equations for $\dedupeL$ have equivalents for $\dedupeR$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$ we have the following.
 
 1. $\dedupeR(\nil) = \nil$.
 2. $\dedupeR(\snoc(a,x)) = \snoc(a,\delete(a,\dedupeR(x)))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Note that
 $$\begin{eqnarray*}
  &   & \dedupeR(\nil) \\
@@ -395,9 +385,9 @@ $$\begin{eqnarray*}
  & = & \snoc(a,\delete(a,\dedupeR(x)))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_dedupeR_nil :: (List t, Equal a, Equal (t a))
 >   => t a -> Test Bool
@@ -412,17 +402,16 @@ as claimed.
 >   testName "dedupeR(snoc(a,x)) == snoc(a,delete(a)(dedupeR(x))" $
 >   \a x -> eq (dedupeR (snoc a x)) (snoc a (delete a (dedupeR x)))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\dedupeR$s are unique.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$. Then $\unique(\dedupeR(x)) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \unique(\dedupeR(x)) \\
@@ -431,9 +420,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_dedupeR_unique :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> Bool)
@@ -441,17 +430,16 @@ as claimed.
 >   testName "unique(dedupeR(x)) == true" $
 >   \x -> eq (unique (dedupeR x)) true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\dedupeR$ is idempotent.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$. Then $\dedupeR(\dedupeR(x)) = \dedupeR(x)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \dedupeR \circ \dedupeR \\
@@ -461,9 +449,9 @@ $$\begin{eqnarray*}
  & = & \dedupeR
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_dedupeR_idempotent :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> Bool)
@@ -471,8 +459,8 @@ as claimed.
 >   testName "dedupeR(dedupeR(x)) == dedupeR(x)" $
 >   \x -> eq (dedupeR (dedupeR x)) (dedupeR x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

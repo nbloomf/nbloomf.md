@@ -45,8 +45,7 @@ slug: takebut-dropbut
 
 Today we'll define two functions, $\takeBut$ and $\dropBut$, analogous to $\take$ and $\drop$, but acting from the end of the list rather than from the beginning. We'd like $\takeBut$ to have a signature like $$\takeBut : \nats \rightarrow {\lists{A}}^{\lists{A}}$$ such that $\takeBut(k)(x)$ is obtained by lopping off the last $k$ items in $x$, and similarly $\dropBut(k)(x)$ lops off all but the last $k$ items. The simplest way to do this is with $\take$, $\drop$, and $\rev$; explicit recursion is not required.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set. We define $\takeBut : \nats \rightarrow {\lists{A}}^{\lists{A}}$ by $$\takeBut(k)(x) = \rev(\drop(k)(\rev(x)))$$ and define $\dropBut : \nats \rightarrow {\lists{A}}^{\lists{A}}$ by $$\dropBut(k)(x) = \rev(\take(k)(\rev(x))).$$
 
 In Haskell:
@@ -57,21 +56,20 @@ In Haskell:
 > dropBut :: (Natural n, List t) => n -> t a -> t a
 > dropBut k x = rev (take k (rev x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 The defining equations for $\drop$ have $\takeBut$ equivalents.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set, with $x \in \lists{A}$, $a \in A$, and $k \in \nats$. Then we have the following.
 
 1. $\takeBut(\zero)(x) = x$.
 2. $\takeBut(\next(k))(\nil) = \nil$.
 3. $\takeBut(\next(k))(\snoc(a,x)) = \takeBut(k)(x)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We have
 $$\begin{eqnarray*}
  &   & \takeBut(\zero)(x) \\
@@ -98,9 +96,9 @@ $$\begin{eqnarray*}
  & = & \takeBut(k,x)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_takeBut_zero :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (t a -> Bool)
@@ -124,17 +122,16 @@ as claimed.
 >     (takeBut (next n) (snoc a x))
 >     (takeBut n x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\takeBut$ is a prefix.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ and $k \in \nats$, we have $$\prefix(\takeBut(k,x),x) = \btrue.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We have
 $$\begin{eqnarray*}
  &   & \prefix(\takeBut(k,x),x) \\
@@ -144,9 +141,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_takeBut_prefix :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> Bool)
@@ -154,21 +151,20 @@ as needed.
 >   testName "prefix(takeBut(k,x),x) == true" $
 >   \k x -> eq (prefix (takeBut k x) x) true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 So $\takeBut$ is a sublist:
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set, with $x \in \lists{A}$ and $k \in \nats$. Then we have $$\sublist(\takeBut(k,x),x) = \btrue.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We have $$\prefix(\takeBut(k,x),x) = \btrue,$$ so $$\infix(\takeBut(k,x),x) = \btrue,$$ so $$\sublist(\takeBut(k,x),x) = \btrue$$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_takeBut_sublist :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> Bool)
@@ -176,21 +172,20 @@ We have $$\prefix(\takeBut(k,x),x) = \btrue,$$ so $$\infix(\takeBut(k,x),x) = \b
 >   testName "sublist(takeBut(k,x),x) == true" $
 >   \k x -> eq (sublist (takeBut k x) x) true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now for $\dropBut$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a \in A$, $x \in \lists{A}$, and $k \in \nats$, we have the following.
 
 1. $\dropBut(\zero,x) = \nil$.
 2. $\dropBut(\next(k),\nil) = \nil$.
 3. $\dropBut(\next(k),\snoc(a,x)) = \snoc(a,\dropBut(k,x))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We have
 $$\begin{eqnarray*}
  &   & \dropBut(\zero,x) \\
@@ -218,9 +213,9 @@ $$\begin{eqnarray*}
  & = & \snoc(a,\dropBut(k,x))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_dropBut_zero :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (t a -> Bool)
@@ -244,17 +239,16 @@ as claimed.
 >     (dropBut (next n) (snoc a x))
 >     (snoc a (dropBut n x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\dropBut$ is a $\suffix$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ and $k \in \nats$, we have $$\suffix(\dropBut(k,x),x) = \btrue.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We have
 $$\begin{eqnarray*}
  &   & \suffix(\dropBut(k,x),x) \\
@@ -264,9 +258,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_dropBut_suffix :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> Bool)
@@ -274,17 +268,16 @@ as claimed.
 >   testName "suffix(dropBut(k,x),x) == true" $
 >   \k x -> eq (suffix (dropBut k x) x) true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\dropBut$ is idempotent.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $k \in \nats$ and $x \in \lists{A}$, we have $$\dropBut(k,\dropBut(k,x)) = \dropBut(k,x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \dropBut(k,\dropBut(k,x)) \\
@@ -295,9 +288,9 @@ $$\begin{eqnarray*}
  & = & \dropBut(k,x)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_dropBut_idempotent :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> Bool)
@@ -305,17 +298,16 @@ as claimed.
 >   testName "dropBut(k,dropBut(k,x)) == dropBut(k,x)" $
 >   \k x -> eq (dropBut k (dropBut k x)) (dropBut k x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Like $\take$ and $\drop$, $\takeBut$ and $\dropBut$ give a kind of $\cat$-factorization.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ and $k \in \nats$, we have $$x = \cat(\takeBut(k,x),\dropBut(k,x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We have
 $$\begin{eqnarray*}
  &   & \cat(\takeBut(k,x),\dropBut(k,x)) \\
@@ -325,9 +317,9 @@ $$\begin{eqnarray*}
  & = & x
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_takeBut_dropBut_cat :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> Bool)
@@ -335,8 +327,8 @@ as claimed.
 >   testName "cat(takeBut(k,x),dropBut(k,x)) == x" $
 >   \k x -> eq (cat (takeBut k x) (dropBut k x)) x
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

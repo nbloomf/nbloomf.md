@@ -32,8 +32,7 @@ The $\cat$ function on $\lists{A}$ is analogous to $\nplus$ on $\nats$. Carrying
 
 Intuitively, $\prefix$ will detect when one list is an initial segment of another, while $\suffix$ detects when one list is a terminal segment of another. We'll start with $\prefix$, which we can define as a $\dfoldr{\ast}{\ast}{\ast}$ as follows.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set. Define $\delta : \lists{A} \rightarrow \bool$ by $\delta(y) = \btrue$, define $\psi : A \times \bool \rightarrow \bool$ by $\psi(a,p) = \bfalse$, and define $\chi : A \times A \times \lists{A} \times \bool \times \bool \rightarrow \lists{A}$ by $$\chi(a,b,y,p,q) = \bif{\beq(a,b)}{p}{\bfalse}.$$ Now define $$\prefix : \lists{A} \times \lists{A} \rightarrow \bool$$ by $$\prefix = \dfoldr{\delta}{\psi}{\chi}.$$
 
 In Haskell:
@@ -45,22 +44,19 @@ In Haskell:
 >     psi _ _ = false
 >     chi a b _ p _ = if eq a b then p else false
 
-</p></div>
-</div>
+::::::::::::::::::::
 
 Since $\prefix$ is defined as a double fold, it is the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set. $\prefix$ is the unique map $f : \lists{A} \times \lists{A} \rightarrow \bool$ satisfying the following equations for all $a,b \in A$ and $x,y \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(\nil,y) = \btrue \\
  f(\cons(a,x),\nil) = \bfalse \\
  f(\cons(a,x),\cons(b,y)) = \bif{\beq(a,b)}{f(x,y)}{\bfalse}
 \end{array}\right.$$
-</p></div>
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_prefix_nil_list :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> Bool)
@@ -84,20 +80,18 @@ $$\left\{\begin{array}{l}
 >     (prefix (cons a x) (cons b y))
 >     (if eq a b then prefix x y else false)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now $\prefix$ is analogous to $\nleq$ in that it detects the existence of solutions $z$ to the equation $y = \cat(x,z)$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. The following hold for all $x,y \in \lists{A}$.
 
 1. $\prefix(x,\cat(x,y)) = \btrue$.
 2. If $\prefix(x,y) = \btrue$, then $y = \cat(x,z)$ for some $z \in \lists{A}$.
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by list induction on $x$. For the base case $x = \nil$, certainly we have
 $$\begin{eqnarray*}
  &   & \prefix(x,\cat(x,y)) \\
@@ -121,9 +115,9 @@ $$\begin{eqnarray*}
  & = & \cat(\cons(a,x),z)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_prefix_cat :: (List t, Equal a)
 >   => t a -> Test (t a -> t a -> Bool)
@@ -131,21 +125,19 @@ as needed.
 >   testName "prefix(x,cat(x,y))" $
 >   \x y -> prefix x (cat x y)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And $\prefix$ interacts with $\snoc$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x,y \in \lists{A}$, if $\prefix(x,y) = \btrue$, then $\prefix(x,\snoc(a,y)) = \btrue$.
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 If $\prefix(x,y) = \btrue$, then $y = \cat(x,z)$ for some $z$. Now $$\snoc(a,y) = \snoc(\cat(x,z)) = \cat(x,\snoc(a,z)),$$ and so $\prefix(x,\snoc(a,y)) = \btrue$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_prefix_snoc :: (List t, Equal a)
 >   => t a -> Test (a -> t a -> t a -> Bool)
@@ -155,21 +147,19 @@ If $\prefix(x,y) = \btrue$, then $y = \cat(x,z)$ for some $z$. Now $$\snoc(a,y) 
 >     then prefix x (snoc a y)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\prefix$ is a partial order.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. Then we have the following for all $x,y,z \in \lists{A}$.
 
 1. $\prefix(x,x) = \btrue$.
 2. If $\prefix(x,y)$ and $\prefix(y,x)$, then $x = y$.
 3. If $\prefix(x,y)$ and $\prefix(y,z)$, then $\prefix(x,z)$.
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We have
 $$\begin{eqnarray*}
  &   & \btrue \\
@@ -187,9 +177,9 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 Since $\cat$ is cancellative, we have $\nil = \cat(u,v)$, so that $u = \nil$, and thus $x = y$ as claimed.
 3. If $\prefix(x,y)$, we have $y = \cat(x,u)$. Similarly, if $\prefix(y,z)$, we have $z = \cat(y,v)$. Now $$z = \cat(\cat(x,u),v) = \cat(x,\cat(u,v))$$ so that $\prefix(x,z)$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_prefix_reflexive :: (List t, Equal a)
 >   => t a -> Test (t a -> Bool)
@@ -215,17 +205,15 @@ Since $\cat$ is cancellative, we have $\nil = \cat(u,v)$, so that $u = \nil$, an
 >     then prefix x z
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\map$ preserves $\prefix$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets with $f : A \rightarrow B$, and let $x,y \in \lists{A}$. If $\prefix(x,y) = \btrue$, then $$\prefix(\map(f)(x),\map(f)(y)) = \btrue.$$
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \prefix(x,y) \\
@@ -255,9 +243,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_prefix_map :: (List t, Equal a)
 >   => t a -> Test ((a -> a) -> t a -> t a -> Bool)
@@ -267,17 +255,15 @@ as claimed.
 >     then prefix (map f x) (map f y)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And $\zip$ preserves $\prefix$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets with $x,y \in \lists{A}$ and $u,v \in \lists{B}$. If $\prefix(x,y) = \btrue$ and $\prefix(u,v) = \btrue$, then $$\prefix(\zip(x,u),\zip(y,v)) = \btrue.$$
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that $\prefix(x,y) = \btrue$. Suppose further that $\prefix(u,v) = \btrue$; now
 $$\begin{eqnarray*}
  &   & \prefix(\zip(x,u),\zip(y,v)) \\
@@ -301,9 +287,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_prefix_zip :: (List t, Equal a)
 >   => t a -> Test (t a -> t a -> t a -> t a -> Bool)
@@ -313,17 +299,15 @@ as claimed.
 >     then prefix (zip x u) (zip y v)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\prefix$ interacts with $\length$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $x,y \in \lists{A}$. If $\prefix(x,y)$, then $\nleq(\length(x),\length(y)$.
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 Suppose $\prefix(x,y)$. Then we have $y = \cat(x,z)$ for some $z$, and so
 $$\begin{eqnarray*}
  &   & \nleq(\length(x),\length(y)) \\
@@ -333,9 +317,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_prefix_length :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (t a -> t a -> Bool)
@@ -345,13 +329,12 @@ as claimed.
 >     then leq ((length x) `withTypeOf` k) (length y)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 The simplest way to define $\suffix$ is in terms of $\prefix$.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set. Define $\suffix : \lists{A} \times \lists{A} \rightarrow \bool$ by $$\suffix(x,y) = \prefix(\rev(x),\rev(y)).$$
 
 In Haskell:
@@ -359,17 +342,14 @@ In Haskell:
 > suffix :: (List t, Equal a) => t a -> t a -> Bool
 > suffix x y = prefix (rev x) (rev y)
 
-</p></div>
-</div>
+::::::::::::::::::::
 
 Not surprisingly, we can characterize $\prefix$ in terms of $\suffix$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $x,y \in \lists{A}$. Then $$\prefix(x,y) = \suffix(\rev(x),\rev(y)).$$
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \suffix(\rev(x),\rev(y)) \\
@@ -377,9 +357,9 @@ $$\begin{eqnarray*}
  & = & \prefix(x,y)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_suffix_prefix :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> Bool)
@@ -387,21 +367,19 @@ as claimed.
 >   testName "prefix(x,y) == suffix(rev(x),rev(y))" $
 >   \x y -> eq (prefix x y) (suffix (rev x) (rev y))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Many theorems about $\prefix$ has an analogue for $\suffix$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a,b \in A$ and $x,y \in \lists{A}$, we have the following.
 
 1. $\suffix(\nil,y) = \btrue$.
 2. $\suffix(\snoc(a,x),\nil) = \bfalse$.
 3. $$\suffix(\snoc(a,x),\snoc(b,y)) = \left\{\begin{array}{ll} \bfalse & \mathrm{if}\ a \neq b \\ \suffix(x,y) & \mathrm{if}\ a = b. \end{array}\right.$$
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We have
 $$\begin{eqnarray*}
  &   & \suffix(\nil,y) \\
@@ -434,9 +412,9 @@ $$\begin{eqnarray*}
  & = & \bfalse
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_suffix_nil_list :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> Bool)
@@ -460,20 +438,18 @@ as claimed.
 >     (suffix (snoc a x) (snoc b y))
 >     (if eq a b then suffix x y else false)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\suffix$ also detects the existence of solutions $z$ to the equation $y = \cat(z,x)$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. The following hold for all $x,y \in \lists{A}$.
 
 1. $\suffix(x,\cat(y,x)) = \btrue$.
 2. If $\suffix(x,y) = \btrue$, then $y = \cat(z,x)$ for some $z \in \lists{A}$.
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We have
 $$\begin{eqnarray*}
  &   & \suffix(x,\cat(y,x)) \\
@@ -491,9 +467,9 @@ $$\begin{eqnarray*}
  & = & \cat(\rev(w),x)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_suffix_cat :: (List t, Equal a)
 >   => t a -> Test (t a -> t a -> Bool)
@@ -501,17 +477,15 @@ as claimed.
 >   testName "suffix(x,cat(y,x))" $
 >   \x y -> suffix x (cat y x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\suffix$ interacts with $\cons$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x,y \in \lists{A}$ and $a \in A$, if $\suffix(x,y)$, then $\suffix(x,\cons(a,y)$.
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 Suppose $\suffix(x,y)$. Then we have
 $$\begin{eqnarray*}
  &   & \btrue \\
@@ -522,9 +496,9 @@ $$\begin{eqnarray*}
  & = & \suffix(x,\cons(a,y))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_suffix_cons :: (List t, Equal a)
 >   => t a -> Test (a -> t a -> t a -> Bool)
@@ -534,21 +508,19 @@ as claimed.
 >     then suffix x (cons a y)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\suffix$ is a partial order:
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. Then we have the following for all $x,y,z \in \lists{A}$.
 
 1. $\suffix(x,x) = \btrue$.
 2. If $\suffix(x,y)$ and $\suffix(y,x)$, then $x = y$.
 3. If $\suffix(x,y)$ and $\suffix(y,z)$, then $\suffix(x,z)$.
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We have
 $$\begin{eqnarray*}
  &   & \btrue \\
@@ -566,9 +538,9 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 Since $\cat$ is cancellative, we have $\nil = \cat(v,u)$, so that $u = \nil$, and thus $x = y$ as claimed.
 3. If $\suffix(x,y)$ and $\suffix(y,z)$, then $\prefix(\rev(x),\rev(y))$ and $\prefix(\rev(y),\rev(z))$. So $\prefix(\rev(x),\rev(z))$, and thus $\suffix(x,z)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_suffix_reflexive :: (List t, Equal a)
 >   => t a -> Test (t a -> Bool)
@@ -594,17 +566,15 @@ Since $\cat$ is cancellative, we have $\nil = \cat(v,u)$, so that $u = \nil$, an
 >     then suffix x z
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\map$ preserves suffixes:
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets with $f : A \rightarrow B$, and let $x,y \in \lists{A}$. If $\suffix(x,y) = \btrue$, then $$\suffix(\map(f)(x),\map(f)(y)) = \btrue.$$
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 Suppose $\suffix(x,y)$; then $\prefix(\rev(x),\rev(y))$. Then we have
 $$\begin{eqnarray*}
  &   & \suffix(\map(f)(x),\map(f)(y)) \\
@@ -613,9 +583,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_suffix_map :: (List t, Equal a)
 >   => t a -> Test ((a -> a) -> t a -> t a -> Bool)
@@ -625,17 +595,15 @@ as claimed.
 >     then suffix (map f x) (map f y)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\suffix$ interacts with $\length$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $x,y \in \lists{A}$. If $\suffix(x,y)$, then $\nleq(\length(x),\length(y))$.
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 Suppose $\suffix(x,y)$. Then $\prefix(\rev(x),\rev(y))$, so we have
 $$\begin{eqnarray*}
  &   & \nleq(\length(x),\length(y)) \\
@@ -643,9 +611,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_suffix_length :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (t a -> t a -> Bool)
@@ -655,17 +623,15 @@ as claimed.
 >     then leq ((length x) `withTypeOf` k) (length y)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 As a special case, the prefixes and suffixes of a one-element list coincide.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$ we have $$\prefix(x,\cons(a,\nil)) = \suffix(x,\cons(a,\nil)).$$
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 We consider three possibilities for $x$. If $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \prefix(x,\cons(a,\nil)) \\
@@ -694,9 +660,9 @@ $$\begin{eqnarray*}
  & = & \btrue,
 \end{eqnarray*}$$
 so that $\prefix(x,\cons(a,\nil)) = \bfalse$. Similarly, $$\nleq(\next(\length(\cons(a,\nil))),\length(x)) = \btrue$$ so that $\suffix(x,\cons(a,\nil)) = \bfalse$ as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_prefix_suffix_singleton :: (List t, Equal a)
 >   => t a -> Test (a -> t a -> Bool)
@@ -704,8 +670,8 @@ so that $\prefix(x,\cons(a,\nil)) = \bfalse$. Similarly, $$\nleq(\next(\length(\
 >   testName "prefix(x,cons(a,nil)) == suffix(x,cons(a,nil))" $
 >   \a x -> eq (prefix x (cons a nil)) (suffix x (cons a nil))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

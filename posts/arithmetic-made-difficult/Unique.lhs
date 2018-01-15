@@ -48,8 +48,7 @@ Today we'll introduce a boolean function $\unique$ to detect whether or not a li
 
 Note that $\unique$ will need to "have it's cake and eat it too"; that is, when testing $\cons(a,x)$ for uniqueness we have to check that $x$ is unique (eat the cake) *and* check that $a$ does not appear in $x$ (have the cake). We had a similar problem when we defined $\tails$; the solution there was to use consuming fold, so that's what we'll do here.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set. Define $\sigma : A \times \lists{A} \times \bool \rightarrow \bool$ by $$\sigma(a,x,p) = \band(\bnot(\elt(a,x)),p).$$ We then define $\unique : \lists{A} \rightarrow \bool$ by $$\unique = \cfoldr{\btrue}{\sigma}.$$
 
 In Haskell:
@@ -59,21 +58,20 @@ In Haskell:
 >   where
 >     sigma a x p = and (not (elt a x)) p
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\unique$ is defined as a $\cfoldr{\ast}{\ast}$, it can be characterized as the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. $\unique$ is the unique map $f : \lists{A} \rightarrow \bool$ satisfying the following system of equations for all $a \in A$ and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(\nil) = \btrue \\
  f(\cons(a,x)) = \band(\bnot(\elt(a,x)),f(x))
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_unique_nil :: (List t, Equal a)
 >   => t a -> Test Bool
@@ -88,20 +86,19 @@ $$\left\{\begin{array}{l}
 >   testName "unique(cons(a,x)) == and(not(elt(a,x)),unique(x))" $
 >    \a x -> eq (unique (cons a x)) (and (not (elt a x)) (unique x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Special cases.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $a,b \in A$. Then we have the following.
 
 1. $\unique(\cons(a,\nil)) = \btrue$.
 2. $\unique(\cons(a,\cons(b,\nil))) = \bnot(\beq(a,b))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Note that
 $$\begin{eqnarray*}
  &   & \unique(\cons(a,\nil)) \\
@@ -119,9 +116,9 @@ $$\begin{eqnarray*}
  & = & \bnot(\beq(a,b))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_unique_single :: (List t, Equal a)
 >   => t a -> Test (a -> Bool)
@@ -138,17 +135,16 @@ as claimed.
 >       (unique (cons a (cons b (nil `withTypeOf` t))))
 >       (not (eq a b))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\unique$ is "down closed" with respect to $\sublist$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $x,y \in \lists{A}$. If $\sublist(x,y) = \btrue$ and $\unique(y) = \btrue$, then $\unique(x) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $y$. For the base case $y = \nil$, suppose $\sublist(x,y) = \btrue$. Then we have $x = \nil$, and thus $\unique(x) = \btrue$. For the inductive step, suppose the implication holds for all $x$ for some $y$ and let $b \in A$. Suppose further that $\unique(\cons(b,y)) = \btrue$ and $\sublist(x,\cons(b,y)) = \btrue$. We consider two possibilities for $x$. If $x = \nil$, then $\unique(x) = \btrue$ as needed. Suppose instead that $x = \cons(a,u)$ for some $a \in A$ and $u \in \lists{A}$. Note first that since $\unique(\cons(b,y)) = \btrue$, we have $$\band(\bnot(\elt(a,x)),\unique(y)) = \btrue;$$ in particular, $\unique(y) = \btrue$.  We now consider two possibilities. If $a \neq b$, we have
 $$\begin{eqnarray*}
  &   & \btrue \\
@@ -173,9 +169,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_unique_sublist :: (List t, Equal a)
 >   => t a -> Test (t a -> t a -> Bool)
@@ -185,17 +181,16 @@ as needed.
 >      then unique y
 >      else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 If $f$ is injective, $\map(f)$ preserves uniqueness.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets with $x \in \lists{A}$ and $f : A \rightarrow B$. If $f$ is injective then $\unique(x) = \unique(\map(f)(x))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \unique(\map(f)(x)) \\
@@ -213,21 +208,20 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\unique$ and $\filter$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$ and $p : A \rightarrow \bool$. If $\unique(x) = \btrue$, then $\unique(\filter(p,x)) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that $\sublist(\filter(p,x),x) = \btrue$; so we have $\unique(\filter(p,x)) = \btrue$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_unique_filter :: (List t, Equal a)
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
@@ -237,17 +231,16 @@ Note that $\sublist(\filter(p,x),x) = \btrue$; so we have $\unique(\filter(p,x))
 >      then unique (filter p x)
 >      else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\unique$ interacts with $\snoc$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $a \in A$ and $x \in \lists{A}$. Then $$\unique(\snoc(a,x)) = \band(\bnot(\elt(a,x)),\unique(x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \unique(\snoc(a,\nil)) \\
@@ -274,9 +267,9 @@ $$\begin{eqnarray*}
  & = & \band(\bnot(\elt(a,\cons(b,x))),\unique(\cons(b,x)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_unique_snoc :: (List t, Equal a)
 >   => t a -> Test (a -> t a -> Bool)
@@ -284,17 +277,16 @@ as needed.
 >   testName "unique(snoc(a,x)) == and(not(elt(a,x)),unique(x))" $
 >    \a x -> eq (unique (snoc a x)) (and (not (elt a x)) (unique x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\unique$ interacts with $\rev$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$. Then $\unique(x) = \unique(\rev(x))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \unique(\rev(x)) \\
@@ -311,9 +303,9 @@ $$\begin{eqnarray*}
  & = & \unique(\cons(a,x))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_unique_rev :: (List t, Equal a)
 >   => t a -> Test (t a -> Bool)
@@ -321,17 +313,16 @@ as needed.
 >   testName "unique(x) == unique(rev(x))" $
 >   \x -> eq (unique x) (unique (rev x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\range$s are unique.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $a,b \in \nats$. We have $$\unique(\range(a,b)) = \btrue.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $b$. For the base case $b = \zero$, we have
 $$\begin{eqnarray*}
  &   & \unique(\range(a,\zero)) \\
@@ -348,9 +339,9 @@ $$\begin{eqnarray*}
  & = & \bnot(\bfalse) \\
  & = & \btrue
 \end{eqnarray*}$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_unique_range :: (List t, Natural n, Equal n)
 >   => t a -> n -> Test (t n -> n -> n -> Bool)
@@ -358,17 +349,16 @@ $$\begin{eqnarray*}
 >   testName "unique(range(a,b)) == true" $
 >   \t a b -> unique ((range a b) `withTypeOf` t)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\unique$ can detect $\elt$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x \in X$, we have $$\all(\unique)(\map(\cons(a,\cons(-,\nil)))(x)) = \bnot(\elt(a,x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \all(\unique)(\map(\cons(a,\cons(-,x)))(\nil)) \\
@@ -388,9 +378,9 @@ $$\begin{eqnarray*}
  & = & \bnot(\elt(a,\cons(b,x)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_unique_elt :: (List t, Equal a)
 >   => t a -> Test (a -> t a -> Bool)
@@ -400,17 +390,16 @@ as needed.
 >     (all unique (map (\b -> cons a (cons b (nil `withTypeOf` t))) x))
 >     (not (elt a x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\unique$ and $\select$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ we have $$\unique(x) = \all(\unique)(\select(\next(\next(\zero)),x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \all(\unique)(\select(\next(\next(\zero)),x)) \\
@@ -432,9 +421,9 @@ $$\begin{eqnarray*}
  & = & \unique(\cons(a,x))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_unique_select_two :: (List t, Equal a, Natural n)
 >   => t a -> n -> Test (t a -> Bool)
@@ -444,8 +433,8 @@ as needed.
 >     (unique x)
 >     (all unique (select (next (next zero) `withTypeOf` n) x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

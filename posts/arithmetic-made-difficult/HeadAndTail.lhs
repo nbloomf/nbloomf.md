@@ -23,8 +23,7 @@ tags: arithmetic-made-difficult, literate-haskell
 
 We define some helper functions in terms of $\uncons$, analogous to $\prev$ and $\iszero$ on $\nats$. These do not require recursion.
 
-<div class="result">
-<div class="dfn"><p>
+:::::: definition ::
 Let $A$ be a set. We define $\isnil : \lists{A} \rightarrow \bool$ by $$\isnil = \either(\const(\btrue),\const(\bfalse)) \circ \uncons$$ and $\head : \lists{A} \rightarrow 1 + A$ by $$\head = \uPair(\id,\fst) \circ \uncons$$ and $\tail : \lists{A} \rightarrow \lists{A}$ by $$\tail = \either(\const(\nil),\snd) \circ \uncons.$$
 
 In Haskell:
@@ -40,20 +39,19 @@ In Haskell:
 > tail :: (List t) => t a -> t a
 > tail = (either (const nil) snd) . uncons
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now $\isnil$ detects $\nil$:
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have the following.
 
 1. $\isnil(\nil) = \btrue$.
 2. $\isnil(\cons(a,x)) = \bfalse$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We have
 $$\begin{eqnarray*}
  &   & \isnil(\nil) \\
@@ -72,9 +70,9 @@ $$\begin{eqnarray*}
  & = & \bfalse
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="thm"><p>
+:::::: theorem :::::
 
 > _test_isNil_nil :: (List t, Equal (t a))
 >   => t a -> Test Bool
@@ -90,20 +88,19 @@ as claimed.
 >   testName "isNil(cons(a,x)) == false" $
 >   \a x -> eq (isNil (cons a x)) false
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\head$ extracts the "first" entry of a list:
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have the following.
 
 1. $\head(\nil) = \lft(\ast)$.
 2. $\head(\cons(a,x)) = \rgt(a)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We have
 $$\begin{eqnarray*}
  &   & \head(\nil) \\
@@ -122,9 +119,9 @@ $$\begin{eqnarray*}
  & = & \rgt(a)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="thm"><p>
+:::::: theorem :::::
 
 > _test_head_nil :: (List t, Equal (t a), Equal a)
 >   => t a -> Test Bool
@@ -140,20 +137,19 @@ as claimed.
 >   testName "head(cons(a,x)) == rgt(a)" $
 >   \a x -> eq (head (cons a x)) (rgt a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And $\tail$ peels off the "first" entry of a list.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have the following.
 
 1. $\tail(\nil) = \nil$.
 2. $\tail(\cons(a,x)) = x$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We have
 $$\begin{eqnarray*}
  &   & \tail(\nil) \\
@@ -172,9 +168,9 @@ $$\begin{eqnarray*}
  & = & x
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="thm"><p>
+:::::: theorem :::::
 
 > _test_tail_nil :: (List t, Equal (t a))
 >   => t a -> Test Bool
@@ -190,21 +186,20 @@ as claimed.
 >   testName "tail(cons(a,x)) == x" $
 >   \a x -> eq (tail (cons a x)) x
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 While we're at it, no cons can be its own tail.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $A$ be a set with $a \in A$ and $x \in \lists{A}$. Then $\cons(a,x) \neq x$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have $\nil \neq \cons(a,\nil)$ for all $a$ as needed. For the inductive step, suppose the inequality holds for some $x$ and let $b \in A$. Suppose further by way of contradiction that $\cons(b,x) = \cons(a,\cons(b,x))$. Then we have $a = b$ and $x = \cons(b,x)$, a contradiction. So in fact $\cons(b,x) \neq \cons(a,\cons(b,x))$ as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_cons_self :: (List t, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
@@ -212,8 +207,8 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have $\nil
 >   testName "x /= cons(a,x)" $
 >   \a x -> not (eq (cons a x) x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

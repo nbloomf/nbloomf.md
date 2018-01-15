@@ -32,8 +32,7 @@ slug: at
 
 The $\head$ function attempts to extract the "first" item in a list; in this post we'll generalize to $\at$, which extracts the element at an arbitrary position in a list.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Define $\beta : \nats \times \lists{A} \rightarrow \bool$ by $$\beta(k,x) = \isnil(x),$$ $\psi : \nats \times \lists{A} \rightarrow 1 + A$ by $$\psi(k,x) = \lft(\ast),$$ and $\omega : \nats \times \lists{A} \rightarrow \lists{A}$ by $$\omega(k,x) = \tail(x).$$ We then define $\at : \lists{A} \times \nats \rightarrow \ast + A$ by $$\at(x,k) = \bailrec{\head}{\beta}{\psi}{\omega}(k,x).$$
 
 In Haskell:
@@ -45,21 +44,20 @@ In Haskell:
 >     psi _ _ = lft ()
 >     omega _ x = tail x
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\at$ is defined in terms of $\bailrec{\ast}{\ast}{\ast}{\ast}$, it is the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 $\at$ is the unique map $f : \nats \times \lists{A} \rightarrow 1 + A$ such that the following hold for all $n \in \nats$, $a \in A$, and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(x,\zero) = \head(x) \\
  f(x,\next(n)) = \bif{\isnil(x)}{\lft(\ast)}{f(\tail(x),n)}
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_at_zero
 >   :: (List t, Equal a, Equal (t a), Natural n, Equal n)
@@ -80,17 +78,16 @@ $$\left\{\begin{array}{l}
 >     (at x ((next n) `withTypeOf` k))
 >     (if isNil x then lft () else at (tail x) n)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\at$ interacts with $\cons$ and $\next$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a \in A$, $x \in \lists{A}$, and $k \in \nats$, we have $$\at(\cons(a,x),\next(k)) = \at(x,k).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \at(\cons(a,x),\next(k)) \\
@@ -100,9 +97,9 @@ $$\begin{eqnarray*}
  & = & \at(x,k)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_at_next_next_cons :: (List t, Equal a, Equal (t a), Natural n, Equal n)
 >   => t a -> n -> Test (t a -> a -> n -> Bool)
@@ -110,21 +107,20 @@ as claimed.
 >   testName "at(cons(a,x),next(next(k))) == at(x,next(k))" $
 >   \x a k -> eq (at (cons a x) (next k)) (at x k)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Let's trace some special cases.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. The following hold for all $a,b \in A$, $x \in \lists{A}$, and $k \in \nats$.
 
 1. $\at(\nil,k) = \lft(\ast)$.
 2. $\at(\cons(a,x),\zero) = \rgt(a)$.
 3. $\at(\cons(a,\cons(b,x)),\next(\zero)) = \rgt(b)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We consider two cases: $k = \zero$ and $k \neq \zero$. If $k = \zero$, we of course have
 $$\begin{eqnarray*}
  &   & \at(\nil,\zero) \\
@@ -152,9 +148,9 @@ $$\begin{eqnarray*}
  & = & \rgt(b)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_at_nil :: (List t, Equal a, Equal (t a), Natural n, Equal n)
 >   => t a -> n -> Test (n -> Bool)
@@ -182,20 +178,19 @@ as claimed.
 >     (at (cons a (cons b x)) (next (zero `withTypeOf` k)))
 >     (rgt b)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\at$ interacts with $\length$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set and let $z \in \lists{A}$.
 
 1. $\at(\cons(a,x),\length(x)) = \head(\rev(\cons(a,x)))$.
 2. $\at(x,\length(x)) = \lft(\ast)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \at(\cons(a,\nil),\length(\nil)) \\
@@ -227,9 +222,9 @@ $$\begin{eqnarray*}
  & = & \lft(\ast)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_at_length
 >   :: (List t, Equal a, Equal (t a), Natural n, Equal n)
@@ -250,20 +245,19 @@ as needed.
 >     (at x ((length x) `withTypeOf` k))
 >     (lft ())
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\at$ interacts with $\snoc$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. Let $a,b \in A$ and $x \in \lists{A}$.
 
 1. If $\nleq(k,\length(x))$ then $\at(\snoc(a,\cons(b,x)),k) = \at(\cons(b,x),k)$.
 2. $\at(\snoc(a,x),\length(x)) = \rgt(a)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by induction on $k$. For the base case $k = \zero$, note that $\nleq(k,\length(x))$, and we have
 $$\begin{eqnarray*}
  &   & \at(\snoc(a,\cons(b,x)),\zero) \\
@@ -296,9 +290,9 @@ $$\begin{eqnarray*}
  & = & \rgt(a)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_at_snoc
 >   :: (List t, Equal a, Equal (t a), Natural n, Equal n)
@@ -317,17 +311,16 @@ as needed.
 >   testName "at(snoc(a,x),length(x)) == rgt(a)" $
 >   \x a -> eq (at (snoc a x) ((length x) `withTypeOf` k)) (rgt a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\at$ interacts with $\rev$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. Let $x \in \lists{A}$ and $u,v \in \nats$. If $\next(\nplus(u,v)) = \length(x)$, then we have $$\at(\rev(x),v) = \at(x,u).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that $\length(x) = \zero$, so that $\next(\nplus(u,v)) = \length(x)$ is false for all $u$ and $v$, and thus the implication holds vacuously. For the inductive step, suppose the implication holds for all $u$ and $v$ for some $x$ and let $a \in A$. Suppose further that $\next(\nplus(u,v)) = \length(\cons(a,x))$. We have two possibilities for $u$. If $u = \zero$, we have $\next(v) = \length(\cons(a,x))$ and thus $v = \length(x)$. In this case, we have
 $$\begin{eqnarray*}
  &   & \at(\cons(a,x),u) \\
@@ -350,9 +343,9 @@ $$\begin{eqnarray*}
  & = & \at(\rev(\cons(a,x)),v)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_at_rev :: (List t, Equal a, Equal (t a), Natural n, Equal n)
 >   => t a -> n -> Test (t a -> n -> n -> Bool)
@@ -362,20 +355,19 @@ as needed.
 >     then eq (at x u) (at (rev x) v)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\at$ interacts with $\cat$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a \in A$, $x,y \in \lists{A}$ and $k \in \nats$, we have the following.
 
 1. If $\nleq(k,\length(x))$, then $\at(\cat(\cons(a,x),y),k) = \at(\cons(a,x),k)$.
 2. If $\at(\cat(\cons(a,x),y),\nplus(\next(\length(x)),k)) = \at(y,k)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by list induction on $y$. For the base case $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \at(\cat(\cons(a,x),\nil),k) \\
@@ -408,9 +400,9 @@ $$\begin{eqnarray*}
  & = & \at(\cons(b,y),k)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_at_cat_left :: (List t, Equal a, Equal (t a), Natural n, Equal n)
 >   => t a -> n -> Test (a -> t a -> t a -> n -> Bool)
@@ -429,20 +421,19 @@ as needed.
 >     (at (cat (cons a x) y) (plus (next (length x)) k))
 >     (at y k)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 We can characterize the $k$s such that $\at(x,k)$ is a $\lft$ or a $\rgt$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ and $k \in \nats$ we have the following.
 
 1. If $\nleq(\length(x),k)$, then $\at(x,k) = \lft(\ast)$.
 2. If $\nleq(k,\length(x))$, then $\at(\cons(a,x),k) = \rgt(b)$ for some $b \in A$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by list induction on $x$. For the base case $x = \nil$, note that for any $k$ we have $\nleq(\zero,k)$ and
 $$\begin{eqnarray*}
  &   & \at(\nil,k) \\
@@ -474,9 +465,9 @@ $$\begin{eqnarray*}
  & = & \rgt(c)
 \end{eqnarray*}$$
 for some $c$ by the inductive hypothesis, as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_at_isleft :: (List t, Equal a, Equal (t a), Natural n, Equal n)
 >   => t a -> n -> Test (t a -> n -> Bool)
@@ -495,17 +486,16 @@ for some $c$ by the inductive hypothesis, as needed.
 >     then isRgt (at (cons a x) k)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Finally, $\at$ detects equality for lists.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set, and let $x,y \in \lists{A}$. Then $x = y$ if and only if $\at(x,k) = \at(y,k)$ for all $k \in \nats$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 The "only if" direction is clear. We show the "if" part by list induction on $x$. For the base case $x = \nil$, suppose we have $\at(x,k) = \at(y,k)$ for all $k \in \nats$. If $y = \cons(a,z)$ for some $z$, then we have
 $$\begin{eqnarray*}
  &   & \rgt(a) \\
@@ -533,9 +523,9 @@ $$\begin{eqnarray*}
  & = & \at(x,k).
 \end{eqnarray*}$$
 By the inductive hypothesis, $x = z$, so that $\cons(a,x) = y$ as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_at_eq :: (List t, Equal a, Equal (t a), Natural n, Equal n)
 >   => t a -> n -> Test (t a -> t a -> n -> Bool)
@@ -545,8 +535,8 @@ By the inductive hypothesis, $x = z$, so that $\cons(a,x) = y$ as needed.
 >     then eq (at x k) (at y k)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

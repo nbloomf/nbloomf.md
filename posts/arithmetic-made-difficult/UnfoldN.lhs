@@ -45,17 +45,16 @@ Another strategy -- and the one we will take -- is to give unfold a natural numb
 
 Before defining $\unfoldN{\ast}$, we need a helper operator, $\tacunfoldN{\ast}$, analogous to $\revcat$. "tac" is a bad pun on "reverse cat" -- since that's kind of what this operator does.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets, and let $f : A \rightarrow 1 + (A \times B)$. There is a unique function $$\Theta : \lists{B} \times \nats \times A \rightarrow \lists{B}$$ such that for all $a \in A$, $x \in \lists{A}$, and $n \in \nats$, we have $$\Theta(x,\zero,a) = x$$ and
 $$\Theta(x,\next(n),a) = \left\{\begin{array}{ll}
  x & \mathrm{if}\ f(a) = \lft(\ast) \\
  \Theta(\snoc(b,x),n,c) & \mathrm{if}\ f(a) = \rgt((c,b)).
 \end{array}\right.$$
 We denote this unique map $\tacunfoldN{f}$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We define $\varphi : A \times \lists{B} \rightarrow \lists{B}$ by $$\varphi(a,x) = x,$$ $\beta : \nats \times (A \times \lists{B}) \rightarrow \bool$ by $$\beta(n,(a,x)) = \isLft(f(a)),$$ $\psi : \nats \times (A \times \lists{B}) \rightarrow \lists{B}$ by $$\psi(n,(a,x)) = x,$$ and $\omega : \nats \times (A \times \lists{B}) \rightarrow A \times \lists{B}$ by
 $$\omega(n,(a,x)) = \left\{\begin{array}{ll}
  (a,x) & \mathrm{if}\ f(a) = \lft(\ast) \\
@@ -112,8 +111,8 @@ $$\begin{eqnarray*}
  & = & \tacunfoldN{f}(x,\next(n),a)
 \end{eqnarray*}$$
 as needed.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 We can implement $\tacunfoldN{f}$ using the definition from the proof, or by pattern matching using the universal property.
 
@@ -164,12 +163,11 @@ And while we're at it, test that $\tacunfoldN{f}$ does satisfy the universal pro
 
 $\tacunfoldN{f}$ interacts with $\cons$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 We have $$\tacunfoldN{f}(\cons(b,x),n,a) = \cons(b,\tacunfoldN{f}(x,n,a)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$, we have
 $$\begin{eqnarray*}
  &   & \tacunfoldN{f}(\cons(b,x),\zero,a) \\
@@ -191,9 +189,9 @@ $$\begin{eqnarray*}
  & = & \cons(b,\tacunfoldN{f}(x,\next(n),a))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_tacunfoldN_cons :: (List t, Equal (t a), Natural n)
 >   => t a -> n -> Test ((a -> Either () (a,a)) -> t a -> a -> n -> a -> Bool)
@@ -201,17 +199,16 @@ as needed.
 >   testName "tacunfoldN(cons(b,x),n,a) == cons(b,tacunfoldN(x,n,a))" $
 >   \f x b n a -> eq (tacunfoldN f (cons b x) n a) (cons b (tacunfoldN f x n a))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\tacunfoldN{f}$ interacts with $\cat$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets with $f : A \rightarrow 1 + (A \times B)$. For all $a \in A$, $x,y \in \lists{B}$, and $n \in \nats$, we have $$\tacunfoldN{f}(\cat(x,y),n,a) = \cat(x,\tacunfoldN{f}(y,n,a).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$, we have
 $$\begin{eqnarray*}
  &   & \tacunfoldN{f}(\cat(x,y),\zero,a) \\
@@ -233,9 +230,9 @@ $$\begin{eqnarray*}
  & = & \cat(x,\tacunfoldN{f}(y,\next(n),a)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_tacunfoldN_cat :: (List t, Equal (t a), Natural n)
 >   => t a -> n -> Test ((a -> Either () (a,a)) -> t a -> t a -> n -> a -> Bool)
@@ -243,13 +240,12 @@ as needed.
 >   testName "tacunfoldN(cat(x,y),n,a) == cat(x,tacunfoldN(y,n,a))" $
 >   \f x y n a -> eq (tacunfoldN f (cat x y) n a) (cat x (tacunfoldN f y n a))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now we can define $\unfoldN{\ast}$ in terms of $\tacunfoldN{\ast}$.
 
-<div class="result">
-<div class="dfn"><p>
+:::::: definition ::
 Let $A$ and $B$ be sets, with $f : A \rightarrow 1 + (A \times B)$. we define $\unfoldN{f} : \nats \times A \rightarrow \lists{B}$ by $$\unfoldN{f}(n,a) = \tacunfoldN{f}(\nil,n,a).$$
 
 In Haskell:
@@ -259,13 +255,12 @@ In Haskell:
 >   => (a -> Either () (a,b)) -> n -> a -> t b
 > unfoldN f = tacunfoldN f nil
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And $\unfoldN{\ast}$ can be characterized as the unique solution of a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ and $B$ be sets with $f : A \rightarrow 1 + (A \times B)$. Then $\unfoldN{f}$ is the unique map $g : \nats \times A \rightarrow B$ such that the following hold for all $a \in A$ and $n \in \nats$.
 $$\left\{\begin{array}{l}
  g(\zero,a) = \nil \\
@@ -274,9 +269,9 @@ $$\left\{\begin{array}{l}
   \cons(b,g(n,c)) & \mathrm{if}\ f(a) = \rgt((c,b)). 
 \end{array}\right.
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 To see that $\unfoldN{\ast}$ satisfies the first equation, note that
 $$\begin{eqnarray*}
  &   & \unfoldN{f}(\zero,a) \\
@@ -336,9 +331,9 @@ $$\begin{eqnarray*}
  & = & \unfoldN{f}(\next(n),a)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_unfoldN_zero :: (List t, Equal (t a), Natural n)
 >   => t a -> n -> Test ((a -> Either () (a,a)) -> a -> Bool)
@@ -355,8 +350,8 @@ as needed.
 >     Left ()     -> eq (unfoldN f (next n) a) (nil `withTypeOf` t)
 >     Right (c,b) -> eq (unfoldN f (next n) a) ((cons b (unfoldN f n c)) `withTypeOf` t)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

@@ -29,8 +29,7 @@ slug: all-any
 
 Today we'll define two boolean functions for lists called $\all$ and $\any$. Each one takes as an argument a predicate $A \rightarrow \bool$, and then tests whether all or any of the items in a list of type $\lists{A}$ satisfy the predicate.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. Define $\varphi : A \times \bool \rightarrow \bool$ by $$\varphi(a,q) = \band(p(a),q).$$ Now define $\all : \bool^A \rightarrow \bool^{\lists{A}}$ by $$\all(p)(x) = \foldr{\btrue}{\varphi}(x).$$
 
 In Haskell:
@@ -40,21 +39,20 @@ In Haskell:
 >   where
 >     phi a q = and (p a) q
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\all(p)$ is defined as a $\foldr{\ast}{\ast}$, it is the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. Then $\all(p)$ is the unique solution $f : \lists{A} \rightarrow \bool$ to the following equations for all $a \in A$ and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(\nil) = \btrue \\
  f(\cons(a,x)) = \band(p(a),f(x))
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_all_nil :: (List t, Equal a)
 >   => t a -> Test ((a -> Bool) -> Bool)
@@ -69,17 +67,16 @@ $$\left\{\begin{array}{l}
 >   testName "all(p)(cons(a,x)) == and(p(a),all(p)(x))" $
 >   \p a x -> eq (all p (cons a x)) (and (p a) (all p x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\all$ interacts with $\snoc$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $p : A \rightarrow \bool$, $a \in A$, and $x \in \lists{A}$, we have $$\all(p,\snoc(a,x)) = \band(p(a),\all(p,x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \all(p,\snoc(a,x)) \\
@@ -98,9 +95,9 @@ $$\begin{eqnarray*}
  & = & \band(p(a),\all(p,\cons(b,x)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_all_snoc :: (List t, Equal a)
 >   => t a -> Test ((a -> Bool) -> a -> t a -> Bool)
@@ -108,17 +105,16 @@ as needed.
 >   testName "all(p)(snoc(a,x)) == and(p(a),all(p)(x))" $
 >   \p a x -> eq (all p (snoc a x)) (and (p a) (all p x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\all$ can also be characterized as a folded map.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 $$\all(p,x) = \foldr{\btrue}{\band}(\map(p)(x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \all(p,x) \\
@@ -137,9 +133,9 @@ $$\begin{eqnarray*}
  & = & \foldr{\btrue}{\band}(\map(p)(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_all_fold_and :: (List t, Equal a)
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
@@ -147,20 +143,19 @@ as needed.
 >   testName "all(p,x) == foldr(true,and)(map(p)(x))" $
 >   \p x -> eq (all p x) (foldr true and (map p x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Two special cases.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. The following hold for all $x \in \lists{A}$.
 
 1. $\all(\ptrue)(x) = \btrue$.
 2. $\all(\pfalse)(x) = \bfalse$ if and only if $x \neq \nil$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \all(\ptrue,x) \\
@@ -188,9 +183,9 @@ $$\begin{eqnarray*}
  & = & \bfalse
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_all_const_true :: (List t, Equal a, Boolean b, Equal b)
 >   => t a -> b -> Test (t a -> Bool)
@@ -207,17 +202,16 @@ as needed.
 >     ((eq (all pfalse x) (false `withTypeOf` p)) `withTypeOf` p)
 >     (not (eq x nil))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\all$ interacts with $\cat$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$. For all $x,y \in \lists{A}$ we have $$\all(p,\cat(x,y)) = \band(\all(p)(x),\all(p)(y)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \all(p)(\cat(x,y)) \\
@@ -237,9 +231,9 @@ $$\begin{eqnarray*}
  & = & \band(\all(p)(\cons(a,x)),\all(p)(y))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_all_cat :: (List t, Equal a)
 >   => t a -> Test ((a -> Bool) -> t a -> t a -> Bool)
@@ -247,17 +241,16 @@ as needed.
 >   testName "all(p,cat(x,y)) == all(p,x) && all(p,y)" $
 >   \p x y -> eq (all p (cat x y)) (and (all p x) (all p y))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\all$ interacts with $\rev$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$. For all $x \in \lists{A}$ we have $$\all(p,\rev(x)) = \all(p,x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \all(p,\rev(x)) \\
@@ -277,9 +270,9 @@ $$\begin{eqnarray*}
  & = & \all(p,\cons(a,x))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_all_rev :: (List t, Equal a)
 >   => t a -> Test ((a -> Bool) -> t a -> t a -> Bool)
@@ -287,17 +280,16 @@ as claimed.
 >   testName "all(p,rev(x)) == all(p,x)" $
 >   \p x y -> eq (all p (rev x)) (all p x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\all$ interacts with $\pimpl$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set and $p,q : A \rightarrow \bool$. If $\pimpl(p,q)$, then $$\bimpl(\all(p,x),\all(q,x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \bimpl(\all(p,\nil),\all(q,\nil)) \\
@@ -311,17 +303,16 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\all$ interacts with $\map$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets with $f : A \rightarrow B$ and $p : B \rightarrow \bool$. Then for all $x \in \lists{A}$ we have $$\all(p)(\map(f)(x)) = \all(p \circ f)(x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \all(p)(\map(f)(x)) \\
@@ -340,9 +331,9 @@ $$\begin{eqnarray*}
  & = & \all(p \circ f)(\cons(a,x))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_all_map :: (List t, Equal a)
 >   => t a -> Test ((a -> a) -> (a -> Bool) -> t a -> Bool)
@@ -350,13 +341,12 @@ as needed.
 >   testName "all(p)(map(f)(x)) == all(p . f)(x)" $
 >   \f p x -> eq (all p (map f x)) (all (p . f) x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\any$ is defined similarly.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. Define $\varphi : A \times \bool \rightarrow \bool$ by $$\varphi(a,q) = \bor(p(a),q).$$ Now define $\any : \bool^A \rightarrow \bool^{\lists{A}}$ by $$\all(p)(x) = \foldr{\bfalse}{\varphi}(x).$$
 
 In Haskell:
@@ -366,21 +356,20 @@ In Haskell:
 >   where
 >     phi a q = or (p a) q
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\any$ is defined as a fold, it is the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set and $p$ a predicate on $A$. $\any(p)$ is the unique map $f : \lists{A} \rightarrow \bool$ satisfying the following equations for all $a \in A$ and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(\nil) = \bfalse \\
  f(\cons(a,x)) = \bor(p(a),f(x))
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_any_nil :: (List t, Equal a)
 >   => t a -> Test ((a -> Bool) -> Bool)
@@ -395,17 +384,16 @@ $$\left\{\begin{array}{l}
 >   testName "any(p)(cons(a,x)) == or(p(a),any(p)(x))" $
 >   \p a x -> eq (any p (cons a x)) (or (p a) (any p x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\any$ can also be characterized as a folded map.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $p$ a predicate on $A$. Then $$\any(p,x) = \foldr{\bfalse}{\bor}(\map(p)(x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \any(p,x) \\
@@ -424,9 +412,9 @@ $$\begin{eqnarray*}
  & = & \foldr{\bfalse}{\bor}(\map(p)(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_any_fold_or :: (List t, Equal a)
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
@@ -434,20 +422,19 @@ as needed.
 >   testName "any(p,x) == foldr(false,or)(map(p)(x))" $
 >   \p x -> eq (any p x) (foldr false or (map p x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 A version of DeMorgan's law holds for $\any$ and $\all$.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set with $p : A \rightarrow \bool$. Then the following hold for all $x \in \lists{A}$.
 
 1. $\any(p,x) = \bnot(\all(\bnot \circ p,x))$.
 2. $\all(p,x) = \bnot(\any(\bnot \circ p,x))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \bnot(\all(\not \circ p,x)) \\
@@ -473,9 +460,9 @@ $$\begin{eqnarray*}
  & = & \all(p,x)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_any_not_all :: (List t, Equal a)
 >   => t a -> Test ((a -> Bool) -> t a -> Bool)
@@ -490,20 +477,19 @@ as claimed.
 >   testName "all(p,x) == not(any(not . p, x))" $
 >   \p x -> eq (all p x) (not (any (not . p) x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Two special cases.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. The following hold for all $x \in \lists{A}$.
 
 1. $\any(\pfalse)(x) = \bfalse$.
 2. $\any(\ptrue)(x) = \btrue$ if and only if $x \neq \nil$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Note that
 $$\begin{eqnarray*}
  &   & \any(\pfalse)(x) \\
@@ -527,9 +513,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_any_const_false :: (List t, Equal a, Boolean b, Equal b)
 >   => t a -> b -> Test (t a -> Bool)
@@ -546,17 +532,16 @@ as needed.
 >     ((eq (any ptrue x) (true `withTypeOf` p)) `withTypeOf` p)
 >     (not (eq x nil))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\any$ interacts with $\cat$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$. For all $x,y \in \lists{A}$ we have $$\any(p,\cat(x,y)) = \bor(\any(p)(x),\any(p)(y)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \any(p,\cat(x,y)) \\
@@ -566,9 +551,9 @@ $$\begin{eqnarray*}
  & = & \bor(\any(p,x),\any(p,y))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_any_cat :: (List t, Equal a)
 >   => t a -> Test ((a -> Bool) -> t a -> t a -> Bool)
@@ -576,17 +561,16 @@ as claimed.
 >   testName "any(p,cat(x,y)) == any(p,x) || any(p,y)" $
 >   \p x y -> eq (any p (cat x y)) (or (any p x) (any p y))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\any$ interacts with $\rev$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set and $p : A \rightarrow \bool$. For all $x,y \in \lists{A}$ we have $$\any(p,\rev(x)) = \any(p,x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \any(p,\rev(x)) \\
@@ -595,9 +579,9 @@ $$\begin{eqnarray*}
  & = & \any(p,x)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_any_rev :: (List t, Equal a)
 >   => t a -> Test ((a -> Bool) -> t a -> t a -> Bool)
@@ -605,17 +589,16 @@ as claimed.
 >   testName "any(p,rev(x)) == any(p,x)" $
 >   \p x y -> eq (any p (rev x)) (any p x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\any$ interacts with $\map$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets with $f : A \rightarrow B$ and $p : B \rightarrow \bool$. Then for all $x \in \lists{A}$ we have $$\any(p)(\map(f)(x)) = \any(p \circ f)(x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \any(p,\map(f)(x)) \\
@@ -625,9 +608,9 @@ $$\begin{eqnarray*}
  & = & \any(p \circ f,x)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_any_map :: (List t, Equal a)
 >   => t a -> Test ((a -> a) -> (a -> Bool) -> t a -> Bool)
@@ -635,8 +618,8 @@ as claimed.
 >   testName "any(p)(map(f)(x)) == any(p . f)(x)" $
 >   \f p x -> eq (any p (map f x)) (any (p . f) x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

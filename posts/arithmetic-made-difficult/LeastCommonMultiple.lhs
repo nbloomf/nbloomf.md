@@ -31,8 +31,7 @@ Recall the following property of $\nmax$: if $\nleq(c,a)$ and $\nleq(c,b)$, then
 
 We don't need recursion for this.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Define $\nlcm : \nats \times \nats \rightarrow \nats$ by $$\nlcm(a,b) = \nquo(\ntimes(a,b),\ngcd(a,b)).$$
 
 In Haskell:
@@ -40,20 +39,19 @@ In Haskell:
 > lcm :: (Natural n, Equal n) => n -> n -> n
 > lcm a b = quo (times a b) (gcd a b)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 woo special cases!
 
-<div class="result">
 <div class="lemma">
 For all $a \in \nats$ we have the following.
 
 1. $\nlcm(a,\zero) = \zero$.
 2. $\nlcm(a,\next(\zero)) = a$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Note that
 $$\begin{eqnarray*}
  &   & \nlcm(a,\zero) \\
@@ -68,9 +66,9 @@ $$\begin{eqnarray*}
  & = & \nquo(a,\next(\zero)) \\
  & = & a.
 \end{eqnarray*}$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_lcm_zero :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
@@ -85,20 +83,19 @@ $$\begin{eqnarray*}
 >   testName "lcm(a,next(0)) == a" $
 >   \a -> eq a (lcm a (next zero))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 As we might expect, $\nlcm$ enjoys many properties analogous to those of $\ngcd$. It is idempotent and commutative.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b \in \nats$. Then we have the following.
 
 1. $\nlcm(a,a) = a$.
 2. $\nlcm(a,b) = \nlcm(b,a)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We consider two cases: $a = \zero$ and $a \neq \zero$. If $a = \zero$, we have
 $$\begin{eqnarray*}
  &   & \nlcm(a,a) \\
@@ -123,9 +120,9 @@ $$\begin{eqnarray*}
  & = & \nlcm(b,a)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_lcm_idempotent :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
@@ -140,20 +137,19 @@ as claimed.
 >   testName "lcm(a,b) == lcm(b,a)" $
 >   \a b -> eq (lcm a b) (lcm b a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And the universal property:
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c \in \nats$. Then we have the following.
 
 1. $\ndiv(a,\nlcm(a,b))$ and $\ndiv(b,\nlcm(a,b))$.
 2. If $\ndiv(a,c)$ and $\ndiv(b,c)$, then $\ndiv(\nlcm(a,b),c)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We consider two cases: $\ngcd(a,b) = \zero$ and $\ngcd(a,b) \neq \zero$. If $\ngcd(a,b) = \zero$, then we have $a = b = \zero$. Now
 $$\begin{eqnarray*}
  &   & \nlcm(\zero,\zero) \\
@@ -193,9 +189,9 @@ $$\begin{eqnarray*}
  & = & \ndiv(\nlcm(a,b),c)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_lcm_div_args :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
@@ -212,38 +208,36 @@ as claimed.
 >     then div (lcm a b) c
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And $\nlcm(a,b)$ is unique with this property.
 
-<div class="result">
-<div class="corollary">
+:::::: corollary :::
 Let $a,b,c \in \nats$. Suppose $m \in \nats$ satisfies the following.
 
 1. $\ndiv(a,m)$ and $\ndiv(b,m)$.
 2. If $\ndiv(a,c)$ and $\ndiv(b,c)$, then $\ndiv(m,c)$.
 
 Then $m = \nlcm(a,b)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Since $\ndiv(a,m)$ and $\ndiv(b,m)$, we have $\ndiv(\nlcm(a,b),m)$. But likewise we have $\ndiv(m,\nlcm(a,b))$. By antisymmetry, we have $m = \nlcm(a,b)$ as claimed.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\nlcm$ is associative:
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c \in \nats$. Then $\nlcm(\nlcm(a,b),c) = \nlcm(a,\nlcm(b,c))$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that $\ndiv(a,\nlcm(a,\nlcm(b,c)))$. We also have $\ndiv(b,\nlcm(b,c))$, so that $$\ndiv(b,\nlcm(a,\nlcm(b,c))$$ by transitivity; similarly, $$\ndiv(c,\nlcm(a,\nlcm(b,c))).$$ By the universal property of $\nlcm$, we thus have $$\ndiv(\nlcm(a,b),\nlcm(a,\nlcm(b,c))),$$ so that $$\ndiv(\nlcm(\nlcm(a,b),c),\nlcm(a,\nlcm(b,c))).$$ A similar argument shows that $$\ndiv(\nlcm(a,\nlcm(b,c)),\nlcm(\nlcm(a,b),c)).$$ By antisymmetry, we thus have $$\nlcm(a,\nlcm(b,c)) = \nlcm(\nlcm(a,b),c)$$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_lcm_associative :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> n -> Bool)
@@ -251,17 +245,16 @@ Note that $\ndiv(a,\nlcm(a,\nlcm(b,c)))$. We also have $\ndiv(b,\nlcm(b,c))$, so
 >   testName "lcm(lcm(a,b),c) == lcm(a,lcm(b,c))" $
 >   \a b c -> eq (lcm (lcm a b) c) (lcm a (lcm b c))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\nlcm$ detects $\ndiv$.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b \in \nats$. Then $\nlcm(a,b) = a$ if and only if $\ndiv(b,a)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 2. First suppose $\ndiv(b,a)$; say $a = \ntimes(b,d)$. Now $\ndiv(a,a)$ and $\ndiv(b,a)$, and if $\ndiv(c,a)$ and $\ndiv(c,b)$ then $\ndiv(c,a)$. By the universal property of $\nlcm$ we have $a = \nlcm(a,b)$. Conversely, suppose $a = \nlcm(a,b)$. We consider two cases: either $(a,b) = (\zero,\zero)$ or $(a,b) \neq (\zero,\zero)$. If $(a,b) = (\zero,\zero)$ then $\ndiv(b,a)$ as needed. Suppose then that $(a,b) \neq (\zero,\zero)$. If $a = \zero$, then $\ndiv(b,a)$ as claimed. Suppose $a \neq \zero$. Now let $d = \ngcd(a,b)$; note that $d \neq \zero$. Say $b = \ntimes(k,d)$. Now
 $$\begin{eqnarray*}
  &   & \ntimes(a,\next(\zero)) \\
@@ -272,9 +265,9 @@ $$\begin{eqnarray*}
  & = & \ntimes(a,k).
 \end{eqnarray*}$$
 Since $a \neq \zero$, we have $k = \next(\zero)$, and thus $b = \ngcd(a,b)$. Hence $\ndiv(b,a)$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_lcm_div :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
@@ -282,17 +275,16 @@ Since $a \neq \zero$, we have $k = \next(\zero)$, and thus $b = \ngcd(a,b)$. Hen
 >   testName "lcm(a,b) == a if and only if ndiv(b,a)" $
 >   \a b -> eq (eq a (lcm a b)) (div b a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\ntimes$ distributes over $\nlcm$.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c \in \nats$. Then we have $$\nlcm(\ntimes(c,a),ntimes(c,b)) = \ntimes(c,\nlcm(a,b)).$$
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We consider two cases: either $c = \zero$ or $c \neq \zero$. If $c = \zero$ we have
 $$\begin{eqnarray*}
  &   & \nlcm(\ntimes(c,a),\ntimes(c,b)) \\
@@ -311,9 +303,9 @@ $$\begin{eqnarray*}
  & = & \ntimes(c,\nlcm(a,b))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_lcm_distributive_times :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> n -> Bool)
@@ -321,17 +313,16 @@ as claimed.
 >   testName "lcm(times(c,a),times(c,b)) == times(c,lcm(a,b))" $
 >   \a b c -> eq (lcm (times c a) (times c b)) (times c (lcm a b))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\nlcm$ is compatible with $\ndiv$.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c \in \nats$. If $\ndiv(a,b)$, then $\ndiv(\nlcm(a,c),\nlcm(b,c))$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We have
 $$\begin{eqnarray*}
  &   & \nlcm(\nlcm(a,c),\nlcm(b,c)) \\
@@ -339,9 +330,9 @@ $$\begin{eqnarray*}
  & = & \nlcm(b,c) \\
 \end{eqnarray*}$$
 so that $\ndiv(\nlcm(a,c),\nlcm(b,c))$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_lcm_div_compatible :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> n -> Bool)
@@ -351,20 +342,19 @@ so that $\ndiv(\nlcm(a,c),\nlcm(b,c))$ as claimed.
 >     then div (lcm a c) (lcm b c)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Finally, $\ngcd$ and $\nlcm$ distribute over each other.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c \in \nats$. Then we have the following.
 
 1. $\ngcd(a,\nlcm(b,c)) = \nlcm(\ngcd(a,b),\ngcd(a,c))$.
 2. $\nlcm(a,\ngcd(b,c)) = \ngcd(\nlcm(a,b),\nlcm(a,c))$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 The proofs of these two results will not be painful, but they are a little tedious, especially with the notation we're using for arithmetic. So for this proof -- and this proof only! -- I'll make two concessions to readability. Because $\ngcd$ is associative, there is no ambiguity in an expression like $$\ngcd(a,b,c).$$ Also, we will denote $\ntimes(a,b)$ by juxtaposition (like we're used to anyway, but have been avoiding).
 
 1. First suppose $a = \zero$; note that
@@ -482,9 +472,9 @@ $$\begin{eqnarray*}
  & = & \nlcm(a,\ngcd(b,c))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_lcm_distributive_gcd :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> n -> Bool)
@@ -499,8 +489,8 @@ as claimed.
 >   testName "gcd(lcm(c,a),lcm(c,b)) == lcm(c,gcd(a,b))" $
 >   \a b c -> eq (gcd (lcm c a) (lcm c b)) (lcm c (gcd a b))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

@@ -40,8 +40,7 @@ slug: select
 
 Today we'll define a function, $\select$, which takes a natural number $n$ and a list $x$ and constructs the list of all length $n$ sublists of $x$. The signature of $\select$ should be $$\nats \times \lists{A} \rightarrow \lists{\lists{A}},$$ which matches several of our recursion operators. After trying a few, we'll use double bailout fold.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set. Define $\delta : \nats \rightarrow \lists{\lists{A}}$ by $$\delta(n) = \bif{\iszero(n)}{\cons(\nil,\nil)}{\nil},$$ $\beta : A \times \lists{A} \times \nats \rightarrow \bool$ by $$\beta(a,x,n) = \iszero(n),$$ $\psi : A \times \lists{A} \times \nats \rightarrow \lists{\lists{A}}$ by $$\psi(a,x,n) = \cons(\nil,\nil),$$ and $\chi : A \times \lists{A} \times \nats \times \lists{\lists{A}} \times \lists{\lists{A}} \rightarrow \lists{\lists{A}}$ by $$\chi(a,x,n,u,v) = \cat(\map(\cons(a,-))(v),u).$$ Now define $\select : \nats \times \lists{A} \rightarrow \lists{\lists{A}}$ by $$\select(n,x) = \dbfoldr{\delta}{\beta}{\prev}{\psi}{\chi}(x,n).$$
 
 In Haskell:
@@ -54,13 +53,12 @@ In Haskell:
 >     psi _ _ _ = cons nil nil
 >     chi a _ _ u v = cat (map (cons a) v) u
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\select$ is defined as a double bailout fold, it can be characterized as the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set. $\select$ is the unique map $f : \nats \times \lists{A} \rightarrow \lists{\lists{A}}$ satisfying the following equations for all $n \in \nats$, $a \in A$, and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(n,\nil) = \bif{\iszero(n)}{\cons(\nil,\nil)}{\nil} \\
@@ -68,9 +66,9 @@ $$\left\{\begin{array}{l}
 \end{array}\right.$$
 
 In particular, we have $$\select(\zero,\cons(a,x)) = \cons(\nil,\nil)$$ and $$\select(\next(n),\cons(a,x)) = \cat(\map(\cons(a,-))(\select(n,x)),\select(\next(n),x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_select_nil :: (List t, Equal a, Natural n, Equal n, Equal (t (t a)))
 >   => t a -> n -> Test (n -> Bool)
@@ -89,17 +87,16 @@ In particular, we have $$\select(\zero,\cons(a,x)) = \cons(\nil,\nil)$$ and $$\s
 >     (select n (cons a x))
 >     (if isZero n then cons nil nil else cat (map (cons a) (select (prev n) x)) (select n x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 We can directly compute $\select(\zero,-)$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$, we have $$\select(\zero,x) = \cons(\nil,\nil).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 If $x = \nil$, then
 $$\begin{eqnarray*}
  &   & \select(\zero,\nil) \\
@@ -113,9 +110,9 @@ $$\begin{eqnarray*}
  & = & \cons(\nil,\nil)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_select_zero :: (List t, Equal a, Natural n, Equal n, Equal (t (t a)))
 >   => t a -> n -> Test (t a -> Bool)
@@ -123,17 +120,16 @@ as claimed.
 >   testName "select(zero,x) == cons(nil,nil)" $
 >   \x -> eq (select (zero `withTypeOf` n) x) (cons nil nil)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 We can directly compute $\select(\next(\zero),-)$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$, we have $$\select(\next(\zero),x) = \map(\cons(-,\nil))(x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \select(\next(\zero),x) \\
@@ -157,9 +153,9 @@ $$\begin{eqnarray*}
  & = & \map(\cons(-,\nil))(\cons(a,x))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_select_one :: (List t, Equal a, Natural n, Equal n, Equal (t (t a)))
 >   => t a -> n -> Test (t a -> Bool)
@@ -169,17 +165,16 @@ as needed.
 >     (select ((next zero) `withTypeOf` n) x)
 >     (map (\a -> cons a nil) x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\select$ interacts with $\length$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$. For all $k \in \nats$, we have $$\length(\select(k,x)) = \nchoose(\length(x),k).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \length(\select(k,x)) \\
@@ -213,9 +208,9 @@ $$\begin{eqnarray*}
  & = & \nchoose(\length(\cons(a,x)),k)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_select_length :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> Bool)
@@ -223,17 +218,16 @@ as needed.
 >   testName "length(select(k,x)) == choose(length(x),k)" $
 >   \k x -> eq (length (select k x)) (choose (length x) k)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\select$ is compatible with $\sublist$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set and let $x,y \in \lists{A}$. If $\sublist(x,y) = \btrue$, then $\sublist(\select(k,x),\select(k,y)) = \btrue$ for all $k \in \nats$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $k$. For the base case $k = \zero$, suppose $\sublist(x,y) = \btrue$. Now
 $$\begin{eqnarray*}
  &   & \sublist(\select(k,x),\select(k,y)) \\
@@ -287,9 +281,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_select_sublist :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> t a -> Bool)
@@ -299,17 +293,16 @@ as needed.
 >     then sublist (select k x) (select k y)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Selections are sublists.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$ and $k \in \nats$. Then $$\all(\sublist(-,x),\select(k,x)) = \btrue.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We consider two possibilities for $k$. If $k = \zero$, we have
 $$\begin{eqnarray*}
  &   & \all(\sublist(-,x),\select(k,x)) \\
@@ -354,9 +347,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_select_all_sublist :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> Bool)
@@ -364,17 +357,16 @@ as needed.
 >   testName "all(sublist(-,x),select(k,x))" $
 >   \k x -> all (\u -> sublist u x) (select k x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Selections have fixed length.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $x \in \lists{A}$ and $k \in \nats$. Then $$\all(\beq(k,\length(-)),\select(k,x)) = \btrue.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We consider two possibilities for $k$. If $k = \zero$, we have
 $$\begin{eqnarray*}
  &   & \all(\beq(k,\length(-)),\select(k,x)) \\
@@ -408,9 +400,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_select_all_length :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> Bool)
@@ -418,8 +410,8 @@ as needed.
 >   testName "all(eq(k,length(-)),select(k,x))" $
 >   \k x -> all (\u -> eq k (length u)) (select k x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

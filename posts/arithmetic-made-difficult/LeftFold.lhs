@@ -23,12 +23,11 @@ slug: foldl
 
 Our goal today is to get as close as possible to a tail-recursive implementation of $\foldr{\ast}{\ast}$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets, with $f : B \times A \rightarrow B$. There is a unique map $\Theta : B \times \lists{A} \rightarrow B$ such that $$\Theta(e,\nil) = e$$ and $$\Theta(e,\cons(a,x)) = \Theta(f(e,a),x).$$ We denote this map by $\foldl{f}$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 First we show existence. Define $\psi : A \times \lists{A}^B \rightarrow \lists{A}^B$ by $$\psi(a,g)(b) = g(f(b,a)),$$ and define $\Theta : B \times \lists{A} \rightarrow B$ by $$\Theta(b,x) = \foldr{\id}{\psi}(x)(b).$$ Now
 $$\begin{eqnarray*}
  &   & \Theta(e,\nil) \\
@@ -60,8 +59,8 @@ $$\begin{eqnarray*}
  & = & \Theta(e,\cons(a,x))
 \end{eqnarray*}$$
 as needed.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Implementation

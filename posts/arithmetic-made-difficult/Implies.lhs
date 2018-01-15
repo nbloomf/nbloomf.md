@@ -21,8 +21,7 @@ slug: implies
 
 Implication on booleans:
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 We define $\bimpl : \bool \times \bool \rightarrow \bool$ by $$\bimpl(p,q) = \bor(\bnot(p),q).$$
 
 In Haskell:
@@ -30,13 +29,12 @@ In Haskell:
 > impl :: Bool -> Bool -> Bool
 > impl p q = ifThenElse p (ifThenElse q true false) true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And implication has its own properties.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 For all $p,q,r,s \in \bool$ we have the following.
 
 1. $\bimpl(\bfalse,p) = \btrue$.
@@ -46,9 +44,9 @@ For all $p,q,r,s \in \bool$ we have the following.
 5. $\bimpl(p,\bimpl(q,r)) = \bimpl(q,\bimpl(p,r))$.
 6. $\bimpl(\bimpl(p,q),\bimpl(\bimpl(q,r),\bimpl(p,r)))$.
 7. $\bimpl(\bimpl(p,\bimpl(q,r)),\bimpl(\bimpl(p,q),\bimpl(p,r)))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We have
 $$\begin{eqnarray*}
  &   & \bimpl(\bfalse,p) \\
@@ -146,9 +144,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_impl_false :: Test (Bool -> Bool)
 > _test_impl_false =
@@ -191,17 +189,16 @@ as claimed.
 >   testName "impl(impl(p,impl(q,r)),impl(impl(p,q),impl(p,r)))" $
 >   \p q r -> impl (impl p (impl q r)) (impl (impl p q) (impl p r))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\bimpl$ interacts with $\band$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 For all $p,q,r,s \in \bool$, if $\bimpl(p,r)$ and $\bimpl(q,s)$, then $\bimpl(\band(p,q),\band(r,s))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 If $p = \bfalse$, then
 $$\begin{eqnarray*}
  &   & \bimpl(\band(p,q),\band(r,s)) \\
@@ -224,9 +221,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_impl_and_compatible :: Test (Bool -> Bool -> Bool -> Bool -> Bool)
 > _test_impl_and_compatible =
@@ -235,8 +232,8 @@ as claimed.
 >     then impl (and p q) (and r s)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 

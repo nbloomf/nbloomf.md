@@ -57,8 +57,7 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 With this in mind we define $\elt$ like so.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set and let $a \in A$. Define $\varphi : A \rightarrow \bool \rightarrow \bool$ by $$\varphi(b,p) = \bif{\beq(a,b)}{\btrue}{p}.$$ Now define $\elt : A \rightarrow \bool^{\lists{A}}$ by $$\elt(a)(x) = \foldr{\bfalse}{\varphi}(x).$$
 
 In Haskell:
@@ -68,21 +67,20 @@ In Haskell:
 >   where
 >     phi b p = if eq a b then true else p
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\elt$ is defined as a $\foldr{\ast}{\ast}$, it can be characterized as the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set with $a \in A$. $\elt$ is the unique map $f : \lists{A} \rightarrow \bool$ satisfying the following equations for all $b \in A$ and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(\nil) = \bfalse \\
  f(\cons(b,x)) = \bif{\beq(a,b)}{\btrue}{f(x)}
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_elt_nil :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> Bool)
@@ -99,17 +97,16 @@ $$\left\{\begin{array}{l}
 >     (elt a (cons b x))
 >     (if eq a b then true else elt a x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Special cases.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a,b \in A$, we have $$\elt(a,\cons(b,\nil)) = \beq(a,b).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \elt(a,\cons(b,\nil)) \\
@@ -118,9 +115,9 @@ $$\begin{eqnarray*}
  & = & \beq(a,b)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_elt_single :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> a -> Bool)
@@ -130,17 +127,16 @@ as claimed.
 >     (elt a (cons b (nil `withTypeOf` t)))
 >     (eq a b)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\elt$ interacts with $\cat$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x,y \in \lists{A}$ we have $$\elt(a)(\cat(x,y)) = \bor(\elt(a)(x),\elt(a)(y)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \elt(a)(\cat(x,y)) \\
@@ -171,9 +167,9 @@ $$\begin{eqnarray*}
  & = & \bor(\elt(a)(\cons(b,x)),\elt(a)(y))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_elt_cat :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> t a -> Bool)
@@ -181,17 +177,16 @@ as claimed.
 >   testName "elt(a)(cat(x,y)) == or(elt(a)(x),elt(a)(y))" $
 >   \a x y -> eq (elt a (cat x y)) (or (elt a x) (elt a y))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\elt$ interacts with $\snoc$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set, with $a \in A$. For all $b \in A$ and $x \in \lists{A}$ we have $$\elt(a)(\snoc(b,x)) = \bif{\beq(a,b)}{\btrue}{\elt(a)(x)}.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \elt(a)(\snoc(b,\nil)) \\
@@ -208,9 +203,9 @@ $$\begin{eqnarray*}
  & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(\cons(c,x))}
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_elt_snoc :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> a -> t a -> Bool)
@@ -218,17 +213,16 @@ as needed.
 >   testName "elt(a)(snoc(b,x)) == if(eq(a,b),true,elt(a)(x))" $
 >   \a b x -> eq (elt a (snoc b x)) (if eq a b then true else elt a x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\elt$ interacts with $\rev$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$ we have $$\elt(a)(x) = \elt(a)(\rev(x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \elt(a)(\rev(x)) \\
@@ -245,9 +239,9 @@ $$\begin{eqnarray*}
  & = & \elt(a)(\cons(b,x))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_elt_rev :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
@@ -255,17 +249,16 @@ as claimed.
 >   testName "elt(a)(x) == elt(a)(rev(x))" $
 >   \a x -> eq (elt a x) (elt a (rev x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\elt$ interacts with $\map(f)$ when $f$ is injective.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets and suppose $f : A \rightarrow B$ is injective. Then for all $a \in A$ and $x \in \lists{A}$ we have $$\elt(a)(x) = \elt(f(a),\map(f)(x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$ we have
 $$\begin{eqnarray*}
  &   & \elt(a)(\nil) \\
@@ -282,20 +275,19 @@ $$\begin{eqnarray*}
  & = & \elt(f(a),\map(f)(\cons(b,x)))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 As a special case, the items in $\tails(x)$ and $\inits(x)$ are precisely the suffixes and prefixes of $x$, respectively.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $x,y \in \lists{A}$. We have the following.
 
 1. $\elt(y,\tails(x)) = \suffix(y,x)$.
 2. $\elt(y,\inits(x)) = \prefix(y,x)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by list induction on $x$. For the base case $x = \nil$, we consider two cases. If $y = \nil$ we have
 $$\begin{eqnarray*}
  &   & \elt(y,\tails(x)) \\
@@ -350,9 +342,9 @@ $$\begin{eqnarray*}
  & = & \prefix(y,x)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_elt_tails :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> t a -> Bool)
@@ -367,17 +359,16 @@ as claimed.
 >   testName "elt(y,inits(x)) == prefix(y,x)" $
 >   \x y -> eq (elt y (inits x)) (prefix y x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 If we filter $a$ out of a list, it is no longer an item there.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set, with $a \in A$ and $x \in \lists{A}$. Then $$\elt(a)(\filter(\bnot(\beq(a,-)),x)) = \bfalse.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \elt(a)(\filter(\bnot(\beq(a,-)),\nil)) \\
@@ -398,9 +389,9 @@ $$\begin{eqnarray*}
  & = & \bfalse
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_elt_filter_eq :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
@@ -408,17 +399,16 @@ as claimed.
 >   testName "elt(a)(filter(eq(a,-),x)) == false" $
 >   \a x -> eq (elt a (filter (not . eq a) x)) false
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\elt$ is an $\any$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set, with $a \in A$ and $x \in \lists{A}$. Then $$\elt(a)(x) = \any(\beq(a,-),x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \elt(a)(x) \\
@@ -449,9 +439,9 @@ $$\begin{eqnarray*}
  & = & \any(\beq(a,-),\cons(b,x))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_elt_any :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
@@ -459,21 +449,20 @@ as needed.
 >   testName "elt(a)(x) == any(eq(a,-))(x)" $
 >   \a x -> eq (elt a x) (any (eq a) x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\elt$ can detect when two lists are distinct.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set, with $a \in A$ and $x,y \in \lists{A}$. If $\elt(a)(x) \neq \elt(a)(y)$, then $x \neq y$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 The contrapositive of this statement is trivial and kind of silly looking: If $x = y$, then $\elt(a)(x) = \elt(a)(y)$. But notice that this theorem gives us a simple way to detect when two lists are distinct from each other.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_elt_distinct :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> t a -> Bool)
@@ -483,17 +472,16 @@ The contrapositive of this statement is trivial and kind of silly looking: If $x
 >     then not (eq x y)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\elt$ interacts with $\map(f)$ when $f$ is injective.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets with $f : A \rightarrow B$ injective. For all $a \in A$ and $x \in  \lists{A}$, we have $$\elt(a,x) = \elt(f(a),\map(f)(x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \elt(a,\nil) \\
@@ -510,17 +498,16 @@ $$\begin{eqnarray*}
  & = & \elt(f(a),\map(f)(\cons(b,x)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\elt$ interacts with $\range$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $a,b,c \in \nats$. If $\nleq(a,c)$, then $$\elt(a,\range(\next(c),b)) = \bfalse.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $b$. If $b = \zero$, we have
 $$\begin{eqnarray*}
  &   & \elt(a,\range(\next(c),\zero)) \\
@@ -536,9 +523,9 @@ $$\begin{eqnarray*}
  & = & \bfalse
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_elt_range :: (List t, Natural n, Equal n)
 >   => t a -> n -> Test (t n -> n -> n -> n -> Bool)
@@ -548,8 +535,8 @@ as needed.
 >     then eq (elt a ((range (next c) b) `withTypeOf` t)) false
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

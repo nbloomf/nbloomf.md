@@ -24,23 +24,21 @@ We've seen an alternative induction principle -- strong induction -- which allow
 
 Today we'll establish a recursion pattern analogous to strong induction. 
 
-<div class="result">
-<div class="dfn"><p>
+:::::: definition ::
 Let $(A,\varepsilon,\varphi)$ be an iterative set. A map $\eta : A \rightarrow \nats$ is called an *iterative norm* if the following hold for all $a \in A$.
 
 1. If $\eta(a) = \zero$, then $\eta(\varphi(a)) = \zero$.
 2. If $\eta(a) = \next(n)$, then $\nleq(\eta(\varphi(a)),n)$.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Roughly speaking, an iterative norm is a measure of "size" on $A$ with the property that this size is strictly decreasing under the action of $\varphi$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $(A,\varepsilon,\varphi)$ be an iterative set, with $\eta : A \rightarrow \nats$ an iterative norm. Let $B$ be a set, with $\chi : A \rightarrow B$. Then there is a unique map $\Theta : A \rightarrow B$ such that, for all $a \in A$, $$\Theta(a) = \bif{\iszero(\eta(a))}{\chi(a)}{\Theta(\varphi(a))}.$$ This $\Theta$ will be denoted $\normrec{\varphi}{\eta}{\chi}$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We define $\beta : \nats \times A \rightarrow \bool$ by $$\beta(k,a) = \iszero(\eta(a)),$$ define $\psi : \nats \times A \rightarrow B$ by $$\psi(k,a) = \chi(a),$$ and define $\omega : \nats \times A \rightarrow A$ by $$\omega(k,a) = \varphi(a),$$ and $\Omega : \nats \times A \rightarrow B$ by $$\Omega = \bailrec{\chi}{\beta}{\psi}{\omega}.$$ As a lemma, we need the following intermediate result: for all $a \in A$ and $k \in \nats$, we have $$\Omega(\nplus(\eta(\varphi(a)),k),\varphi(a)) = \Omega(\eta(\varphi(a)),\varphi(a)).$$ We proceed by double induction, starting with strong induction on $\eta(\varphi(a))$. For the base case $\eta(\varphi(a)) = \zero$, we proceed by induction on $k$. For the base case $k = \zero$, we have
 $$\begin{eqnarray*}
  &   & \Omega(\nplus(\eta(\varphi(a)),k),\varphi(a)) \\
@@ -111,8 +109,8 @@ $$\begin{eqnarray*}
 as claimed.
 
 We show that $\Theta$ is unique by strong induction. Suppose $\Pi$ is another function $A \rightarrow B$ such that $\Pi(a) = \chi(a)$ if $\eta(a) = \zero$ and $\Pi(a) = \Pi(\varphi(a))$ otherwise. For the base case, if $\eta(a) = \zero$, we have $$\Pi(a) = \chi(a) = \Theta(a).$$ For the inductive step, suppose $\Pi(a) = \Theta(a)$ whenever $\nleq(\eta(a),m)$ for some $m$, and suppose $\eta(a) = \next(m)$. Then $\nleq(\eta(\varphi(a)),m)$ and $$\Pi(a) = \Pi(\varphi(a)) = \Theta(\varphi(a)) = \Theta(a)$$ as needed.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Implementation
 --------------
@@ -140,9 +138,8 @@ Or by pattern matching, using the universal property.
 
 As with our other recursion operators, $\normrec{\varphi}{\eta}{\chi}$ is the unique solution to a system of functional equations. Specifically, we have the following.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $A$ and $B$ be sets, with $\varphi : A \rightarrow A$, $\eta : A \rightarrow \nats$ an iterative norm on $(A,\varepsilon,\varphi)$ for some $\varepsilon$, and $\chi : A \rightarrow B$. Then $\normrec{\varphi}{\eta}{\chi}$ is the unique solution $f : A \rightarrow B$ to the following functional equation for all $a \in A$:
 $$f(a) = \bif{\iszero(\eta(a))}{\chi(a)}{f(\varphi(a))}.$$
-</div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::

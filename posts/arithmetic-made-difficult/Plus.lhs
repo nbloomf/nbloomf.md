@@ -34,8 +34,7 @@ $$\begin{eqnarray*}
 
 With this in mind, we define a binary operation $\nplus$ on $\nats$ as follows.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $\mu : \nats \times \nats \times \nats \rightarrow \nats$ be given by $\mu(k,a,b) = \next(b)$. We then define $\nplus : \nats \times \nats \rightarrow \nats$ by $$\nplus = \simprec{\id}{\mu}.$$
 
 In Haskell:
@@ -44,17 +43,15 @@ In Haskell:
 > plus = simpleRec id mu
 >   where mu _ _ b = next b
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\nplus$ is defined in terms of simple recursion, it is the unique solution to a set of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 $\nplus$ is the unique map $f : \nats \times \nats \rightarrow \nats$ with the property that for all $a,b \in \nats$, we have $$\left\{ \begin{array}{l} f(\zero,b) = b \\ f(\next(a),b) = \next(f(a,b)). \end{array} \right.$$
-</p></div>
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_plus_zero_left :: (Natural n, Equal n)
 >   => n -> (n -> n -> n) -> Test (n -> Bool)
@@ -69,20 +66,18 @@ $\nplus$ is the unique map $f : \nats \times \nats \rightarrow \nats$ with the p
 >   testName "f(next(a),b) == next(f(a,b))" $
 >   \a b -> eq (f (next a) b) (next (f a b))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Next we establish a version of the universal property of $\nplus$ with the arguments reversed.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 The following hold for all natural numbers $a$ and $b$.
 
 1. $\nplus(a,\zero) = a$.
 2. $\nplus(a,\next(b)) = \next(\nplus(a,b))$.
-</div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by induction on $a$. For the base case, we have $\nplus(\zero,\zero) = \zero$ by the universal property of $\nplus$. For the inductive step, suppose we have $\nplus(a,\zero) = a$ for some $a$. Then
 $$\begin{eqnarray*}
  &   & \nplus(\next(a),\zero) \\
@@ -98,9 +93,9 @@ $$\begin{eqnarray*}
  & = & \next(\nplus(\next(a),b))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_plus_zero_right :: (Natural n, Equal n)
 >   => n -> (n -> n -> n) -> Test (n -> Bool)
@@ -115,20 +110,18 @@ as needed.
 >   testName "next(plus(a,b)) == plus(a,next(b))" $
 >   \a b -> eq (f a (next b)) (next (f a b))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\nplus$ is associative and commutative.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 The following hold for all natural numbers $a$, $b$, and $c$.
 
 1. $\nplus(\nplus(a,b),c) = \nplus(a,\nplus(b,c))$.
 2. $\nplus(a,b) = \nplus(b,a)$.
-</div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We will show this by induction on $a$. For the base case, note that $$\nplus(\nplus(\zero,b),c) = \nplus(b,c) = \nplus(\zero,\nplus(b,c)).$$ For the inductive step, suppose the result holds for some $a$. Then
 $$\begin{eqnarray*}
  &   & \nplus(\nplus(\next(a),b),c) \\
@@ -146,9 +139,9 @@ $$\begin{eqnarray*}
  & = & \nplus(b,\next(a))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_plus_associative :: (Natural n, Equal n)
 >   => n -> (n -> n -> n) -> Test (n -> n -> n -> Bool)
@@ -163,25 +156,23 @@ as needed.
 >   testName "plus(a,b) == plus(b,a)" $
 >   \a b -> eq (f a b) (f b a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And $\nplus$ is cancellative.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 The following hold for all natural numbers $a$, $b$, and $c$.
 
 1. If $\nplus(c,a) = \nplus(c,b)$ then $a = b$.
 2. If $\nplus(a,c) = \nplus(b,c)$ then $a = b$.
-</div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by induction on $c$. For the base case, note that if $\nplus(\zero,a) = \nplus(\zero,b)$, then we have $$a = \nplus(\zero,a) = \nplus(\zero,b) = b.$$ For the inductive step, suppose the result holds for some $c$. Now if $$\nplus(\next(c),a)) = \nplus(\next(c),b),$$ then $$\next(\nplus(c,a)) = \next(\nplus(c,b))$$ so that $$\nplus(c,a) = \nplus(c,b)$$ and thus $a = b$ as needed.
 2. If $$\nplus(a,c) = \nplus(b,c),$$ then $$\nplus(c,a) = \nplus(c,b),$$ and so $a = b$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_plus_cancellative_left :: (Natural n, Equal n)
 >   => n -> (n -> n -> n) -> Test (n -> n -> n -> Bool)
@@ -200,8 +191,8 @@ The following hold for all natural numbers $a$, $b$, and $c$.
 >     then eq a b
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Of course we will eventually prefer to say $a + b$ instead of $\nplus(a,b)$. But we'll avoid the more familiar notation until we're convinced that $\nplus$ really does act just like the usual $+$, since familiar notation can easily lull us into using theorems we haven't proven yet.
 

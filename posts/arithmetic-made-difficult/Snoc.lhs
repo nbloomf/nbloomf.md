@@ -29,8 +29,7 @@ The $\cons$ function attaches a new item to the "beginning" of a list; we want a
 
 First let's tackle adding items to the end of a list; traditionally this operator is called $\snoc$ as a bad pun on "reverse $\cons$". Now the signature of $\snoc$ should be something like $$\snoc : A \times \lists{A} \rightarrow \lists{A},$$ and $\foldr{e}{\varphi}$ can be used to build a map $\lists{A} \rightarrow \lists{A}$, provided $e$ is in $\lists{A}$ and $\varphi : A \times \lists{A} \rightarrow \lists{A}$. Considering the behavior we want $\snoc$ to have, we define the following.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set. We now define a map $\snoc : A \times \lists{A} \rightarrow \lists{A}$ by $$\snoc(a,x) = \foldr{\cons(a,\nil)}{\cons}(x).$$
 
 In Haskell:
@@ -38,21 +37,20 @@ In Haskell:
 > snoc :: (List t) => a -> t a -> t a
 > snoc a = foldr (cons a nil) cons
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Because $\snoc$ is defined directly as a fold, it is the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set. Then $\snoc$ is the unique function $f : A \times \lists{A} \rightarrow \lists{A}$ with the property that for all $a,b \in A$ and $x \in \lists{A}$ we have
 $$\left\{ \begin{array}{ll}
  f(a,\nil) = \cons(a,\nil) \\
  f(a,\cons(b,x)) = \cons(b,f(a,x)).
 \end{array} \right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_snoc_nil :: (List t, Equal (t a))
 >   => t a -> Test (a -> Bool)
@@ -69,17 +67,16 @@ $$\left\{ \begin{array}{ll}
 >   testName "snoc(a,cons(b,x)) == cons(b,snoc(a,x))" $
 >   \a b x -> eq (snoc a (cons b x)) (cons b (snoc a x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now $\snoc$ interacts with $\foldr{\ast}{\ast}$.
 
-<div class="result">
 <div class="lemma"><p>
 Let $A$ and $B$ be sets with $e \in B$ and $\varphi : A \times B \rightarrow B$. Then for all $a \in A$ and $x \in \lists{A}$ we have $$\foldr{e}{\varphi}(\snoc(a,x)) = \foldr{\varphi(a,e)}{\varphi}(x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \foldr{e}{\varphi}(\snoc(a,\nil)) \\
@@ -97,17 +94,16 @@ $$\begin{eqnarray*}
  & = & \foldr{\varphi(a,e)}{\varphi}(\cons(b,x))
 \end{eqnarray*}$$
 as needed.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 We can perform case analysis on lists with $\snoc$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set and let $x \in \lists{A}$. Then either $x = \nil$ or $x = \snoc(a,w)$ for some $w \in \lists{A}$ and $a \in A$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, the conclusion holds trivially. For the inductive step, suppose the conclusion holds for some $x$ and let $a \in A$. Now $\cons(a,x) \neq \nil$. We have two cases for $x$; if $x = \nil$, then $$\cons(a,x) = \cons(a,\nil) = \snoc(a,\nil)$$ as needed. Suppose instead that $x \neq \nil$; by the inductive hypothesis we have $x = \snoc(b,w)$ for some $b \in A$ and $w \in \lists{A}$. Then we have
 $$\begin{eqnarray*}
  &   & \cons(a,x) \\
@@ -115,17 +111,16 @@ $$\begin{eqnarray*}
  & = & \snoc(b,\cons(a,w))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Also, $\snoc$ interacts with $\beq$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $a,b \in A$ and $x,y \in \lists{A}$. Then $$\beq(\snoc(a,x),\snoc(b,y)) = \band(\beq(a,b),\beq(x,y)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case, set $x = \nil$. We consider two possibilities for $y$. If $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \beq(\snoc(a,x),\snoc(b,y)) \\
@@ -170,9 +165,9 @@ $$\begin{eqnarray*}
  & = & \band(\beq(a,b),\band(\cons(d,x),y))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_snoc_eq :: (List t, Equal (t a), Equal a, Boolean b, Equal b)
 >   => t a -> b -> Test (a -> a -> t a -> t a -> Bool)
@@ -182,17 +177,16 @@ as needed.
 >     ((eq (snoc a x) (snoc b y)) `withTypeOf` p)
 >     (and (eq a b) (eq x y))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now $\foldl{\ast}$ interacts with $\snoc$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 We have $$\foldl{\varphi}(e,\snoc(a,x)) = \varphi(\foldl{\varphi}(e,x),a).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case we have
 $$\begin{eqnarray*}
  &   & \foldl{\varphi}(e,\snoc(a,\nil)) \\
@@ -210,9 +204,9 @@ $$\begin{eqnarray*}
  & = & \varphi(\foldl{\varphi}(e,\cons(b,x)),a)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_snoc_foldl :: (List t, Equal (t a), Equal a)
 >   => t a -> Test ((a -> a -> a) -> a -> a -> t a -> Bool)
@@ -222,17 +216,16 @@ as needed.
 >     (foldl phi e (snoc a x))
 >     (phi (foldl phi e x) a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And $\snoc$ is not $\nil$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 We have $$\isnil(\snoc(a,x)) = \bfalse.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \isnil(\snoc(a,\nil)) \\
@@ -246,9 +239,9 @@ $$\begin{eqnarray*}
  & = & \bfalse
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_snoc_isnil :: (List t, Equal (t a), Equal a)
 >   => t a -> Test (a -> t a -> Bool)
@@ -256,20 +249,19 @@ as needed.
 >   testName "eq(isnil(snoc(a,x)),false)" $
 >   \a x -> eq (isNil (snoc a x)) false
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Many interesting list functions can be implemented in terms of either $\foldr{\ast}{\ast}$ or $\foldl{\ast}$, and depending on the function, one may be preferable over the other. A useful question to ask is this: under what circumstances is a given right fold equivalent to a left fold? The next result provides a sufficient condition.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets, and suppose $\varphi : A \times B \rightarrow B$ has the property that $$\varphi(a,\varphi(b,e)) = \varphi(b,\varphi(a,e))$$ for all $a,b \in A$ and $e \in B$. Letting $\psi : B \times A \rightarrow B$ be given by $\psi(b,a) = \varphi(a,b)$, we have the following.
 
 1. $\foldl{\psi}(e,\snoc(a,x)) = \foldl{\psi}(e,\cons(a,x))$.
 2. $\foldr{e}{\varphi}(x) = \foldl{\psi}(e,x)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by list induction on $x$. For the base case $x = \nil$ we have
 $$\begin{eqnarray*}
  &   & \foldl{\psi}(e,\cons(a,\nil)) \\
@@ -308,8 +300,8 @@ $$\begin{eqnarray*}
  & = & \foldl{\psi}(e,\cons(a,x))
 \end{eqnarray*}$$
 as needed.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

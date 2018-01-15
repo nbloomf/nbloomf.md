@@ -22,7 +22,6 @@ slug: disjoint-unions
 
 Dual to sets of tuples are disjoint sums.
 
-<div class="result">
 <div class="defn"><a name="dfn-disjoint-union" />
 Let $A$ and $B$ be sets. There is a set $A + B$ together with two functions $\lft : A \rightarrow A + B$ and $\rgt : B \rightarrow A + B$ having the property that if $X$ is a set and $\sigma : A \rightarrow X$ and $\tau : B \rightarrow X$ functions then there is a unique map $\Theta : A + B \rightarrow X$ such that $\Theta \circ \lft = \sigma$ and $\Theta \circ \rgt = \tau$. That is, there is a unique $\Theta$ such that the following diagram commutes.
 
@@ -36,21 +35,20 @@ X @= X @= X
 We will denote this unique $\Theta : A + B \rightarrow X$ by $\either(\sigma,\tau)$.
 
 More concretely, if $f : A + B \rightarrow X$ such that $f(\lft(a)) = \sigma(a)$ and $f(\rgt(b)) = \tau(b)$ for all $a \in A$ and $b \in B$, then $f = \either(\sigma,\tau)$.
-</div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now every element of $A+B$ is uniquely either of the form $\lft(a)$ or $\rgt(b)$ for some $a \in A$ or $b \in B$; this allows us to use case analysis on $A + B$. This set is sometimes called a *tagged union*, because it behaves like an ordinary set-theoretic union where elements are "tagged" with the set they came from (so, for instance, if $x \in A$ and $x \in B$, the $x$ from $A$ and the $x$ from $B$ are distinct in $A+B$).
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $A$ and $B$ be sets.
 
 1. If $x \in A + B$, then either $x = \lft(a)$ for some $a \in A$ or $x = \rgt(b)$ for some $b \in B$.
 2. There does not exist $x \in A + B$ such that $x = \lft(a)$ and $x = \rgt(b)$ for some $a \in A$ and $b \in B$.
 3. $\lft : A \rightarrow A+B$ and $\rgt : B \rightarrow A+B$ are injective.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Suppose to the contrary that there exists some $z \in A+B$ which is not of the form $\lft(a)$ or $\rgt(b)$ for any $a$ or $b$. Now consider the following two functions $A+B \rightarrow \bool$: $$\Psi(x) = \btrue$$ and
 $$\Omega(x) = \left\{\begin{array}{ll}
  \bfalse & \mathrm{if}\ x = z \\
@@ -102,8 +100,8 @@ $$\begin{eqnarray*}
  & = & f(v);
 \end{eqnarray*}$$
 thus $v = u$ as needed. A similar argument holds for $\rgt$.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 The previous results suggest that we can model $A + B$ with the Haskell type ``Either a b``, and the maps in the universal property like so.
 
@@ -125,12 +123,11 @@ The previous results suggest that we can model $A + B$ with the Haskell type ``E
 
 For example, $\id_{A + B}$ is an $\either$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Provided the types match up, we have $$\either(\lft,\rgt) = \id_{A + B}.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 If $a \in A$, we have
 $$\begin{eqnarray*}
  &   & (\id_{A + B} \circ \lft)(a) \\
@@ -144,9 +141,9 @@ $$\begin{eqnarray*}
  & = & \rgt(b).
 \end{eqnarray*}$$
 Since $\either(\lft,\rgt)$ is unique with this property, we have $\either(\lft,\rgt) = \id_{A+B}$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_either_lft_rgt :: (Equal a, Equal b)
 >   => a -> b -> Test (Either a b -> Bool)
@@ -154,12 +151,11 @@ Since $\either(\lft,\rgt)$ is unique with this property, we have $\either(\lft,\
 >   testName "either(lft,rgt) == id" $
 >   \x -> eq (either lft rgt x) x
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 We define $\uSwap$ on disjoint unions like so.
 
-<div class="result">
 <div class="defn"><a name="dfn-uswap" />
 Let $A$ and $B$ be sets. We define $\uSwap : A + B \rightarrow B + A$ by $$\uSwap = \either(\rgt,\lft).$$
 
@@ -168,21 +164,20 @@ In Haskell:
 > uswap :: Either a b -> Either b a
 > uswap = either rgt lft
 
-</div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now $\uSwap$ effectively toggles the tag of its argument.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets. Then we have the following for all $a \in A$ and $b \in B$.
 
 1. $\uSwap(\lft(a)) = \rgt(a)$.
 2. $\uSwap(\rgt(b)) = \lft(b)$.
 3. $\uSwap \circ \uSwap = \id_{A + B}$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Note that
 $$\begin{eqnarray*}
  &   & \uSwap(\lft(a)) \\
@@ -212,9 +207,9 @@ $$\begin{eqnarray*}
  & = & \rgt(b)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_uswap_lft :: (Equal a, Equal b)
 >   => a -> b -> Test (a -> Bool)
@@ -240,13 +235,12 @@ as needed.
 >   testName "swap(swap(x)) == x" $
 >   \x -> eq (uswap (uswap x)) x
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Next, the utility $\uPair$ facilitates defining functions from one disjoint union to another.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$, $B$, $U$, and $V$ be sets. We define $\uPair : U^A \times V^B \rightarrow (U + V)^{A + B}$ by $$\uPair(f,g) = \either(\lft \circ f, \rgt \circ g).$$
 
 In Haskell:
@@ -254,21 +248,20 @@ In Haskell:
 > upair :: (a -> u) -> (b -> v) -> Either a b -> Either u v
 > upair f g = either (lft . f) (rgt . g)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\uPair$ has some nice properties.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 For all $f$, $g$, $h$, $k$, $a$, and $b$ we have the following.
 
 1. $\uPair(f,g)(\lft(a)) = \lft(f(a))$.
 2. $\uPair(f,g)(\rgt(b)) = \rgt(g(b))$.
 2. $\uPair(f,g) \circ \uPair(h,k) = \uPair(f \circ h, g \circ k)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Note that
 $$\begin{eqnarray*}
  &   & \uPair(f,g)(\lft(a)) \\
@@ -302,9 +295,9 @@ $$\begin{eqnarray*}
  & = & \uPair(f \circ h, g \circ k)(\rgt(b))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_upair_lft :: (Equal a, Equal b)
 >   => a -> b -> Test ((a -> a) -> (b -> b) -> a -> Bool)
@@ -335,12 +328,11 @@ as needed.
 >       (upair f g (upair h k x))
 >       (upair (f . h) (g . k) x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Finally, note that although as sets $A + (B + C)$ and $(A + B) + C$ cannot possibly be equal to each other in general, they are naturally isomorphic via $\uAssocL$ and $\uAssocR$.
 
-<div class="result">
 <div class="defn">
 Let $A$, $B$, and $C$ be sets. We define $\uAssocL : A + (B + C) \rightarrow (A + B) + C$ by $$\uAssocL = \either(\lft \circ \lft, \either(\lft \circ \rgt, \rgt))$$ and define $\uAssocR : (A + B) + C \rightarrow A + (B + C)$ by $$\uAssocR = \either(\either(\lft,\rgt \circ \lft),\rgt \circ \rgt).$$
 
@@ -352,13 +344,12 @@ In Haskell:
 > uassocR :: Either (Either a b) c -> Either a (Either b c)
 > uassocR = either (either lft (rgt . lft)) (rgt . rgt)
 
-</div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now $\uAssocL$ and $\uAssocR$ have some nice properties.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 The following hold whenever everything has the appropriate type.
 
 1. $\uAssocL(\lft(a)) = \lft(\lft(a))$.
@@ -369,9 +360,9 @@ The following hold whenever everything has the appropriate type.
 6. $\uAssocR(\rgt(c)) = \rgt(\rgt(c))$.
 7. $\uAssocR \circ \uAssocL = \id_{A + (B + C)}$.
 8. $\uAssocL \circ \uAssocR = \id_{(A + B) + C}$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We have
 $$\begin{eqnarray*}
  &   & \uAssocL(\lft(a)) \\
@@ -472,9 +463,9 @@ $$\begin{eqnarray*}
  & = & x,
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_uassocL_lft :: (Equal a, Equal b, Equal c)
 >   => a -> b -> c -> Test (a -> Bool)
@@ -551,12 +542,11 @@ as needed.
 >   testName "uassocL . uassocR == id" $
 >   \x -> eq (uassocL (uassocR x)) x
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 We also define some helper functions which detect whether an element of $A + B$ is a $\lft$ or a $\rgt$.
 
-<div class="result">
 <div class="defn">
 Let $A$ and $B$ be sets. We define $\isLft : A + B \rightarrow \bool$ by $$\isLft = \either(\const(\btrue),\const(\bfalse))$$ and $\isRgt : A + B \rightarrow \bool$ by $$\isRgt = \either(\const(\bfalse),\const(\btrue)).$$
 
@@ -568,22 +558,21 @@ In Haskell:
 > isRgt :: Either a b -> Bool
 > isRgt = either (const false) (const true)
 
-</div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now $\isLft$ and $\isRgt$ have some nice properties.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets. Then we have the following for all $a \in A$ and $b \in B$.
 
 1. $\isLft(\lft(a)) = \btrue$.
 2. $\isLft(\rgt(b)) = \bfalse$.
 3. $\isRgt(\lft(a)) = \bfalse$.
 4. $\isRgt(\rgt(b)) = \btrue$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We have
 $$\begin{eqnarray*}
  &   & \isLft(\lft(a)) \\
@@ -616,9 +605,9 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_isLft_lft :: (Equal a, Equal b)
 >   => a -> b -> Test (a -> Bool)
@@ -647,8 +636,8 @@ as claimed.
 >   testName "isRgt(rgt(b)) == true" $
 >   \b -> eq (isRgt ((rgt b) `withTypeOf` (lft x))) true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

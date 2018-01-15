@@ -33,8 +33,7 @@ slug: tails-inits
 
 Today we'll construct the lists of all suffixes ($\tails$) and prefixes ($\inits$) of a list. Starting with $\tails$: this function should have a signature like $$\lists{A} \rightarrow \lists{\lists{A}}.$$
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set. Let $\gamma = \cons(\nil,\nil)$, and define $\sigma : A \times \lists{A} \times \lists{\lists{A}} \rightarrow \lists{\lists{A}}$ by $$\sigma(a,x,z) = \cons(\cons(a,x),z).$$ Now define $\tails : \lists{A} \rightarrow \lists{\lists{A}}$ by $$\tails = \cfoldr{\gamma}{\sigma}.$$
 
 In Haskell:
@@ -45,21 +44,20 @@ In Haskell:
 >     gamma = cons nil nil
 >     sigma a x z = cons (cons a x) z
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\tails$ is defined as a $\cfoldr{\ast}{\ast}$, it is the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set. $\tails$ is the unique map $f : \lists{A} \rightarrow \lists{\lists{A}}$ which satisfies the following equations for all $a \in A$ and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(\nil) = \cons(\nil,\nil) \\
  f(\cons(a,x)) = \cons(\cons(a,x),f(x))
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_tails_nil :: (List t, Equal a, Equal (t (t a)))
 >   => t a -> Test Bool
@@ -74,20 +72,19 @@ $$\left\{\begin{array}{l}
 >   testName "tails(cons(a,x)) == cons(cons(a,x),tails(x))" $
 >   \a x -> eq (tails (cons a x)) (cons (cons a x) (tails x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Special cases.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a sets. For all $a,b \in A$ we have the following.
 
 1. $\tails(\cons(a,\nil)) = \cons(\cons(a,\nil),\cons(\nil,\nil))$.
 2. $\tails(\cons(a,\cons(b,\nil))) = \cons(\cons(a,\cons(b,\nil)),\cons(\cons(b,\nil),\cons(\nil,\nil)))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Note that
 $$\begin{eqnarray*}
  &   & \tails(\cons(a,\nil)) \\
@@ -102,9 +99,9 @@ $$\begin{eqnarray*}
  & = & \cons(\cons(a,\cons(b,\nil)),\cons(\cons(a,\nil),\cons(\nil,\nil)))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_tails_single :: (List t, Equal a, Equal (t (t a)))
 >   => t a -> Test (a -> Bool)
@@ -123,17 +120,16 @@ as claimed.
 >     (tails (cons a (cons b (nil `withTypeOf` t))))
 >     (cons (cons a (cons b nil)) (cons (cons b nil) (cons nil nil)))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\tails$ interacts with $\map$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets with $f : A \rightarrow B$. For all $x \in \lists{A}$ we have $$\tails(\map(f)(x)) = \map(\map(f))(\tails(x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \tails(\map(f)(\nil)) \\
@@ -153,9 +149,9 @@ $$\begin{eqnarray*}
  & = & \map(\map(f))(\tails(\cons(a,x)))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_tails_map :: (List t, Equal a, Equal (t (t a)))
 >   => t a -> Test ((a -> a) -> t a -> Bool)
@@ -163,17 +159,16 @@ as claimed.
 >   testName "tails(map(f)(x)) == map(map(f))(tails(x))" $
 >   \f x -> eq (tails (map f x)) (map (map f) (tails x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\tails$ interacts with $\length$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ we have $$\length(\tails(x)) = \next(\length(x)).$$ In particular, $\tails{x} \neq \nil$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \length(\tails(\nil)) \\
@@ -190,9 +185,9 @@ $$\begin{eqnarray*}
  & = & \next(\length(\cons(a,x)))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_tails_length
 >   :: (List t, Equal a, Natural n, Equal n, Equal (t a))
@@ -201,17 +196,16 @@ as claimed.
 >   testName "length(tails(x)) == next(length(x))" $
 >   \x -> eq (length (tails x)) (next (length x `withTypeOf` n))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\tails$ interacts with $\snoc$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ and $a \in A$ we have $$\tails(\snoc(a,x)) = \snoc(\nil,\map(\snoc(a,-))(\tails(x))).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \snoc(\nil,\map(\snoc(a,-))(\tails(x))) \\
@@ -237,9 +231,9 @@ $$\begin{eqnarray*}
  & = & \snoc(\nil,\map(\snoc(a,-))(\tails(\cons(b,x))))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_tails_snoc :: (List t, Equal a, Equal (t (t a)))
 >   => t a -> Test (a -> t a -> Bool)
@@ -247,17 +241,16 @@ as needed.
 >   testName "tails(snoc(a,x)) == snoc(nil,map(snoc(a,-))(tails(x)))" $
 >   \a x -> eq (tails (snoc a x)) (snoc nil (map (snoc a) (tails x)))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And $\tails(x)$ consists of suffixes.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ we have $$\all(\suffix(-,x),\tails(x)) = \btrue.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \all(\suffix(-,x),\tails(x)) \\
@@ -277,9 +270,9 @@ $$\begin{eqnarray*}
  & = & \all(\suffix(-,\cons(a,x)),\tails(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_tails_suffix :: (List t, Equal a, Equal (t (t a)))
 >   => t a -> Test (t a -> Bool)
@@ -287,13 +280,12 @@ as needed.
 >   testName "all(suffix(_,x))(tails(x))" $
 >   \x -> all (\y -> suffix y x) (tails x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Next we'll define $\inits$ in terms of $\tails$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a sets. We define $\inits : \lists{A} \rightarrow \lists{\lists{A}}$ by $$\inits(x) = \rev(\map(\rev)(\tails(\rev(x)))).$$
 
 In Haskell:
@@ -301,19 +293,18 @@ In Haskell:
 > inits :: (List t) => t a -> t (t a)
 > inits = rev . map rev . tails . rev
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 (@@@)
 
 And likewise, $\tails$ has an expression in terms of $\inits$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$ we have $$\tails(x) = \map(\rev)(\rev(\inits(\rev(x)))).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \map(\rev) \circ \rev \circ \inits \circ \rev \\
@@ -324,9 +315,9 @@ $$\begin{eqnarray*}
  & = & \tails
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_inits_tails :: (List t, Equal a, Equal (t (t a)))
 >   => t a -> Test (t a -> Bool)
@@ -334,17 +325,16 @@ as needed.
 >   testName "tails(x) == rev(map(rev)(inits(rev(x))))" $
 >   \x -> eq (tails x) (map rev (rev (inits (rev x))))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\inits$ interacts with $\cons$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have $$\inits(\cons(a,x)) = \cons(\nil,\map(\cons(a,-))(\inits(x))).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \inits(\cons(a,x)) \\
@@ -361,9 +351,9 @@ $$\begin{eqnarray*}
  & = & \cons(\nil,\map(\cons(a,-))(\inits(x))) \\
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_inits_cons :: (List t, Equal a, Equal (t (t a)))
 >   => t a -> Test (a -> t a -> Bool)
@@ -371,17 +361,16 @@ as claimed.
 >   testName "inits(cons(a,x)) == cons(nil,map(cons(a,-))(inits(x)))" $
 >   \a x -> eq (inits (cons a x)) (cons nil (map (cons a) (inits x)))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\inits$ interacts with $\map$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets with $f : A \rightarrow B$. For all $x \in \lists{A}$, we have $$\inits(\map(f)(x)) = \map(\map(f))(\inits(x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \inits(\map(f)(x)) \\
@@ -395,9 +384,9 @@ $$\begin{eqnarray*}
  & = & \map(\map(f))(\inits(x))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_inits_map :: (List t, Equal a, Equal (t (t a)))
 >   => t a -> Test ((a -> a) -> t a -> Bool)
@@ -405,17 +394,16 @@ as claimed.
 >   testName "inits(map(f)(x)) == map(map(f))(inits(x))" $
 >   \f x -> eq (inits (map f x)) (map (map f) (inits x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\inits$ interacts with $\length$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x \in \lists{A}$, we have $$\length(\inits(x)) = \next(\length(x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \length(\inits(x)) \\
@@ -426,9 +414,9 @@ $$\begin{eqnarray*}
  & = & \next(\length(x))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_inits_length :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (t a -> Bool)
@@ -436,17 +424,16 @@ as claimed.
 >   testName "length(inits(x)) == next(length(x))" $
 >   \x -> eq (length (inits x)) (next (length x `withTypeOf` n))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\inits$ distributes over $\lcp$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x,y \in \lists{A}$, we have $$\inits(\lcp(x,y)) = \lcp(\inits(x),\inits(y)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have two possibilities for $y$. If $y = \nil$ we have
 $$\begin{eqnarray*}
  &   & \lcp(\inits(x),\inits(y))
@@ -495,9 +482,9 @@ $$\begin{eqnarray*}
  & = & \tails(\lcp(\cons(a,x),y))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_inits_lcp :: (List t, Equal a, Equal (t a), Equal (t (t a)))
 >   => t a -> Test (t a -> t a -> Bool)
@@ -505,17 +492,16 @@ as needed.
 >   testName "inits(lcp(x,y)) == lcp(inits(x),inits(y))" $
 >   \x y -> eq (inits (lcp x y)) (lcp (inits x) (inits y))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And $\tails$ distributes over $\lcs$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $x,y \in \lists{A}$, we have $$\tails(\lcs(x,y)) = \lcs(\tails(x),\tails(y)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that $\rev$ is injective, so that
 $$\begin{eqnarray*}
  &   & \tails(\lcs(x,y)) \\
@@ -528,9 +514,9 @@ $$\begin{eqnarray*}
  & = & \lcs(\tails(x),\tails(y))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_tails_lcs :: (List t, Equal a, Equal (t a), Equal (t (t a)))
 >   => t a -> Test (t a -> t a -> Bool)
@@ -538,8 +524,8 @@ as claimed.
 >   testName "tails(lcs(x,y)) == lcs(tails(x),tails(y))" $
 >   \x y -> eq (tails (lcs x y)) (lcs (tails x) (tails y))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

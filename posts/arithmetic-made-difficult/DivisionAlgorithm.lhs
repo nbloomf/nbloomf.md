@@ -36,8 +36,7 @@ Suppose now that $\Theta(a,b) = (q,r)$. Can we describe $\Theta(\next(a),b)$ in 
 
 Let's try it.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Define $\varphi : \nats \rightarrow \nats \times \nats$ by $\varphi(x) = (\zero,\zero)$, and define $\mu : \nats \times \nats \times (\nats \times \nats) \rightarrow \nats \times \nats$ by
 $$\mu(a,b,(q,r)) = \left\{\begin{array}{ll}
  (\next(q),\zero) & \mathrm{if}\ b = \next(r) \\
@@ -63,21 +62,20 @@ In Haskell:
 > rem :: (Natural n, Equal n) => n -> n -> n
 > rem a b = snd (divalg a b)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\ndivalg$ is defined in terms of simple recursion, it is the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 $\ndivalg$ is the unique map $f : \nats \times \nats \rightarrow \nats \times \nats$ with the property that for all $a,b \in \nats$, we have
 $$\left\{\begin{array}{l}
  f(\zero,b) = (\zero,\zero) \\
  f(\next(a),b) = \bif{\beq(b,\next(r))}{(\next(q),\zero)}{(q,\next(r))}\ \mathrm{where}\ (q,r) = f(q,r).
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_divalg_zero_left :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
@@ -111,20 +109,19 @@ $$\left\{\begin{array}{l}
 >   \a b -> let (_,r) = divalg a b in
 >   eq r (rem a b)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now $\ndivalg(a,b)$ acts like the division algorithm.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b \in \nats$ and let $(q,r) = \ndivalg(a,\next(b))$. Then we have the following.
 
 1. $a = \nplus(\ntimes(q,\next(b)),r)$.
 2. $\nleq(r,b) = \btrue$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $a$. For the base case, $a = \zero$, note that $$\ndivalg(\zero,\next(b)) = \varphi(\next(b)) = (\zero,\zero).$$ Now we have $$\nplus(\ntimes(\zero,\next(b)),\zero) = \zero = a$$ and $\nleq(\zero,\next(b))$ as needed.
 
 For the inductive step, suppose both conclusions hold for all $b$ for some $a$. Let $(q_1,r_1) = \ndivalg(a,b)$. Now we have $$\begin{eqnarray*} & & \ndivalg(\next(a),\next(b)) \\ & = & \mu(a,\next(b),\ndivalg(a,\next(b))) \\ & = & \mu(a,\next(b),(q_1,r_1)) \\ & = & Q. \end{eqnarray*}$$ We have two possibilities: either $\next(r_1) = \next(b)$ or $\next(r_1) \neq \next(b)$.
@@ -138,9 +135,9 @@ $$\begin{eqnarray*}
  & = & \next(a).
 \end{eqnarray*}$$
 If $\nleq(\next(r_1),b) = \bfalse$, then $\nleq(b,\next(r_1)) = \btrue$ and $\next(r_1) \neq b$. In particular, we must have $r_1 = b$. But then $\next(r_1) = \next(b)$, a contradiction. So we must have $\nleq(\next(r_1),b) = \btrue$, and the conclusion holds for all $b$ given $\next(a)$ as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_divalg_equality :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
@@ -157,17 +154,16 @@ If $\nleq(\next(r_1),b) = \bfalse$, then $\nleq(b,\next(r_1)) = \btrue$ and $\ne
 >   \a b -> let (_,r) = divalg a (next b) in
 >   leq r b
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Also the output of the division algorithm is unique.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b \in \nats$ and suppose we have $q,r \in \nats$ such that $$a = \nplus(\ntimes(q,\next(b)),r)$$ and $\nleq(r,b) = \btrue$. Then $(q,r) = \ndivalg(a,b)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 It suffices to show that if $(q_1,r_1)$ and $(q_2,r_2)$ both satisfy the conditions of the division algorithm, then $q_1 = q_2$ and $r_1 = r_2$. To this end, suppose we have $$\begin{eqnarray*} & & \nplus(\ntimes(q_1,\next(b)),r_1) \\ & = & a \\ & = & \nplus(\ntimes(q_2,\next(b)),r_2). \end{eqnarray*}$$ Without loss of generality, we have $\nleq(r_1,r_2)$; say $r_2 = \nplus(r_1,k)$. Now $$\begin{eqnarray*} & & \nplus(\ntimes(q_1,\next(b)),r_1) \\ & = & \nplus(\ntimes(q_2,\next(b)),r_2) \\ & = & \nplus(\ntimes(q_2,\next(b)),\nplus(r_1,k))) \\ & = & \nplus(\nplus(\ntimes(q_2,\next(b)),k),r_1), \end{eqnarray*}$$ and thus $$\ntimes(q_1,\next(b)) = \nplus(\ntimes(q_2,\next(b)),k).$$ Note that $\nleq(k,r_2)$, and thus $\nleq(k,b)$.
 
 We wish to show that $k = \zero$. To this end, let $P(q_1,q_2,b,k)$ denote the statement $$\mathrm{if}\ \ntimes(q_1,\next(b)) = \nplus(\ntimes(\ntimes(q_2,\next(b))),k)\ \mathrm{then}\ k = \zero,$$ and define a set $$M = \{ q_1 \in \nats \mid \forall q_2,b,k\ P(q_1,q_2,b,k) \}.$$ We will show that $M = \nats$ by (you guessed it!) induction.
@@ -187,9 +183,9 @@ $$\begin{eqnarray*}
 So we have $$\ntimes(q_1,\next(b)) = \nplus(\ntimes(q_2,\next(b)),k),$$ and since $N(q_1) = \nats$, $k = \zero$. So $\next(q_2) \in N(\next(q_1))$ as needed.
 
 So we have $k = \zero$, and thus $$\ntimes(q_1,\next(b)) = \ntimes(q_2,\next(b)).$$ Thus $q_1 = q_2$, and moreover $r_1 = r_2$ as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_divalg_unique :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> n -> n -> Bool)
@@ -199,22 +195,21 @@ So we have $k = \zero$, and thus $$\ntimes(q_1,\next(b)) = \ntimes(q_2,\next(b))
 >     then eq (q,r) (divalg a (next b))
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 The last two theorems say that the output of $\ndivalg(a,b)$ is the unique solution of a particular system of equations so long as $b$ is not $\zero$. But what if $b$ is zero? We frankly won't usually be interested in this case, but it will show up later as the base case in some induction proofs. Of course in the $b = \zero$ case the output of $\ndivalg$ is no longer a unique solution to the system of equations, and the particular solution is a quirk of our definition.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 If $a \in \nats$ we have the following.
 
 1. $\ndivalg(a,\zero) = (\zero,a)$.
 2. $\ndivalg(a,\next(\zero)) = (a,\zero)$.
 3. If $\nleq(a,b)$, then $\ndivalg(a,\next(b)) = (\zero,a)$.
 4. $\ndivalg(\next(a),\next(a)) = (\next(\zero),\zero)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by induction on $a$. For the base case $a = \zero$, note that $$\ndivalg(\zero,\zero) = (\zero, \zero)$$ as needed. For the inductive step, suppose the equation holds for some $a$. Now
 $$\begin{eqnarray*}
  &   & \ndivalg(\next(a),\zero) \\
@@ -233,9 +228,9 @@ $$\begin{eqnarray*}
  & = & \next(a).
 \end{eqnarray*}$$
 Since $\next(a) \neq \zero$, by the uniqueness of the division algorithm, we have $\ndivalg(\next(a),\next(a)) = (\next(\zero),\zero)$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_divalg_zero_right :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
@@ -266,21 +261,20 @@ Since $\next(a) \neq \zero$, by the uniqueness of the division algorithm, we hav
 >   testName "divalg(next(a),next(a)) == (next(0),0)" $
 >   \a -> eq (divalg (next a) (next a)) (next zero, zero)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\nquo$ interacts with $\ntimes$.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b \in \nats$. If $b \neq \zero$, then $\nquo(\ntimes(a,b),b) = a$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Say $b = \next(m)$. Note that $\nleq(\zero,m)$. Now $$\ntimes(a,b) = \nplus(\ntimes(a,b),\zero),$$ and by the uniqueness of quotients by nonzero divisors, we have $a = \nquo(\ntimes(a,b),b)$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_divalg_times_left :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
@@ -288,8 +282,8 @@ Say $b = \next(m)$. Note that $\nleq(\zero,m)$. Now $$\ntimes(a,b) = \nplus(\nti
 >   testName "quo(times(a,next(b)),next(b)) = a" $
 >   \a b -> eq (quo (times a (next b)) (next b)) a
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

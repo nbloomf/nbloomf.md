@@ -18,26 +18,23 @@ In this post we'll see that the answer to both questions is *yes*. As it turns o
 
 To see how this works let's revisit our old friends the *iterative sets* again, this time from a different perspective. Recall the definition.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 A set $A$ with a distinguished element $e$ and a distinguished function $\varphi : A \rightarrow A$ is called an *iterative set*.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 So an iterative set is (1) a set, with (2) an element, and (3) a function. It turns out we can think of *elements* of sets as *functions* from the one-element set $1 = \{\ast\}$. More precisely, if $e \in A$, we can identify $e$ with the map $e^\prime : 1 \rightarrow A$ given by $e^\prime(\ast) = e$. From now on I'll make this identification implicitly.
 
 So an iterative set is (1) a set $A$, with (2) a map $1 \rightarrow A$, and (3) a map $A \rightarrow A$. We can make this even more succinct. In general, given two mappings $U \rightarrow X$ and $V \rightarrow X$, we can "bundle" them together as a single map $U+V \rightarrow X$. So an alternate definition for iterative sets is the following.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 An *iterative set* is a set $A$ with a mapping $\theta : 1+A \rightarrow A$.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 All we've done here is recast the iterative set data in terms of mappings. And in this language, iterative set homomorphisms have a nice characterization as well:
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ and $B$ be iterative sets with mappings $\theta_A : 1+A \rightarrow A$ and $\theta_B : 1+B \rightarrow B$. A map $\varphi : A \rightarrow B$ is called an *iterative set homomorphism* if the following diagram commutes.
 $$\require{AMScd}
 \begin{CD}
@@ -45,8 +42,8 @@ $$\require{AMScd}
 @V{\theta_A}VV @VV{\theta_B}V \\
 A @>>{\varphi}> B
 \end{CD}$$
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Let's stick this in our back pocket for now.
 
@@ -108,16 +105,13 @@ Functors which are built using a finite number of applications of these producti
 
 Looking back, there appears to be a polynomial endofunctor hidden in our definition of inductive sets.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $F$ be the polynomial functor $F(X) = 1+X$. An *iterative set* is a set $A$ with a mapping $\theta_A : F(A) \rightarrow A$.
-</p></div>
-</div>
+::::::::::::::::::::
 
 With this example in mind, we make the following definition.
 
-<div class="result">
-<div class="defn">
+:::::: definition ::
 Let $\mathcal{C}$ be a category and $F$ a covariant endofunctor on $\mathcal{C}$. An $F$-algebra is an object $A$ coupled with a morphism $\theta_A : F(A) \rightarrow A$.
 
 Given two $F$-algebras $(A,\theta_A)$ and $(B,\theta_B)$, an $F$-algebra homomorphism is a morphism $\varphi : A \rightarrow B$ such that $F(\varphi) \circ \theta_B = \theta_A \circ \varphi$. That is, a morphism $\varphi$ such that the following diagram commutes.
@@ -127,16 +121,13 @@ F(A) @>{F(\varphi)}>> F(B)\\
 @V{\theta_A}VV @VV{\theta_B}V \\
 A @>>{\varphi}> B
 \end{CD}$$
-</div>
-</div>
+::::::::::::::::::::
 
 Now it can be shown that the collection of $F$-algebras and $F$-algebra homomorphisms form a category. And now the natural numbers have a very nice characterization.
 
-<div class="result">
-<div class="defn">
+:::::: definition ::
 $\nats$ is the initial $F$-algebra of the functor $F(X) = 1+X$.
-</div>
-</div>
+::::::::::::::::::::
 
 Recall that an object in a category is called *initial* if there is exactly one morphism from it to any other given object. In the case of $\nats$, the unique morphism is precisely $\natrec{\ast}{\ast}$.
 

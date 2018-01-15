@@ -33,8 +33,7 @@ The second option is to implement so-called *truncated subtraction*, so that any
 
 The third option is a blend of the first two. We can attach an extra element to $\nats$, say $\ast$, and then say $b-a = \ast$ if $b-a$ is not a natural number. This allows us to distinguish when $b-a$ does not exist but keeps the minus function total. So our signature for minus will be $$\nats \times \nats \rightarrow 1 + \nats,$$ where $1 = \{\ast\}$.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Define maps $\varphi : \nats \rightarrow 1 + \nats$ by
 $$\varphi(x) = \left\{\begin{array}{ll}
  \rgt(\zero) & \mathrm{if}\ x == \zero \\
@@ -64,21 +63,18 @@ In Haskell:
 > 
 >     omega _ b = prev b
 
-</p></div>
-</div>
+::::::::::::::::::::
 
 Woo! Since $\nminus$ is defined in terms of bailout recursion, it is the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 $\nminus$ is the unique map $f : \nats \times \nats \rightarrow 1 + \nats$ with the property that for all $a,b \in \nats$, we have
 $$\left\{\begin{array}{l}
  f(\zero,b) = \bif{\iszero(b)}{\rgt(\zero)}{\lft(\ast)} \\
  f(\next(a),b) = \bif{\iszero(b)}{\rgt(\next(a))}{\nminus(a,\prev(b))}.
 \end{array}\right.$$
-</p></div>
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_minus_zero_left :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
@@ -98,20 +94,19 @@ $$\left\{\begin{array}{l}
 >     then eq (minus (next a) b) (rgt (next a))
 >     else eq (minus (next a) b) (minus a (prev b))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Here are some special cases:
 
-<div class="result">
 <div class="lemma">
 For all $n \in \nats$ we have the following.
 
 1. $\nminus(n,\zero) = \rgt(n)$.
 2. $\nminus(\zero,\next(n)) = \lft(\ast)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. If $n = \zero$, then
 $$\begin{eqnarray*}
  &   & \nminus(\zero,\zero) \\
@@ -134,9 +129,9 @@ $$\begin{eqnarray*}
  & = & \bif{\bfalse}{\rgt(\zero)}{\lft(\ast)} \\
  & = & \lft(\ast)
 \end{eqnarray*}$$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_minus_nat_zero :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
@@ -151,17 +146,16 @@ $$\begin{eqnarray*}
 >   testName "minus(0,next(n)) == lft(ast)" $
 >   \n -> eq (minus zero (next n)) (lft ())
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 We can "cancel" $\next$s on both arguments of a $\nminus$.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b \in \nats$. Then we have $$\nminus(\next(b),\next(a)) = \nminus(b,a).$$
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We have
 $$\begin{eqnarray*}
  &   & \nminus(\next(b),\next(a)) \\
@@ -171,9 +165,9 @@ $$\begin{eqnarray*}
  & = & \nminus(b,a)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_minus_next_next :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
@@ -181,17 +175,16 @@ as claimed.
 >   testName "minus(next(b),next(a)) == minus(b,a)" $
 >   \a b -> eq (minus (next b) (next a)) (minus b a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Another important special case.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a \in \nats$. Then we have $$\nminus(a,\next(a)) = \lft(\ast).$$
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $a$. For the base case $a = \zero$ we have $$\nminus(\zero,\next(\zero)) = \lft(\ast)$$ as needed. For the inductive step, suppose the equality holds for some $a$; now
 $$\begin{eqnarray*}
  &   & \nminus(\next(a),\next(\next(a))) \\
@@ -199,9 +192,9 @@ $$\begin{eqnarray*}
  & = & \lft(\ast)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_minus_nat_next :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
@@ -209,20 +202,19 @@ as needed.
 >   testName "minus(a,next(a)) == lft(*)" $
 >   \a -> eq (minus a (next a)) (lft ())
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 The next result shows that $\nminus$ gives a solution to the equation $b = \nplus(a,x)$.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c \in \nats$. Then the following are equivalent.
 
 1. $\nminus(b,a) = \rgt(c)$.
 2. $b = \nplus(a,c)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 First we show (1) implies (2) by induction on $b$. For the base case, suppose we have $\nminus(\zero,a) = \rgt(c)$. Now
 $$\begin{eqnarray*}
  &   & \rgt(c) \\
@@ -261,9 +253,9 @@ $$\begin{eqnarray*}
  & = & \rgt(c)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_minus_plus_equiv :: (Natural n, Equal n, Boolean b, Equal b)
 >   => n -> b -> Test (n -> n -> n -> Bool)
@@ -273,25 +265,24 @@ as needed.
 >     ((eq (minus b a) (rgt c)) `withTypeOf` p)
 >     (eq (plus a c) b)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now $\nminus$ inherits several properties from $\nplus$. For instance, $\nminus$ is cancellative.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c \in \nats$. Then the following are equivalent.
 
 1. If $\nminus(b,a) = \nminus(b,c)$ and $\isRgt(\nminus(b,a)) = \btrue$, then $a = c$.
 2. If $\nminus(a,b) = \nminus(c,b)$ and $\isRgt(\nminus(a,b)) = \btrue$, then $a = c$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Say $$\nminus(b,a) = \rgt(d) = \nminus(b,c).$$ Now $$\nplus(a,d) = b = \nplus(c,d)$$ and thus $a = c$ as claimed.
 2. Say $$\nminus(a,b) = \rgt(d) = \nminus(c,b).$$ Now $$a = \nplus(b,d) = c$$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_minus_cancellative_left :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> n -> Bool)
@@ -310,25 +301,24 @@ Let $a,b,c \in \nats$. Then the following are equivalent.
 >     then eq a c
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\nminus$ "undoes" $\nplus$.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b \in \nats$. Then the following are equivalent.
 
 1. $\nminus(\nplus(b,a),b) = \rgt(a)$.
 2. $\nminus(\nplus(a,b),b) = \rgt(a)$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We have $\nplus(b,a) = \nplus(b,a)$, so that $\nminus(\nplus(b,a),b) = \rgt(a)$ as claimed.
 2. We have $$\nminus(\nplus(a,b),b) = \nminus(b,a),b) = \rgt(a)$$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_minus_plus_right :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
@@ -343,27 +333,26 @@ Let $a,b \in \nats$. Then the following are equivalent.
 >   testName "minus(plus(a,b),b) == rgt(a)" $
 >   \a b -> eq (minus (plus a b) b) (rgt a)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 We are able to rearrange $\nminus$ expressions (a little bit).
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c,d \in \nats$. Then the following hold.
 
 1. If $\nminus(b,a) = \rgt(c)$, then $\nminus(\next(b),a) = \rgt(\next(c))$.
 2. If $\nminus(b,a) = \rgt(c)$, then $\nminus(b,c) = \rgt(a)$.
 3. If $\nminus(b,a) = \rgt(c)$, then $\nminus(\nplus(b,d),a) = \rgt(\nplus(c,d))$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Since $\nminus(b,a) = \rgt(c)$, we have $\nplus(a,c) = b$, so that $$\nplus(a,\next(c)) = \next(\nplus(a,c)) = \next(b).$$ Thus we have $$\nminus(\next(b),a) = \rgt(\next(c))$$ as claimed.
 2. Since $\nminus(b,a) = \rgt(c)$, we have $b = \nplus(a,c) = \nplus(c,a)$, so that $\nminus(b,c) = \rgt(a)$ as claimed.
 3. Suppose $\nminus(b,a) = \rgt(c)$; then $b = \nplus(a,c)$. Now $$\nplus(b,d) = \nplus(\nplus(a,c),d) = \nplus(a,\nplus(c,d)),$$ so that $$\nminus(\nplus(b,d),a) = \rgt(\nplus(c,d))$$ as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_minus_next_left_cond :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
@@ -391,23 +380,22 @@ Let $a,b,c,d \in \nats$. Then the following hold.
 >     Right c -> eq (minus (plus b d) a) (rgt (plus c d))
 >     Left () -> true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Given natural numbers $a$ and $b$, either $\nminus(a,b)$ or $\nminus(b,a)$ is of the form $\rgt(c)$ for some $c$.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b \in \nats$. If $\nminus(a,b) = \lft(\ast)$, then $\nminus(b,a) = \rgt(c)$ for some $c$.
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $a$. For the base case $a = \zero$, if $\nminus(\zero,b) = \lft(\ast)$ we have $b \neq \zero$ and $\nminus(b,\zero) = \rgt(b)$ as needed.
 
 For the inductive step, suppose the implication holds for all $b$ for some $a$. Suppose further that $\nminus(\next(a),b) = \lft(\ast)$. If $b = \zero$, note that $\nminus(\next(a),\zero) = \lft(\zero)$ is false, so the implication holds vacuously. If $b = \next(d)$ for some $d$, then we have $$\lft(\ast) = \nminus(\next(a),b) = \nminus(\next(a),\next(d)) = \nminus(a,d).$$ By the induction hypothesis we have $$\nminus(d,a) = \rgt(c)$$ for some $c$, so that $$\nminus(b,a) = \nminus(\next(d),a) = \rgt(\next(c))$$ as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_minus_flip :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
@@ -417,17 +405,16 @@ For the inductive step, suppose the implication holds for all $b$ for some $a$. 
 >     then isRgt (minus b a)
 >     else true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\ntimes$ distributes over $\nminus$.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $a,b,c \in \nats$. If $\nminus(a,b) = \rgt(d)$ for some $d \in \nats$, then $$\nminus(\ntimes(c,a),\ntimes(c,b)) = \rgt(\ntimes(c,d)).$$
-</div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $a$. For the base case $a = \zero$, suppose we have $\nminus(\zero,b) = \rgt(d)$; then $d = \zero$ and $b = \zero$. Now
 $$\begin{eqnarray*}
  &   & \nminus(\ntimes(c,a),(\ntimes(c,b)) \\
@@ -452,9 +439,9 @@ $$\begin{eqnarray*}
  & = & \ntimes(c,\nminus(\next(a),b))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_minus_times_dist_left :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> n -> Bool)
@@ -466,8 +453,8 @@ as needed.
 >       (rgt (times c d))
 >     Left () -> true
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

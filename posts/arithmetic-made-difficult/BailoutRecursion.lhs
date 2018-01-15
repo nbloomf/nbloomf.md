@@ -23,8 +23,7 @@ slug: bailrec
 
 So far we have defined two special *recursion operators*, $\natrec{\ast}{\ast}$ and $\simprec{\ast}{\ast}$. These act like program skeletons: fill in the slots with functions of the right signatures and get a computable function out. In this post we'll define another operator, which we will call *bailout recursion*.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Suppose we have sets $A$ and $B$ and functions with the following signatures:
 $$\begin{eqnarray*}
 \varphi & : & A \rightarrow B \\
@@ -36,7 +35,7 @@ $$\begin{eqnarray*}
 Then there is a unique function $\Theta : \nats \times A \rightarrow B$ such that, for all $n \in \nats$ and $a \in A$, $$\Theta(\zero, a) = \varphi(a)$$ and $$\Theta(\next(m), a) = \left\{ \begin{array}{ll} \psi(m,a) & \mathrm{if}\ \beta(m,a) \\ \Theta(m, \omega(m,a)) & \mathrm{otherwise}. \end{array}\right.$$
 
 This function $\Theta$ will be denoted $\bailrec{\varphi}{\beta}{\psi}{\omega}$.
-</div>
+::::::::::::::::::::
 
 <div class="proof">
 This proof will be very similar to the analogous proof for simple recursion.
@@ -121,8 +120,8 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 
 if not, for all $a \in A$. Thus $\Psi = \Theta$ as needed.
-</div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 You might notice that in this proof, we didn't really use $\beta$ or $\psi$, and the fact that $W$ is piecewise-defined plays no role. When this happens in a proof it usually means we've got some unnecessary details. But in this case, we will be using $\beta$ and $\psi$ later, and the piecewiseness of $\Theta$ will be crucial in constructing an efficient tail-recursive evaluation strategy. Stay tuned. :)
 
@@ -185,8 +184,7 @@ By the way, I think it's helpful to compare the difference between arbitrary rec
 
 As with natural and simple recursion, the "uniqueness" part of bailout recursion is also handy. To be a little more explicit, it says the following.
 
-<div class="result">
-<div class="thm">
+:::::: theorem :::::
 Let $A$ and $B$ be sets, with mappings
 $$\begin{eqnarray*}
 \varphi & : & A \rightarrow B \\
@@ -199,5 +197,5 @@ $$\left\{\begin{array}{l}
  f(\zero,a) = \varphi(a) \\
  f(\next(k),a) = \bif{\beta(k,a)}{\psi(m,a)}{f(k,\omega(k,a))}
 \end{array}\right.$$
-</div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::

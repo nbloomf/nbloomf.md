@@ -30,8 +30,7 @@ slug: zippad
 
 Now to define $\zipPad$, an alternate interpretation of $\zip$.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ and $B$ be sets, with $u \in A$ and $v \in B$. Define $\delta : \lists{B} \rightarrow \lists{A \times B}$ by $$\delta(y) = \map(\tupL(u))(y),$$ $\psi : A \times \lists{A \times B} \rightarrow \lists{A \times B}$ by $$\psi(a,z) = \cons((a,v),z),$$ and $\chi : A \times B \times \lists{B} \times \lists{A \times B} \times \lists{A \times B} \rightarrow \lists{A \times B}$ by $$\chi(a,b,y,z,w) = \cons((a,b),z).$$ We then define $\zipPad(u,v) : \lists{A} \times \lists{B} \rightarrow \lists{A \times B}$ by $$\zipPad(u,v) = \dfoldr{\delta}{\psi}{\chi}.$$
 
 In Haskell:
@@ -43,22 +42,21 @@ In Haskell:
 >     psi a z = cons (a,v) z
 >     chi a b _ z _ = cons (a,b) z
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\zipPad(u,v)$ is defined as a $\dfoldr{\ast}{\ast}{\ast}$, it is the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ and $B$ be sets. Then $\zip$ is the unique solution $f : \lists{A} \times \lists{B} \rightarrow \lists{A \times B}$ to the following equations for all $a \in A$, $b \in B$, $x \in \lists{A}$, and $y \in \lists{B}$.
 $$\left\{\begin{array}{l}
  f(\nil,y) = \map(\tupL(u))(y) \\
  f(\cons(a,x),\nil) = \cons((a,v),f(x,nil)) \\
  f(\cons(a,x),\cons(b,y)) = \cons((a,b),f(x,y))
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_zipPad_nil_list :: (List t, Equal (t (a,b)))
 >   => t a -> t b -> Test (a -> b -> t b -> Bool)
@@ -82,18 +80,17 @@ $$\left\{\begin{array}{l}
 >   testName "zipPad(u,v)(cons(a,x),cons(b,y)) == cons((a,b),zipPad(u,v)(x,y))" $
 >   \u v a x b y -> eq (zipPad u v (cons a x) (cons b y)) (cons (a,b) (zipPad u v x y))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\zipPad$ with a nil right argument is a $\map$.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ and $B$ be sets, with $u \in A$ and $v \in B$. For all $x \in \lists{A}$, we have 
 $$\zipPad(u,v)(x,\nil) = \map(\tupR(v))(x)$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \zipPad(u,v)(\nil,\nil) \\
@@ -111,9 +108,9 @@ $$\begin{eqnarray*}
  & = & \map(\tupR(v))(\cons(a,x))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_zipPad_nil_right :: (List t, Equal (t (a,b)))
 >   => t a -> t b -> Test (a -> b -> t a -> Bool)
@@ -121,17 +118,16 @@ as needed.
 >   testName "zipPad(u,v)(x,nil) == map(tupR(v))(x)" $
 >   \u v x -> eq (zipPad u v x nil) (map (tupR v) x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\zipPad$ interacts with $\tSwap$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets. Then for all $u \in A$, $v \in B$, $x \in \lists{A}$, and $y \in \lists{B}$ we have $$\map(\tSwap)(\zipPad(u,v)(x,y)) = \zipPad(v,u)(y,x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \map(\tSwap)(\zipPad(u,v)(x,y)) \\
@@ -165,9 +161,9 @@ $$\begin{eqnarray*}
  & = & \zipPad(v,u)(y,\cons(a,x)) \\
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_zipPad_tswap :: (List t, Equal (t (b,a)))
 >   => t a -> t b -> Test (a -> b -> t a -> t b -> Bool)
@@ -175,17 +171,16 @@ as needed.
 >   testName "map(tswap)(zipPad(u,v)(x,y)) == zipPad(v,u)(y,x)" $
 >   \u v x y -> eq (map tswap (zipPad u v x y)) (zipPad v u y x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\zipPad$ interacts with $\tPair$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$, $B$, $U$, and $V$ be sets, with functions $f : A \rightarrow U$ and $g : B \rightarrow V$. Then for all $u \in A$, $v \in B$, $x \in \lists{A}$, and $y \in \lists{B}$, we have $$\map(\tPair(f,g))(\zipPad(u,v)(x,y)) = \zipPad(f(u),g(v))(\map(f)(x),\map(g)(y)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \map(\tPair(f,g))(\zipPad(u,v)(x,y)) \\
@@ -221,9 +216,9 @@ $$\begin{eqnarray*}
  & = & \zipPad(f(u),g(v))(\map(f)(\cons(a,x)),\map(g)(y)) \\
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_zipPad_tpair :: (List t, Equal (t (a,b)))
 >   => t a -> t b -> Test ((a -> a) -> (b -> b) -> a -> b -> t a -> t b -> Bool)
@@ -233,17 +228,16 @@ as needed.
 >     (map (tpair f g) (zipPad u v x y))
 >     (zipPad (f u) (g v) (map f x) (map g y))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\zipPad$ interacts with $\length$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets, with $u \in A$, $v \in B$, $x \in \lists{A}$, and $y \in \lists{B}$. Then $$\length(\zipPad(u,v)(x,y)) = \nmax(\length(x),\length(y)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \length(\zipPad(u,v)(x,y)) \\
@@ -276,9 +270,9 @@ $$\begin{eqnarray*}
  & = & \nmax(\length(\cons(a,x)),\length(y)) \\
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_zipPad_length :: (List t, Natural n, Equal n)
 >   => t a -> t b -> n -> Test (a -> b -> t a -> t b -> Bool)
@@ -288,13 +282,12 @@ as claimed.
 >     ((length (zipPad u v x y)) `withTypeOf` n)
 >     (max (length x) (length y))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\zipPad$ is also kind of associative:
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$, $B$, and $C$ be sets, with $u \in A$, $v \in B$, $w \in C$, $x \in \lists{A}$, $y \in \lists{B}$, and $z \in \lists{C}$. Then the following hold.
 
 1. $$\begin{eqnarray*}
@@ -305,9 +298,9 @@ Let $A$, $B$, and $C$ be sets, with $u \in A$, $v \in B$, $w \in C$, $x \in \lis
  &   & \zipPad(u,(v,w))(x,\zipPad(v,w)(y,z)) \\
  & = & \map(\tAssocR)(\zipPad((u,v),w)(\zipPad(u,v)(x,y),z)).
 \end{eqnarray*}$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \zipPad((u,v),w)(\zipPad(u,v)(x,y),z) \\
@@ -362,9 +355,9 @@ $$\begin{eqnarray*}
  & = & \map(\tAssocR)(\zipPad((u,v),w)(\zipPad(u,v)(x,y),z))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_zipPad_zipPad_left :: (List t, Equal a, Equal (t ((a,a),a)))
 >   => t a -> Test (a -> a -> a -> t a -> t a -> t a -> Bool)
@@ -383,8 +376,8 @@ as claimed.
 >     (zipPad a (b,c) x (zipPad b c y z))
 >     (map tassocR (zipPad (a,b) c (zipPad a b x y) z))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

@@ -31,8 +31,7 @@ slug: range
 
 For our first application of $\unfoldN{\ast}$ we'll define a function, $\range$, that constructs lists of natural numbers. There are a few ways to do this. We could take an argument $n$ and construct the list of natural numbers from $\zero$ to $n$, but this is too specialized. We could instead take *two* arguments $a$ and $b$ and construct the list of natural numbers from $a$ to $b$, but we'll have to check whether or not the arguments are in order. A third option -- and the one we'll take -- is to take two arguments $a$ and $b$, and construct the list of the first $b$ natural numbers starting from $a$.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Define $f : \nats \rightarrow \ast + \nats \times \nats$ by $$f(k) = (\next(k),k).$$ We then define $\range : \nats \times \nats \rightarrow \lists{\nats}$ by $$\range(a,b) = \unfoldN(f,b,a).$$
 
 In Haskell:
@@ -41,21 +40,18 @@ In Haskell:
 > range a b = unfoldN f b a
 >   where f k = rgt (next k, k)
 
-</p></div>
-</div>
+::::::::::::::::::::
 
 Since $\range$ is an $\unfoldN{\ast}$, it is the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 $\range$ is the unique $f : \nats \times \nats \rightarrow \lists{\nats}$ satisfying the following system of equations for all $a,b \in \nats$.
 $$\left\{\begin{array}{l}
  f(a,\zero) = \nil \\
  f(a,\next(b)) = \cons(a,f(\next(a),b))
 \end{array}\right.$$
-</p></div>
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_range_zero :: (List t, Natural n, Equal (t n), Equal n)
 >   => t n -> Test (n -> Bool)
@@ -72,17 +68,15 @@ $$\left\{\begin{array}{l}
 >     ((range a (next b)) `withTypeOf` t)
 >     (cons a (range (next a) b))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 A special case.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 For all $a \in \nats$ we have $\range(a,\next(\zero)) = \cons(a,\nil)$.
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \range(a,\next(\zero)) \\
@@ -90,9 +84,9 @@ $$\begin{eqnarray*}
  & = & \cons(a,\nil)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_range_one :: (List t, Natural n, Equal (t n), Equal n)
 >   => t n -> Test (n -> Bool)
@@ -100,17 +94,15 @@ as claimed.
 >   testName "range(a,next(zero)) == cons(a,nil)" $
 >   \a -> eq (range a (next zero)) ((cons a nil) `withTypeOf` t)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 The $\length$ of a $\range$ is predictable.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 For all $a,b \in \nats$, we have $\length(\range(a,b)) = b$.
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $b$. For the base case $b = \zero$, we have
 $$\begin{eqnarray*}
  &   & \length(\range(a,b)) \\
@@ -127,9 +119,9 @@ $$\begin{eqnarray*}
  & = & \next(b)
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_range_length :: (List t, Natural n, Equal (t n), Equal n)
 >   => t n -> Test (n -> n -> Bool)
@@ -137,17 +129,15 @@ as claimed.
 >   testName "length(range(a,b)) == b" $
 >   \a b -> eq (length ((range a b) `withTypeOf` t)) b
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\range$ interacts with $\snoc$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 For all $a,b \in \nats$ we have $$\range(a,\next(b)) = \snoc(\nplus(a,b),\range(a,b)).$$
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $b$. For the base case $b = \zero$, we have
 $$\begin{eqnarray*}
  &   & \range(a,\next(b)) \\
@@ -166,9 +156,9 @@ $$\begin{eqnarray*}
  & = & \snoc(\nplus(a,\next(b)),\range(a,\next(b)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_range_snoc :: (List t, Natural n, Equal (t n), Equal n)
 >   => t n -> Test (n -> n -> Bool)
@@ -178,17 +168,15 @@ as needed.
 >     ((range a (next b)) `withTypeOf` t)
 >     (snoc (plus a b) (range a b))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\range$ interacts with $\nplus$ in its second argument.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 If $a,b,c \in \nats$, we have $$\range(a,\nplus(b,c)) = \cat(\range(a,b),\range(\nplus(a,b),c).$$
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $c$. For the base case $c = \zero$, we have
 $$\begin{eqnarray*}
  &   & \range(a,\nplus(b,c)) \\
@@ -209,9 +197,9 @@ $$\begin{eqnarray*}
  & = & \cat(\range(a,b),\range(\nplus(a,b),\next(c)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_range_plus_right :: (List t, Natural n, Equal (t n), Equal n)
 >   => t n -> Test (n -> n -> n -> Bool)
@@ -221,17 +209,15 @@ as needed.
 >     ((range a (plus b c)) `withTypeOf` t)
 >     (cat (range a b) (range (plus a b) c))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\range$ interacts with $\next$ in its first argument.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 For all $a,b \in \nats$ we have $$\range(\next(a),b) = \map(\next)(\range(a,b)).$$
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $b$. For the base case $b = \zero$, we have
 $$\begin{eqnarray*}
  &   & \range(\next(a),b) \\
@@ -250,9 +236,9 @@ $$\begin{eqnarray*}
  & = & \map(\next)(\range(a,\next(b)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_range_next_left :: (List t, Natural n, Equal (t n), Equal n)
 >   => t n -> Test (n -> n -> Bool)
@@ -262,17 +248,15 @@ as needed.
 >     ((range (next a) b) `withTypeOf` t)
 >     (map next (range a b))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And $\range$ interacts with $\nplus$ in its first argument. In this theorem we use a bit of new notation. When a function argument is replaced by a dash, we implicitly mean lambda-abstraction. That is, if $f$ is a function, then $f(-)$ is short for $\lambda x. f(x)$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 If $a,b,c \in \nats$, we have $$\range(\nplus(a,b),c) = \map(\nplus(a,-))(\range(b,c)).$$
-</p></div>
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by induction on $a$. For the base case $a = \zero$ note that $\nplus(a,-) = \id$, since for all $b \in \nats$ we have $$\nplus(\zero,-)(b) = \nplus(\zero,b) = b.$$ Thus
 $$\begin{eqnarray*}
  &   & \range(\nplus(a,b),c) \\
@@ -293,9 +277,9 @@ $$\begin{eqnarray*}
  & = & \map(\nplus(\next(a),-))(\range(b,c))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_range_plus_left :: (List t, Natural n, Equal (t n), Equal n)
 >   => t n -> Test (n -> n -> n -> Bool)
@@ -305,8 +289,8 @@ as needed.
 >     ((range (plus a b) c) `withTypeOf` t)
 >     (map (plus a) (range b c))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

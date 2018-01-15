@@ -27,8 +27,7 @@ Today we'll define a function that takes a list and reverses the order of its el
 
 First we define a utility as follows.
 
-<div class="result">
-<div class="defn"><p>
+:::::: definition ::
 Let $A$ be a set, and define $\varphi : \lists{A} \times A \rightarrow \lists{A}$ by $\varphi(x,a) = \cons(a,x)$. We now define a map $\revcat : \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\revcat = \foldl{\varphi}.$$
 
 In Haskell:
@@ -38,21 +37,20 @@ In Haskell:
 >   where
 >     phi x a = cons a x
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Since $\revcat$ is defined as a $\foldl{\ast}$, it can be characterized as the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set. Then $\revcat$ is the unique solution $f : \lists{A} \times \lists{A} \rightarrow \lists{A}$ to the following system of equations for all $a \in A$ and $x,y \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(x,\nil) = x \\
  f(x,\cons(a,y)) = f(\cons(a,x),y)
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_revcat_nil :: (List t, Equal (t a))
 >   => t a -> Test (t a -> Bool)
@@ -69,20 +67,19 @@ $$\left\{\begin{array}{l}
 >   testName "revcat(x,cons(a,y)) == revcat(cons(a,x),y)" $
 >   \a x y -> eq (revcat x (cons a y)) (revcat (cons a x) y)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now $\revcat$ interacts with $\snoc$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set. For all $a \in A$ and $x,y \in \lists{A}$ we have the following.
 
 1. $\revcat(\snoc(a,x),y) = \snoc(a,\revcat(x,y))$.
 2. $\revcat(x,\snoc(a,y)) = \cons(a,\revcat(x,y))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We proceed by list induction on $y$. For the base case $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \revcat(\snoc(a,x),\nil) \\
@@ -115,9 +112,9 @@ $$\begin{eqnarray*}
  & = & \cons(a,\revcat(x,\cons(b,y)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_revcat_snoc_left :: (List t, Equal (t a))
 >   => t a -> Test (a -> t a -> t a -> Bool)
@@ -132,13 +129,12 @@ as needed.
 >   testName "revcat(x,snoc(a,y)) == cons(a,revcat(x,y))" $
 >   \a x y -> eq (revcat x (snoc a y)) (cons a (revcat x y))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And we define list reversal in terms of $\revcat$.
 
-<div class="result">
-<div class="dfn"><p>
+:::::: definition ::
 Let $A$ be a set. We define $\rev : \lists{A} \rightarrow \lists{A}$ by $$\rev(x) = \revcat(\nil,x).$$
 
 In Haskell:
@@ -146,17 +142,16 @@ In Haskell:
 > rev :: (List t) => t a -> t a
 > rev = revcat nil
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now $\rev$ is essentially defined here as a left fold, but it can also be characterized as a right fold.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 We have $$\rev(x) = \foldr{\nil}{\snoc}(x).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Let $\varphi$ be as defined in the definition of $\rev$. We proceed by list induction on $x$. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \foldr{\nil}{\snoc}(\nil) \\
@@ -176,9 +171,9 @@ $$\begin{eqnarray*}
  & = & \rev(\cons(a,x))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_rev_foldr :: (List t, Equal (t a))
 >   => t a -> Test (t a -> Bool)
@@ -186,21 +181,20 @@ as needed.
 >   testName "rev(x) == foldr(nil,snoc)(x)" $
 >   \x -> eq (rev x) (foldr nil snoc x)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Because $\rev$ is equivalent to a $\foldr{\ast}{\ast}$, it can be characterized as the unique solution to a system of functional equations.
 
-<div class="result">
-<div class="corollary"><p>
+:::::: corollary :::
 Let $A$ be a set. Then $\rev$ is the unique function $f : \lists{A} \rightarrow \lists{A}$ having the property that for all $a \in A$ and $x \in \lists{A}$ we have
 $$\left\{\begin{array}{l}
  f(\nil) = \nil \\
  f(\cons(a,x)) = \snoc(a,f(x)).
 \end{array}\right.$$
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_rev_nil :: (List t, Equal (t a))
 >   => t a -> Test Bool
@@ -216,20 +210,19 @@ $$\left\{\begin{array}{l}
 >   testName "rev(cons(a,x)) == snoc(a,rev(x))" $
 >   \a x -> eq (rev (cons a x)) (snoc a (rev x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Special cases:
 
-<div class="result">
 <div class="lemma"><p>
 Let $A$ be a set. For all $a,b \in A$ we have the following.
 
 1. $\rev(\cons(a,\nil)) = \cons(a,\nil)$.
 2. $\rev(\cons(a,\cons(b,\nil))) = \cons(b,\cons(a,\nil))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. Note that
 $$\begin{eqnarray*}
  &   & \rev(\cons(a,\nil)) \\
@@ -247,9 +240,9 @@ $$\begin{eqnarray*}
  & = & \cons(b,\cons(a,\nil))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_rev_single :: (List t, Equal (t a))
 >   => t a -> Test (a -> Bool)
@@ -270,17 +263,16 @@ as claimed.
 >       (rev (cons a (cons b nil')))
 >       (cons b (cons a nil'))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Now $\rev$ and $\snoc$ interact:
 
-<div class="result">
 <div class="lemma"><p>
 Let $A$ be a set. Then for all $a \in A$ and $x \in \lists{A}$, we have $$\rev(\snoc(a,x)) = \cons(a,\rev(x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We have
 $$\begin{eqnarray*}
  &   & \rev(\snoc(a,\nil)) \\
@@ -289,9 +281,9 @@ $$\begin{eqnarray*}
  & = & \cons(a,\rev(x))
 \end{eqnarray*}$$
 as claimed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_rev_snoc :: (List t, Equal (t a))
 >   => t a -> Test (a -> a -> t a -> Bool)
@@ -299,17 +291,16 @@ as claimed.
 >   testName "rev(snoc(a,x)) == cons(a,rev(x))" $
 >   \a b x -> eq (rev (snoc a x)) (cons a (rev x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And $\rev$ is an involution.
 
-<div class="result">
 <div class="lemma"><p>
 Let $A$ be a set. For all $x \in \lists{A}$, we have $\rev(\rev(x)) = x$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \rev(\rev(\nil)) \\
@@ -324,9 +315,9 @@ $$\begin{eqnarray*}
  & = & \cons(a,x)
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_rev_involution :: (List t, Equal (t a))
 >   => t a -> Test (t a -> Bool)
@@ -334,20 +325,19 @@ as needed.
 >   testName "rev(rev(x)) == x" $
 >   \x -> eq (rev (rev x)) x
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 $\rev$ preserves $\isnil$ and $\beq$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ be a set with $x,y \in \lists{A}$. Then we have the following.
 
 1. $\isnil(x) = \isnil(\rev(x))$.
 2. $\beq(x,y) = \beq(\rev(x),\rev(y))$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 1. We consider two possibilities. If $x = \nil$, we have $$x = \nil = \rev(\nil) = \rev(x),$$ so that $\isnil(x) = \isnil(\rev(x))$ as claimed. Suppose instead that $x = \cons(a,u)$ for some $u$; then $x = \snoc(b,v)$ for some $v$. Now we have
 $$\begin{eqnarray*}
  &   & \isnil(x) \\
@@ -389,9 +379,9 @@ $$\begin{eqnarray*}
  & = & \beq(\rev(\cons(a,x)),\rev(y))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_rev_isnil :: (List t, Equal (t a), Equal a)
 >   => t a -> Test (t a -> Bool)
@@ -408,17 +398,16 @@ as needed.
 >     (eq (rev x) (rev y))
 >     ((eq x y) `withTypeOf` p)
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 And left fold is a reversed right fold.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $\varphi : B \times A \rightarrow B$, and define $\psi : A \times B \rightarrow B$ by $$\psi(a,b) = \varphi(b,a).$$ Now $$\foldl{\varphi}(e,x) = \foldr{e,\psi}(\rev(x)).$$
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \foldl{\varphi}(e,\nil) \\
@@ -436,9 +425,9 @@ $$\begin{eqnarray*}
  & = & \foldr{e}{\psi}(\rev(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
-</p></div>
+::::::::::::::::::::
 
-<div class="test"><p>
+::: test :::::::::::
 
 > _test_rev_foldl :: (List t, Equal (t a), Equal a)
 >   => t a -> Test ((a -> a -> a) -> a -> t a -> Bool)
@@ -448,25 +437,24 @@ as needed.
 >     let psi a b = phi b a in
 >     eq (foldl phi e x) (foldr e psi (rev x))
 
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 Note that $\rev$ is a nontrivial involution on $\lists{A}$ -- in particular, that means it is a bijection on $\lists{A}$ other than the identity. When this happens on a type with an induction principle, if we can show that our nontrivial bijection is actually an isomorphism, we get an alternative induction principle (almost) for free. And indeed, $\rev$ is an isomorphism taking $\cons$ to $\snoc$.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 (Snoc Induction.) Let $A$ be a set, and let $f : \lists{A} \rightarrow B$ be a map. Suppose $C \subseteq B$ is a subset with the property that
 
 1. $f(\nil) \in C$
 2. If $f(x) \in C$ and $a \in A$, then $f(\snoc(a,x)) \in C$.
 
 Then we have $f(x) \in C$ for all $x \in \lists{A}$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 This proof is analogous to that of the ordinary list induction principle. Define $T \subseteq \lists{A}$ by $$T = \{ x \in \lists{A} \mid f(x) \in C \}.$$ Note that $\nil \in T$ and if $x \in T$ and $a \in A$ then $\snoc(a,x) \in T$; that is, $(T,\nil,\snoc)$ is an $A$-iterative set. We define $\Theta : \lists{A} \rightarrow T$ to be the fold $$\Theta = \foldr{\nil}{\snoc}.$$ Now $\rev : T \rightarrow \lists{A}$ is an $A$-iterative homomorphism since $$\rev(\cons(a,x)) = \snoc(a,\rev(x)).$$ Thus $\rev \circ \Theta$ is an $A$-inductive homomorphism, which by uniqueness must be the identity on $\lists{A}$. If $x \in \lists{A}$, we have $$x = \rev(\rev(x)) = \rev(\id(\rev(x))) = \rev(\rev(\Theta(\rev(x))) = \Theta(\rev(x)) \in T,$$ so that $T = \lists{A}$ as claimed.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Testing

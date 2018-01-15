@@ -23,17 +23,16 @@ slug: dbfoldr
 
 In this post we'll construct a hybrid of double fold and bailout fold.
 
-<div class="result">
-<div class="thm"><p>
+:::::: theorem :::::
 Let $A$ and $B$ be sets. Suppose we have maps $$\delta : B \rightarrow C,$$ $$\beta : A \times \lists{A} \times B \rightarrow \bool,$$ $$\mu : B \rightarrow B,$$ $$\psi : A \times \lists{A} \times B \rightarrow C,$$ and $$\chi : A \times B \times C \times C \rightarrow C.$$ Then there is a unique map $\Theta : \lists{A} \times B \rightarrow C$ such that $$\Theta(\nil,b) = \delta(b)$$ and
 $$\Theta(\cons(a,x),b) = \left\{\begin{array}{ll}
  \psi(a,x,b) & \mathrm{if}\ \beta(a,x,b) \\
  \chi(a,x,b,\Theta(x,b),\Theta(x,\mu(b))) & \mathrm{otherwise}.
 \end{array}\right.$$
 We denote this $\Theta$ by $\dbfoldr{\delta}{\beta}{\mu}{\psi}{\chi}$.
-</p></div>
+::::::::::::::::::::
 
-<div class="proof"><p>
+::: proof ::::::::::
 Define $\varepsilon : B \times \lists{A} \rightarrow C$ by $$\varepsilon(b,x) = \delta(b)$$ and $\varphi : A \times C^{B \times \lists{A}} \rightarrow C^{B \times \lists{A}}$ casewise by
 $$\varphi(a,g)(b,x) = \left\{\begin{array}{ll}
  \psi(a,\tail(x),b) & \mathrm{if}\ \beta(a,\tail(x),b) \\
@@ -84,8 +83,8 @@ $$\begin{eqnarray*}
  & = & \Theta(\cons(a,x),b)
 \end{eqnarray*}$$
 as needed.
-</p></div>
-</div>
+::::::::::::::::::::
+::::::::::::::::::::
 
 
 Implementation
