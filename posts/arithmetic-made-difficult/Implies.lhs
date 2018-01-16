@@ -17,35 +17,61 @@ slug: implies
 > import And
 > import Or
 
-
-
-Implication on booleans:
+Next we define implication on booleans.
 
 :::::: definition ::
-We define $\bimpl : \bool \times \bool \rightarrow \bool$ by $$\bimpl(p,q) = \bor(\bnot(p),q).$$
+We define $\bimpl : \bool \times \bool \rightarrow \bool$ by $$\bimpl(p,q) = \bif{p}{q}{\btrue}.$$
 
 In Haskell:
 
-> impl :: Bool -> Bool -> Bool
-> impl p q = ifThenElse p (ifThenElse q true false) true
+> impl :: (Boolean b) => b -> b -> b
+> impl p q = ifThenElse p q true
 
 ::::::::::::::::::::
 
-And implication has its own properties.
+$\bimpl$ is equivalent to an $\bor$.
 
 :::::: theorem :::::
-For all $p,q,r,s \in \bool$ we have the following.
-
-1. $\bimpl(\bfalse,p) = \btrue$.
-2. $\bimpl(\btrue,p) = p$.
-3. $\bimpl(p,p)$.
-4. $\bor(\bimpl(p,q),\bimpl(q,p))$.
-5. $\bimpl(p,\bimpl(q,r)) = \bimpl(q,\bimpl(p,r))$.
-6. $\bimpl(\bimpl(p,q),\bimpl(\bimpl(q,r),\bimpl(p,r)))$.
-7. $\bimpl(\bimpl(p,\bimpl(q,r)),\bimpl(\bimpl(p,q),\bimpl(p,r)))$.
+For all $p,q \in \bool$, we have $$\bimpl(p,q) = \bor(\bnot(p),q).$$
 
 ::: proof ::::::::::
-1. We have
+If $p = \bfalse$, we have
+$$\begin{eqnarray*}
+ &   & \bimpl(\bfalse,q) \\
+ & = & \bif{\bfalse}{q}{\btrue} \\
+ & = & \btrue \\
+ & = & \bor(\btrue,q) \\
+ & = & \bor(\bnot(\bfalse),q)
+\end{eqnarray*}$$
+as needed. Suppose then that $p = \btrue$. Then
+$$\begin{eqnarray*}
+ &   & \bimpl(\btrue,q) \\
+ & = & \bif{\btrue}{q}{\btrue} \\
+ & = & q \\
+ & = & \bor(\bfalse,q) \\
+ & = & \bor(\bnot(\btrue),q)
+\end{eqnarray*}$$
+as needed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_impl_or :: (Boolean b, Equal b)
+>   => b -> Test (b -> b -> Bool)
+> _test_impl_or _ =
+>   testName "impl(p,q) == or(not(p),q)" $
+>   \p q -> eq (impl p q) (or (not p) q) 
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+$\bfalse$ implies anything.
+
+:::::: theorem :::::
+If $p \in \bool$, we have $\bimpl(\bfalse,p) = \btrue$.
+
+::: proof ::::::::::
+We have
 $$\begin{eqnarray*}
  &   & \bimpl(\bfalse,p) \\
  & = & \bor(\bnot(\bfalse),p) \\
@@ -53,7 +79,26 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.
-2. We have
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_impl_false :: (Boolean b, Equal b)
+>   => b -> Test (b -> Bool)
+> _test_impl_false _ =
+>   testName "impl(false,p) == true" $
+>   \p -> eq (impl false p) true
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+$\btrue$ is left-neutral.
+
+:::::: theorem :::::
+For all $p \in \bool$ we have $\bimpl(\btrue,p) = p$.
+
+::: proof ::::::::::
+We have
 $$\begin{eqnarray*}
  &   & \bimpl(\btrue,p) \\
  & = & \bor(\bnot(\btrue),p) \\
@@ -61,14 +106,52 @@ $$\begin{eqnarray*}
  & = & p
 \end{eqnarray*}$$
 as claimed.
-3. If $p = \btrue$, we have
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_impl_true :: (Boolean b, Equal b)
+>   => b -> Test (b -> Bool)
+> _test_impl_true _ =
+>   testName "impl(true,p) == p" $
+>   \p -> eq (impl true p) p
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+$\bimpl$ is... idemp-constant? Not sure what to call this.
+
+:::::: theorem :::::
+If $p \in \bool$ we have $\bimpl(p,p)$.
+
+::: proof ::::::::::
+If $p = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bimpl(\btrue,\btrue) \\
  & = & \bor(\bnot(\btrue),\btrue) \\
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.
-4. We have
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_impl_reflexive :: (Boolean b, Equal b)
+>   => b -> Test (b -> Bool)
+> _test_impl_reflexive _ =
+>   testName "impl(p,p) == true" $
+>   \p -> eq (impl p p) true
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+$\bimpl$ is antisymmetric.
+
+:::::: theorem :::::
+For all $p,q \in \bool$ we have $\bor(\bimpl(p,q),\bimpl(q,p))$.
+
+::: proof ::::::::::
+We have
 $$\begin{eqnarray*}
  &   & \bor(\bimpl(p,q),\bimpl(q,p)) \\
  & = & \bor(\bor(\bnot(p),q),\bor(\bnot(q),p)) \\
@@ -79,7 +162,26 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
-5. We have
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_impl_total :: (Boolean b, Equal b)
+>   => b -> Test (b -> b -> Bool)
+> _test_impl_total _ =
+>   testName "or(impl(p,q),impl(q,p)) == true" $
+>   \p q -> eq (or (impl p q) (impl q p)) true
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+$\bimpl$ is left-commutative.
+
+:::::: theorem :::::
+For all $p,q,r \in \bool$ we have $$\bimpl(p,\bimpl(q,r)) = \bimpl(q,\bimpl(p,r)).$$
+
+::: proof ::::::::::
+We have
 $$\begin{eqnarray*}
  &   & \bimpl(p,\bimpl(q,r)) \\
  & = & \bor(\bnot(p),\bimpl(q,r)) \\
@@ -91,7 +193,26 @@ $$\begin{eqnarray*}
  &   & \bimpl(q,\bimpl(p,r))
 \end{eqnarray*}$$
 as claimed.
-6. We have
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_impl_antecedents_commute :: (Boolean b, Equal b)
+>   => b -> Test (b -> b -> b -> Bool)
+> _test_impl_antecedents_commute _ =
+>   testName "impl(p,impl(q,r)) == impl(q,impl(p,r))" $
+>   \p q r -> eq (impl p (impl q r)) (impl q (impl p r))
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+$\bimpl$ has a kind of transitivity.
+
+:::::: theorem :::::
+For all $p,q,r \in \bool$ we have $$\bimpl(\bimpl(p,q),\bimpl(\bimpl(q,r),\bimpl(p,r))).$$
+
+::: proof ::::::::::
+We have
 $$\begin{eqnarray*}
  &   & \bimpl(\bimpl(p,q),\bimpl(\bimpl(q,r),\bimpl(p,r))) \\
  & = & \bimpl(\bor(\bnot(p),q),\bor(\bnot(\bimpl(q,r)),\bimpl(p,r))) \\
@@ -126,7 +247,26 @@ $$\begin{eqnarray*}
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
-7. If $p = \bfalse$, we have
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_impl_transitive :: (Boolean b, Equal b)
+>   => b -> Test (b -> b -> b -> Bool)
+> _test_impl_transitive _ =
+>   testName "impl(impl(p,q),impl(impl(q,r),impl(p,r)))" $
+>   \p q r -> isTrue $ impl (impl p q) (impl (impl q r) (impl p r))
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+$\bimpl$ has a kind of distributivity.
+
+:::::: theorem :::::
+For all $p,q,r \in \bool$ we have $$\bimpl(\bimpl(p,\bimpl(q,r)),\bimpl(\bimpl(p,q),\bimpl(p,r))).$$
+
+::: proof ::::::::::
+If $p = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bimpl(\bimpl(p,\bimpl(q,r)),\bimpl(\bimpl(p,q),\bimpl(p,r))) \\
  & = & \bimpl(\bimpl(\bfalse,\bimpl(q,r)),\bimpl(\bimpl(\bfalse,q),\bimpl(\bfalse,r))) \\
@@ -146,46 +286,11 @@ as claimed.
 
 ::: test :::::::::::
 
-> _test_impl_false :: Test (Bool -> Bool)
-> _test_impl_false =
->   testName "impl(false,p) == true" $
->   \p -> eq (impl false p) true
-> 
-> 
-> _test_impl_true :: Test (Bool -> Bool)
-> _test_impl_true =
->   testName "impl(true,p) == p" $
->   \p -> eq (impl true p) p
-> 
-> 
-> _test_impl_reflexive :: Test (Bool -> Bool)
-> _test_impl_reflexive =
->   testName "impl(p,p) == true" $
->   \p -> eq (impl p p) true
-> 
-> 
-> _test_impl_total :: Test (Bool -> Bool -> Bool)
-> _test_impl_total =
->   testName "or(impl(p,q),impl(q,p)) == true" $
->   \p q -> eq (or (impl p q) (impl q p)) true
-> 
-> 
-> _test_impl_antecedents_commute :: Test (Bool -> Bool -> Bool -> Bool)
-> _test_impl_antecedents_commute =
->   testName "impl(p,impl(q,r)) == impl(q,impl(p,r))" $
->   \p q r -> eq (impl p (impl q r)) (impl q (impl p r))
-> 
-> 
-> _test_impl_transitive :: Test (Bool -> Bool -> Bool -> Bool)
-> _test_impl_transitive =
->   testName "impl(impl(p,q),impl(impl(q,r),impl(p,r)))" $
->   \p q r -> impl (impl p q) (impl (impl q r) (impl p r))
-> 
-> 
-> _test_impl_distributive :: Test (Bool -> Bool -> Bool -> Bool)
-> _test_impl_distributive =
+> _test_impl_distributive :: (Boolean b, Equal b)
+>   => b -> Test (b -> b -> b -> Bool)
+> _test_impl_distributive _ =
 >   testName "impl(impl(p,impl(q,r)),impl(impl(p,q),impl(p,r)))" $
->   \p q r -> impl (impl p (impl q r)) (impl (impl p q) (impl p r))
+>   \p q r -> isTrue $ impl (impl p (impl q r)) (impl (impl p q) (impl p r))
 
 ::::::::::::::::::::
 ::::::::::::::::::::
@@ -222,12 +327,13 @@ as claimed.
 
 ::: test :::::::::::
 
-> _test_impl_and_compatible :: Test (Bool -> Bool -> Bool -> Bool -> Bool)
-> _test_impl_and_compatible =
+> _test_impl_and_compatible :: (Boolean b, Equal b)
+>   => b -> Test (b -> b -> b -> b -> Bool)
+> _test_impl_and_compatible b =
 >   testName "if and(impl(p,r),impl(q,s)) then impl(and(p,q),and(r,s))" $
->   \p q r s -> if and (impl p r) (impl q s)
->     then impl (and p q) (and r s)
->     else true
+>   \p q r s -> isTrue $ ifThenElse (and (impl p r) (impl q s))
+>     (impl (and p q) (and r s))
+>     (true)
 
 ::::::::::::::::::::
 ::::::::::::::::::::
@@ -240,10 +346,10 @@ Testing
 Suite:
 
 > _test_impl ::
->   ( Boolean b, Arbitrary b, Show b, Equal b
+>   ( TypeName b, Boolean b, Arbitrary b, Show b, Equal b
 >   ) => b -> Int -> Int -> IO ()
 > _test_impl p size num = do
->   testLabel0 "Bool"
+>   testLabel1 "implies" p
 > 
 >   let
 >     args = stdArgs
@@ -251,14 +357,15 @@ Suite:
 >       , maxSize = size
 >       }
 > 
->   runTest args _test_impl_false
->   runTest args _test_impl_true
->   runTest args _test_impl_reflexive
->   runTest args _test_impl_total
->   runTest args _test_impl_antecedents_commute
->   runTest args _test_impl_transitive
->   runTest args _test_impl_distributive
->   runTest args _test_impl_and_compatible
+>   runTest args (_test_impl_or p)
+>   runTest args (_test_impl_false p)
+>   runTest args (_test_impl_true p)
+>   runTest args (_test_impl_reflexive p)
+>   runTest args (_test_impl_total p)
+>   runTest args (_test_impl_antecedents_commute p)
+>   runTest args (_test_impl_transitive p)
+>   runTest args (_test_impl_distributive p)
+>   runTest args (_test_impl_and_compatible p)
 
 Main:
 

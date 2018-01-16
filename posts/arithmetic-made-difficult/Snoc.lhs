@@ -133,7 +133,7 @@ $$\begin{eqnarray*}
  & = & \band(\beq(a,c),\bfalse) \\
  & = & \bfalse \\
  & = & \band(\beq(a,b),\bfalse) \\
- & = & \band(\beq(a,b),\beq(\nil,\cons(c,u)) \\
+ & = & \band(\beq(a,b),\beq(\nil,\cons(c,u))) \\
  & = & \band(\beq(a,b),\beq(x,y))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$, $b$, and $y$ for some $x$ and let $d \in A$. We again consider two possibilities for $y$. If $y = \nil$, we have
@@ -156,7 +156,7 @@ $$\begin{eqnarray*}
  & = & \band(\beq(d,c),\beq(\snoc(a,x),\snoc(b,u))) \\
  & = & \band(\beq(d,c),\band(\beq(a,b),\beq(x,u))) \\
  & = & \band(\beq(a,b),\band(\beq(d,c),\beq(x,u))) \\
- & = & \band(\beq(a,b),\band(\cons(d,x),\cons(c,u)) \\
+ & = & \band(\beq(a,b),\band(\cons(d,x),\cons(c,u))) \\
  & = & \band(\beq(a,b),\band(\cons(d,x),y))
 \end{eqnarray*}$$
 as needed.
@@ -167,7 +167,7 @@ as needed.
 > _test_snoc_eq :: (List t, Equal (t a), Equal a, Boolean b, Equal b)
 >   => t a -> b -> Test (a -> a -> t a -> t a -> Bool)
 > _test_snoc_eq _ p =
->   testName "eq(snoc(a,x),snoc(b,y) iff and(eq(a,b),eq(x,y))" $
+>   testName "eq(snoc(a,x),snoc(b,y)) iff and(eq(a,b),eq(x,y))" $
 >   \a b x y -> eq
 >     ((eq (snoc a x) (snoc b y)) `withTypeOf` p)
 >     (and (eq a b) (eq x y))

@@ -8,8 +8,7 @@ slug: booleans
 
 > {-# LANGUAGE NoImplicitPrelude #-}
 > module Booleans
->   ( Boolean, true, false, ifThenElse, isTrue, isFalse
->   , Equal, eq
+>   ( Boolean, true, false, ifThenElse, isTrue, isFalse, Equal, eq
 >   , _test_boolean, main_boolean
 >   ) where
 > 

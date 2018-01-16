@@ -5,6 +5,7 @@ author: nbloomf
 
 Under construction. I don't know exactly what this is yet. Links that don't exist are my to-do list.
 
+0. [Arithmetic Made Difficult](/posts/arithmetic-made-difficult/Testing.html)
 1. First Steps
     * [Booleans](/posts/arithmetic-made-difficult/Booleans.html)
         * [Not](/posts/arithmetic-made-difficult/Not.html)

@@ -447,12 +447,12 @@ Testing
 Suite:
 
 > _test_or ::
->   ( Equal a, Arbitrary a, CoArbitrary a, Show a
->   , Boolean b, Arbitrary b, Show b, Equal b
+>   ( Equal a, Arbitrary a, CoArbitrary a, Show a, TypeName a
+>   , Boolean b, Arbitrary b, Show b, Equal b, TypeName b
 >   )
 >   => b -> a -> Int -> Int -> IO ()
 > _test_or p x size num = do
->   testLabel0 "Bool"
+>   testLabel2 "or" p x
 > 
 >   let
 >     args = stdArgs
