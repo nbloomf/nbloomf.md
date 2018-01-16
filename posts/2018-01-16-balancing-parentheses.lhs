@@ -342,8 +342,8 @@ Now `main` is straightforward enough; we read the command line arguments and cal
 >       (fmap lines getContents) >>= balanceLines "stdin" ds
 > 
 >     (True, _) -> do
->       let process name =
->         (fmap lines $ readFile name) >>= balanceLines name ds
+>       let process name = do
+>             (fmap lines $ readFile name) >>= balanceLines name ds
 >       sequence_ $ map process filenames
 > 
 >   return ()
