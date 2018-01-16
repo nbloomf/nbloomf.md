@@ -254,15 +254,15 @@ Now `balanceFile` handles checking entire files...
 >   case balanceDelimiters ds (fileLoc text) of
 >     Left (Left (d,t)) -> do
 >       putStrLn $ path ++ ": " ++ err t
->       putStrLn $ "unbalanced closing delimiter '" ++ d ++ "'"
+>       putStrLn $ "  unbalanced closing delimiter '" ++ d ++ "'"
 >     Left (Right ((d,t),(e,u))) -> do
 >       putStrLn $ path ++ ": " ++ err t
->       putStrLn $ "closing delimiter '" ++ d ++ "'"
->       putStrLn $ "does not match opening '" ++ e ++ "'"
->       putStrLn $ "at " ++ err u
+>       putStrLn $ "  closing delimiter '" ++ d ++ "'"
+>       putStrLn $ "  does not match opening '" ++ e ++ "'"
+>       putStrLn $ "  at " ++ err u
 >     Right ((d,t):_) -> do
 >       putStrLn $ path ++ ": " ++ err t
->       putStrLn $ "unbalanced opening delimiter '" ++ d ++ "'"
+>       putStrLn $ "  unbalanced opening delimiter '" ++ d ++ "'"
 >     Right [] -> return ()
 >   where
 >     err (i,j) = "line " ++ show i ++ " column " ++ show j
@@ -290,15 +290,15 @@ Now `balanceFile` handles checking entire files...
 >   case balanceDelimiters ds (num text) of
 >     Left (Left (d,t)) -> do
 >       putStrLn $ path ++ ", line " ++ show k ++ ": " ++ err t
->       putStrLn $ "unbalanced closing delimiter '" ++ d ++ "'"
+>       putStrLn $ "  unbalanced closing delimiter '" ++ d ++ "'"
 >     Left (Right ((d,t),(e,u))) -> do
 >       putStrLn $ path ++ ", line " ++ show k ++ ": " ++ err t
->       putStrLn $ "closing delimiter '" ++ d ++ "'"
->       putStrLn $ "does not match opening '" ++ e ++ "'"
->       putStrLn $ "at " ++ err u
+>       putStrLn $ "  closing delimiter '" ++ d ++ "'"
+>       putStrLn $ "  does not match opening '" ++ e ++ "'"
+>       putStrLn $ "  at " ++ err u
 >     Right ((d,t):_) -> do
 >       putStrLn $ path ++ ", line " ++ show k ++ ": " ++ err t
->       putStrLn $ "unbalanced opening delimiter '" ++ d ++ "'"
+>       putStrLn $ "  unbalanced opening delimiter '" ++ d ++ "'"
 >     Right [] -> return ()
 >   where
 >     err :: Int -> String
