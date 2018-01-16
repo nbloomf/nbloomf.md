@@ -109,7 +109,7 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \unique(\cons(a,\cons(b,\nil))) \\
  & = & \band(\bnot(\elt(a,\cons(b,\nil))),\unique(\cons(b,\nil))) \\
- & = & \band(\bnot(\beq(a,b))),\btrue) \\
+ & = & \band(\bnot(\beq(a,b)),\btrue) \\
  & = & \bnot(\beq(a,b))
 \end{eqnarray*}$$
 as claimed.
@@ -250,10 +250,10 @@ $$\begin{eqnarray*}
  & = & \band(\bnot(\bif{\beq(b,a)}{\btrue}{\elt(b,x)}),\band(\bnot(\elt(a,x)),\unique(x))) \\
  & = & \band(\bif{\beq(b,a)}{\bfalse}{\bnot(\elt(b,x))},\band(\bnot(\elt(a,x)),\unique(x))) \\
  & = & \bif{\beq(a,b)}{\band(\bfalse,\band(\bnot(\elt(a,x)),\unique(x)))}{\band(\bnot(\elt(b,x)),\band(\bnot(\elt(a,x)),\unique(x)))} \\
- & = & \bif{\beq(a,b)}{\bfalse}{\band(\band(\bnot(\elt(b,x),\bnot(\elt(a,x))),\unique(x))} \\
- & = & \bif{\beq(a,b)}{\bfalse}{\band(\band(\bnot(\elt(a,x),\bnot(\elt(b,x))),\unique(x))} \\
- & = & \bif{\beq(a,b)}{\bfalse}{\band(\bnot(\elt(a,x)),\band(\bnot(\elt(b,x)),\unique(x))))} \\
- & = & \bif{\beq(a,b)}{\band(\bfalse,\band(\bnot(\elt(b,x)),\unique(x)))}{\band(\bnot(\elt(a,x)),\band(\bnot(\elt(b,x)),\unique(x))))} \\
+ & = & \bif{\beq(a,b)}{\bfalse}{\band(\band(\bnot(\elt(b,x)),\bnot(\elt(a,x))),\unique(x))} \\
+ & = & \bif{\beq(a,b)}{\bfalse}{\band(\band(\bnot(\elt(a,x)),\bnot(\elt(b,x))),\unique(x))} \\
+ & = & \bif{\beq(a,b)}{\bfalse}{\band(\bnot(\elt(a,x)),\band(\bnot(\elt(b,x)),\unique(x)))} \\
+ & = & \bif{\beq(a,b)}{\band(\bfalse,\band(\bnot(\elt(b,x)),\unique(x)))}{\band(\bnot(\elt(a,x)),\band(\bnot(\elt(b,x)),\unique(x)))} \\
  & = & \band(\bif{\beq(a,b)}{\bfalse}{\bnot(\elt(a,x))},\band(\bnot(\elt(b,x)),\unique(x))) \\
  & = & \band(\bnot(\bif{\beq(a,b)}{\btrue}{\elt(a,x)}),\band(\bnot(\elt(b,x)),\unique(x))) \\
  & = & \band(\bnot(\elt(a,\cons(b,x))),\band(\bnot(\elt(b,x)),\unique(x))) \\

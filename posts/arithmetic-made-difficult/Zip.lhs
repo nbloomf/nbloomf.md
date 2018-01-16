@@ -222,7 +222,7 @@ $$\begin{eqnarray*}
  & = & \next(\min(\length(z),\length(y))) \\
  & = & \nmin(\next(\length(z)),\next(\length(y))) \\
  & = & \nmin(\length(\cons(a,z)),\length(\cons(b,y))) \\
- & = & \nmin(x),\length(\cons(b,y))) \\
+ & = & \nmin(x,\length(\cons(b,y))) \\
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

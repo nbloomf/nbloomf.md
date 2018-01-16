@@ -47,7 +47,7 @@ $$\begin{eqnarray*}
 With this in mind, we define $\unzip$ like so.
 
 :::::: definition ::
-Let $A$ and $B$ be sets. Define $\varphi : (A \times B) \times (\lists{A} \times \lists{B}) \rightarrow \lists{A} \times \lists{B}$ by $$\varphi((a,b),(u,v)) = (\cons(a,u),\cons(b,v).$$ We then define $\unzip : \lists{A \times B} \rightarrow \lists{A} \times \lists{B}$ by $$\unzip(x) = \foldr{(\nil,\nil)}{\varphi}(x).$$
+Let $A$ and $B$ be sets. Define $\varphi : (A \times B) \times (\lists{A} \times \lists{B}) \rightarrow \lists{A} \times \lists{B}$ by $$\varphi((a,b),(u,v)) = (\cons(a,u),\cons(b,v)).$$ We then define $\unzip : \lists{A \times B} \rightarrow \lists{A} \times \lists{B}$ by $$\unzip(x) = \foldr{(\nil,\nil)}{\varphi}(x).$$
 
 In Haskell:
 
@@ -101,7 +101,7 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed. Suppose now that the result holds for some $x$ and let $a \in A$ and $b \in B$. Let $(u,v) = \unzip(x)$. Now
 $$\begin{eqnarray*}
- &   & \zip(\unzip(\cons((a,b),x)) \\
+ &   & \zip(\unzip(\cons((a,b),x))) \\
  & = & \zip(\cons(a,\fst(\unzip(x))),\cons(b,\snd(\unzip(x)))) \\
  & = & \cons((a,b),\zip(\fst(\unzip(x)),\snd(\unzip(x)))) \\
  & = & \cons((a,b),\zip(\unzip(x))) \\

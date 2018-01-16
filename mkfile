@@ -116,7 +116,8 @@ blankpost:VQ:
 sniff-amd:VQ: \
   sniff-amd-fencediv \
   sniff-amd-plaindiv \
-  sniff-amd-nestdiv
+  sniff-amd-nestdiv \
+  sniff-amd-balance
 
 #-- use consistent syntax for fenced divs --#
 sniff-amd-fencediv:VQ:
@@ -176,4 +177,15 @@ sniff-amd-nestdiv:VQ:
     echo 'Nested Divs' | doppler lightred
     echo $( echo "$NESTDIV" | wc -l ) 'problems found' | doppler lightred
     echo "$NESTDIV"
+  fi
+
+#-- balanced delimiters --#
+sniff-amd-balance:VQ:
+  BALANCE=$( balance -d '\left\{ \right. ( ) { }' posts/arithmetic-made-difficult/* )
+  if [ -z "$BALANCE" ]; then
+    echo 'Delimiters OK' | doppler lightgreen
+  else
+    echo 'Delimiters' | doppler lightred
+    echo $( echo "$BALANCE" | wc -l ) 'problems found' | doppler lightred
+    echo "$BALANCE"
   fi

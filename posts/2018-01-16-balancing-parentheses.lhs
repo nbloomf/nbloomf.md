@@ -255,17 +255,14 @@ Now `balanceFile` handles checking entire files...
 >     Left (Left (d,t)) -> do
 >       putStrLn $ path ++ ": " ++ err t
 >       putStrLn $ "unbalanced closing delimiter '" ++ d ++ "'"
->       exitFailure
 >     Left (Right ((d,t),(e,u))) -> do
 >       putStrLn $ path ++ ": " ++ err t
 >       putStrLn $ "closing delimiter '" ++ d ++ "'"
 >       putStrLn $ "does not match opening '" ++ e ++ "'"
 >       putStrLn $ "at " ++ err u
->       exitFailure
 >     Right ((d,t):_) -> do
 >       putStrLn $ path ++ ": " ++ err t
 >       putStrLn $ "unbalanced opening delimiter '" ++ d ++ "'"
->       exitFailure
 >     Right [] -> return ()
 >   where
 >     err (i,j) = "line " ++ show i ++ " column " ++ show j
@@ -294,17 +291,14 @@ Now `balanceFile` handles checking entire files...
 >     Left (Left (d,t)) -> do
 >       putStrLn $ path ++ ", line " ++ show k ++ ": " ++ err t
 >       putStrLn $ "unbalanced closing delimiter '" ++ d ++ "'"
->       exitFailure
 >     Left (Right ((d,t),(e,u))) -> do
 >       putStrLn $ path ++ ", line " ++ show k ++ ": " ++ err t
 >       putStrLn $ "closing delimiter '" ++ d ++ "'"
 >       putStrLn $ "does not match opening '" ++ e ++ "'"
 >       putStrLn $ "at " ++ err u
->       exitFailure
 >     Right ((d,t):_) -> do
 >       putStrLn $ path ++ ", line " ++ show k ++ ": " ++ err t
 >       putStrLn $ "unbalanced opening delimiter '" ++ d ++ "'"
->       exitFailure
 >     Right [] -> return ()
 >   where
 >     err :: Int -> String

@@ -150,7 +150,7 @@ as needed. Finally, suppose $y = \cons(b,w)$. Then we have
 $$\begin{eqnarray*}
  &   & \map(\tSwap)(\zipPad(u,v)(\cons(a,x),y)) \\
  & = & \map(\tSwap)(\zipPad(u,v)(\cons(a,x),\cons(b,w))) \\
- & = & \map(\tSwap)(\cons((a,b),\zipPad(u,v)(x,w)) \\
+ & = & \map(\tSwap)(\cons((a,b),\zipPad(u,v)(x,w))) \\
  & = & \cons(\tSwap((a,b)),\map(\tSwap)(\zipPad(u,v)(x,w))) \\
  & = & \cons((b,a),\zipPad(v,u)(w,x)) \\
  & = & \zipPad(v,u)(\cons(b,w),\cons(a,x)) \\
