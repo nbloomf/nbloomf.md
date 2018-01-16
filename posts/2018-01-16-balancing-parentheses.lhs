@@ -95,7 +95,10 @@ $> num "hello"
 In the second case, we want to turn a `[[a]]` into something like `[(a,(Int,Int))]`. This is a little more complicated (but not much).
 
 > lineCol :: [[a]] -> [(a,(Int,Int))]
-> lineCol xss = concatMap (\(xs,i) -> map (\(x,j) -> (x,(i,j))) xs) $ num (map num xss)
+> lineCol xss =
+>   concatMap (\(xs,i) -> map (\(x,j) -> (x,(i,j))) xs) $ num (map num xss)
+
+for example:
 
 ```haskell
 $> lineCol ["hello","world"]
@@ -148,7 +151,10 @@ $> tokenize ["<<","&&"] (num "<hi&&k<<")
 Now the old `checkToken1` only nees a couple of adaptations to work on multiple delimiters. The failure cases are a little more complicated; now we can have a close with no open, an open with no close, or a close with a mismatched open.
 
 > checkToken :: (Eq a)
->   => [(a,a)] -> [(a,t)] -> (a,t) -> Either (Either (a,t) ((a,t),(a,t))) [(a,t)]
+>   => [(a,a)]
+>   -> [(a,t)]
+>   -> (a,t)
+>   -> Either (Either (a,t) ((a,t),(a,t))) [(a,t)]
 > checkToken ds z (x,t) =
 >   case lookup x ds of
 >     Just y -> Right ((x,t):z) -- opening delimiter found
@@ -162,7 +168,10 @@ Now the old `checkToken1` only nees a couple of adaptations to work on multiple 
 
 The shape of `checkToken` is right for `foldM`.
 
-> balance :: (Eq a) => [(a,a)] -> [(a,t)] -> Either (Either (a,t) ((a,t),(a,t))) [(a,t)]
+> balance :: (Eq a)
+>   => [(a,a)]
+>   -> [(a,t)]
+>   -> Either (Either (a,t) ((a,t),(a,t))) [(a,t)]
 > balance ds = foldM (checkToken ds) []
 
 And a helper to turn our list of paired delimiters into a list of tokens:
@@ -170,6 +179,8 @@ And a helper to turn our list of paired delimiters into a list of tokens:
 > flat :: [(a,a)] -> [a]
 > flat [] = []
 > flat ((a,b):xs) = a:b:(flat xs)
+
+For example:
 
 ```haskell
 $> let ds = [("(",")"),("<<",">>")]
@@ -217,7 +228,7 @@ We'll use the `GetOpt` library to handle parsing command line options.
 
 > options :: [OptDescr (Flags -> Maybe Flags)]
 > options =
->   [ Option ['l'] ["line"]
+>   [ Option ['l'] ["lines"]
 >       (NoArg (\opts -> Just $ opts { lineMode = True }))
 >       "balance each input line separately"
 > 
@@ -258,13 +269,15 @@ Now `balanceFile` handles checking entire files...
 >     Right [] -> return ()
 >   where
 >     err (i,j) = "line " ++ show i ++ " column " ++ show j
-> 
-> 
+
+(`fileLoc` is an improvement over `lineCol` that won't allow matches of multi-character delimiters across newlines.)
+
 > fileLoc :: String -> [(Char,(Int,Int))]
-> fileLoc str = unfoldr foo (str,(1,1))
+> fileLoc str = unfoldr next (str,(1,1))
 >   where
->     foo :: ([Char],(Int,Int)) -> Maybe ((Char,(Int,Int)), ([Char],(Int,Int)))
->     foo (str,(row,col)) = case str of
+>     next :: ([Char],(Int,Int))
+>               -> Maybe ((Char,(Int,Int)), ([Char],(Int,Int)))
+>     next (str,(row,col)) = case str of
 >       [] -> Nothing
 >       (c:cs) -> if c == '\n'
 >         then Just ((c,(row,col)),(cs,(row+1,1)))
@@ -297,7 +310,7 @@ Now `balanceFile` handles checking entire files...
 >     err :: Int -> String
 >     err j = "column " ++ show j
 
-And `main`:
+Now `main` is straightforward enough; we read the command line arguments and call either `balanceFile` or `balanceLines`, depending.
 
 > main :: IO ()
 > main = do
@@ -329,7 +342,8 @@ And `main`:
 >       (fmap lines getContents) >>= balanceLines "stdin" ds
 > 
 >     (True, _) -> do
->       let process name = (fmap lines $ readFile name) >>= balanceLines name ds
+>       let process name =
+>         (fmap lines $ readFile name) >>= balanceLines name ds
 >       sequence_ $ map process filenames
 > 
 >   return ()
