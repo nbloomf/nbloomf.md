@@ -160,7 +160,14 @@ Also the output of the division algorithm is unique.
 Let $a,b \in \nats$ and suppose we have $q,r \in \nats$ such that $$a = \nplus(\ntimes(q,\next(b)),r)$$ and $\nleq(r,b) = \btrue$. Then $(q,r) = \ndivalg(a,b)$.
 
 ::: proof ::::::::::
-It suffices to show that if $(q_1,r_1)$ and $(q_2,r_2)$ both satisfy the conditions of the division algorithm, then $q_1 = q_2$ and $r_1 = r_2$. To this end, suppose we have $$\begin{eqnarray*} & & \nplus(\ntimes(q_1,\next(b)),r_1) \\ & = & a \\ & = & \nplus(\ntimes(q_2,\next(b)),r_2). \end{eqnarray*}$$ Without loss of generality, we have $\nleq(r_1,r_2)$; say $r_2 = \nplus(r_1,k)$. Now $$\begin{eqnarray*} & & \nplus(\ntimes(q_1,\next(b)),r_1) \\ & = & \nplus(\ntimes(q_2,\next(b)),r_2) \\ & = & \nplus(\ntimes(q_2,\next(b)),\nplus(r_1,k))) \\ & = & \nplus(\nplus(\ntimes(q_2,\next(b)),k),r_1), \end{eqnarray*}$$ and thus $$\ntimes(q_1,\next(b)) = \nplus(\ntimes(q_2,\next(b)),k).$$ Note that $\nleq(k,r_2)$, and thus $\nleq(k,b)$.
+It suffices to show that if $(q_1,r_1)$ and $(q_2,r_2)$ both satisfy the conditions of the division algorithm, then $q_1 = q_2$ and $r_1 = r_2$. To this end, suppose we have $$\begin{eqnarray*} & & \nplus(\ntimes(q_1,\next(b)),r_1) \\ & = & a \\ & = & \nplus(\ntimes(q_2,\next(b)),r_2). \end{eqnarray*}$$ Without loss of generality, we have $\nleq(r_1,r_2)$; say $r_2 = \nplus(r_1,k)$. Now
+$$\begin{eqnarray*}
+ &   & \nplus(\ntimes(q_1,\next(b)),r_1) \\
+ & = & \nplus(\ntimes(q_2,\next(b)),r_2) \\
+ & = & \nplus(\ntimes(q_2,\next(b)),\nplus(r_1,k)) \\
+ & = & \nplus(\nplus(\ntimes(q_2,\next(b)),k),r_1),
+\end{eqnarray*}$$
+and thus $$\ntimes(q_1,\next(b)) = \nplus(\ntimes(q_2,\next(b)),k).$$ Note that $\nleq(k,r_2)$, and thus $\nleq(k,b)$.
 
 We wish to show that $k = \zero$. To this end, let $P(q_1,q_2,b,k)$ denote the statement $$\mathrm{if}\ \ntimes(q_1,\next(b)) = \nplus(\ntimes(\ntimes(q_2,\next(b))),k)\ \mathrm{then}\ k = \zero,$$ and define a set $$M = \{ q_1 \in \nats \mid \forall q_2,b,k\ P(q_1,q_2,b,k) \}.$$ We will show that $M = \nats$ by (you guessed it!) induction.
 
@@ -186,7 +193,7 @@ So we have $k = \zero$, and thus $$\ntimes(q_1,\next(b)) = \ntimes(q_2,\next(b))
 > _test_divalg_unique :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> n -> n -> Bool)
 > _test_divalg_unique _ =
->   testName "if and(eq(a,plus(times(q,next(b)),r),leq(r,b)) then (q,r) = divalg(a,b)" $
+>   testName "if and(eq(a,plus(times(q,next(b)),r)),leq(r,b)) then (q,r) = divalg(a,b)" $
 >   \a b q r -> if and (eq a (plus (times q (next b)) r)) (leq r b)
 >     then eq (q,r) (divalg a (next b))
 >     else true

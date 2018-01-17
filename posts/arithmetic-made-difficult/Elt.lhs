@@ -307,7 +307,7 @@ as claimed. For the inductive step, suppose the equality holds for all $y$ for s
 $$\begin{eqnarray*}
  &   & \elt(y,\tails(\cons(a,x))) \\
  & = & \elt(y,\cons(\cons(a,x),\tails(x))) \\
- & = & \bif{\beq(y,\cons(a,x)}{\btrue}{\elt(y,\tails(x)} \\
+ & = & \bif{\beq(y,\cons(a,x))}{\btrue}{\elt(y,\tails(x))} \\
  & = & \btrue \\
  & = & \suffix(\cons(a,x),\cons(a,x)) \\
  & = & \suffix(y,\cons(a,x))
@@ -316,7 +316,7 @@ as claimed. Suppose $y \neq \cons(a,x)$. Now
 $$\begin{eqnarray*}
  &   & \elt(y,\tails(\cons(a,x))) \\
  & = & \elt(y,\cons(\cons(a,x),\tails(x))) \\
- & = & \bif{\beq(y,\cons(a,x))}{\btrue}{\elt(y,\tails(x)} \\
+ & = & \bif{\beq(y,\cons(a,x))}{\btrue}{\elt(y,\tails(x))} \\
  & = & \elt(y,tails(x)) \\
  & = & \suffix(y,x) \\
  & = & \suffix(y,\cons(a,x))
@@ -375,8 +375,8 @@ $$\begin{eqnarray*}
 as claimed. If $b \neq a$ (that is, $\bnot(\beq(a,b)) = \btrue$), we have
 $$\begin{eqnarray*}
  &   & \elt(a)(\filter(\bnot(\beq(a,-)),\cons(b,x))) \\
- & = & \elt(a)(\cons(b,\filter(\bnot(\beq(a,-),x))) \\
- & = & \filter(\bnot(\beq(a,-)),x) \\
+ & = & \elt(a)(\cons(b,\filter(\bnot(\beq(a,-)))(x))) \\
+ & = & \filter(\bnot(\beq(a,-)))(x) \\
  & = & \bfalse
 \end{eqnarray*}$$
 as claimed.

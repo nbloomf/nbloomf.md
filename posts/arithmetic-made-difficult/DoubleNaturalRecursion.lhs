@@ -22,7 +22,7 @@ slug: dnaturalrec
 Today we'll implement a slight generalization of natural recursion that allows recursion on two arguments.
 
 :::::: theorem :::::
-Let $A$ be a set. Let $\delta : \nats \rightarrow A$, $\psi : A \rightarrow A$, and $\chi : \nats \times A \times A \rightarrow A$. Then there is a unique map $\Theta : \nats \times \nats \rightarrow A$ such that $$\Theta(\zero,k) = \delta(k),$$ $$\Theta(\next(n),\zero) = \psi(\Theta(n,\zero)),$$ and $$\Theta(\next(n),\next(k)) = \chi(k,\Theta(n,k),\Theta(n,\next(k)).$$ We denote this map by $\dnatrec{\delta}{\psi}{\chi}.$$
+Let $A$ be a set. Let $\delta : \nats \rightarrow A$, $\psi : A \rightarrow A$, and $\chi : \nats \times A \times A \rightarrow A$. Then there is a unique map $\Theta : \nats \times \nats \rightarrow A$ such that $$\Theta(\zero,k) = \delta(k),$$ $$\Theta(\next(n),\zero) = \psi(\Theta(n,\zero)),$$ and $$\Theta(\next(n),\next(k)) = \chi(k,\Theta(n,k),\Theta(n,\next(k))).$$ We denote this map by $\dnatrec{\delta}{\psi}{\chi}.$$
 
 ::: proof ::::::::::
 Define $\varphi : A^\nats \rightarrow A^\nats$ casewise by

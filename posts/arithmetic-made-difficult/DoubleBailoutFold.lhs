@@ -35,7 +35,7 @@ We denote this $\Theta$ by $\dbfoldr{\delta}{\beta}{\mu}{\psi}{\chi}$.
 Define $\varepsilon : B \times \lists{A} \rightarrow C$ by $$\varepsilon(b,x) = \delta(b)$$ and $\varphi : A \times C^{B \times \lists{A}} \rightarrow C^{B \times \lists{A}}$ casewise by
 $$\varphi(a,g)(b,x) = \left\{\begin{array}{ll}
  \psi(a,\tail(x),b) & \mathrm{if}\ \beta(a,\tail(x),b) \\
- \chi(a,\tail(x),b,g(b,\tail(x))),g(\mu(b),\tail(x))) & \mathrm{otherwise},
+ \chi(a,\tail(x),b,g(b,\tail(x)),g(\mu(b),\tail(x))) & \mathrm{otherwise},
 \end{array}\right.$$
 and let $\Theta(x,b) = \foldr{\varepsilon}{\varphi}(x)(b,x)$. To see that $\Theta$ solves the given equations, note that
 $$\begin{eqnarray*}

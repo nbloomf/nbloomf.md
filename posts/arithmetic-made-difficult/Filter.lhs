@@ -81,7 +81,7 @@ $$\left\{\begin{array}{ll}
 > _test_filter_cons :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> a -> t a -> Bool)
 > _test_filter_cons _ =
->   testName "filter(p)(cons(a,x)) == if(p(a),cons(a,filter(p)(x)),filter(p)(x)))" $
+>   testName "filter(p)(cons(a,x)) == if(p(a),cons(a,filter(p)(x)),filter(p)(x))" $
 >   \p a x -> eq
 >     (filter p (cons a x))
 >     (if p a then cons a (filter p x) else filter p x)
@@ -344,7 +344,7 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. We consider two possibilities. If $p(a) = \btrue$, we have
 $$\begin{eqnarray*}
- &   & \beq(\cons(a,x),\filter(p)(\cons(a,x)) \\
+ &   & \beq(\cons(a,x),\filter(p)(\cons(a,x))) \\
  & = & \beq(\cons(a,x),\bif{p(a)}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
  & = & \beq(\cons(a,x),\bif{\btrue}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
  & = & \beq(\cons(a,x),\cons(a,\filter(p)(x))) \\
@@ -358,7 +358,7 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed. Suppose instead that $p(a) = \bfalse$. Now $\sublist(\filter(p)(x),x) = \btrue$, and using the inductive hypothesis we have
 $$\begin{eqnarray*}
- &   & \beq(\cons(a,x),\filter(p)(\cons(a,x)) \\
+ &   & \beq(\cons(a,x),\filter(p)(\cons(a,x))) \\
  & = & \beq(\cons(a,x),\bif{p(a)}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
  & = & \beq(\cons(a,x),\bif{\bfalse}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
  & = & \beq(\cons(a,x),\filter(p)(x)) \\
