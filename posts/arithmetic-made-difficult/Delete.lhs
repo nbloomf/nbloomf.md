@@ -327,7 +327,7 @@ $$\begin{eqnarray*}
 as needed. If $b \neq a$, then again using the inductive hypothesis we have
 $$\begin{eqnarray*}
  &   & \elt(a,\delete(a,\cons(b,x))) \\
- & = & \elt(a,\cons(b,(\delete(a,x))) \\
+ & = & \elt(a,\cons(b,(\delete(a,x)))) \\
  & = & \elt(a,\delete(a,x)) \\
  & = & \bfalse
 \end{eqnarray*}$$
@@ -454,7 +454,7 @@ $$\begin{eqnarray*}
  & = & \bif{\beq(a,b)}{\delete(a,\rev(x))}{\snoc(b,\delete(a,\rev(x)))} \\
  & = & \bif{\beq(a,b)}{\rev(\delete(a,x))}{\snoc(b,\rev(\delete(a,x)))} \\
  & = & \bif{\beq(a,b)}{\rev(\delete(a,x))}{\rev(\cons(b,\delete(a,x)))} \\
- & = & \rev(\bif{\beq(a,b)}{\delete(a,x))}{\cons(b,\delete(a,x)))}) \\
+ & = & \rev(\bif{\beq(a,b)}{\delete(a,x)}{\cons(b,\delete(a,x))}) \\
  & = & \rev(\delete(a,\cons(b,x)))
 \end{eqnarray*}$$
 as needed.

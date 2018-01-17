@@ -40,7 +40,7 @@ $$\begin{eqnarray*}
  & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(u,\cons(a,x)) \\
  & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(u,\cons(a,x)) \\
  & = & \bif{\beta(a,\tail(\cons(a,x)),u)}{\psi(a,\tail(\cons(a,x)),u)}{\foldr{\varepsilon}{\varphi}(x)(\omega(a,\tail(\cons(a,x)),u),\tail(\cons(a,x)))} \\
- & = & \bif{\beta(a,x,u)}{\psi(a,x,u)}{\foldr{\varepsilon}{\varphi}(x)(\omega(a,x,u),x))} \\
+ & = & \bif{\beta(a,x,u)}{\psi(a,x,u)}{\foldr{\varepsilon}{\varphi}(x)(\omega(a,x,u),x)} \\
  & = & \bif{\beta(a,x,u)}{\psi(a,x,u)}{\Theta(x,\omega(a,x,u))}
 \end{eqnarray*}$$
 as needed. Suppose $\Psi : \lists{A} \times B \rightarrow C$ also satisfies these equations; we show that $\Psi = \Theta$ by list induction on $x$. For the base case $x = \nil$, we have

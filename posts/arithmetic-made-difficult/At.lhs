@@ -267,7 +267,7 @@ $$\begin{eqnarray*}
  & = & \at(\snoc(a,\cons(c,u)),k) \\
  & = & \at(\cons(c,u),k) \\
  & = & \at(x,k) \\
- & = & \at(\cons(b,x),\next(k)
+ & = & \at(\cons(b,x),\next(k))
 \end{eqnarray*}$$
 as needed.
 2. We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -380,7 +380,7 @@ $$\begin{eqnarray*}
  & = & \at(\cons(a,y),\next(k)) \\
  & = & \at(y,k)
 \end{eqnarray*}$$
-as needed. For the inductive step, suppose the equality holds for all $a$, $y$, and $k$ for some $x$, and let $b \in A$. Note that $\snoc(b,x) = \cons(c,u)$ for some $c$ and u$, where $\length(x) = \next(\length(u)$. Now
+as needed. For the inductive step, suppose the equality holds for all $a$, $y$, and $k$ for some $x$, and let $b \in A$. Note that $\snoc(b,x) = \cons(c,u)$ for some $c$ and u$, where $\length(x) = \next(\length(u))$. Now
 $$\begin{eqnarray*}
  &   & \at(\cat(\cons(a,x),\cons(b,y)),\nplus(\next(\length(x)),k)) \\
  & = & \at(\cat(\snoc(b,\cons(a,x)),y),\next(\nplus(\length(x),k))) \\

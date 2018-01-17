@@ -78,7 +78,7 @@ $$\left\{\begin{eqnarray*}
 > _test_dedupeL_cons :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
 > _test_dedupeL_cons _ =
->   testName "dedupeL(cons(a,x)) == cons(a,delete(a)(dedupeL(x))" $
+>   testName "dedupeL(cons(a,x)) == cons(a,delete(a)(dedupeL(x)))" $
 >   \a x -> eq (dedupeL (cons a x)) (cons a (delete a (dedupeL x)))
 
 ::::::::::::::::::::
@@ -310,13 +310,13 @@ $$\begin{eqnarray*}
  & = & \cons(b,\delete(b)(\bif{\elt(a,x)}{\dedupeL(x)}{\snoc(a,\dedupeL(x))})) \\
  & = & \bif{\elt(a,x)}{\cons(b,\delete(b)(\dedupeL(x)))}{\cons(b,\delete(b)(\snoc(a,\dedupeL(x))))} \\
  & = & \bif{\elt(a,x)}{\dedupeL(\cons(b,x))}{\cons(b,\delete(b)(\snoc(a,\dedupeL(x))))} \\
- & = & \bif{\elt(a,x)}{\dedupeL(\cons(b,x))}{\cons(b,\bif{\beq(a,b)}{\delete(b)(\dedupeL(x))}{\snoc(a,\delete(b)(\dedupeL(x))})} \\
- & = & \bif{\elt(a,x)}{\dedupeL(\cons(b,x))}{\bif{\beq(a,b)}{\cons(b,\delete(b)(\dedupeL(x)))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x)))}} \\
- & = & \bif{\elt(a,x)}{\dedupeL(\cons(b,x))}{\bif{\beq(a,b)}{\dedupeL(\cons(b,x))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x)))}} \\
+ & = & \bif{\elt(a,x)}{\dedupeL(\cons(b,x))}{\cons(b,\bif{\beq(a,b)}{\delete(b)(\dedupeL(x))}{\snoc(a,\delete(b)(\dedupeL(x)))})} \\
+ & = & \bif{\elt(a,x)}{\dedupeL(\cons(b,x))}{\bif{\beq(a,b)}{\cons(b,\delete(b)(\dedupeL(x)))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x))))}} \\
+ & = & \bif{\elt(a,x)}{\dedupeL(\cons(b,x))}{\bif{\beq(a,b)}{\dedupeL(\cons(b,x))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x))))}} \\
  & = & \bif{\bor(\beq(a,b),\elt(a,x))}{\dedupe(\cons(b,x))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x))))} \\
- & = & \bif{\elt(a,\cons(b,x)}{\dedupe(\cons(b,x))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x))))} \\
- & = & \bif{\elt(a,\cons(b,x)}{\dedupe(\cons(b,x))}{\snoc(a,\cons(b,\delete(b)(\dedupeL(x))))} \\
- & = & \bif{\elt(a,\cons(b,x)}{\dedupe(\cons(b,x))}{\snoc(a,\dedupeL(\cons(b,x)))}
+ & = & \bif{\elt(a,\cons(b,x))}{\dedupe(\cons(b,x))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x))))} \\
+ & = & \bif{\elt(a,\cons(b,x))}{\dedupe(\cons(b,x))}{\snoc(a,\cons(b,\delete(b)(\dedupeL(x))))} \\
+ & = & \bif{\elt(a,\cons(b,x))}{\dedupe(\cons(b,x))}{\snoc(a,\dedupeL(\cons(b,x)))}
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -389,7 +389,7 @@ as claimed.
 > _test_dedupeR_snoc :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
 > _test_dedupeR_snoc _ =
->   testName "dedupeR(snoc(a,x)) == snoc(a,delete(a)(dedupeR(x))" $
+>   testName "dedupeR(snoc(a,x)) == snoc(a,delete(a)(dedupeR(x)))" $
 >   \a x -> eq (dedupeR (snoc a x)) (snoc a (delete a (dedupeR x)))
 
 ::::::::::::::::::::

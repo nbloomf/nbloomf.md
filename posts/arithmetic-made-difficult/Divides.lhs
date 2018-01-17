@@ -173,7 +173,7 @@ $$\begin{eqnarray*}
  & = & \ntimes(\nplus(h,k),c)
 \end{eqnarray*}$$
 as needed.
-4. We consider two cases: either $d = \zero$ or $d = \next(m)$ for some $m$. If $d = \zero$, then we have $a = c = \zero$, and thus $b = \zero$. So $\ndiv(d,b)$ as claimed. Suppose now that $d = \next(m)$. Now $a = \ntimes(d,u)$ and $c = \ntimes(d,v)$ for some $u$ and $v$. Letting $(q,r) = \ndivalg(b,d)$, we have $$b = \nplus(\ntimes(q,d),r.$$ Now
+4. We consider two cases: either $d = \zero$ or $d = \next(m)$ for some $m$. If $d = \zero$, then we have $a = c = \zero$, and thus $b = \zero$. So $\ndiv(d,b)$ as claimed. Suppose now that $d = \next(m)$. Now $a = \ntimes(d,u)$ and $c = \ntimes(d,v)$ for some $u$ and $v$. Letting $(q,r) = \ndivalg(b,d)$, we have $$b = \nplus(\ntimes(q,d),r).$$ Now
 $$\begin{eqnarray*}
  &   & \ntimes(d,v) \\
  & = & c \\

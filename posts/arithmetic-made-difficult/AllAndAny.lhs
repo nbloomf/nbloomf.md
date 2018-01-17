@@ -291,7 +291,7 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the implication holds for some $x$ and let $a \in A$. Now $\bimpl(p(a),q(a))$, and by the induction hypothesis $\bimpl(\all(p,x),\all(q,x))$. Then we have
 $$\begin{eqnarray*}
  &   & \bimpl(\all(p,\cons(a,x)),\all(q,\cons(a,x))) \\
- & = & \bimpl(\band(p(a),\all(p,x)),\band(q(a),\all(q),x))) \\
+ & = & \bimpl(\band(p(a),\all(p,x)),\band(q(a),\all(q),x)) \\
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
