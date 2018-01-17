@@ -284,11 +284,13 @@ $\zipPad$ is also kind of associative:
 :::::: theorem :::::
 Let $A$, $B$, and $C$ be sets, with $u \in A$, $v \in B$, $w \in C$, $x \in \lists{A}$, $y \in \lists{B}$, and $z \in \lists{C}$. Then the following hold.
 
-1. $$\begin{eqnarray*}
+1. Note that
+$$\begin{eqnarray*}
  &   & \zipPad((u,v),w)(\zipPad(u,v)(x,y),z) \\
  & = & \map(\tAssocL)(\zipPad(u,(v,w))(x,\zipPad(v,w)(y,z))).
 \end{eqnarray*}$$
-2. $$\begin{eqnarray*}
+2. Note that
+$$\begin{eqnarray*}
  &   & \zipPad(u,(v,w))(x,\zipPad(v,w)(y,z)) \\
  & = & \map(\tAssocR)(\zipPad((u,v),w)(\zipPad(u,v)(x,y),z)).
 \end{eqnarray*}$$

@@ -61,7 +61,7 @@ Since $\dedupeL$ is defined as a foldr, it can be characterized as the unique so
 
 :::::: corollary :::
 Let $A$ be a set. $\dedupeL$ is the unique map $f : \lists{A} \rightarrow \lists{A}$ satisfying the following equations for all $a \in A$ and $x \in \lists{A}$.
-$$\left\{\begin{eqnarray*}
+$$\left\{\begin{array}{l}
  f(\nil) = \nil \\
  f(\cons(a,x)) = \cons(a,\delete(a)(f(x)))
 \end{array}\right.$$

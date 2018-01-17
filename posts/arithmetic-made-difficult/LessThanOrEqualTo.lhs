@@ -221,7 +221,14 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 2. We have $$\nleq(\nplus(c,a),\nplus(c,b)) = \nleq(\nplus(a,c),\nplus(b,c)) = \nleq(a,b).$$
-3. We have $$\btrue = \nleq(a,b) = \nleq(\nplus(a,c),\nplus(b,c))$$ and $$\begin{eqnarray*} & & \btrue \\ & = & \nleq(c,d) \\ & = & \nleq(\nplus(c,b),\nplus(d,b)) \\ & = & \nleq(\nplus(b,c),\nplus(b,d)). \end{eqnarray*}$$ The result holds by transitivity.
+3. We have $$\btrue = \nleq(a,b) = \nleq(\nplus(a,c),\nplus(b,c))$$ and
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ & = & \nleq(c,d) \\
+ & = & \nleq(\nplus(c,b),\nplus(d,b)) \\
+ & = & \nleq(\nplus(b,c),\nplus(b,d)).
+\end{eqnarray*}$$
+The result holds by transitivity.
 ::::::::::::::::::::
 
 ::: test :::::::::::
@@ -322,7 +329,19 @@ $$\begin{eqnarray*}
  & = & \nleq(\ntimes(a,\next(\next(c))),\ntimes(b,\next(\next(c))))
 \end{eqnarray*}$$
 as needed. Finally, suppose $a \neq b$ and $\nleq(a,b)$ is false. Then $\nleq(b,a)$ is true, and by the prior argument we have $$\nleq(b,a) = \nleq(\ntimes(a,\next(\next(c))),\ntimes(b,\next(\next(c)))).$$ Note that $$\ntimes(a,\next(\next(c))) \neq \ntimes(b,\next(\next(c)))$$ (since $a \neq b$). So we have $$\nleq(\ntimes(a,\next(\next(c))),\nplus(b,\next(\next(c))))$$ as needed.
-2. There are two possibilities for $c$. If $c = \zero$, then we have $$\begin{eqnarray*} & & \nleq(\ntimes(a,c),\ntimes(b,d)) \\ & = & \nleq(\zero,\ntimes(b,d)) \\ & = & \btrue \end{eqnarray*}.$$ Suppose instead that $c = \next(u)$. Now there are two possibilities for $b$. If $b = \zero$, then in fact $a = \zero$, and we have $$\begin{eqnarray*} & & \nleq(\ntimes(a,c),\ntimes(b,d)) \\ & = & \nleq(\zero,\zero) \\ & = & \btrue \end{eqnarray*}$$ as needed. Suppose then that $b = \next(v)$. Now we have
+2. There are two possibilities for $c$. If $c = \zero$, then we have
+$$\begin{eqnarray*}
+ &   & \nleq(\ntimes(a,c),\ntimes(b,d)) \\
+ & = & \nleq(\zero,\ntimes(b,d)) \\
+ & = & \btrue
+\end{eqnarray*}.$$
+Suppose instead that $c = \next(u)$. Now there are two possibilities for $b$. If $b = \zero$, then in fact $a = \zero$, and we have
+$$\begin{eqnarray*}
+ &   & \nleq(\ntimes(a,c),\ntimes(b,d)) \\
+ & = & \nleq(\zero,\zero) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as needed. Suppose then that $b = \next(v)$. Now we have
 $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \nleq(\ntimes(a,\next(u)),\ntimes(b,\next(u))) \\

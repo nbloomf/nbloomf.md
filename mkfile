@@ -117,7 +117,9 @@ sniff-amd:VQ: \
   sniff-amd-fencediv \
   sniff-amd-plaindiv \
   sniff-amd-nestdiv \
-  sniff-amd-balance
+  sniff-amd-balance \
+  sniff-amd-refname \
+  sniff-amd-eqnarray
 
 #-- use consistent syntax for fenced divs --#
 sniff-amd-fencediv:VQ:
@@ -188,4 +190,36 @@ sniff-amd-balance:VQ:
     echo 'Delimiters' | doppler lightred
     echo $( echo "$BALANCE" | wc -l ) 'problems found' | doppler lightred
     echo "$BALANCE"
+  fi
+
+#-- consistent reference names --#
+sniff-amd-refname:VQ:
+  REFNAME=$( grep '^\[\](#' posts/arithmetic-made-difficult/* \
+    | sed 's/\[\](\(#[^)]*\)).*/ \1/' \
+    | grep -v '#def-[a-z-]*$' \
+    | grep -v '#thm-[a-z-]*' \
+    || true )
+  if [ -z "$REFNAME" ]; then
+    echo 'Reference Names OK' | doppler lightgreen
+  else
+    echo 'Reference Names' | doppler lightred
+    echo $( echo "$REFNAME" | wc -l ) 'problems found' | doppler lightred
+    echo "$REFNAME"
+  fi
+
+#-- eqnarray command on separate line --#
+sniff-amd-eqnarray:VQ:
+  EQNARRAY=$( grep \
+      -e '.$$\\begin{eqnarray\*}' \
+      -e '$$\\begin{eqnarray\*}.' \
+      -e '.\\end{eqnarray\*}$\$' \
+      -e '\\end{eqnarray\*}$$.' \
+      posts/arithmetic-made-difficult/* \
+    || true )
+  if [ -z "$EQNARRAY" ]; then
+    echo 'Eqnarray OK' | doppler lightgreen
+  else
+    echo 'Eqnarray' | doppler lightred
+    echo $( echo "$EQNARRAY" | wc -l ) 'problems found' | doppler lightred
+    echo "$EQNARRAY"
   fi

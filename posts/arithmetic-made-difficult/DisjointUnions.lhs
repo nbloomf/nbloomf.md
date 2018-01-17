@@ -23,7 +23,7 @@ slug: disjoint-unions
 Dual to sets of tuples are disjoint sums.
 
 :::::: definition ::
-[](#dfn-disjoint-union) Let $A$ and $B$ be sets. There is a set $A + B$ together with two functions $\lft : A \rightarrow A + B$ and $\rgt : B \rightarrow A + B$ having the property that if $X$ is a set and $\sigma : A \rightarrow X$ and $\tau : B \rightarrow X$ functions then there is a unique map $\Theta : A + B \rightarrow X$ such that $\Theta \circ \lft = \sigma$ and $\Theta \circ \rgt = \tau$. That is, there is a unique $\Theta$ such that the following diagram commutes.
+[](#def-disjoint-union) Let $A$ and $B$ be sets. There is a set $A + B$ together with two functions $\lft : A \rightarrow A + B$ and $\rgt : B \rightarrow A + B$ having the property that if $X$ is a set and $\sigma : A \rightarrow X$ and $\tau : B \rightarrow X$ functions then there is a unique map $\Theta : A + B \rightarrow X$ such that $\Theta \circ \lft = \sigma$ and $\Theta \circ \rgt = \tau$. That is, there is a unique $\Theta$ such that the following diagram commutes.
 
 $$\require{AMScd}
 \begin{CD}
@@ -154,7 +154,7 @@ Since $\either(\lft,\rgt)$ is unique with this property, we have $\either(\lft,\
 We define $\uSwap$ on disjoint unions like so.
 
 :::::: definition ::
-[](#dfn-uswap) Let $A$ and $B$ be sets. We define $\uSwap : A + B \rightarrow B + A$ by $$\uSwap = \either(\rgt,\lft).$$
+[](#def-uswap) Let $A$ and $B$ be sets. We define $\uSwap : A + B \rightarrow B + A$ by $$\uSwap = \either(\rgt,\lft).$$
 
 In Haskell:
 

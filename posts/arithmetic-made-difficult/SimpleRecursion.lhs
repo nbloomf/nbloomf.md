@@ -34,7 +34,8 @@ Now we define $\Theta$ as follows: $$\Theta(n,a) = (\snd \circ \natrec{(\zero, \
 
 ($\snd$ is the map which selects the second entry of a pair.)
 
-Note that $$\begin{eqnarray*}
+Note that
+$$\begin{eqnarray*}
  &   & \Theta(\zero,a) \\
  & = & (\snd \circ \natrec{(\zero, \varphi)}{t})(\zero)(a) \\
  & = & (\snd(\natrec{(\zero, \varphi)}{t})(\zero))(a) \\

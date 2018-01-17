@@ -30,7 +30,7 @@ In Haskell:
 We can compute $\band$ explicitly.
 
 :::::: theorem :::::
-[](#and-eval) We have
+[](#thm-and-eval) We have
 $$\begin{eqnarray*}
 \band(\btrue,\btrue)   & = & \btrue \\
 \band(\btrue,\bfalse)  & = & \bfalse \\

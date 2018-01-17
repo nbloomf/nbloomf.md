@@ -447,7 +447,35 @@ Let $a,b,c \in \nats$. Then we have the following.
 4. $\nmax(\nmin(b,c),a) = \nmin(\nmax(b,a),\nmax(c,a))$.
 
 ::: proof ::::::::::
-4. Brute force time! Suppose $\nleq(a,b) = \btrue$. If $\nleq(a,c) = \btrue$, then $\nleq(a,\nmin(b,c))$, so that $\nleq(a,\nmax(b,c))$. Now we have $$\begin{eqnarray*} & & \nmax(\nmin(a,b),\nmin(a,c)) \\ & = & \nmax(a,a) \\ & = & a \\ & = & \nmin(a,\nmax(b,c)). \end{eqnarray*}$$ Suppose $\nleq(a,c) = \bfalse$; then $\nleq(c,a) = \btrue$, and by transitivity $\nleq(c,b) = \btrue$ so that $\nmax(b,c) = b$. Now $$\begin{eqnarray*} & & \nmax(\nmin(a,b),\nmin(a,c)) \\ & = & \nmax(a,c) \\ & = & a \\ & = & \nmin(a,b) \\ & = & \nmin(a,\nmax(b,c)). \end{eqnarray*}$$ Now suppose $\nleq(a,b) = \bfalse$, so that $\nleq(b,a) = \btrue$. If $\nleq(a,c)$, then $\nleq(b,c)$ by transitivity. So we have $$\begin{eqnarray*} & & \nmax(\nmin(a,b),\nmin(a,c)) \\ & = & \nmax(b,a) \\ & = & a \\ & = & \nmin(a,c) \\ & = & \nmin(a,\nmax(b,c)). \end{eqnarray*}$$ If $\nleq(a,c) = \bfalse$, then $\nleq(c,a) = \btrue$. In this case we have $\nleq(\nmax(b,c),a)$, so that $$\begin{eqnarray*} & & \nmax(\nmin(a,b),\nmin(a,c)) \\ & = & \nmax(b,c) \\ & = & \nmin(a,\nmax(b,c)). \end{eqnarray*}$$
+4. Brute force time! Suppose $\nleq(a,b) = \btrue$. If $\nleq(a,c) = \btrue$, then $\nleq(a,\nmin(b,c))$, so that $\nleq(a,\nmax(b,c))$. Now we have
+$$\begin{eqnarray*}
+ &   & \nmax(\nmin(a,b),\nmin(a,c)) \\
+ & = & \nmax(a,a) \\
+ & = & a \\
+ & = & \nmin(a,\nmax(b,c)).
+\end{eqnarray*}$$
+Suppose $\nleq(a,c) = \bfalse$; then $\nleq(c,a) = \btrue$, and by transitivity $\nleq(c,b) = \btrue$ so that $\nmax(b,c) = b$. Now
+$$\begin{eqnarray*}
+ &   & \nmax(\nmin(a,b),\nmin(a,c)) \\
+ & = & \nmax(a,c) \\
+ & = & a \\
+ & = & \nmin(a,b) \\
+ & = & \nmin(a,\nmax(b,c)).
+\end{eqnarray*}$$
+Now suppose $\nleq(a,b) = \bfalse$, so that $\nleq(b,a) = \btrue$. If $\nleq(a,c)$, then $\nleq(b,c)$ by transitivity. So we have
+$$\begin{eqnarray*}
+ &   & \nmax(\nmin(a,b),\nmin(a,c)) \\
+ & = & \nmax(b,a) \\
+ & = & a \\
+ & = & \nmin(a,c) \\
+ & = & \nmin(a,\nmax(b,c)).
+\end{eqnarray*}$$
+If $\nleq(a,c) = \bfalse$, then $\nleq(c,a) = \btrue$. In this case we have $\nleq(\nmax(b,c),a)$, so that
+$$\begin{eqnarray*}
+ &   & \nmax(\nmin(a,b),\nmin(a,c)) \\
+ & = & \nmax(b,c) \\
+ & = & \nmin(a,\nmax(b,c)).
+\end{eqnarray*}$$
 5. Similar to (4), which we can agree was super tedious.
 6. Follows from (4) and commutativity.
 7. Follows from (5) and commutativity.

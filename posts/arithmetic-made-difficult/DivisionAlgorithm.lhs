@@ -121,9 +121,25 @@ Let $a,b \in \nats$ and let $(q,r) = \ndivalg(a,\next(b))$. Then we have the fol
 ::: proof ::::::::::
 We proceed by induction on $a$. For the base case, $a = \zero$, note that $$\ndivalg(\zero,\next(b)) = \varphi(\next(b)) = (\zero,\zero).$$ Now we have $$\nplus(\ntimes(\zero,\next(b)),\zero) = \zero = a$$ and $\nleq(\zero,\next(b))$ as needed.
 
-For the inductive step, suppose both conclusions hold for all $b$ for some $a$. Let $(q_1,r_1) = \ndivalg(a,b)$. Now we have $$\begin{eqnarray*} & & \ndivalg(\next(a),\next(b)) \\ & = & \mu(a,\next(b),\ndivalg(a,\next(b))) \\ & = & \mu(a,\next(b),(q_1,r_1)) \\ & = & Q. \end{eqnarray*}$$ We have two possibilities: either $\next(r_1) = \next(b)$ or $\next(r_1) \neq \next(b)$.
+For the inductive step, suppose both conclusions hold for all $b$ for some $a$. Let $(q_1,r_1) = \ndivalg(a,b)$. Now we have
+$$\begin{eqnarray*}
+ &   & \ndivalg(\next(a),\next(b)) \\
+ & = & \mu(a,\next(b),\ndivalg(a,\next(b))) \\
+ & = & \mu(a,\next(b),(q_1,r_1)) \\
+ & = & Q.
+\end{eqnarray*}$$
+We have two possibilities: either $\next(r_1) = \next(b)$ or $\next(r_1) \neq \next(b)$.
 
-Suppose first that $\next(r_1) = \next(b)$; then we have $$Q = (\next(q_1),\zero).$$ Now we have $$\begin{eqnarray*} & & \nplus(\ntimes(\next(q_1),\next(b)),\zero) \\ & = & \ntimes(\next(q_1),\next(b)) \\ & = & \nplus(\ntimes(q_1,\next(b)),\next(b)) \\ & = & \nplus(\ntimes(q_1,\next(b)),\next(r_1)) \\ & = & \next(\nplus(\ntimes(q_1,\next(b)),r_1)) \\ & = & \next(a) \end{eqnarray*}$$ as needed; moreover, we have $\nleq(\zero,b) = \btrue$.
+Suppose first that $\next(r_1) = \next(b)$; then we have $$Q = (\next(q_1),\zero).$$ Now we have
+$$\begin{eqnarray*}
+ &   & \nplus(\ntimes(\next(q_1),\next(b)),\zero) \\
+ & = & \ntimes(\next(q_1),\next(b)) \\
+ & = & \nplus(\ntimes(q_1,\next(b)),\next(b)) \\
+ & = & \nplus(\ntimes(q_1,\next(b)),\next(r_1)) \\
+ & = & \next(\nplus(\ntimes(q_1,\next(b)),r_1)) \\
+ & = & \next(a)
+\end{eqnarray*}$$
+as needed; moreover, we have $\nleq(\zero,b) = \btrue$.
 
 Now suppose we have $\next(r_1) \neq \next(b)$. Now we have $$Q = (q_1,\next(r_1)).$$ In this case,
 $$\begin{eqnarray*}
@@ -160,7 +176,13 @@ Also the output of the division algorithm is unique.
 Let $a,b \in \nats$ and suppose we have $q,r \in \nats$ such that $$a = \nplus(\ntimes(q,\next(b)),r)$$ and $\nleq(r,b) = \btrue$. Then $(q,r) = \ndivalg(a,b)$.
 
 ::: proof ::::::::::
-It suffices to show that if $(q_1,r_1)$ and $(q_2,r_2)$ both satisfy the conditions of the division algorithm, then $q_1 = q_2$ and $r_1 = r_2$. To this end, suppose we have $$\begin{eqnarray*} & & \nplus(\ntimes(q_1,\next(b)),r_1) \\ & = & a \\ & = & \nplus(\ntimes(q_2,\next(b)),r_2). \end{eqnarray*}$$ Without loss of generality, we have $\nleq(r_1,r_2)$; say $r_2 = \nplus(r_1,k)$. Now
+It suffices to show that if $(q_1,r_1)$ and $(q_2,r_2)$ both satisfy the conditions of the division algorithm, then $q_1 = q_2$ and $r_1 = r_2$. To this end, suppose we have
+$$\begin{eqnarray*}
+ &   & \nplus(\ntimes(q_1,\next(b)),r_1) \\
+ & = & a \\
+ & = & \nplus(\ntimes(q_2,\next(b)),r_2).
+\end{eqnarray*}$$
+Without loss of generality, we have $\nleq(r_1,r_2)$; say $r_2 = \nplus(r_1,k)$. Now
 $$\begin{eqnarray*}
  &   & \nplus(\ntimes(q_1,\next(b)),r_1) \\
  & = & \nplus(\ntimes(q_2,\next(b)),r_2) \\
@@ -173,7 +195,15 @@ We wish to show that $k = \zero$. To this end, let $P(q_1,q_2,b,k)$ denote the s
 
 For the base case $q_1 = \zero$, suppose the hypothesis of $P(\zero,q_2,b,k)$. Then we have $$\zero = \ntimes(\zero,\next(b)) = \nplus(\ntimes(q_2,\next(b)),k),$$ so that $k = \zero$. For the inductive step, we suppose that $q_1 \in M$. Now define the set $$N(x) = \{ q_2 \in \nats \mid \forall b,k, P(x,q_2,b,k) \};$$ we have supposed that $N(q_1) = \nats$.
 
-We will show that $N(\next(q_1)) = \nats$ also by induction. For the base case $q_2 = \zero$, suppose the hypothesis of $P(\next(q_1),\zero,b,k)$. Now $$\begin{eqnarray*} & & \nplus(\ntimes(q_1,\next(b)),\next(b)) \\ & = & \ntimes(\next(q_1),\next(b)) \\ & = & \nplus(\ntimes(\zero,\next(b)),k) \\ & = & \nplus(\zero,k) \\ & = & k. \end{eqnarray*}$$ Thus $\nleq(\next(b),k)$. But now we have $\nleq(\next(b),b)$ by transitivity, a contradiction. Thus the hypothesis of $P(\next(q_1),\zero,b,k)$ is false, and we have $\zero \in N(\next(q_1))$ vacuously.
+We will show that $N(\next(q_1)) = \nats$ also by induction. For the base case $q_2 = \zero$, suppose the hypothesis of $P(\next(q_1),\zero,b,k)$. Now
+$$\begin{eqnarray*}
+ &   & \nplus(\ntimes(q_1,\next(b)),\next(b)) \\
+ & = & \ntimes(\next(q_1),\next(b)) \\
+ & = & \nplus(\ntimes(\zero,\next(b)),k) \\
+ & = & \nplus(\zero,k) \\
+ & = & k.
+\end{eqnarray*}$$
+Thus $\nleq(\next(b),k)$. But now we have $\nleq(\next(b),b)$ by transitivity, a contradiction. Thus the hypothesis of $P(\next(q_1),\zero,b,k)$ is false, and we have $\zero \in N(\next(q_1))$ vacuously.
 
 For the inductive step, suppose we have $q_2 \in N(\next(q_1))$, and suppose the hypothesis of $P(\next(q_1),\next(q_2),b,k)$; that is, that $$\ntimes(\next(q_1),\next(b)) = \nplus(\ntimes(\next(q_2),\next(b)),k).$$ Now we have
 $$\begin{eqnarray*}

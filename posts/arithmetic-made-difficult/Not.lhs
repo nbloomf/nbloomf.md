@@ -29,7 +29,7 @@ In Haskell:
 We can compute $\bnot$ explicitly.
 
 :::::: theorem :::::
-[](#not-eval) We have $\bnot(\btrue) = \bfalse$ and $\bnot(\bfalse) = \btrue$.
+[](#thm-not-eval) We have $\bnot(\btrue) = \bfalse$ and $\bnot(\bfalse) = \btrue$.
 
 ::: proof ::::::::::
 Note that
@@ -68,7 +68,7 @@ as claimed.
 $\bnot$ is an involution.
 
 :::::: theorem :::::
-[](#not-involution) For all $a \in \bool$ we have $\bnot(\bnot(a)) = a$.
+[](#thm-not-involution) For all $a \in \bool$ we have $\bnot(\bnot(a)) = a$.
 
 ::: proof ::::::::::
 If $a = \btrue$ we have $$\bnot(\bnot(\btrue)) = \bnot(\bfalse) = \btrue,$$ and if $a = \bfalse$, we have $$\bnot(\bnot(\bfalse)) = \bnot(\btrue) = \bfalse$$ as claimed.

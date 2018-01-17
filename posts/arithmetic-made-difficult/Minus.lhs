@@ -127,7 +127,8 @@ $$\begin{eqnarray*}
  & = & \bif{\iszero(\next(n))}{\rgt(\zero)}{\lft(\ast)} \\
  & = & \bif{\bfalse}{\rgt(\zero)}{\lft(\ast)} \\
  & = & \lft(\ast)
-\end{eqnarray*}$$ as claimed.
+\end{eqnarray*}$$
+as claimed.
 ::::::::::::::::::::
 
 ::: test :::::::::::
