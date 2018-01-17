@@ -89,7 +89,7 @@ $$\begin{eqnarray*}
  & = & \revcat(\cons(b,\snoc(a,x)),y) \\
  & = & \revcat(\snoc(a,\cons(b,x)),y) \\
  & = & \snoc(a,\revcat(\cons(b,x)),y) \\
- & = & \snoc(a,\revcat(x,\const(b,y))
+ & = & \snoc(a,\revcat(x,\const(b,y)))
 \end{eqnarray*}$$
 as needed.
 2. We proceed by list induction on $y$. For the base case $y = \nil$, we have
@@ -440,7 +440,7 @@ Note that $\rev$ is a nontrivial involution on $\lists{A}$ -- in particular, tha
 Then we have $f(x) \in C$ for all $x \in \lists{A}$.
 
 ::: proof ::::::::::
-This proof is analogous to that of the ordinary list induction principle. Define $T \subseteq \lists{A}$ by $$T = \{ x \in \lists{A} \mid f(x) \in C \}.$$ Note that $\nil \in T$ and if $x \in T$ and $a \in A$ then $\snoc(a,x) \in T$; that is, $(T,\nil,\snoc)$ is an $A$-iterative set. We define $\Theta : \lists{A} \rightarrow T$ to be the fold $$\Theta = \foldr{\nil}{\snoc}.$$ Now $\rev : T \rightarrow \lists{A}$ is an $A$-iterative homomorphism since $$\rev(\cons(a,x)) = \snoc(a,\rev(x)).$$ Thus $\rev \circ \Theta$ is an $A$-inductive homomorphism, which by uniqueness must be the identity on $\lists{A}$. If $x \in \lists{A}$, we have $$x = \rev(\rev(x)) = \rev(\id(\rev(x))) = \rev(\rev(\Theta(\rev(x))) = \Theta(\rev(x)) \in T,$$ so that $T = \lists{A}$ as claimed.
+This proof is analogous to that of the ordinary list induction principle. Define $T \subseteq \lists{A}$ by $$T = \{ x \in \lists{A} \mid f(x) \in C \}.$$ Note that $\nil \in T$ and if $x \in T$ and $a \in A$ then $\snoc(a,x) \in T$; that is, $(T,\nil,\snoc)$ is an $A$-iterative set. We define $\Theta : \lists{A} \rightarrow T$ to be the fold $$\Theta = \foldr{\nil}{\snoc}.$$ Now $\rev : T \rightarrow \lists{A}$ is an $A$-iterative homomorphism since $$\rev(\cons(a,x)) = \snoc(a,\rev(x)).$$ Thus $\rev \circ \Theta$ is an $A$-inductive homomorphism, which by uniqueness must be the identity on $\lists{A}$. If $x \in \lists{A}$, we have $$x = \rev(\rev(x)) = \rev(\id(\rev(x))) = \rev(\rev(\Theta(\rev(x)))) = \Theta(\rev(x)) \in T,$$ so that $T = \lists{A}$ as claimed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 

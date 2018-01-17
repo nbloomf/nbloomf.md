@@ -76,8 +76,8 @@ $$\begin{eqnarray*}
  &   & \natrec{(\zero, \varphi)}{t}(\next\ n) \\
  & = & t(\natrec{(\zero, \varphi)}{t}(n)) \\
  & = & t(n, \lambda x : \Theta(n,x)) \\
- & = & (\next\ n, \lambda y : \mu(n, y, \Theta(n,y))) \\
- & = & (\next\ n, \lambda x : \Theta(\next\ n, x).
+ & = & (\next(n), \lambda y : \mu(n, y, \Theta(n,y))) \\
+ & = & (\next(n), \lambda x : \Theta(\next\ n, x)).
 \end{eqnarray*}$$
 
 (Note that we used both parts of the induction hypothesis here.) Also note that
@@ -85,8 +85,8 @@ $$\begin{eqnarray*}
 $$\begin{eqnarray*}
  &   & \Theta(\next(\next\ n), a) \\
  & = & (\snd \circ \natrec{(\zero, \varphi)}{t})(\next(\next\ n))(a) \\
- & = & (\snd (\natrec{(\zero, \varphi)}{t}(\next(\next\ n)))(a) \\
- & = & (\snd (t (\natrec{(\zero, \varphi)}{t}(\next\ n)))(a) \\
+ & = & \snd(\natrec{(\zero, \varphi)}{t}(\next(\next\ n)))(a) \\
+ & = & \snd(t(\natrec{(\zero, \varphi)}{t}(\next\ n)))(a) \\
  & = & (\snd (t (\next\ n, \lambda x : \Theta(\next\ n, x))))(a) \\
  & = & (\snd (\next(\next\ n), \lambda y : \mu(\next\ n, y, \Theta(\next\ n, y))))(a) \\
  & = & (\lambda y : \mu(\next\ n, y, \Theta(\next\ n, y)))(a) \\

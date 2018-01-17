@@ -183,7 +183,7 @@ as needed.
 > _test_repeat_plus :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> n -> a -> Bool)
 > _test_repeat_plus t _ =
->   testName "repeat(plus(m,n),a)) == cat(repeat(m,a),repeat(n,a))" $
+>   testName "repeat(plus(m,n),a) == cat(repeat(m,a),repeat(n,a))" $
 >   \m n a -> eq
 >     ((repeat (plus m n) a) `withTypeOf` t)
 >     (cat (repeat m a) (repeat n a))
