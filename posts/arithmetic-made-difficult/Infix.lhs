@@ -165,7 +165,7 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $y$ and let $b \in A$. Now
 $$\begin{eqnarray*}
- &   & \infix(x,\cat(\cons(b,y),x) \\
+ &   & \infix(x,\cat(\cons(b,y),x)) \\
  & = & \infix(x,\cons(b,\cat(y,x))) \\
  & = & \bor(\prefix(x,\cons(b,\cat(y,x))),\infix(x,\cat(y,x))) \\
  & = & \bor(\prefix(x,\cons(b,\cat(y,x))),\btrue) \\
@@ -274,7 +274,7 @@ $$\begin{eqnarray*}
  & = & \infix(x,\cons(a,y)) \\
  & = & \bor(\prefix(x,\cons(b,y)),\infix(x,y)).
 \end{eqnarray*}$$
-We have two possibilities. First suppose $\prefix(x,\cons(b,y)) = \btrue$. Then $\prefix(x,\snoc(a,\cons(a,y))) = \btrue$, and so $\infix(x,\snoc(a,\cons(b,y))$ as needed. Suppose instead that $\infix(x,y) = \btrue$. By the inductive hypothesis we have $$\infix(x,\snoc(a,y)) = \btrue,$$ and by the previous result we have
+We have two possibilities. First suppose $\prefix(x,\cons(b,y)) = \btrue$. Then $\prefix(x,\snoc(a,\cons(a,y))) = \btrue$, and so $\infix(x,\snoc(a,\cons(b,y)))$ as needed. Suppose instead that $\infix(x,y) = \btrue$. By the inductive hypothesis we have $$\infix(x,\snoc(a,y)) = \btrue,$$ and by the previous result we have
 $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \infix(x,\cons(b,\snoc(a,y))) \\

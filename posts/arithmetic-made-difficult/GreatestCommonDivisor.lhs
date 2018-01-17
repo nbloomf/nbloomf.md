@@ -48,8 +48,8 @@ Suppose instead that $\eta(a,b) = \next(m)$. In particular $b \neq \zero$, so we
 $$\begin{eqnarray*}
  &   & \eta(\varphi(a,b)) \\
  & = & \eta(b,\nrem(a,b)) \\
- & = & \bif{\iszero(\nrem(a,b))}{\zero}{\bif{\nleq(b,\nrem(a,b))}{\next(\nplus(b,\nrem(a,b))}{\nplus(b,\nrem(a,b))}} \\
- & = & \bif{\iszero(\nrem(a,b))}{\zero}{\bif{\bfalse}{\next(\nplus(b,\nrem(a,b))}{\nplus(b,\nrem(a,b))}} \\
+ & = & \bif{\iszero(\nrem(a,b))}{\zero}{\bif{\nleq(b,\nrem(a,b))}{\next(\nplus(b,\nrem(a,b)))}{\nplus(b,\nrem(a,b))}} \\
+ & = & \bif{\iszero(\nrem(a,b))}{\zero}{\bif{\bfalse}{\next(\nplus(b,\nrem(a,b)))}{\nplus(b,\nrem(a,b))}} \\
  & = & \bif{\iszero(\nrem(a,b))}{\zero}{\nplus(b,\nrem(a,b))}; \\
 \end{eqnarray*}$$
 in particular, $$\nleq(\eta(\varphi(a,b)),\nplus(b,\nrem(a,b))).$$ Now if $\nleq(a,b) = \btrue$, we have $\eta(a,b) = \next(\nplus(a,b))$ and $\nleq(a,\nrem(a,b))$, so that $$\nleq(\nplus(b,\nrem(a,b)),\next(\nplus(a,b)))$$ as needed. If $\nleq(a,b) = \bfalse$, then $\nleq(b,a) = \btrue$, so that $\nleq(\nrem(a,b),a)$ and $\nrem(a,b) \neq a$, and we have $$\nleq(\nplus(b,\nrem(a,b)),\nplus(a,b))$$ as needed.
@@ -122,14 +122,14 @@ Let $a,b,c \in \nats$. Then we have the following.
 2. If $\ndiv(c,a)$ and $\ndiv(c,b)$, then $\ndiv(c,\ngcd(a,b))$.
 
 ::: proof ::::::::::
-1. We proceed by strong induction on $b$. For the base case $b = \zero$, note that $\ngcd(a,b) = a$, and we have $$\ndiv(\ngcd(a,b),a) = \ndiv(a,a) = \btrue$$ and $$\ndiv(\ngcd(a,b),b) = \ndiv(a,\zero) = \btrue$$ as needed. For the inductive step, suppose the conclusion holds for all $a$ and for all $b$ such that $\nleq(b,m)$, and let $b = \next(m)$ and $a \in \nats$. In this case we have $\ngcd(a,b) = \ngcd(b,\nrem(a,b))$. By the induction hypothesis, we have $\ndiv(\ngcd(a,b),b)$ and $\ndiv(\ngcd(a,b),\nrem(a,b))$. Now $\ndiv(\ngcd(a,b),\ntimes(b,\nquo(a,b))$, so we have
+1. We proceed by strong induction on $b$. For the base case $b = \zero$, note that $\ngcd(a,b) = a$, and we have $$\ndiv(\ngcd(a,b),a) = \ndiv(a,a) = \btrue$$ and $$\ndiv(\ngcd(a,b),b) = \ndiv(a,\zero) = \btrue$$ as needed. For the inductive step, suppose the conclusion holds for all $a$ and for all $b$ such that $\nleq(b,m)$, and let $b = \next(m)$ and $a \in \nats$. In this case we have $\ngcd(a,b) = \ngcd(b,\nrem(a,b))$. By the induction hypothesis, we have $\ndiv(\ngcd(a,b),b)$ and $\ndiv(\ngcd(a,b),\nrem(a,b))$. Now $\ndiv(\ngcd(a,b),\ntimes(b,\nquo(a,b)))$, so we have
 $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \ndiv(\ngcd(a,b),\nplus(\ntimes(b,\nquo(a,b)),\nrem(a,b))) \\
  & = & \ndiv(\ngcd(a,b),a)
 \end{eqnarray*}$$
 as needed.
-2. We again proceed by strong induction on $b$. For the base case $b = \zero$, suppose $\ndiv(c,a)$ and $\ndiv(c,b)$; now $\ngcd(a,b) = a$, so that $\ndiv(c,\ngcd(a,b))$ trivially. For the inductive step, suppose the implication holds for all $a$ and $c$ when $\nleq(b,m)$, and let $b = \next(m)$ with $a,c \in \nats$. Suppose further that $\ndiv(c,a)$ and $\ndiv(c,b)$. Now $\ndiv(c,\ntimes(b,\nquo(a,b))$, so that $\ndiv(c,\nrem(a,b))$, and thus $\ndiv(c,\ngcd(a,b))$ as needed.
+2. We again proceed by strong induction on $b$. For the base case $b = \zero$, suppose $\ndiv(c,a)$ and $\ndiv(c,b)$; now $\ngcd(a,b) = a$, so that $\ndiv(c,\ngcd(a,b))$ trivially. For the inductive step, suppose the implication holds for all $a$ and $c$ when $\nleq(b,m)$, and let $b = \next(m)$ with $a,c \in \nats$. Suppose further that $\ndiv(c,a)$ and $\ndiv(c,b)$. Now $\ndiv(c,\ntimes(b,\nquo(a,b)))$, so that $\ndiv(c,\nrem(a,b))$, and thus $\ndiv(c,\ngcd(a,b))$ as needed.
 ::::::::::::::::::::
 
 ::: test :::::::::::
@@ -310,7 +310,7 @@ $$\begin{eqnarray*}
  & = & \ngcd(\zero,\zero) \\
  & = & \ngcd(\ntimes(a,c),\ntimes(b,c))
 \end{eqnarray*}$$
-as claimed. Now suppose $c \neq \zero$. First note that $\ndiv(\ngcd(a,b),a)$, so that $$\ndiv(\ntimes(\ngcd(a,b),c),\ntimes(a,c)).$$ Similarly, we have $$\ndiv(\ntimes(\ngcd(a,b),c),\ntimes(b,c)).$$ Thus $$\ndiv(\ntimes(\ngcd(a,b),c), \ngcd(\ntimes(a,c),\ntimes(b,c))).$$ Now note that $\ndiv(c,\ntimes(a,c))$ and $\ndiv(c,\ntimes(b,c))$, so that $$\ndiv(c,\ngcd(\ntimes(a,c),\ntimes(b,c))).$$ Say $$\ntimes(u,c) = \ngcd(\ntimes(a,c),\ntimes(b,c)).$$ Now $\ndiv(\ntimes(u,c),\ntimes(a,c))$, so that $\ndiv(u,a)$; similarly, $\ndiv(u,b)$. Thus $\ndiv(u,\ngcd(a,b))$, and we have $$\ndiv(\ngcd(\ntimes(a,c),\ntimes(b,c)),\ntimes(\ngcd(a,b),c)).$$ By the antisymmetry of $\ndiv$, we have $$\ngcd(\ntimes(a,c),\ntimes(b,c) = \ntimes(\ngcd(a,b),c)$$ as claimed.
+as claimed. Now suppose $c \neq \zero$. First note that $\ndiv(\ngcd(a,b),a)$, so that $$\ndiv(\ntimes(\ngcd(a,b),c),\ntimes(a,c)).$$ Similarly, we have $$\ndiv(\ntimes(\ngcd(a,b),c),\ntimes(b,c)).$$ Thus $$\ndiv(\ntimes(\ngcd(a,b),c), \ngcd(\ntimes(a,c),\ntimes(b,c))).$$ Now note that $\ndiv(c,\ntimes(a,c))$ and $\ndiv(c,\ntimes(b,c))$, so that $$\ndiv(c,\ngcd(\ntimes(a,c),\ntimes(b,c))).$$ Say $$\ntimes(u,c) = \ngcd(\ntimes(a,c),\ntimes(b,c)).$$ Now $\ndiv(\ntimes(u,c),\ntimes(a,c))$, so that $\ndiv(u,a)$; similarly, $\ndiv(u,b)$. Thus $\ndiv(u,\ngcd(a,b))$, and we have $$\ndiv(\ngcd(\ntimes(a,c),\ntimes(b,c)),\ntimes(\ngcd(a,b),c)).$$ By the antisymmetry of $\ndiv$, we have $$\ngcd(\ntimes(a,c),\ntimes(b,c)) = \ntimes(\ngcd(a,b),c)$$ as claimed.
 ::::::::::::::::::::
 
 ::: test :::::::::::

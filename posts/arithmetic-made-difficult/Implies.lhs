@@ -218,9 +218,9 @@ $$\begin{eqnarray*}
  & = & \bimpl(\bor(\bnot(p),q),\bor(\bnot(\bimpl(q,r)),\bimpl(p,r))) \\
  & = & \bimpl(\bor(\bnot(p),q),\bor(\bnot(\bor(\bnot(q),r)),\bor(\bnot(p),r))) \\
  & = & \bor(\bnot(\bor(\bnot(p),q)),\bor(\bnot(\bor(\bnot(q),r)),\bor(\bnot(p),r))) \\
- & = & \bor(\band(\bnot(\bnot(p)),\bnot(q))),\bor(\bnot(\bor(\bnot(q),r)),\bor(\bnot(p),r))) \\
+ & = & \bor(\band(\bnot(\bnot(p)),\bnot(q)),\bor(\bnot(\bor(\bnot(q),r)),\bor(\bnot(p),r))) \\
  & = & \bor(\band(p,\bnot(q)),\bor(\bnot(\bor(\bnot(q),r)),\bor(\bnot(p),r))) \\
- & = & \bor(\band(p,\bnot(q)),\bor(\band(\bnot(\bnot(q)),\bnot(r))),\bor(\bnot(p),r))) \\
+ & = & \bor(\band(p,\bnot(q)),\bor(\band(\bnot(\bnot(q)),\bnot(r)),\bor(\bnot(p),r))) \\
  & = & \bor(\band(p,\bnot(q)),\bor(\band(q,\bnot(r)),\bor(\bnot(p),r))) \\
  & = & Q.
 \end{eqnarray*}$$
@@ -278,7 +278,7 @@ Suppose instead that $p = \btrue$. Now
 $$\begin{eqnarray*}
  &   & \bimpl(\bimpl(p,\bimpl(q,r)),\bimpl(\bimpl(p,q),\bimpl(p,r))) \\
  & = & \bimpl(\bimpl(\btrue,\bimpl(q,r)),\bimpl(\bimpl(\btrue,q),\bimpl(\btrue,r))) \\
- & = & \bimpl(\bimpl(q,r),\bimpl(\bimpl(q,r)) \\
+ & = & \bimpl(\bimpl(q,r),\bimpl(q,r)) \\
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.

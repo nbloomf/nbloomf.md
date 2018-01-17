@@ -113,7 +113,7 @@ $$\begin{eqnarray*}
  & = & \findsmallest{\sigma}(\next(\next(n)),k) \\
  & = & \bif{\sigma(k)}{\rgt(k)}{\findsmallest{\sigma}(\next(n),\next(k))}.
 \end{eqnarray*}$$
-We have two possibilities. If $\sigma(k) = \btrue$, then $\rgt(t) = \rgt(k)$, so that $\nleq(k,t)$ and $\nleq(t,\nplus(n,k))$ as needed. If $\sigma(k) = \bfalse$, we have $\rgt(t) = \findsmallest{\sigma}(\next(n),\next(k))$. By the inductive hypothesis, we have $\nleq(\next(k),t)$ and $\nleq(t,\nplus(\next(n),\next(k))$. By transitivity we thus have $\nleq(k,t)$ and $\nleq(t,\nplus(\next(\next(n)),k)$ as needed.
+We have two possibilities. If $\sigma(k) = \btrue$, then $\rgt(t) = \rgt(k)$, so that $\nleq(k,t)$ and $\nleq(t,\nplus(n,k))$ as needed. If $\sigma(k) = \bfalse$, we have $\rgt(t) = \findsmallest{\sigma}(\next(n),\next(k))$. By the inductive hypothesis, we have $\nleq(\next(k),t)$ and $\nleq(t,\nplus(\next(n),\next(k)))$. By transitivity we thus have $\nleq(k,t)$ and $\nleq(t,\nplus(\next(\next(n)),k))$ as needed.
 ::::::::::::::::::::
 
 ::: test :::::::::::
@@ -148,7 +148,7 @@ $$\begin{eqnarray*}
  & = & \findsmallest{\sigma}(\next(\next(n)),k) \\
  & = & \bif{\sigma(k)}{\rgt(k)}{\findsmallest{\sigma}(\next(n),\next(k))}. \\
 \end{eqnarray*}$$
-Now we must have $\sigma(k) = \bfalse$, and moreover $\findsmallest{\sigma}(\next(n),\next(k)) = \lft(\ast)$. By the inductive hypothesis, we have $\sigma(t) = \bfalse$ whenever $\nleq(\next(k),t)$ and $\nleq(t,\nplus(\next(n),\next(k))$; thus $\sigma(t) = \bfalse$ whenever $\nleq(k,t)$ and $\nleq(t,\nplus(\next(\next(n)),k)$ as needed.
+Now we must have $\sigma(k) = \bfalse$, and moreover $\findsmallest{\sigma}(\next(n),\next(k)) = \lft(\ast)$. By the inductive hypothesis, we have $\sigma(t) = \bfalse$ whenever $\nleq(\next(k),t)$ and $\nleq(t,\nplus(\next(n),\next(k)))$; thus $\sigma(t) = \bfalse$ whenever $\nleq(k,t)$ and $\nleq(t,\nplus(\next(\next(n)),k))$ as needed.
 
 We also prove the "if" direction by induction on $n$. For the base case $n = \zero$, suppose $\sigma(t) = \bfalse$ when $\nleq(k,t)$ and $\nleq(t,\nplus(\zero,k))$; by antisymmetry, we have $\sigma(k) = \bfalse$, and thus
 $$\begin{eqnarray*}
@@ -158,7 +158,7 @@ $$\begin{eqnarray*}
  & = & \bif{\bfalse}{\rgt(k)}{\lft(\ast)} \\
  & = & \lft(\ast)
 \end{eqnarray*}$$
-as needed. For the inductive step, suppose the implication holds for all $k$ for some $n$, and suppose further that $\sigma(t) = \bfalse$ whenever $\nleq(k,t)$ and $\nleq(t,\nplus(\next(n),k)$. Then we have $\sigma(k) = \bfalse$, and we also have $\sigma(t) = \bfalse$ whenever $\nleq(\next(k),t)$ and $\nleq(t,\nplus(n,\next(k))$, and by the inductive hypothesis, $\findsmallest{\sigma}(\next(n),\next(k)) = \lft(\ast)$. Now
+as needed. For the inductive step, suppose the implication holds for all $k$ for some $n$, and suppose further that $\sigma(t) = \bfalse$ whenever $\nleq(k,t)$ and $\nleq(t,\nplus(\next(n),k))$. Then we have $\sigma(k) = \bfalse$, and we also have $\sigma(t) = \bfalse$ whenever $\nleq(\next(k),t)$ and $\nleq(t,\nplus(n,\next(k)))$, and by the inductive hypothesis, $\findsmallest{\sigma}(\next(n),\next(k)) = \lft(\ast)$. Now
 $$\begin{eqnarray*}
  &   & \findsmallest{\sigma}(\next(\next(n)),k) \\
  & = & \bif{\sigma(k)}{\rgt(k)}{\findsmallest{\sigma}(\next(n),\next(k))} \\
@@ -246,7 +246,7 @@ $$\begin{eqnarray*}
  & = & \findsmallest{\sigma}(\next(\next(n)),k) \\
  & = & \bif{\sigma(k)}{\rgt(k)}{\findsmallest{\sigma}(\next(n),\next(k))}.
 \end{eqnarray*}$$
-If $\sigma(k) = \btrue$, then $t = k$, and we again have $\nleq(t,u)$ as needed. If instead $\sigma(k) = \bfalse$, we have $$\rgt(t) = \findsmallest{\sigma}(\next(n),\next(k)).$$ By the inductive hypothesis, if $\sigma(u) = \btrue$ and $\nleq(\next(k),u)$ and $\nleq(u,\nplus(n,\next(k))$, then $\nleq(t,u)$. Suppose $\sigma(u) = \btrue$, $\nleq(k,u)$, and $\nleq(u,\nplus(\next(n),k))$. Since $\sigma(k) = \bfalse$, we have $\nleq(\next(k),u)$, so by the inductive hypothesis, $\nleq(t,u)$ as needed.
+If $\sigma(k) = \btrue$, then $t = k$, and we again have $\nleq(t,u)$ as needed. If instead $\sigma(k) = \bfalse$, we have $$\rgt(t) = \findsmallest{\sigma}(\next(n),\next(k)).$$ By the inductive hypothesis, if $\sigma(u) = \btrue$ and $\nleq(\next(k),u)$ and $\nleq(u,\nplus(n,\next(k)))$, then $\nleq(t,u)$. Suppose $\sigma(u) = \btrue$, $\nleq(k,u)$, and $\nleq(u,\nplus(\next(n),k))$. Since $\sigma(k) = \bfalse$, we have $\nleq(\next(k),u)$, so by the inductive hypothesis, $\nleq(t,u)$ as needed.
 ::::::::::::::::::::
 
 ::: test :::::::::::
@@ -254,7 +254,7 @@ If $\sigma(k) = \btrue$, then $t = k$, and we again have $\nleq(t,u)$ as needed.
 > _test_findSmallest_minimal :: (Natural n, Equal n)
 >   => n -> Test ((n -> Bool) -> n -> n -> n -> n -> Bool)
 > _test_findSmallest_minimal _ =
->   testName "if findSmallest(sigma)(next(n),k) == rgt(t) and sigma(u) and leq(k,u) and leq(u,plus(n,k) then leq(t,u)" $
+>   testName "if findSmallest(sigma)(next(n),k) == rgt(t) and sigma(u) and leq(k,u) and leq(u,plus(n,k)) then leq(t,u)" $
 >   \sigma n k t u -> case findSmallest sigma (next n) k of
 >     Right t -> if and (sigma u) (and (leq k u) (leq u (plus n k)))
 >       then leq t u

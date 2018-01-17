@@ -228,7 +228,7 @@ $\nlcm$ is associative:
 Let $a,b,c \in \nats$. Then $\nlcm(\nlcm(a,b),c) = \nlcm(a,\nlcm(b,c))$.
 
 ::: proof ::::::::::
-Note that $\ndiv(a,\nlcm(a,\nlcm(b,c)))$. We also have $\ndiv(b,\nlcm(b,c))$, so that $$\ndiv(b,\nlcm(a,\nlcm(b,c))$$ by transitivity; similarly, $$\ndiv(c,\nlcm(a,\nlcm(b,c))).$$ By the universal property of $\nlcm$, we thus have $$\ndiv(\nlcm(a,b),\nlcm(a,\nlcm(b,c))),$$ so that $$\ndiv(\nlcm(\nlcm(a,b),c),\nlcm(a,\nlcm(b,c))).$$ A similar argument shows that $$\ndiv(\nlcm(a,\nlcm(b,c)),\nlcm(\nlcm(a,b),c)).$$ By antisymmetry, we thus have $$\nlcm(a,\nlcm(b,c)) = \nlcm(\nlcm(a,b),c)$$ as claimed.
+Note that $\ndiv(a,\nlcm(a,\nlcm(b,c)))$. We also have $\ndiv(b,\nlcm(b,c))$, so that $$\ndiv(b,\nlcm(a,\nlcm(b,c)))$$ by transitivity; similarly, $$\ndiv(c,\nlcm(a,\nlcm(b,c))).$$ By the universal property of $\nlcm$, we thus have $$\ndiv(\nlcm(a,b),\nlcm(a,\nlcm(b,c))),$$ so that $$\ndiv(\nlcm(\nlcm(a,b),c),\nlcm(a,\nlcm(b,c))).$$ A similar argument shows that $$\ndiv(\nlcm(a,\nlcm(b,c)),\nlcm(\nlcm(a,b),c)).$$ By antisymmetry, we thus have $$\nlcm(a,\nlcm(b,c)) = \nlcm(\nlcm(a,b),c)$$ as claimed.
 ::::::::::::::::::::
 
 ::: test :::::::::::
@@ -400,7 +400,7 @@ $$\begin{eqnarray*}
  & = & \ngcd(a,\nquo(bc,\ngcd(b,c))) \\
  & = & \ngcd(\nquo(a\ngcd(b,c),\ngcd(b,c)),\nquo(bc,\ngcd(b,c))) \\
  & = & \nquo(\ngcd(a\ngcd(b,c),bc),\ngcd(b,c)) \\
- & = & \nquo(\ngcd(a,b)\ngcd(a,c),\ngcd(a,\ngcd(b,c)) \\
+ & = & \nquo(\ngcd(a,b)\ngcd(a,c),\ngcd(a,\ngcd(b,c))) \\
  & = & \nquo(\ngcd(a,b)\ngcd(a,c),\ngcd(\ngcd(a,b),\ngcd(a,c))) \\
  & = & \nlcm(\ngcd(a,b),\ngcd(a,c))
 \end{eqnarray*}$$
@@ -448,7 +448,7 @@ $$\begin{eqnarray*}
 Note that $$\ndiv(\ngcd(a,\ngcd(b,c)),a\ngcd(b,c)),$$ so that $$\ndiv(\ngcd(a,b)\ngcd(a,c),a\ngcd(ba,bc,ca,cb)).$$ By cross-multiplication, we have
 $$\begin{eqnarray*}
  &   & \nquo(a\ngcd(ba,bc,ca,cb),\ngcd(a,b)\ngcd(a,c)) \\
- & = & \nquo(a\ngcd(b,c),\ngcd(a,\ngcd(b,c)).
+ & = & \nquo(a\ngcd(b,c),\ngcd(a,\ngcd(b,c))).
 \end{eqnarray*}$$
 Thus we have
 $$\begin{eqnarray*}
@@ -458,7 +458,7 @@ $$\begin{eqnarray*}
  & = & \nquo(\ngcd(ab\ngcd(a,c),ac\ngcd(a,b)),\ngcd(a,b)\ngcd(a,c)) \\
  & = & \nquo(a\ngcd(b\ngcd(a,c),c\ngcd(a,b)),\ngcd(a,b)\ngcd(a,c)) \\
  & = & \nquo(a\ngcd(ba,bc,ca,cb),\ngcd(a,b)\ngcd(a,c)) \\
- & = & \nquo(a\ngcd(b,c),\ngcd(a,\ngcd(b,c)) \\
+ & = & \nquo(a\ngcd(b,c),\ngcd(a,\ngcd(b,c))) \\
  & = & \nlcm(a,\ngcd(b,c))
 \end{eqnarray*}$$
 as claimed.

@@ -325,7 +325,7 @@ as needed. Finally, suppose $a \neq b$ and $\nleq(a,b)$ is false. Then $\nleq(b,
 2. There are two possibilities for $c$. If $c = \zero$, then we have $$\begin{eqnarray*} & & \nleq(\ntimes(a,c),\ntimes(b,d)) \\ & = & \nleq(\zero,\ntimes(b,d)) \\ & = & \btrue \end{eqnarray*}.$$ Suppose instead that $c = \next(u)$. Now there are two possibilities for $b$. If $b = \zero$, then in fact $a = \zero$, and we have $$\begin{eqnarray*} & & \nleq(\ntimes(a,c),\ntimes(b,d)) \\ & = & \nleq(\zero,\zero) \\ & = & \btrue \end{eqnarray*}$$ as needed. Suppose then that $b = \next(v)$. Now we have
 $$\begin{eqnarray*}
  &   & \btrue \\
- & = & \nleq(\ntimes(a,\next(u)),\ntimes(b,\next(u)) \\
+ & = & \nleq(\ntimes(a,\next(u)),\ntimes(b,\next(u))) \\
  & = & \nleq(\ntimes(a,c),\ntimes(b,c))
 \end{eqnarray*}$$
 and
