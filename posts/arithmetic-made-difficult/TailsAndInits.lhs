@@ -176,7 +176,7 @@ $$\begin{eqnarray*}
  &   & \length(\tails(\cons(a,x))) \\
  & = & \length(\cons(\cons(a,x),\tails(x))) \\
  & = & \next(\length(\tails(x))) \\
- & = & \next(\next(\length(x)) \\
+ & = & \next(\next(\length(x))) \\
  & = & \next(\length(\cons(a,x)))
 \end{eqnarray*}$$
 as claimed.
@@ -362,7 +362,7 @@ Note that
 $$\begin{eqnarray*}
  &   & \inits(\map(f)(x)) \\
  & = & \rev(\map(\rev)(\tails(\rev(\map(f)(x))))) \\
- & = & \rev(\map(\rev)(\tails(\map(f)(\rev(x)))) \\
+ & = & \rev(\map(\rev)(\tails(\map(f)(\rev(x))))) \\
  & = & \rev(\map(\rev)(\map(\map(f))(\tails(\rev(x))))) \\
  & = & \rev(\map(\rev \circ \map(f))(\tails(\rev(x)))) \\
  & = & \rev(\map(\map(f) \circ \rev)(\tails(\rev(x)))) \\
@@ -430,7 +430,7 @@ and if $y = \cons(a,u)$, we have
 $$\begin{eqnarray*}
  &   & \lcp(\inits(x),\inits(y)) \\
  & = & \lcp(\inits(\nil),\inits(\cons(a,u))) \\
- & = & \lcp(\cons(\nil,\nil),\cons(\nil,\map(\cons(a,-))(\inits(x))) \\
+ & = & \lcp(\cons(\nil,\nil),\cons(\nil,\map(\cons(a,-))(\inits(x)))) \\
  & = & \cons(\nil,\lcp(\nil,\map(\cons(a,-))(\inits(x)))) \\
  & = & \cons(\nil,\nil)
 \end{eqnarray*}$$

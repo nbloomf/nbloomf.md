@@ -168,7 +168,7 @@ We have $$\prefix(\take(k,x),x) = \btrue,$$ so $$\infix(\take(k,x),x) = \btrue,$
 $\take$ has bounded length:
 
 :::::: theorem :::::
-Let $A$ be a set, with $x \in \lists{A}$ and $k \in \nats$. Then we have $$\length(\take(k,x) = \nmin(k,\length(x)).$$
+Let $A$ be a set, with $x \in \lists{A}$ and $k \in \nats$. Then we have $$\length(\take(k,x)) = \nmin(k,\length(x)).$$
 
 ::: proof ::::::::::
 We proceed by induction on $k$. For the base case $k = \zero$, we have
@@ -365,7 +365,7 @@ as needed.
 > _test_take_idempotent :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> Bool)
 > _test_take_idempotent _ _ =
->   testName "take(k,(take(k,x)) == take(k,take(k,x))" $
+>   testName "take(k,(take(k,x))) == take(k,take(k,x))" $
 >   \k x -> eq (take k (take k x)) (take k x)
 
 ::::::::::::::::::::

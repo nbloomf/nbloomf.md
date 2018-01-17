@@ -440,7 +440,7 @@ But now we have
 $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \nleq(\length(\cons(a,x)),\length(y)) \\
- & = & \nleq(\next(\length(x)),\length(y)
+ & = & \nleq(\next(\length(x)),\length(y))
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
@@ -572,7 +572,7 @@ $$\begin{eqnarray*}
 as needed. If $x = \cons(c,u)$ and $\sublist(\snoc(a,x),\snoc(b,\nil)) = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \btrue \\
- & = & \nleq(\length(\snoc(a,x)),\length(\snoc(b,\nil)) \\
+ & = & \nleq(\length(\snoc(a,x)),\length(\snoc(b,\nil))) \\
  & = & \nleq(\next(\length(x)),\next(\length(\nil))) \\
  & = & \nleq(\next(\length(\cons(c,u))),\next(\zero)) \\
  & = & \nleq(\next(\next(\length(u))),\next(\zero)) \\
@@ -869,9 +869,9 @@ $$\begin{eqnarray*}
  &   & \sublist(\map(f)(x),\map(f)(\cons(b,y))) \\
  & = & \sublist(\map(f)(\cons(a,u)),\map(f)(\cons(b,y))) \\
  & = & \sublist(\cons(f(a),\map(f)(u)),\cons(f(b),\map(f)(y))) \\
- & = & \bif{\beq(f(a),f(b))}{\sublist(\map(f)(u),\map(f)(y))}{\sublist(\cons(f(a),\map(f)(u)),\map(f)(y)} \\
- & = & \bif{\beq(f(a),f(b))}{\sublist(\map(f)(u),\map(f)(y))}{\sublist(\map(f)(\cons(a,u)),\map(f)(y)} \\
- & = & \bif{\beq(f(a),f(b))}{\sublist(\map(f)(u),\map(f)(y))}{\sublist(\map(f)(x),\map(f)(y)} \\
+ & = & \bif{\beq(f(a),f(b))}{\sublist(\map(f)(u),\map(f)(y))}{\sublist(\cons(f(a),\map(f)(u)),\map(f)(y))} \\
+ & = & \bif{\beq(f(a),f(b))}{\sublist(\map(f)(u),\map(f)(y))}{\sublist(\map(f)(\cons(a,u)),\map(f)(y))} \\
+ & = & \bif{\beq(f(a),f(b))}{\sublist(\map(f)(u),\map(f)(y))}{\sublist(\map(f)(x),\map(f)(y))} \\
  & = & \bif{\beq(f(a),f(b))}{\btrue}{\btrue} \\
  & = & \btrue
 \end{eqnarray*}$$
@@ -905,7 +905,7 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equality holds for all $p$ for some $x$ and let $a \in A$. We consider two possibilities. If $p(a) = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \sublist(\filter(p,\cons(a,x)),\cons(a,x)) \\
- & = & \sublist(\bif{p(a)}{\cons(a,\filter(p,x)}{\filter(p,x)},\cons(a,x)) \\
+ & = & \sublist(\bif{p(a)}{\cons(a,\filter(p,x))}{\filter(p,x)},\cons(a,x)) \\
  & = & \sublist(\cons(a,\filter(p,x)),\cons(a,x)) \\
  & = & \sublist(\filter(p,x),x) \\
  & = & \btrue
@@ -913,7 +913,7 @@ $$\begin{eqnarray*}
 as needed. If $p(a) = \bfalse$, note that $$\sublist(\filter(p,x),x) = \btrue,$$ so that
 $$\begin{eqnarray*}
  &   & \sublist(\filter(p,\cons(a,x)),\cons(a,x)) \\
- & = & \sublist(\bif{p(a)}{\cons(a,\filter(p,x)}{\filter(p,x)},\cons(a,x)) \\
+ & = & \sublist(\bif{p(a)}{\cons(a,\filter(p,x))}{\filter(p,x)},\cons(a,x)) \\
  & = & \sublist(\filter(p,x),\cons(a,x)) \\
  & = & \btrue
 \end{eqnarray*}$$
