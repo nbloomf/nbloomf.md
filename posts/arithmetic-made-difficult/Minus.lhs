@@ -309,7 +309,7 @@ Let $a,b \in \nats$. Then the following are equivalent.
 
 ::: proof ::::::::::
 1. We have $\nplus(b,a) = \nplus(b,a)$, so that $\nminus(\nplus(b,a),b) = \rgt(a)$ as claimed.
-2. We have $$\nminus(\nplus(a,b),b) = \nminus(b,a),b) = \rgt(a)$$ as claimed.
+2. We have $$\nminus(\nplus(a,b),b) = \nminus(\nplus(b,a),b) = \rgt(a)$$ as claimed.
 ::::::::::::::::::::
 
 ::: test :::::::::::
@@ -408,7 +408,7 @@ Let $a,b,c \in \nats$. If $\nminus(a,b) = \rgt(d)$ for some $d \in \nats$, then 
 ::: proof ::::::::::
 We proceed by induction on $a$. For the base case $a = \zero$, suppose we have $\nminus(\zero,b) = \rgt(d)$; then $d = \zero$ and $b = \zero$. Now
 $$\begin{eqnarray*}
- &   & \nminus(\ntimes(c,a),(\ntimes(c,b)) \\
+ &   & \nminus(\ntimes(c,a),\ntimes(c,b)) \\
  & = & \nminus(\zero,\zero) \\
  & = & \rgt(\zero)
 \end{eqnarray*}$$

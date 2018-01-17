@@ -23,7 +23,7 @@ slug: max-min
 > import Minus
 > import LessThanOrEqualTo
 
-With $\nleq$ in hand we can also define max and min functions. These are less interesting since they do not have to be defined recursively. :)
+With $\nleq$ in hand we can also define max and min functions. These are less interesting since they do not have to be defined recursively.
 
 :::::: definition ::
 We define $\nmax : \nats \times \nats \rightarrow \nats$ by $$\nmax(a,b) = \bif{\nleq(a,b)}{b}{a}$$ and $\nmin : \nats \times \nats \rightarrow \nats$ by $$\nmin(a,b) = \bif{\nleq(a,b)}{a}{b}.$$

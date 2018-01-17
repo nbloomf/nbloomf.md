@@ -72,7 +72,7 @@ $$\left\{\begin{array}{l}
 > _test_lcp_cons_cons :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (a -> t a -> a -> t a -> Bool)
 > _test_lcp_cons_cons _ =
->   testName "lcp(cons(a,x),cons(b,y)) == if(eq(a,b),cons(a,lcp(x,y),nil)" $
+>   testName "lcp(cons(a,x),cons(b,y)) == if(eq(a,b),cons(a,lcp(x,y),nil))" $
 >   \a x b y -> eq
 >     (lcp (cons a x) (cons b y))
 >     (if eq a b then cons a (lcp x y) else nil)
@@ -719,7 +719,7 @@ We have
 $$\begin{eqnarray*}
  &   & \lcs(\lcs(x,y),z) \\
  & = & \lcs(\rev(\lcp(\rev(x),\rev(y))),z) \\
- & = & \rev(\lcp(\rev(\rev(\lcp(\rev(x),\rev(y)))),\rev(z)) \\
+ & = & \rev(\lcp(\rev(\rev(\lcp(\rev(x),\rev(y)))),\rev(z))) \\
  & = & \rev(\lcp(\lcp(\rev(x),\rev(y)),\rev(z))) \\
  & = & \rev(\lcp(\rev(x),\lcp(\rev(y),\rev(z)))) \\
  & = & \rev(\lcp(\rev(x),\rev(\rev(\lcp(\rev(y),\rev(z)))))) \\

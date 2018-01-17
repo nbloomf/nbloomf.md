@@ -130,7 +130,7 @@ $$\begin{eqnarray*}
  & = & \map(g)(\cons(f(a),\map(f)(x))) \\
  & = & \cons(g(f(a)),\map(g)(\map(f)(x))) \\
  & = & \cons((g \circ f)(a),(\map(g) \circ \map(f))(x)) \\
- & = & \cons((g \circ f)(a),(\map(g \circ f)(x)) \\
+ & = & \cons((g \circ f)(a),\map(g \circ f)(x)) \\
  & = & \map(g \circ f)(\cons(a,x))
 \end{eqnarray*}$$
 as needed.
@@ -165,7 +165,7 @@ as needed. For the inductive step, suppose the equality holds for some $x$ and l
 $$\begin{eqnarray*}
  &   & \map(f)(\tail(\cons(a,x))) \\
  & = & \map(f)(x) \\
- & = & \tail(\cons(f(a),\map(f)(x)) \\
+ & = & \tail(\cons(f(a),\map(f)(x))) \\
  & = & \tail(\map(f)(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
@@ -280,7 +280,7 @@ $$\begin{eqnarray*}
  & = & \map(f)(\snoc(a,\rev(x))) \\
  & = & \snoc(f(a),\map(f)(\rev(x))) \\
  & = & \snoc(f(a),\rev(\map(f)(x))) \\
- & = & \rev(\cons(f(a),\map(f)(x)) \\
+ & = & \rev(\cons(f(a),\map(f)(x))) \\
  & = & \rev(\map(f)(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.

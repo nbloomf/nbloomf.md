@@ -75,7 +75,7 @@ $$\left\{\begin{array}{l}
 > _test_prefix_cons_cons :: (List t, Equal a)
 >   => t a -> Test (a -> t a -> a -> t a -> Bool)
 > _test_prefix_cons_cons _ =
->   testName "prefix((cons(a,x),cons(b,y)) == if(eq(a,b),prefix(x,y),false)" $
+>   testName "prefix(cons(a,x),cons(b,y)) == if(eq(a,b),prefix(x,y),false)" $
 >   \a x b y -> eq
 >     (prefix (cons a x) (cons b y))
 >     (if eq a b then prefix x y else false)
@@ -305,7 +305,7 @@ as claimed.
 $\prefix$ interacts with $\length$.
 
 :::::: theorem :::::
-Let $A$ be a set with $x,y \in \lists{A}$. If $\prefix(x,y)$, then $\nleq(\length(x),\length(y)$.
+Let $A$ be a set with $x,y \in \lists{A}$. If $\prefix(x,y)$, then $\nleq(\length(x),\length(y))$.
 
 ::: proof ::::::::::
 Suppose $\prefix(x,y)$. Then we have $y = \cat(x,z)$ for some $z$, and so
@@ -433,7 +433,7 @@ as claimed.
 > _test_suffix_snoc_snoc :: (List t, Equal a)
 >   => t a -> Test (a -> t a -> a -> t a -> Bool)
 > _test_suffix_snoc_snoc _ =
->   testName "suffix((snoc(a,x),snoc(b,y)) == if(eq(a,b),suffix(x,y),false)" $
+>   testName "suffix(snoc(a,x),snoc(b,y)) == if(eq(a,b),suffix(x,y),false)" $
 >   \a x b y -> eq
 >     (suffix (snoc a x) (snoc b y))
 >     (if eq a b then suffix x y else false)
@@ -483,7 +483,7 @@ as claimed.
 $\suffix$ interacts with $\cons$.
 
 :::::: theorem :::::
-Let $A$ be a set. For all $x,y \in \lists{A}$ and $a \in A$, if $\suffix(x,y)$, then $\suffix(x,\cons(a,y)$.
+Let $A$ be a set. For all $x,y \in \lists{A}$ and $a \in A$, if $\suffix(x,y)$, then $\suffix(x,\cons(a,y))$.
 
 ::: proof ::::::::::
 Suppose $\suffix(x,y)$. Then we have
@@ -607,7 +607,7 @@ Let $A$ be a set with $x,y \in \lists{A}$. If $\suffix(x,y)$, then $\nleq(\lengt
 Suppose $\suffix(x,y)$. Then $\prefix(\rev(x),\rev(y))$, so we have
 $$\begin{eqnarray*}
  &   & \nleq(\length(x),\length(y)) \\
- & = & \nleq(\length(\rev(x),\length(\rev(y))) \\
+ & = & \nleq(\length(\rev(x),\length(\rev(y)))) \\
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.

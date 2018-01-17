@@ -113,9 +113,9 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for some $b$. Now
 $$\begin{eqnarray*}
- &   & \length(\range(a,\next(b)) \\
+ &   & \length(\range(a,\next(b))) \\
  & = & \length(\cons(a,\range(\next(a),b))) \\
- & = & \next(\length(\range(\next(a),b)) \\
+ & = & \next(\length(\range(\next(a),b))) \\
  & = & \next(b)
 \end{eqnarray*}$$
 as claimed.
@@ -174,7 +174,7 @@ as needed.
 $\range$ interacts with $\nplus$ in its second argument.
 
 :::::: theorem :::::
-If $a,b,c \in \nats$, we have $$\range(a,\nplus(b,c)) = \cat(\range(a,b),\range(\nplus(a,b),c).$$
+If $a,b,c \in \nats$, we have $$\range(a,\nplus(b,c)) = \cat(\range(a,b),\range(\nplus(a,b),c)).$$
 
 ::: proof ::::::::::
 We proceed by induction on $c$. For the base case $c = \zero$, we have

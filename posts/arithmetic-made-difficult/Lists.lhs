@@ -109,7 +109,7 @@ $$\begin{array}{c}
 \cons(c,\cons(b,\cons(a,\nil))) \\
 \vdots
 \end{array}$$
-We will wrap this definition up in code both as a concrete type and as a type class, so that later we can give alternative implementations. The list algebra is characterized by the components of the algebra map ($\nil$ and $\cons$) as well as the inverse map $\uncons$).
+We will wrap this definition up in code both as a concrete type and as a type class, so that later we can give alternative implementations. The list algebra is characterized by the components of the algebra map ($\nil$ and $\cons$) as well as the inverse map ($\uncons$).
 
 > class List t where 
 >   nil :: t a
