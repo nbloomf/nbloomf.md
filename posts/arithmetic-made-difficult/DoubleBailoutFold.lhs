@@ -49,18 +49,9 @@ $$\begin{eqnarray*}
  &   & \Theta(\cons(a,x),b) \\
  & = & \foldr{\delta}{\varphi}(\cons(a,x))(b,\cons(a,x)) \\
  & = & \varphi(a,\foldr{\delta}{\varphi}(x))(b,\cons(a,x)) \\
- & = & \left\{\begin{array}{ll}
-        \psi(a,\tail(\cons(a,x)),b) & \mathrm{if}\ \beta(a,\tail(\cons(a,x)),b) \\
-        \chi(a,\tail(\cons(a,x)),b,\foldr{\varepsilon}{\varphi}(x)(b,\tail(\cons(a,x))),\foldr{\varepsilon}{\varphi}(x)(\mu(b),\tail(\cons(a,x)))) & \mathrm{otherwise}
-       \end{array}\right. \\
- & = & \left\{\begin{array}{ll}
-        \psi(a,x,b) & \mathrm{if}\ \beta(a,x,b) \\
-        \chi(a,x,b,\foldr{\varepsilon}{\varphi}(x)(b,x),\foldr{\varepsilon}{\varphi}(x)(\mu(b),x)) & \mathrm{otherwise}
-       \end{array}\right. \\
- & = & \left\{\begin{array}{ll}
-        \psi(a,x,b) & \mathrm{if}\ \beta(a,x,b) \\
-        \chi(a,x,b,\Theta(x,b),\Theta(x,\mu(b))) & \mathrm{otherwise}
-       \end{array}\right. \\
+ & = & \bif{\beta(a,\tail(\cons(a,x)),b)}{\psi(a,\tail(\cons(a,x)),b)}{\chi(a,\tail(\cons(a,x)),b,\foldr{\varepsilon}{\varphi}(x)(b,\tail(\cons(a,x))),\foldr{\varepsilon}{\varphi}(x)(\mu(b),\tail(\cons(a,x))))} \\
+ & = & \bif{\beta(a,x,b)}{\psi(a,x,b)}{\chi(a,x,b,\foldr{\varepsilon}{\varphi}(x)(b,x),\foldr{\varepsilon}{\varphi}(x)(\mu(b),x))} \\
+ & = & \bif{\beta(a,x,b)}{\psi(a,x,b)}{\chi(a,x,b,\Theta(x,b),\Theta(x,\mu(b)))}
 \end{eqnarray*}$$
 as needed. Now suppose $\Psi : \lists{A} \times B \rightarrow C$ also satisfies the equations; we show that $\Psi = \Theta$ by list induction. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
@@ -71,14 +62,8 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equations hold for all $b$ for some $x$, and let $a \in A$. Then we have
 $$\begin{eqnarray*}
  &   & \Psi(\cons(a,x),b) \\
- & = & \left\{\begin{array}{ll}
-        \psi(a,x,b) & \mathrm{if}\ \beta(a,x,b) \\
-        \chi(a,x,b,\Psi(x,b),\Psi(x,\mu(b))) & \mathrm{otherwise}
-       \end{array}\right. \\
- & = & \left\{\begin{array}{ll}
-        \psi(a,x,b) & \mathrm{if}\ \beta(a,x,b) \\
-        \chi(a,x,b,\Theta(x,b),\Theta(x,\mu(b))) & \mathrm{otherwise}
-       \end{array}\right. \\
+ & = & \bif{\beta(a,x,b)}{\psi(a,x,b)}{\chi(a,x,b,\Psi(x,b),\Psi(x,\mu(b)))} \\
+ & = & \bif{\beta(a,x,b)}{\psi(a,x,b)}{\chi(a,x,b,\Theta(x,b),\Theta(x,\mu(b)))} \\
  & = & \Theta(\cons(a,x),b)
 \end{eqnarray*}$$
 as needed.

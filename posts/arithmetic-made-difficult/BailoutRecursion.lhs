@@ -86,18 +86,18 @@ $$\begin{eqnarray*}
  &   & \natrec{(\zero, \varphi)}{t}(\next\ n) \\
  & = & t(\natrec{(\zero, \varphi)}{t}(n)) \\
  & = & t(n, \lambda x : \Theta(n,x)) \\
- & = & (\next\ n, W(n, \lambda x : \Theta(n,x))) \\
- & = & (\next\ n, \lambda y : W(n, \lambda x : \Theta(n,x))(y)) \\
- & = & (\next\ n, \lambda y : \Theta(\next\ n, y)
+ & = & (\next(n), W(n, \lambda x : \Theta(n,x))) \\
+ & = & (\next(n), \lambda y : W(n, \lambda x : \Theta(n,x))(y)) \\
+ & = & (\next(n), \lambda y : \Theta(\next(n),y))
 \end{eqnarray*}$$
 
 (Note that we used both parts of the induction hypothesis here.) Also note that
 $$\begin{eqnarray*}
- &   & \Theta(\next(\next\ n), a) \\
- & = & \snd (\natrec{(\zero, \varphi)}{t}(\next(\next\ n)))(a) \\
- & = & \snd (t (\natrec{(\zero, \varphi)}{t}(\next\ n)))(a) \\
- & = & \snd (t (\next\ n, \lambda x : \Theta(\next\ n, x)))(a) \\
- & = & \snd (\next(\next\ n), W(\next\ n, \lambda x : \Theta(\next\ n,x)))(a) \\
+ &   & \Theta(\next(\next(n)), a) \\
+ & = & \snd (\natrec{(\zero,\varphi)}{t}(\next(\next(n))))(a) \\
+ & = & \snd (t (\natrec{(\zero, \varphi)}{t}(\next(n))))(a) \\
+ & = & \snd (t (\next(n), \lambda x : \Theta(\next(n), x)))(a) \\
+ & = & \snd (\next(\next(n)), W(\next(n), \lambda x : \Theta(\next\ n,x)))(a) \\
  & = & W(\next\ n, \lambda x : \Theta(\next\ n, x))(a).
 \end{eqnarray*}$$
 
@@ -122,7 +122,7 @@ if not, for all $a \in A$. Thus $\Psi = \Theta$ as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-You might notice that in this proof, we didn't really use $\beta$ or $\psi$, and the fact that $W$ is piecewise-defined plays no role. When this happens in a proof it usually means we've got some unnecessary details. But in this case, we will be using $\beta$ and $\psi$ later, and the piecewiseness of $\Theta$ will be crucial in constructing an efficient tail-recursive evaluation strategy. Stay tuned. :)
+You might notice that in this proof, we didn't really use $\beta$ or $\psi$, and the fact that $W$ is piecewise-defined plays no role. When this happens in a proof it usually means we've got some unnecessary details. But in this case, we will be using $\beta$ and $\psi$ later, and the piecewiseness of $\Theta$ will be crucial in constructing an efficient tail-recursive evaluation strategy. Stay tuned.
 
 
 Implementation

@@ -247,22 +247,34 @@ We'll use the `GetOpt` library to handle parsing command line options.
 >       [_] -> Nothing
 >       (x:y:xs) -> fmap ((x,y):) $ readPairs xs
 
+Some helpers for error messages.
+
+> putLoc :: (Show a, Num a) => FilePath -> a -> a -> String
+> putLoc path line col = concat
+>   [path, ":", show line, ":", show col]
+> 
+> quote :: String -> String
+> quote str = "'" ++ str ++ "'"
+
 Now `balanceFile` handles checking entire files...
 
 > balanceFile :: FilePath -> [(String, String)] -> String -> IO ()
 > balanceFile path ds text =
 >   case balanceDelimiters ds (fileLoc text) of
->     Left (Left (d,t)) -> do
->       putStrLn $ path ++ ": " ++ err t
->       putStrLn $ "  unbalanced closing delimiter '" ++ d ++ "'"
->     Left (Right ((d,t),(e,u))) -> do
->       putStrLn $ path ++ ": " ++ err t
->       putStrLn $ "  closing delimiter '" ++ d ++ "'"
->       putStrLn $ "  does not match opening '" ++ e ++ "'"
->       putStrLn $ "  at " ++ err u
->     Right ((d,t):_) -> do
->       putStrLn $ path ++ ": " ++ err t
->       putStrLn $ "  unbalanced opening delimiter '" ++ d ++ "'"
+>     Left (Left (d,(i,j))) -> do
+>       putStrLn $ unwords
+>         [ putLoc path i j, "unbalanced closing delimiter", quote d ]
+>       putStrLn $ ">>> " ++ (lines text)!!i
+>     Left (Right ((d,(i,j)),(e,(h,k)))) -> do
+>       putStrLn $ unwords
+>         [ putLoc path i j, "closing delimiter", quote d
+>         , "does not match opening", quote e, "at", show h ++ ":" ++ show k
+>         ]
+>       putStrLn $ ">>> " ++ (lines text)!!i
+>     Right ((d,(i,j)):_) -> do
+>       putStrLn $ unwords
+>         [ putLoc path i j, "unbalanced opening delimiter", quote d ]
+>       putStrLn $ ">>> " ++ (lines text)!!i
 >     Right [] -> return ()
 >   where
 >     err (i,j) = "line " ++ show i ++ " column " ++ show j
@@ -289,20 +301,20 @@ Now `balanceFile` handles checking entire files...
 > balanceLine path ds k text = do
 >   case balanceDelimiters ds (num text) of
 >     Left (Left (d,t)) -> do
->       putStrLn $ path ++ ", line " ++ show k ++ ": " ++ err t
->       putStrLn $ "  unbalanced closing delimiter '" ++ d ++ "'"
+>       putStrLn $ unwords
+>         [ putLoc path k t, "unbalanced closing delimiter", quote d ]
+>       putStrLn $ ">>> " ++ text
 >     Left (Right ((d,t),(e,u))) -> do
->       putStrLn $ path ++ ", line " ++ show k ++ ": " ++ err t
->       putStrLn $ "  closing delimiter '" ++ d ++ "'"
->       putStrLn $ "  does not match opening '" ++ e ++ "'"
->       putStrLn $ "  at " ++ err u
+>       putStrLn $ unwords
+>         [ putLoc path k t, "closing delimiter", quote d
+>         , "does not match opening", quote e, "at column", show u
+>         ]
+>       putStrLn $ ">>> " ++ text
 >     Right ((d,t):_) -> do
->       putStrLn $ path ++ ", line " ++ show k ++ ": " ++ err t
->       putStrLn $ "  unbalanced opening delimiter '" ++ d ++ "'"
+>       putStrLn $ unwords
+>         [ putLoc path k t, "unbalanced opening delimiter", quote d ]
+>       putStrLn $ ">>> " ++ text
 >     Right [] -> return ()
->   where
->     err :: Int -> String
->     err j = "column " ++ show j
 
 Now `main` is straightforward enough; we read the command line arguments and call either `balanceFile` or `balanceLines`, depending.
 

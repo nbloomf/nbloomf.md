@@ -430,7 +430,7 @@ $$\begin{eqnarray*}
  &   & \at(\nil,k) \\
  & = & \lft(\ast)
 \end{eqnarray*}$$
-as needed. For the inductive step, suppose the implication holds for all $k$ for some $x$ and let $a \in A$. Suppose further that $\nleq(\length(\cons(a,x),k)$; we then have $k = \next(m)$ for some $m$, where $\nleq(\length(x),m)$. Now
+as needed. For the inductive step, suppose the implication holds for all $k$ for some $x$ and let $a \in A$. Suppose further that $\nleq(\length(\cons(a,x),k))$; we then have $k = \next(m)$ for some $m$, where $\nleq(\length(x),m)$. Now
 $$\begin{eqnarray*}
  &   & \at(\cons(a,x),k) \\
  & = & \at(\cons(a,x),\next(m)) \\
@@ -440,7 +440,7 @@ $$\begin{eqnarray*}
 as needed.
 2. We proceed by list induction on $x$. For the base case $x = \nil$, note that if $\nleq(k,\length(\nil))$ then $k = \zero$. Now
 $$\begin{eqnarray*}
- &   & \at(\cons(a,\nil),\zero)) \\
+ &   & \at(\cons(a,\nil),\zero) \\
  & = & \rgt(a)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the implication holds for all $k$ and $a$ for some $x$ and let $b \in A$. Suppose further that $\nleq(k,\length(\cons(b,x)))$. We have two possibilities for $k$. If $k = \zero$, we have

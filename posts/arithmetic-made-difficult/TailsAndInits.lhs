@@ -257,8 +257,8 @@ $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \all(\suffix(-,x),\tails(x)) \\
  & = & \all(\suffix(-,\cons(a,x)),\tails(x)) \\
- & = & \band(\btrue,\all(\suffix(-,\cons(a,x)),\tails(x)) \\
- & = & \band(\suffix(\cons(a,x),\cons(a,x)),\all(\suffix(-,\cons(a,x)),\tails(x)))) \\
+ & = & \band(\btrue,\all(\suffix(-,\cons(a,x)),\tails(x))i) \\
+ & = & \band(\suffix(\cons(a,x),\cons(a,x)),\all(\suffix(-,\cons(a,x)),\tails(x))) \\
  & = & \all(\suffix(-,\cons(a,x)),\cons(\cons(a,x),\tails(x))) \\
  & = & \all(\suffix(-,\cons(a,x)),\tails(\cons(a,x)))
 \end{eqnarray*}$$

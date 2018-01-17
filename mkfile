@@ -113,6 +113,7 @@ blankpost:VQ:
   echo '---'
   echo
 
+
 sniff-amd:VQ: \
   sniff-amd-fencediv \
   sniff-amd-plaindiv \
@@ -188,6 +189,15 @@ sniff-amd-balance:VQ:
     echo 'Delimiters OK' | doppler lightgreen
   else
     echo 'Delimiters' | doppler lightred
+    echo $( echo "$BALANCE" | wc -l ) 'problems found' | doppler lightred
+    echo "$BALANCE"
+  fi
+  
+  BALANCE=$( grep '^ & ' posts/arithmetic-made-difficult/* | balance -l || true )
+  if [ -z "$BALANCE" ]; then
+    echo "Eqnarray Delimiters OK" | doppler lightgreen
+  else
+    echo "Eqnarray Delimiters" | doppler lightred
     echo $( echo "$BALANCE" | wc -l ) 'problems found' | doppler lightred
     echo "$BALANCE"
   fi

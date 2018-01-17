@@ -288,7 +288,7 @@ $$\begin{eqnarray*}
 as claimed. Suppose then that $c \neq \zero$. Now we have
 $$\begin{eqnarray*}
  &   & \nlcm(\ntimes(c,a),\ntimes(c,b)) \\
- & = & \nquo(\ntimes(\ntimes(c,a),\ntimes(c,b)),\ngcd(\ntimes(c,a),\ntimes(c,b)) \\
+ & = & \nquo(\ntimes(\ntimes(c,a),\ntimes(c,b)),\ngcd(\ntimes(c,a),\ntimes(c,b))) \\
  & = & \nquo(\ntimes(\ntimes(c,\ntimes(a,b)),c),\ngcd(\ntimes(a,b),c)) \\
  & = & \nquo(\ntimes(c,\ntimes(a,b)),\ngcd(a,b)) \\
  & = & \ntimes(c,\nquo(\ntimes(a,b),\ngcd(a,b))) \\
@@ -392,7 +392,7 @@ Note that $$\ndiv(\ngcd(b,c),a\ngcd(b,c))$$ and $$\ndiv(\ngcd(b,c),bc),$$ so tha
 By cross-multiplication, we have
 $$\begin{eqnarray*}
  &   & \nquo(\ngcd(a\ngcd(b,c),bc),\ngcd(b,c)) \\
- & = & \nquo(\ngcd(a,b)\ngcd(a,c)),\ngcd(a,\ngcd(b,c))).
+ & = & \nquo(\ngcd(a,b)\ngcd(a,c),\ngcd(a,\ngcd(b,c))).
 \end{eqnarray*}$$
 Thus we have
 $$\begin{eqnarray*}
