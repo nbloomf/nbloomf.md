@@ -209,6 +209,24 @@ test-suite amd-simplerec
     Unary,
     NaturalNumbers
 
+test-suite amd-bailoutrec
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: BailoutRecursion.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options: -main-is BailoutRecursion.main_bailoutrec
+  other-modules:
+    Testing,
+    Booleans,
+    Not,
+    And,
+    Or,
+    Implies,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers
+
 test-suite amd-plus
   default-language: Haskell2010
   type: exitcode-stdio-1.0

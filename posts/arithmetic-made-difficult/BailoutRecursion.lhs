@@ -9,7 +9,7 @@ slug: bailrec
 > {-# LANGUAGE BangPatterns #-}
 > {-# LANGUAGE NoImplicitPrelude #-}
 > module BailoutRecursion
->   ( bailoutRec
+>   ( bailoutRec, _test_bailoutrec, main_bailoutrec
 >   ) where
 > 
 > import Testing
@@ -167,6 +167,16 @@ And there's the definition from the proof:
 
 Unlike simple recursion, the naive implementation of bailout recursion is already tail recursive.
 
+We should test that these are equivalent:
+
+> _test_bailoutrec_equiv :: (Natural n, Equal b)
+>   => n -> a -> b -> Test ((a -> b) -> (n -> a -> Bool) -> (n -> a -> b) -> (n -> a -> a) -> n -> a -> Bool)
+> _test_bailoutrec_equiv _ _ _ =
+>   testName "bailoutRec(phi,beta,psi,omega)(n,a) == bailoutRec'(phi,beta,psi,omega)(n,a)" $
+>   \phi beta psi omega n a -> eq
+>     (bailoutRec phi beta psi omega n a)
+>     (bailoutRec' phi beta psi omega n a)
+
 
 What it does
 ------------
@@ -197,3 +207,34 @@ $$\left\{\begin{array}{l}
  f(\next(k),a) = \bif{\beta(k,a)}{\psi(m,a)}{f(k,\omega(k,a))}
 \end{array}\right.$$
 ::::::::::::::::::::
+
+
+Testing
+-------
+
+Suite:
+
+> _test_bailoutrec
+>   :: (TypeName n, Natural n, Equal n, Show n, Arbitrary n
+>   , Equal b, Arbitrary a, CoArbitrary a, Arbitrary b, CoArbitrary b
+>   , Show a, Show b, TypeName a, TypeName b, CoArbitrary n)
+>   => n -> a -> b -> Int -> Int -> IO ()
+> _test_bailoutrec n a b maxSize numCases = do
+>   testLabel3 "bailoutRec" n a b
+> 
+>   let
+>     args = stdArgs
+>       { maxSuccess = numCases
+>       , maxSize    = maxSize
+>       }
+> 
+>   runTest args (_test_bailoutrec_equiv n a b)
+
+Main:
+
+> main_bailoutrec :: IO ()
+> main_bailoutrec = do
+>   _test_bailoutrec (zero :: Unary) (true :: Bool)  (true :: Bool)  100 100
+>   _test_bailoutrec (zero :: Unary) (zero :: Unary) (true :: Bool)  100 100
+>   _test_bailoutrec (zero :: Unary) (true :: Bool)  (zero :: Unary) 100 100
+>   _test_bailoutrec (zero :: Unary) (zero :: Unary) (zero :: Unary) 100 100
