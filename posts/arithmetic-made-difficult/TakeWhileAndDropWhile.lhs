@@ -91,7 +91,7 @@ As usual, since $\takeWhile$ is defined directly in terms of foldr it is the uni
 Let $A$ be a set. Then $\takeWhile$ is the unique function $$f : \bool^A \times \lists{A} \rightarrow \lists{A}$$ satisfying the following system of equations for all $p : A \rightarrow \bool$, $a \in A$, and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(p,\nil) = \nil \\
- f(p,\cons(a,x)) = \bif{p(a)}{\cons(a,f(p,x)}{\nil}.
+ f(p,\cons(a,x)) = \bif{p(a)}{\cons(a,f(p,x))}{\nil}.
 \end{array}\right.$$
 
 ::: test :::::::::::
@@ -106,7 +106,7 @@ $$\left\{\begin{array}{l}
 > _test_takeWhile_cons :: (List t, Equal a, Equal (t a))
 >   => t a -> Test ((a -> Bool) -> a -> t a -> Bool)
 > _test_takeWhile_cons t =
->   testName "takeWhile(p)(cons(a,x)) == if(p(a),cons(a,takeWhile(p)(x),nil)" $
+>   testName "takeWhile(p)(cons(a,x)) == if(p(a),cons(a,takeWhile(p)(x),nil))" $
 >   \p a x -> eq
 >     (takeWhile p (cons a x))
 >     (if p a then cons a (takeWhile p x) else nil)
@@ -365,7 +365,7 @@ as needed. For the inductive step, suppose the equality holds for some $x$ and l
 $$\begin{eqnarray*}
  &   & \cat(\takeWhile(p)(\cons(a,x)),\dropWhile(p)(\cons(a,x))) \\
  & = & \cat(\bif{p(a)}{\cons(a,\takeWhile(p)(x))}{\nil},\bif{p(a)}{\dropWhile(x)}{\cons(a,x)}) \\
- & = & \bif{p(a)}{\cat(\cons(a,\takeWhile(p)(x)),\dropWhile(p)(x)}{\cat(\nil,\cons(a,x))} \\
+ & = & \bif{p(a)}{\cat(\cons(a,\takeWhile(p)(x)),\dropWhile(p)(x))}{\cat(\nil,\cons(a,x))} \\
  & = & \bif{p(a)}{\cons(a,\cat(\takeWhile(p)(x)),\dropWhile(p)(x))}{\cons(a,x)} \\
  & = & \bif{p(a)}{\cons(a,x)}{\cons(a,x)} \\
  & = & \cons(a,x)

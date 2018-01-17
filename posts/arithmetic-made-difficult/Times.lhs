@@ -299,7 +299,7 @@ $$\begin{eqnarray*}
 while $$\ntimes(\next(a),b) = \ntimes(\next(a),\zero) = \zero;$$ in particular, the statement $$\ntimes(\next(a),\next(c)) = \ntimes(\next(a),b)$$ is false, so that $\next(c) \in C(\zero)$ *vacuously*. So we have $C(\zero) = \nats$, and thus $\zero \in B$. For the inductive step, suppose we have $b \in B$; we wish to show that $\next(b) \in B$, or equivalently that $C(\next(b)) = \nats$. We proceed by induction on $c$ again. The base case $c = \zero$ holds vacuously. For the inductive step, suppose we have $c \in C(\next(b))$. Now suppose further that $$\ntimes(\next(a),\next(b)) = \ntimes(\next(a),\next(c)).$$ Note that
 $$\begin{eqnarray*}
  &   & \ntimes(\next(a),\next(b)) \\
- & = & \nplus(\ntimes(a,\next(c),\next(c)) \\
+ & = & \nplus(\ntimes(a,\next(c),\next(c))) \\
  & = & \next(\nplus(\ntimes(\next(c),a),c)) \\
  & = & \next(\nplus(\nplus(\ntimes(c,a),a),c)) \\
  & = & \next(\nplus(\nplus(\ntimes(a,c),c),a)).

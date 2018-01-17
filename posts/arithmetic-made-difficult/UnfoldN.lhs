@@ -203,7 +203,7 @@ as needed.
 $\tacunfoldN{f}$ interacts with $\cat$.
 
 :::::: theorem :::::
-Let $A$ and $B$ be sets with $f : A \rightarrow 1 + (A \times B)$. For all $a \in A$, $x,y \in \lists{B}$, and $n \in \nats$, we have $$\tacunfoldN{f}(\cat(x,y),n,a) = \cat(x,\tacunfoldN{f}(y,n,a).$$
+Let $A$ and $B$ be sets with $f : A \rightarrow 1 + (A \times B)$. For all $a \in A$, $x,y \in \lists{B}$, and $n \in \nats$, we have $$\tacunfoldN{f}(\cat(x,y),n,a) = \cat(x,\tacunfoldN{f}(y,n,a)).$$
 
 ::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$, we have
@@ -223,8 +223,8 @@ $$\begin{eqnarray*}
  &   & \tacunfoldN{f}(\cat(x,y),\next(n),a) \\
  & = & \tacunfoldN{f}(\snoc(d,\cat(x,y)),n,c) \\
  & = & \tacunfoldN{f}(\cat(x,\snoc(d,y)),n,c) \\
- & = & \cat(x,\tacunfoldN{f}(\snoc(d,y),n,c) \\
- & = & \cat(x,\tacunfoldN{f}(y,\next(n),a)
+ & = & \cat(x,\tacunfoldN{f}(\snoc(d,y),n,c)) \\
+ & = & \cat(x,\tacunfoldN{f}(y,\next(n),a))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -286,8 +286,8 @@ $$\begin{eqnarray*}
  & = & \tacunfoldN{f}(\snoc(b,\nil),\zero,c) \\
  & = & \snoc(b,\nil) \\
  & = & \cons(b,\nil) \\
- & = & \cons(b,\tacunfoldN{f}(\nil,\zero,a) \\
- & = & \cons(b,\unfoldN{f}(\zero,a)
+ & = & \cons(b,\tacunfoldN{f}(\nil,\zero,a)) \\
+ & = & \cons(b,\unfoldN{f}(\zero,a))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ for some $n$. Let $a \in A$. If $f(a) = \lft(\ast)$, we have
 $$\begin{eqnarray*}
