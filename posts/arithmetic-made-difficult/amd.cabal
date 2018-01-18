@@ -227,6 +227,24 @@ test-suite amd-bailoutrec
     Unary,
     NaturalNumbers
 
+test-suite amd-mutatingrec
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: MutatingRecursion.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options: -main-is MutatingRecursion.main_mutatingrec
+  other-modules:
+    Testing,
+    Booleans,
+    Not,
+    And,
+    Or,
+    Implies,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers
+
 test-suite amd-plus
   default-language: Haskell2010
   type: exitcode-stdio-1.0

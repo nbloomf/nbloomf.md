@@ -8,7 +8,7 @@ slug: mutrec
 
 > {-# LANGUAGE NoImplicitPrelude #-}
 > module MutatingRecursion
->   ( mutatingRec
+>   ( mutatingRec, _test_mutatingrec, main_mutatingrec
 >   ) where
 > 
 > import Testing
@@ -78,6 +78,16 @@ And there's the definition from the proof:
 
 The naive implementation of mutating recursion is not tail recursive, and I think (without proof) that no truly tail recursive implementation exists (that is sort of the reason for this operator).
 
+While we're at it, we should test that the two are not *not* equivalent.
+
+> _test_mutatingrec_equiv :: (Natural n, Equal b)
+>   => n -> a -> b -> Test ((a -> b) -> (a -> a) -> (a -> (a -> b) -> b) -> n -> a -> Bool)
+> _test_mutatingrec_equiv _ _ _ =
+>   testName "mutatingRec(phi,omega,chi)(n,a) == mutatingRec'(phi,omega,chi)(n,a)" $
+>   \phi omega chi n a -> eq
+>     (mutatingRec phi omega chi n a)
+>     (mutatingRec' phi omega chi n a)
+
 
 What it does
 ------------
@@ -97,3 +107,34 @@ $$\left\{\begin{array}{l}
  f(\next(n))(a) = \chi(\omega(a),f(n))
 \end{array}\right.$$
 ::::::::::::::::::::
+
+
+Testing
+-------
+
+Suite:
+
+> _test_mutatingrec
+>   :: (TypeName n, Natural n, Equal n, Show n, Arbitrary n
+>   , Equal b, Arbitrary a, CoArbitrary a, Arbitrary b, CoArbitrary b
+>   , Show a, Show b, TypeName a, TypeName b, CoArbitrary n)
+>   => n -> a -> b -> Int -> Int -> IO ()
+> _test_mutatingrec n a b maxSize numCases = do
+>   testLabel3 "mutatingRec" n a b
+> 
+>   let
+>     args = stdArgs
+>       { maxSuccess = numCases
+>       , maxSize    = maxSize
+>       }
+> 
+>   runTest args (_test_mutatingrec_equiv n a b)
+
+Main:
+
+> main_mutatingrec :: IO ()
+> main_mutatingrec = do
+>   _test_mutatingrec (zero :: Unary) (true :: Bool)  (true :: Bool)  5 50
+>   _test_mutatingrec (zero :: Unary) (zero :: Unary) (true :: Bool)  5 50
+>   _test_mutatingrec (zero :: Unary) (true :: Bool)  (zero :: Unary) 5 50
+>   _test_mutatingrec (zero :: Unary) (zero :: Unary) (zero :: Unary) 5 50
