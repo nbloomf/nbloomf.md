@@ -3,6 +3,7 @@ title: Head and Tail
 author: nbloomf
 date: 2018-01-03
 tags: arithmetic-made-difficult, literate-haskell
+slug: head-tail
 ---
 
 > {-# LANGUAGE NoImplicitPrelude #-}

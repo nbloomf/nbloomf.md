@@ -80,19 +80,23 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * [Unique](/posts/arithmetic-made-difficult/Unique.html)
         * [Delete](/posts/arithmetic-made-difficult/Delete.html)
         * [Dedupe](/posts/arithmetic-made-difficult/Dedupe.html)
-        * [Take and Drop](/posts/arithmetic-made-difficult/TakeAndDrop.html)
-        * [TakeBut and DropBut](/posts/arithmetic-made-difficult/TakeButAndDropBut.html)
-        * [TakeWhile and DropWhile](/posts/arithmetic-made-difficult/TakeWhileAndDropWhile.html)
-        * ChunksOf
-        * ChunksBy
         * Sublists
         * Infixes
+        * Concat
         * Transpose
         * Cycle
+        * Replace
+        * Truncation
+            * [Take and Drop](/posts/arithmetic-made-difficult/TakeAndDrop.html)
+            * [TakeBut and DropBut](/posts/arithmetic-made-difficult/TakeButAndDropBut.html)
+            * [TakeWhile and DropWhile](/posts/arithmetic-made-difficult/TakeWhileAndDropWhile.html)
+        * Cat Factorization
+            * ChunksOf
+            * ChunksBy
+            * ChainsBy
         * InsertAt
         * DeleteAt
         * SwapAt
-        * Replace
     * Topics on Lists
         * Run Length Encoding
         * Edit Distance

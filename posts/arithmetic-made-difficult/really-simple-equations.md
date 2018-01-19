@@ -3,6 +3,7 @@ title: Really Simple Equations
 author: nbloomf
 date: 2017-04-01
 tags: arithmetic-made-difficult
+slug: simple-eqs
 ---
 
 In this post we will take a break and solve some equations in the natural numbers. These equations will be *really* simple, but we have to start somewhere! In the more familiar notation we will solve the following equations: $$\begin{array}{rrr} a+b=0 & \quad a+b=1 & \quad a+b=2 \\ ab=0 & \quad ab=1 & \quad ab=2 \end{array}$$

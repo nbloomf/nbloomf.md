@@ -9,6 +9,7 @@ targets:VQ:
   echo '  favicons  : generate favicons'              | doppler lightcyan
   echo '  winfiles  : convert raw file line endings'  | doppler lightcyan
   echo '  blankpost : echo empty post template'       | doppler lightcyan
+  echo '  sniff-amd : style sniffs'                   | doppler lightcyan
 
 all:VQ: build watch install test
 
@@ -17,6 +18,9 @@ all:VQ: build watch install test
 #========#
 # basics #
 #========#
+
+install:VQ:
+  stack install
 
 watch:VQ: site
   export LANG=C
@@ -40,8 +44,9 @@ check:VQ:
 
 
 
-install:VQ:
-  stack install
+#======#
+# test #
+#======#
 
 test:VQ:
   shelltest test/ --color --threads=16 --execdir
@@ -54,7 +59,6 @@ test-info:VQ:
   echo '  tests: ' ${AMDTESTS} | doppler lightblue
   AMDCASES="$(echo "${AMD}" | grep '^+++' | awk '{t+=$4}; END {print t}')"
   echo '  cases: ' ${AMDCASES} | doppler lightblue
-
 
 
 
@@ -114,13 +118,19 @@ blankpost:VQ:
   echo
 
 
+
+#========#
+# sniffs #
+#========#
+
 sniff-amd:VQ: \
   sniff-amd-fencediv \
   sniff-amd-plaindiv \
   sniff-amd-nestdiv \
   sniff-amd-balance \
   sniff-amd-refname \
-  sniff-amd-eqnarray
+  sniff-amd-eqnarray \
+  sniff-amd-slugs
 
 #-- use consistent syntax for fenced divs --#
 sniff-amd-fencediv:VQ:
@@ -232,4 +242,43 @@ sniff-amd-eqnarray:VQ:
     echo 'Eqnarray' | doppler lightred
     echo $( echo "$EQNARRAY" | wc -l ) 'problems found' | doppler lightred
     echo "$EQNARRAY"
+  fi
+
+#-- slugs exist, have consistent form, and are unique --#
+sniff-amd-slugs:VQ:
+  SLUGS=$( grep '^slug: ' posts/arithmetic-made-difficult/* \
+    | grep -v 'slug: [a-z-]*$' \
+    || true )
+  if [ -z "$SLUGS" ]; then
+    echo 'Slug form OK' | doppler lightgreen
+  else
+    echo 'Slug form' | doppler lightred
+    echo $( echo "$SLUGS" | wc -l ) 'problems found' | doppler lightred
+    echo "$SLUGS"
+  fi
+  
+  SLUGS=$( grep '^slug: ' posts/arithmetic-made-difficult/* \
+    | cut -d ' ' -f 2 \
+    | sort \
+    | uniq -c \
+    | grep -v ' *1' \
+    || true )
+  if [ -z "$SLUGS" ]; then
+    echo 'Slug uniqueness OK' | doppler lightgreen
+  else
+    echo 'Slug uniqueness' | doppler lightred
+    echo $( echo "$SLUGS" | wc -l ) 'problems found' | doppler lightred
+    echo "$SLUGS"
+  fi
+  
+  SLUGS=$( grep -L '^slug: ' \
+    posts/arithmetic-made-difficult/*.lhs \
+    posts/arithmetic-made-difficult/*.md \
+    || true )
+  if [ -z "$SLUGS" ]; then
+    echo 'Slug existence OK' | doppler lightgreen
+  else
+    echo 'Slug existence' | doppler lightred
+    echo $( echo "$SLUGS" | wc -l ) 'problems found' | doppler lightred
+    echo "$SLUGS"
   fi

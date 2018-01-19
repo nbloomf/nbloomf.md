@@ -3,6 +3,7 @@ title: Iterative Sets Redux
 author: nbloomf
 date: 2017-04-22
 tags: arithmetic-made-difficult
+slug: initial-algebra
 ---
 
 Warning: this post is super handwavy!

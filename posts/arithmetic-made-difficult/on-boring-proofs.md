@@ -3,6 +3,7 @@ title: On Boring and Repetitive Proofs
 author: nbloomf
 date: 2017-06-01
 tags: arithmetic-made-difficult
+slug: boring-proofs
 ---
 
 So far in this series we've defined two basic "data types", the natural numbers and lists. Both types nailed down some kind of recursive structure and each came with an induction principle, which we used to establish a kind of computational algebra. On $\nats$ the computational algebra was just arithmetic, while on lists it was... different, but still turns out to be useful. But in both cases recursion and induction make it possible to

@@ -3,6 +3,7 @@ title: Strong Induction
 author: nbloomf
 date: 2017-04-06
 tags: arithmetic-made-difficult
+slug: strong-induction
 ---
 
 In this post we'll take a break from defining programs to establish two important equivalent versions of the induction principle: first a version of induction that allows us to make a much "stronger" induction hypothesis, and then a nonconstructive result about $\nats$ that will make some proofs easier.

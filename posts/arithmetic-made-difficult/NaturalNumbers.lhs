@@ -3,6 +3,7 @@ title: The Uniqueness of the Natural Numbers
 author: nbloomf
 date: 2014-05-23
 tags: arithmetic-made-difficult, literate-haskell
+slug: nats
 ---
 
 > {-# LANGUAGE BangPatterns #-}
