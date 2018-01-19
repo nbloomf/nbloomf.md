@@ -3,9 +3,19 @@ title: Arithmetic Made Difficult
 author: nbloomf
 date: 2018-01-12
 tags: arithmetic-made-difficult, literate-haskell
+slug: testing
 ---
 
-(@@@)
+Proving that programs are correct is hard. For one thing, determining what it means for a program to be "correct" is not trivial -- it always has a certain output? never has an error? doesn't do unnecessary work? what is the execution model? But programs can be very useful things, and assurance that they are "correct" (whatever that means) may be valuable.
+
+Comparatively, proving theorems in mathematics is easy. In algebra especially lots of proofs can be written in the so-called "equational" style, which is straightforward to the point of boringness. In this style of proof we can establish that $A$ is equal to $B$ by producing a sequence of statements, each equal to the next according to strict rules, starting at $A$ and ending at $B$.
+
+So we have on the one hand some programs we'd like to prove things about, and on the other a simple proof technique. With some careful thought, we can apply one to the other -- we just have to get used to thinking of programs as *arithmetic* in an appropriate *algebra*.
+
+This is an old idea, and many books have been written about it. In this series of posts I'll be exploring this idea for myself. In a nutshell, different kinds of data structures can be thought of as elements of an algebra with a universal property. The prototype for this point of view is the natural numbers; the universal property is essentially the principle of mathematical induction, and we can use it to define the usual arithmetic on numbers. This process generalizes to other kinds of structures, and "arithmetic" generalizes to *programs*. And just like induction is the power tool for proving things about the natural numbers, generalized induction can be used to prove things about other structures.
+
+We can build an *algebra of programs*.
+
 
 Testing
 -------
@@ -69,15 +79,18 @@ The ``Test`` type, with ``testName``, is a shorthand for writing named tests.
 > testLabel0 :: String -> IO ()
 > testLabel0 = testLabel
 > 
-> testLabel1 :: (TypeName a) => String -> a -> IO ()
+> testLabel1 :: (TypeName a)
+>   => String -> a -> IO ()
 > testLabel1 str a = testLabel $ concat
 >   [ str, ": ", typeName a ]
 > 
-> testLabel2 :: (TypeName a, TypeName b) => String -> a -> b -> IO ()
+> testLabel2 :: (TypeName a, TypeName b)
+>   => String -> a -> b -> IO ()
 > testLabel2 str a b = testLabel $ concat
 >   [ str, ": ", typeName a, ", ", typeName b ]
 > 
-> testLabel3 :: (TypeName a, TypeName b, TypeName c) => String -> a -> b -> c -> IO ()
+> testLabel3 :: (TypeName a, TypeName b, TypeName c)
+>   => String -> a -> b -> c -> IO ()
 > testLabel3 str a b c = testLabel $ concat
 >   [ str, ": ", typeName a, ", ", typeName b, ", ", typeName c ]
 
