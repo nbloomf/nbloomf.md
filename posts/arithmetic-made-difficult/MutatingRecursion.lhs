@@ -68,7 +68,7 @@ as needed.
 Implementation
 --------------
 
-As usual we now want to implement $\mutrec{\ast}{\ast}{\ast}$ in software, and there are a couple of ways to go about this. First, the signature.
+As usual we now want to implement $\mutrec{\ast}{\ast}{\ast}{\ast}{\ast}$ in software, and there are a couple of ways to go about this. First, the signature.
 
 > mutatingRec, mutatingRec' :: (Natural n, Boolean bool)
 >   => (a -> b)
@@ -124,7 +124,7 @@ Let $A$ and $B$ be sets, with mappings
 $$\begin{eqnarray*}
  \varepsilon & : & A \rightarrow B \\
  \beta & : & \nats \times A \rightarrow \bool \\
- \psi $ : & \nats \times A \rightarrow B \\
+ \psi & : & \nats \times A \rightarrow B \\
  \chi & : & \nats \times A \times B \rightarrow B \\
  \omega & : & \nats \times A \rightarrow A.
 \end{eqnarray*}$$
@@ -162,7 +162,7 @@ Main:
 
 > main_mutatingrec :: IO ()
 > main_mutatingrec = do
->   _test_mutatingrec (zero :: Unary) (true :: Bool)  (true :: Bool)  (true :: Bool) 5 50
->   _test_mutatingrec (zero :: Unary) (zero :: Unary) (true :: Bool)  (true :: Bool) 5 50
->   _test_mutatingrec (zero :: Unary) (true :: Bool)  (zero :: Unary) (true :: Bool) 5 50
->   _test_mutatingrec (zero :: Unary) (zero :: Unary) (zero :: Unary) (true :: Bool) 5 50
+>   _test_mutatingrec (zero :: Unary) (true :: Bool)  (true :: Bool)  (true :: Bool) 50 500
+>   _test_mutatingrec (zero :: Unary) (zero :: Unary) (true :: Bool)  (true :: Bool) 50 500
+>   _test_mutatingrec (zero :: Unary) (true :: Bool)  (zero :: Unary) (true :: Bool) 50 500
+>   _test_mutatingrec (zero :: Unary) (zero :: Unary) (zero :: Unary) (true :: Bool) 50 500
