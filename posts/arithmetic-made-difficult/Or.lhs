@@ -1,7 +1,7 @@
 ---
 title: Or
 author: nbloomf
-date: 2018-01-14
+date: 2018-01-17
 tags: arithmetic-made-difficult, literate-haskell
 slug: or
 ---

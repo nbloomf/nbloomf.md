@@ -1,7 +1,7 @@
 ---
 title: Implies
 author: nbloomf
-date: 2018-01-14
+date: 2018-01-18
 tags: arithmetic-made-difficult, literate-haskell
 slug: implies
 ---
