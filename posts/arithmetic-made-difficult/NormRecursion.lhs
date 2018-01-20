@@ -7,7 +7,9 @@ slug: normrec
 ---
 
 > {-# LANGUAGE NoImplicitPrelude #-}
-> module NormRecursion where
+> module NormRecursion (
+>   normRec
+> ) where
 > 
 > import Testing
 > import Booleans

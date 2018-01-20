@@ -37,6 +37,7 @@ library
     IsPrime,
     Exponentiation,
     Choose,
+    MutatingNormRecursion,
     Lists,
     HeadAndTail,
     LeftFold,

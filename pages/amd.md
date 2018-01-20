@@ -43,6 +43,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * [Primes](/posts/arithmetic-made-difficult/IsPrime.html)
         * [Exponentiation](/posts/arithmetic-made-difficult/Exponentiation.html)
         * [Choose](/posts/arithmetic-made-difficult/Choose.html)
+        * [Mutating Norm Recursion](/posts/arithmetic-made-difficult/MutatingNormRecursion.html)
 3. $\mathsf{Lists}(A)$
     * Type
         * [Iterative Sets Redux](/posts/arithmetic-made-difficult/iterative-sets-redux.html)
