@@ -70,6 +70,7 @@ library
     Unique,
     Delete,
     Dedupe,
+    Sublists,
     TakeAndDrop,
     TakeButAndDropBut,
     TakeWhileAndDropWhile
@@ -1672,6 +1673,64 @@ test-suite amd-dedupe
     Select,
     Unique,
     Delete
+
+test-suite amd-sublists
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Sublists.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options: -main-is Sublists.main_sublists
+  other-modules:
+    Testing,
+    Booleans,
+    Not,
+    And,
+    Or,
+    Implies,
+    Predicates,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    DoubleNaturalRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo,
+    MaxAndMin,
+    Choose,
+    Lists,
+    HeadAndTail,
+    LeftFold,
+    DoubleFold,
+    ConsumingFold,
+    BailoutFold,
+    DoubleBailoutFold,
+    Snoc,
+    Reverse,
+    Cat,
+    At,
+    Length,
+    Map,
+    UnfoldN,
+    Range,
+    Zip,
+    PrefixAndSuffix,
+    LongestCommonPrefix,
+    AllAndAny,
+    TailsAndInits,
+    Filter,
+    Elt,
+    Count,
+    Repeat,
+    Sublist,
+    Infix,
+    Select,
+    Unique,
+    Delete,
+    Dedupe
 
 test-suite amd-take-drop
   default-language: Haskell2010

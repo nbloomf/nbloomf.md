@@ -81,7 +81,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * [Unique](/posts/arithmetic-made-difficult/Unique.html)
         * [Delete](/posts/arithmetic-made-difficult/Delete.html)
         * [Dedupe](/posts/arithmetic-made-difficult/Dedupe.html)
-        * Sublists
+        * [Sublists](/posts/arithmetic-made-difficult/Sublists.html)
         * Infixes
         * Concat
         * Transpose
