@@ -829,63 +829,38 @@ as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-$\sublist$ interacts with $\map$.
+$\sublist$ interacts with $\map(f)$ when $f$ is injective.
 
 :::::: theorem :::::
-Let $A$ and $B$ be sets with $x,y \in \lists{A}$ and $f : A \rightarrow B$ injective. If $\sublist(x,y) = \btrue$, then $\sublist(\map(f)(x),\map(f)(y)) = \btrue$.
+Let $A$ and $B$ be sets with $f : A \rightarrow B$ injective. For all $x,y \in \lists{A}$ we have $$\sublist(\map(f)(x),\map(f)(y)) = \sublist(x,y).$$
 
 ::: proof ::::::::::
-We proceed by list induction on $y$. For the base case $y = \nil$, suppose $\sublist(x,y) = \btrue$. Then in fact $x = \nil$. In this case we have
+We proceed by list induction on $y$. For the base case $y = \nil$, note that
 $$\begin{eqnarray*}
- &   & \sublist(\map(f)(x),\map(f)(y)) \\
- & = & \sublist(\map(f)(\nil),\map(f)(\nil)) \\
- & = & \sublist(\nil,\nil) \\
- & = & \btrue
+ &   & \sublist(\map(f)(x),\map(f)(\nil)) \\
+ & = & \sublist(\map(f)(x),\nil) \\
+ & = & \isnil(\map(f)(x)) \\
+ & = & \isnil(x) \\
+ & = & \sublist(x,\nil)
 \end{eqnarray*}$$
-as needed. For the inductive step, suppose the implication holds for all $x$ for some $y$ and let $b \in A$. Suppose further that $\sublist(x,\cons(a,y)) = \btrue$. We have two possibilities for $x$. If $x = \nil$, we have
+as needed. For the inductive step, suppose the equation holds for all $x$ for some $y$, and let $b \in A$. We have two possibilities for $x$. If $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \sublist(\map(f)(x),\map(f)(\cons(a,y))) \\
- & = & \sublist(\map(f)(\nil),\map(f)(\cons(a,y))) \\
- & = & \sublist(\nil,\map(f)(\cons(a,y))) \\
- & = & \btrue
-\end{eqnarray*}$$
-as needed. Suppose instead that $x = \cons(a,u)$. Note that if $f(a) = f(b)$ then $a = b$ (since $f$ is injective) and we have
-$$\begin{eqnarray*}
- &   & \btrue \\
- & = & \sublist(x,\cons(b,y)) \\
- & = & \sublist(\cons(a,u),\cons(b,y)) \\
- & = & \sublist(u,y),
-\end{eqnarray*}$$
-and if $f(a) \neq f(b)$, then $a \neq b$ (since $f$ is injective), and we have
-$$\begin{eqnarray*}
+ &   & \sublist(\map(f)(\nil),\map(f)(\cons(b,y))) \\
+ & = & \sublist(\nil,\map(f)(\cons(b,y))) \\
  & = & \btrue \\
- & = & \sublist(x,\cons(b,y)) \\
- & = & \sublist(\cons(a,u),\cons(b,y)) \\
- & = & \sublist(\cons(a,u),y) \\
- & = & \sublist(x,y).
+ & = & \sublist(\nil,\cons(b,y))
 \end{eqnarray*}$$
-In either case, using the inductive hypothesis we have
+as claimed. Suppose instead that $x = \cons(a,u)$. Note that since $f$ is injective we have $\beq(f(a),f(b)) = \beq(a,b)$; then we have
 $$\begin{eqnarray*}
- &   & \sublist(\map(f)(x),\map(f)(\cons(b,y))) \\
- & = & \sublist(\map(f)(\cons(a,u)),\map(f)(\cons(b,y))) \\
- & = & \sublist(\cons(f(a),\map(f)(u)),\cons(f(b),\map(f)(y))) \\
+ &   & \sublist(\map(f)(\cons(a,u)),\map(f)(\cons(b,y))) \\
+ & = & \sublist(\cons(f(a),\map(f)(u)),\cons(f(b))(\map(f)(y)))) \\
  & = & \bif{\beq(f(a),f(b))}{\sublist(\map(f)(u),\map(f)(y))}{\sublist(\cons(f(a),\map(f)(u)),\map(f)(y))} \\
- & = & \bif{\beq(f(a),f(b))}{\sublist(\map(f)(u),\map(f)(y))}{\sublist(\map(f)(\cons(a,u)),\map(f)(y))} \\
- & = & \bif{\beq(f(a),f(b))}{\sublist(\map(f)(u),\map(f)(y))}{\sublist(\map(f)(x),\map(f)(y))} \\
- & = & \bif{\beq(f(a),f(b))}{\btrue}{\btrue} \\
- & = & \btrue
+ & = & \bif{\beq(f(a),f(b))}{\sublist(u,y)}{\sublist(\map(f)(\cons(a,u)),\map(f)(y))} \\
+ & = & \bif{\beq(f(a),f(b))}{\sublist(u,y)}{\sublist(\cons(a,u),y)} \\
+ & = & \bif{\beq(a,b)}{\sublist(u,y)}{\sublist(\cons(a,u),y)} \\
+ & = & \sublist(\cons(a,u),\cons(b,y))
 \end{eqnarray*}$$
 as needed.
-::::::::::::::::::::
-
-::: test :::::::::::
-
-> _test_sublist_map :: (List t, Equal a, Equal (t a))
->   => t a -> Test ((a -> a) -> t a -> t a -> Bool)
-> _test_sublist_map _ =
->   testName "if sublist(x,y) then sublist(map(f)(x),map(f)(y))" $
->   \f x y -> if sublist x y then sublist (map f x) (map f y) else true
-
 ::::::::::::::::::::
 ::::::::::::::::::::
 
@@ -1014,6 +989,42 @@ Suppose to the contrary that $\sublist(\cons(a,y),x) = \btrue$. By transitivity 
 ::::::::::::::::::::
 ::::::::::::::::::::
 
+$\sublist$ on singleton lists is equivalent to $\elt$.
+
+:::::: theorem :::::
+Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have $$\sublist(\cons(a,\nil),x) = \elt(a,x).$$
+
+::: proof ::::::::::
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \sublist(\cons(a,\nil),\nil) \\
+ & = & \isnil(\cons(a,\nil)) \\
+ & = & \bfalse \\
+ & = & \elt(a,\nil)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$, and let $b \in A$. Now
+$$\begin{eqnarray*}
+ &   & \sublist(\cons(a,\nil),\cons(b,x)) \\
+ & = & \bif{\beq(a,b)}{\sublist(\nil,x)}{\sublist(\cons(a,\nil),x)} \\
+ & = & \bif{\beq(a,b)}{\btrue}{\elt(a,x)} \\
+ & = & \elt(a,\cons(b,x))
+\end{eqnarray*}$$
+as needed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_sublist_singleton_elt :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (a -> t a -> Bool)
+> _test_sublist_singleton_elt _ =
+>   testName "sublist(cons(a,nil),x) == elt(a,x)" $
+>   \a x -> eq
+>     (sublist (cons a nil) x)
+>     (elt a x)
+
+::::::::::::::::::::
+::::::::::::::::::::
+
 
 Testing
 -------
@@ -1057,11 +1068,11 @@ Suite:
 >   runTest args (_test_sublist_right_cat_right t)
 >   runTest args (_test_sublist_left_cat_left t)
 >   runTest args (_test_sublist_right_cat_left t)
->   runTest args (_test_sublist_map t)
 >   runTest args (_test_sublist_filter t)
 >   runTest args (_test_sublist_all t)
 >   runTest args (_test_sublist_any t)
 >   runTest args (_test_sublist_cons_not t)
+>   runTest args (_test_sublist_singleton_elt t)
 
 Main:
 

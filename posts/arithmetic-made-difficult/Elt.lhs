@@ -107,8 +107,8 @@ Let $A$ be a set. For all $a,b \in A$, we have $$\elt(a,\cons(b,\nil)) = \beq(a,
 Note that
 $$\begin{eqnarray*}
  &   & \elt(a,\cons(b,\nil)) \\
- & = & \bif(\beq(a,b),\btrue,\elt(a,\nil)) \\
- & = & \bif(\beq(a,b),\btrue,\bfalse) \\
+ & = & \bif{\beq(a,b)}{\btrue}{\elt(a,\nil)} \\
+ & = & \bif{\beq(a,b)}{\btrue}{\bfalse} \\
  & = & \beq(a,b)
 \end{eqnarray*}$$
 as claimed.
@@ -525,6 +525,48 @@ as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
+$\elt$ interacts with $\cons$ on lists of lists.
+
+:::::: theorem :::::
+Let $A$ be a set. For all $a,b \in A$, $x \in \lists{A}$, and $z \in \lists{\lists{A}}$, we have $$\elt(\cons(a,x),\map(\cons(b,-))(z)) = \band(\beq(a,b),\elt(x,z)).$$
+
+::: proof ::::::::::
+We proceed by list induction on $z$. For the base case $z = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \elt(\cons(a,x),\map(\cons(b,-))(\nil)) \\
+ & = & \elt(\cons(a,x),\nil) \\
+ & = & \bfalse \\
+ & = & \band(\beq(a,b),\bfalse) \\
+ & = & \band(\beq(a,b),\elt(x,\nil))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $a$, $b$, and $x$ for some $z$, and let $u \in \lists{A}$. Now
+$$\begin{eqnarray*}
+ &   & \elt(\cons(a,x),\map(\cons(b,-))(\cons(u,z))) \\
+ & = & \elt(\cons(a,x),\cons(\cons(b,u),\map(\cons(b,-))(z))) \\
+ & = & \bif{\beq(\cons(a,x),\cons(b,u))}{\btrue}{\elt(\cons(a,x),\map(\cons(b,-))(z))} \\
+ & = & \bif{\beq(\cons(a,x),\cons(b,u))}{\btrue}{\band(\beq(a,b),\elt(x,z))} \\
+ & = & \bif{\band(\beq(a,b),\beq(x,u))}{\btrue}{\band(\beq(a,b),\elt(x,z))} \\
+ & = & \bor(\band(\beq(a,b),\beq(x,u)),\band(\beq(a,b),\elt(x,z))) \\
+ & = & \band(\beq(a,b),\bor(\beq(x,u),\elt(x,z))) \\
+ & = & \band(\beq(a,b),\bif{\beq(x,u)}{\btrue}{\elt(x,z)}) \\
+ & = & \band(\beq(a,b),\elt(x,\cons(u,z)))
+\end{eqnarray*}$$
+as needed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_elt_cons_map_cons :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (a -> a -> t a -> t (t a) -> Bool)
+> _test_elt_cons_map_cons _ =
+>   testName "elt(cons(a,x),map(cons(b,-))(z)) == and(eq(a,b),elt(x,z))" $
+>   \a b x z -> eq
+>     (elt (cons a x) (map (cons b) z))
+>     (and (eq a b) (elt x z))
+
+::::::::::::::::::::
+::::::::::::::::::::
+
 
 Testing
 -------
@@ -536,6 +578,7 @@ Suite:
 >   , TypeName (t a), List t, Arbitrary (t n), Show (t n), Equal (t n)
 >   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (a,a))
 >   , TypeName n, Equal n, Show n, Arbitrary n, Natural n
+>   , Arbitrary (t (t a)), Show (t (t a)), Equal (t (t a))
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_elt t n maxSize numCases = do
 >   testLabel1 "elt" t
@@ -558,6 +601,7 @@ Suite:
 >   runTest args (_test_elt_any t)
 >   runTest args (_test_elt_distinct t)
 >   runTest args (_test_elt_range t n)
+>   runTest args (_test_elt_cons_map_cons t)
 
 Main:
 

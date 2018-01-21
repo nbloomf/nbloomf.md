@@ -338,6 +338,51 @@ as claimed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
+$\bimpl$ interacts with $\band$ and $\bif{\ast}{\ast}{\ast}$.
+
+$\band$ interacts with $\bif{\ast}{\ast}{\ast}$.
+
+:::::: theorem :::::
+Let $p,q,r \in \bool$. If $\bimpl(r,q)$, then $$\bif{\band(p,q)}{\btrue}{r} = \bif{p}{q}{r}.$$
+
+::: proof ::::::::::
+If $r = \btrue$, then $q = \btrue$. Now
+$$\begin{eqnarray*}
+ &   & \bif{\band(p,\btrue)}{\btrue}{\btrue} \\
+ & = & \bif{p}{\btrue}{\btrue}
+\end{eqnarray*}$$
+as needed. Suppose instead that $r = \bfalse$. If $p = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \bif{\band(\btrue,q)}{\btrue}{\bfalse} \\
+ & = & \bif{q}{\btrue}{\bfalse} \\
+ & = & q \\
+ & = & \bif{\btrue}{q}{\bfalse}
+\end{eqnarray*}$$
+as needed. If $p = \bfalse$, we have
+$$\begin{eqnarray*}
+ &   & \bif{\band(\bfalse,q)}{\btrue}{r} \\
+ & = & \bif{\bfalse}{\btrue}{r} \\
+ & = & r \\
+ & = & \bif{\bfalse}{q}{r}
+\end{eqnarray*}$$
+as needed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_impl_and_if :: (Boolean b, Equal b)
+>   => b -> Test (b -> b -> b -> Bool)
+> _test_impl_and_if _ =
+>   testName "if impl(r,q) then if(and(p,q),true,r) == if(p,q,r)" $
+>   \p q r -> if isTrue (impl r q)
+>     then eq
+>       (ifThenElse (and p q) true r)
+>       (ifThenElse p q r)
+>     else true
+
+::::::::::::::::::::
+::::::::::::::::::::
+
 
 
 Testing
@@ -366,6 +411,7 @@ Suite:
 >   runTest args (_test_impl_transitive p)
 >   runTest args (_test_impl_distributive p)
 >   runTest args (_test_impl_and_compatible p)
+>   runTest args (_test_impl_and_if p)
 
 Main:
 

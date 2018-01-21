@@ -281,7 +281,7 @@ as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-Finally, $\ntimes$ is *almost* cancellative.
+$\ntimes$ is *almost* cancellative.
 
 :::::: theorem :::::
 For all $a,b,c \in \nats$, we have the following.
@@ -338,6 +338,32 @@ as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
+As a special case, $\times(\next(\next(\zero)),-)$ is equivalent to a $\nplus$.
+
+:::::: theorem :::::
+For all $a \in \nats$ we have $$\ntimes(\next(\next(\zero)),a) = \nplus(a,a).$$
+
+::: proof ::::::::::
+Note that
+$$\begin{eqnarray*}
+ &   & \ntimes(\next(\next(\zero)),a) \\
+ & = & \nplus(\ntimes(\next(\zero),a),a) \\
+ & = & \nplus(a,a)
+\end{eqnarray*}$$
+as claimed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_times_two_left :: (Natural n, Equal n)
+>   => n -> (n -> n -> n) -> Test (n -> Bool)
+> _test_times_two_left _ f =
+>   testName "a == times(1,a)" $
+>   \a -> eq (plus a a) (f (next (next zero)) a)
+
+::::::::::::::::::::
+::::::::::::::::::::
+
 
 Testing
 -------
@@ -365,6 +391,7 @@ Testing
 >   runTest args (_test_times_associative n f)
 >   runTest args (_test_times_cancellative_left n f)
 >   runTest args (_test_times_cancellative_right n f)
+>   runTest args (_test_times_two_left n f)
 
 I used a much smaller number of test cases this time, because these run much more slowly than the tests for ``plus``. The culprit is ``_test_times_associative``. What's happening is that multiplication of ``Nat``s is inherently slow; it's implemented as iterated addition, which itself is iterated ``N``.
 

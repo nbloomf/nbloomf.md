@@ -308,28 +308,50 @@ Note that $\sublist(\delete(a)(x),x) = \btrue$, so that $\unique(\delete(a)(x)) 
 $\delete$ interacts with $\elt$.
 
 :::::: theorem :::::
-Let $A$ be a set with $x \in \lists{A}$ and $a \in A$. Then $\elt(a,\delete(a,x)) = \bfalse$.
+Let $A$ be a set with $x \in \lists{A}$ and $a,b \in A$. Then $$\elt(a,\delete(b,x)) = \bif{\beq(a,b)}{\bfalse}{\elt(a,x)}$.
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \elt(a,\delete(a,\nil)) \\
+ &   & \elt(a,\delete(b,\nil)) \\
  & = & \elt(a,\nil) \\
- & = & \bfalse
+ & = & \bfalse \\
+ & = & \bif{\beq(a,b)}{\bfalse}{\bfalse} \\
+ & = & \bif{\beq(a,b)}{\bfalse}{\elt(a,\nil)}
 \end{eqnarray*}$$
-as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$, and let $b \in A$. We consider two possibilities. If $b = a$, using the inductive hypothesis we have
+as needed. For the inductive step, suppose the equality holds for all $a$ and $b$ for some $x$ and let $c \in A$. If $b = c$ and $a \neq c$, we have
 $$\begin{eqnarray*}
- &   & \elt(a,\delete(a,\cons(b,x))) \\
- & = & \elt(a,\delete(a,\cons(a,x))) \\
- & = & \elt(a,\delete(a,x)) \\
- & = & \bfalse
+ &   & \elt(a,\delete(b,\cons(c,x))) \\
+ & = & \elt(a,\delete(b,x)) \\
+ & = & \bif{\beq(a,b)}{\bfalse}{\elt(a,x)} \\
+ & = & \bif{\beq(a,b)}{\bfalse}{\elt(a,\cons(c,x))}.
 \end{eqnarray*}$$
-as needed. If $b \neq a$, then again using the inductive hypothesis we have
+If $b = c$ and $a = c$, then
 $$\begin{eqnarray*}
- &   & \elt(a,\delete(a,\cons(b,x))) \\
- & = & \elt(a,\cons(b,(\delete(a,x)))) \\
- & = & \elt(a,\delete(a,x)) \\
- & = & \bfalse
+ &   & \elt(a,\delete(b,\cons(c,x))) \\
+ & = & \elt(a,\delete(b,x)) \\
+ & = & \bif{\beq(a,b)}{\bfalse}{\elt(a,x)} \\
+ & = & \bfalse \\
+ & = & \bif{\beq(a,b)}{\bfalse}{\elt(a,\cons(c,x))}.
+\end{eqnarray*}$$
+Suppose then that $b \neq c$. If $a = c$, then $a \neq b$, and we have
+$$\begin{eqnarray*}
+ &   & \elt(a,\delete(b,\cons(c,x))) \\
+ & = & \elt(a,\cons(c,\delete(b,x))) \\
+ & = & \bif{\beq(a,c)}{\btrue}{\elt(a,\delete(b,x))} \\
+ & = & \btrue \\
+ & = & \bif{\beq(a,c)}{\btrue}{\elt(a,x)} \\
+ & = & \elt(a,\cons(c,x)) \\
+ & = & \bif{\bfalse}{\bfalse}{\elt(a,\cons(c,x))} \\
+ & = & \bif{\beq(a,b)}{\bfalse}{\elt(a,\cons(c,x))}.
+\end{eqnarray*}$$
+If $b \neq c$ and $a \neq c$, we have
+$$\begin{eqnarray*}
+ &   & \elt(a,\delete(b,\cons(c,x))) \\
+ & = & \elt(a,\cons(c,\delete(b,x))) \\
+ & = & \elt(a,\delete(b,x)) \\
+ & = & \bif{\beq(a,b)}{\bfalse}{\elt(a,x)} \\
+ & = & \bif{\beq(a,b)}{\bfalse}{\elt(a,\cons(c,x))}
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -337,10 +359,12 @@ as needed.
 ::: test :::::::::::
 
 > _test_delete_elt :: (List t, Equal a, Equal (t a))
->   => t a -> Test (a -> t a -> Bool)
+>   => t a -> Test (a -> a -> t a -> Bool)
 > _test_delete_elt _ =
->   testName "elt(a,delete(a)(x)) == false" $
->   \a x -> eq (elt a (delete a x)) false
+>   testName "elt(a,delete(b)(x)) == if(eq(a,b),false,elt(a,x))" $
+>   \a b x -> eq
+>     (elt a (delete b x))
+>     (if eq a b then false else elt a x)
 
 ::::::::::::::::::::
 ::::::::::::::::::::

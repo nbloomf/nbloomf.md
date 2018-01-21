@@ -313,10 +313,10 @@ $$\begin{eqnarray*}
  & = & \bif{\elt(a,x)}{\dedupeL(\cons(b,x))}{\cons(b,\bif{\beq(a,b)}{\delete(b)(\dedupeL(x))}{\snoc(a,\delete(b)(\dedupeL(x)))})} \\
  & = & \bif{\elt(a,x)}{\dedupeL(\cons(b,x))}{\bif{\beq(a,b)}{\cons(b,\delete(b)(\dedupeL(x)))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x))))}} \\
  & = & \bif{\elt(a,x)}{\dedupeL(\cons(b,x))}{\bif{\beq(a,b)}{\dedupeL(\cons(b,x))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x))))}} \\
- & = & \bif{\bor(\beq(a,b),\elt(a,x))}{\dedupe(\cons(b,x))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x))))} \\
- & = & \bif{\elt(a,\cons(b,x))}{\dedupe(\cons(b,x))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x))))} \\
- & = & \bif{\elt(a,\cons(b,x))}{\dedupe(\cons(b,x))}{\snoc(a,\cons(b,\delete(b)(\dedupeL(x))))} \\
- & = & \bif{\elt(a,\cons(b,x))}{\dedupe(\cons(b,x))}{\snoc(a,\dedupeL(\cons(b,x)))}
+ & = & \bif{\bor(\beq(a,b),\elt(a,x))}{\dedupeL(\cons(b,x))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x))))} \\
+ & = & \bif{\elt(a,\cons(b,x))}{\dedupeL(\cons(b,x))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x))))} \\
+ & = & \bif{\elt(a,\cons(b,x))}{\dedupeL(\cons(b,x))}{\snoc(a,\cons(b,\delete(b)(\dedupeL(x))))} \\
+ & = & \bif{\elt(a,\cons(b,x))}{\dedupeL(\cons(b,x))}{\snoc(a,\dedupeL(\cons(b,x)))}
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -330,6 +330,41 @@ as needed.
 >   \a x -> eq
 >     (dedupeL (snoc a x))
 >     (if elt a x then dedupeL x else snoc a (dedupeL x))
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+$\dedupeL$ interacts with $\elt$.
+
+:::::: theorem :::::
+Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have $$\elt(a,\dedupeL(x)) = \elt(a,x).$$
+
+::: proof ::::::::::
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \elt(a,\dedupeL(\nil)) \\
+ & = & \elt(a,\nil)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$, and let $b \in A$. Now
+$$\begin{eqnarray*}
+ &   & \elt(a,\dedupeL(\cons(b,x))) \\
+ & = & \elt(a,\cons(b,\delete(b)(\dedupeL(x)))) \\
+ & = & \bif{\beq(a,b)}{\btrue}{\elt(a,\delete(b)(\dedupeL(x)))} \\
+ & = & \bif{\beq(a,b)}{\btrue}{\bif{\beq(a,b)}{\bfalse}{\elt(a,\dedupeL(x))}} \\
+ & = & \bif{\beq(a,b)}{\btrue}{\elt(a,\dedupeL(x))} \\
+ & = & \bif{\beq(a,b)}{\btrue}{\elt(a,x)} \\
+ & = & \elt(a,\cons(b,x))
+\end{eqnarray*}$$
+as needed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_dedupeL_elt :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (a -> t a -> Bool)
+> _test_dedupeL_elt _ =
+>   testName "elt(a,dedupeL(x)) == elt(a,x)" $
+>   \a x -> eq (elt a (dedupeL x)) (elt a x)
 
 ::::::::::::::::::::
 ::::::::::::::::::::
@@ -478,6 +513,7 @@ Suite:
 >   runTest args (_test_dedupeL_eq_unique t)
 >   runTest args (_test_dedupeL_idempotent t)
 >   runTest args (_test_dedupeL_snoc t)
+>   runTest args (_test_dedupeL_elt t)
 > 
 >   runTest args (_test_dedupeR_nil t)
 >   runTest args (_test_dedupeR_snoc t)

@@ -19,7 +19,7 @@ slug: or
 Finally, $\bor$.
 
 :::::: definition ::
-We define $\bor : \bool \times \bool \rightarrow \bool$ by $$\bor(p,q) = \bif{p}{\btrue}{\bif{q}{\btrue}{\ptrue}}.$$
+We define $\bor : \bool \times \bool \rightarrow \bool$ by $$\bor(p,q) = \bif{p}{\btrue}{\bif{q}{\btrue}{\bfalse}}.$$
 
 In Haskell:
 

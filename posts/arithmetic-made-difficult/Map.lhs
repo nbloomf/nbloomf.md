@@ -300,7 +300,7 @@ as needed.
 $\map(f)$ interacts with $\at$:
 
 :::::: theorem :::::
-Let $A$ and $B$ be sets with a map $f : A \rightarrow B$ and $x \in \lists{A}$. Then we have $$\at(\map(f)(x),k) = \upair(\id,f)(\at(x,k)).$$
+Let $A$ and $B$ be sets with a map $f : A \rightarrow B$ and $x \in \lists{A}$. Then we have $$\at(\map(f)(x),k) = \uPair(\id,f)(\at(x,k)).$$
 
 ::: proof ::::::::::
 There are two possibilities for $x$. If $x = \nil$, we have
@@ -309,24 +309,24 @@ $$\begin{eqnarray*}
  & = & \at(\nil,k) \\
  & = & \lft(\ast) \\
  & = & \lft(\id(\ast)) \\
- & = & \upair(\id,f)(\lft(\ast)) \\
- & = & \upair(\id,f)(\at(\nil,k))
+ & = & \uPair(\id,f)(\lft(\ast)) \\
+ & = & \uPair(\id,f)(\at(\nil,k))
 \end{eqnarray*}$$
 as claimed. Suppose instead that $x = \cons(a,y)$. We now proceed by induction on $k$. For the base case $k = \zero$, we have
 $$\begin{eqnarray*}
  &   & \at(\map(f)(\cons(a,y)),\zero) \\
  & = & \at(\cons(f(a),\map(f)(y)),\zero) \\
  & = & \rgt(f(a)) \\
- & = & \upair(\id,f)(\rgt(a)) \\
- & = & \upair(\id,f)(\at(\cons(a,y),\zero))
+ & = & \uPair(\id,f)(\rgt(a)) \\
+ & = & \uPair(\id,f)(\at(\cons(a,y),\zero))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ and $y$ for some $k$. Now
 $$\begin{eqnarray*}
  &   & \at(\map(f)(\cons(a,y)),\next(k)) \\
  & = & \at(\cons(f(a),\map(f)(y)),\next(k)) \\
  & = & \at(\map(f)(y),k) \\
- & = & \upair(\id,f)(\at(y,k)) \\
- & = & \upair(\id,f)(\at(\cons(a,y),\next(k)))
+ & = & \uPair(\id,f)(\at(y,k)) \\
+ & = & \uPair(\id,f)(\at(\cons(a,y),\next(k)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -377,6 +377,38 @@ as claimed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
+$\map$ preserves $\isnil$.
+
+:::::: theorem :::::
+Let $A$ and $B$ be sets with $f : A \rightarrow B$. For all $x \in \lists{A}$, we have $$\isnil(\map(f)(x)) = \isnil(x).$$
+
+::: proof ::::::::::
+We have two possibilities for $x$. If $x = \nil$ we have
+$$\begin{eqnarray*}
+ &   & \isnil(\map(f)(\nil)) \\
+ & = & \isnil(\nil)
+\end{eqnarray*}$$
+and if $x = \cons(a,u)$ we have
+$$\begin{eqnarray*}
+ &   & \isnil(\map(f)(\cons(a,u))) \\
+ & = & \isnil(\cons(f(a),\map(f)(u)) \\
+ & = & \bfalse \\
+ & = & \isnil(\cons(a,u))
+\end{eqnarray*}$$
+as needed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_map_isnil :: (List t, Equal (t a))
+>   => t a -> Test ((a -> a) -> t a -> Bool)
+> _test_map_isnil _ =
+>   testName "isnil(map(f)(x)) == isnil(x)" $
+>   \f x -> eq (isNil (map f x)) (isNil x)
+
+::::::::::::::::::::
+::::::::::::::::::::
+
 
 Testing
 -------
@@ -407,6 +439,7 @@ Suite:
 >   runTest args (_test_map_rev t)
 >   runTest args (_test_map_at t n)
 >   runTest args (_test_map_length t n)
+>   runTest args (_test_map_isnil t)
 
 Main:
 

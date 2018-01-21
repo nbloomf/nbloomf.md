@@ -67,7 +67,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * [Zip](/posts/arithmetic-made-difficult/Zip.html)
         * [ZipPad](/posts/arithmetic-made-difficult/ZipPad.html)
         * [Unzip](/posts/arithmetic-made-difficult/Unzip.html)
-        * [Prefix and Suffix](/posts/arithmetic-made-difficult/Prefix.html)
+        * [Prefix and Suffix](/posts/arithmetic-made-difficult/PrefixAndSuffix.html)
         * [Longest Common Prefix](/posts/arithmetic-made-difficult/LongestCommonPrefix.html)
         * [All and Any](/posts/arithmetic-made-difficult/AllAndAny.html)
         * [Tails and Inits](/posts/arithmetic-made-difficult/TailsAndInits.html)
@@ -81,6 +81,8 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * [Unique](/posts/arithmetic-made-difficult/Unique.html)
         * [Delete](/posts/arithmetic-made-difficult/Delete.html)
         * [Dedupe](/posts/arithmetic-made-difficult/Dedupe.html)
+        * [Common](/posts/arithmetic-made-difficult/Common.html)
+        * Disjoint
         * [Sublists](/posts/arithmetic-made-difficult/Sublists.html)
         * Infixes
         * Concat
