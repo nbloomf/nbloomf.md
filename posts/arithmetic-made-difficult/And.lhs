@@ -236,6 +236,72 @@ as claimed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
+$\band$ interacts with $\bif{\ast}{\ast}{\ast}$ in the second argument.
+
+:::::: theorem :::::
+Let $p,q,r \in \bool$. Then we have $$\band(p,\bif{p}{q}{r}) = \band(p,q).$$
+
+::: proof ::::::::::
+If $p = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \band(\btrue,\bif{\btrue}{q}{r}) \\
+ & = & \band(\btrue,q) \\
+\end{eqnarray*}$$
+as claimed. If $p = \bfalse$, we have
+$$\begin{eqnarray*}
+ &   & \band(\bfalse,\bif{\bfalse}{q}{r}) \\
+ & = & \bfalse \\
+ & = & \band(\bfalse,q)
+\end{eqnarray*}$$
+as claimed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_and_if_cancel :: (Boolean b, Equal b)
+>   => b -> Test (b -> b -> b -> Bool)
+> _test_and_if_cancel _ =
+>   testName "and(p,if(p,q,r)) == and(p,q)" $
+>   \p q r -> eq (and p (ifThenElse p q r)) (and p q)
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+$\band$ in the hypothesis of $\bif{\ast}{\ast}{\ast}$ expands.
+
+:::::: theorem :::::
+Let $A$ be a set with $a,b \in A$, and let $p,q \in \bool$. Then we have $$\bif{\band(p,q)}{a}{b} = \bif{p}{\bif{q}{a}{b}}{b}.$$
+
+::: proof ::::::::::
+If $p = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \bif{\band(\btrue,q)}{a}{b} \\
+ & = & \bif{q}{a}{b} \\
+ & = & \bif{\btrue}{\bif{q}{a}{b}}{b},
+\end{eqnarray*}$$
+and if $p = \bfalse$, we have
+$$\begin{eqnarray*}
+ &   & \bif{\band(\bfalse,q)}{a}{b} \\
+ & = & \bif{\bfalse}{a}{b} \\
+ & = & b \\
+ & = & \bif{\bfalse}{\bif{q}{a}{b}}{b}
+\end{eqnarray*}$$
+as claimed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_and_if_hypothesis :: (Boolean b, Equal b, Equal a)
+>   => b -> a -> Test (b -> b -> a -> a -> Bool)
+> _test_and_if_hypothesis _ _ =
+>   testName "if(and(p,q),a,b) == if(p,if(q,a,b),b)" $
+>   \p q a b -> eq
+>     (ifThenElse (and p q) a b)
+>     (ifThenElse p (ifThenElse q a b) b)
+
+::::::::::::::::::::
+::::::::::::::::::::
+
 
 Testing
 -------
@@ -266,6 +332,8 @@ Suite:
 >   runTest args (_test_and_idempotent p)
 >   runTest args (_test_and_commutative p)
 >   runTest args (_test_and_associative p)
+>   runTest args (_test_and_if_cancel p)
+>   runTest args (_test_and_if_hypothesis p x)
 
 Main:
 

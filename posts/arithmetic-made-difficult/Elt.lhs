@@ -354,7 +354,51 @@ as claimed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-If we filter $a$ out of a list, it is no longer an item there.
+$\elt$ interacts with $\filter$.
+
+:::::: theorem :::::
+Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $a \in A$ and $x \in \lists{A}$, we have $$\elt(a,\filter(p)(x)) = \band(p(a),\elt(a,x)).$$
+
+::: proof ::::::::::
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \elt(a,\filter(p)(\nil)) \\
+ & = & \elt(a,\nil) \\
+ & = & \bfalse \\
+ & = & \band(p(a),\bfalse) \\
+ & = & \band(p(a),\elt(a,\nil))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$ and let $b \in A$. Note that if $a = b$, then $p(a) = p(b)$. Now
+$$\begin{eqnarray*}
+ &   & \elt(a,\filter(p)(\cons(b,x))) \\
+ & = & \elt(a,\bif{p(b)}{\cons(b,\filter(p)(x))}{\filter(p)(x)}) \\
+ & = & \bif{p(b)}{\elt(a,\cons(b,\filter(p)(x)))}{\elt(a,\filter(p)(x))} \\
+ & = & \bif{p(b)}{\bif{\beq(a,b)}{\btrue}{\elt(a,\filter(p)(x))}}{\elt(a,\filter(p)(x))} \\
+ & = & \bif{\beq(a,b)}{\bif{p(b)}{\btrue}{\elt(a,\filter(p)(x))}}{\elt(a,\filter(p)(x))} \\
+ & = & \bif{\beq(a,b)}{\bif{p(b)}{\btrue}{\band(p(a),\elt(a,x))}}{\band(p(a),\elt(a,x))} \\
+ & = & \bif{\beq(a,b)}{\bif{p(a)}{\btrue}{\band(p(a),\elt(a,x))}}{\band(p(a),\elt(a,x))} \\
+ & = & \bif{\beq(a,b)}{\bif{p(a)}{\band(p(a),\btrue)}{\band(p(a),\elt(a,x))}}{\band(p(a),\elt(a,x))} \\
+ & = & \bif{\beq(a,b)}{\band(p(a),\bif{p(a)}{\btrue}{\elt(a,x)})}{\band(p(a),\elt(a,x))} \\
+ & = & \band(p(a),\bif{\beq(a,b)}{\bif{p(a)}{\btrue}{\elt(a,x)}}{\elt(a,x)}) \\
+ & = & \band(p(a),\bif{p(a)}{\bif{\beq(a,b)}{\btrue}{\elt(a,x)}}{\elt(a,x)}) \\
+ & = & \band(p(a),\bif{p(a)}{\elt(a,\cons(b,x))}{\elt(a,x)}) \\
+ & = & \band(p(a),\elt(a,\cons(b,x)))
+\end{eqnarray*}$$
+as needed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_elt_filter :: (List t, Equal a, Equal (t a))
+>   => t a -> Test ((a -> Bool) -> a -> t a -> Bool)
+> _test_elt_filter _ =
+>   testName "elt(a)(filter(p,x)) == and(p(a),elt(a,x))" $
+>   \p a x -> eq (elt a (filter p x)) (and (p a) (elt a x))
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+As a special case, if we filter $a$ out of a list, it is no longer an item there.
 
 :::::: theorem :::::
 Let $A$ be a set, with $a \in A$ and $x \in \lists{A}$. Then $$\elt(a)(\filter(\bnot(\beq(a,-)),x)) = \bfalse.$$
@@ -597,6 +641,7 @@ Suite:
 >   runTest args (_test_elt_rev t)
 >   runTest args (_test_elt_tails t)
 >   runTest args (_test_elt_inits t)
+>   runTest args (_test_elt_filter t)
 >   runTest args (_test_elt_filter_eq t)
 >   runTest args (_test_elt_any t)
 >   runTest args (_test_elt_distinct t)

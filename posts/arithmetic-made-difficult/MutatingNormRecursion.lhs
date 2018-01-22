@@ -103,11 +103,11 @@ $$\begin{eqnarray*}
  & = & \sigma(a,\Omega(m,\varphi(a))) \\
  & = & \sigma(a,\Omega(\nplus(\eta(\varphi(a)),u),\varphi(a))) \\
  & = & \sigma(a,\Omega(\eta(\varphi(a)),\varphi(a))) \\
- & = & \sigma(a,\Theta(\varphi(a))
+ & = & \sigma(a,\Theta(\varphi(a)))
 \end{eqnarray*}$$
 as needed.
 
-Finally we show that $\Theta$ is unique. To this end, suppose $\Psi : A \rightarrow B$ is a map such that $\Psi(a) = \delta(a)$ if $\eta(a) = \zero$ and $\Psi(a) = \sigma(a,\Psi(\varphi(a))$ otherwise. We show that $\Psi(a) = \Theta(a)$ for all $a$ by strong induction on $\eta(a)$. For the base case $\eta(a) = \zero$, we have
+Finally we show that $\Theta$ is unique. To this end, suppose $\Psi : A \rightarrow B$ is a map such that $\Psi(a) = \delta(a)$ if $\eta(a) = \zero$ and $\Psi(a) = \sigma(a,\Psi(\varphi(a)))$ otherwise. We show that $\Psi(a) = \Theta(a)$ for all $a$ by strong induction on $\eta(a)$. For the base case $\eta(a) = \zero$, we have
 $$\begin{eqnarray*}
  &   & \Psi(a) \\
  & = & \delta(a) \\
@@ -116,8 +116,8 @@ $$\begin{eqnarray*}
 as needed. For the inductive step suppose the equality holds for all $a$ such that $\nleq(\eta(a),m)$ for some $m$, and suppose further that $\eta(a) = \next(m)$. Now $\nleq(\eta(\varphi(a)),m)$, so we have
 $$\begin{eqnarray*}
  &   & \Psi(a) \\
- & = & \sigma(a,\Psi(\varphi(a)) \\
- & = & \sigma(a,\Theta(\varphi(a)) \\
+ & = & \sigma(a,\Psi(\varphi(a))) \\
+ & = & \sigma(a,\Theta(\varphi(a))) \\
  & = & \Theta(a)
 \end{eqnarray*}$$
 as needed.

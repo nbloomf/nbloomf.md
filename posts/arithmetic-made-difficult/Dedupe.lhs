@@ -369,6 +369,61 @@ as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
+$\dedupeL$ commutes with $\filter$.
+
+:::::: theorem :::::
+Let $A$ be a set with $p : A \rightarrow \bool$ a predicate. For all $x \in \lists{A}$, we have $$\dedupeL(\filter(p)(x)) = \filter(p)(\dedupeL(x)).$$
+
+::: proof ::::::::::
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \dedupeL(\filter(p)(\nil)) \\
+ & = & \dedupeL(\nil) \\
+ & = & \nil \\
+ & = & \filter(p)(\nil) \\
+ & = & \filter(p)(\dedupeL(\nil))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equation holds for some $x$ and let $a \in A$. We consider the two possibilities for $p(a)$. If $p(a) = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \filter(p)(\dedupeL(\cons(a,x))) \\
+ & = & \filter(p)(\cons(a,\delete(a)(\dedupeL(x)))) \\
+ & = & \bif{p(a)}{\cons(a,\filter(p)(\delete(a)(\dedupeL(x))))}{\filter(p)(\delete(a)(\dedupeL(x)))} \\
+ & = & \bif{\btrue}{\cons(a,\filter(p)(\delete(a)(\dedupeL(x))))}{\filter(p)(\delete(a)(\dedupeL(x)))} \\
+ & = & \cons(a,\filter(p)(\delete(a)(\dedupeL(x)))) \\
+ & = & \cons(a,\delete(a)(\filter(a)(\dedupeL(x)))) \\
+ & = & \cons(a,\delete(a)(\dedupeL(\filter(p)(x)))) \\
+ & = & \dedupeL(\cons(a,\filter(p)(x))) \\
+ & = & \dedupeL(\bif{\btrue}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
+ & = & \dedupeL(\filter(p)(\cons(a,x)))
+\end{eqnarray*}$$
+as needed. If $p(a) = \bfalse$, we have
+$$\begin{eqnarray*}
+ &   & \filter(p)(\dedupeL(\cons(a,x))) \\
+ & = & \filter(p)(\cons(a,\delete(a)(\dedupeL(x)))) \\
+ & = & \bif{p(a)}{\cons(a,\filter(p)(\delete(a)(\dedupeL(x))))}{\filter(p)(\delete(a)(\dedupeL(x)))} \\
+ & = & \bif{\bfalse}{\cons(a,\filter(p)(\delete(a)(\dedupeL(x))))}{\filter(p)(\delete(a)(\dedupeL(x)))} \\
+ & = & \filter(p)(\delete(a)(\dedupeL(x))) \\
+ & = & \delete(a)(\filter(p)(\dedupeL(x))) \\
+ & = & \filter(p)(\dedupeL(x)) \\
+ & = & \dedupeL(\filter(p)(x)) \\
+ & = & \dedupeL(\bif{\bfalse}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
+ & = & \dedupeL(\bif{p(a)}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
+ & = & \dedupeL(\filter(p)(\cons(a,x)))
+\end{eqnarray*}$$
+as needed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_dedupeL_filter :: (List t, Equal a, Equal (t a))
+>   => t a -> Test ((a -> Bool) -> t a -> Bool)
+> _test_dedupeL_filter _ =
+>   testName "dedupeL(filter(p)(x)) == filter(p)(dedupeL(x))" $
+>   \p x -> eq (dedupeL (filter p x)) (filter p (dedupeL x))
+
+::::::::::::::::::::
+::::::::::::::::::::
+
 We define $\dedupeR$ in terms of $\dedupeL$.
 
 :::::: definition ::
@@ -514,6 +569,7 @@ Suite:
 >   runTest args (_test_dedupeL_idempotent t)
 >   runTest args (_test_dedupeL_snoc t)
 >   runTest args (_test_dedupeL_elt t)
+>   runTest args (_test_dedupeL_filter t)
 > 
 >   runTest args (_test_dedupeR_nil t)
 >   runTest args (_test_dedupeR_snoc t)

@@ -238,14 +238,13 @@ as claimed.
 $\bif{\ast}{\ast}{\ast}$ is sort of commutative.
 
 :::::: theorem :::::
-Let $A$ be a set. For all $p,q \in \bool$ and $a,b \in A$, we have
-$$\begin{eqnarray*}
- &   & \bif{p}{a}{\bif{q}{a}{b}} \\
- & = & \bif{q}{a}{\bif{p}{a}{b}}.
-\end{eqnarray*}$$
+Let $A$ be a set. For all $p,q \in \bool$ and $a,b \in A$, we have the following.
+
+1. $\bif{p}{a}{\bif{q}{a}{b}} = \bif{q}{a}{\bif{p}{a}{b}}$
+2. $\bif{p}{\bif{q}{a}{b}}{b} = \bif{q}{\bif{p}{a}{b}}{b}$
 
 ::: proof ::::::::::
-If $p = \btrue$, we have
+1. If $p = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bif{p}{a}{\bif{q}{a}{b}} \\
  & = & a \\
@@ -261,6 +260,16 @@ $$\begin{eqnarray*}
  & = & \bif{q}{a}{\bif{p}{a}{b}}
 \end{eqnarray*}$$
 as claimed.
+2. We have
+$$\begin{eqnarray*}
+ &   & \bif{p}{\bif{q}{a}{b}}{b} \\
+ & = & \bif{\bnot(p)}{b}{\bif{q}{a}{b}} \\
+ & = & \bif{\bnot(p)}{b}{\bif{\bnot(q)}{b}{a}} \\
+ & = & \bif{\bnot(q)}{b}{\bif{\bnot(p)}{b}{a}} \\
+ & = & \bif{\bnot(q)}{b}{\bif{p}{a}{b}} \\
+ & = & \bif{q}{\bif{p}{a}{b}}{b}
+\end{eqnarray*}$$
+as claimed.
 ::::::::::::::::::::
 
 ::: test :::::::::::
@@ -272,6 +281,14 @@ as claimed.
 >   \p q a b -> eq
 >     (ifThenElse p a (ifThenElse q a b))
 >     (ifThenElse q a (ifThenElse p a b))
+> 
+> _test_if_commute_right :: (Equal a, Boolean b)
+>   => b -> a -> Test (Bool -> Bool -> a -> a -> Bool)
+> _test_if_commute_right _ _ =
+>   testName "if(p,if(q,a,b),b) == if(q,if(p,a,b),b)" $
+>   \p q a b -> eq
+>     (ifThenElse p (ifThenElse q a b) b)
+>     (ifThenElse q (ifThenElse p a b) b)
 
 ::::::::::::::::::::
 ::::::::::::::::::::
@@ -352,6 +369,7 @@ Suite:
 >   runTest args (_test_if_prune_left p x)
 >   runTest args (_test_if_prune_right p x)
 >   runTest args (_test_if_commute_left p x)
+>   runTest args (_test_if_commute_right p x)
 >   runTest args (_test_if_two_args p x)
 
 Main:

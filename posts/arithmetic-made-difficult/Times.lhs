@@ -358,7 +358,7 @@ as claimed.
 > _test_times_two_left :: (Natural n, Equal n)
 >   => n -> (n -> n -> n) -> Test (n -> Bool)
 > _test_times_two_left _ f =
->   testName "a == times(1,a)" $
+>   testName "times(next(next(zero)),a) == plus(a,a)" $
 >   \a -> eq (plus a a) (f (next (next zero)) a)
 
 ::::::::::::::::::::

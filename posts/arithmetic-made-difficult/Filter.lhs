@@ -381,6 +381,45 @@ as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
+$\filter(p)$ and $\filter(q)$ commute.
+
+:::::: theorem :::::
+Let $A$ be a set and $p,q : A \rightarrow \bool$ predicates. For all $x \in \lists{A}$ we have $$\filter(p)(\filter(q)(x)) = \filter(q)(\filter(p)(x)).$$
+
+::: proof ::::::::::
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \filter(p)(\filter(q)(\nil)) \\
+ & = & \filter(p)(\nil) \\
+ & = & \nil \\
+ & = & \filter(q)(\nil) \\
+ & = & \filter(q)(\filter(p)(\nil))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
+$$\begin{eqnarray*}
+ &   & \filter(p)(\filter(q)(\cons(a,x))) \\
+ & = & \filter(p)(\bif{q(a)}{\cons(a,\filter(q)(x))}{\filter(q)(x)}) \\
+ & = & \bif{q(a)}{\filter(p)(\cons(a,\filter(q)(x)))}{\filter(p)(\filter(q)(x))} \\
+ & = & \bif{q(a)}{\bif{p(a)}{\cons(a),\filter(p)(\filter(q)(x))}{\filter(p)(\filter(q)(x))}}{\filter(p)(\filter(q)(x))} \\
+ & = & \bif{p(a)}{\bif{q(a)}{\cons(a),\filter(p)(\filter(q)(x))}{\filter(p)(\filter(q)(x))}}{\filter(p)(\filter(q)(x))} \\
+ & = & \bif{p(a)}{\filter(q)(\cons(a,\filter(p)(x)))}{\filter(q)(\filter(p)(x))} \\
+ & = & \filter(q)(\bif{p(a)}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
+ & = & \filter(q)(\filter(p)(\cons(a,x)))
+\end{eqnarray*}$$
+as needed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_filter_commute :: (List t, Equal a, Equal (t a))
+>   => t a -> Test ((a -> Bool) -> (a -> Bool) -> t a -> Bool)
+> _test_filter_commute _ =
+>   testName "filter(p)(filter(q)(x)) == filter(q)(filter(p)(x))" $
+>   \p q x -> eq (filter p (filter q x)) (filter q (filter p x))
+
+::::::::::::::::::::
+::::::::::::::::::::
+
 
 Testing
 -------
@@ -409,6 +448,7 @@ Suite:
 >   runTest args (_test_filter_cat t)
 >   runTest args (_test_filter_idempotent t)
 >   runTest args (_test_filter_eq_all t)
+>   runTest args (_test_filter_commute t)
 
 Main:
 

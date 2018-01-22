@@ -99,7 +99,7 @@ $$\begin{eqnarray*}
  &   & \filter(\bnot(\beq(a,-)))(\cons(b,x)) \\
  & = & \bif{\bnot(\beq(a,b))}{\cons(b,\filter(\bnot(\beq(a,-)))(x))}{\filter(\bnot(\beq(a,-)))(x)} \\
  & = & \bif{\bnot(\beq(a,b))}{\cons(b,\delete(a)(x))}{\delete(a)(x)} \\
- & = & \bif{\eq(a,b)}{\delete(a)(x)}{\cons(b,\delete(a)(x))} \\
+ & = & \bif{\beq(a,b)}{\delete(a)(x)}{\cons(b,\delete(a)(x))} \\
  & = & \delete(a)(\cons(b,x))
 \end{eqnarray*}$$
 as needed.
@@ -112,6 +112,62 @@ as needed.
 > _test_delete_filter _ =
 >   testName "delete(a)(x) == filter(not(eq(a,-)))(x)" $
 >   \a x -> eq (delete a x) (filter (\b -> not (eq a b)) x)
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+So $\delete$ commutes with $\filter$.
+
+:::::: corollary :::
+Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $a \in A$ and $x \in \lists{A}$, we have $$\delete(a)(\filter(p)(x)) = \filter(p)(\delete(a)(x)).$$
+
+::: test :::::::::::
+
+> _test_delete_filter_commute :: (List t, Equal a, Equal (t a))
+>   => t a -> Test ((a -> Bool) -> a -> t a -> Bool)
+> _test_delete_filter_commute _ =
+>   testName "delete(a)(filter(p)(x)) == filter(p)(delete(a)(x))" $
+>   \p a x -> eq (delete a (filter p x)) (filter p (delete a x))
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+And if $p(a) = \bfalse$, then $\filter(p)$ absorbs $\delete$.
+
+:::::: theorem :::::
+Let $A$ be a set with $p : A \rightarrow \bool$ a predicate. For all $a \in A$ and $x \in \lists{A}$, if $p(a) = \bfalse$ we have $$\delete(a)(\filter(p)(x)) = \filter(p)(x).$$
+
+::: proof ::::::::::
+We proceed by list induction on $x$. For the base case $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \delete(a)(\filter(p)(\nil)) \\
+ & = & \delete(a)(\nil) \\
+ & = & \nil \\
+ & = & \filter(p)(\nil)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equatily holds for some $x$, and let $b \in A$. Note that if $p(b) = \btrue$, then $\beq(a,b)$ must be $\bfalse. Now
+$$\begin{eqnarray*}
+ &   & \delete(a)(\filter(p)(\cons(b,x))) \\
+ & = & \delete(a)(\bif{p(b)}{\cons(b,\filter(p)(x))}{\filter(p)(x)}) \\
+ & = & \bif{p(b)}{\delete(a)(\cons(b,\filter(p)(x)))}{\delete(a)(\filter(p)(x))} \\
+ & = & \bif{p(b)}{\bif{\beq(a,b)}{\delete(a)(\filter(p)(x))}{\cons(b,\delete(a)(\filter(p)(x)))}}{\delete(a)(\filter(p)(x))} \\
+ & = & \bif{p(b)}{\bif{\beq(a,b)}{\filter(p)(x)}{\cons(b,\filter(p)(x))}}{\filter(p)(x)} \\
+ & = & \bif{p(b)}{\bif{\bfalse}{\filter(p)(x)}{\cons(b,\filter(p)(x))}}{\filter(p)(x)} \\
+ & = & \bif{p(b)}{\cons(b,\filter(p)(x))}{\filter(p)(x)} \\
+ & = & \filter(p)(\cons(b,x))
+\end{eqnarray*}$$
+as needed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_delete_filter_absorb :: (List t, Equal a, Equal (t a))
+>   => t a -> Test ((a -> Bool) -> a -> t a -> Bool)
+> _test_delete_filter_absorb _ =
+>   testName "if p(a) == false then delete(a)(filter(p)(x)) == filter(p)(x)" $
+>   \p a x -> if isFalse (p a)
+>     then eq (delete a (filter p x)) (filter p x)
+>     else true
 
 ::::::::::::::::::::
 ::::::::::::::::::::
@@ -558,6 +614,8 @@ Suite:
 >   runTest args (_test_delete_nil t)
 >   runTest args (_test_delete_cons t)
 >   runTest args (_test_delete_filter t)
+>   runTest args (_test_delete_filter_commute t)
+>   runTest args (_test_delete_filter_absorb t)
 >   runTest args (_test_delete_idempotent t)
 >   runTest args (_test_delete_eq_not_elt t)
 >   runTest args (_test_delete_commutative t)

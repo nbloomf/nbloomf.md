@@ -57,7 +57,7 @@ $$\left\{\begin{array}{l}
 > _test_power_zero_right :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
 > _test_power_zero_right _ =
->   testName "power(a,0) == 1" $
+>   testName "power(a,zero) == next(zero)" $
 >   \a -> eq (power a zero) (next zero)
 > 
 > 
@@ -115,14 +115,14 @@ as needed.
 > _test_power_zero_left :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
 > _test_power_zero_left _ =
->   testName "power(a,0) == 1" $
+>   testName "power(zero,next(a)) == zero" $
 >   \a -> eq (power zero (next a)) zero
 > 
 > 
 > _test_power_one_left :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
 > _test_power_one_left _ =
->   testName "power(1,a) == 1" $
+>   testName "power(next(zero),a) == next(zero)" $
 >   \a -> eq (power (next zero) a) (next zero)
 
 ::::::::::::::::::::

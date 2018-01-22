@@ -124,7 +124,7 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the result holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \elt(\nil,\sublists(\cons(a,x))) \\
- & = & \elt(\nil,\cat(\map(\cons(a,-))(\sublists(x)),\sublists(x)) \\
+ & = & \elt(\nil,\cat(\map(\cons(a,-))(\sublists(x)),\sublists(x))) \\
  & = & \bor(\elt(\nil,\map(\cons(a,-))(\sublists(x))),\elt(\nil,\sublists(x))) \\
  & = & \bor(\elt(\nil,\map(\cons(a,-))(\sublists(x))),\btrue) \\
  & = & \btrue
@@ -212,7 +212,7 @@ as needed. For the inductive step, suppose the equality holds for some $x$, and 
 $$\begin{eqnarray*}
  &   & \sublists(\map(f)(\cons(a,x))) \\
  & = & \sublists(\cons(f(a),\map(f)(x))) \\
- & = & \cat(\map(\cons(f(a),-))(\sublists(\map(f)(x))),\sublists(\map(f)(x)))) \\
+ & = & \cat(\map(\cons(f(a),-))(\sublists(\map(f)(x))),\sublists(\map(f)(x))) \\
  & = & \cat(\map(\cons(f(a),-))(\map(\map(f))(\sublists(x))),\map(\map(f))(\sublists(x))) \\
  & = & \cat(\map(\cons(f(a),-) \circ \map(f))(\sublists(x)),\map(\map(f))(\sublists(x))) \\
  & = & \cat(\map(\map(f) \circ \cons(a,-))(\sublists(x)),\map(\map(f))(\sublists(x))) \\
@@ -382,7 +382,7 @@ Let $A$ be a set. For all $x \in \lists{A}$, we have $$\unique(x) = \unique(\sub
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \unique{\sublists(\nil)) \\
+ &   & \unique(\sublists(\nil)) \\
  & = & \unique(\cons(\nil,\nil)) \\
  & = & \btrue \\
  & = & \unique(\nil)

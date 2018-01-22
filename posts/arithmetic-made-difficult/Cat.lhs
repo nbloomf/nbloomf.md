@@ -374,7 +374,7 @@ so that $v = u = \nil$ as claimed.
 > _test_cat_nil_list_nil :: (List t, Equal (t a))
 >   => t a -> Test (t a -> t a -> t a -> Bool)
 > _test_cat_nil_list_nil _ =
->   testName "if eq(cat(u,x),x) then eq(u,nil)" $
+>   testName "if eq(cat(u,cat(x,v)),x) then and(eq(u,nil),eq(v,nil))" $
 >   \x u v -> if eq (cat u (cat x v)) x
 >     then and (eq u nil) (eq v nil)
 >     else true

@@ -159,7 +159,7 @@ We have $$\prefix(\take(k,x),x) = \btrue,$$ so $$\infix(\take(k,x),x) = \btrue,$
 > _test_take_sublist :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> Bool)
 > _test_take_sublist _ _ =
->   testName "prefix(take(k,x),x) == true" $
+>   testName "sublist(take(k,x),x) == true" $
 >   \k x -> sublist (take k x) x
 
 ::::::::::::::::::::

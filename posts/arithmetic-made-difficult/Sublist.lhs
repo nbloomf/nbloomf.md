@@ -853,7 +853,7 @@ $$\begin{eqnarray*}
 as claimed. Suppose instead that $x = \cons(a,u)$. Note that since $f$ is injective we have $\beq(f(a),f(b)) = \beq(a,b)$; then we have
 $$\begin{eqnarray*}
  &   & \sublist(\map(f)(\cons(a,u)),\map(f)(\cons(b,y))) \\
- & = & \sublist(\cons(f(a),\map(f)(u)),\cons(f(b))(\map(f)(y)))) \\
+ & = & \sublist(\cons(f(a),\map(f)(u)),\cons(f(b))(\map(f)(y))) \\
  & = & \bif{\beq(f(a),f(b))}{\sublist(\map(f)(u),\map(f)(y))}{\sublist(\cons(f(a),\map(f)(u)),\map(f)(y))} \\
  & = & \bif{\beq(f(a),f(b))}{\sublist(u,y)}{\sublist(\map(f)(\cons(a,u)),\map(f)(y))} \\
  & = & \bif{\beq(f(a),f(b))}{\sublist(u,y)}{\sublist(\cons(a,u),y)} \\

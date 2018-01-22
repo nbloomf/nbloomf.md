@@ -391,7 +391,7 @@ $$\begin{eqnarray*}
 and if $x = \cons(a,u)$ we have
 $$\begin{eqnarray*}
  &   & \isnil(\map(f)(\cons(a,u))) \\
- & = & \isnil(\cons(f(a),\map(f)(u)) \\
+ & = & \isnil(\cons(f(a),\map(f)(u))) \\
  & = & \bfalse \\
  & = & \isnil(\cons(a,u))
 \end{eqnarray*}$$

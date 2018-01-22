@@ -1730,7 +1730,8 @@ test-suite amd-common
     Infix,
     Select,
     Unique,
-    Delete
+    Delete,
+    Dedupe
 
 test-suite amd-sublists
   default-language: Haskell2010
@@ -1758,6 +1759,12 @@ test-suite amd-sublists
     Minus,
     LessThanOrEqualTo,
     MaxAndMin,
+    DivisionAlgorithm,
+    Divides,
+    NormRecursion,
+    GreatestCommonDivisor,
+    CoprimeTo,
+    Exponentiation,
     Choose,
     Lists,
     HeadAndTail,

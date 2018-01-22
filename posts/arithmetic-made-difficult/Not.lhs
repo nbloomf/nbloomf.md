@@ -59,8 +59,8 @@ as claimed.
 > _test_not_false :: (Boolean b, Equal b)
 >   => b -> Test Bool
 > _test_not_false p =
->   testName "not(true) == false" $
->   eq (not (true `withTypeOf` p)) false
+>   testName "not(false) == true" $
+>   eq (not (false `withTypeOf` p)) true
 
 ::::::::::::::::::::
 ::::::::::::::::::::

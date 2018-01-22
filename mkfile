@@ -10,6 +10,7 @@ targets:VQ:
   echo '  winfiles  : convert raw file line endings'  | doppler lightcyan
   echo '  blankpost : echo empty post template'       | doppler lightcyan
   echo '  sniff-amd : style sniffs'                   | doppler lightcyan
+  echo '  test-info : test stats'                     | doppler lightcyan
 
 all:VQ: build watch install test
 
@@ -54,11 +55,13 @@ test:VQ:
 
 test-info:VQ:
   echo 'amd' | doppler lightgreen
+  STMTS=$( grep '^>   testName "' posts/arithmetic-made-difficult/* | wc -l )
+  echo '  statements: ' ${STMTS} | doppler lightblue
   AMD="$(stack test amd 2> /dev/null)"
   AMDTESTS="$(echo "${AMD}" | grep '^+++' | wc -l)"
-  echo '  tests: ' ${AMDTESTS} | doppler lightblue
+  echo '  tests:      ' ${AMDTESTS} | doppler lightblue
   AMDCASES="$(echo "${AMD}" | grep '^+++' | awk '{t+=$4}; END {print t}')"
-  echo '  cases: ' ${AMDCASES} | doppler lightblue
+  echo '  cases:      ' ${AMDCASES} | doppler lightblue
 
 
 
@@ -130,7 +133,8 @@ sniff-amd:VQ: \
   sniff-amd-balance \
   sniff-amd-refname \
   sniff-amd-eqnarray \
-  sniff-amd-slugs
+  sniff-amd-slugs \
+  sniff-amd-testtext
 
 #-- use consistent syntax for fenced divs --#
 sniff-amd-fencediv:VQ:
@@ -203,7 +207,7 @@ sniff-amd-balance:VQ:
     echo "$BALANCE"
   fi
   
-  BALANCE=$( grep '^ & ' posts/arithmetic-made-difficult/* | balance -l || true )
+  BALANCE=$( grep -n '^ & ' posts/arithmetic-made-difficult/* | balance -l || true )
   if [ -z "$BALANCE" ]; then
     echo "Eqnarray Delimiters OK" | doppler lightgreen
   else
@@ -281,4 +285,19 @@ sniff-amd-slugs:VQ:
     echo 'Slug existence' | doppler lightred
     echo $( echo "$SLUGS" | wc -l ) 'problems found' | doppler lightred
     echo "$SLUGS"
+  fi
+
+#-- test descriptions are unique --#
+sniff-amd-testtext:VQ:
+  TESTTEXT=$( grep '^>   testName ' posts/arithmetic-made-difficult/* \
+    | sed 's/" \$$//' \
+    | sed 's/>   testName "/ @ /' \
+    | awk -F '@' 'num[$2]++{if (num[$2]==2) print prev[$2]; print} {prev[$2]=$0}' \
+    || true )
+  if [ -z "$TESTTEXT" ]; then
+    echo 'Test text OK' | doppler lightgreen
+  else
+    echo 'Test text' | doppler lightred
+    echo $( echo "$TESTTEXT" | wc -l ) 'problems found' | doppler lightred
+    echo "$TESTTEXT"
   fi
