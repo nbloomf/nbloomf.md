@@ -76,6 +76,7 @@ $$\left\{\begin{array}{l}
 Next we establish a version of the universal property of $\nplus$ with the arguments reversed.
 
 :::::: theorem :::::
+[]{#cor-plus-up-zero-right}[]{#cor-plus-up-next-right}
 The following hold for all natural numbers $a$ and $b$.
 
 1. $\nplus(a,\zero) = a$.
@@ -87,7 +88,8 @@ $$\begin{eqnarray*}
  &   & \nplus(\next(a),\zero) \\
  &     \href{@plus@#cor-plus-up-next}
    = & \next(\nplus(a,\zero)) \\
- & = & \next(a)
+ &     \hyp{\nplus(a,\zero) = a}
+   = & \next(a)
 \end{eqnarray*}$$
 as needed.
 2. We proceed by induction on $a$. For the base case, note that $$\nplus(\zero,\next(b)) = \next(b).$$ For the inductive step, suppose we have $\next(\nplus(a,b)) = \nplus(a,\next(b))$ for all $b$ for some $a$. Then
@@ -95,7 +97,8 @@ $$\begin{eqnarray*}
  &   & \nplus(\next(a),\next(b)) \\
  &     \href{@plus@#cor-plus-up-next}
    = & \next(\nplus(a,\next(b))) \\
- & = & \next(\next(\nplus(a,b))) \\
+ &     \hyp{\next(\nplus(a,b)) = \nplus(a,\next(b))}
+   = & \next(\next(\nplus(a,b))) \\
  &     \href{@plus@#cor-plus-up-next}
    = & \next(\nplus(\next(a),b))
 \end{eqnarray*}$$
@@ -132,18 +135,25 @@ The following hold for all natural numbers $a$, $b$, and $c$.
 1. We will show this by induction on $a$. For the base case, note that $$\nplus(\nplus(\zero,b),c) = \nplus(b,c) = \nplus(\zero,\nplus(b,c)).$$ For the inductive step, suppose the result holds for some $a$. Then
 $$\begin{eqnarray*}
  &   & \nplus(\nplus(\next(a),b),c) \\
- & = & \nplus(\next(\nplus(a,b)),c) \\
- & = & \next(\nplus(\nplus(a,b),c)) \\
- & = & \next(\nplus(a,\nplus(b,c))) \\
- & = & \nplus(\next(a),\nplus(b,c))
+ &     \href{@plus@#cor-plus-up-next}
+   = & \nplus(\next(\nplus(a,b)),c) \\
+ &     \href{@plus@#cor-plus-up-next}
+   = & \next(\nplus(\nplus(a,b),c)) \\
+ &     \hyp{\nplus(a,\nplus(b,c)) = \nplus(\nplus(a,b),c)}
+   = & \next(\nplus(a,\nplus(b,c))) \\
+ &     \href{@plus@#cor-plus-up-next}
+   = & \nplus(\next(a),\nplus(b,c))
 \end{eqnarray*}$$
 as needed.
 2. We proceed by induction on $a$. For the base case, note that $$\nplus(\zero,b) = b = \nplus(b,\zero).$$ For the inductive step, suppose the result holds for some $a$. Then we have
 $$\begin{eqnarray*}
  &   & \nplus(\next(a),b) \\
- & = & \next(\nplus(a,b)) \\
- & = & \next(\nplus(b,a)) \\
- & = & \nplus(b,\next(a))
+ &     \href{@plus@#cor-plus-up-next}
+   = & \next(\nplus(a,b)) \\
+ &     \hyp{\nplus(a,b) = \nplus(b,a)}
+   = & \next(\nplus(b,a)) \\
+ &     \href{@plus@#cor-plus-up-next-right}
+   = & \nplus(b,\next(a))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

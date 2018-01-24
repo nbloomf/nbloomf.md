@@ -63,6 +63,11 @@ test-info:VQ:
   AMDCASES="$(echo "${AMD}" | grep '^+++' | awk '{t+=$4}; END {print t}')"
   echo '  cases:      ' ${AMDCASES} | doppler lightblue
 
+check-info:VQ:
+  echo 'amd' | doppler lightgreen
+  CHECKS=$( grep '^ &     \\h' posts/arithmetic-made-difficult/* | wc -l )
+  echo '  checked equalities: ' ${CHECKS} | doppler lightblue
+
 
 
 #===================#
@@ -313,7 +318,7 @@ sniff-amd-rewrite:VQ:
     | sed 's/^   = & //' \
     | sed 's/ \\\\$//' \
     | tr '&' '\n' \
-    | sed 's/     \\href{\([^}]*\)}/\1/' \
+    | sed 's/     \\href{\([^}]*\)}/===\1===/' \
     | sed 's/[ ]*$//' \
     | paste - - - - \
     | awk '{print $2 "\t" $3 "\t" $1 "\t" $4}' \
