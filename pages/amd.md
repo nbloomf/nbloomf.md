@@ -82,7 +82,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * [Delete](/posts/arithmetic-made-difficult/Delete.html)
         * [Dedupe](/posts/arithmetic-made-difficult/Dedupe.html)
         * [Common](/posts/arithmetic-made-difficult/Common.html)
-        * Disjoint
+        * [Disjoint](/posts/arithmetic-made-difficult/Disjoint.html)
         * [Sublists](/posts/arithmetic-made-difficult/Sublists.html)
         * Infixes
         * Concat

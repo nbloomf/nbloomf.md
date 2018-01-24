@@ -134,7 +134,8 @@ sniff-amd:VQ: \
   sniff-amd-refname \
   sniff-amd-eqnarray \
   sniff-amd-slugs \
-  sniff-amd-testtext
+  sniff-amd-testtext \
+  sniff-amd-rewrite
 
 #-- use consistent syntax for fenced divs --#
 sniff-amd-fencediv:VQ:
@@ -300,4 +301,29 @@ sniff-amd-testtext:VQ:
     echo 'Test text' | doppler lightred
     echo $( echo "$TESTTEXT" | wc -l ) 'problems found' | doppler lightred
     echo "$TESTTEXT"
+  fi
+
+#-- check term rewrites --#
+sniff-amd-rewrite:VQ:
+  REWRITE=$( grep -n -C 1 '^ &[ ]*\\href' posts/arithmetic-made-difficult/* \
+    | sed '/^--$/d' \
+    | sed 's/^[a-zA-Z\/.-]*[0-9][0-9]*-//' \
+    | sed 's/^ &   & //' \
+    | sed 's/^ & = & //' \
+    | sed 's/^   = & //' \
+    | sed 's/ \\\\$//' \
+    | tr '&' '\n' \
+    | sed 's/     \\href{\([^}]*\)}/\1/' \
+    | sed 's/[ ]*$//' \
+    | paste - - - - \
+    | awk '{print $2 "\t" $3 "\t" $1 "\t" $4}' \
+    | sed -f amd-rules.txt | tee out.txt \
+    | rewrite-term \
+    || true )
+  if [ -z "$REWRITE" ]; then
+    echo 'Term rewrites OK' | doppler lightgreen
+  else
+    echo 'Term rewrites' | doppler lightred
+    echo $( echo "$REWRITE" | wc -l ) 'problems found' | doppler lightred
+    echo "$REWRITE"
   fi

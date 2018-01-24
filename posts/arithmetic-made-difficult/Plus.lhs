@@ -48,7 +48,12 @@ In Haskell:
 Since $\nplus$ is defined in terms of simple recursion, it is the unique solution to a set of functional equations.
 
 :::::: corollary :::
-$\nplus$ is the unique map $f : \nats \times \nats \rightarrow \nats$ with the property that for all $a,b \in \nats$, we have $$\left\{ \begin{array}{l} f(\zero,b) = b \\ f(\next(a),b) = \next(f(a,b)). \end{array} \right.$$
+[]{#cor-plus-up}[]{#cor-plus-up-zero}[]{#cor-plus-up-next}
+$\nplus$ is the unique map $f : \nats \times \nats \rightarrow \nats$ with the property that for all $a,b \in \nats$, we have
+$$\left\{\begin{array}{l}
+ f(\zero,b) = b \\
+ f(\next(a),b) = \next(f(a,b)).
+\end{array}\right.$$
 
 ::: test :::::::::::
 
@@ -80,16 +85,19 @@ The following hold for all natural numbers $a$ and $b$.
 1. We proceed by induction on $a$. For the base case, we have $\nplus(\zero,\zero) = \zero$ by the universal property of $\nplus$. For the inductive step, suppose we have $\nplus(a,\zero) = a$ for some $a$. Then
 $$\begin{eqnarray*}
  &   & \nplus(\next(a),\zero) \\
- & = & \next(\nplus(a,\zero)) \\
+ &     \href{@plus@#cor-plus-up-next}
+   = & \next(\nplus(a,\zero)) \\
  & = & \next(a)
 \end{eqnarray*}$$
 as needed.
 2. We proceed by induction on $a$. For the base case, note that $$\nplus(\zero,\next(b)) = \next(b).$$ For the inductive step, suppose we have $\next(\nplus(a,b)) = \nplus(a,\next(b))$ for all $b$ for some $a$. Then
 $$\begin{eqnarray*}
  &   & \nplus(\next(a),\next(b)) \\
- & = & \next(\nplus(a,\next(b))) \\
+ &     \href{@plus@#cor-plus-up-next}
+   = & \next(\nplus(a,\next(b))) \\
  & = & \next(\next(\nplus(a,b))) \\
- & = & \next(\nplus(\next(a),b))
+ &     \href{@plus@#cor-plus-up-next}
+   = & \next(\nplus(\next(a),b))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

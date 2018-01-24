@@ -71,6 +71,7 @@ library
     Delete,
     Dedupe,
     Common,
+    Disjoint,
     Sublists,
     TakeAndDrop,
     TakeButAndDropBut,
@@ -1732,6 +1733,65 @@ test-suite amd-common
     Unique,
     Delete,
     Dedupe
+
+test-suite amd-disjoint
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Disjoint.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options: -main-is Disjoint.main_disjoint
+  other-modules:
+    Testing,
+    Booleans,
+    Not,
+    And,
+    Or,
+    Implies,
+    Predicates,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers,
+    SimpleRecursion,
+    BailoutRecursion,
+    DoubleNaturalRecursion,
+    Plus,
+    Times,
+    Minus,
+    LessThanOrEqualTo,
+    MaxAndMin,
+    Choose,
+    Lists,
+    HeadAndTail,
+    LeftFold,
+    DoubleFold,
+    ConsumingFold,
+    BailoutFold,
+    DoubleBailoutFold,
+    Snoc,
+    Reverse,
+    Cat,
+    At,
+    Length,
+    Map,
+    UnfoldN,
+    Range,
+    Zip,
+    PrefixAndSuffix,
+    LongestCommonPrefix,
+    AllAndAny,
+    TailsAndInits,
+    Filter,
+    Elt,
+    Count,
+    Repeat,
+    Sublist,
+    Infix,
+    Select,
+    Unique,
+    Delete,
+    Dedupe,
+    Common
 
 test-suite amd-sublists
   default-language: Haskell2010

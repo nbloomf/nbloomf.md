@@ -1,0 +1,3 @@
+# mapping references to inference rules for amd
+s|@plus@#cor-plus-up-zero|\\nplus(\\zero,b) = b|
+s|@plus@#cor-plus-up-next|\\nplus(\\next(a),b) = \\next(\\nplus(a,b))|

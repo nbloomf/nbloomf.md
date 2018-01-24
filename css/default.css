@@ -127,6 +127,10 @@ a[href^="#"]::before {
   content: "⚓"
 }
 
+.MathJax a {
+  color: blue;
+}
+
 
 
 /************/
@@ -142,32 +146,32 @@ div.axiom, div.definition, div.theorem, div.corollary {
   position: relative;
 }
 
-div.axiom p:first-child::before {
+div.axiom::before {
   content: "Axiom:\0000a0";
   font-style: italic;
 }
 
-div.definition p:first-child::before {
+div.definition::before {
   content: "Def'n:\0000a0";
   font-style: italic;
 }
 
-div.theorem p:first-child::before {
+div.theorem::before {
   content: "Theorem:\0000a0";
   font-style: italic;
 }
 
-div.corollary p:first-child::before {
+div.corollary::before {
   content: "Corollary:\0000a0";
   font-style: italic;
 }
 
-div.proof p:first-child::before {
+div.proof::before {
   content: "Proof:\0000a0";
   font-style: italic;
 }
 
-div.test div.sourceCode:first-child::before {
+div.test::before {
   content: "Test:\0000a0";
   font-style: italic;
 }

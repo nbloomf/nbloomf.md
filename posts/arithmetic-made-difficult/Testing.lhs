@@ -16,9 +16,11 @@ This is an old idea, and many books have been written about it. In this series o
 
 We can build an *algebra of programs*.
 
+In this series of posts I'll be exploring this idea in detail, including lots of proofs. We could do this using a language designed specifically for formal verification, but I'd like to stay as close to English as possible. At the same time, in any big list of proofs there's the danger that some of them are wrong. To help mitigate this I'll use two different kinds of checks. First, we'll include automated tests for as many theorems as possible. And second, as much as possible, we'll use a term rewriting tool to check that the steps in our equational proofs are correct. If you see a blue equals sign in an equational proof, that signifies a link to the previous theorem or definition which justifies the equality. But more than that, the blue equals signs are verified by an automated tool.
 
-Testing
--------
+
+Property Testing
+----------------
 
 Along the way we'll see lots of identities. These are equations that are true for all possible values of any variables, like $$a + b = b + a$$ where $a$ and $b$ are integers. Although we'll establish these with proof, identities are prime candidates for checking with *generative tests*. If an equation like $a+b = b+a$ is supposed to be true for all possible $a$ and $b$, one way to test this is to generate a bunch of random pairs and see if the equation holds.
 
