@@ -43,6 +43,7 @@ In Haskell:
 Since $\ntimes$ is defined in terms of simple recursion, it is the unique solution to a set of functional equations.
 
 :::::: corollary :::
+[]{#cor-times-up}[]{#cor-times-up-zero}[]{#cor-times-up-next}
 $\ntimes$ is the unique map $f : \nats \times \nats \rightarrow \nats$ with the property that for all $a,b \in \nats$, we have
 $$\left\{\begin{array}{l}
  f(\zero,b) = \zero \\
@@ -70,6 +71,7 @@ $$\left\{\begin{array}{l}
 Next we establish a version of the universal property of $\ntimes$ with the arguments reversed.
 
 :::::: theorem :::::
+[]{#thm-times-zero-right}[]{#thm-times-next-right}
 The following hold for all natural numbers $a$ and $b$.
 
 1. $\ntimes(a,\zero) = \zero$.
@@ -79,29 +81,43 @@ The following hold for all natural numbers $a$ and $b$.
 1. We proceed by induction on $a$. For the base case, note that $\ntimes(\zero,\zero) = \zero$. For the inductive step, suppose we have $\ntimes(a,\zero) = \zero$ for some $a$. Then
 $$\begin{eqnarray*}
  &   & \ntimes(\next(a),\zero) \\
- & = & \nplus(\ntimes(a,\zero),\zero) \\
- & = & \nplus(\zero,\zero) \\
- & = & \zero
+ &     \href{@times@#cor-times-up-next}
+   = & \nplus(\ntimes(a,\zero),\zero) \\
+ &     \hyp{\ntimes(a,\zero) = \zero}
+   = & \nplus(\zero,\zero) \\
+ &     \href{@plus@#cor-plus-up-zero}
+   = & \zero
 \end{eqnarray*}$$
 as needed.
 2. We proceed by induction on $a$. For the base case, we have
 $$\begin{eqnarray*}
  &   & \ntimes(\zero,\next(b)) \\
- & = & \zero \\
- & = & \nplus(\zero,\zero) \\
- & = & \nplus(\ntimes(\zero,b),\zero)
+ &     \href{@times@#cor-times-up-zero}
+   = & \zero \\
+ &     \href{@plus@#cor-plus-up-zero}
+   = & \nplus(\zero,\zero) \\
+ &     \href{@times@#cor-times-up-zero}
+   = & \nplus(\ntimes(\zero,b),\zero)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose we have $\ntimes(a,\next(b)) = \nplus(\ntimes(a,b),a)$ for some $a$. Now
 $$\begin{eqnarray*}
  &   & \ntimes(\next(a),\next(b)) \\
- & = & \nplus(\ntimes(a,\next(b)),\next(b)) \\
- & = & \next(\nplus(\ntimes(a,\next(b)),b)) \\
- & = & \next(\nplus(\nplus(\ntimes(a,b),a),b)) \\
- & = & \next(\nplus(\ntimes(a,b),\nplus(a,b))) \\
- & = & \next(\nplus(\ntimes(a,b),\nplus(b,a))) \\
- & = & \next(\nplus(\nplus(\ntimes(a,b),b),a)) \\
- & = & \next(\nplus(\ntimes(\next(a),b),a)) \\
- & = & \nplus(\ntimes(\next(a),b),\next(a))
+ &     \href{@times@#cor-times-up-next}
+   = & \nplus(\ntimes(a,\next(b)),\next(b)) \\
+ &     \href{@plus@#thm-plus-next-right}
+   = & \next(\nplus(\ntimes(a,\next(b)),b)) \\
+ &     \hyp{\ntimes(a,\next(b)) = \nplus(\ntimes(a,b),a)}
+   = & \next(\nplus(\nplus(\ntimes(a,b),a),b)) \\
+ &     \href{@plus@#thm-plus-associative}
+   = & \next(\nplus(\ntimes(a,b),\nplus(a,b))) \\
+ &     \href{@plus@#thm-plus-commutative}
+   = & \next(\nplus(\ntimes(a,b),\nplus(b,a))) \\
+ &     \href{@plus@#thm-plus-associative}
+   = & \next(\nplus(\nplus(\ntimes(a,b),b),a)) \\
+ &     \href{@times@#cor-times-up-next}
+   = & \next(\nplus(\ntimes(\next(a),b),a)) \\
+ &     \href{@plus@#thm-plus-next-right}
+   = & \nplus(\ntimes(\next(a),b),\next(a))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -127,6 +143,7 @@ as needed.
 $\next(\zero)$ is neutral under $\ntimes$.
 
 :::::: theorem :::::
+[]{#thm-times-one-left}[]{#thm-times-one-right}
 For all $a \in \nats$, we have
 
 1. $\ntimes(\next(\zero),a) = a$.
@@ -136,17 +153,25 @@ For all $a \in \nats$, we have
 1. Note first that for all $a$, we have
 $$\begin{eqnarray*}
  &   & \ntimes(\next(\zero),a) \\
- & = & \nplus(\ntimes(\zero,a),a) \\
- & = & \nplus(\zero,a) \\
- & = & a.
+ &     \href{@times@#cor-times-up-next}
+   = & \nplus(\ntimes(\zero,a),a) \\
+ &     \href{@times@#cor-times-up-zero}
+   = & \nplus(\zero,a) \\
+ &     \href{@plus@#cor-plus-up-zero}
+   = & a
 \end{eqnarray*}$$
+as claimed.
 2. We proceed by induction on $a$. For the base case, note that $\ntimes(\zero,\next(\zero)) = \zero$. For the inductive step, suppose we have $\ntimes(a,\next(\zero)) = a$ for some $a$. Now
 $$\begin{eqnarray*}
  &   & \ntimes(\next(a),\next(\zero)) \\
- & = & \nplus(\ntimes(a,\next(\zero)),\next(\zero)) \\
- & = & \nplus(a,\next(\zero)) \\
- & = & \next(\nplus(a,\zero)) \\
- & = & \next(a)
+ &     \href{@times@#cor-times-up-next}
+   = & \nplus(\ntimes(a,\next(\zero)),\next(\zero)) \\
+ &     \hyp{\ntimes(a,\next(\zero)) = a}
+   = & \nplus(a,\next(\zero)) \\
+ &     \href{@plus@#thm-plus-next-right}
+   = & \next(\nplus(a,\zero)) \\
+ &     \href{@plus@#thm-plus-zero-right}
+   = & \next(a)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -172,15 +197,19 @@ as needed.
 $\ntimes$ is commutative.
 
 :::::: theorem :::::
+[]{#thm-times-commutative}
 For all $a,b \in \nats$ we have $\ntimes(a,b) = \ntimes(b,a)$.
 
 ::: proof ::::::::::
 We proceed by induction on $a$. For the base case, note that $$\ntimes(\zero,b) = \zero = \ntimes(b,\zero)$$ as needed. For the inductive step, suppose we have $\ntimes(a,b) = \ntimes(b,a)$ for some $a$. Now
 $$\begin{eqnarray*}
  &   & \ntimes(\next(a),b) \\
- & = & \nplus(\ntimes(a,b),b) \\
- & = & \nplus(\ntimes(b,a),b) \\
- & = & \ntimes(b,\next(a))
+ &     \href{@times@#cor-times-up-next}
+   = & \nplus(\ntimes(a,b),b) \\
+ &     \hyp{\ntimes(a,b) = \ntimes(b,a)}
+   = & \nplus(\ntimes(b,a),b) \\
+ &     \href{@times@#thm-times-next-right}
+   = & \ntimes(b,\next(a))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -199,6 +228,7 @@ as needed.
 $\ntimes$ distributes over $\nplus$.
 
 :::::: theorem :::::
+[]{#thm-times-plus-distribute-left}[]{#thm-times-plus-distribute-right}
 For all $a,b,c, \in \nats$, we have the following.
 
 1. $\ntimes(a,\nplus(b,c)) = \nplus(\ntimes(a,b),\ntimes(a,c))$.
@@ -338,7 +368,7 @@ as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-As a special case, $\times(\next(\next(\zero)),-)$ is equivalent to a $\nplus$.
+As a special case, $\ntimes(\next(\next(\zero)),-)$ is equivalent to a $\nplus$.
 
 :::::: theorem :::::
 For all $a \in \nats$ we have $$\ntimes(\next(\next(\zero)),a) = \nplus(a,a).$$

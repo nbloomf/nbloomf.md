@@ -76,7 +76,7 @@ $$\left\{\begin{array}{l}
 Next we establish a version of the universal property of $\nplus$ with the arguments reversed.
 
 :::::: theorem :::::
-[]{#cor-plus-up-zero-right}[]{#cor-plus-up-next-right}
+[]{#thm-plus-zero-right}[]{#thm-plus-next-right}
 The following hold for all natural numbers $a$ and $b$.
 
 1. $\nplus(a,\zero) = a$.
@@ -126,6 +126,7 @@ as needed.
 $\nplus$ is associative and commutative.
 
 :::::: theorem :::::
+[]{#thm-plus-associative}[]{#thm-plus-commutative}
 The following hold for all natural numbers $a$, $b$, and $c$.
 
 1. $\nplus(\nplus(a,b),c) = \nplus(a,\nplus(b,c))$.
@@ -152,7 +153,7 @@ $$\begin{eqnarray*}
    = & \next(\nplus(a,b)) \\
  &     \hyp{\nplus(a,b) = \nplus(b,a)}
    = & \next(\nplus(b,a)) \\
- &     \href{@plus@#cor-plus-up-next-right}
+ &     \href{@plus@#thm-plus-next-right}
    = & \nplus(b,\next(a))
 \end{eqnarray*}$$
 as needed.
