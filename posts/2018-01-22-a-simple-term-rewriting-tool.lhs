@@ -270,15 +270,15 @@ So we'll need to split a line on tabs:
 >       in
 >         Just (cell, rest)
 
-And we'll need to process one untabbed line:
+And we'll need to process one untabbed line. We're assuming that the rewrite rules are reversible; given `x = y` and two expressions `lhs` and `rhs`, any substitution taking either `lhs` to `rhs` or `rhs` to `lhs` is considered valid. This is ok for the equation chains we want to use this on in the Arithmetic Made Difficult posts.
 
 > process :: [String] -> IO ()
 > process [loc,r,a,b] = do
 >   (x,y) <- parseWithIO loc (pRule pLatexExpr) r
 >   lhs <- parseWithIO loc pLatexExpr a
 >   rhs <- parseWithIO loc pLatexExpr b
->   case (validate (x,y) lhs rhs, validate (y,x) lhs rhs) of
->     ([],[]) -> do
+>   case (validate (x,y) lhs rhs, validate (y,x) lhs rhs, validate (x,y) rhs lhs, validate (y,x) lhs rhs) of
+>     ([],[],[],[]) -> do
 >       putStrLn $ unwords [loc,"invalid!",r,"::",a,"-->",b]
 >     _ -> return ()
 > process xs = do

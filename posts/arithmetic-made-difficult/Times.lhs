@@ -78,12 +78,12 @@ The following hold for all natural numbers $a$ and $b$.
 2. $\ntimes(a,\next(b)) = \nplus(\ntimes(a,b),a)$.
 
 ::: proof ::::::::::
-1. We proceed by induction on $a$. For the base case, note that $\ntimes(\zero,\zero) = \zero$. For the inductive step, suppose we have $\ntimes(a,\zero) = \zero$ for some $a$. Then
+1. We proceed by induction on $a$. For the base case, note that $\ntimes(\zero,\zero) = \zero$. For the inductive step, suppose we have $\ntimes(\a,\zero) = \zero$ for some $a$. Then
 $$\begin{eqnarray*}
- &   & \ntimes(\next(a),\zero) \\
+ &   & \ntimes(\next(\a),\zero) \\
  &     \href{@times@#cor-times-up-next}
-   = & \nplus(\ntimes(a,\zero),\zero) \\
- &     \hyp{\ntimes(a,\zero) = \zero}
+   = & \nplus(\ntimes(\a,\zero),\zero) \\
+ &     \hyp{\ntimes(\a,\zero) = \zero}
    = & \nplus(\zero,\zero) \\
  &     \href{@plus@#cor-plus-up-zero}
    = & \zero
@@ -99,25 +99,25 @@ $$\begin{eqnarray*}
  &     \href{@times@#cor-times-up-zero}
    = & \nplus(\ntimes(\zero,b),\zero)
 \end{eqnarray*}$$
-as needed. For the inductive step, suppose we have $\ntimes(a,\next(b)) = \nplus(\ntimes(a,b),a)$ for some $a$. Now
+as needed. For the inductive step, suppose we have $\ntimes(\a,\next(b)) = \nplus(\ntimes(\a,b),\a)$ for some $a$. Now
 $$\begin{eqnarray*}
- &   & \ntimes(\next(a),\next(b)) \\
+ &   & \ntimes(\next(\a),\next(b)) \\
  &     \href{@times@#cor-times-up-next}
-   = & \nplus(\ntimes(a,\next(b)),\next(b)) \\
+   = & \nplus(\ntimes(\a,\next(b)),\next(b)) \\
  &     \href{@plus@#thm-plus-next-right}
-   = & \next(\nplus(\ntimes(a,\next(b)),b)) \\
- &     \hyp{\ntimes(a,\next(b)) = \nplus(\ntimes(a,b),a)}
-   = & \next(\nplus(\nplus(\ntimes(a,b),a),b)) \\
+   = & \next(\nplus(\ntimes(\a,\next(b)),b)) \\
+ &     \hyp{\ntimes(\a,\next(b)) = \nplus(\ntimes(\a,b),\a)}
+   = & \next(\nplus(\nplus(\ntimes(\a,b),\a),b)) \\
  &     \href{@plus@#thm-plus-associative}
-   = & \next(\nplus(\ntimes(a,b),\nplus(a,b))) \\
+   = & \next(\nplus(\ntimes(\a,b),\nplus(\a,b))) \\
  &     \href{@plus@#thm-plus-commutative}
-   = & \next(\nplus(\ntimes(a,b),\nplus(b,a))) \\
+   = & \next(\nplus(\ntimes(\a,b),\nplus(b,\a))) \\
  &     \href{@plus@#thm-plus-associative}
-   = & \next(\nplus(\nplus(\ntimes(a,b),b),a)) \\
+   = & \next(\nplus(\nplus(\ntimes(\a,b),b),\a)) \\
  &     \href{@times@#cor-times-up-next}
-   = & \next(\nplus(\ntimes(\next(a),b),a)) \\
+   = & \next(\nplus(\ntimes(\next(\a),b),\a)) \\
  &     \href{@plus@#thm-plus-next-right}
-   = & \nplus(\ntimes(\next(a),b),\next(a))
+   = & \nplus(\ntimes(\next(\a),b),\next(\a))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -161,17 +161,17 @@ $$\begin{eqnarray*}
    = & a
 \end{eqnarray*}$$
 as claimed.
-2. We proceed by induction on $a$. For the base case, note that $\ntimes(\zero,\next(\zero)) = \zero$. For the inductive step, suppose we have $\ntimes(a,\next(\zero)) = a$ for some $a$. Now
+2. We proceed by induction on $a$. For the base case, note that $\ntimes(\zero,\next(\zero)) = \zero$. For the inductive step, suppose we have $\ntimes(\a,\next(\zero)) = \a$ for some $\a$. Now
 $$\begin{eqnarray*}
- &   & \ntimes(\next(a),\next(\zero)) \\
+ &   & \ntimes(\next(\a),\next(\zero)) \\
  &     \href{@times@#cor-times-up-next}
-   = & \nplus(\ntimes(a,\next(\zero)),\next(\zero)) \\
- &     \hyp{\ntimes(a,\next(\zero)) = a}
-   = & \nplus(a,\next(\zero)) \\
+   = & \nplus(\ntimes(\a,\next(\zero)),\next(\zero)) \\
+ &     \hyp{\ntimes(\a,\next(\zero)) = \a}
+   = & \nplus(\a,\next(\zero)) \\
  &     \href{@plus@#thm-plus-next-right}
-   = & \next(\nplus(a,\zero)) \\
+   = & \next(\nplus(\a,\zero)) \\
  &     \href{@plus@#thm-plus-zero-right}
-   = & \next(a)
+   = & \next(\a)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -201,15 +201,15 @@ $\ntimes$ is commutative.
 For all $a,b \in \nats$ we have $\ntimes(a,b) = \ntimes(b,a)$.
 
 ::: proof ::::::::::
-We proceed by induction on $a$. For the base case, note that $$\ntimes(\zero,b) = \zero = \ntimes(b,\zero)$$ as needed. For the inductive step, suppose we have $\ntimes(a,b) = \ntimes(b,a)$ for some $a$. Now
+We proceed by induction on $a$. For the base case, note that $$\ntimes(\zero,b) = \zero = \ntimes(b,\zero)$$ as needed. For the inductive step, suppose we have $\ntimes(\a,b) = \ntimes(b,\a)$ for some $\a$. Now
 $$\begin{eqnarray*}
- &   & \ntimes(\next(a),b) \\
+ &   & \ntimes(\next(\a),b) \\
  &     \href{@times@#cor-times-up-next}
-   = & \nplus(\ntimes(a,b),b) \\
- &     \hyp{\ntimes(a,b) = \ntimes(b,a)}
-   = & \nplus(\ntimes(b,a),b) \\
+   = & \nplus(\ntimes(\a,b),b) \\
+ &     \hyp{\ntimes(\a,b) = \ntimes(b,\a)}
+   = & \nplus(\ntimes(b,\a),b) \\
  &     \href{@times@#thm-times-next-right}
-   = & \ntimes(b,\next(a))
+   = & \ntimes(b,\next(\a))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

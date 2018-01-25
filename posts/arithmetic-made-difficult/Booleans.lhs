@@ -26,7 +26,7 @@ We're going to characterize the boolean values true and false in a roundabout wa
 As algebras go, doubly-pointed sets are almost as weak as they come. We can see shades of the boolean values there -- "true" and "false" can be thought of as distinguished elements  in a doubly-pointed set. And indeed we'll do that. But the booleans are not just any doubly-pointed set; they are the *smallest* such set in a precise sense.
 
 :::::: definition ::
-[](#def-bool) There is a special doubly-pointed set, denoted $\bool$, with distinguished elements $\btrue$ and $\bfalse$, with the property that if $A$ is a doubly-pointed set with distinguished elements $a_t, a_f$, then there is a *unique* doubly-pointed homomorphism $\Theta : \bool \rightarrow A$. We denote this $\Theta$ by $$\Theta(p) = \bif{p}{a_t}{a_f}.$$ To be clear, we have $$\bif{\btrue}{a_t}{a_f} = a_t$$ and $$\bif{\bfalse}{a_t}{a_f} = a_f.$$
+[]{#def-bool}[]{#cor-if-true}[]{#cor-if-false} There is a special doubly-pointed set, denoted $\bool$, with distinguished elements $\btrue$ and $\bfalse$, with the property that if $A$ is a doubly-pointed set with distinguished elements $a_t, a_f$, then there is a *unique* doubly-pointed homomorphism $\Theta : \bool \rightarrow A$. We denote this $\Theta$ by $$\Theta(p) = \bif{p}{a_t}{a_f}.$$ To be clear, we have $$\bif{\btrue}{a_t}{a_f} = a_t$$ and $$\bif{\bfalse}{a_t}{a_f} = a_f.$$
 ::::::::::::::::::::
 
 What makes the booleans special among doubly-pointed sets is this unique map, which looks suspiciously like the traditional "if-then-else" construct, because that's exactly what it is.
@@ -76,23 +76,28 @@ There are many other instances which differ only by the labels of $\btrue$ and $
 $\bif{\ast}{\ast}{\ast}$ enjoys some other nice properties. For example, it interacts with function application.
 
 :::::: theorem :::::
-[](#thm-iffunc) Let $A$ and $B$ be sets with $f : A \rightarrow B$ a map. For all $p \in \bool$ and $u,v \in A$, we have $$f(\bif{p}{u}{v}) = \bif{p}{f(u)}{f(v)}.$$
+[]{#thm-iffunc}
+Let $A$ and $B$ be sets with $f : A \rightarrow B$ a map. For all $p \in \bool$ and $u,v \in A$, we have $$f(\bif{p}{u}{v}) = \bif{p}{f(u)}{f(v)}.$$
 
 ::: proof ::::::::::
 If $p = \btrue$, we have
 $$\begin{eqnarray*}
  &   & f(\bif{p}{u}{v}) \\
  & = & f(\bif{\btrue}{u}{v}) \\
- & = & f(u) \\
- & = & \bif{\btrue}{f(u)}{f(v)} \\
+ &     \href{@booleans@#cor-if-true}
+   = & f(u) \\
+ &     \href{@booleans@#cor-if-true}
+   = & \bif{\btrue}{f(u)}{f(v)} \\
  & = & \bif{p}{f(u)}{f(v)}
 \end{eqnarray*}$$
 as claimed. If $p = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & f(\bif{p}{u}{v}) \\
  & = & f(\bif{\bfalse}{u}{v}) \\
- & = & f(v) \\
- & = & \bif{\bfalse}{f(u)}{f(v)} \\
+ &     \href{@booleans@#cor-if-false}
+   = & f(v) \\
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{\bfalse}{f(u)}{f(v)} \\
  & = & \bif{p}{f(u)}{f(v)}
 \end{eqnarray*}$$
 as claimed.
@@ -123,20 +128,28 @@ We have four possibilities for $(p,q)$. If $p = \btrue$ and $q = \btrue$,
 $$\begin{eqnarray*}
  &   & \bif{p}{\bif{q}{a}{b}}{\bif{q}{c}{d}} \\
  & = & \bif{\btrue}{\bif{\btrue}{a}{b}}{\bif{q}{c}{d}} \\
- & = & \bif{\btrue}{a}{b} \\
- & = & a \\
- & = & \bif{\btrue}{a}{c} \\
- & = & \bif{\btrue}{\bif{\btrue}{a}{c}}{\bif{p}{b}{d}} \\
+ &     \href{@booleans@#cor-if-true}
+   = & \bif{\btrue}{a}{b} \\
+ &     \href{@booleans@#cor-if-true}
+   = & a \\
+ &     \href{@booleans@#cor-if-true}
+   = & \bif{\btrue}{a}{c} \\
+ &     \href{@booleans@#cor-if-true}
+   = & \bif{\btrue}{\bif{\btrue}{a}{c}}{\bif{p}{b}{d}} \\
  & = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
 \end{eqnarray*}$$
 as claimed. If $p = \btrue$ and $q = \bfalse$,
 $$\begin{eqnarray*}
  &   & \bif{p}{\bif{q}{a}{b}}{\bif{q}{c}{d}} \\
  & = & \bif{\btrue}{\bif{\bfalse}{a}{b}}{\bif{q}{c}{d}} \\
- & = & \bif{\bfalse}{a}{b} \\
- & = & b \\
- & = & \bif{\btrue}{b}{d} \\
- & = & \bif{\bfalse}{\bif{p}{a}{c}}{\bif{\btrue}{b}{d}} \\
+ &     \href{@booleans@#cor-if-true}
+   = & \bif{\bfalse}{a}{b} \\
+ &     \href{@booleans@#cor-if-false}
+   = & b \\
+ &     \href{@booleans@#cor-if-true}
+   = & \bif{\btrue}{b}{d} \\
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{\bfalse}{\bif{p}{a}{c}}{\bif{\btrue}{b}{d}} \\
  & = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
 \end{eqnarray*}$$
 as claimed. If $p = \bfalse$ and $q = \btrue$,

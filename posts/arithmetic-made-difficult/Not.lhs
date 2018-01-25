@@ -17,7 +17,8 @@ slug: not
 In the last post, we defined the booleans $\bool$. We can define the usual logical operators in terms of $\bif{\ast}{\ast}{\ast}$. First, $\bnot$.
 
 :::::: definition ::
-[](#def-not) We define $\bnot : \bool \rightarrow \bool$ by $$\bnot(p) = \bif{p}{\bfalse}{\btrue}.$$
+[]{#def-not}
+We define $\bnot : \bool \rightarrow \bool$ by $$\bnot(p) = \bif{p}{\bfalse}{\btrue}.$$
 
 In Haskell:
 
@@ -29,20 +30,25 @@ In Haskell:
 We can compute $\bnot$ explicitly.
 
 :::::: theorem :::::
-[](#thm-not-eval) We have $\bnot(\btrue) = \bfalse$ and $\bnot(\bfalse) = \btrue$.
+[]{#thm-not-true}[#thm-not-false]{}
+We have $\bnot(\btrue) = \bfalse$ and $\bnot(\bfalse) = \btrue$.
 
 ::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \bnot(\btrue) \\
- & = & \bif{\btrue}{\bfalse}{\btrue} \\
- & = & \bfalse
+ &     \href{@not@#def-not}
+   = & \bif{\btrue}{\bfalse}{\btrue} \\
+ &     \href{@booleans@#cor-if-true}
+   = & \bfalse
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
  &   & \bnot(\bfalse) \\
- & = & \bif{\bfalse}{\bfalse}{\btrue} \\
- & = & \btrue
+ &     \href{@not@#def-not}
+   = & \bif{\bfalse}{\bfalse}{\btrue} \\
+ &     \href{@booleans@#cor-if-false}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -68,7 +74,8 @@ as claimed.
 $\bnot$ is an involution.
 
 :::::: theorem :::::
-[](#thm-not-involution) For all $a \in \bool$ we have $\bnot(\bnot(a)) = a$.
+[]{#thm-not-involution}
+For all $a \in \bool$ we have $\bnot(\bnot(a)) = a$.
 
 ::: proof ::::::::::
 If $a = \btrue$ we have $$\bnot(\bnot(\btrue)) = \bnot(\bfalse) = \btrue,$$ and if $a = \bfalse$, we have $$\bnot(\bnot(\bfalse)) = \bnot(\btrue) = \bfalse$$ as claimed.
@@ -88,25 +95,32 @@ If $a = \btrue$ we have $$\bnot(\bnot(\btrue)) = \bnot(\bfalse) = \btrue,$$ and 
 $\bif{\ast}{\ast}{\ast}$ interacts with $\bnot$.
 
 :::::: theorem :::::
-[](#thm-ifnot) Let $A$ be a set with $p \in \bool$ and $a,b \in A$. We have $$\bif{\bnot(p)}{a}{b} = \bif{p}{b}{a}.$$
+[]{#thm-ifnot}
+Let $A$ be a set with $p \in \bool$ and $a,b \in A$. We have $$\bif{\bnot(p)}{a}{b} = \bif{p}{b}{a}.$$
 
 ::: proof ::::::::::
 If $p = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bif{\bnot(p)}{a}{b} \\
  & = & \bif{\bnot(\btrue)}{a}{b} \\
- & = & \bif{\bfalse}{a}{b} \\
- & = & b \\
- & = & \bif{\btrue}{b}{a} \\
- & = & \bif{p}{b}{a},
+ &     \href{@not@#thm-not-true}
+   = & \bif{\bfalse}{a}{b} \\
+ &     \href{@booleans@#cor-if-false}
+   = & b \\
+ &     \href{@booleans@#cor-if-true}
+   = & \bif{\btrue}{b}{a} \\
+ & = & \bif{p}{b}{a}
 \end{eqnarray*}$$
 and if $p = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bif{\bnot(p)}{a}{b} \\
  & = & \bif{\bnot(\bfalse)}{a}{b} \\
- & = & \bif{\btrue}{a}{b} \\
- & = & a \\
- & = & \bif{\bfalse}{b}{a} \\
+ &     \href{@not@#thm-not-false}
+   = & \bif{\btrue}{a}{b} \\
+ &     \href{@booleans@#cor-if-true}
+   = & a \\
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{\bfalse}{b}{a} \\
  & = & \bif{p}{b}{a},
 \end{eqnarray*}$$
 as needed.
