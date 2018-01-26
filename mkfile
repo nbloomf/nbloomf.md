@@ -322,9 +322,9 @@ sniff-amd-rewrite:VQ:
     | sed 's/     \\hyp{\([^}]*\)}/\1/' \
     | sed 's/     \\let{\([^}]*\)}/\1/' \
     | sed 's/[ ]*$//' \
-    | paste - - - - | tee out1.txt \
+    | paste - - - - \
     | awk -F"\t" '{print $2 "\t" $3 "\t" $1 "\t" $4}' \
-    | sed -f amd-rules.txt | tee out.txt \
+    | sed -f amd-rules.txt \
     | rewrite-term \
     || true )
   if [ -z "$REWRITE" ]; then

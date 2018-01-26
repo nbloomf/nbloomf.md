@@ -92,25 +92,29 @@ $\bif{\ast}{\ast}{\ast}$ enjoys some other nice properties. For example, it inte
 Let $A$ and $B$ be sets with $f : A \rightarrow B$ a map. For all $p \in \bool$ and $u,v \in A$, we have $$f(\bif{p}{u}{v}) = \bif{p}{f(u)}{f(v)}.$$
 
 ::: proof ::::::::::
-If $p = \btrue$, we have
+If $\p = \btrue$, we have
 $$\begin{eqnarray*}
- &   & f(\bif{p}{u}{v}) \\
- & = & f(\bif{\btrue}{u}{v}) \\
+ &   & f(\bif{\p}{u}{v}) \\
+ &     \let{\p = \btrue}
+   = & f(\bif{\btrue}{u}{v}) \\
  &     \href{@booleans@#cor-if-true}
    = & f(u) \\
  &     \href{@booleans@#cor-if-true}
    = & \bif{\btrue}{f(u)}{f(v)} \\
- & = & \bif{p}{f(u)}{f(v)}
+ &     \let{\p = \btrue}
+   = & \bif{\p}{f(u)}{f(v)}
 \end{eqnarray*}$$
 as claimed. If $p = \bfalse$, we have
 $$\begin{eqnarray*}
- &   & f(\bif{p}{u}{v}) \\
- & = & f(\bif{\bfalse}{u}{v}) \\
+ &   & f(\bif{\p}{u}{v}) \\
+ &     \let{\p = \bfalse}
+   = & f(\bif{\bfalse}{u}{v}) \\
  &     \href{@booleans@#cor-if-false}
    = & f(v) \\
  &     \href{@booleans@#cor-if-false}
    = & \bif{\bfalse}{f(u)}{f(v)} \\
- & = & \bif{p}{f(u)}{f(v)}
+ &     \let{\p = \bfalse}
+   = & \bif{\p}{f(u)}{f(v)}
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
