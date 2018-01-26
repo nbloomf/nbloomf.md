@@ -332,3 +332,14 @@ sniff-amd-rewrite:VQ:
     echo $( echo "$REWRITE" | wc -l ) 'problems found' | doppler lightred
     echo "$REWRITE"
   fi
+
+#-- check existence of crossrefs --#
+sniff-amd-crossref:VQ:
+  CROSS=$( grep '^ & = & ' posts/arithmetic-made-difficult/* || true )
+  if [ -z "$CROSS" ]; then
+    echo 'Cross references OK' | doppler lightgreen
+  else
+    echo 'Cross references' | doppler lightred
+    echo "$CROSS"
+    echo #( echo "$CROSS" | wc -l ) 'problems found' | doppler lightred
+  fi
