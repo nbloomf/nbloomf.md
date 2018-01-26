@@ -141,6 +141,7 @@ We define $\prev : \nats \rightarrow \nats$ by $$\prev = \either(\const(\zero),\
 Now $\unnext$, $\prev$, and $\iszero$ have some useful properties.
 
 :::::: theorem :::::
+[]{@unary@#thm-prev-zero}[]{@unary@#thm-prev-next}[]{@unary@#thm-iszero-zero}[]{@unary@#thm-iszero-next}
 1. $\unnext(\zero) = \lft(\ast)$.
 2. $\unnext(\next(n)) = \rgt(n)$.
 3. $\prev(\zero) = \zero$.

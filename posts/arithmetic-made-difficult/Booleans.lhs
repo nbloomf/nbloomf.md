@@ -20,13 +20,15 @@ Before we think about numbers or writing programs, let's start by nailing down s
 We're going to characterize the boolean values true and false in a roundabout way. First, we define a kind of algebra.
 
 :::::: definition ::
-[](#def-doubly-pointed-set) A *doubly-pointed set* is a set $A$ with two (not necessarily distinct) distinguished elements $a_t, a_f \in A$. If $A$ and $B$ are doubly-pointed sets with distinguished elements $a_t, a_f \in A$ and $b_t, b_f \in B$, a map $\theta : A \rightarrow B$ is called a *doubly-pointed homomorphism* if $\theta(a_t) = b_t$ and $\theta(a_f) = b_f$.
+[]{#def-doubly-pointed-set}
+A *doubly-pointed set* is a set $A$ with two (not necessarily distinct) distinguished elements $a_t, a_f \in A$. If $A$ and $B$ are doubly-pointed sets with distinguished elements $a_t, a_f \in A$ and $b_t, b_f \in B$, a map $\theta : A \rightarrow B$ is called a *doubly-pointed homomorphism* if $\theta(a_t) = b_t$ and $\theta(a_f) = b_f$.
 ::::::::::::::::::::
 
 As algebras go, doubly-pointed sets are almost as weak as they come. We can see shades of the boolean values there -- "true" and "false" can be thought of as distinguished elements  in a doubly-pointed set. And indeed we'll do that. But the booleans are not just any doubly-pointed set; they are the *smallest* such set in a precise sense.
 
 :::::: definition ::
-[]{#def-bool}[]{#cor-if-true}[]{#cor-if-false} There is a special doubly-pointed set, denoted $\bool$, with distinguished elements $\btrue$ and $\bfalse$, with the property that if $A$ is a doubly-pointed set with distinguished elements $a_t, a_f$, then there is a *unique* doubly-pointed homomorphism $\Theta : \bool \rightarrow A$. We denote this $\Theta$ by $$\Theta(p) = \bif{p}{a_t}{a_f}.$$ To be clear, we have $$\bif{\btrue}{a_t}{a_f} = a_t$$ and $$\bif{\bfalse}{a_t}{a_f} = a_f.$$
+[]{#def-bool}[]{#cor-if-true}[]{#cor-if-false}
+There is a special doubly-pointed set, denoted $\bool$, with distinguished elements $\btrue$ and $\bfalse$, with the property that if $A$ is a doubly-pointed set with distinguished elements $a_t, a_f$, then there is a *unique* doubly-pointed homomorphism $\Theta : \bool \rightarrow A$. We denote this $\Theta$ by $$\Theta(p) = \bif{p}{a_t}{a_f}.$$ To be clear, we have $$\bif{\btrue}{a_t}{a_f} = a_t$$ and $$\bif{\bfalse}{a_t}{a_f} = a_f.$$
 ::::::::::::::::::::
 
 What makes the booleans special among doubly-pointed sets is this unique map, which looks suspiciously like the traditional "if-then-else" construct, because that's exactly what it is.
@@ -117,7 +119,8 @@ as claimed.
 Nested $\bif{\ast}{\ast}{\ast}$s commute (sort of).
 
 :::::: theorem :::::
-[](#thm-ifnest) Let $A$ be a set with $p,q \in \bool$ and $a,b,c,d \in A$. Then we have
+[]{#thm-ifnest}
+Let $A$ be a set with $p,q \in \bool$ and $a,b,c,d \in A$. Then we have
 $$\begin{eqnarray*}
  &   & \bif{p}{\bif{q}{a}{b}}{\bif{q}{c}{d}} \\
  & = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}}.
@@ -192,7 +195,8 @@ as claimed.
 Nested ifs on the same boolean can be pruned.
 
 :::::: theorem :::::
-[](#thm-ifprune) Let $A$ be a set with $p \in \bool$ and $a,b,c \in A$. We have the following.
+[]{#thm-if-prune-true}[]{#thm-if-prune-false}
+Let $A$ be a set with $p \in \bool$ and $a,b,c \in A$. We have the following.
 
 1. $\bif{p}{\bif{p}{a}{b}}{c} = \bif{p}{a}{c}$
 2. $\bif{p}{a}{\bif{p}{b}{c}} = \bif{p}{a}{c}$
@@ -251,6 +255,7 @@ as claimed.
 $\bif{\ast}{\ast}{\ast}$ is sort of commutative.
 
 :::::: theorem :::::
+[]{#thm-if-commute-true}[]{#thm-if-commute-false}
 Let $A$ be a set. For all $p,q \in \bool$ and $a,b \in A$, we have the following.
 
 1. $\bif{p}{a}{\bif{q}{a}{b}} = \bif{q}{a}{\bif{p}{a}{b}}$
@@ -260,7 +265,9 @@ Let $A$ be a set. For all $p,q \in \bool$ and $a,b \in A$, we have the following
 1. If $p = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bif{p}{a}{\bif{q}{a}{b}} \\
- & = & a \\
+ & = & \bif{\btrue}{a}{\bif{q}{a}{b}} \\
+ &     \href{@booleans@#cor-if-true}
+   = & a \\
  & = & \bif{q}{a}{a} \\
  & = & \bif{q}{a}{\bif{p}{a}{c}}
 \end{eqnarray*}$$

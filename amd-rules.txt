@@ -4,6 +4,11 @@
 s|===@booleans@#cor-if-true===|\\bif{\\btrue}{a}{b} = a|
 s|===@booleans@#cor-if-false===|\\bif{\\bfalse}{a}{b} = b|
 s|===@booleans@#thm-iffunc===|\\bif{p}{f(u)}{f(v)} = f(\bif{p}{u}{v})|
+s|===@booleans@#thm-ifnest===|\\bif{p}{\\bif{q}{a}{b}}{\\bif{q}{c}{d}} = \bif{q}{\\bif{p}{a}{c}}{\\bif{p}{b}{d}}|
+s|===@booleans@#thm-if-prune-true===|\\bif{p}{\\bif{p}{a}{b}}{c} = \\bif{p}{a}{c}|
+s|===@booleans@#thm-if-prune-false===|\\bif{p}{a}{\\bif{p}{b}{c}} = \\bif{p}{a}{c}|
+s|===@booleans@#thm-if-commute-true===|\\bif{p}{\\bif{q}{a}{b}}{b} = \\bif{q}{\\bif{p}{a}{b}}{b}|
+s|===@booleans@#thm-if-commute-false===|\\bif{p}{a}{\\bif{q}{a}{b}} = \\bif{q}{a}{\\bif{p}{a}{b}}|
 #====================#
 #--- not ------------#
 #====================#
@@ -12,6 +17,13 @@ s|===@not@#thm-not-true===|\\bnot(\\btrue) = \\bfalse|
 s|===@not@#thm-not-false===|\\bnot(\\bfalse) = \\btrue|
 s|===@not@#thm-not-involution===|\\bnot(p) = p|
 s|===@not@#thm-ifnot===|\\bif{\\bnot(p)}{a}{b} = \bif{p}{b}{a}|
+#====================#
+#--- unary ----------#
+#====================#
+s|===@unary@#thm-prev-zero===|\\prev(\\zero) = \\zero|
+s|===@unary@#thm-prev-next===|\\prev(\\next(a)) = a|
+s|===@unary@#thm-iszero-zero===|\\iszero(\\zero) = \\btrue|
+s|===@unary@#thm-iszero-next===|\\iszero(\\next(a)) = \\bfalse|
 #====================#
 #--- plus -----------#
 #====================#
@@ -33,3 +45,12 @@ s|===@times@#thm-times-one-right===|\\ntimes(a,\\next(\\zero)) = a|
 s|===@times@#thm-times-commutative===|\\ntimes(a,b) = \\ntimes(b,a)|
 s|===@times@#thm-times-plus-distribute-left===|\\ntimes(a,\\nplus(b,c)) = \\nplus(\\ntimes(a,b),\\ntimes(a,c))|
 s|===@times@#thm-times-plus-distribute-right===|\\ntimes(\\nplus(a,b),c) = \\nplus(\\ntimes(a,c),\\ntimes(b,c))|
+#====================#
+#--- minus ----------#
+#====================#
+s|===@minus@#cor-minus-up-zero===|\\nminus(\\zero,b) = \\bif{\\iszero(b)}{\\rgt(\\zero)}{\\lft(\\ast)}|
+s|===@minus@#cor-minus-up-next===|\\nminus(\\next(a),b) = \\bif{\\iszero(b)}{\\rgt(\\next(a))}{\\nminus(a,\\prev(b))}|
+s|===@minus@#thm-minus-nat-zero===|\\nminus(a,\\zero) = \rgt(a)|
+s|===@minus@#thm-minus-zero-next===|\\nminus(\\zero,\\next(a)) = \\lft(\\ast)|
+s|===@minus@#thm-minus-next-cancel===|\\nminus(\\next(a),\\next(b)) = \\nminus(a,b)|
+s|===@minus@#thm-minus-next-self===|\\nminus(a,\\next(a)) = \\lft(\\ast)|

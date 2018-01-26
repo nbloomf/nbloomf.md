@@ -68,6 +68,7 @@ In Haskell:
 Woo! Since $\nminus$ is defined in terms of bailout recursion, it is the unique solution to a system of functional equations.
 
 :::::: corollary :::
+[]{#cor-minus-up}[]{#cor-minus-up-zero}[]{#cor-minus-up-next}
 $\nminus$ is the unique map $f : \nats \times \nats \rightarrow 1 + \nats$ with the property that for all $a,b \in \nats$, we have
 $$\left\{\begin{array}{l}
  f(\zero,b) = \bif{\iszero(b)}{\rgt(\zero)}{\lft(\ast)} \\
@@ -100,6 +101,7 @@ $$\left\{\begin{array}{l}
 Here are some special cases:
 
 :::::: theorem :::::
+[]{#thm-minus-nat-zero}[]{#thm-minus-zero-next}
 For all $n \in \nats$ we have the following.
 
 1. $\nminus(n,\zero) = \rgt(n)$.
@@ -109,24 +111,33 @@ For all $n \in \nats$ we have the following.
 1. If $n = \zero$, then
 $$\begin{eqnarray*}
  &   & \nminus(\zero,\zero) \\
- & = & \bif{\iszero(\zero)}{\rgt(\zero)}{\lft(\ast)} \\
- & = & \bif{\btrue}{\rgt(\zero)}{\lft(\ast)} \\
- & = & \rgt(\zero)
+ &     \href{@minus@#cor-minus-up-zero}
+   = & \bif{\iszero(\zero)}{\rgt(\zero)}{\lft(\ast)} \\
+ &     \href{@unary@#thm-iszero-zero}
+   = & \bif{\btrue}{\rgt(\zero)}{\lft(\ast)} \\
+ &     \href{@booleans@#cor-if-true}
+   = & \rgt(\zero)
 \end{eqnarray*}$$
 as claimed. If $n = \next(m)$, we have
 $$\begin{eqnarray*}
  &   & \nminus(\next(m),\zero) \\
- & = & \bif{\iszero(\zero)}{\rgt(\next(m))}{\nminus(m,\prev(\zero))} \\
- & = & \bif{\btrue}{\rgt(\next(m))}{\nminus(m,\prev(\zero))} \\
- & = & \rgt(\next(m))
+ &     \href{@minus@#cor-minus-up-next}
+   = & \bif{\iszero(\zero)}{\rgt(\next(m))}{\nminus(m,\prev(\zero))} \\
+ &     \href{@unary@#thm-iszero-zero}
+   = & \bif{\btrue}{\rgt(\next(m))}{\nminus(m,\prev(\zero))} \\
+ &     \href{@booleans@#cor-if-true}
+   = & \rgt(\next(m))
 \end{eqnarray*}$$
 as claimed.
 2. We have
 $$\begin{eqnarray*}
  &   & \nminus(\zero,\next(n)) \\
- & = & \bif{\iszero(\next(n))}{\rgt(\zero)}{\lft(\ast)} \\
- & = & \bif{\bfalse}{\rgt(\zero)}{\lft(\ast)} \\
- & = & \lft(\ast)
+ &     \href{@minus@#cor-minus-up-zero}
+   = & \bif{\iszero(\next(n))}{\rgt(\zero)}{\lft(\ast)} \\
+ &     \href{@unary@#thm-iszero-next}
+   = & \bif{\bfalse}{\rgt(\zero)}{\lft(\ast)} \\
+ &     \href{@booleans@#cor-if-false}
+   = & \lft(\ast)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -152,16 +163,21 @@ as claimed.
 We can "cancel" $\next$s on both arguments of a $\nminus$.
 
 :::::: theorem :::::
+[]{#thm-minus-next-cancel}
 Let $a,b \in \nats$. Then we have $$\nminus(\next(b),\next(a)) = \nminus(b,a).$$
 
 ::: proof ::::::::::
 We have
 $$\begin{eqnarray*}
  &   & \nminus(\next(b),\next(a)) \\
- & = & \bif{\iszero(\next(a))}{\next(b)}{\nminus(b,\prev(\next(a)))} \\
- & = & \bif{\bfalse}{\next(b)}{\nminus(b,\prev(\next(a)))} \\
- & = & \nminus(b,\prev(\next(a))) \\
- & = & \nminus(b,a)
+ &     \href{@minus@#cor-minus-up-next}
+   = & \bif{\iszero(\next(a))}{\rgt(\next(b))}{\nminus(b,\prev(\next(a)))} \\
+ &     \href{@unary@#thm-iszero-next}
+   = & \bif{\bfalse}{\rgt(\next(b))}{\nminus(b,\prev(\next(a)))} \\
+ &     \href{@booleans@#cor-if-false}
+   = & \nminus(b,\prev(\next(a))) \\
+ &     \href{@unary@#thm-prev-next}
+   = & \nminus(b,a)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -180,14 +196,23 @@ as claimed.
 Another important special case.
 
 :::::: theorem :::::
+[]{#thm-minus-next-self}
 Let $a \in \nats$. Then we have $$\nminus(a,\next(a)) = \lft(\ast).$$
 
 ::: proof ::::::::::
-We proceed by induction on $a$. For the base case $a = \zero$ we have $$\nminus(\zero,\next(\zero)) = \lft(\ast)$$ as needed. For the inductive step, suppose the equality holds for some $a$; now
+We proceed by induction on $a$. For the base case $a = \zero$ we have
 $$\begin{eqnarray*}
- &   & \nminus(\next(a),\next(\next(a))) \\
- & = & \nminus(a,\next(a)) \\
- & = & \lft(\ast)
+ &   & \nminus(\zero,\next(\zero)) \\
+ &     \href{@minus@#thm-minus-zero-next}
+   = & \lft(\ast)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $\a$; now
+$$\begin{eqnarray*}
+ &   & \nminus(\next(\a),\next(\next(\a))) \\
+ &     \href{@minus@#thm-minus-next-cancel}
+   = & \nminus(\a,\next(\a)) \\
+ &     \hyp{\nminus(\a,\next(a)) = \lft(\ast)}
+   = & \lft(\ast)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

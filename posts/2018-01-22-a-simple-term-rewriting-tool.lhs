@@ -98,7 +98,7 @@ And some helpers:
 > 
 > parseWithIO :: String -> Parser a -> String -> IO a
 > parseWithIO loc p text = case parseWith loc p text of
->   Left msg -> putStrLn (unwords [loc,msg]) >> exitFailure
+>   Left msg -> putStrLn (unwords [loc,text,msg]) >> exitFailure
 >   Right a  -> return a
 
 And here is an example.
