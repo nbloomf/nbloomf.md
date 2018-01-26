@@ -26,6 +26,7 @@ slug: leq
 Next we'd like to nail down what it means for one natural number to be less than or equal to another. Note that while $\nplus$ and $\ntimes$ have signatures $$\nats \times \nats \rightarrow \nats,$$ "less than or equal to" (which I will abbrebiate to *leq* from now on) does not. In fact $\leq$ is typically defined as a set of pairs. To make $\leq$ computable, we will instead (try to) define it as a function with signature $$\nats \times \nats \rightarrow \bool.$$ In fact, we can make a reasonable attempt on $\nleq$ without using (explicit) recursion at all.
 
 :::::: definition ::
+[]{#dfn-leq}
 Define $\nleq : \nats \times \nats \rightarrow \bool$ by $$\nleq(a,b) = \isRgt(\nminus(b,a)).$$
 
 In Haskell:

@@ -539,6 +539,7 @@ as needed.
 We also define some helper functions which detect whether an element of $A + B$ is a $\lft$ or a $\rgt$.
 
 :::::: definition ::
+[]{#dfn-disjoint-unions-isRgt}[]{#dfn-disjoint-unions-isLft}
 Let $A$ and $B$ be sets. We define $\isLft : A + B \rightarrow \bool$ by $$\isLft = \either(\const(\btrue),\const(\bfalse))$$ and $\isRgt : A + B \rightarrow \bool$ by $$\isRgt = \either(\const(\bfalse),\const(\btrue)).$$
 
 In Haskell:
@@ -554,6 +555,7 @@ In Haskell:
 Now $\isLft$ and $\isRgt$ have some nice properties.
 
 :::::: theorem :::::
+[]{#thm-disjoint-unions-isLft-lft}[]{#thm-disjoint-unions-isLft-rgt}[]{#thm-disjoint-unions-isRgt-lft}[]{#thm-disjoint-unions-isRgt-rgt}
 Let $A$ and $B$ be sets. Then we have the following for all $a \in A$ and $b \in B$.
 
 1. $\isLft(\lft(a)) = \btrue$.

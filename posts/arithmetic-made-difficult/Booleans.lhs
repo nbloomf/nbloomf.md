@@ -27,11 +27,36 @@ A *doubly-pointed set* is a set $A$ with two (not necessarily distinct) distingu
 As algebras go, doubly-pointed sets are almost as weak as they come. We can see shades of the boolean values there -- "true" and "false" can be thought of as distinguished elements  in a doubly-pointed set. And indeed we'll do that. But the booleans are not just any doubly-pointed set; they are the *smallest* such set in a precise sense.
 
 :::::: definition ::
-[]{#def-bool}[]{#cor-if-true}[]{#cor-if-false}
-There is a special doubly-pointed set, denoted $\bool$, with distinguished elements $\btrue$ and $\bfalse$, with the property that if $A$ is a doubly-pointed set with distinguished elements $a_t, a_f$, then there is a *unique* doubly-pointed homomorphism $\Theta : \bool \rightarrow A$. We denote this $\Theta$ by $$\Theta(p) = \bif{p}{a_t}{a_f}.$$ To be clear, we have $$\bif{\btrue}{a_t}{a_f} = a_t$$ and $$\bif{\bfalse}{a_t}{a_f} = a_f.$$
+[]{#def-bool}
+There is a special doubly-pointed set, denoted $\bool$, with distinguished elements $\btrue$ and $\bfalse$, with the property that if $A$ is a doubly-pointed set with distinguished elements $a_t, a_f$, then there is a *unique* doubly-pointed homomorphism $\Theta : \bool \rightarrow A$. We denote this $\Theta$ by $$\Theta(p) = \bif{p}{a_t}{a_f}.$$
 ::::::::::::::::::::
 
 What makes the booleans special among doubly-pointed sets is this unique map, which looks suspiciously like the traditional "if-then-else" construct, because that's exactly what it is.
+
+:::::: corollary :::
+[]{#cor-if-true}[]{#cor-if-false}
+Let $(A,a_t,a_f)$ be a doubly pointed set. Then we have the following.
+
+1. $\bif{\btrue}{a_t}{a_f} = a_t$.
+2. $\bif{\bfalse}{a_t}{a_f} = a_f$.
+
+::: test :::::::::::
+
+> _test_if_true :: (Boolean b, Equal a)
+>   => b -> a -> Test (a -> a -> Bool)
+> _test_if_true p _ =
+>   testName "if(true,a,b) == a" $
+>   \x y -> eq (ifThenElse (true `withTypeOf` p) x y) x
+> 
+> 
+> _test_if_false :: (Boolean b, Equal a)
+>   => b -> a -> Test (a -> a -> Bool)
+> _test_if_false p _ =
+>   testName "if(false,a,b) == a" $
+>   \x y -> eq (ifThenElse (false `withTypeOf` p) x y) y
+
+::::::::::::::::::::
+::::::::::::::::::::
 
 This is a weird way to define $\bool$ -- but there's a really good reason for it, which we'll get into later.
 
@@ -49,21 +74,6 @@ Of course the Haskell ``Bool`` type is an instance.
 >   false = False
 > 
 >   ifThenElse p x y = if p then x else y
-
-We can test this instance. Remember the defining property of $\bif{\ast}{\ast}{\ast}$ is that it preserves distinguished points.
-
-> _test_if_true :: (Boolean b, Equal a)
->   => b -> a -> Test (a -> a -> Bool)
-> _test_if_true p _ =
->   testName "if(true,a,b) == a" $
->   \x y -> eq (ifThenElse (true `withTypeOf` p) x y) x
-> 
-> 
-> _test_if_false :: (Boolean b, Equal a)
->   => b -> a -> Test (a -> a -> Bool)
-> _test_if_false p _ =
->   testName "if(false,a,b) == a" $
->   \x y -> eq (ifThenElse (false `withTypeOf` p) x y) y
 
 It will be handy later to name these two functions from an abstract boolean set to ``Bool``.
 
@@ -141,10 +151,13 @@ $$\begin{eqnarray*}
    = & \bif{\btrue}{\bif{\btrue}{a}{c}}{\bif{p}{b}{d}} \\
  & = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
 \end{eqnarray*}$$
-as claimed. If $p = \btrue$ and $q = \bfalse$,
+as claimed. If $\p = \btrue$ and $\q = \bfalse$,
 $$\begin{eqnarray*}
- &   & \bif{p}{\bif{q}{a}{b}}{\bif{q}{c}{d}} \\
- & = & \bif{\btrue}{\bif{\bfalse}{a}{b}}{\bif{q}{c}{d}} \\
+ &   & \bif{\p}{\bif{\q}{a}{b}}{\bif{\q}{c}{d}} \\
+ &     \let{\p = \btrue}
+   = & \bif{\btrue}{\bif{\q}{a}{b}}{\bif{\q}{c}{d}} \\
+ &     \let{\q = \bfalse}
+   = & \bif{\btrue}{\bif{\bfalse}{a}{b}}{\bif{\q}{c}{d}} \\
  &     \href{@booleans@#cor-if-true}
    = & \bif{\bfalse}{a}{b} \\
  &     \href{@booleans@#cor-if-false}
@@ -152,18 +165,24 @@ $$\begin{eqnarray*}
  &     \href{@booleans@#cor-if-true}
    = & \bif{\btrue}{b}{d} \\
  &     \href{@booleans@#cor-if-false}
-   = & \bif{\bfalse}{\bif{p}{a}{c}}{\bif{\btrue}{b}{d}} \\
- & = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
+   = & \bif{\bfalse}{\bif{\p}{a}{c}}{\bif{\btrue}{b}{d}} \\
+ &     \let{\q = \bfalse}
+   = & \bif{\q}{\bif{\p}{a}{c}}{\bif{\btrue}{b}{d}} \\
+ &     \let{\p = \btrue}
+   = & \bif{\q}{\bif{\p}{a}{c}}{\bif{\p}{b}{d}} \\
 \end{eqnarray*}$$
-as claimed. If $p = \bfalse$ and $q = \btrue$,
+as claimed. If $\p = \bfalse$ and $\q = \btrue$,
 $$\begin{eqnarray*}
- &   & \bif{p}{\bif{q}{a}{b}}{\bif{q}{c}{d}} \\
- & = & \bif{\bfalse}{\bif{q}{a}{b}}{\bif{\btrue}{c}{d}} \\
+ &   & \bif{\p}{\bif{\q}{a}{b}}{\bif{\q}{c}{d}} \\
+ &     \let{\p = \bfalse}
+   = & \bif{\bfalse}{\bif{\q}{a}{b}}{\bif{\q}{c}{d}} \\
+ &     \let{\q = \btrue}
+   = & \bif{\bfalse}{\bif{\q}{a}{b}}{\bif{\btrue}{c}{d}} \\
  & = & \bif{\btrue}{c}{d} \\
  & = & c \\
  & = & \bif{\bfalse}{a}{c} \\
- & = & \bif{\btrue}{\bif{\bfalse}{a}{c}}{\bif{p}{b}{d}} \\
- & = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
+ & = & \bif{\btrue}{\bif{\bfalse}{a}{c}}{\bif{\p}{b}{d}} \\
+ & = & \bif{q}{\bif{\p}{a}{c}}{\bif{\p}{b}{d}} \\
 \end{eqnarray*}$$
 as claimed. If $p = \bfalse$ and $q = \bfalse$,
 $$\begin{eqnarray*}

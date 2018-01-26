@@ -65,7 +65,7 @@ test-info:VQ:
 
 check-info:VQ:
   echo 'amd' | doppler lightgreen
-  CHECKS=$( grep '^ &     \\h' posts/arithmetic-made-difficult/* | wc -l )
+  CHECKS=$( grep '^ &     \\' posts/arithmetic-made-difficult/* | wc -l )
   echo '  checked equalities: ' ${CHECKS} | doppler lightblue
 
 
@@ -310,7 +310,7 @@ sniff-amd-testtext:VQ:
 
 #-- check term rewrites --#
 sniff-amd-rewrite:VQ:
-  REWRITE=$( grep -n -C 1 '^ &[ ]*\\href' posts/arithmetic-made-difficult/* \
+  REWRITE=$( grep -n -C 1 '^ &     \\' posts/arithmetic-made-difficult/* \
     | sed '/^--$/d' \
     | sed 's/^[a-zA-Z\/.-]*[0-9][0-9]*-//' \
     | sed 's/^ &   & //' \
@@ -319,10 +319,12 @@ sniff-amd-rewrite:VQ:
     | sed 's/ \\\\$//' \
     | tr '&' '\n' \
     | sed 's/     \\href{\([^}]*\)}/===\1===/' \
+    | sed 's/     \\hyp{\([^}]*\)}/\1/' \
+    | sed 's/     \\let{\([^}]*\)}/\1/' \
     | sed 's/[ ]*$//' \
-    | paste - - - - \
-    | awk '{print $2 "\t" $3 "\t" $1 "\t" $4}' \
-    | sed -f amd-rules.txt \
+    | paste - - - - | tee out1.txt \
+    | awk -F"\t" '{print $2 "\t" $3 "\t" $1 "\t" $4}' \
+    | sed -f amd-rules.txt | tee out.txt \
     | rewrite-term \
     || true )
   if [ -z "$REWRITE" ]; then

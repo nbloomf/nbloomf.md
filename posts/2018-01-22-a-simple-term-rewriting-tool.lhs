@@ -12,6 +12,7 @@ tags: literate-haskell
 > import Text.ParserCombinators.Parsec
 > import System.Environment
 > import System.Exit
+> import System.IO
 
 Today we'll build a tool that applies term-rewriting rules to expressions in a simplified form of mathematical notation.
 
@@ -290,3 +291,4 @@ Now the main tool just splits each input line and verifies rewrites.
 > main = do
 >   checks <- fmap (map unTab . lines) getContents
 >   mapM_ process checks
+>   hPutStrLn stderr $ unwords [show $ length checks,"checks completed"]
