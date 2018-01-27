@@ -408,7 +408,8 @@ $$\begin{eqnarray*}
  & = & \bif{q(a)}{\bif{p(a)}{\cons(a),\filter(p)(\filter(q)(x))}{\filter(p)(\filter(q)(x))}}{\filter(p)(\filter(q)(x))} \\
  & = & \bif{p(a)}{\bif{q(a)}{\cons(a),\filter(p)(\filter(q)(x))}{\filter(p)(\filter(q)(x))}}{\filter(p)(\filter(q)(x))} \\
  & = & \bif{p(a)}{\filter(q)(\cons(a,\filter(p)(x)))}{\filter(q)(\filter(p)(x))} \\
- & = & \filter(q)(\bif{p(a)}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \filter(q)(\bif{p(a)}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
  & = & \filter(q)(\filter(p)(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.

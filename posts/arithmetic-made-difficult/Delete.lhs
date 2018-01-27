@@ -500,7 +500,8 @@ $$\begin{eqnarray*}
  &     \href{@booleans@#thm-ifnest}
    = & \bif{\beq(a,b)}{\bif{\beq(a,c)}{\delete(a,x)}{\cons(c,\delete(a,x))}}{\bif{\beq(a,c)}{\snoc(b,\delete(a,x))}{\snoc(b,\cons(c,\delete(a,x)))}} \\
  & = & \bif{\beq(a,b)}{\delete(a,\cons(c,x))}{\bif{\beq(a,c)}{\snoc(b,\delete(a,x))}{\snoc(b,\cons(c,\delete(a,x)))}} \\
- & = & \bif{\beq(a,b)}{\delete(a,\cons(c,x))}{\snoc(b,\bif{\beq(a,c)}{\delete(a,x)}{\cons(c,\delete(a,x))})} \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \bif{\beq(a,b)}{\delete(a,\cons(c,x))}{\snoc(b,\bif{\beq(a,c)}{\delete(a,x)}{\cons(c,\delete(a,x))})} \\
  & = & \bif{\beq(a,b)}{\delete(a,\cons(c,x))}{\snoc(b,\delete(a,\cons(c,x)))} \\
 \end{eqnarray*}$$
 as needed.
@@ -540,7 +541,8 @@ $$\begin{eqnarray*}
  & = & \bif{\beq(a,b)}{\delete(a,\rev(x))}{\snoc(b,\delete(a,\rev(x)))} \\
  & = & \bif{\beq(a,b)}{\rev(\delete(a,x))}{\snoc(b,\rev(\delete(a,x)))} \\
  & = & \bif{\beq(a,b)}{\rev(\delete(a,x))}{\rev(\cons(b,\delete(a,x)))} \\
- & = & \rev(\bif{\beq(a,b)}{\delete(a,x)}{\cons(b,\delete(a,x))}) \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \rev(\bif{\beq(a,b)}{\delete(a,x)}{\cons(b,\delete(a,x))}) \\
  & = & \rev(\delete(a,\cons(b,x)))
 \end{eqnarray*}$$
 as needed.
@@ -578,7 +580,8 @@ $$\begin{eqnarray*}
  & = & \cat(\bif{\beq(a,b)}{\delete(a)(x)}{\snoc(b,\delete(a)(x))},\delete(a)(y)) \\
  & = & \bif{\beq(a,b)}{\cat(\delete(a)(x),\delete(a)(y))}{\cat(\snoc(b,\delete(a)(x)),\delete(a)(y))} \\
  & = & \bif{\beq(a,b)}{\cat(\delete(a)(x),\delete(a)(y))}{\cat(\delete(a)(x),\cons(b,\delete(a)(y)))} \\
- & = & \cat(\delete(a)(x),\bif{\beq(a,b)}{\delete(a)(y)}{\cons(b,\delete(a)(y))}) \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \cat(\delete(a)(x),\bif{\beq(a,b)}{\delete(a)(y)}{\cons(b,\delete(a)(y))}) \\
  & = & \cat(\delete(a)(x),\delete(a)(\cons(b,y)))
 \end{eqnarray*}$$
 as needed.

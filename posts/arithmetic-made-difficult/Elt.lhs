@@ -381,8 +381,10 @@ $$\begin{eqnarray*}
  & = & \bif{\beq(a,b)}{\bif{p(b)}{\btrue}{\band(p(a),\elt(a,x))}}{\band(p(a),\elt(a,x))} \\
  & = & \bif{\beq(a,b)}{\bif{p(a)}{\btrue}{\band(p(a),\elt(a,x))}}{\band(p(a),\elt(a,x))} \\
  & = & \bif{\beq(a,b)}{\bif{p(a)}{\band(p(a),\btrue)}{\band(p(a),\elt(a,x))}}{\band(p(a),\elt(a,x))} \\
- & = & \bif{\beq(a,b)}{\band(p(a),\bif{p(a)}{\btrue}{\elt(a,x)})}{\band(p(a),\elt(a,x))} \\
- & = & \band(p(a),\bif{\beq(a,b)}{\bif{p(a)}{\btrue}{\elt(a,x)}}{\elt(a,x)}) \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \bif{\beq(a,b)}{\band(p(a),\bif{p(a)}{\btrue}{\elt(a,x)})}{\band(p(a),\elt(a,x))} \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \band(p(a),\bif{\beq(a,b)}{\bif{p(a)}{\btrue}{\elt(a,x)}}{\elt(a,x)}) \\
  &     \href{@booleans@#thm-if-commute-true}
    = & \band(p(a),\bif{p(a)}{\bif{\beq(a,b)}{\btrue}{\elt(a,x)}}{\elt(a,x)}) \\
  & = & \band(p(a),\bif{p(a)}{\elt(a,\cons(b,x))}{\elt(a,x)}) \\

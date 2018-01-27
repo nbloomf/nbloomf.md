@@ -184,7 +184,8 @@ $$\begin{eqnarray*}
  &   & \nmax(\next(a),\next(b)) \\
  & = & \bif{\nleq(\next(a),\next(b))}{\next(b)}{\next(a)} \\
  & = & \bif{\nleq(a,b)}{\next(b)}{\next(a)} \\
- & = & \next(\bif{\nleq(a,b)}{b}{a}) \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \next(\bif{\nleq(a,b)}{b}{a}) \\
  & = & \next(\nmax(a,b))
 \end{eqnarray*}$$
 as claimed.
@@ -193,7 +194,8 @@ $$\begin{eqnarray*}
  &   & \nmax(\nplus(c,a),\nplus(c,b)) \\
  & = & \bif{\nleq(\nplus(c,a),\nplus(c,b))}{\nplus(c,b)}{\nplus(c,a)} \\
  & = & \bif{\nleq(a,b)}{\nplus(c,b)}{\nplus(c,a)} \\
- & = & \nplus(c,\bif{\nleq(a,b)}{b}{a}) \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \nplus(c,\bif{\nleq(a,b)}{b}{a}) \\
  & = & \nplus(c,\nmax(a,b))
 \end{eqnarray*}$$
 as claimed.
@@ -202,7 +204,8 @@ $$\begin{eqnarray*}
  &   & \nmin(\next(a),\next(b)) \\
  & = & \bif{\nleq(\next(a),\next(b))}{\next(a)}{\next(b)} \\
  & = & \bif{\nleq(a,b)}{\next(a)}{\next(b)} \\
- & = & \next(\bif{\nleq(a,b)}{a}{b}) \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \next(\bif{\nleq(a,b)}{a}{b}) \\
  & = & \next(\nmin(a,b))
 \end{eqnarray*}$$
 as claimed.
@@ -211,7 +214,8 @@ $$\begin{eqnarray*}
  &   & \nmin(\nplus(c,a),\nplus(c,b)) \\
  & = & \bif{\nleq(\nplus(c,a),\nplus(c,b))}{\nplus(c,a)}{\nplus(c,b)} \\
  & = & \bif{\nleq(a,b)}{\nplus(c,a)}{\nplus(c,b)} \\
- & = & \nplus(c,\bif{\nleq(a,b)}{a}{b}) \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \nplus(c,\bif{\nleq(a,b)}{a}{b}) \\
  & = & \nplus(c,\nmin(a,b))
 \end{eqnarray*}$$
 as claimed.
@@ -274,7 +278,8 @@ $$\begin{eqnarray*}
  & = & \bif{\nleq(\ntimes(c,a),\ntimes(c,b))}{\ntimes(c,b)}{\ntimes(c,a)} \\
  & = & \bif{\nleq(\ntimes(\next(d),a),\ntimes(\next(d),b))}{\ntimes(c,b)}{\ntimes(c,a)} \\
  & = & \bif{\nleq(a,b)}{\ntimes(c,b)}{\ntimes(c,a)} \\
- & = & \ntimes(c,\bif{\nleq(a,b)}{b}{a}) \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \ntimes(c,\bif{\nleq(a,b)}{b}{a}) \\
  & = & \ntimes(c,\nmax(a,b))
 \end{eqnarray*}$$
 as claimed.
@@ -294,7 +299,8 @@ $$\begin{eqnarray*}
  & = & \bif{\nleq(\ntimes(c,a),\ntimes(c,b))}{\ntimes(c,a)}{\ntimes(c,b)} \\
  & = & \bif{\nleq(\ntimes(\next(d),a),\ntimes(\next(d),b))}{\ntimes(c,a)}{\ntimes(c,b)} \\
  & = & \bif{\nleq(a,b)}{\ntimes(c,b)}{\ntimes(c,a)} \\
- & = & \ntimes(c,\bif{\nleq(a,b)}{b}{a}) \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \ntimes(c,\bif{\nleq(a,b)}{b}{a}) \\
  & = & \ntimes(c,\nmin(a,b))
 \end{eqnarray*}$$
 as claimed.
