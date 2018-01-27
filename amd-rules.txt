@@ -3,6 +3,7 @@
 #=======================#
 @booleans@#cor-if-true	\\bif{\\btrue}{a}{b} = a
 @booleans@#cor-if-false	\\bif{\\bfalse}{a}{b} = b
+@booleans@#thm-if-same	\\bif{p}{a}{a} = a
 @booleans@#thm-iffunc	\\bif{p}{f(u)}{f(v)} = f(\\bif{p}{u}{v})
 @booleans@#thm-ifnest	\\bif{p}{\\bif{q}{a}{b}}{\\bif{q}{c}{d}} = \\bif{q}{\\bif{p}{a}{c}}{\\bif{p}{b}{d}}
 @booleans@#thm-if-prune-true	\\bif{p}{\\bif{p}{a}{b}}{c} = \\bif{p}{a}{c}

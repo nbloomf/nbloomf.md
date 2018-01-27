@@ -85,7 +85,43 @@ It will be handy later to name these two functions from an abstract boolean set 
 
 There are many other instances which differ only by the labels of $\btrue$ and $\bfalse$, and depending on the context, a different concrete instance might make more sense. We could call the distinguished elements of $\bool$ "Yes/No", "Present/Absent", or something else, and the essence of booleanness would not change.
 
-$\bif{\ast}{\ast}{\ast}$ enjoys some other nice properties. For example, it interacts with function application.
+$\bif{\ast}{\ast}{\ast}$ enjoys some other nice properties. For instance, $\bif{p}{a}{a} = \btrue$.
+
+:::::: theorem :::::
+[]{#thm-if-same}
+Let $A$ be a set with $a \in A$. If $p \in \bool$, we have $$\bif{p}{a}{a} = a.$$
+
+::: proof ::::::::::
+If $\p = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \bif{\p}{a}{a} \\
+ &     \let{\p = \btrue}
+   = & \bif{\btrue}{a}{a} \\
+ &     \href{@booleans@#cor-if-true}
+   = & a
+\end{eqnarray*}$$
+and if $\p = \bfalse$, we have
+$$\begin{eqnarray*}
+ &   & \bif{\p}{a}{a} \\
+ &     \let{\p = \bfalse}
+   = & \bif{\bfalse}{a}{a} \\
+ &     \href{@booleans@#cor-if-false}
+   = & a
+\end{eqnarray*}$$
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_if_same :: (Equal a, Boolean b)
+>   => b -> a -> Test (b -> a -> Bool)
+> _test_if_same _ _ =
+>   testName "if(p,a,a) == a" $
+>   \p a -> eq (ifThenElse p a a) a
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+$\bif{\ast}{\ast}{\ast}$ interacts with function application.
 
 :::::: theorem :::::
 []{#thm-iffunc}
@@ -201,19 +237,25 @@ $$\begin{eqnarray*}
  &     \let{\q = \btrue}
    = & \bif{\q}{\bif{\p}{a}{c}}{\bif{\p}{b}{d}} \\
 \end{eqnarray*}$$
-as claimed. If $p = \bfalse$ and $q = \bfalse$,
+as claimed. If $\p = \bfalse$ and $\q = \bfalse$,
 $$\begin{eqnarray*}
- &   & \bif{p}{\bif{q}{a}{b}}{\bif{q}{c}{d}} \\
- & = & \bif{\bfalse}{\bif{q}{a}{b}}{\bif{\bfalse}{c}{d}} \\
+ &   & \bif{\p}{\bif{\q}{a}{b}}{\bif{\q}{c}{d}} \\
+ &     \let{\p = \bfalse}
+   = & \bif{\bfalse}{\bif{\q}{a}{b}}{\bif{\q}{c}{d}} \\
  &     \href{@booleans@#cor-if-false}
+   = & \bif{\q}{c}{d} \\
+ &     \let{\q = \bfalse}
    = & \bif{\bfalse}{c}{d} \\
  &     \href{@booleans@#cor-if-false}
    = & d \\
  &     \href{@booleans@#cor-if-false}
    = & \bif{\bfalse}{b}{d} \\
+ &     \let{\p = \bfalse}
+   = & \bif{\p}{b}{d} \\
  &     \href{@booleans@#cor-if-false}
-   = & \bif{\bfalse}{\bif{p}{a}{c}}{\bif{\bfalse}{b}{d}} \\
- & = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
+   = & \bif{\bfalse}{\bif{\p}{a}{c}}{\bif{\p}{b}{d}} \\
+ &     \let{\q = \bfalse}
+   = & \bif{\q}{\bif{\p}{a}{c}}{\bif{\p}{b}{d}} \\
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -263,22 +305,25 @@ $$\begin{eqnarray*}
    = & \bif{\p}{a}{c}
 \end{eqnarray*}$$
 as needed.
-2. If $p = \btrue$, we have
+2. If $\p = \btrue$, we have
 $$\begin{eqnarray*}
- &   & \bif{p}{a}{\bif{p}{b}{c}} \\
- & = & \bif{\btrue}{a}{\bif{p}{b}{c}} \\
+ &   & \bif{\p}{a}{\bif{\p}{b}{c}} \\
+ &     \let{\p = \btrue}
+   = & \bif{\btrue}{a}{\bif{\p}{b}{c}} \\
  &     \href{@booleans@#cor-if-true}
    = & a \\
  &     \href{@booleans@#cor-if-true}
    = & \bif{\btrue}{a}{c} \\
- & = & \bif{p}{a}{c}
+ &     \let{\p = \btrue}
+   = & \bif{\p}{a}{c}
 \end{eqnarray*}$$
-as claimed, and if $p = \bfalse$, we have
+as claimed, and if $\p = \bfalse$, we have
 $$\begin{eqnarray*}
- &   & \bif{p}{a}{\bif{p}{b}{c}} \\
- & = & \bif{p}{a}{\bif{\bfalse}{b}{c}} \\
+ &   & \bif{\p}{a}{\bif{\p}{b}{c}} \\
+ &     \let{\p = \bfalse}
+   = & \bif{\p}{a}{\bif{\bfalse}{b}{c}} \\
  &     \href{@booleans@#cor-if-false}
-   = & \bif{p}{a}{c}
+   = & \bif{\p}{a}{c}
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -311,22 +356,53 @@ Let $A$ be a set. For all $p,q \in \bool$ and $a,b \in A$, we have the following
 2. $\bif{p}{\bif{q}{a}{b}}{b} = \bif{q}{\bif{p}{a}{b}}{b}$
 
 ::: proof ::::::::::
-1. If $p = \btrue$, we have
+1. If $\p = \btrue$, we have
 $$\begin{eqnarray*}
- &   & \bif{p}{a}{\bif{q}{a}{b}} \\
- & = & \bif{\btrue}{a}{\bif{q}{a}{b}} \\
+ &   & \bif{\p}{a}{\bif{\q}{a}{b}} \\
+ &     \let{\p = \btrue}
+   = & \bif{\btrue}{a}{\bif{\q}{a}{b}} \\
  &     \href{@booleans@#cor-if-true}
    = & a \\
- & = & \bif{q}{a}{a} \\
- & = & \bif{q}{a}{\bif{p}{a}{c}}
+ &     \href{@booleans@#thm-if-same}
+   = & \bif{\q}{a}{a} \\
+ &     \href{@booleans@#cor-if-true}
+   = & \bif{\q}{a}{\bif{\btrue}{a}{c}}
+ &     \let{\p = \btrue}
+   = & \bif{\q}{a}{\bif{\p}{a}{c}}
 \end{eqnarray*}$$
-as claimed. Likewise, the equality holds if $q = \btrue$. Suppose then that $p = q = \bfalse$; now
+as claimed. If $\q = \btrue$, we have
 $$\begin{eqnarray*}
- &   & \bif{p}{a}{\bif{q}{a}{b}} \\
- & = & \bif{q}{a}{b} \\
- & = & b \\
- & = & \bif{p}{a}{b} \\
- & = & \bif{q}{a}{\bif{p}{a}{b}}
+ &   & \bif{\q}{a}{\bif{\p}{a}{b}} \\
+ &     \let{\q = \btrue}
+   = & \bif{\btrue}{a}{\bif{\p}{a}{b}} \\
+ &     \href{@booleans@#cor-if-true}
+   = & a \\
+ &     \href{@booleans@#thm-if-same}
+   = & \bif{\p}{a}{a} \\
+ &     \href{@booleans@#cor-if-true}
+   = & \bif{\p}{a}{\bif{\btrue}{a}{c}}
+ &     \let{\q = \btrue}
+   = & \bif{\p}{a}{\bif{\q}{a}{c}}
+\end{eqnarray*}$$
+as claimed. Suppose then that $\p = \q = \bfalse$; now
+$$\begin{eqnarray*}
+ &   & \bif{\p}{a}{\bif{\q}{a}{b}} \\
+ &     \let{\p = \bfalse}
+   = & \bif{\bfalse}{a}{\bif{\q}{a}{b}} \\
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{\q}{a}{b} \\
+ &     \let{\q = \bfalse}
+   = & \bif{\bfalse}{a}{b} \\
+ &     \href{@booleans@#cor-if-false}
+   = & b \\
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{\bfalse}{a}{b} \\
+ &     \let{\p = \bfalse}
+   = & \bif{\p}{a}{b} \\
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{\bfalse}{a}{\bif{\p}{a}{b}} \\
+ &     \let{\q = \bfalse}
+   = & \bif{\q}{a}{\bif{\p}{a}{b}}
 \end{eqnarray*}$$
 as claimed.
 2. We have
@@ -433,6 +509,7 @@ Suite:
 > 
 >   runTest args (_test_if_true p x)
 >   runTest args (_test_if_false p x)
+>   runTest args (_test_if_same p x)
 >   runTest args (_test_if_func p x)
 >   runTest args (_test_if_nest p x)
 >   runTest args (_test_if_prune_left p x)
