@@ -374,7 +374,8 @@ $$\begin{eqnarray*}
  &   & \elt(a,\delete(b,\nil)) \\
  & = & \elt(a,\nil) \\
  & = & \bfalse \\
- & = & \bif{\beq(a,b)}{\bfalse}{\bfalse} \\
+ &     \href{@booleans@#thm-if-same}
+   = & \bif{\beq(a,b)}{\bfalse}{\bfalse} \\
  & = & \bif{\beq(a,b)}{\bfalse}{\elt(a,\nil)}
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ and $b$ for some $x$ and let $c \in A$. If $b = c$ and $a \neq c$, we have

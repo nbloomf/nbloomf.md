@@ -133,7 +133,8 @@ $$\begin{eqnarray*}
  & = & \bif{p(a)}{\prefix(\cons(a,\takeWhile(p,x)),\cons(a,x))}{\prefix(\nil,\cons(a,x))} \\
  & = & \bif{p(a)}{\prefix(\takeWhile(p,x),x)}{\btrue} \\
  & = & \bif{p(a)}{\btrue}{\btrue} \\
- & = & \btrue
+ &     \href{@booleans@#thm-if-same}
+   = & \btrue
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -336,7 +337,8 @@ $$\begin{eqnarray*}
  & = & \suffix(\bif{p(a)}{\dropWhile(p)(x)}{\cons(a,x)},\cons(a,x)) \\
  & = & \bif{p(a)}{\suffix(\dropWhile(p)(x),\cons(a,x))}{\suffix(\cons(a,x),\cons(a,x))} \\
  & = & \bif{p(a)}{\btrue}{\btrue} \\
- & = & \btrue
+ &     \href{@booleans@#thm-if-same}
+   = & \btrue
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -371,7 +373,8 @@ $$\begin{eqnarray*}
  & = & \bif{p(a)}{\cat(\cons(a,\takeWhile(p)(x)),\dropWhile(p)(x))}{\cat(\nil,\cons(a,x))} \\
  & = & \bif{p(a)}{\cons(a,\cat(\takeWhile(p)(x)),\dropWhile(p)(x))}{\cons(a,x)} \\
  & = & \bif{p(a)}{\cons(a,x)}{\cons(a,x)} \\
- & = & \cons(a,x)
+ &     \href{@booleans@#thm-if-same}
+   = & \cons(a,x)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

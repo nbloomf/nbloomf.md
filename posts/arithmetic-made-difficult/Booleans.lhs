@@ -410,7 +410,8 @@ $$\begin{eqnarray*}
  &   & \bif{\p}{\bif{\q}{a}{b}}{b} \\
  & = & \bif{\bfalse}{\bif{\q}{a}{b}}{b} \\
  & = & b \\
- & = & \bif{\q}{b}{b} \\
+ &     \href{@booleans@#thm-if-same}
+   = & \bif{\q}{b}{b} \\
  & = & \bif{\q}{\bif{\bfalse}{a}{b}}{b} \\
  & = & \bif{\q}{\bif{\p}{a}{b}}{b}
 \end{eqnarray*}$$
@@ -419,7 +420,8 @@ $$\begin{eqnarray*}
  &   & \bif{\p}{\bif{\q}{a}{b}}{b} \\
  & = & \bif{\p}{\bif{\bfalse}{a}{b}}{b} \\
  & = & \bif{\p}{b}{b} \\
- & = & b \\
+ &     \href{@booleans@#thm-if-same}
+   = & b \\
  & = & \bif{\bfalse}{\bif{\p}{a}{b}}{b} \\
  & = & \bif{\q}{\bif{\p}{a}{b}}{b}
 \end{eqnarray*}$$

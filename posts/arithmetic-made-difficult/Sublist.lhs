@@ -152,7 +152,8 @@ $$\begin{eqnarray*}
  & = & \bif{\beq(a,b)}{\sublist(\nil,\snoc(a,y))}{\sublist(\cons(a,\nil),\snoc(a,y))} \\
  & = & \bif{\beq(a,b)}{\btrue}{\sublist(\snoc(a,\nil),\snoc(a,y))} \\
  & = & \bif{\beq(a,b)}{\btrue}{\btrue} \\
- & = & \btrue
+ &     \href{@booleans@#thm-if-same}
+   = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step (on $x$), suppose the equality holds for some $x$ and let $c \in A$. We need to show that $$\sublist(\cons(c,x),y) = \sublist(\snoc(a,\cons(c,x)),\snoc(a,y))$$ for all $y$; we again proceed by list induction on $y$. For the base case $y = \nil$, note that
 $$\begin{eqnarray*}
@@ -168,7 +169,8 @@ $$\begin{eqnarray*}
  & = & \sublist(\cons(c,\snoc(a,x)),\cons(a,\nil)) \\
  & = & \bif{\beq(c,a)}{\sublist(\snoc(a,x),\nil)}{\sublist(\cons(c,\snoc(a,x)),\nil)} \\
  & = & \bif{\beq(c,a)}{\bfalse}{\bfalse} \\
- & = & \bfalse
+ &     \href{@booleans@#thm-if-same}
+   = & \bfalse
 \end{eqnarray*}$$
 as needed. For the inductive step (on $y$), suppose we have $$\sublist(\cons(c,x),y) = \sublist(\snoc(a,\cons(c,x)),\snoc(a,y))$$ for some $y$, and let $b \in A$. Using both the outer and nested inductive hypotheses we have
 $$\begin{eqnarray*}
@@ -273,7 +275,8 @@ $$\begin{eqnarray*}
  &   & \sublist(\cons(c,x),\cons(b,y)) \\
  & = & \bif{\beq(c,b)}{\sublist(x,y)}{\sublist(\cons(c,x),y)} \\
  & = & \bif{\beq(c,b)}{\btrue}{\btrue} \\
- & = & \btrue
+ &     \href{@booleans@#thm-if-same}
+   = & \btrue
 \end{eqnarray*}$$
 as needed.
 
@@ -305,7 +308,8 @@ $$\begin{eqnarray*}
  &   & \sublist(\cons(c,x),\cons(d,y)) \\
  & = & \bif{\beq(c,d)}{\sublist(x,y)}{\sublist(\cons(c,x),y)} \\
  & = & \bif{\beq(c,d)}{\btrue}{\btrue} \\
- & = & \btrue
+ &     \href{@booleans@#thm-if-same}
+   = & \btrue
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -923,7 +927,8 @@ $$\begin{eqnarray*}
  & = & \bif{\beq(a,b)}{\sublist(u,y)}{\sublist(\cons(a,u),y)} \\
  & = & \bif{\beq(a,b)}{\all(p,u)}{\all(p,\cons(a,u))} \\
  & = & \bif{\beq(a,b)}{\all(p,\cons(a,u))}{\all(p,\cons(a,u))} \\
- & = & \all(p,\cons(a,u)) \\
+ &     \href{@booleans@#thm-if-same}
+   = & \all(p,\cons(a,u)) \\
  & = & \all(p,x)
 \end{eqnarray*}$$
 as needed.
