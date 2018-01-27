@@ -48,8 +48,8 @@ Now we define $\Theta$ as follows: $$\Theta(m,a) = \snd((\natrec{(\zero, \varphi
 Note that
 $$\begin{eqnarray*}
  &   & \Theta(\zero,a) \\
- & = & (\snd(\natrec{(\zero, \varphi)}{t})(\zero))(a) \\
- & = & (\snd(\zero, \varphi))(a) \\
+ & = & (\snd(\natrec{(\zero,\varphi)}{t})(\zero))(a) \\
+ & = & (\snd(\zero,\varphi))(a) \\
  & = & \varphi(a).
 \end{eqnarray*}$$
 
@@ -61,7 +61,7 @@ To show the second property of $\Theta$, we will show by induction that the foll
 For the base case, note that
 
 $$\begin{eqnarray*}
- &   & \natrec{(\zero, \varphi)}{t}(\zero) \\
+ &   & \natrec{(\zero,\varphi)}{t}(\zero) \\
  & = & (\zero, \varphi) \\
  & = & (\zero, \lambda x : \varphi(x)) \\
  & = & (\zero, \lambda x : \Theta(\zero, x))

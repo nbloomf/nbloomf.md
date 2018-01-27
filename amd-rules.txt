@@ -1,69 +1,69 @@
 #=======================#
 #--- booleans ----------#
 #=======================#
-s|===@booleans@#cor-if-true===|\\bif{\\btrue}{a}{b} = a|
-s|===@booleans@#cor-if-false===|\\bif{\\bfalse}{a}{b} = b|
-s|===@booleans@#thm-iffunc===|\\bif{p}{f(u)}{f(v)} = f(\bif{p}{u}{v})|
-s|===@booleans@#thm-ifnest===|\\bif{p}{\\bif{q}{a}{b}}{\\bif{q}{c}{d}} = \bif{q}{\\bif{p}{a}{c}}{\\bif{p}{b}{d}}|
-s|===@booleans@#thm-if-prune-true===|\\bif{p}{\\bif{p}{a}{b}}{c} = \\bif{p}{a}{c}|
-s|===@booleans@#thm-if-prune-false===|\\bif{p}{a}{\\bif{p}{b}{c}} = \\bif{p}{a}{c}|
-s|===@booleans@#thm-if-commute-true===|\\bif{p}{\\bif{q}{a}{b}}{b} = \\bif{q}{\\bif{p}{a}{b}}{b}|
-s|===@booleans@#thm-if-commute-false===|\\bif{p}{a}{\\bif{q}{a}{b}} = \\bif{q}{a}{\\bif{p}{a}{b}}|
+@booleans@#cor-if-true	\\bif{\\btrue}{a}{b} = a
+@booleans@#cor-if-false	\\bif{\\bfalse}{a}{b} = b
+@booleans@#thm-iffunc	\\bif{p}{f(u)}{f(v)} = f(\bif{p}{u}{v})
+@booleans@#thm-ifnest	\\bif{p}{\\bif{q}{a}{b}}{\\bif{q}{c}{d}} = \bif{q}{\\bif{p}{a}{c}}{\\bif{p}{b}{d}}
+@booleans@#thm-if-prune-true	\\bif{p}{\\bif{p}{a}{b}}{c} = \\bif{p}{a}{c}
+@booleans@#thm-if-prune-false	\\bif{p}{a}{\\bif{p}{b}{c}} = \\bif{p}{a}{c}
+@booleans@#thm-if-commute-true	\\bif{p}{\\bif{q}{a}{b}}{b} = \\bif{q}{\\bif{p}{a}{b}}{b}
+@booleans@#thm-if-commute-false	\\bif{p}{a}{\\bif{q}{a}{b}} = \\bif{q}{a}{\\bif{p}{a}{b}}
 #=======================#
 #--- not ---------------#
 #=======================#
-s|===@not@#def-not===|\\bnot(p) = \\bif{p}{\\bfalse}{\\btrue}|
-s|===@not@#thm-not-true===|\\bnot(\\btrue) = \\bfalse|
-s|===@not@#thm-not-false===|\\bnot(\\bfalse) = \\btrue|
-s|===@not@#thm-not-involution===|\\bnot(p) = p|
-s|===@not@#thm-ifnot===|\\bif{\\bnot(p)}{a}{b} = \bif{p}{b}{a}|
+@not@#def-not	\\bnot(p) = \\bif{p}{\\bfalse}{\\btrue}
+@not@#thm-not-true	\\bnot(\\btrue) = \\bfalse
+@not@#thm-not-false	\\bnot(\\bfalse) = \\btrue
+@not@#thm-not-involution	\\bnot(p) = p	
+@not@#thm-ifnot	\\bif{\\bnot(p)}{a}{b} = \bif{p}{b}{a}
 #=======================#
 #--- disjoint-unions ---#
 #=======================#
-s|===@disjoint-unions@#dfn-disjoint-unions-isRgt===|\\isRgt = \\either(\\const(\\bfalse),\\const(\\btrue))|
-s|===@disjoint-unions@#dfn-disjoint-unions-isLft===|\\isLft = \\either(\\const(\\btrue),\\const(\\bfalse))|
-s|===@disjoint-unions@#thm-disjoint-unions-isLft-lft===|\\isLft(\\lft(a)) = \\btrue|
-s|===@disjoint-unions@#thm-disjoint-unions-isLft-rgt===|\\isLft(\\rgt(b)) = \\bfalse|
-s|===@disjoint-unions@#thm-disjoint-unions-isRgt-lft===|\\isRgt(\\lft(a)) = \\bfalse|
-s|===@disjoint-unions@#thm-disjoint-unions-isRgt-rgt===|\\isRgt(\\rgt(b)) = \\btrue|
+@disjoint-unions@#dfn-disjoint-unions-isRgt	\\isRgt = \\either(\\const(\\bfalse),\\const(\\btrue))
+@disjoint-unions@#dfn-disjoint-unions-isLft	\\isLft = \\either(\\const(\\btrue),\\const(\\bfalse))
+@disjoint-unions@#thm-disjoint-unions-isLft-lft	\\isLft(\\lft(a)) = \\btrue
+@disjoint-unions@#thm-disjoint-unions-isLft-rgt	\\isLft(\\rgt(b)) = \\bfalse
+@disjoint-unions@#thm-disjoint-unions-isRgt-lft	\\isRgt(\\lft(a)) = \\bfalse
+@disjoint-unions@#thm-disjoint-unions-isRgt-rgt	\\isRgt(\\rgt(b)) = \\btrue
 #=======================#
 #--- unary -------------#
 #=======================#
-s|===@unary@#thm-prev-zero===|\\prev(\\zero) = \\zero|
-s|===@unary@#thm-prev-next===|\\prev(\\next(a)) = a|
-s|===@unary@#thm-iszero-zero===|\\iszero(\\zero) = \\btrue|
-s|===@unary@#thm-iszero-next===|\\iszero(\\next(a)) = \\bfalse|
+@unary@#thm-prev-zero	\\prev(\\zero) = \\zero
+@unary@#thm-prev-next	\\prev(\\next(a)) = a
+@unary@#thm-iszero-zero	\\iszero(\\zero) = \\btrue
+@unary@#thm-iszero-next	\\iszero(\\next(a)) = \\bfalse
 #=======================#
 #--- plus --------------#
 #=======================#
-s|===@plus@#cor-plus-up-zero===|\\nplus(\\zero,b) = b|
-s|===@plus@#cor-plus-up-next===|\\nplus(\\next(a),b) = \\next(\\nplus(a,b))|
-s|===@plus@#thm-plus-zero-right===|\\nplus(a,\\zero) = a|
-s|===@plus@#thm-plus-next-right===|\\nplus(a,\\next(b)) = \\next(\\nplus(a,b))|
-s|===@plus@#thm-plus-associative===|\\nplus(\\nplus(a,b),c) = \\nplus(a,\\nplus(b,c))|
-s|===@plus@#thm-plus-commutative===|\\nplus(a,b) = \\nplus(b,a)|
+@plus@#cor-plus-up-zero	\\nplus(\\zero,b) = b
+@plus@#cor-plus-up-next	\\nplus(\\next(a),b) = \\next(\\nplus(a,b))
+@plus@#thm-plus-zero-right	\\nplus(a,\\zero) = a
+@plus@#thm-plus-next-right	\\nplus(a,\\next(b)) = \\next(\\nplus(a,b))
+@plus@#thm-plus-associative	\\nplus(\\nplus(a,b),c) = \\nplus(a,\\nplus(b,c))
+@plus@#thm-plus-commutative	\\nplus(a,b) = \\nplus(b,a)
 #=======================#
 #--- times -------------#
 #=======================#
-s|===@times@#cor-times-up-zero===|\\ntimes(\\zero,b) = \\zero|
-s|===@times@#cor-times-up-next===|\\ntimes(\\next(a),b) = \\nplus(\\ntimes(a,b),b)|
-s|===@times@#thm-times-zero-right===|\\ntimes(a,\\zero) = \\zero|
-s|===@times@#thm-times-next-right===|\\ntimes(a,\\next(b)) = \\nplus(\\ntimes(a,b),a)|
-s|===@times@#thm-times-one-left===|\\ntimes(\\next(\\zero),a) = a|
-s|===@times@#thm-times-one-right===|\\ntimes(a,\\next(\\zero)) = a|
-s|===@times@#thm-times-commutative===|\\ntimes(a,b) = \\ntimes(b,a)|
-s|===@times@#thm-times-plus-distribute-left===|\\ntimes(a,\\nplus(b,c)) = \\nplus(\\ntimes(a,b),\\ntimes(a,c))|
-s|===@times@#thm-times-plus-distribute-right===|\\ntimes(\\nplus(a,b),c) = \\nplus(\\ntimes(a,c),\\ntimes(b,c))|
+@times@#cor-times-up-zero	\\ntimes(\\zero,b) = \\zero
+@times@#cor-times-up-next	\\ntimes(\\next(a),b) = \\nplus(\\ntimes(a,b),b)
+@times@#thm-times-zero-right	\\ntimes(a,\\zero) = \\zero
+@times@#thm-times-next-right	\\ntimes(a,\\next(b)) = \\nplus(\\ntimes(a,b),a)
+@times@#thm-times-one-left	\\ntimes(\\next(\\zero),a) = a
+@times@#thm-times-one-right	\\ntimes(a,\\next(\\zero)) = a
+@times@#thm-times-commutative	\\ntimes(a,b) = \\ntimes(b,a)
+@times@#thm-times-plus-distribute-left	\\ntimes(a,\\nplus(b,c)) = \\nplus(\\ntimes(a,b),\\ntimes(a,c))
+@times@#thm-times-plus-distribute-right	\\ntimes(\\nplus(a,b),c) = \\nplus(\\ntimes(a,c),\\ntimes(b,c))
 #=======================#
 #--- minus -------------#
 #=======================#
-s|===@minus@#cor-minus-up-zero===|\\nminus(\\zero,b) = \\bif{\\iszero(b)}{\\rgt(\\zero)}{\\lft(\\ast)}|
-s|===@minus@#cor-minus-up-next===|\\nminus(\\next(a),b) = \\bif{\\iszero(b)}{\\rgt(\\next(a))}{\\nminus(a,\\prev(b))}|
-s|===@minus@#thm-minus-nat-zero===|\\nminus(a,\\zero) = \rgt(a)|
-s|===@minus@#thm-minus-zero-next===|\\nminus(\\zero,\\next(a)) = \\lft(\\ast)|
-s|===@minus@#thm-minus-next-cancel===|\\nminus(\\next(a),\\next(b)) = \\nminus(a,b)|
-s|===@minus@#thm-minus-next-self===|\\nminus(a,\\next(a)) = \\lft(\\ast)|
+@minus@#cor-minus-up-zero	\\nminus(\\zero,b) = \\bif{\\iszero(b)}{\\rgt(\\zero)}{\\lft(\\ast)}
+@minus@#cor-minus-up-next	\\nminus(\\next(a),b) = \\bif{\\iszero(b)}{\\rgt(\\next(a))}{\\nminus(a,\\prev(b))}
+@minus@#thm-minus-nat-zero	\\nminus(a,\\zero) = \rgt(a)
+@minus@#thm-minus-zero-next	\\nminus(\\zero,\\next(a)) = \\lft(\\ast)
+@minus@#thm-minus-next-cancel	\\nminus(\\next(a),\\next(b)) = \\nminus(a,b)
+@minus@#thm-minus-next-self	\\nminus(a,\\next(a)) = \\lft(\\ast)
 #=======================#
 #--- leq ---------------#
 #=======================#
-s|===@leq@#dfn-leq===|\\nleq(a,b) = \\isRgt(\\nminus(b,a))|
+@leq@#dfn-leq	\\nleq(a,b) = \\isRgt(\\nminus(b,a))

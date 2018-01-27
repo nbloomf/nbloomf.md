@@ -61,15 +61,14 @@ Nothing about this type is specific to LaTeX, but we can write a little parser t
 > pLatexExpr :: Parser Expr
 > pLatexExpr = chainl1 pTerm (return Apply)
 >   where
->     parens, braces :: Parser a -> Parser a
->     parens = between (char '(') (char ')')
->     braces = between (char '{') (char '}')
+>     fenced :: Parser a -> Parser a
+>     fenced p = (between (char '(') (char ')') p) <|> (between (char '{') (char '}') p)
 > 
 >     pVariable :: Parser Expr
 >     pVariable = do
 >       token <- many1 letter
->       args <- option [] $ parens $ sepBy1 pLatexExpr (char ',')
->       case args of
+>       args <- option [] $ many1 $ fenced $ sepBy1 pLatexExpr (char ',')
+>       case concat args of
 >         [] -> return $ Variable token
 >         as -> return $ foldl Apply (Variable token) as
 > 
@@ -77,15 +76,14 @@ Nothing about this type is specific to LaTeX, but we can write a little parser t
 >     pConstant = do
 >       char '\\'
 >       token <- many1 letter
->       args <- option [] $ parens $ sepBy1 pLatexExpr (char ',')
->       case args of
+>       args <- option [] $ many1 $ fenced $ sepBy1 pLatexExpr (char ',')
+>       case concat args of
 >         [] -> return $ Constant token
 >         as -> return $ foldl Apply (Constant token) as
 > 
 >     pTerm :: Parser Expr
 >     pTerm = choice
->       [ parens pLatexExpr
->       , braces pLatexExpr
+>       [ fenced pLatexExpr
 >       , pConstant
 >       , pVariable
 >       ]
@@ -285,10 +283,51 @@ And we'll need to process one untabbed line. We're assuming that the rewrite rul
 > process xs = do
 >   putStrLn $ unwords ("unrecognized input:":xs)
 
+> parseNamedRule :: [String] -> IO (String,(Expr,Expr))
+> parseNamedRule [name,r] = do
+>   (x,y) <- parseWithIO "-" (pRule pLatexExpr) r
+>   return (name,(x,y))
+> parseNamedRule xs = do
+>   putStrLn $ unwords ("unrecognized input:":xs)
+>   exitFailure
+
 Now the main tool just splits each input line and verifies rewrites.
+
+> comment :: String -> Bool
+> comment ('#':_) = True
+> comment _ = False
+
+> unesc :: String -> String
+> unesc ('\\':'\\':xs) = '\\' : unesc xs
+> unesc (c:cs) = c : unesc cs
+> unesc [] = []
+
+> processS :: [String] -> [(String,(Expr,Expr))] -> IO ()
+> processS [loc,line,a,b] ((name,(x,y)):rs) = do
+>   lhs <- case parseWith loc pLatexExpr a of
+>     Left _ -> return (Constant "")
+>     Right w -> return w
+>   rhs <- case parseWith loc pLatexExpr b of
+>     Left _ -> return (Constant "")
+>     Right w -> return w
+>   case (validate (x,y) lhs rhs, validate (y,x) lhs rhs, validate (x,y) rhs lhs, validate (y,x) lhs rhs) of
+>     ([],[],[],[]) -> processS [loc,line,a,b] rs
+>     _ -> do
+>       putStrLn $ unwords ["sed -i","'"++line++"s/^ & = & / &     \\href{" ++ name ++ "}@@@   = & /'",loc]
+> processS [_,_,_,_] [] = return ()
+> processS xs _ = do
+>   putStrLn $ unwords xs
 
 > main :: IO ()
 > main = do
->   checks <- fmap (map unTab . lines) getContents
->   mapM_ process checks
->   hPutStrLn stderr $ unwords [show $ length checks,"checks completed"]
+>   args <- getArgs
+>   case args of
+>     [] -> do
+>       checks <- fmap (map unTab . lines) getContents
+>       mapM_ process checks
+>       hPutStrLn stderr $ unwords [show $ length checks,"checks completed"]
+>     ["-s",path] -> do
+>       rules <- (fmap (map unTab . filter (not . comment) . lines . unesc) $ readFile path)
+>         >>= mapM parseNamedRule
+>       checks <- fmap (map unTab . lines) getContents
+>       mapM_ (\c -> processS c rules) checks

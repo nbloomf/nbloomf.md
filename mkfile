@@ -310,6 +310,10 @@ sniff-amd-testtext:VQ:
 
 #-- check term rewrites --#
 sniff-amd-rewrite:VQ:
+  cat amd-rules.txt \
+    | grep -v '^#' amd-rules.txt \
+    | awk -F"\t" '{print "s|===" $1 "===|" $2 "|";}' \
+    > amd-rules-sed.txt
   REWRITE=$( grep -n -C 1 '^ &     \\' posts/arithmetic-made-difficult/* \
     | sed '/^--$/d' \
     | sed 's/^[a-zA-Z\/.-]*[0-9][0-9]*-//' \
@@ -324,9 +328,10 @@ sniff-amd-rewrite:VQ:
     | sed 's/[ ]*$//' \
     | paste - - - - \
     | awk -F"\t" '{print $2 "\t" $3 "\t" $1 "\t" $4}' \
-    | sed -f amd-rules.txt \
+    | sed -f amd-rules-sed.txt \
     | rewrite-term \
     || true )
+  rm amd-rules-sed.txt
   if [ -z "$REWRITE" ]; then
     echo 'Term rewrites OK' | doppler lightgreen
   else
@@ -334,6 +339,22 @@ sniff-amd-rewrite:VQ:
     echo $( echo "$REWRITE" | wc -l ) 'problems found' | doppler lightred
     echo "$REWRITE"
   fi
+
+sniff-amd-suggest:VQ:
+  SUGGEST=$( awk '/^ & = & /{print FILENAME "\t" FNR "\t" prev "\t" $0} {prev=$0}' \
+    posts/arithmetic-made-difficult/* \
+    | sed 's/ & = & //g' \
+    | sed 's/ &   & //g' \
+    | sed 's/ \\\\//g' \
+    | sed 's/,$//' \
+    | sed 's/\.$//' \
+    | grep -v 'circ' \
+    | grep -v ' ' \
+    | grep -v ':' \
+    | grep -v '{(' \
+    | rewrite-term -s amd-rules.txt \
+    || true )
+  echo "$SUGGEST"
 
 #-- check existence of crossrefs --#
 sniff-amd-crossref:VQ:
