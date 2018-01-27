@@ -340,6 +340,7 @@ sniff-amd-rewrite:VQ:
     echo "$REWRITE"
   fi
 
+#-- brute force search for valid crossrefs and edit script generator --#
 sniff-amd-suggest:VQ:
   SUGGEST=$( awk '/^ & = & /{print FILENAME "\t" FNR "\t" prev "\t" $0} {prev=$0}' \
     posts/arithmetic-made-difficult/* \

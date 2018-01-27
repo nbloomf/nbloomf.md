@@ -141,10 +141,13 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 
 ::: proof ::::::::::
-We have four possibilities for $(p,q)$. If $p = \btrue$ and $q = \btrue$,
+We have four possibilities for $(p,q)$. If $\p = \btrue$ and $\q = \btrue$,
 $$\begin{eqnarray*}
- &   & \bif{p}{\bif{q}{a}{b}}{\bif{q}{c}{d}} \\
- & = & \bif{\btrue}{\bif{\btrue}{a}{b}}{\bif{q}{c}{d}} \\
+ &   & \bif{\p}{\bif{\q}{a}{b}}{\bif{\q}{c}{d}} \\
+ &     \let{\p = \btrue}
+   = & \bif{\btrue}{\bif{\q}{a}{b}}{\bif{\q}{c}{d}} \\
+ &     \let{\q = \btrue}
+   = & \bif{\btrue}{\bif{\btrue}{a}{b}}{\bif{\q}{c}{d}} \\
  &     \href{@booleans@#cor-if-true}
    = & \bif{\btrue}{a}{b} \\
  &     \href{@booleans@#cor-if-true}
@@ -152,8 +155,11 @@ $$\begin{eqnarray*}
  &     \href{@booleans@#cor-if-true}
    = & \bif{\btrue}{a}{c} \\
  &     \href{@booleans@#cor-if-true}
-   = & \bif{\btrue}{\bif{\btrue}{a}{c}}{\bif{p}{b}{d}} \\
- & = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
+   = & \bif{\btrue}{\bif{\btrue}{a}{c}}{\bif{\p}{b}{d}} \\
+ &     \let{\p = \btrue}
+   = & \bif{\btrue}{\bif{\p}{a}{c}}{\bif{\p}{b}{d}} \\
+ &     \let{\q = \btrue}
+   = & \bif{\q}{\bif{\p}{a}{c}}{\bif{\p}{b}{d}} \\
 \end{eqnarray*}$$
 as claimed. If $\p = \btrue$ and $\q = \bfalse$,
 $$\begin{eqnarray*}
@@ -232,22 +238,25 @@ Let $A$ be a set with $p \in \bool$ and $a,b,c \in A$. We have the following.
 2. $\bif{p}{a}{\bif{p}{b}{c}} = \bif{p}{a}{c}$
 
 ::: proof ::::::::::
-1. If $p = \btrue$, we have
+1. If $\p = \btrue$, we have
 $$\begin{eqnarray*}
- &   & \bif{p}{\bif{p}{a}{b}}{c} \\
- & = & \bif{p}{\bif{\btrue}{a}{b}}{c} \\
+ &   & \bif{\p}{\bif{\p}{a}{b}}{c} \\
+ &     \let{\p = \btrue}
+   = & \bif{\p}{\bif{\btrue}{a}{b}}{c} \\
  &     \href{@booleans@#cor-if-true}
-   = & \bif{p}{a}{c}
+   = & \bif{\p}{a}{c}
 \end{eqnarray*}$$
-as needed. If $p = \bfalse$, we have
+as needed. If $\p = \bfalse$, we have
 $$\begin{eqnarray*}
- &   & \bif{p}{\bif{p}{a}{b}}{c} \\
- & = & \bif{\bfalse}{\bif{\bfalse}{a}{b}}{c} \\
+ &   & \bif{\p}{\bif{\p}{a}{b}}{c} \\
+ &     \let{\p = \bfalse}
+   = & \bif{\bfalse}{\bif{\p}{a}{b}}{c} \\
  &     \href{@booleans@#cor-if-false}
    = & c \\
  &     \href{@booleans@#cor-if-false}
    = & \bif{\bfalse}{a}{c} \\
- & = & \bif{p}{a}{c}
+ &     \let{\p = \bfalse}
+   = & \bif{\p}{a}{c}
 \end{eqnarray*}$$
 as needed.
 2. If $p = \btrue$, we have
