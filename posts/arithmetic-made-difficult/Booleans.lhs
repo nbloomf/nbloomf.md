@@ -409,17 +409,20 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \bif{\p}{\bif{\q}{a}{b}}{b} \\
  & = & \bif{\bfalse}{\bif{\q}{a}{b}}{b} \\
- & = & b \\
+ &     \href{@booleans@#cor-if-false}
+   = & b \\
  &     \href{@booleans@#thm-if-same}
    = & \bif{\q}{b}{b} \\
- & = & \bif{\q}{\bif{\bfalse}{a}{b}}{b} \\
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{\q}{\bif{\bfalse}{a}{b}}{b} \\
  & = & \bif{\q}{\bif{\p}{a}{b}}{b}
 \end{eqnarray*}$$
 as claimed. If $\q = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bif{\p}{\bif{\q}{a}{b}}{b} \\
  & = & \bif{\p}{\bif{\bfalse}{a}{b}}{b} \\
- & = & \bif{\p}{b}{b} \\
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{\p}{b}{b} \\
  &     \href{@booleans@#thm-if-same}
    = & b \\
  & = & \bif{\bfalse}{\bif{\p}{a}{b}}{b} \\
@@ -429,10 +432,12 @@ as claimed. If $\p = \q = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bif{\p}{\bif{\q}{a}{b}}{b} \\
  & = & \bif{\p}{\bif{\btrue}{a}{b}}{b} \\
- & = & \bif{\p}{a}{b} \\
+ &     \href{@booleans@#cor-if-true}
+   = & \bif{\p}{a}{b} \\
  & = & \bif{\btrue}{a}{b} \\
  & = & \bif{\q}{a}{b} \\
- & = & \bif{\q}{\bif{\btrue}{a}{b}}{b} \\
+ &     \href{@booleans@#cor-if-true}
+   = & \bif{\q}{\bif{\btrue}{a}{b}}{b} \\
  & = & \bif{\q}{\bif{\p}{a}{b}}{b}
 \end{eqnarray*}$$
 as claimed.
@@ -468,17 +473,21 @@ We have $$f(\bif{p}{a}{c},\bif{p}{b}{d}) = \bif{p}{f(a,b)}{f(c,d)}.$$
 ::: proof ::::::::::
 If $\p = \btrue$, we have
 $$\begin{eqnarray*}
- &   & f(\bif{\p}{a}{c},\bif{p}{b}{d}) \\
+ &   & f(\bif{\p}{a}{c},\bif{\p}{b}{d}) \\
  & = & f(\bif{\btrue}{a}{c},\bif{\btrue}{b}{d}) \\
- & = & f(a,\bif{\btrue}{b}{d}) \\
- & = & f(a,b)
+ &     \href{@booleans@#cor-if-true}
+   = & f(a,\bif{\btrue}{b}{d}) \\
+ &     \href{@booleans@#cor-if-true}
+   = & f(a,b)
 \end{eqnarray*}$$
 and if $\p = \bfalse,
 $$\begin{eqnarray*}
  &   & f(\bif{\p}{a}{c},\bif{\p}{b}{d}) \\
  & = & f(\bif{\bfalse}{a}{c},\bif{\bfalse}{b}{d}) \\
- & = & f(c,\bif{\bfalse}{b}{d}) \\
- & = & f(c,d)
+ &     \href{@booleans@#cor-if-false}
+   = & f(c,\bif{\bfalse}{b}{d}) \\
+ &     \href{@booleans@#cor-if-false}
+   = & f(c,d)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
