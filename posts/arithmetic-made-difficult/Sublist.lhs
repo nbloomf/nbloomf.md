@@ -930,14 +930,16 @@ as needed.
 2. We prove this implication by contraposition. Suppose $\any(p,y) = \bfalse$; then we have
 $$\begin{eqnarray*}
  &   & \btrue \\
- & = & \bnot(\bfalse) \\
+ &     \href{@not@#thm-not-false}
+   = & \bnot(\bfalse) \\
  & = & \bnot(\any(p,y)) \\
  & = & \all(\bnot \circ p, y).
 \end{eqnarray*}$$
 Using (1), we thus have
 $$\begin{eqnarray*}
  &   & \bfalse \\
- & = & \bnot(\btrue) \\
+ &     \href{@not@#thm-not-true}
+   = & \bnot(\btrue) \\
  & = & \bnot(\all(\bnot \circ p,x)) \\
  & = & \bnot(\bnot(\any(p,x))) \\
  & = & \any(p,x)

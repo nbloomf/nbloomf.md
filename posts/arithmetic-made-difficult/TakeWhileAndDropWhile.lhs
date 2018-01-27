@@ -231,13 +231,16 @@ as needed. For the inductive step, suppose the equality holds for some $x \in \l
 $$\begin{eqnarray*}
  &   & \takeWhile(p,\takeWhile(q,\cons(a,x))) \\
  & = & \takeWhile(p,\bif{q(a)}{\cons(a,\takeWhile(q,x))}{\nil}) \\
- & = & \bif{q(a)}{\takeWhile(p,\cons(a,\takeWhile(q,x)))}{\takeWhile(p,\nil)} \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \bif{q(a)}{\takeWhile(p,\cons(a,\takeWhile(q,x)))}{\takeWhile(p,\nil)} \\
  & = & \bif{q(a)}{\bif{p(a)}{\cons(a,\takeWhile(p,\takeWhile(q,x)))}{\nil}}{\nil} \\
  & = & \bif{q(a)}{\bif{p(a)}{\cons(a,\takeWhile(q,\takeWhile(p,x)))}{\nil}}{\bif{p(a)}{\nil}{\nil}} \\
- & = & \bif{p(a)}{\bif{q(a)}{\cons(a,\takeWhile(q,\takeWhile(p,x)))}{\nil}}{\bif{q(a)}{\nil}{\nil}} \\
+ &     \href{@booleans@#thm-ifnest}
+   = & \bif{p(a)}{\bif{q(a)}{\cons(a,\takeWhile(q,\takeWhile(p,x)))}{\nil}}{\bif{q(a)}{\nil}{\nil}} \\
  & = & \bif{p(a)}{\bif{q(a)}{\cons(a,\takeWhile(q,\takeWhile(p,x)))}{\nil}}{\nil} \\
  & = & \bif{p(a)}{\takeWhile(q,\cons(a,\takeWhile(p,x)))}{\takeWhile(q,\nil)} \\
- & = & \takeWhile(q,\bif{p(a)}{\cons(a,\takeWhile(p,x))}{\nil}) \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \takeWhile(q,\bif{p(a)}{\cons(a,\takeWhile(p,x))}{\nil}) \\
  & = & \takeWhile(q,\takeWhile(p,\cons(a,x)))
 \end{eqnarray*}$$
 as needed.

@@ -90,7 +90,8 @@ $$\begin{eqnarray*}
  &   & \at(\cons(a,x),\next(k)) \\
  & = & \bif{\isnil(\cons(a,x))}{\lft(\ast)}{\at(\tail(\cons(a,x)),k)} \\
  & = & \bif{\bfalse}{\lft(\ast)}{\at(\tail(\cons(a,x)),k)} \\
- & = & \at(\tail(\cons(a,x)),k) \\
+ &     \href{@booleans@#cor-if-false}
+   = & \at(\tail(\cons(a,x)),k) \\
  & = & \at(x,k)
 \end{eqnarray*}$$
 as claimed.
@@ -127,7 +128,8 @@ $$\begin{eqnarray*}
  &   & \at(\nil,\next(m)) \\
  & = & \bif{\isnil(\nil)}{\lft(\ast)}{\at(\tail(\nil),m)} \\
  & = & \bif{\btrue}{\lft(\ast)}{\at(\tail(\nil),m)} \\
- & = & \lft(\ast)
+ &     \href{@booleans@#cor-if-true}
+   = & \lft(\ast)
 \end{eqnarray*}$$
 as claimed.
 2. We have

@@ -427,7 +427,8 @@ $$\begin{eqnarray*}
  &   & \bnot(\all(\not \circ p,x)) \\
  & = & \bnot(\all(\not \circ p,\nil)) \\
  & = & \bnot(\btrue) \\
- & = & \bfalse \\
+ &     \href{@not@#thm-not-true}
+   = & \bfalse \\
  & = & \foldr{\bfalse}{\varphi(p)}(\nil) \\
  & = & \foldr{\bfalse}{\varphi(p)}(x)
 \end{eqnarray*}$$
@@ -482,7 +483,8 @@ $$\begin{eqnarray*}
  & = & \bnot(\all(\bnot \circ \pfalse)(x)) \\
  & = & \bnot(\all(\ptrue)(x)) \\
  & = & \bnot(\btrue) \\
- & = & \bfalse
+ &     \href{@not@#thm-not-true}
+   = & \bfalse
 \end{eqnarray*}$$
 as claimed.
 2. If $x = \nil$, we have
@@ -496,7 +498,8 @@ $$\begin{eqnarray*}
  & = & \bnot(\all(\bnot \circ \ptrue)(\cons(a,u))) \\
  & = & \bnot(\all(\pfalse)(\cons(a,u))) \\
  & = & \bnot(\bfalse) \\
- & = & \btrue
+ &     \href{@not@#thm-not-false}
+   = & \btrue
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

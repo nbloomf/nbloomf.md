@@ -85,19 +85,24 @@ $$\begin{eqnarray*}
  &   & \npower(a,\next(\zero)) \\
  & = & \ntimes(\npower(a,\zero),a) \\
  & = & \ntimes(\next(\zero),a) \\
- & = & a.
+ &     \href{@times@#thm-times-one-left}
+   = & a
 \end{eqnarray*}$$
+as claimed.
 2. We have
 $$\begin{eqnarray*}
  &   & \npower(\zero,\next(a)) \\
  & = & \ntimes(\npower(\zero,a),\zero) \\
- & = & \zero.
+ &     \href{@times@#thm-times-zero-right}
+   = & \zero
 \end{eqnarray*}$$
+as claimed.
 3. We proceed by induction on $a$. For the base case, we have $\npower(\next(\zero),\zero) = \next(\zero)$. For the inductive step, suppose $\npower(\next(\zero),a) = \next(\zero)$. Now
 $$\begin{eqnarray*}
  &   & \npower(\next(\zero),\next(a)) \\
  & = & \ntimes(\npower(\next(\zero),a),\next(\zero)) \\
- & = & \npower(\next(\zero),a) \\
+ &     \href{@times@#thm-times-one-right}
+   = & \npower(\next(\zero),a) \\
  & = & \next(\zero)
 \end{eqnarray*}$$
 as needed.
@@ -142,15 +147,18 @@ Let $a,b,c \in \nats$. Then we have the following.
 $$\begin{eqnarray*}
  &   & \npower(a,\nplus(b,c)) \\
  & = & \npower(a,\nplus(b,\zero)) \\
- & = & \npower(a,b) \\
- & = & \ntimes(\npower(a,b),\next(\zero)) \\
+ &     \href{@plus@#thm-plus-zero-right}
+   = & \npower(a,b) \\
+ &     \href{@times@#thm-times-one-right}
+   = & \ntimes(\npower(a,b),\next(\zero)) \\
  & = & \ntimes(\npower(a,b),\npower(a,\zero)) \\
  & = & \ntimes(\npower(a,b),\npower(a,c)).
 \end{eqnarray*}$$
 For the inductive step, suppose the equality holds for some $c \in \nats$. Now
 $$\begin{eqnarray*}
  &   & \npower(a,\nplus(b,\next(c))) \\
- & = & \npower(a,\next(\nplus(b,c))) \\
+ &     \href{@plus@#thm-plus-next-right}
+   = & \npower(a,\next(\nplus(b,c))) \\
  & = & \ntimes(a,\npower(a,\nplus(b,c))) \\
  & = & \ntimes(a,\ntimes(\npower(a,b),\npower(a,c))) \\
  & = & \ntimes(\npower(a,b),\ntimes(a,\npower(a,c))) \\
@@ -161,7 +169,8 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \npower(a,\ntimes(b,c)) \\
  & = & \npower(a,\ntimes(b,\zero)) \\
- & = & \npower(a,\zero) \\
+ &     \href{@times@#thm-times-zero-right}
+   = & \npower(a,\zero) \\
  & = & \next(\zero) \\
  & = & \npower(\npower(a,b),\zero) \\
  & = & \npower(\npower(a,b),c).
@@ -180,7 +189,8 @@ $$\begin{eqnarray*}
  &   & \npower(\ntimes(a,b),c) \\
  & = & \npower(\ntimes(a,b),\zero) \\
  & = & \next(\zero) \\
- & = & \ntimes(\next(\zero),\next(\zero)) \\
+ &     \href{@times@#thm-times-one-left}
+   = & \ntimes(\next(\zero),\next(\zero)) \\
  & = & \ntimes(\npower(a,\zero),\npower(b,\zero)) \\
  & = & \ntimes(\npower(a,c),\npower(b,c)).
 \end{eqnarray*}$$

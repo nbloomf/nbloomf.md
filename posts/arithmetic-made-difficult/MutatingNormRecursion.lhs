@@ -33,16 +33,19 @@ We first need the following intermediate result: for all $a \in A$ and $k \in \n
 $$\begin{eqnarray*}
  &   & \Omega(\nplus(\eta(\varphi(a)),k),\varphi(a)) \\
  & = & \Omega(\nplus(\zero,\zero),\varphi(a)) \\
- & = & \Omega(\zero,\varphi(a)) \\
+ &     \href{@plus@#cor-plus-up-zero}
+   = & \Omega(\zero,\varphi(a)) \\
  & = & \Omega(\eta(\varphi(a)),\varphi(a))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $k$ when $\eta(\varphi(a)) = \zero$. Now
 $$\begin{eqnarray*}
  &   & \Omega(\nplus(\eta(\varphi(a)),\next(k)),\varphi(a)) \\
- & = & \Omega(\next(\nplus(\eta(\varphi(a)),k)),\varphi(a)) \\
+ &     \href{@plus@#thm-plus-next-right}
+   = & \Omega(\next(\nplus(\eta(\varphi(a)),k)),\varphi(a)) \\
  & = & \bif{\iszero(\eta(\varphi(a)))}{\delta(\varphi(a))}{\sigma(\varphi(a),\Omega(\nplus(\eta(\varphi(a)),k),\varphi(\varphi(a))))} \\
  & = & \bif{\btrue}{\delta(\varphi(a))}{\sigma(\varphi(a),\Omega(\nplus(\eta(\varphi(a)),k),\varphi(\varphi(a))))} \\
- & = & \delta(\varphi(a)) \\
+ &     \href{@booleans@#cor-if-true}
+   = & \delta(\varphi(a)) \\
  & = & \bif{\btrue}{\delta(\varphi(a))}{} \\
  & = & \bif{\iszero(\eta(\varphi(a)))}{\delta(\varphi(a))}{\sigma(\varphi(a),\Omega(\eta(\varphi(a)),\varphi(\varphi(a))))} \\
  & = & \Omega(\eta(\varphi(a)),\varphi(a))
@@ -53,12 +56,14 @@ For the strong inductive step, suppose the equality holds for all $k$ whenever $
 $$\begin{eqnarray*}
  &   & \Omega(\nplus(\eta(\varphi(a)),k),\varphi(a)) \\
  & = & \Omega(\nplus(\eta(\varphi(a)),\zero),\varphi(a)) \\
- & = & \Omega(\eta(\varphi(a)),\varphi(a))
+ &     \href{@plus@#thm-plus-zero-right}
+   = & \Omega(\eta(\varphi(a)),\varphi(a))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $k$. Now
 $$\begin{eqnarray*}
  &   & \Omega(\nplus(\eta(\varphi(a)),\next(k)),\varphi(a)) \\
- & = & \Omega(\next(\nplus(\eta(\varphi(a)),k)),\varphi(a)) \\
+ &     \href{@plus@#thm-plus-next-right}
+   = & \Omega(\next(\nplus(\eta(\varphi(a)),k)),\varphi(a)) \\
  & = & \bif{\iszero(\varphi(a))}{\delta(\varphi(a))}{\sigma(\varphi(a),\Omega(\nplus(\eta(\varphi(a)),k),\varphi(\varphi(a))))} \\
  & = & \sigma(\varphi(a),\Omega(\nplus(\eta(\varphi(a)),k),\varphi(\varphi(a)))) \\
  & = & Q.
@@ -69,7 +74,8 @@ $$\begin{eqnarray*}
  & = & \nplus(\next(m),k) \\
  & = & \nplus(m,\next(k)) \\
  & = & \nplus(\nplus(\eta(\varphi(\varphi(a))),u),\next(k)) \\
- & = & \nplus(\eta(\varphi(\varphi(a))),\nplus(u,\next(k))).
+ &     \href{@plus@#thm-plus-associative}
+   = & \nplus(\eta(\varphi(\varphi(a))),\nplus(u,\next(k)))
 \end{eqnarray*}$$
 Using the strong induction hypothesis, we have
 $$\begin{eqnarray*}
@@ -78,7 +84,8 @@ $$\begin{eqnarray*}
  & = & \sigma(\varphi(a),\Omega(\eta(\varphi(\varphi(a))),\varphi(\varphi(a)))) \\
  & = & \sigma(\varphi(a),\Omega(\nplus(\eta(\varphi(\varphi(a))),u),\varphi(\varphi(a)))) \\
  & = & \sigma(\varphi(a),\Omega(m,\varphi(\varphi(a)))) \\
- & = & \bif{\bfalse}{\delta(\varphi(a))}{\sigma(\varphi(a),\Omega(m,\varphi(\varphi(a))))} \\
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{\bfalse}{\delta(\varphi(a))}{\sigma(\varphi(a),\Omega(m,\varphi(\varphi(a))))} \\
  & = & \bif{\iszero(\eta(\varphi(a)))}{\delta(\varphi(a))}{\sigma(\varphi(a),\Omega(m,\varphi(\varphi(a))))} \\
  & = & \Omega(\next(m),\varphi(a)) \\
  & = & \Omega(\eta(\varphi(a)),\varphi(a))
@@ -99,8 +106,10 @@ $$\begin{eqnarray*}
  & = & \Omega(\next(m),a) \\
  & = & \bif{\iszero(\eta(a))}{\delta(a)}{\sigma(a,\Omega(m,\varphi(a)))} \\
  & = & \bif{\iszero(\next(m))}{\delta(a)}{\sigma(a,\Omega(m,\varphi(a)))} \\
- & = & \bif{\bfalse}{\delta(a)}{\sigma(a,\Omega(m,\varphi(a)))} \\
- & = & \sigma(a,\Omega(m,\varphi(a))) \\
+ &     \href{@unary@#thm-iszero-next}
+   = & \bif{\bfalse}{\delta(a)}{\sigma(a,\Omega(m,\varphi(a)))} \\
+ &     \href{@booleans@#cor-if-false}
+   = & \sigma(a,\Omega(m,\varphi(a))) \\
  & = & \sigma(a,\Omega(\nplus(\eta(\varphi(a)),u),\varphi(a))) \\
  & = & \sigma(a,\Omega(\eta(\varphi(a)),\varphi(a))) \\
  & = & \sigma(a,\Theta(\varphi(a)))

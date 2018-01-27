@@ -251,7 +251,8 @@ Let $a,b \in \nats$. Then $\nlcm(a,b) = a$ if and only if $\ndiv(b,a)$.
 First suppose $\ndiv(b,a)$; say $a = \ntimes(b,d)$. Now $\ndiv(a,a)$ and $\ndiv(b,a)$, and if $\ndiv(c,a)$ and $\ndiv(c,b)$ then $\ndiv(c,a)$. By the universal property of $\nlcm$ we have $a = \nlcm(a,b)$. Conversely, suppose $a = \nlcm(a,b)$. We consider two cases: either $(a,b) = (\zero,\zero)$ or $(a,b) \neq (\zero,\zero)$. If $(a,b) = (\zero,\zero)$ then $\ndiv(b,a)$ as needed. Suppose then that $(a,b) \neq (\zero,\zero)$. If $a = \zero$, then $\ndiv(b,a)$ as claimed. Suppose $a \neq \zero$. Now let $d = \ngcd(a,b)$; note that $d \neq \zero$. Say $b = \ntimes(k,d)$. Now
 $$\begin{eqnarray*}
  &   & \ntimes(a,\next(\zero)) \\
- & = & a \\
+ &     \href{@times@#thm-times-one-right}
+   = & a \\
  & = & \nlcm(a,b) \\
  & = & \nquo(\ntimes(a,b),\ngcd(a,b)) \\
  & = & \nquo(\ntimes(\ntimes(a,k),d),d) \\
@@ -282,7 +283,8 @@ $$\begin{eqnarray*}
  &   & \nlcm(\ntimes(c,a),\ntimes(c,b)) \\
  & = & \nlcm(\zero,\zero) \\
  & = & \zero \\
- & = & \ntimes(\zero,\nlcm(a,b)) \\
+ &     \href{@times@#cor-times-up-zero}
+   = & \ntimes(\zero,\nlcm(a,b)) \\
  & = & \ntimes(c,\nlcm(a,b))
 \end{eqnarray*}$$
 as claimed. Suppose then that $c \neq \zero$. Now we have

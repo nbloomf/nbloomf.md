@@ -114,7 +114,8 @@ Let $a,b,c \in \nats$. We have the following.
 2. First suppose $a = \zero$. Since $\ndiv(a,b)$, we have $b = 0$ as needed. Now suppose $a = \next(d)$. We have $h,k \in \nats$ such that $a = \ntimes(h,b)$ and $b = \ntimes(k,a)$; now
 $$\begin{eqnarray*}
  &   & \ntimes(\next(\zero),\next(d)) \\
- & = & \next(d) \\
+ &     \href{@times@#thm-times-one-left}
+   = & \next(d) \\
  & = & b \\
  & = & \ntimes(\ntimes(h,k),b) \\
  & = & \ntimes(\ntimes(h,k),\next(d));
@@ -170,7 +171,8 @@ Let $a,b,c,d \in \nats$. We have the following.
 $$\begin{eqnarray*}
  &   & \nplus(a,b) \\
  & = & \nplus(\ntimes(h,c),\ntimes(k,c)) \\
- & = & \ntimes(\nplus(h,k),c)
+ &     \href{@times@#thm-times-plus-distribute-right}
+   = & \ntimes(\nplus(h,k),c)
 \end{eqnarray*}$$
 as needed.
 4. We consider two cases: either $d = \zero$ or $d = \next(m)$ for some $m$. If $d = \zero$, then we have $a = c = \zero$, and thus $b = \zero$. So $\ndiv(d,b)$ as claimed. Suppose now that $d = \next(m)$. Now $a = \ntimes(d,u)$ and $c = \ntimes(d,v)$ for some $u$ and $v$. Letting $(q,r) = \ndivalg(b,d)$, we have $$b = \nplus(\ntimes(q,d),r).$$ Now
@@ -187,7 +189,8 @@ $$\begin{eqnarray*}
  &   & b \\
  & = & \ntimes(k,a) \\
  & = & \ntimes(\next(k),a) \\
- & = & \nplus(\ntimes(k,a),a)
+ &     \href{@times@#cor-times-up-next}
+   = & \nplus(\ntimes(k,a),a)
 \end{eqnarray*}$$
 so that $\nleq(a,b)$.
 ::::::::::::::::::::
@@ -261,7 +264,8 @@ $$\begin{eqnarray*}
  &   & \nquo(\ntimes(c,a),b) \\
  & = & \nquo(\zero,\zero) \\
  & = & \zero \\
- & = & \ntimes(c,\zero) \\
+ &     \href{@times@#thm-times-zero-right}
+   = & \ntimes(c,\zero) \\
  & = & \ntimes(c,\nquo(a,b))
 \end{eqnarray*}$$
 as claimed. Suppose then that $b \neq \zero$; say $b = \next(m)$. Now say $a = \ntimes(q,b)$, and by the uniqueness of quotients by a nonzero divisor, we have $q = \nquo(a,b)$. Now $\ntimes(c,a) = \ntimes(\ntimes(c,q),b)$, and again by the uniqueness of quotients by a nonzero divisor we have

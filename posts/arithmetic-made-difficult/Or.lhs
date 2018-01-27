@@ -45,27 +45,33 @@ Note that
 $$\begin{eqnarray*}
  &   & \bor(\btrue,\btrue) \\
  & = & \bif{\btrue}{\btrue}{\bif{\btrue}{\btrue}{\bfalse}} \\
- & = & \btrue,
+ &     \href{@booleans@#cor-if-true}
+   = & \btrue
 \end{eqnarray*}$$
 that
 $$\begin{eqnarray*}
  &   & \bor(\btrue,\bfalse) \\
  & = & \bif{\btrue}{\btrue}{\bif{\bfalse}{\btrue}{\bfalse}} \\
- & = & \btrue,
+ &     \href{@booleans@#cor-if-true}
+   = & \btrue
 \end{eqnarray*}$$
 that
 $$\begin{eqnarray*}
  &   & \bor(\bfalse,\btrue) \\
  & = & \bif{\bfalse}{\btrue}{\bif{\btrue}{\btrue}{\bfalse}} \\
- & = & \bif{\bfalse}{\btrue}{\btrue} \\
- & = & \btrue,
+ &     \href{@booleans@#cor-if-true}
+   = & \bif{\bfalse}{\btrue}{\btrue} \\
+ &     \href{@booleans@#cor-if-false}
+   = & \btrue
 \end{eqnarray*}$$
 and that
 $$\begin{eqnarray*}
  &   & \bor(\bfalse,\bfalse) \\
  & = & \bif{\bfalse}{\btrue}{\bif{\bfalse}{\btrue}{\bfalse}} \\
- & = & \bif{\bfalse}{\btrue}{\bfalse} \\
- & = & \bfalse,
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{\bfalse}{\btrue}{\bfalse} \\
+ &     \href{@booleans@#cor-if-false}
+   = & \bfalse
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -252,7 +258,8 @@ $$\begin{eqnarray*}
  & = & \bnot(\band(\btrue,b)) \\
  & = & \bnot(b) \\
  & = & \bor(\bfalse,\bnot(b)) \\
- & = & \bor(\bnot(\btrue),\bnot(b)) \\
+ &     \href{@not@#thm-not-true}
+   = & \bor(\bnot(\btrue),\bnot(b)) \\
  & = & \bor(\bnot(a),\bnot(b))
 \end{eqnarray*}$$
 as claimed. If $a = \bfalse$, we have
@@ -260,9 +267,11 @@ $$\begin{eqnarray*}
  &   & \bnot(\band(a,b)) \\
  & = & \bnot(\band(\bfalse,b)) \\
  & = & \bnot(\bfalse) \\
- & = & \btrue \\
+ &     \href{@not@#thm-not-false}
+   = & \btrue \\
  & = & \bor(\btrue,\bnot(b)) \\
- & = & \bor(\bnot(\bfalse),\bnot(b)) \\
+ &     \href{@not@#thm-not-false}
+   = & \bor(\bnot(\bfalse),\bnot(b)) \\
  & = & \bor(\bnot(a),\bnot(b))
 \end{eqnarray*}$$
 as claimed.
@@ -271,9 +280,11 @@ $$\begin{eqnarray*}
  &   & \bnot(\bor(a,b)) \\
  & = & \bnot(\bor(\btrue,b)) \\
  & = & \bnot(\btrue) \\
- & = & \bfalse \\
+ &     \href{@not@#thm-not-true}
+   = & \bfalse \\
  & = & \band(\bfalse,\bnot(b)) \\
- & = & \band(\bnot(\btrue),\bnot(b)) \\
+ &     \href{@not@#thm-not-true}
+   = & \band(\bnot(\btrue),\bnot(b)) \\
  & = & \band(\bnot(a),\bnot(b))
 \end{eqnarray*}$$
 as claimed. If $b = \bfalse$, we have
@@ -282,7 +293,8 @@ $$\begin{eqnarray*}
  & = & \bnot(\bor(\bfalse,b)) \\
  & = & \bnot(b) \\
  & = & \band(\btrue,\bnot(b)) \\
- & = & \band(\bnot(\bfalse),\bnot(b)) \\
+ &     \href{@not@#thm-not-false}
+   = & \band(\bnot(\bfalse),\bnot(b)) \\
  & = & \band(\bnot(a),\bnot(b))
 \end{eqnarray*}$$
 as claimed.
@@ -380,13 +392,15 @@ $$\bif{p}{\btrue}{q} = \bor(p,q).$$
 If $p = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bif{\btrue}{\btrue}{q} \\
- & = & \btrue \\
+ &     \href{@booleans@#cor-if-true}
+   = & \btrue \\
  & = & \bor(\btrue,q),
 \end{eqnarray*}$$
 and if $p = \bfalse we have
 $$\begin{eqnarray*}
  &   & \bif{\bfalse}{\btrue}{q} \\
- & = & q \\
+ &     \href{@booleans@#cor-if-false}
+   = & q \\
  & = & \bor(\bfalse,q)
 \end{eqnarray*}$$
 as needed.
@@ -413,15 +427,18 @@ If $p = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bif{\bor(p,q)}{a}{b} \\
  & = & \bif{\btrue}{a}{b} \\
- & = & a
- & = & \bif{\btrue}{a}{\bif{q}{a}{b}} \\
+ &     \href{@booleans@#cor-if-true}
+   = & a
+ &     \href{@booleans@#cor-if-true}
+   = & \bif{\btrue}{a}{\bif{q}{a}{b}} \\
  & = & \bif{p}{a}{\bif{q}{a}{b}}
 \end{eqnarray*}$$
 as needed, and if $p = \bfalse$ we have
 $$\begin{eqnarray*}
  &   & \bif{\bor(p,q)}{a}{b} \\
  & = & \bif{q}{a}{b} \\
- & = & \bif{\bfalse}{a}{\bif{q}{a}{b}} \\
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{\bfalse}{a}{\bif{q}{a}{b}} \\
  & = & \bif{p}{a}{\bif{q}{a}{b}}
 \end{eqnarray*}$$
 as needed.

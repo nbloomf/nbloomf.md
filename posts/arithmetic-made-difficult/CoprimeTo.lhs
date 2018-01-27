@@ -47,7 +47,8 @@ Let $a,b,c \in \nats$ such that $\ncoprime(a,b)$ and $\ndiv(a,\ntimes(b,c))$. Th
 Since $\next(\zero) = \ngcd(a,b)$, we have
 $$\begin{eqnarray*}
  &   & c \\
- & = & \ntimes(\next(\zero),c) \\
+ &     \href{@times@#thm-times-one-left}
+   = & \ntimes(\next(\zero),c) \\
  & = & \ntimes(\ngcd(a,b),c) \\
  & = & \ngcd(\ntimes(a,c),\ntimes(b,c)).
 \end{eqnarray*}$$

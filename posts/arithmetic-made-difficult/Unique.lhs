@@ -101,7 +101,8 @@ $$\begin{eqnarray*}
  &   & \unique(\cons(a,\nil)) \\
  & = & \band(\bnot(\elt(a,\nil)),\unique(\nil)) \\
  & = & \band(\bnot(\bfalse),\btrue) \\
- & = & \band(\btrue,\btrue) \\
+ &     \href{@not@#thm-not-false}
+   = & \band(\btrue,\btrue) \\
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.
@@ -328,7 +329,8 @@ $$\begin{eqnarray*}
  & = & \band(\bnot(\elt(a,\range(\next(a),b))),\btrue) \\
  & = & \bnot(\elt(a,\range(\next(a),b))) \\
  & = & \bnot(\bfalse) \\
- & = & \btrue
+ &     \href{@not@#thm-not-false}
+   = & \btrue
 \end{eqnarray*}$$
 ::::::::::::::::::::
 
@@ -354,7 +356,8 @@ $$\begin{eqnarray*}
  &   & \all(\unique)(\map(\cons(a,\cons(-,x)))(\nil)) \\
  & = & \all(\unique)(\nil) \\
  & = & \btrue \\
- & = & \bnot(\bfalse) \\
+ &     \href{@not@#thm-not-false}
+   = & \bnot(\bfalse) \\
  & = & \bnot(\elt(a,\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$, and let $b \in A$. Now

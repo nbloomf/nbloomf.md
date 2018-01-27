@@ -238,21 +238,28 @@ For all $a,b,c, \in \nats$, we have the following.
 1. We proceed by induction on $a$. For the base case, we have $$\ntimes(\zero,\nplus(b,c)) = \zero = \nplus(\zero,\zero) = \nplus(\ntimes(\zero,b),\ntimes(\zero,c))$$ as needed. For the inductive step, suppose we have $\ntimes(a,\nplus(b,c)) = \nplus(\ntimes(a,b),\ntimes(a,c))$ for all $b$ and $c$ for some $a$. Now
 $$\begin{eqnarray*}
  &   & \ntimes(\next(a),\nplus(b,c)) \\
- & = & \nplus(\ntimes(a,\nplus(b,c)),\nplus(b,c)) \\
- & = & \nplus(\nplus(\ntimes(a,b),\ntimes(a,c)),\nplus(b,c)) \\
+ &     \href{@times@#cor-times-up-next}
+   = & \nplus(\ntimes(a,\nplus(b,c)),\nplus(b,c)) \\
+ &     \href{@times@#thm-times-plus-distribute-left}
+   = & \nplus(\nplus(\ntimes(a,b),\ntimes(a,c)),\nplus(b,c)) \\
  & = & \nplus(\nplus(\nplus(\nplus(\ntimes(a,b),\ntimes(a,c))),b),c) \\
  & = & \nplus(\nplus(\ntimes(a,b),\nplus(\ntimes(a,c),b)),c) \\
- & = & \nplus(\nplus(\ntimes(a,b),\nplus(b,\ntimes(a,c))),c) \\
- & = & \nplus(\nplus(\nplus(\ntimes(a,b),b),\ntimes(a,c)),c) \\
- & = & \nplus(\nplus(\ntimes(a,b),b),\nplus(\ntimes(a,c),c)) \\
+ &     \href{@plus@#thm-plus-commutative}
+   = & \nplus(\nplus(\ntimes(a,b),\nplus(b,\ntimes(a,c))),c) \\
+ &     \href{@plus@#thm-plus-associative}
+   = & \nplus(\nplus(\nplus(\ntimes(a,b),b),\ntimes(a,c)),c) \\
+ &     \href{@plus@#thm-plus-associative}
+   = & \nplus(\nplus(\ntimes(a,b),b),\nplus(\ntimes(a,c),c)) \\
  & = & \nplus(\ntimes(\next(a),b),\ntimes(\next(a),c))
 \end{eqnarray*}$$
 as needed.
 2. We have
 $$\begin{eqnarray*}
  &   & \ntimes(\nplus(a,b),c) \\
- & = & \ntimes(c,\nplus(a,b)) \\
- & = & \nplus(\ntimes(c,a),\ntimes(c,b)) \\
+ &     \href{@times@#thm-times-commutative}
+   = & \ntimes(c,\nplus(a,b)) \\
+ &     \href{@times@#thm-times-plus-distribute-left}
+   = & \nplus(\ntimes(c,a),\ntimes(c,b)) \\
  & = & \nplus(\ntimes(a,c),\ntimes(b,c))
 \end{eqnarray*}$$
 as claimed.
@@ -285,17 +292,23 @@ For all $a,b,c \in \nats$, we have $$\ntimes(\ntimes(a,b),c) = \ntimes(a,\ntimes
 We proceed by induction on $a$. For the base case, we have
 $$\begin{eqnarray*}
  &   & \ntimes(\zero,\ntimes(b,c)) \\
- & = & \zero \\
- & = & \ntimes(\zero,c) \\
- & = & \ntimes(\ntimes(\zero,b),c)
+ &     \href{@times@#cor-times-up-zero}
+   = & \zero \\
+ &     \href{@times@#cor-times-up-zero}
+   = & \ntimes(\zero,c) \\
+ &     \href{@times@#cor-times-up-zero}
+   = & \ntimes(\ntimes(\zero,b),c)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose we have $\ntimes(a,\ntimes(b,c)) = \ntimes(\ntimes(a,b),c)$ for all $b$ and $c$ for some $a$. Then
 $$\begin{eqnarray*}
  &   & \ntimes(\ntimes(\next(a),b),c) \\
- & = & \ntimes(\nplus(\ntimes(a,b),b),c) \\
- & = & \nplus(\ntimes(\ntimes(a,b),c),\ntimes(b,c)) \\
+ &     \href{@times@#cor-times-up-next}
+   = & \ntimes(\nplus(\ntimes(a,b),b),c) \\
+ &     \href{@times@#thm-times-plus-distribute-right}
+   = & \nplus(\ntimes(\ntimes(a,b),c),\ntimes(b,c)) \\
  & = & \nplus(\ntimes(a,\ntimes(b,c)),\ntimes(b,c)) \\
- & = & \ntimes(\next(a),\ntimes(b,c))
+ &     \href{@times@#cor-times-up-next}
+   = & \ntimes(\next(a),\ntimes(b,c))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -323,15 +336,18 @@ For all $a,b,c \in \nats$, we have the following.
 1. This proof will be a little different: we will use induction twice; first on $b$, and then on $c$. To this end, let $$B = \{ b \in \nats \mid \forall c, \forall a,\ \mathrm{if}\ \ntimes(\next(a),b) = \ntimes(\next(a),c)\ \mathrm{then}\ b = c \}$$ and given $b \in \nats$ let $$C(b) = \{ c \in \nats \mid \forall a,\ \mathrm{if}\ \ntimes(\next(a),b) = \ntimes(\next(a),c)\ \mathrm{then}\ b = c \}.$$ We wish to show that $B = \nats$ by induction. For the base case, we need to show that $b = \zero \in B$; for this it suffices to show that $C(\zero) = \nats$, which we do by induction. For the base case $c = \zero$, we have $b = c$ regardless of $a$. For the inductive step suppose we have $c \in C(\zero)$ for some $c$. Note that
 $$\begin{eqnarray*}
  &   & \ntimes(\next(a),\next(c)) \\
- & = & \nplus(\ntimes(a,\next(c)),\next(c)) \\
- & = & \next(\nplus(\ntimes(a,\next(c)),c))
+ &     \href{@times@#cor-times-up-next}
+   = & \nplus(\ntimes(a,\next(c)),\next(c)) \\
+ &     \href{@plus@#thm-plus-next-right}
+   = & \next(\nplus(\ntimes(a,\next(c)),c))
 \end{eqnarray*}$$
 while $$\ntimes(\next(a),b) = \ntimes(\next(a),\zero) = \zero;$$ in particular, the statement $$\ntimes(\next(a),\next(c)) = \ntimes(\next(a),b)$$ is false, so that $\next(c) \in C(\zero)$ *vacuously*. So we have $C(\zero) = \nats$, and thus $\zero \in B$. For the inductive step, suppose we have $b \in B$; we wish to show that $\next(b) \in B$, or equivalently that $C(\next(b)) = \nats$. We proceed by induction on $c$ again. The base case $c = \zero$ holds vacuously. For the inductive step, suppose we have $c \in C(\next(b))$. Now suppose further that $$\ntimes(\next(a),\next(b)) = \ntimes(\next(a),\next(c)).$$ Note that
 $$\begin{eqnarray*}
  &   & \ntimes(\next(a),\next(b)) \\
  & = & \nplus(\ntimes(a,\next(c),\next(c))) \\
  & = & \next(\nplus(\ntimes(\next(c),a),c)) \\
- & = & \next(\nplus(\nplus(\ntimes(c,a),a),c)) \\
+ &     \href{@times@#cor-times-up-next}
+   = & \next(\nplus(\nplus(\ntimes(c,a),a),c)) \\
  & = & \next(\nplus(\nplus(\ntimes(a,c),c),a)).
 \end{eqnarray*}$$
 The analogous statement holds for $b$. So we have
@@ -377,8 +393,10 @@ For all $a \in \nats$ we have $$\ntimes(\next(\next(\zero)),a) = \nplus(a,a).$$
 Note that
 $$\begin{eqnarray*}
  &   & \ntimes(\next(\next(\zero)),a) \\
- & = & \nplus(\ntimes(\next(\zero),a),a) \\
- & = & \nplus(a,a)
+ &     \href{@times@#cor-times-up-next}
+   = & \nplus(\ntimes(\next(\zero),a),a) \\
+ &     \href{@times@#thm-times-one-left}
+   = & \nplus(a,a)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

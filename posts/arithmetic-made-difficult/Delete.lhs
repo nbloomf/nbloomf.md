@@ -149,11 +149,13 @@ as needed. For the inductive step, suppose the equatily holds for some $x$, and 
 $$\begin{eqnarray*}
  &   & \delete(a)(\filter(p)(\cons(b,x))) \\
  & = & \delete(a)(\bif{p(b)}{\cons(b,\filter(p)(x))}{\filter(p)(x)}) \\
- & = & \bif{p(b)}{\delete(a)(\cons(b,\filter(p)(x)))}{\delete(a)(\filter(p)(x))} \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \bif{p(b)}{\delete(a)(\cons(b,\filter(p)(x)))}{\delete(a)(\filter(p)(x))} \\
  & = & \bif{p(b)}{\bif{\beq(a,b)}{\delete(a)(\filter(p)(x))}{\cons(b,\delete(a)(\filter(p)(x)))}}{\delete(a)(\filter(p)(x))} \\
  & = & \bif{p(b)}{\bif{\beq(a,b)}{\filter(p)(x)}{\cons(b,\filter(p)(x))}}{\filter(p)(x)} \\
  & = & \bif{p(b)}{\bif{\bfalse}{\filter(p)(x)}{\cons(b,\filter(p)(x))}}{\filter(p)(x)} \\
- & = & \bif{p(b)}{\cons(b,\filter(p)(x))}{\filter(p)(x)} \\
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{p(b)}{\cons(b,\filter(p)(x))}{\filter(p)(x)} \\
  & = & \filter(p)(\cons(b,x))
 \end{eqnarray*}$$
 as needed.
@@ -398,7 +400,8 @@ $$\begin{eqnarray*}
  & = & \btrue \\
  & = & \bif{\beq(a,c)}{\btrue}{\elt(a,x)} \\
  & = & \elt(a,\cons(c,x)) \\
- & = & \bif{\bfalse}{\bfalse}{\elt(a,\cons(c,x))} \\
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{\bfalse}{\bfalse}{\elt(a,\cons(c,x))} \\
  & = & \bif{\beq(a,b)}{\bfalse}{\elt(a,\cons(c,x))}.
 \end{eqnarray*}$$
 If $b \neq c$ and $a \neq c$, we have
@@ -490,9 +493,11 @@ $$\begin{eqnarray*}
  & = & \delete(a,\cons(c,\snoc(b,x))) \\
  & = & \bif{\beq(a,c)}{\delete(a,\snoc(b,x))}{\cons(c,\delete(a,\snoc(b,x)))} \\
  & = & \bif{\beq(a,c)}{\bif{\beq(a,b)}{\delete(a,x)}{\snoc(b,\delete(a,x))}}{\cons(c,\bif{\beq(a,b)}{\delete(a,x)}{\snoc(b,\delete(a,x))})} \\
- & = & \bif{\beq(a,c)}{\bif{\beq(a,b)}{\delete(a,x)}{\snoc(b,\delete(a,x))}}{\bif{\beq(a,b)}{\cons(c,\delete(a,x))}{\cons(c,\snoc(b,\delete(a,x)))}} \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \bif{\beq(a,c)}{\bif{\beq(a,b)}{\delete(a,x)}{\snoc(b,\delete(a,x))}}{\bif{\beq(a,b)}{\cons(c,\delete(a,x))}{\cons(c,\snoc(b,\delete(a,x)))}} \\
  & = & \bif{\beq(a,c)}{\bif{\beq(a,b)}{\delete(a,x)}{\snoc(b,\delete(a,x))}}{\bif{\beq(a,b)}{\cons(c,\delete(a,x))}{\snoc(b,\cons(c,\delete(a,x)))}} \\
- & = & \bif{\beq(a,b)}{\bif{\beq(a,c)}{\delete(a,x)}{\cons(c,\delete(a,x))}}{\bif{\beq(a,c)}{\snoc(b,\delete(a,x))}{\snoc(b,\cons(c,\delete(a,x)))}} \\
+ &     \href{@booleans@#thm-ifnest}
+   = & \bif{\beq(a,b)}{\bif{\beq(a,c)}{\delete(a,x)}{\cons(c,\delete(a,x))}}{\bif{\beq(a,c)}{\snoc(b,\delete(a,x))}{\snoc(b,\cons(c,\delete(a,x)))}} \\
  & = & \bif{\beq(a,b)}{\delete(a,\cons(c,x))}{\bif{\beq(a,c)}{\snoc(b,\delete(a,x))}{\snoc(b,\cons(c,\delete(a,x)))}} \\
  & = & \bif{\beq(a,b)}{\delete(a,\cons(c,x))}{\snoc(b,\bif{\beq(a,c)}{\delete(a,x)}{\cons(c,\delete(a,x))})} \\
  & = & \bif{\beq(a,b)}{\delete(a,\cons(c,x))}{\snoc(b,\delete(a,\cons(c,x)))} \\

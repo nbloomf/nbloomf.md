@@ -51,20 +51,24 @@ that
 $$\begin{eqnarray*}
  &   & \band(\btrue,\bfalse) \\
  & = & \bif{\btrue}{\bif{\bfalse}{\btrue}{\bfalse}}{\bfalse} \\
- & = & \bif{\btrue}{\bfalse}{\bfalse} \\
- & = & \bfalse,
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{\btrue}{\bfalse}{\bfalse} \\
+ &     \href{@booleans@#cor-if-true}
+   = & \bfalse
 \end{eqnarray*}$$
 that
 $$\begin{eqnarray*}
  &   & \band(\bfalse,\btrue) \\
  & = & \bif{\bfalse}{\bif{\btrue}{\btrue}{\bfalse}}{\bfalse} \\
- & = & \bfalse,
+ &     \href{@booleans@#cor-if-false}
+   = & \bfalse
 \end{eqnarray*}$$
 and that
 $$\begin{eqnarray*}
  &   & \band(\bfalse,\bfalse) \\
  & = & \bif{\bfalse}{\bif{\bfalse}{\btrue}{\bfalse}}{\bfalse} \\
- & = & \bfalse
+ &     \href{@booleans@#cor-if-false}
+   = & \bfalse
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -246,7 +250,8 @@ Let $p,q,r \in \bool$. Then we have $$\band(p,\bif{p}{q}{r}) = \band(p,q).$$
 If $p = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \band(\btrue,\bif{\btrue}{q}{r}) \\
- & = & \band(\btrue,q) \\
+ &     \href{@booleans@#cor-if-true}
+   = & \band(\btrue,q) \\
 \end{eqnarray*}$$
 as claimed. If $p = \bfalse$, we have
 $$\begin{eqnarray*}
@@ -278,14 +283,17 @@ If $p = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bif{\band(\btrue,q)}{a}{b} \\
  & = & \bif{q}{a}{b} \\
- & = & \bif{\btrue}{\bif{q}{a}{b}}{b},
+ &     \href{@booleans@#cor-if-true}
+   = & \bif{\btrue}{\bif{q}{a}{b}}{b}
 \end{eqnarray*}$$
 and if $p = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bif{\band(\bfalse,q)}{a}{b} \\
  & = & \bif{\bfalse}{a}{b} \\
- & = & b \\
- & = & \bif{\bfalse}{\bif{q}{a}{b}}{b}
+ &     \href{@booleans@#cor-if-false}
+   = & b \\
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{\bfalse}{\bif{q}{a}{b}}{b}
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

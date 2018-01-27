@@ -43,23 +43,27 @@ We define $\beta : \nats \times A \rightarrow \bool$ by $$\beta(k,a) = \iszero(\
 $$\begin{eqnarray*}
  &   & \Omega(\nplus(\eta(\varphi(a)),k),\varphi(a)) \\
  & = & \Omega(\nplus(\zero,\zero),\varphi(a)) \\
- & = & \Omega(\zero,\varphi(a)) \\
+ &     \href{@plus@#cor-plus-up-zero}
+   = & \Omega(\zero,\varphi(a)) \\
  & = & \Omega(\eta(\varphi(a)),\varphi(a)).
 \end{eqnarray*}$$
 For the inductive step, suppose the equality holds for some $k$. Now
 $$\begin{eqnarray*}
  &   & \Omega(\nplus(\eta(\varphi(a)),\next(k)),\varphi(a)) \\
- & = & \Omega(\next(\nplus(\eta(\varphi(a)),k)),\varphi(a)) \\
+ &     \href{@plus@#thm-plus-next-right}
+   = & \Omega(\next(\nplus(\eta(\varphi(a)),k)),\varphi(a)) \\
  & = & \bif{\iszero(\eta(\varphi(a)))}{\chi(\varphi(a))}{\Omega(\nplus(\eta(\varphi(\varphi(a))),k))} \\
  & = & \bif{\btrue}{\chi(\varphi(a))}{\Omega(\nplus(\eta(\varphi(\varphi(a))),k))} \\
- & = & \chi(\varphi(a)) \\
+ &     \href{@booleans@#cor-if-true}
+   = & \chi(\varphi(a)) \\
  & = & \Omega(\zero,\varphi(a)) \\
  & = & \Omega(\eta(\varphi(a)),\varphi(a)).
 \end{eqnarray*}$$
 So if $\eta(\varphi(a)) = \zero$, we have $$\Omega(\nplus(\eta(\varphi(a)),k),\varphi(a)) = \Omega(\eta(\varphi(a)),\varphi(a)).$$ For the strong induction step, suppose we have $m \in \nats$ such that the equality holds for all $k \in \nats$ and all $a \in A$ such that $\nleq(\eta(\varphi(a)),m)$. Suppose further that $a \in A$ such that $\eta(\varphi(a)) = \next(m)$. We proceed by induction on $k$. If $k = \zero$, we have $$\Omega(\nplus(\eta(\varphi(a)),\zero),\varphi(a)) = \Omega(\eta(\varphi(a)),\varphi(a)).$$ For the inductive step suppose the equality holds for some $k$. Now
 $$\begin{eqnarray*}
  &   & \Omega(\nplus(\eta(\varphi(a)),\next(k)),\varphi(a)) \\
- & = & \Omega(\next(\nplus(\eta(\varphi(a)),k)),\varphi(a)) \\
+ &     \href{@plus@#thm-plus-next-right}
+   = & \Omega(\next(\nplus(\eta(\varphi(a)),k)),\varphi(a)) \\
  & = & \bif{\iszero(\eta(\varphi(a)))}{\chi(\varphi(a))}{\Omega(\nplus(\eta(\varphi(a)),k),\varphi(\varphi(a)))} \\
  & = & \Omega(\nplus(\eta(\varphi(a)),k),\varphi(\varphi(a))) \\
  & = & Q.
@@ -70,7 +74,8 @@ $$\begin{eqnarray*}
  & = & \nplus(\next(m),k) \\
  & = & \nplus(m,\next(k)) \\
  & = & \nplus(\nplus(\eta(\varphi(\varphi(a))),u),\next(k)) \\
- & = & \nplus(\eta(\varphi(\varphi(a))),\nplus(u,\next(k))),
+ &     \href{@plus@#thm-plus-associative}
+   = & \nplus(\eta(\varphi(\varphi(a))),\nplus(u,\next(k)))
 \end{eqnarray*}$$
 and by the strong induction hypothesis, we have
 $$\begin{eqnarray*}

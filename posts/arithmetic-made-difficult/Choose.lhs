@@ -102,7 +102,8 @@ $$\begin{eqnarray*}
  & = & \nchoose(\next(\next(n)),\next(m)) \\
  & = & \nplus(\nchoose(\next(n),m),\nchoose(\next(n),\next(m))) \\
  & = & \nplus(\zero,\zero) \\
- & = & \zero
+ &     \href{@plus@#cor-plus-up-zero}
+   = & \zero
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -154,7 +155,8 @@ $$\begin{eqnarray*}
  &   & \nchoose(\next(n),\next(n)) \\
  & = & \nplus(\nchoose(n,n),\nchoose(n,\next(n))) \\
  & = & \nplus(\next(\zero),\zero) \\
- & = & \next(\zero)
+ &     \href{@plus@#thm-plus-zero-right}
+   = & \next(\zero)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -204,14 +206,16 @@ $$\begin{eqnarray*}
  &   & \next(n) \\
  & = & \nplus(k,m) \\
  & = & \nplus(\next(v),m) \\
- & = & \next(\nplus(v,m))
+ &     \href{@plus@#cor-plus-up-next}
+   = & \next(\nplus(v,m))
 \end{eqnarray*}$$
 so that $n = \nplus(v,m)$, and similarly
 $$\begin{eqnarray*}
  &   & \next(n) \\
  & = & \nplus(k,m) \\
  & = & \nplus(k,\next(u)) \\
- & = & \next(\nplus(k,u))
+ &     \href{@plus@#thm-plus-next-right}
+   = & \next(\nplus(k,u))
 \end{eqnarray*}$$
 so that $n = \nplus(k,u)$. Using the inductive hypothesis, we have
 $$\begin{eqnarray*}
@@ -220,7 +224,8 @@ $$\begin{eqnarray*}
  & = & \nplus(\nchoose(n,v),\nchoose(n,\next(v))) \\
  & = & \nplus(\nchoose(n,m),\nchoose(n,k)) \\
  & = & \nplus(\nchoose(n,\next(u)),\nchoose(n,u)) \\
- & = & \nplus(\nchoose(n,u),\nchoose(n,\next(u))) \\
+ &     \href{@plus@#thm-plus-commutative}
+   = & \nplus(\nchoose(n,u),\nchoose(n,\next(u))) \\
  & = & \nplus(\next(n),\next(u)) \\
  & = & \nplus(\next(n),m)
 \end{eqnarray*}$$

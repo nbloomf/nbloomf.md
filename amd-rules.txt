@@ -3,8 +3,8 @@
 #=======================#
 @booleans@#cor-if-true	\\bif{\\btrue}{a}{b} = a
 @booleans@#cor-if-false	\\bif{\\bfalse}{a}{b} = b
-@booleans@#thm-iffunc	\\bif{p}{f(u)}{f(v)} = f(\bif{p}{u}{v})
-@booleans@#thm-ifnest	\\bif{p}{\\bif{q}{a}{b}}{\\bif{q}{c}{d}} = \bif{q}{\\bif{p}{a}{c}}{\\bif{p}{b}{d}}
+@booleans@#thm-iffunc	\\bif{p}{f(u)}{f(v)} = f(\\bif{p}{u}{v})
+@booleans@#thm-ifnest	\\bif{p}{\\bif{q}{a}{b}}{\\bif{q}{c}{d}} = \\bif{q}{\\bif{p}{a}{c}}{\\bif{p}{b}{d}}
 @booleans@#thm-if-prune-true	\\bif{p}{\\bif{p}{a}{b}}{c} = \\bif{p}{a}{c}
 @booleans@#thm-if-prune-false	\\bif{p}{a}{\\bif{p}{b}{c}} = \\bif{p}{a}{c}
 @booleans@#thm-if-commute-true	\\bif{p}{\\bif{q}{a}{b}}{b} = \\bif{q}{\\bif{p}{a}{b}}{b}
@@ -59,7 +59,7 @@
 #=======================#
 @minus@#cor-minus-up-zero	\\nminus(\\zero,b) = \\bif{\\iszero(b)}{\\rgt(\\zero)}{\\lft(\\ast)}
 @minus@#cor-minus-up-next	\\nminus(\\next(a),b) = \\bif{\\iszero(b)}{\\rgt(\\next(a))}{\\nminus(a,\\prev(b))}
-@minus@#thm-minus-nat-zero	\\nminus(a,\\zero) = \rgt(a)
+@minus@#thm-minus-nat-zero	\\nminus(a,\\zero) = \\rgt(a)
 @minus@#thm-minus-zero-next	\\nminus(\\zero,\\next(a)) = \\lft(\\ast)
 @minus@#thm-minus-next-cancel	\\nminus(\\next(a),\\next(b)) = \\nminus(a,b)
 @minus@#thm-minus-next-self	\\nminus(a,\\next(a)) = \\lft(\\ast)

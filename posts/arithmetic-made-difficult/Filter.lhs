@@ -308,9 +308,11 @@ as needed. For the inductive step, suppose the equality holds for some $x$ and l
 $$\begin{eqnarray*}
  &   & \filter(p)(\filter(p)(\cons(a,x))) \\
  & = & \filter(p)(\bif{p(a)}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
- & = & \bif{p(a)}{\filter(p)(\cons(a,\filter(p)(x)))}{\filter(p)(\filter(p)(x))} \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \bif{p(a)}{\filter(p)(\cons(a,\filter(p)(x)))}{\filter(p)(\filter(p)(x))} \\
  & = & \bif{p(a)}{\bif{p(a)}{\cons(a,\filter(p)(x))}{\filter(p)(x)}}{\filter(p)(x)} \\
- & = & \bif{p(a)}{\cons(a,\filter(p)(x))}{\filter(p)(x)} \\
+ &     \href{@booleans@#thm-if-prune-true}
+   = & \bif{p(a)}{\cons(a,\filter(p)(x))}{\filter(p)(x)} \\
  & = & \filter(p)(\cons(a,x))
 \end{eqnarray*}$$
 as needed
@@ -347,7 +349,8 @@ $$\begin{eqnarray*}
  &   & \beq(\cons(a,x),\filter(p)(\cons(a,x))) \\
  & = & \beq(\cons(a,x),\bif{p(a)}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
  & = & \beq(\cons(a,x),\bif{\btrue}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
- & = & \beq(\cons(a,x),\cons(a,\filter(p)(x))) \\
+ &     \href{@booleans@#cor-if-true}
+   = & \beq(\cons(a,x),\cons(a,\filter(p)(x))) \\
  & = & \band(\beq(a,a),\beq(x,\filter(p)(x))) \\
  & = & \band(\btrue,\beq(x,\filter(p)(x))) \\
  & = & \beq(x,\filter(p)(x)) \\
@@ -361,7 +364,8 @@ $$\begin{eqnarray*}
  &   & \beq(\cons(a,x),\filter(p)(\cons(a,x))) \\
  & = & \beq(\cons(a,x),\bif{p(a)}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
  & = & \beq(\cons(a,x),\bif{\bfalse}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
- & = & \beq(\cons(a,x),\filter(p)(x)) \\
+ &     \href{@booleans@#cor-if-false}
+   = & \beq(\cons(a,x),\filter(p)(x)) \\
  & = & \bfalse \\
  & = & \band(\bfalse,\all(p,x)) \\
  & = & \band(p(a),\all(p,x)) \\
@@ -399,7 +403,8 @@ as needed. For the inductive step, suppose the equality holds for some $x$ and l
 $$\begin{eqnarray*}
  &   & \filter(p)(\filter(q)(\cons(a,x))) \\
  & = & \filter(p)(\bif{q(a)}{\cons(a,\filter(q)(x))}{\filter(q)(x)}) \\
- & = & \bif{q(a)}{\filter(p)(\cons(a,\filter(q)(x)))}{\filter(p)(\filter(q)(x))} \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \bif{q(a)}{\filter(p)(\cons(a,\filter(q)(x)))}{\filter(p)(\filter(q)(x))} \\
  & = & \bif{q(a)}{\bif{p(a)}{\cons(a),\filter(p)(\filter(q)(x))}{\filter(p)(\filter(q)(x))}}{\filter(p)(\filter(q)(x))} \\
  & = & \bif{p(a)}{\bif{q(a)}{\cons(a),\filter(p)(\filter(q)(x))}{\filter(p)(\filter(q)(x))}}{\filter(p)(\filter(q)(x))} \\
  & = & \bif{p(a)}{\filter(q)(\cons(a,\filter(p)(x)))}{\filter(q)(\filter(p)(x))} \\

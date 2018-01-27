@@ -50,26 +50,36 @@ Let $a,b \in \nats$. Then we have the following.
 1. We have
 $$\begin{eqnarray*}
  &   & \nleq(\next(a),\zero) \\
- & = & \isRgt(\nminus(\zero,\next(a))) \\
- & = & \isRgt(\lft(\ast)) \\
- & = & \bfalse
+ &     \href{@leq@#dfn-leq}
+   = & \isRgt(\nminus(\zero,\next(a))) \\
+ &     \href{@minus@#thm-minus-zero-next}
+   = & \isRgt(\lft(\ast)) \\
+ &     \href{@disjoint-unions@#thm-disjoint-unions-isRgt-lft}
+   = & \bfalse
 \end{eqnarray*}$$
 as claimed.
 2. We have
 $$\begin{eqnarray*}
  &   & \nleq(\next(\next(a)),\next(\zero)) \\
- & = & \isRgt(\nminus(\next(\zero),\next(\next(a)))) \\
- & = & \isRgt(\nminus(\zero,\next(a))) \\
- & = & \isRgt(\lft(\ast)) \\
- & = & \bfalse
+ &     \href{@leq@#dfn-leq}
+   = & \isRgt(\nminus(\next(\zero),\next(\next(a)))) \\
+ &     \href{@minus@#thm-minus-next-cancel}
+   = & \isRgt(\nminus(\zero,\next(a))) \\
+ &     \href{@minus@#thm-minus-zero-next}
+   = & \isRgt(\lft(\ast)) \\
+ &     \href{@disjoint-unions@#thm-disjoint-unions-isRgt-lft}
+   = & \bfalse
 \end{eqnarray*}$$
 as claimed.
 3. We have
 $$\begin{eqnarray*}
  &   & \nleq(\next(a),a) \\
- & = & \isRgt(\nminus(a,\next(a))) \\
- & = & \isRgt(\lft(\ast)) \\
- & = & \bfalse
+ &     \href{@leq@#dfn-leq}
+   = & \isRgt(\nminus(a,\next(a))) \\
+ &     \href{@minus@#thm-minus-next-self}
+   = & \isRgt(\lft(\ast)) \\
+ &     \href{@disjoint-unions@#thm-disjoint-unions-isRgt-lft}
+   = & \bfalse
 \end{eqnarray*}$$
 as claimed.
 4. We have $\nminus(\nplus(a,b),a) = \rgt(b)$, so $\nleq(a,\nplus(a,b)) = \btrue$.
@@ -116,9 +126,12 @@ For all $a,b \in \nats$ we have $\nleq(\next(a),\next(b)) = \nleq(a,b)$.
 We have
 $$\begin{eqnarray*}
  &   & \nleq(\next(a),\next(b)) \\
- & = & \isRgt(\nminus(\next(b),\next(a))) \\
- & = & \isRgt(\nminus(b,a)) \\
- & = & \nleq(a,b)
+ &     \href{@leq@#dfn-leq}
+   = & \isRgt(\nminus(\next(b),\next(a))) \\
+ &     \href{@minus@#thm-minus-next-cancel}
+   = & \isRgt(\nminus(b,a)) \\
+ &     \href{@leq@#dfn-leq}
+   = & \nleq(a,b)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -158,10 +171,12 @@ We have the following.
 2. Suppose $\nleq(a,b)$ and $\nleq(b,a)$; then there exist $u,v \in \nats$ such that $b = \nplus(a,u)$ and $a = \nplus(b,v)$. Now
 $$\begin{eqnarray*}
  &   & \nplus(a,\zero) \\
- & = & a \\
+ &     \href{@plus@#thm-plus-zero-right}
+   = & a \\
  & = & \nplus(b,v) \\
  & = & \nplus(\nplus(a,u),v) \\
- & = & \nplus(a,\nplus(u,v)),
+ &     \href{@plus@#thm-plus-associative}
+   = & \nplus(a,\nplus(u,v))
 \end{eqnarray*}$$
 so that $\zero = \nplus(u,v)$, and thus $u = v = \zero$. So $b = \nplus(a,\zero) = a$ as claimed.
 3. Suppose $\nleq(a,b)$ and $\nleq(b,c)$; then there exist $u,v \in \nats$ such that $b = \nplus(a,u)$ and $c = \nplus(b,v)$. Now
@@ -169,7 +184,8 @@ $$\begin{eqnarray*}
  &   & c \\
  & = & \nplus(b,v) \\
  & = & \nplus(\nplus(a,u),v) \\
- & = & \nplus(a,\nplus(u,v))
+ &     \href{@plus@#thm-plus-associative}
+   = & \nplus(a,\nplus(u,v))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

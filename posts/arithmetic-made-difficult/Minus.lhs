@@ -241,26 +241,29 @@ First we show (1) implies (2) by induction on $b$. For the base case, suppose we
 $$\begin{eqnarray*}
  &   & \rgt(c) \\
  & = & \nminus(\zero,a) \\
- & = & \bif{\iszero(a)}{\rgt(\zero)}{\lft(\ast)}.
+ &     \href{@minus@#cor-minus-up-zero}
+   = & \bif{\iszero(a)}{\rgt(\zero)}{\lft(\ast)}
 \end{eqnarray*}$$
-If $\iszero(a) = \bfalse$, we have $\rgt(c) = \lft(\ast)$, which is absurd. So $\iszero(a) = \btrue$, and thus $a = \zero$, and moreover $\rgt(c) = \rgt(\zero)$, so $c = \zero$. Then $\zero = \nplus(a,c)$ as needed. For the inductive step, suppose the result holds for all $a$ and $c$ for some $b$, and suppose further that $\nminus(\next(b),a) = \rgt(c)$. If $a = \zero$, we have
+as needed. If $\iszero(a) = \bfalse$, we have $\rgt(c) = \lft(\ast)$, which is absurd. So $\iszero(a) = \btrue$, and thus $a = \zero$, and moreover $\rgt(c) = \rgt(\zero)$, so $c = \zero$. Then $\zero = \nplus(a,c)$ as needed. For the inductive step, suppose the result holds for all $a$ and $c$ for some $b$, and suppose further that $\nminus(\next(b),a) = \rgt(c)$. If $a = \zero$, we have
 $$\begin{eqnarray*}
  &   & \rgt(c) \\
  & = & \nminus(\next(b),\zero) \\
- & = & \rgt(\next(b)),
+ & = & \rgt(\next(b))
 \end{eqnarray*}$$
 so that $\next(b) = c = \nplus(c,\zero)$ as needed. Suppose instead that $a = \next(d)$ for some $d$. Now
 $$\begin{eqnarray*}
  &   & \rgt(c) \\
  & = & \nminus(\next(b),a) \\
  & = & \nminus(\next(b),\next(d)) \\
- & = & \nminus(b,d) \\
+ &     \href{@minus@#thm-minus-next-cancel}
+   = & \nminus(b,d) \\
 \end{eqnarray*}$$
 and thus $\nplus(d,c) = b$. But then
 $$\begin{eqnarray*}
  &   & \next(b) \\
  & = & \next(\nplus(d,c)) \\
- & = & \nplus(\next(d),c) \\
+ &     \href{@plus@#cor-plus-up-next}
+   = & \nplus(\next(d),c) \\
  & = & \nplus(a,c)
 \end{eqnarray*}$$
 as needed.
@@ -269,8 +272,10 @@ Next we show that (2) implies (1) by induction on $a$. For the base case $a = \z
 $$\begin{eqnarray*}
  &   & \nminus(b,\next(a)) \\
  & = & \nminus(\nplus(\next(a),c),\next(a)) \\
- & = & \nminus(\next(\nplus(a,c)),\next(a)) \\
- & = & \nminus(\nplus(a,c),a) \\
+ &     \href{@plus@#cor-plus-up-next}
+   = & \nminus(\next(\nplus(a,c)),\next(a)) \\
+ &     \href{@minus@#thm-minus-next-cancel}
+   = & \nminus(\nplus(a,c),a) \\
  & = & \nminus(d,a) \\
  & = & \rgt(c)
 \end{eqnarray*}$$
@@ -449,10 +454,12 @@ as claimed.
 For the inductive step, suppose the equality holds for some $a \in \nats$ and suppose that $\nminus(\next(a),b) = \rgt(d)$. Then we have
 $$\begin{eqnarray*}
  &   & \nminus(\ntimes(c,\next(a)),\ntimes(c,b)) \\
- & = & \nminus(\nplus(\ntimes(c,a),c),\ntimes(c,b)) \\
+ &     \href{@times@#thm-times-next-right}
+   = & \nminus(\nplus(\ntimes(c,a),c),\ntimes(c,b)) \\
  & = & \nplus(\nminus(\ntimes(c,a),\ntimes(c,b)),c) \\
  & = & \nplus(\ntimes(c,\nminus(a,b)),c) \\
- & = & \ntimes(c,\next(\nminus(a,b))) \\
+ &     \href{@times@#thm-times-next-right}
+   = & \ntimes(c,\next(\nminus(a,b))) \\
  & = & \ntimes(c,\nminus(\next(a),b))
 \end{eqnarray*}$$
 as needed.

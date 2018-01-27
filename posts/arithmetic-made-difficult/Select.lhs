@@ -175,7 +175,8 @@ $$\begin{eqnarray*}
  &   & \length(\select(k,x)) \\
  & = & \length(\select(k,\nil)) \\
  & = & \length(\bif{\iszero(k)}{\cons(\nil,\nil)}{\nil}) \\
- & = & \bif{\iszero(k)}{\length(\cons(\nil,\nil))}{\length(\nil)} \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \bif{\iszero(k)}{\length(\cons(\nil,\nil))}{\length(\nil)} \\
  & = & \bif{\iszero(k)}{\next(\zero)}{\zero} \\
  & = & \nchoose(\zero,k) \\
  & = & \nchoose(\length(\nil),k) \\
@@ -198,7 +199,8 @@ $$\begin{eqnarray*}
  & = & \nplus(\length(\map(\cons(a,-))(\select(m,x))),\length(\select(\next(m),x))) \\
  & = & \nplus(\length(\select(m,x)),\length(\select(\next(m),x))) \\
  & = & \nplus(\nchoose(\length(x),m),\nchoose(\length(x),\next(m))) \\
- & = & \nplus(\nchoose(\length(x),\next(m)),\nchoose(\length(x),m)) \\
+ &     \href{@plus@#thm-plus-commutative}
+   = & \nplus(\nchoose(\length(x),\next(m)),\nchoose(\length(x),m)) \\
  & = & \nchoose(\next(\length(x)),\next(m)) \\
  & = & \nchoose(\length(\cons(a,x)),k)
 \end{eqnarray*}$$

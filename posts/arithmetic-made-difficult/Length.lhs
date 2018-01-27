@@ -366,7 +366,8 @@ We proceed by list induction on $y$. For the base case $y = \nil$, note that
 $$\begin{eqnarray*}
  &   & \length(\cat(x,\nil)) \\
  & = & \length(x) \\
- & = & \nplus(\length(x),\zero) \\
+ &     \href{@plus@#thm-plus-zero-right}
+   = & \nplus(\length(x),\zero) \\
  & = & \nplus(\length(x),\length(\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $y \in \lists{A}$ and let $a \in A$. Now

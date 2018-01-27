@@ -194,7 +194,8 @@ $$\begin{eqnarray*}
  & = & \elt(a)(\cons(c,\snoc(b,x))) \\
  & = & \bif{\beq(a,c)}{\btrue}{\elt(a)(\snoc(b,x))} \\
  & = & \bif{\beq(a,c)}{\btrue}{\bif{\beq(a,b)}{\btrue}{\elt(a)(x)}} \\
- & = & \bif{\beq(a,b)}{\btrue}{\bif{\beq(a,c)}{\btrue}{\elt(a)(x)}} \\
+ &     \href{@booleans@#thm-if-commute-false}
+   = & \bif{\beq(a,b)}{\btrue}{\bif{\beq(a,c)}{\btrue}{\elt(a)(x)}} \\
  & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(\cons(c,x))}
 \end{eqnarray*}$$
 as needed.
@@ -372,15 +373,18 @@ as needed. For the inductive step, suppose the equality holds for all $a$ for so
 $$\begin{eqnarray*}
  &   & \elt(a,\filter(p)(\cons(b,x))) \\
  & = & \elt(a,\bif{p(b)}{\cons(b,\filter(p)(x))}{\filter(p)(x)}) \\
- & = & \bif{p(b)}{\elt(a,\cons(b,\filter(p)(x)))}{\elt(a,\filter(p)(x))} \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \bif{p(b)}{\elt(a,\cons(b,\filter(p)(x)))}{\elt(a,\filter(p)(x))} \\
  & = & \bif{p(b)}{\bif{\beq(a,b)}{\btrue}{\elt(a,\filter(p)(x))}}{\elt(a,\filter(p)(x))} \\
- & = & \bif{\beq(a,b)}{\bif{p(b)}{\btrue}{\elt(a,\filter(p)(x))}}{\elt(a,\filter(p)(x))} \\
+ &     \href{@booleans@#thm-if-commute-true}
+   = & \bif{\beq(a,b)}{\bif{p(b)}{\btrue}{\elt(a,\filter(p)(x))}}{\elt(a,\filter(p)(x))} \\
  & = & \bif{\beq(a,b)}{\bif{p(b)}{\btrue}{\band(p(a),\elt(a,x))}}{\band(p(a),\elt(a,x))} \\
  & = & \bif{\beq(a,b)}{\bif{p(a)}{\btrue}{\band(p(a),\elt(a,x))}}{\band(p(a),\elt(a,x))} \\
  & = & \bif{\beq(a,b)}{\bif{p(a)}{\band(p(a),\btrue)}{\band(p(a),\elt(a,x))}}{\band(p(a),\elt(a,x))} \\
  & = & \bif{\beq(a,b)}{\band(p(a),\bif{p(a)}{\btrue}{\elt(a,x)})}{\band(p(a),\elt(a,x))} \\
  & = & \band(p(a),\bif{\beq(a,b)}{\bif{p(a)}{\btrue}{\elt(a,x)}}{\elt(a,x)}) \\
- & = & \band(p(a),\bif{p(a)}{\bif{\beq(a,b)}{\btrue}{\elt(a,x)}}{\elt(a,x)}) \\
+ &     \href{@booleans@#thm-if-commute-true}
+   = & \band(p(a),\bif{p(a)}{\bif{\beq(a,b)}{\btrue}{\elt(a,x)}}{\elt(a,x)}) \\
  & = & \band(p(a),\bif{p(a)}{\elt(a,\cons(b,x))}{\elt(a,x)}) \\
  & = & \band(p(a),\elt(a,\cons(b,x)))
 \end{eqnarray*}$$
@@ -456,7 +460,8 @@ $$\begin{eqnarray*}
  &   & \elt(a)(\cons(b,x)) \\
  & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(x)} \\
  & = & \bif{\btrue}{\btrue}{\elt(a)(x)} \\
- & = & \btrue \\
+ &     \href{@booleans@#cor-if-true}
+   = & \btrue \\
  & = & \bor(\btrue,\any(\beq(a,-),x)) \\
  & = & \bor(\beq(a,b),\any(\beq(a,-),x)) \\
  & = & \any(\beq(a,-),\cons(b,x))
@@ -466,7 +471,8 @@ $$\begin{eqnarray*}
  &   & \elt(a)(\cons(b,x)) \\
  & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(x)} \\
  & = & \bif{\bfalse}{\btrue}{\elt(a)(x)} \\
- & = & \elt(a)(x) \\
+ &     \href{@booleans@#cor-if-false}
+   = & \elt(a)(x) \\
  & = & \any(\beq(a,-),x) \\
  & = & \bor(\bfalse,\any(\beq(a,-),x)) \\
  & = & \bor(\beq(a,b),\any(\beq(a,-),x)) \\

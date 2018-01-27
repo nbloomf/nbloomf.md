@@ -54,7 +54,8 @@ $$\begin{eqnarray*}
  &   & \nmax(\zero,a) \\
  & = & \bif{\nleq(\zero,a)}{a}{\zero} \\
  & = & \bif{\btrue}{a}{\zero} \\
- & = & a
+ &     \href{@booleans@#cor-if-true}
+   = & a
 \end{eqnarray*}$$
 as claimed.
 2. We have
@@ -62,7 +63,8 @@ $$\begin{eqnarray*}
  &   & \nmax(a,a) \\
  & = & \bif{\nleq(a,a)}{a}{a} \\
  & = & \bif{\btrue}{a}{a} \\
- & = & a
+ &     \href{@booleans@#cor-if-true}
+   = & a
 \end{eqnarray*}$$
 as claimed.
 3. We have
@@ -70,7 +72,8 @@ $$\begin{eqnarray*}
  &   & \nmin(\zero,a) \\
  & = & \bif{\nleq(\zero,a)}{\zero}{a} \\
  & = & \bif{\btrue}{\zero}{a} \\
- & = & \zero
+ &     \href{@booleans@#cor-if-true}
+   = & \zero
 \end{eqnarray*}$$
 as claimed.
 4. We have
@@ -78,7 +81,8 @@ $$\begin{eqnarray*}
  &   & \nmin(a,a) \\
  & = & \bif{\nleq(a,a)}{a}{a} \\
  & = & \bif{\btrue}{a}{a} \\
- & = & a
+ &     \href{@booleans@#cor-if-true}
+   = & a
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -260,7 +264,8 @@ $$\begin{eqnarray*}
  & = & \nmax(\ntimes(\zero,a),\ntimes(\zero,b)) \\
  & = & \nmax(\zero,\zero) \\
  & = & \zero \\
- & = & \ntimes(\zero,\nmax(a,b)) \\
+ &     \href{@times@#cor-times-up-zero}
+   = & \ntimes(\zero,\nmax(a,b)) \\
  & = & \ntimes(c,\nmax(a,b))
 \end{eqnarray*}$$
 as claimed. If $c = \next(d)$, we have
@@ -279,7 +284,8 @@ $$\begin{eqnarray*}
  & = & \nmin(\ntimes(\zero,a),\ntimes(\zero,b)) \\
  & = & \nmin(\zero,\zero) \\
  & = & \zero \\
- & = & \ntimes(\zero,\nmin(a,b)) \\
+ &     \href{@times@#cor-times-up-zero}
+   = & \ntimes(\zero,\nmin(a,b)) \\
  & = & \ntimes(c,\nmin(a,b))
 \end{eqnarray*}$$
 as claimed. If $c = \next(d)$, we have
@@ -326,7 +332,8 @@ $$\begin{eqnarray*}
  &   & \nmax(a,\nmax(b,c)) \\
  & = & \bif{\nleq(a,\nmax(b,c))}{\nmax(b,c)}{a} \\
  & = & \bif{\nleq(a,\bif{\nleq(b,c)}{c}{b})}{\nmax(b,c)}{a} \\
- & = & \bif{\bif{\nleq(b,c)}{\nleq(a,c)}{\nleq(a,b)}}{\nmax(b,c)}{a} \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \bif{\bif{\nleq(b,c)}{\nleq(a,c)}{\nleq(a,b)}}{\nmax(b,c)}{a} \\
  & = & \bif{\bif{\nleq(b,c)}{\nleq(a,c)}{\nleq(a,b)}}{\bif{\nleq(b,c)}{c}{b}}{a} \\
  & = & Q
 \end{eqnarray*}$$

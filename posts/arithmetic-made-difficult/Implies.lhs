@@ -39,17 +39,21 @@ If $p = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bimpl(\bfalse,q) \\
  & = & \bif{\bfalse}{q}{\btrue} \\
- & = & \btrue \\
+ &     \href{@booleans@#cor-if-false}
+   = & \btrue \\
  & = & \bor(\btrue,q) \\
- & = & \bor(\bnot(\bfalse),q)
+ &     \href{@not@#thm-not-false}
+   = & \bor(\bnot(\bfalse),q)
 \end{eqnarray*}$$
 as needed. Suppose then that $p = \btrue$. Then
 $$\begin{eqnarray*}
  &   & \bimpl(\btrue,q) \\
  & = & \bif{\btrue}{q}{\btrue} \\
- & = & q \\
+ &     \href{@booleans@#cor-if-true}
+   = & q \\
  & = & \bor(\bfalse,q) \\
- & = & \bor(\bnot(\btrue),q)
+ &     \href{@not@#thm-not-true}
+   = & \bor(\bnot(\btrue),q)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -75,7 +79,8 @@ We have
 $$\begin{eqnarray*}
  &   & \bimpl(\bfalse,p) \\
  & = & \bor(\bnot(\bfalse),p) \\
- & = & \bor(\btrue,p) \\
+ &     \href{@not@#thm-not-false}
+   = & \bor(\btrue,p) \\
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.
@@ -102,7 +107,8 @@ We have
 $$\begin{eqnarray*}
  &   & \bimpl(\btrue,p) \\
  & = & \bor(\bnot(\btrue),p) \\
- & = & \bor(\bfalse,p) \\
+ &     \href{@not@#thm-not-true}
+   = & \bor(\bfalse,p) \\
  & = & p
 \end{eqnarray*}$$
 as claimed.
@@ -228,7 +234,8 @@ If $p = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & Q \\
  & = & \bor(\band(p,\bnot(q)),\bor(\band(q,\bnot(r)),\bor(\bnot(\bfalse),r))) \\
- & = & \bor(\band(p,\bnot(q)),\bor(\band(q,\bnot(r)),\bor(\btrue,r))) \\
+ &     \href{@not@#thm-not-false}
+   = & \bor(\band(p,\bnot(q)),\bor(\band(q,\bnot(r)),\bor(\btrue,r))) \\
  & = & \bor(\band(p,\bnot(q)),\bor(\band(q,\bnot(r)),\btrue)) \\
  & = & \bor(\band(p,\bnot(q)),\btrue) \\
  & = & \btrue.
@@ -356,14 +363,17 @@ $$\begin{eqnarray*}
  &   & \bif{\band(\btrue,q)}{\btrue}{\bfalse} \\
  & = & \bif{q}{\btrue}{\bfalse} \\
  & = & q \\
- & = & \bif{\btrue}{q}{\bfalse}
+ &     \href{@booleans@#cor-if-true}
+   = & \bif{\btrue}{q}{\bfalse}
 \end{eqnarray*}$$
 as needed. If $p = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bif{\band(\bfalse,q)}{\btrue}{r} \\
  & = & \bif{\bfalse}{\btrue}{r} \\
- & = & r \\
- & = & \bif{\bfalse}{q}{r}
+ &     \href{@booleans@#cor-if-false}
+   = & r \\
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{\bfalse}{q}{r}
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

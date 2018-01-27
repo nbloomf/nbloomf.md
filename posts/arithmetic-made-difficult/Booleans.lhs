@@ -137,7 +137,7 @@ Nested $\bif{\ast}{\ast}{\ast}$s commute (sort of).
 Let $A$ be a set with $p,q \in \bool$ and $a,b,c,d \in A$. Then we have
 $$\begin{eqnarray*}
  &   & \bif{p}{\bif{q}{a}{b}}{\bif{q}{c}{d}} \\
- & = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}}.
+   = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}}.
 \end{eqnarray*}$$
 
 ::: proof ::::::::::
@@ -183,19 +183,26 @@ $$\begin{eqnarray*}
  &     \let{\q = \btrue}
    = & \bif{\bfalse}{\bif{\q}{a}{b}}{\bif{\btrue}{c}{d}} \\
  & = & \bif{\btrue}{c}{d} \\
- & = & c \\
- & = & \bif{\bfalse}{a}{c} \\
- & = & \bif{\btrue}{\bif{\bfalse}{a}{c}}{\bif{\p}{b}{d}} \\
+ &     \href{@booleans@#cor-if-true}
+   = & c \\
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{\bfalse}{a}{c} \\
+ &     \href{@booleans@#cor-if-true}
+   = & \bif{\btrue}{\bif{\bfalse}{a}{c}}{\bif{\p}{b}{d}} \\
  & = & \bif{q}{\bif{\p}{a}{c}}{\bif{\p}{b}{d}} \\
 \end{eqnarray*}$$
 as claimed. If $p = \bfalse$ and $q = \bfalse$,
 $$\begin{eqnarray*}
  &   & \bif{p}{\bif{q}{a}{b}}{\bif{q}{c}{d}} \\
  & = & \bif{\bfalse}{\bif{q}{a}{b}}{\bif{\bfalse}{c}{d}} \\
- & = & \bif{\bfalse}{c}{d} \\
- & = & d \\
- & = & \bif{\bfalse}{b}{d} \\
- & = & \bif{\bfalse}{\bif{p}{a}{c}}{\bif{\bfalse}{b}{d}} \\
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{\bfalse}{c}{d} \\
+ &     \href{@booleans@#cor-if-false}
+   = & d \\
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{\bfalse}{b}{d} \\
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{\bfalse}{\bif{p}{a}{c}}{\bif{\bfalse}{b}{d}} \\
  & = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
 \end{eqnarray*}$$
 as claimed.
@@ -229,14 +236,17 @@ Let $A$ be a set with $p \in \bool$ and $a,b,c \in A$. We have the following.
 $$\begin{eqnarray*}
  &   & \bif{p}{\bif{p}{a}{b}}{c} \\
  & = & \bif{p}{\bif{\btrue}{a}{b}}{c} \\
- & = & \bif{p}{a}{c}
+ &     \href{@booleans@#cor-if-true}
+   = & \bif{p}{a}{c}
 \end{eqnarray*}$$
 as needed. If $p = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bif{p}{\bif{p}{a}{b}}{c} \\
  & = & \bif{\bfalse}{\bif{\bfalse}{a}{b}}{c} \\
- & = & c \\
- & = & \bif{\bfalse}{a}{c} \\
+ &     \href{@booleans@#cor-if-false}
+   = & c \\
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{\bfalse}{a}{c} \\
  & = & \bif{p}{a}{c}
 \end{eqnarray*}$$
 as needed.
@@ -244,15 +254,18 @@ as needed.
 $$\begin{eqnarray*}
  &   & \bif{p}{a}{\bif{p}{b}{c}} \\
  & = & \bif{\btrue}{a}{\bif{p}{b}{c}} \\
- & = & a \\
- & = & \bif{\btrue}{a}{c} \\
+ &     \href{@booleans@#cor-if-true}
+   = & a \\
+ &     \href{@booleans@#cor-if-true}
+   = & \bif{\btrue}{a}{c} \\
  & = & \bif{p}{a}{c}
 \end{eqnarray*}$$
 as claimed, and if $p = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bif{p}{a}{\bif{p}{b}{c}} \\
  & = & \bif{p}{a}{\bif{\bfalse}{b}{c}} \\
- & = & \bif{p}{a}{c}
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{p}{a}{c}
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

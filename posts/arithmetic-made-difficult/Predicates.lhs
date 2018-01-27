@@ -89,7 +89,8 @@ $$\begin{eqnarray*}
  & = & \bnot(\ptrue(a)) \\
  & = & \bnot(\const(\btrue)(a)) \\
  & = & \bnot(\btrue) \\
- & = & \bfalse \\
+ &     \href{@not@#thm-not-true}
+   = & \bfalse \\
  & = & \const(\bfalse)(a) \\
  & = & \pfalse(a)
 \end{eqnarray*}$$
@@ -100,7 +101,8 @@ $$\begin{eqnarray*}
  & = & \bnot(\pfalse(a)) \\
  & = & \bnot(\const(\bfalse)(a)) \\
  & = & \bnot(\bfalse) \\
- & = & \btrue \\
+ &     \href{@not@#thm-not-false}
+   = & \btrue \\
  & = & \const(\btrue)(a) \\
  & = & \ptrue(a)
 \end{eqnarray*}$$
@@ -110,7 +112,8 @@ $$\begin{eqnarray*}
  &   & (\bnot \circ \ptrue)(a) \\
  & = & \bnot(\ptrue(a)) \\
  & = & \bnot(\btrue) \\
- & = & \bfalse \\
+ &     \href{@not@#thm-not-true}
+   = & \bfalse \\
  & = & \pfalse(a)
 \end{eqnarray*}$$
 as needed.
@@ -119,7 +122,8 @@ $$\begin{eqnarray*}
  &   & (\bnot \circ \pfalse)(a) \\
  & = & \bnot(\pfalse(a)) \\
  & = & \bnot(\bfalse) \\
- & = & \btrue \\
+ &     \href{@not@#thm-not-false}
+   = & \btrue \\
  & = & \ptrue(a)
 \end{eqnarray*}$$
 ::::::::::::::::::::

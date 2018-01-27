@@ -298,7 +298,8 @@ $$\begin{eqnarray*}
  &   & \dedupeL(\snoc(a,\nil)) \\
  & = & \dedupeL(\cons(a,\nil)) \\
  & = & \cons(a,\nil) \\
- & = & \bif{\bfalse}{\nil}{\cons(a,\nil)} \\
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{\bfalse}{\nil}{\cons(a,\nil)} \\
  & = & \bif{\elt(a,\nil)}{\nil}{\cons(a,\nil)} \\
  & = & \bif{\elt(a,\nil)}{\dedupeL(\nil)}{\snoc(a,\nil)}
 \end{eqnarray*}$$
@@ -311,7 +312,8 @@ $$\begin{eqnarray*}
  & = & \bif{\elt(a,x)}{\cons(b,\delete(b)(\dedupeL(x)))}{\cons(b,\delete(b)(\snoc(a,\dedupeL(x))))} \\
  & = & \bif{\elt(a,x)}{\dedupeL(\cons(b,x))}{\cons(b,\delete(b)(\snoc(a,\dedupeL(x))))} \\
  & = & \bif{\elt(a,x)}{\dedupeL(\cons(b,x))}{\cons(b,\bif{\beq(a,b)}{\delete(b)(\dedupeL(x))}{\snoc(a,\delete(b)(\dedupeL(x)))})} \\
- & = & \bif{\elt(a,x)}{\dedupeL(\cons(b,x))}{\bif{\beq(a,b)}{\cons(b,\delete(b)(\dedupeL(x)))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x))))}} \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \bif{\elt(a,x)}{\dedupeL(\cons(b,x))}{\bif{\beq(a,b)}{\cons(b,\delete(b)(\dedupeL(x)))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x))))}} \\
  & = & \bif{\elt(a,x)}{\dedupeL(\cons(b,x))}{\bif{\beq(a,b)}{\dedupeL(\cons(b,x))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x))))}} \\
  & = & \bif{\bor(\beq(a,b),\elt(a,x))}{\dedupeL(\cons(b,x))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x))))} \\
  & = & \bif{\elt(a,\cons(b,x))}{\dedupeL(\cons(b,x))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x))))} \\
@@ -351,7 +353,8 @@ $$\begin{eqnarray*}
  & = & \elt(a,\cons(b,\delete(b)(\dedupeL(x)))) \\
  & = & \bif{\beq(a,b)}{\btrue}{\elt(a,\delete(b)(\dedupeL(x)))} \\
  & = & \bif{\beq(a,b)}{\btrue}{\bif{\beq(a,b)}{\bfalse}{\elt(a,\dedupeL(x))}} \\
- & = & \bif{\beq(a,b)}{\btrue}{\elt(a,\dedupeL(x))} \\
+ &     \href{@booleans@#thm-if-prune-false}
+   = & \bif{\beq(a,b)}{\btrue}{\elt(a,\dedupeL(x))} \\
  & = & \bif{\beq(a,b)}{\btrue}{\elt(a,x)} \\
  & = & \elt(a,\cons(b,x))
 \end{eqnarray*}$$
@@ -389,11 +392,13 @@ $$\begin{eqnarray*}
  & = & \filter(p)(\cons(a,\delete(a)(\dedupeL(x)))) \\
  & = & \bif{p(a)}{\cons(a,\filter(p)(\delete(a)(\dedupeL(x))))}{\filter(p)(\delete(a)(\dedupeL(x)))} \\
  & = & \bif{\btrue}{\cons(a,\filter(p)(\delete(a)(\dedupeL(x))))}{\filter(p)(\delete(a)(\dedupeL(x)))} \\
- & = & \cons(a,\filter(p)(\delete(a)(\dedupeL(x)))) \\
+ &     \href{@booleans@#cor-if-true}
+   = & \cons(a,\filter(p)(\delete(a)(\dedupeL(x)))) \\
  & = & \cons(a,\delete(a)(\filter(a)(\dedupeL(x)))) \\
  & = & \cons(a,\delete(a)(\dedupeL(\filter(p)(x)))) \\
  & = & \dedupeL(\cons(a,\filter(p)(x))) \\
- & = & \dedupeL(\bif{\btrue}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
+ &     \href{@booleans@#cor-if-true}
+   = & \dedupeL(\bif{\btrue}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
  & = & \dedupeL(\filter(p)(\cons(a,x)))
 \end{eqnarray*}$$
 as needed. If $p(a) = \bfalse$, we have
@@ -402,11 +407,13 @@ $$\begin{eqnarray*}
  & = & \filter(p)(\cons(a,\delete(a)(\dedupeL(x)))) \\
  & = & \bif{p(a)}{\cons(a,\filter(p)(\delete(a)(\dedupeL(x))))}{\filter(p)(\delete(a)(\dedupeL(x)))} \\
  & = & \bif{\bfalse}{\cons(a,\filter(p)(\delete(a)(\dedupeL(x))))}{\filter(p)(\delete(a)(\dedupeL(x)))} \\
- & = & \filter(p)(\delete(a)(\dedupeL(x))) \\
+ &     \href{@booleans@#cor-if-false}
+   = & \filter(p)(\delete(a)(\dedupeL(x))) \\
  & = & \delete(a)(\filter(p)(\dedupeL(x))) \\
  & = & \filter(p)(\dedupeL(x)) \\
  & = & \dedupeL(\filter(p)(x)) \\
- & = & \dedupeL(\bif{\bfalse}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
+ &     \href{@booleans@#cor-if-false}
+   = & \dedupeL(\bif{\bfalse}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
  & = & \dedupeL(\bif{p(a)}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
  & = & \dedupeL(\filter(p)(\cons(a,x)))
 \end{eqnarray*}$$

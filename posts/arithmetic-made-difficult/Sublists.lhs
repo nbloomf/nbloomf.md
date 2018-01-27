@@ -256,7 +256,8 @@ $$\begin{eqnarray*}
  & = & \nplus(\length(\sublists(x)),\length(\sublists(x))) \\
  & = & \ntimes(\next(\next(\zero)),\length(\sublists(x))) \\
  & = & \ntimes(\next(\next(\zero)),\npower(\next(\next(\zero)),\length(x))) \\
- & = & \ntimes(\npower(\next(\next(\zero)),\length(x)),\next(\next(\zero))) \\
+ &     \href{@times@#thm-times-commutative}
+   = & \ntimes(\npower(\next(\next(\zero)),\length(x)),\next(\next(\zero))) \\
  & = & \npower(\next(\next(\zero)),\next(\length(x))) \\
  & = & \npower(\next(\next(\zero)),\length(\cons(a,x)))
 \end{eqnarray*}$$
@@ -342,7 +343,8 @@ $$\begin{eqnarray*}
  &   & \sublists(\filter(p)(\nil)) \\
  & = & \sublists(\nil) \\
  & = & \cons(\nil,\nil) \\
- & = & \bif{\btrue}{\cons(\nil,\nil)}{\filter(\all(p))(\nil)} \\
+ &     \href{@booleans@#cor-if-true}
+   = & \bif{\btrue}{\cons(\nil,\nil)}{\filter(\all(p))(\nil)} \\
  & = & \bif{\all(p)(\nil)}{\cons(\nil,\filter(\all(p))(\nil))}{\filter(\all(p))(\nil)} \\
  & = & \filter(\all(p))(\cons(\nil,\nil)) \\
  & = & \filter(\all(p))(\sublists(\nil))
@@ -351,7 +353,8 @@ as needed. For the inductive step, suppose the equation holds for some $x$ and l
 $$\begin{eqnarray*}
  &   & \sublists(\filter(p)(\cons(a,x))) \\
  & = & \sublists(\bif{p(a)}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
- & = & \bif{p(a)}{\sublists(\cons(a,\filter(p)(x)))}{\sublists(\filter(p)(x))} \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \bif{p(a)}{\sublists(\cons(a,\filter(p)(x)))}{\sublists(\filter(p)(x))} \\
  & = & \bif{p(a)}{\cat(\map(\cons(a,-))(\sublists(\filter(p)(x))),\sublists(\filter(p)(x)))}{\sublists(\filter(p)(x))} \\
  & = & (@@@)
  & = & \cat(\filter(\all(p))(\map(\cons(a,-))(\sublists(x))),\filter(\all(p))(\sublists(x))) \\

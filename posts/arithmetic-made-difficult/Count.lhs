@@ -128,8 +128,10 @@ $$\begin{eqnarray*}
  & = & \addcount(a)(k,\cons(c,\snoc(b,x))) \\
  & = & \addcount(a)(\bif{\beq(a,c)}{\next(k)}{k},\snoc(b,x)) \\
  & = & \addcount(a)(\bif{\beq(a,b)}{\next(\bif{\beq(a,c)}{\next(k)}{k})}{\bif{\beq(a,c)}{\next(k)}{k}},x) \\
- & = & \addcount(a)(\bif{\beq(a,b)}{\bif{\beq(a,c)}{\next(\next(k))}{\next(k)}}{\bif{\beq(a,c)}{\next(k)}{k}},x) \\
- & = & \addcount(a)(\bif{\beq(a,c)}{\bif{\beq(a,b)}{\next(\next(k))}{\next(k)}}{\bif{\beq(a,b)}{\next(k)}{k}},x) \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \addcount(a)(\bif{\beq(a,b)}{\bif{\beq(a,c)}{\next(\next(k))}{\next(k)}}{\bif{\beq(a,c)}{\next(k)}{k}},x) \\
+ &     \href{@booleans@#thm-ifnest}
+   = & \addcount(a)(\bif{\beq(a,c)}{\bif{\beq(a,b)}{\next(\next(k))}{\next(k)}}{\bif{\beq(a,b)}{\next(k)}{k}},x) \\
  & = & \addcount(a)(\bif{\beq(a,c)}{\next(\bif{\beq(a,b)}{\next(k)}{k})}{\bif{\beq(a,b)}{\next(k)}{k}},x) \\
  & = & \addcount(a)(\bif{\beq(a,b)}{\next(k)}{k},\cons(c,x))
 \end{eqnarray*}$$
@@ -376,7 +378,8 @@ $$\begin{eqnarray*}
  &   & \count(a,\cat(x,y)) \\
  & = & \count(a,\cat(\nil,y)) \\
  & = & \count(a,y) \\
- & = & \nplus(\zero,\count(a,y)) \\
+ &     \href{@plus@#cor-plus-up-zero}
+   = & \nplus(\zero,\count(a,y)) \\
  & = & \nplus(\count(a,\nil),\count(a,y)) \\
  & = & \nplus(\count(a,x),\count(a,y))
 \end{eqnarray*}$$
@@ -387,7 +390,8 @@ $$\begin{eqnarray*}
  & = & \bif{\beq(a,b)}{\next(\count(a,\cat(x,y)))}{\count(a,\cat(x,y))} \\
  & = & \next(\count(a,\cat(x,y))) \\
  & = & \next(\nplus(\count(a,x),\count(a,y))) \\
- & = & \nplus(\next(\count(a,x)),\count(a,y)) \\
+ &     \href{@plus@#cor-plus-up-next}
+   = & \nplus(\next(\count(a,x)),\count(a,y)) \\
  & = & \nplus(\bif{\beq(a,b)}{\next(\count(a,x))}{\count(a,x)},\count(a,y)) \\
  & = & \nplus(\count(a,\cons(b,x)),\count(a,y))
 \end{eqnarray*}$$

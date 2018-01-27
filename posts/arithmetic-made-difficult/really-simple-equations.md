@@ -72,7 +72,8 @@ so that $\zero = \next(\nplus(m,b))$, a contradiction.
 * If $a = \next(\next(\zero))$, then we have
 $$\begin{eqnarray*}
  &   & \nplus(\next(\next(\zero)),\zero) \\
- & = & \next(\next(\zero)) \\
+ &     \href{@plus@#thm-plus-zero-right}
+   = & \next(\next(\zero)) \\
  & = & \nplus(\next(\next(\zero)),b)
 \end{eqnarray*}$$
 so that $b = \zero$ as claimed.
@@ -110,8 +111,10 @@ $$\begin{eqnarray*}
  &   & \zero \\
  & = & \ntimes(a,b) \\
  & = & \ntimes(\next(h),\next(k)) \\
- & = & \nplus(\ntimes(h,\next(k)),\next(k)) \\
- & = & \next(\nplus(\ntimes(h,\next(k)),k)),
+ &     \href{@times@#cor-times-up-next}
+   = & \nplus(\ntimes(h,\next(k)),\next(k)) \\
+ &     \href{@plus@#thm-plus-next-right}
+   = & \next(\nplus(\ntimes(h,\next(k)),k))
 \end{eqnarray*}$$
 a contradiction. So we must have either $a = \zero$ or $b = \zero$. Note also that in either case we indeed have $\ntimes(a,b) = \zero$.
 ::::::::::::::::::::
@@ -153,7 +156,8 @@ Suppose we have $\ntimes(a,b) = \next(\next(\zero))$. Note that either $a = \zer
 $$\begin{eqnarray*}
  &   & \next(\next(\zero)) \\
  & = & \ntimes(\next(\next(\next(m))),b) \\
- & = & \nplus(\ntimes(\next(\next(m)),b),b).
+ &     \href{@times@#cor-times-up-next}
+   = & \nplus(\ntimes(\next(\next(m)),b),b)
 \end{eqnarray*}$$
 If $b = \zero$, then we have $\next(\next(\zero)) = \zero$, a contradiction. Thus $b = \next(k)$ for some $k \in \nats$. This leaves two possibilities: $$(\ntimes(\next(\next(m)),\next(k)),\next(k))$$ is either $(\next(\zero),\next(\zero))$ or $(\zero,\next(\next(\zero)))$. If $b = \next(\zero)$, we have $\next(\next(\zero)) = \next(\next(\next(m)))$ for some $m$, a contradiction. If $b = \next(\next(\zero))$ and $\ntimes(\next(\next(m)),b) = \zero$, we have either $b = \zero$ (a contradiction) or $\next(\next(m)) = \zero$ (also a contradiction).
 ::::::::::::::::::::

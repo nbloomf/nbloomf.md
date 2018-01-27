@@ -162,14 +162,16 @@ Let $A$ be a set. For all $m,n \in \nats$ and $a \in A$, we have $$\repeat(\nplu
 We proceed by induction on $m$. For the base case $m = \zero$, we have
 $$\begin{eqnarray*}
  &   & \repeat(\nplus(\zero,n),a) \\
- & = & \repeat(n,a) \\
+ &     \href{@plus@#cor-plus-up-zero}
+   = & \repeat(n,a) \\
  & = & \cat(\nil,\repeat(n,a)) \\
  & = & \cat(\repeat(\zero,a),\repeat(n,a))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $m$. Now we have
 $$\begin{eqnarray*}
  &   & \repeat(\nplus(\next(m),n),a) \\
- & = & \repeat(\next(\nplus(m,n)),a) \\
+ &     \href{@plus@#cor-plus-up-next}
+   = & \repeat(\next(\nplus(m,n)),a) \\
  & = & \cons(a,\repeat(\nplus(m,n),a)) \\
  & = & \cons(a,\cat(\repeat(m,a),\repeat(n,a))) \\
  & = & \cat(\cons(a,\repeat(m,a)),\repeat(n,a)) \\

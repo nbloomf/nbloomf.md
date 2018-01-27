@@ -567,7 +567,8 @@ Let $A$ and $B$ be sets. Then we have the following for all $a \in A$ and $b \in
 1. We have
 $$\begin{eqnarray*}
  &   & \isLft(\lft(a)) \\
- & = & \either(\const(\btrue),\const(\bfalse))(\lft(a)) \\
+ &     \href{@disjoint-unions@#dfn-disjoint-unions-isLft}
+   = & \either(\const(\btrue),\const(\bfalse))(\lft(a)) \\
  & = & \const(\btrue)(a) \\
  & = & \btrue
 \end{eqnarray*}$$
@@ -575,7 +576,8 @@ as claimed.
 2. We have
 $$\begin{eqnarray*}
  &   & \isLft(\rgt(b)) \\
- & = & \either(\const(\btrue),\const(\bfalse))(\rgt(b)) \\
+ &     \href{@disjoint-unions@#dfn-disjoint-unions-isLft}
+   = & \either(\const(\btrue),\const(\bfalse))(\rgt(b)) \\
  & = & \const(\bfalse)(b) \\
  & = & \bfalse
 \end{eqnarray*}$$
@@ -583,7 +585,8 @@ as claimed.
 3. We have
 $$\begin{eqnarray*}
  &   & \isRgt(\lft(a)) \\
- & = & \either(\const(\bfalse),\const(\btrue))(\lft(a)) \\
+ &     \href{@disjoint-unions@#dfn-disjoint-unions-isRgt}
+   = & \either(\const(\bfalse),\const(\btrue))(\lft(a)) \\
  & = & \const(\bfalse)(a) \\
  & = & \bfalse
 \end{eqnarray*}$$
@@ -591,7 +594,8 @@ as claimed.
 4. We have
 $$\begin{eqnarray*}
  &   & \isRgt(\rgt(b)) \\
- & = & \either(\const(\bfalse),\const(\btrue))(\rgt(b)) \\
+ &     \href{@disjoint-unions@#dfn-disjoint-unions-isRgt}
+   = & \either(\const(\bfalse),\const(\btrue))(\rgt(b)) \\
  & = & \const(\btrue)(b) \\
  & = & \btrue
 \end{eqnarray*}$$

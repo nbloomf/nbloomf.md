@@ -156,7 +156,8 @@ $$\begin{eqnarray*}
  & = & \bif{\sigma(k)}{\rgt(k)}{\findsmallest{\sigma}(\zero,k)} \\
  & = & \bif{\sigma(k)}{\rgt(k)}{\lft(\ast)} \\
  & = & \bif{\bfalse}{\rgt(k)}{\lft(\ast)} \\
- & = & \lft(\ast)
+ &     \href{@booleans@#cor-if-false}
+   = & \lft(\ast)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the implication holds for all $k$ for some $n$, and suppose further that $\sigma(t) = \bfalse$ whenever $\nleq(k,t)$ and $\nleq(t,\nplus(\next(n),k))$. Then we have $\sigma(k) = \bfalse$, and we also have $\sigma(t) = \bfalse$ whenever $\nleq(\next(k),t)$ and $\nleq(t,\nplus(n,\next(k)))$, and by the inductive hypothesis, $\findsmallest{\sigma}(\next(n),\next(k)) = \lft(\ast)$. Now
 $$\begin{eqnarray*}
@@ -164,7 +165,8 @@ $$\begin{eqnarray*}
  & = & \bif{\sigma(k)}{\rgt(k)}{\findsmallest{\sigma}(\next(n),\next(k))} \\
  & = & \bif{\sigma(k)}{\rgt(k)}{\lft(\ast)} \\
  & = & \bif{\bfalse}{\rgt(k)}{\lft(\ast)} \\
- & = & \lft(\ast)
+ &     \href{@booleans@#cor-if-false}
+   = & \lft(\ast)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

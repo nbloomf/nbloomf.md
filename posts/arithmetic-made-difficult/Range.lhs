@@ -181,7 +181,8 @@ We proceed by induction on $c$. For the base case $c = \zero$, we have
 $$\begin{eqnarray*}
  &   & \range(a,\nplus(b,c)) \\
  & = & \range(a,\nplus(b,\zero)) \\
- & = & \range(a,b) \\
+ &     \href{@plus@#thm-plus-zero-right}
+   = & \range(a,b) \\
  & = & \cat(\range(a,b),\nil) \\
  & = & \cat(\range(a,b),\range(\nplus(a,b),\zero)) \\
  & = & \cat(\range(a,b),\range(\nplus(a,b),c))
@@ -189,10 +190,12 @@ $$\begin{eqnarray*}
 as claimed. For the inductive step, suppose the equality holds for some $c$. Using the inductive hypothesis we have
 $$\begin{eqnarray*}
  &   & \range(a,\nplus(b,\next(c))) \\
- & = & \range(a,\next(\nplus(b,c))) \\
+ &     \href{@plus@#thm-plus-next-right}
+   = & \range(a,\next(\nplus(b,c))) \\
  & = & \snoc(\nplus(a,\nplus(b,c)),\range(a,\nplus(b,c))) \\
  & = & \snoc(\nplus(a,\nplus(b,c)),\cat(\range(a,b),\range(\nplus(a,b),c))) \\
- & = & \snoc(\nplus(\nplus(a,b),c),\cat(\range(a,b),\range(\nplus(a,b),c))) \\
+ &     \href{@plus@#thm-plus-associative}
+   = & \snoc(\nplus(\nplus(a,b),c),\cat(\range(a,b),\range(\nplus(a,b),c))) \\
  & = & \cat(\range(a,b),\snoc(\nplus(\nplus(a,b),c),\range(\nplus(a,b),c))) \\
  & = & \cat(\range(a,b),\range(\nplus(a,b),\next(c)))
 \end{eqnarray*}$$
@@ -261,7 +264,8 @@ We proceed by induction on $a$. For the base case $a = \zero$ note that $\nplus(
 $$\begin{eqnarray*}
  &   & \range(\nplus(a,b),c) \\
  & = & \range(\nplus(\zero,b),c) \\
- & = & \range(b,c) \\
+ &     \href{@plus@#cor-plus-up-zero}
+   = & \range(b,c) \\
  & = & \map(\id)(\range(b,c)) \\
  & = & \map(\nplus(\zero,-))(\range(b,c)) \\
  & = & \map(\nplus(a,-))(\range(b,c))
@@ -269,7 +273,8 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the result holds for some $a$. Now
 $$\begin{eqnarray*}
  &   & \range(\nplus(\next(a),b),c) \\
- & = & \range(\next(\nplus(a,b)),c) \\
+ &     \href{@plus@#cor-plus-up-next}
+   = & \range(\next(\nplus(a,b)),c) \\
  & = & \map(\next)(\range(\nplus(a,b),c)) \\
  & = & \map(\next)(\map(\nplus(a,-))(\range(b,c))) \\
  & = & (\map(\next) \circ \map(\nplus(a,-)))(\range(b,c)) \\

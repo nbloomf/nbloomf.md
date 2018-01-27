@@ -200,8 +200,10 @@ $$\begin{eqnarray*}
  &   & \nplus(\ntimes(q_1,\next(b)),\next(b)) \\
  & = & \ntimes(\next(q_1),\next(b)) \\
  & = & \nplus(\ntimes(\zero,\next(b)),k) \\
- & = & \nplus(\zero,k) \\
- & = & k.
+ &     \href{@times@#cor-times-up-zero}
+   = & \nplus(\zero,k) \\
+ &     \href{@plus@#cor-plus-up-zero}
+   = & k
 \end{eqnarray*}$$
 Thus $\nleq(\next(b),k)$. But now we have $\nleq(\next(b),b)$ by transitivity, a contradiction. Thus the hypothesis of $P(\next(q_1),\zero,b,k)$ is false, and we have $\zero \in N(\next(q_1))$ vacuously.
 
@@ -257,7 +259,8 @@ as needed.
 $$\begin{eqnarray*}
  &   & \nplus(\ntimes(\next(\zero),a),\zero) \\
  & = & \nplus(\next(a),\zero) \\
- & = & \next(a).
+ &     \href{@plus@#thm-plus-zero-right}
+   = & \next(a)
 \end{eqnarray*}$$
 Since $\next(a) \neq \zero$, by the uniqueness of the division algorithm, we have $\ndivalg(\next(a),\next(a)) = (\next(\zero),\zero)$ as claimed.
 ::::::::::::::::::::
