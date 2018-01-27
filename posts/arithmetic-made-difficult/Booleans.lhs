@@ -188,14 +188,18 @@ $$\begin{eqnarray*}
    = & \bif{\bfalse}{\bif{\q}{a}{b}}{\bif{\q}{c}{d}} \\
  &     \let{\q = \btrue}
    = & \bif{\bfalse}{\bif{\q}{a}{b}}{\bif{\btrue}{c}{d}} \\
- & = & \bif{\btrue}{c}{d} \\
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{\btrue}{c}{d} \\
  &     \href{@booleans@#cor-if-true}
    = & c \\
  &     \href{@booleans@#cor-if-false}
    = & \bif{\bfalse}{a}{c} \\
+ &     \let{\p = \bfalse}
+   = & \bif{\p}{a}{c} \\
  &     \href{@booleans@#cor-if-true}
-   = & \bif{\btrue}{\bif{\bfalse}{a}{c}}{\bif{\p}{b}{d}} \\
- & = & \bif{q}{\bif{\p}{a}{c}}{\bif{\p}{b}{d}} \\
+   = & \bif{\btrue}{\bif{\p}{a}{c}}{\bif{\p}{b}{d}} \\
+ &     \let{\q = \btrue}
+   = & \bif{\q}{\bif{\p}{a}{c}}{\bif{\p}{b}{d}} \\
 \end{eqnarray*}$$
 as claimed. If $p = \bfalse$ and $q = \bfalse$,
 $$\begin{eqnarray*}
