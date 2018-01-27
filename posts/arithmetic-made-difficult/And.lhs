@@ -43,7 +43,8 @@ Note that
 $$\begin{eqnarray*}
  &   & \band(\btrue,\btrue) \\
  & = & \bif{\btrue}{\bif{\btrue}{\btrue}{\bfalse}}{\bfalse} \\
- & = & \bif{\btrue}{\btrue}{\bfalse} \\
+ &     \href{@booleans@#cor-if-true}
+   = & \bif{\btrue}{\btrue}{\bfalse} \\
  & = & \btrue,
 \end{eqnarray*}$$
 that

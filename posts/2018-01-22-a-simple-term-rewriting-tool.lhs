@@ -313,7 +313,7 @@ Now the main tool just splits each input line and verifies rewrites.
 >   case (validate (x,y) lhs rhs, validate (y,x) lhs rhs, validate (x,y) rhs lhs, validate (y,x) lhs rhs) of
 >     ([],[],[],[]) -> processS [loc,line,a,b] rs
 >     _ -> do
->       putStrLn $ unwords ["sed -i","'"++line++"s/^ & = & / &     \\href{" ++ name ++ "}@@@   = & /'",loc]
+>       putStrLn $ unwords ["sed -i ''","'"++line++"s/^ & = & / \\&     \\\\href{" ++ name ++ "}@@@   = \\& /'",loc]
 > processS [_,_,_,_] [] = return ()
 > processS xs _ = do
 >   putStrLn $ unwords xs
