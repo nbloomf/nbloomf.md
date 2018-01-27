@@ -441,7 +441,8 @@ We proceed by induction on $a$. For the base case $a = \zero$, suppose we have $
 $$\begin{eqnarray*}
  &   & \nminus(\ntimes(c,a),\ntimes(c,b)) \\
  & = & \nminus(\zero,\zero) \\
- & = & \rgt(\zero)
+ &     \href{@minus@#thm-minus-nat-zero}
+   = & \rgt(\zero)
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}

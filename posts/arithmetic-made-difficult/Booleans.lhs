@@ -408,37 +408,46 @@ as claimed.
 2. If $\p = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bif{\p}{\bif{\q}{a}{b}}{b} \\
- & = & \bif{\bfalse}{\bif{\q}{a}{b}}{b} \\
+ &     \let{\p = \bfalse}
+   = & \bif{\bfalse}{\bif{\q}{a}{b}}{b} \\
  &     \href{@booleans@#cor-if-false}
    = & b \\
  &     \href{@booleans@#thm-if-same}
    = & \bif{\q}{b}{b} \\
  &     \href{@booleans@#cor-if-false}
    = & \bif{\q}{\bif{\bfalse}{a}{b}}{b} \\
- & = & \bif{\q}{\bif{\p}{a}{b}}{b}
+ &     \let{\p = \bfalse}
+   = & \bif{\q}{\bif{\p}{a}{b}}{b}
 \end{eqnarray*}$$
 as claimed. If $\q = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bif{\p}{\bif{\q}{a}{b}}{b} \\
- & = & \bif{\p}{\bif{\bfalse}{a}{b}}{b} \\
+ &     \let{\q = \bfalse}
+   = & \bif{\p}{\bif{\bfalse}{a}{b}}{b} \\
  &     \href{@booleans@#cor-if-false}
    = & \bif{\p}{b}{b} \\
  &     \href{@booleans@#thm-if-same}
    = & b \\
- & = & \bif{\bfalse}{\bif{\p}{a}{b}}{b} \\
- & = & \bif{\q}{\bif{\p}{a}{b}}{b}
+ &     \href{@booleans@#cor-if-false}
+   = & \bif{\bfalse}{\bif{\p}{a}{b}}{b} \\
+ &     \let{\q = \bfalse}
+   = & \bif{\q}{\bif{\p}{a}{b}}{b}
 \end{eqnarray*}$$
 as claimed. If $\p = \q = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bif{\p}{\bif{\q}{a}{b}}{b} \\
- & = & \bif{\p}{\bif{\btrue}{a}{b}}{b} \\
+ &     \let{\q = \btrue}
+   = & \bif{\p}{\bif{\btrue}{a}{b}}{b} \\
  &     \href{@booleans@#cor-if-true}
    = & \bif{\p}{a}{b} \\
- & = & \bif{\btrue}{a}{b} \\
- & = & \bif{\q}{a}{b} \\
+ &     \let{\p = \btrue}
+   = & \bif{\btrue}{a}{b} \\
+ &     \let{\q = \btrue}
+   = & \bif{\q}{a}{b} \\
  &     \href{@booleans@#cor-if-true}
    = & \bif{\q}{\bif{\btrue}{a}{b}}{b} \\
- & = & \bif{\q}{\bif{\p}{a}{b}}{b}
+ &     \let{\p = \btrue}
+   = & \bif{\q}{\bif{\p}{a}{b}}{b}
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
