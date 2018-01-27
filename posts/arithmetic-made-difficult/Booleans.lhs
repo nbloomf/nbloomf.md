@@ -405,14 +405,33 @@ $$\begin{eqnarray*}
    = & \bif{\q}{a}{\bif{\p}{a}{b}}
 \end{eqnarray*}$$
 as claimed.
-2. We have
+2. If $\p = \bfalse$, we have
 $$\begin{eqnarray*}
- &   & \bif{p}{\bif{q}{a}{b}}{b} \\
- & = & \bif{\bnot(p)}{b}{\bif{q}{a}{b}} \\
- & = & \bif{\bnot(p)}{b}{\bif{\bnot(q)}{b}{a}} \\
- & = & \bif{\bnot(q)}{b}{\bif{\bnot(p)}{b}{a}} \\
- & = & \bif{\bnot(q)}{b}{\bif{p}{a}{b}} \\
- & = & \bif{q}{\bif{p}{a}{b}}{b}
+ &   & \bif{\p}{\bif{\q}{a}{b}}{b} \\
+ & = & \bif{\bfalse}{\bif{\q}{a}{b}}{b} \\
+ & = & b \\
+ & = & \bif{\q}{b}{b} \\
+ & = & \bif{\q}{\bif{\bfalse}{a}{b}}{b} \\
+ & = & \bif{\q}{\bif{\p}{a}{b}}{b}
+\end{eqnarray*}$$
+as claimed. If $\q = \bfalse$, we have
+$$\begin{eqnarray*}
+ &   & \bif{\p}{\bif{\q}{a}{b}}{b} \\
+ & = & \bif{\p}{\bif{\bfalse}{a}{b}}{b} \\
+ & = & \bif{\p}{b}{b} \\
+ & = & b \\
+ & = & \bif{\bfalse}{\bif{\p}{a}{b}}{b} \\
+ & = & \bif{\q}{\bif{\p}{a}{b}}{b}
+\end{eqnarray*}$$
+as claimed. If $\p = \q = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \bif{\p}{\bif{\q}{a}{b}}{b} \\
+ & = & \bif{\p}{\bif{\btrue}{a}{b}}{b} \\
+ & = & \bif{\p}{a}{b} \\
+ & = & \bif{\btrue}{a}{b} \\
+ & = & \bif{\q}{a}{b} \\
+ & = & \bif{\q}{\bif{\btrue}{a}{b}}{b} \\
+ & = & \bif{\q}{\bif{\p}{a}{b}}{b}
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -441,17 +460,22 @@ as claimed.
 $\bif{\ast}{\ast}{\ast}$ interacts with functions of two arguments.
 
 :::::: theorem :::::
+[]{#thm-if-func-two}
 We have $$f(\bif{p}{a}{c},\bif{p}{b}{d}) = \bif{p}{f(a,b)}{f(c,d)}.$$
 
 ::: proof ::::::::::
-If $p = \btrue$, we have
+If $\p = \btrue$, we have
 $$\begin{eqnarray*}
- &   & f(\bif{p}{a}{c},\bif{p}{b}{d}) \\
+ &   & f(\bif{\p}{a}{c},\bif{p}{b}{d}) \\
+ & = & f(\bif{\btrue}{a}{c},\bif{\btrue}{b}{d}) \\
+ & = & f(a,\bif{\btrue}{b}{d}) \\
  & = & f(a,b)
 \end{eqnarray*}$$
-and if $p = \bfalse,
+and if $\p = \bfalse,
 $$\begin{eqnarray*}
- &   & f(\bif{p}{a}{c},\bif{p}{b}{d}) \\
+ &   & f(\bif{\p}{a}{c},\bif{\p}{b}{d}) \\
+ & = & f(\bif{\bfalse}{a}{c},\bif{\bfalse}{b}{d}) \\
+ & = & f(c,\bif{\bfalse}{b}{d}) \\
  & = & f(c,d)
 \end{eqnarray*}$$
 as claimed.
