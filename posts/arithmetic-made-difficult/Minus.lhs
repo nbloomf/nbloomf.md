@@ -248,7 +248,8 @@ as needed. If $\iszero(a) = \bfalse$, we have $\rgt(c) = \lft(\ast)$, which is a
 $$\begin{eqnarray*}
  &   & \rgt(c) \\
  & = & \nminus(\next(b),\zero) \\
- & = & \rgt(\next(b))
+ &     \href{@minus@#thm-minus-nat-zero}
+   = & \rgt(\next(b))
 \end{eqnarray*}$$
 so that $\next(b) = c = \nplus(c,\zero)$ as needed. Suppose instead that $a = \next(d)$ for some $d$. Now
 $$\begin{eqnarray*}

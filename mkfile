@@ -329,7 +329,7 @@ sniff-amd-rewrite:VQ:
     | paste - - - - \
     | awk -F"\t" '{print $2 "\t" $3 "\t" $1 "\t" $4}' \
     | sed -f amd-rules-sed.txt \
-    | rewrite-term \
+    | rewrite-term --verify \
     || true )
   rm amd-rules-sed.txt
   if [ -z "$REWRITE" ]; then
@@ -353,7 +353,7 @@ sniff-amd-suggest:VQ:
     | grep -v ' ' \
     | grep -v ':' \
     | grep -v '{(' \
-    | rewrite-term -s amd-rules.txt \
+    | rewrite-term --suggest amd-rules.txt \
     || true )
   echo "$SUGGEST"
 

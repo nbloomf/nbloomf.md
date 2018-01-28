@@ -489,7 +489,7 @@ $$\begin{eqnarray*}
  &     \href{@booleans@#cor-if-true}
    = & f(a,b)
 \end{eqnarray*}$$
-and if $\p = \bfalse,
+and if $\p = \bfalse$,
 $$\begin{eqnarray*}
  &   & f(\bif{\p}{a}{c},\bif{\p}{b}{d}) \\
  & = & f(\bif{\bfalse}{a}{c},\bif{\bfalse}{b}{d}) \\

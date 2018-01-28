@@ -16,7 +16,7 @@ tags: literate-haskell
 
 Today we'll build a tool that applies term-rewriting rules to expressions in a simplified form of mathematical notation.
 
-My motivation for this comes from the Arithmetic Made Difficult series of posts on this site. There, I'm writing lots of equation-style proofs, and it would be nice to have a tool check that at least some of the steps in those proofs are carried out correctly. I won't try to build a full-fledged proof checker -- building a proof checker that uses a syntax readable by people is a Hard Problem. But a simple term rewriting tool can get us (made up number) 80% of the benefits with 1% of the effort.
+My motivation for this comes from the [Arithmetic Made Difficult](/pages/amd.html) series of posts on this site. There, I'm writing lots of equation-style proofs, and it would be nice to have a tool check that at least some of the steps in those proofs are carried out correctly. I won't try to build a full-fledged proof checker -- building a proof checker that uses a syntax readable by people is a Hard Problem. But a simple term rewriting tool can get us (made up number) 80% of the benefits with 1% of the effort. With this tool, we'll be able to annotate equational proofs with "justification" information that is machine checked, but also compiles to human readable cross references (hyperlinks).
 
 
 Grammar
@@ -24,17 +24,38 @@ Grammar
 
 To set the scope of the problem, we'll focus on a subset of math notation that can be easily translated to something like lambda calculus. The basic ingredients are
 
-1. *constants*, or atomic expressions;
-2. *variables*, for which we can substitute subexpressions; and
+1. *constants*, or atomic expressions, that represent themselves;
+2. *variables*, that represent arbitrary subexpressions; and
 3. *application* of one expression to another.
 
-Syntactically, we will decree that constants consist of one or more letters prefixed by a `\`, such as
+We can represent this little grammar with the following ``Expr`` type.
+
+> data Expr
+>   = Con Token
+>   | Var Token
+>   | App Expr Expr
+>   deriving (Eq, Show)
+> 
+> type Token = String
+
+In keeping with $\LaTeX$ syntax, we will decree that constants consist of one or more letters prefixed by a `\`, such as
 
     \plus \times \cons
+
+> pCon :: Parser Expr
+> pCon = do
+>   char '\\'
+>   token <- many1 letter
+>   return (Con token)
 
 We'll decree that variables consist of one or more letters *not* prefixed by a `\`, such as
 
     a b foo munge
+
+> pVar :: Parser Expr
+> pVar = do
+>   token <- many1 letter
+>   return (Var token)
 
 Application is a little trickier. Certainly an expression like ``f(a)`` means "the expression ``f`` applied to the expression ``a``. The trouble is how to handle functions with more than one argument. We'll do this by implicitly currying all functions. Remember that any function with signature
 
@@ -44,51 +65,28 @@ is equivalent to one with signature
 
     g : a -> b -> c
 
-where the function arrow is right associative. So we can interpret an expression like ``f(a,b)`` implicitly as ``f(a)(b)``. In particular, we only need to support functions of one argument.
+where the function arrow is right associative. So we can interpret an expression like ``f(a,b)`` implicitly as ``f(a)(b)``. In particular, we only need to support functions of one argument. But we also need to handle explicitly curried functions, like
 
-We can represent this little grammar with the following ``Expr`` type.
+    f(a)(b,c)
 
-> data Expr
->   = Constant Token
->   | Variable Token
->   | Apply Expr Expr
->   deriving (Eq, Show)
-> 
-> type Token = String
+and we also need to allow arguments to be fenced in either parentheses or braces.
 
-Nothing about this type is specific to LaTeX, but we can write a little parser to read LaTeX statements in to the ``Expr`` type. We'll go ahead and do this now so we can define ``Expr`` values more easily.
+> fenced :: Parser a -> Parser a
+> fenced p =
+>       (between (char '(') (char ')') p)
+>   <|> (between (char '{') (char '}') p)
+
+We'll say that an "expression" is a constant or variable followed by zero or more fenced comma-delimited lists of subexpressions.
 
 > pLatexExpr :: Parser Expr
-> pLatexExpr = chainl1 pTerm (return Apply)
->   where
->     fenced :: Parser a -> Parser a
->     fenced p = (between (char '(') (char ')') p) <|> (between (char '{') (char '}') p)
-> 
->     pVariable :: Parser Expr
->     pVariable = do
->       token <- many1 letter
->       args <- option [] $ many1 $ fenced $ sepBy1 pLatexExpr (char ',')
->       case concat args of
->         [] -> return $ Variable token
->         as -> return $ foldl Apply (Variable token) as
-> 
->     pConstant :: Parser Expr
->     pConstant = do
->       char '\\'
->       token <- many1 letter
->       args <- option [] $ many1 $ fenced $ sepBy1 pLatexExpr (char ',')
->       case concat args of
->         [] -> return $ Constant token
->         as -> return $ foldl Apply (Constant token) as
-> 
->     pTerm :: Parser Expr
->     pTerm = choice
->       [ fenced pLatexExpr
->       , pConstant
->       , pVariable
->       ]
+> pLatexExpr = do
+>   f <- pCon <|> pVar
+>   args <- option [] $ many1 $ fenced $ sepBy1 pLatexExpr (char ',')
+>   return $ foldl App f $ concat args
 
-And some helpers:
+Nothing about the ``Expr`` type is specific to LaTeX, but (at least for now) this tool will be used specifically to parse and verify equations written in LaTeX.
+
+While we're at it, some parsing helpers:
 
 > parseWith :: String -> Parser a -> String -> Either String a
 > parseWith loc p text = case runParser (p <* eof) () loc text of
@@ -105,15 +103,15 @@ And here is an example.
 ```haskell
 $> x <- parseWithIO "" pLatexExpr "\\plus(a,\\times(b,c))"
 $> putStrLn $ show x
-Apply (Apply (Constant "plus") (Variable "a")) (Apply (Apply (Constant "times") (Variable "b")) (Variable "c"))
+App (App (Con "plus") (Var "a")) (App (App (Con "times") (Var "b")) (Var "c"))
 ```
 
 We'll also make a function to pretty print ``Expr``s as LaTeX.
 
 > latex :: Expr -> String
-> latex (Constant x) = '\\' : x
-> latex (Variable x) = x
-> latex (Apply x y) = concat
+> latex (Con x) = '\\' : x
+> latex (Var x) = x
+> latex (App x y) = concat
 >   [ latex x, "(", latex y, ")" ]
 
 For example:
@@ -134,7 +132,7 @@ A *substitution* is a mapping from variables to expressions, which we'll represe
 
 > type Substitution = [(Token, Expr)]
 
-Since lists are not actually maps, we need a helper function to decide whether a given list of token-expression pairs is well-defined. That is, we shouldn't have two pairs with the same token but different expressions.
+Since lists are not actually maps, we need a helper function to decide whether a given list of token-expression pairs is well-defined. That is, a valid substitution shouldn't have two pairs with the same token but different expressions.
 
 > wellDefined :: Substitution -> Bool
 > wellDefined [] = True
@@ -143,43 +141,38 @@ Since lists are not actually maps, we need a helper function to decide whether a
 >   , wellDefined ps
 >   ]
 
-Now actually making a substitution is straightforward.
+Now actually making a substitution is straightforward; we march down an ``Expr``, and if we find a variable token replace it with its associated subexpression. We do the simplest thing by replacing _all_ instances of the variable.
 
 > substitute :: Substitution -> Expr -> Expr
-> substitute _  (Constant a) =
->   Constant a
-> substitute es (Variable x) =
+> substitute _ (Con a) =
+>   Con a
+> substitute es (Var x) =
 >   case lookup x es of
 >     Just e  -> e
->     Nothing -> Variable x
-> substitute es (Apply a b) =
->   Apply (substitute es a) (substitute es b)
+>     Nothing -> Var x
+> substitute es (App a b) =
+>   App (substitute es a) (substitute es b)
 
-For fun:
-
-> showSub :: Substitution -> String
-> showSub x = unlines $ map (\(a,z) -> a ++ " => " ++ latex z) x
-
-Next we can try to construct a substitution taking one expression to another, based at the root.
+Next we can try to construct a substitution taking one expression to another, based at the root. Constants match only themselves, variables match anything, and applications match recursively.
 
 > matches :: Expr -> Expr -> Maybe Substitution
-> matches pattern expr = match' pattern expr >>= check
+> matches pattern expr = match pattern expr >>= check
 >   where
 >     check ps = if wellDefined ps
 >       then Just (nub ps)
 >       else Nothing
 > 
->     match' (Constant a) (Constant b) =
+>     match (Con a) (Con b) =
 >       if a == b then Just [] else Nothing
->     match' (Constant _) _ =
+>     match (Con _) _ =
 >       Nothing
->     match' (Variable x) e =
+>     match (Var x) e =
 >       Just [(x,e)]
->     match' (Apply e1 e2) (Apply f1 f2) = do
->       xs <- match' e1 f1
->       ys <- match' e2 f2
+>     match (App e1 e2) (App f1 f2) = do
+>       xs <- match e1 f1
+>       ys <- match e2 f2
 >       return (xs ++ ys)
->     match' (Apply _ _) _ =
+>     match (App _ _) _ =
 >       Nothing
 
 More generally matches can occur anywhere in an expression, and we need to be able to unambiguously state where the match is. The ``Path`` type represents a series of directions for moving from the root of an expression to some interior node.
@@ -192,13 +185,13 @@ And ``matchesIn`` constructs a list of all substitutions from one expression to 
 
 > matchesIn :: Expr -> Expr -> [(Path, Substitution)]
 > matchesIn pattern expr = case expr of
->   Constant a -> case matches pattern expr of
+>   Con a -> case matches pattern expr of
 >     Nothing -> []
 >     Just s -> [(H, s)]
->   Variable x -> case matches pattern expr of
+>   Var x -> case matches pattern expr of
 >     Nothing -> []
 >     Just s -> [(H, s)]
->   Apply x y -> do
+>   App x y -> do
 >     let
 >       mx = map (\(p,z) -> (L p, z)) $ matchesIn pattern x
 >       my = map (\(p,z) -> (R p, z)) $ matchesIn pattern y
@@ -210,14 +203,16 @@ Given a ``Path``, we can (attempt to) transform the subexpression it points to.
 
 > transform :: (Expr -> Expr) -> Path -> Expr -> Maybe Expr
 > transform f H expr = Just (f expr)
-> transform f (L path) (Apply expr w) = do
+> transform f (L path) (App expr w) = do
 >   q <- transform f path expr
->   Just (Apply q w)
-> transform f (R path) (Apply w expr) = do
+>   Just (App q w)
+> transform f (R path) (App w expr) = do
 >   q <- transform f path expr
->   Just (Apply w q)
+>   Just (App w q)
 > transform _ _ _ = Nothing
-> 
+
+As a special case, ``rewrite`` replaces the subexpression at a given location.
+
 > rewrite :: Expr -> Path -> Expr -> Maybe Expr
 > rewrite p = transform (const p)
 
@@ -228,7 +223,9 @@ Rewrite Rules
 A *rewrite rule* is a pair of expressions that we interpret as being "equal" for all possible substitutions.
 
 > type Rule = (Expr, Expr)
-> 
+
+In our latexy syntax, we'll say a rewrite rule is two expressions, separated by an equals sign, and separated by spaces.
+
 > pRule :: Parser Expr -> Parser Rule
 > pRule p = do
 >   a <- p
@@ -238,25 +235,45 @@ A *rewrite rule* is a pair of expressions that we interpret as being "equal" for
 >   b <- p
 >   return (a,b)
 
-> validate1 :: Rule -> Expr -> Expr -> (Path, Substitution) -> Bool
-> validate1 (_,q) h k (path,subs) =
->   case rewrite (substitute subs q) path h of
->     Nothing -> False
->     Just w -> w == k
-> 
-> validate :: Rule -> Expr -> Expr -> [(Path, Substitution)]
-> validate (p,q) h k =
->   filter (validate1 (p,q) h k) (matchesIn p h)
+To apply a rewrite rule to an expression, we find all matches of the left hand side in the expression, substitute these into the right hand side, and then rewrite the expression.
+
+> applyRule :: Rule -> Expr -> [Expr]
+> applyRule (lhs,rhs) x =
+>   catMaybes $ map applyMatch $ matchesIn lhs x
+>   where
+>     applyMatch (path,sub) = rewrite (substitute sub rhs) path x
+
+To _validate_ a rule application -- to check that ``a = b`` maps ``e`` to ``f`` -- we apply the rule to ``e`` and see if ``f`` is among the resuls.
+
+> validate :: Rule -> Expr -> Expr -> Bool
+> validate rule input output = elem output (applyRule rule input)
+
+Most of the rewrite rules and expressions we'll deal with are _symmetric_; we don't mind reversing the order of the expressions in the rewrite rule, and the roles of the input and output expressions. For this case we'll use a separate validation function.
+
+> validateSymmetric :: Rule -> Expr -> Expr -> Bool
+> validateSymmetric (lhs,rhs) e f = or
+>   [ validate (lhs,rhs) e f
+>   , validate (rhs,lhs) e f
+>   , validate (lhs,rhs) f e
+>   , validate (rhs,lhs) f e
+>   ]
 
 
 Interface
 ---------
 
-We'll keep this really simple. This tool expects its input on `stdin`, one rewrite check per line, in the form
+Remember: this tool is specifically intended for use with the [Arithmetic Made Difficult](/pages/amd.html) posts, which include a few thousand lines worth of equational proofs. Those posts need two kinds of support.
+
+1. We'd like to statically check the equalities in our equational proofs. Some equalities are annotated with a cross reference to the theorem that justifies them. Some `sed` magic can turn these into rewrite rules, which we can use to verify that the left hand side of an equality rewrites to the right hand side. Verifying one equality at a time, rather than an entire proof, makes it possible to build up static checks incrementally.
+2. If an equality _doesn't_ have a cross referenced annotation, it'd be nice if our tool could also give suggestions for valid cross references based on a dictionary of rewrite rules. Bonus points if it also builds an edit script for inserting the annotation (hint, it will).
+
+These requirements suggest that the tool needs two modes, which we'll call *verify* mode and *suggest* mode, respectively.
+
+We'll keep this really simple. In verify mode, the tool expects its input on `stdin`, one rewrite check per line, in the form
 
     location TAB rulelhs = rulerhs TAB from-expr TAB to-expr
 
-So we'll need to split a line on tabs:
+Where `location` is some information about where the check comes from (for reporting problems). So we'll need to split a line on tabs:
 
 > unTab :: String -> [String]
 > unTab = unfoldr getCell
@@ -269,19 +286,22 @@ So we'll need to split a line on tabs:
 >       in
 >         Just (cell, rest)
 
-And we'll need to process one untabbed line. We're assuming that the rewrite rules are reversible; given `x = y` and two expressions `lhs` and `rhs`, any substitution taking either `lhs` to `rhs` or `rhs` to `lhs` is considered valid. This is ok for the equation chains we want to use this on in the Arithmetic Made Difficult posts.
+And we'll need to process one untabbed line. We're assuming that the rewrite rules are symmetric; given `x = y` and two expressions `e` and `f`, any substitution taking either `e` to `f` or `f` to `e` is considered valid. This is ok for the equation chains we want to use this on.
 
-> process :: [String] -> IO ()
-> process [loc,r,a,b] = do
->   (x,y) <- parseWithIO loc (pRule pLatexExpr) r
->   lhs <- parseWithIO loc pLatexExpr a
->   rhs <- parseWithIO loc pLatexExpr b
->   case (validate (x,y) lhs rhs, validate (y,x) lhs rhs, validate (x,y) rhs lhs, validate (y,x) lhs rhs) of
->     ([],[],[],[]) -> do
->       putStrLn $ unwords [loc,"invalid!",r,"::",a,"-->",b]
->     _ -> return ()
-> process xs = do
->   putStrLn $ unwords ("unrecognized input:":xs)
+> processVerify :: [String] -> IO ()
+> processVerify [loc,r,a,b] = do
+>   rule <- parseWithIO loc (pRule pLatexExpr) r
+>   e <- parseWithIO loc pLatexExpr a
+>   f <- parseWithIO loc pLatexExpr b
+>   if validateSymmetric rule e f
+>     then return ()
+>     else putStrLn $ unwords [loc,"invalid!",r,"::",a,"-->",b]
+> processVerify xs = do
+>   putStrLn $ unwords ("unrecognized input format:":xs)
+
+In suggest mode, we'll assume that a dictionary of named rewrite rules is kept in some external file consisting of lines of the form
+
+    name TAB rulelhs = rulerhs
 
 > parseNamedRule :: [String] -> IO (String,(Expr,Expr))
 > parseNamedRule [name,r] = do
@@ -291,43 +311,163 @@ And we'll need to process one untabbed line. We're assuming that the rewrite rul
 >   putStrLn $ unwords ("unrecognized input:":xs)
 >   exitFailure
 
-Now the main tool just splits each input line and verifies rewrites.
+We'll also allow comment lines in the dictionary; these start with  a `#` character and are ignored.
 
 > comment :: String -> Bool
 > comment ('#':_) = True
 > comment _ = False
+
+We also assume backslashes are escaped in the dictionary because reasons.
 
 > unesc :: String -> String
 > unesc ('\\':'\\':xs) = '\\' : unesc xs
 > unesc (c:cs) = c : unesc cs
 > unesc [] = []
 
-> processS :: [String] -> [(String,(Expr,Expr))] -> IO ()
-> processS [loc,line,a,b] ((name,(x,y)):rs) = do
+It will be more useful if in suggest mode, we ignore parse errors. Suggestion mode marches down the rules in the dictionary, and if it finds one, emits a `sed` command to insert an annotation. This part is completely ad-hoc.
+
+> processSuggest :: [(String,(Expr,Expr))] -> [String] -> IO ()
+> processSuggest ((name,(x,y)):rs) [loc,line,a,b] = do
 >   lhs <- case parseWith loc pLatexExpr a of
->     Left _ -> return (Constant "")
+>     Left _ -> return (Con "")
 >     Right w -> return w
 >   rhs <- case parseWith loc pLatexExpr b of
->     Left _ -> return (Constant "")
+>     Left _ -> return (Con "")
 >     Right w -> return w
->   case (validate (x,y) lhs rhs, validate (y,x) lhs rhs, validate (x,y) rhs lhs, validate (y,x) lhs rhs) of
->     ([],[],[],[]) -> processS [loc,line,a,b] rs
->     _ -> do
->       putStrLn $ unwords ["sed -i ''","'"++line++"s/^ & = & / \\&     \\\\href{" ++ name ++ "}~   = \\& /'",loc]
-> processS [_,_,_,_] [] = return ()
-> processS xs _ = do
+>   if validateSymmetric (x,y) lhs rhs
+>     then do
+>       putStrLn $ unwords
+>         [ "sed -i ''"
+>         , "'"++line++"s/^ & = & / \\&     \\\\href{" ++ name ++ "}~   = \\& /'"
+>         , loc
+>         ]
+>       else processSuggest rs [loc,line,a,b]
+> processSuggest [] [_,_,_,_] = return ()
+> processSuggest _ xs = do
 >   putStrLn $ unwords xs
+
+And `main`. In a departure from the unix philosophy, in verify mode we'll report the number of checks made.
 
 > main :: IO ()
 > main = do
 >   args <- getArgs
 >   case args of
->     [] -> do
+>     ["--verify"] -> do
 >       checks <- fmap (map unTab . lines) getContents
->       mapM_ process checks
->       hPutStrLn stderr $ unwords [show $ length checks,"checks completed"]
->     ["-s",path] -> do
+>       mapM_ processVerify checks
+>       hPutStrLn stderr $ unwords [show $ length checks, "checks completed"]
+> 
+>     ["--suggest", path] -> do
 >       rules <- (fmap (map unTab . filter (not . comment) . lines . unesc) $ readFile path)
 >         >>= mapM parseNamedRule
 >       checks <- fmap (map unTab . lines) getContents
->       mapM_ (\c -> processS c rules) checks
+>       mapM_ (processSuggest rules) checks
+> 
+>     _ -> do
+>       putStrLn $ unlines
+>         [ "usage:"
+>         , "  --verify       : validate rewrites on stdin"
+>         , "  --suggest PATH : suggest rewrite rules from PATH on stdin"
+>         ]
+
+
+Testing
+=======
+
+The parts of this tool are complicated enough that I'll feel better having some tests.
+
+> test_main :: IO ()
+> test_main = do
+>   parseSuccessTests
+>   parseFailureTests
+>   substituteTests
+
+Parsing tests helpers:
+
+> testParseSuccess :: Int -> (String, Expr) -> IO ()
+> testParseSuccess k (str,expr) = do
+>   putStrLn $ "\nsuccess test " ++ show k
+>   putStrLn str
+>   case parseWith "" pLatexExpr str of
+>     Left msg -> putStrLn msg >> exitFailure
+>     Right ex -> if ex == expr
+>       then putStrLn "ok"
+>       else do
+>         putStrLn $ unlines
+>           [ "parse error:"
+>           , str
+>           , "expected: " ++ show expr
+>           , "actual:   " ++ show ex
+>           ]
+>         exitFailure
+> 
+> testParseFailure :: Int -> String -> IO ()
+> testParseFailure k str = do
+>   putStrLn $ "\nfailure test " ++ show k
+>   putStrLn str
+>   case parseWith "" pLatexExpr str of
+>     Right ex -> putStrLn (show ex) >> exitFailure
+>     Left _   -> putStrLn "ok"
+
+Parsing test cases:
+
+> parseSuccessTests :: IO ()
+> parseSuccessTests = sequence_ $ zipWith testParseSuccess [1..]
+>   [ ("f", Var "f")
+>   , ("\\f", Con "f")
+>   , ("f(x)", App (Var "f") (Var "x"))
+>   , ("\\f(x)", App (Con "f") (Var "x"))
+>   , ("f(\\x)", App (Var "f") (Con "x"))
+>   , ("\\f(\\x)", App (Con "f") (Con "x"))
+>   , ("f{x}", App (Var "f") (Var "x"))
+>   , ("\\f{x}", App (Con "f") (Var "x"))
+>   , ("f{\\x}", App (Var "f") (Con "x"))
+>   , ("\\f{\\x}", App (Con "f") (Con "x"))
+>   , ("f(x,y)", App (App (Var "f") (Var "x")) (Var "y"))
+>   , ("\\f(x,y)", App (App (Con "f") (Var "x")) (Var "y"))
+>   , ("f(x)(y)", App (App (Var "f") (Var "x")) (Var "y"))
+>   , ("f{x}(y)", App (App (Var "f") (Var "x")) (Var "y"))
+>   , ("f(x,y)(z)", App (App (App (Var "f") (Var "x")) (Var "y")) (Var "z"))
+>   , ("f(x)(y,z)", App (App (App (Var "f") (Var "x")) (Var "y")) (Var "z"))
+>   , ("f{x,y}(z)", App (App (App (Var "f") (Var "x")) (Var "y")) (Var "z"))
+>   , ("f{x}(y,z)", App (App (App (Var "f") (Var "x")) (Var "y")) (Var "z"))
+>   , ("f(x)(g(y))", App (App (Var "f") (Var "x")) (App (Var "g") (Var "y")))
+>   ]
+> 
+> parseFailureTests :: IO ()
+> parseFailureTests = sequence_ $ zipWith testParseFailure [1..]
+>   [ "#"
+>   , "f(x"
+>   , "f(x}"
+>   , "\\fx)"
+>   , "\\f(x,)"
+>   , "\\f(,x)"
+>   ]
+
+Substitution test helper:
+
+> testSubstitution :: Int -> (Substitution, Expr, Expr) -> IO ()
+> testSubstitution k (sub,e1,e2) = do
+>   putStrLn $ "\nsubstitution test " ++ show k
+>   putStrLn $ show sub
+>   putStrLn $ latex e1
+>   if e2 == substitute sub e1
+>     then putStrLn "ok"
+>     else do
+>       putStrLn $ unlines
+>         [ "substitution error:"
+>         , "expected: " ++ show e2
+>         , "actual:   " ++ show (substitute sub e1)
+>         ]
+>       exitFailure
+
+Substitution test cases:
+
+> substituteTests :: IO ()
+> substituteTests = sequence_ $ zipWith testSubstitution [1..]
+>   [ ([], Con "a", Con "a")
+>   , ([("a", Con "b")], Var "a", Con "b")
+>   , ([("a", Con "b")], Con "a", Con "a")
+>   , ([("a", App (Con "f") (Var "x"))], App (Con "g") (Var "a"), App (Con "g") (App (Con "f") (Var "x")))
+>   , ([("a", Con "x")], App (Var "a") (Var "a"), App (Con "x") (Con "x"))
+>   ]
