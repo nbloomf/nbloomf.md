@@ -38,6 +38,20 @@
 @and@#thm-and-if-right	\\band(p,\\bif{p}{q}{r}) = \\band(p,q)
 @and@#thm-and-if-hyp	\\bif{\\band(p,q)}{a}{b} = \bif{p}{\bif{q}{a}{b}}{b}
 #=======================#
+#--- or ----------------#
+#=======================#
+@or@#def-or	\\bor(p,q) = \\bif{p}{\\btrue}{\bif{q}{\\btrue}{\\bfalse}}
+@or@#thm-or-eval-true-true	\\bor(\\btrue,\\btrue) = \\btrue
+@or@#thm-or-eval-true-false	\\bor(\\btrue,\\bfalse) = \\btrue
+@or@#thm-or-eval-false-true	\\bor(\\bfalse,\\btrue) = \\btrue
+@or@#thm-or-eval-false-false	\\bor(\\bfalse,\\bfalse) = \\bfalse
+@or@#thm-or-true-left	\\bor(\\btrue,p) = \\btrue
+@or@#thm-or-true-right	\\bor(p,\\btrue) = \\btrue
+@or@#thm-or-false-left	\\bor(\\bfalse,p) = p
+@or@#thm-or-false-right	\\bor(p,\\bfalse) = p
+@or@#thm-or-not	\\bor(p,\\bnot(p)) = \\btrue
+@or@#thm-or-idempotent	\\bor(p,p) = p
+#=======================#
 #--- disjoint-unions ---#
 #=======================#
 @disjoint-unions@#dfn-disjoint-unions-isRgt	\\isRgt = \\either(\\const(\\bfalse),\\const(\\btrue))

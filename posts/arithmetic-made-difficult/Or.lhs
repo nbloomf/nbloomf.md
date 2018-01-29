@@ -19,6 +19,7 @@ slug: or
 Finally, $\bor$.
 
 :::::: definition ::
+[]{#def-or}
 We define $\bor : \bool \times \bool \rightarrow \bool$ by $$\bor(p,q) = \bif{p}{\btrue}{\bif{q}{\btrue}{\bfalse}}.$$
 
 In Haskell:
@@ -31,7 +32,7 @@ In Haskell:
 We can compute $\bor$ explicitly.
 
 :::::: theorem :::::
-<a name="def-or" />
+[]{#thm-or-eval}[]{#thm-or-eval-true-true}[]{#thm-or-eval-true-false}[]{#thm-or-eval-false-true}[]{#thm-or-eval-false-false}
 We have
 $$\begin{eqnarray*}
 \bor(\btrue,\btrue)   & = & \btrue \\
@@ -111,10 +112,22 @@ as claimed.
 $\btrue$ absorbs under $\bor$.
 
 :::::: theorem :::::
+[]{#thm-or-true}[]{#thm-or-true-left}[]{#thm-or-true-right}
 For all $a \in \bool$, we have $$\bor(\btrue,a) = \bor(a,\btrue) = \btrue.$$
 
 ::: proof ::::::::::
-If $a = \btrue$, we have $$\bor(\btrue,\btrue) = \btrue,$$ and if $a = \bfalse$ we have $$\bor(\btrue,\bfalse) = \btrue = \bor(\bfalse,\btrue)$$ as claimed.
+If $a = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \bor(\btrue,\btrue) \\
+ & = & \btrue
+\end{eqnarray*}$$
+and if $a = \bfalse$ we have
+$$\begin{eqnarray*}
+ &   & \bor(\btrue,\bfalse) \\
+ & = & \btrue \\
+ & = & \bor(\bfalse,\btrue)
+\end{eqnarray*}$$
+as claimed.
 ::::::::::::::::::::
 
 ::: test :::::::::::
@@ -131,10 +144,22 @@ If $a = \btrue$, we have $$\bor(\btrue,\btrue) = \btrue,$$ and if $a = \bfalse$ 
 $\bfalse$ is neutral under $\bor$.
 
 :::::: theorem :::::
+[]{#thm-or-false}[]{#thm-or-false-left}[]{#thm-or-false-right}
 For all $a \in \bool$, we have $$\bor(\bfalse,a) = \bor(a,\bfalse) = a.$$
 
 ::: proof ::::::::::
-If $a = \btrue$, we have $$\bor(\bfalse,\btrue) = \btrue = \bor(\btrue,\bfalse),$$ and if $a = \bfalse$ we have $$\bor(\bfalse,\bfalse) = \bfalse$$ as claimed.
+If $a = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \bor(\bfalse,\btrue) \\
+ & = & \btrue \\
+ & = & \bor(\btrue,\bfalse)
+\end{eqnarray*}$$
+and if $a = \bfalse$ we have
+$$\begin{eqnarray*}
+ &   & \bor(\bfalse,\bfalse) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as claimed.
 ::::::::::::::::::::
 
 ::: test :::::::::::
@@ -151,10 +176,22 @@ If $a = \btrue$, we have $$\bor(\bfalse,\btrue) = \btrue = \bor(\btrue,\bfalse),
 $\bor$ interacts with $\bnot$.
 
 :::::: theorem :::::
+[]{#thm-or-not}
 For all $a \in \bool$, we have $\bor(p,\bnot(p)) = \btrue$.
 
 ::: proof ::::::::::
-If $a = \btrue$, we have $$\bor(\btrue,\bnot(\btrue)) = \btrue,$$ and if $a = \bfalse$ we have $$\bor(\bfalse,\bnot(\bfalse)) = \bor(\bfalse,\btrue) = \btrue$$ as claimed.
+If $a = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \bor(\btrue,\bnot(\btrue)) \\
+ & = & \btrue
+\end{eqnarray*}$$
+and if $a = \bfalse$ we have
+$$\begin{eqnarray*}
+ &   & \bor(\bfalse,\bnot(\bfalse)) \\
+ & = & \bor(\bfalse,\btrue) \\
+ & = & \btrue
+\end{eqnarray*}$$
+as claimed.
 ::::::::::::::::::::
 
 ::: test :::::::::::
@@ -171,10 +208,21 @@ If $a = \btrue$, we have $$\bor(\btrue,\bnot(\btrue)) = \btrue,$$ and if $a = \b
 $\bor$ is idempotent.
 
 :::::: theorem :::::
+[]{#thm-or-idempotent}
 For all $a \in \bool$, we have $\bor(a,a) = a$.
 
 ::: proof ::::::::::
-If $a = \btrue$ we have $$\bor(\btrue,\btrue) = \btrue,$$ and if $a = \bfalse$ then $$\bor(\bfalse,\bfalse) = \bfalse$$ as claimed.
+If $a = \btrue$ we have
+$$\begin{eqnarray*}
+ &   & \bor(\btrue,\btrue) \\
+ & = & \btrue
+\end{eqnarray*}$$
+and if $a = \bfalse$ then
+$$\begin{eqnarray*}
+ &   & \bor(\bfalse,\bfalse) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as claimed.
 ::::::::::::::::::::
 
 ::: test :::::::::::
