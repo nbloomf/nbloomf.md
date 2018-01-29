@@ -224,7 +224,8 @@ $$\begin{eqnarray*}
  & = & \all(p)(\cons(a,\cat(x,y))) \\
  & = & \band(p(a),\all(p)(\cat(x,y))) \\
  & = & \band(p(a),\band(\all(p)(x),\all(p)(y))) \\
- & = & \band(\band(p(a),\all(p)(x)),\all(p)(y)) \\
+ &     \href{@and@#thm-and-associative}
+   = & \band(\band(p(a),\all(p)(x)),\all(p)(y)) \\
  & = & \band(\all(p)(\cons(a,x)),\all(p)(y))
 \end{eqnarray*}$$
 as needed.
@@ -261,7 +262,8 @@ $$\begin{eqnarray*}
  & = & \all(p,\cat(\rev(x),\rev(\cons(a,\nil)))) \\
  & = & \band(\all(p,\rev(x)),\all(p,\rev(\cons(a,\nil)))) \\
  & = & \band(\all(p,x),\all(p,\cons(a,\nil))) \\
- & = & \band(\all(p,\cons(a,\nil)),\all(p,x)) \\
+ &     \href{@and@#thm-and-commutative}
+   = & \band(\all(p,\cons(a,\nil)),\all(p,x)) \\
  & = & \all(p,\cat(\cons(a,\nil),x)) \\
  & = & \all(p,\cons(a,x))
 \end{eqnarray*}$$

@@ -389,7 +389,8 @@ $$\begin{eqnarray*}
  &     \href{@booleans@#thm-if-commute-true}
    = & \band(p(a),\bif{p(a)}{\bif{\beq(a,b)}{\btrue}{\elt(a,x)}}{\elt(a,x)}) \\
  & = & \band(p(a),\bif{p(a)}{\elt(a,\cons(b,x))}{\elt(a,x)}) \\
- & = & \band(p(a),\elt(a,\cons(b,x)))
+ &     \href{@and@#thm-and-if-right}
+   = & \band(p(a),\elt(a,\cons(b,x)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

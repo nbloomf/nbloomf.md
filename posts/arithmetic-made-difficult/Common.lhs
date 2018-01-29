@@ -280,7 +280,8 @@ $$\begin{eqnarray*}
  &   & \elt(a,\common(x,y)) \\
  & = & \elt(a,\filter(\elt(-,y))(x)) \\
  & = & \band(\elt(a,y),\elt(a,x)) \\
- & = & \band(\elt(a,x),\elt(a,y))
+ &     \href{@and@#thm-and-commutative}
+   = & \band(\elt(a,x),\elt(a,y))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -308,7 +309,8 @@ We have
 $$\begin{eqnarray*}
  &   & \elt(a,\common(x,y)) \\
  & = & \band(\elt(a,x),\elt(a,y)) \\
- & = & \band(\elt(a,y),\elt(a,x)) \\
+ &     \href{@and@#thm-and-commutative}
+   = & \band(\elt(a,y),\elt(a,x)) \\
  & = & \elt(a,\common(y,x))
 \end{eqnarray*}$$
 as claimed.
@@ -349,7 +351,8 @@ $$\begin{eqnarray*}
  & = & \bif{\elt(a,\filter(\elt(-,z))(y))}{\cons(a,\common(x,\common(y,z)))}{\common(x,\common(y,z))} \\
  & = & \bif{\band(\elt(a,z),\elt(a,y))}{\cons(a,\common(x,\common(y,z)))}{\common(x,\common(y,z))} \\
  & = & \bif{\band(\elt(a,y),\elt(a,z))}{\cons(a,\common(\common(x,y),z))}{\common(\common(x,y),z)} \\
- & = & \bif{\elt(a,y)}{\bif{\elt(a,z)}{\cons(a,\common(\common(x,y),z))}{\common(\common(x,y),z)}}{\common(\common(x,y),z)} \\
+ &     \href{@and@#thm-and-if-hyp}
+   = & \bif{\elt(a,y)}{\bif{\elt(a,z)}{\cons(a,\common(\common(x,y),z))}{\common(\common(x,y),z)}}{\common(\common(x,y),z)} \\
  & = & \bif{\elt(a,y)}{\bif{\elt(a,z)}{\cons(a,\filter(\elt(-,z))(\common(x,y)))}{\filter(\elt(-,z))(\common(x,y))}}{\common(\common(x,y),z)} \\
  & = & \bif{\elt(a,y)}{\filter(\elt(-,z))(\cons(a,\common(x,y)))}{\common(\common(x,y),z)} \\
  & = & \bif{\elt(a,y)}{\filter(\elt(-,z))(\cons(a,\common(x,y)))}{\filter(\elt(-,z))(\common(x,y))} \\

@@ -207,14 +207,16 @@ as needed.
 $$\begin{eqnarray*}
  &   & \pand(p,p)(a) \\
  & = & \band(p(a),p(a)) \\
- & = & p(a)
+ &     \href{@and@#thm-and-idempotent}
+   = & p(a)
 \end{eqnarray*}$$
 as needed.
 4. For all $a \in A$, we have
 $$\begin{eqnarray*}
  &   & \pand(p,q)(a) \\
  & = & \band(p(a),q(a)) \\
- & = & \band(q(a),p(a)) \\
+ &     \href{@and@#thm-and-commutative}
+   = & \band(q(a),p(a)) \\
  & = & \pand(q,p)(a)
 \end{eqnarray*}$$
 as needed.
@@ -223,7 +225,8 @@ $$\begin{eqnarray*}
  &   & \pand(\pand(p,q),r)(a) \\
  & = & \band(\pand(p,q)(a),r(a)) \\
  & = & \band(\band(p(a),q(a)),r(a)) \\
- & = & \band(p(a),\band(q(a),r(a))) \\
+ &     \href{@and@#thm-and-associative}
+   = & \band(p(a),\band(q(a),r(a))) \\
  & = & \band(p(a),\pand(q,r)(a)) \\
  & = & \pand(p,\band(q,r))(a)
 \end{eqnarray*}$$

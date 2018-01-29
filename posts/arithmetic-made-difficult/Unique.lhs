@@ -254,8 +254,10 @@ $$\begin{eqnarray*}
  & = & \band(\bif{\beq(b,a)}{\bfalse}{\bnot(\elt(b,x))},\band(\bnot(\elt(a,x)),\unique(x))) \\
  & = & \bif{\beq(a,b)}{\band(\bfalse,\band(\bnot(\elt(a,x)),\unique(x)))}{\band(\bnot(\elt(b,x)),\band(\bnot(\elt(a,x)),\unique(x)))} \\
  & = & \bif{\beq(a,b)}{\bfalse}{\band(\band(\bnot(\elt(b,x)),\bnot(\elt(a,x))),\unique(x))} \\
- & = & \bif{\beq(a,b)}{\bfalse}{\band(\band(\bnot(\elt(a,x)),\bnot(\elt(b,x))),\unique(x))} \\
- & = & \bif{\beq(a,b)}{\bfalse}{\band(\bnot(\elt(a,x)),\band(\bnot(\elt(b,x)),\unique(x)))} \\
+ &     \href{@and@#thm-and-commutative}
+   = & \bif{\beq(a,b)}{\bfalse}{\band(\band(\bnot(\elt(a,x)),\bnot(\elt(b,x))),\unique(x))} \\
+ &     \href{@and@#thm-and-associative}
+   = & \bif{\beq(a,b)}{\bfalse}{\band(\bnot(\elt(a,x)),\band(\bnot(\elt(b,x)),\unique(x)))} \\
  &     \href{@and@#thm-and-false-left}
    = & \bif{\beq(a,b)}{\band(\bfalse,\band(\bnot(\elt(b,x)),\unique(x)))}{\band(\bnot(\elt(a,x)),\band(\bnot(\elt(b,x)),\unique(x)))} \\
  & = & \band(\bif{\beq(a,b)}{\bfalse}{\bnot(\elt(a,x))},\band(\bnot(\elt(b,x)),\unique(x))) \\

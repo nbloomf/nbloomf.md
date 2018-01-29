@@ -192,13 +192,16 @@ If $a \in \bool$, we have $\band(a,\bnot(a)) = \bfalse$.
 If $a = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \band(\btrue,\bnot(\btrue)) \\
- & = & \band(\btrue,\bfalse) \\
- & = & \bfalse
+ &     \href{@not@#thm-not-true}
+   = & \band(\btrue,\bfalse) \\
+ &     \href{@and@#thm-and-eval-true-false}
+   = & \bfalse
 \end{eqnarray*}$$
 and if $a = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \band(\bfalse,\bnot(\bfalse)) \\
- & = & \bfalse
+ &     \href{@and@#thm-and-false-left}
+   = & \bfalse
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -224,12 +227,14 @@ If $a \in \bool$, we have $\band(a,a) = a$.
 If $a = \btrue$ we have
 $$\begin{eqnarray*}
  &   & \band(\btrue,\btrue) \\
- & = & \btrue
+ &     \href{@and@#thm-and-eval-true-true}
+   = & \btrue
 \end{eqnarray*}$$
 and if $a = \bfalse$ we have
 $$\begin{eqnarray*}
  &   & \band(\bfalse,\bfalse) \\
- & = & \bfalse
+ &     \href{@and@#thm-and-eval-false-false}
+   = & \bfalse
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -255,14 +260,18 @@ If $a,b \in \bool$, we have $\band(a,b) = \band(b,a)$.
 If $a = \btrue$ we have
 $$\begin{eqnarray*}
  &   & \band(\btrue,b) \\
- & = & b \\
- & = & \band(b,\btrue)
+ &     \href{@and@#thm-and-true-left}
+   = & b \\
+ &     \href{@and@#thm-and-true-right}
+   = & \band(b,\btrue)
 \end{eqnarray*}$$
 and if $a = \bfalse$ we have
 $$\begin{eqnarray*}
  &   & \band(\bfalse,b)
- & = & \bfalse \\
- & = & \band(b,\bfalse)
+ &     \href{@and@#thm-and-false-left}
+   = & \bfalse \\
+ &     \href{@and@#thm-and-false-right}
+   = & \band(b,\bfalse)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
