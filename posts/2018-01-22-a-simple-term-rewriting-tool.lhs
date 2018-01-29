@@ -384,6 +384,7 @@ And `main`. In a departure from the unix philosophy, in verify mode we'll report
 >       rules <- (fmap (map unTab . filter (not . comment) . lines . unesc) $ readFile path)
 >         >>= mapM parseNamedRule
 >       checks <- fmap (map unTab . lines) getContents
+>       putStrLn "#!/bin/bash"
 >       mapM_ (processSuggest rules) checks
 > 
 >     _ -> do

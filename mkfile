@@ -387,6 +387,12 @@ sniff-amd-suggest:VQ:
     || true )
   echo "$SUGGEST"
 
+#-- apply suggested crossref edits --#
+sniff-amd-suggest-apply:VQ:
+  chmod +x suggestions.txt
+  ./suggestions.txt
+  sed -i '' $'s/~/\\\n/' posts/arithmetic-made-difficult/*
+
 #-- check existence of crossrefs --#
 sniff-amd-crossref:VQ:
   CROSS=$( grep '^ & = & ' posts/arithmetic-made-difficult/* || true )
