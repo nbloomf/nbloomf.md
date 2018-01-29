@@ -175,7 +175,8 @@ $$\begin{eqnarray*}
  & = & \bor(\elt(\cons(b,w),\map(\cons(a,-))(\sublists(x))),\sublist(y,x)) \\
  & = & \bor(\band(\beq(b,a),\elt(w,\sublists(x))),\sublist(y,x)) \\
  & = & \bor(\band(\beq(b,a),\sublist(w,x)),\sublist(y,x)) \\
- & = & \bif{\band(\beq(b,a),\sublist(w,x))}{\btrue}{\sublist(y,x)} \\
+ &     \href{@or@#thm-or-is-if}
+   = & \bif{\band(\beq(b,a),\sublist(w,x))}{\btrue}{\sublist(y,x)} \\
  & = & \bif{\beq(b,a)}{\sublist(w,x)}{\sublist(y,x)} \\
  & = & \bif{\beq(b,a)}{\sublist(w,x)}{\sublist(\cons(b,w),x)} \\
  & = & \sublist(\cons(b,w),\cons(a,x)) \\

@@ -373,7 +373,8 @@ $$\begin{eqnarray*}
  & = & \band(\unique(\cons(a,\cons(b,\nil))),\all(\unique)(\map(\cons(a,\cons(-,\nil)))(x))) \\
  & = & \band(\unique(\cons(a,\cons(b,\nil))),\bnot(\elt(a,x))) \\
  & = & \band(\bnot(\eq(a,b)),\bnot(\elt(a,x))) \\
- & = & \bnot(\bor(\eq(a,b),\elt(a,x))) \\
+ &     \href{@or@#thm-demorgan-not-or}
+   = & \bnot(\bor(\eq(a,b),\elt(a,x))) \\
  & = & \bnot(\elt(a,\cons(b,x)))
 \end{eqnarray*}$$
 as needed.

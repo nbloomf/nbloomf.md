@@ -103,7 +103,8 @@ as needed. If $y = \cons(b,u)$, we have
 $$\begin{eqnarray*}
  &   & \infix(x,\cons(b,u)) \\
  & = & \bif{\prefix(x,\cons(b,u))}{\btrue}{\infix(x,u)} \\
- & = & \bor(\prefix(x,\cons(b,u)),\infix(x,u)) \\
+ &     \href{@or@#thm-or-is-if}
+   = & \bor(\prefix(x,\cons(b,u)),\infix(x,u)) \\
  & = & \bor(\prefix(x,y),\infix(x,\tail(y)))
 \end{eqnarray*}$$
 as needed.

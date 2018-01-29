@@ -162,8 +162,10 @@ We have
 $$\begin{eqnarray*}
  &   & \bor(\bimpl(p,q),\bimpl(q,p)) \\
  & = & \bor(\bor(\bnot(p),q),\bor(\bnot(q),p)) \\
- & = & \bor(\bnot(p),\bor(q,\bor(\bnot(q),p))) \\
- & = & \bor(\bnot(p),\bor(\bor(q,\bnot(q)),p)) \\
+ &     \href{@or@#thm-or-associative}
+   = & \bor(\bnot(p),\bor(q,\bor(\bnot(q),p))) \\
+ &     \href{@or@#thm-or-associative}
+   = & \bor(\bnot(p),\bor(\bor(q,\bnot(q)),p)) \\
  &     \href{@or@#thm-or-not}
    = & \bor(\bnot(p),\bor(\btrue,p)) \\
  &     \href{@or@#thm-or-true-left}
@@ -196,9 +198,12 @@ $$\begin{eqnarray*}
  &   & \bimpl(p,\bimpl(q,r)) \\
  & = & \bor(\bnot(p),\bimpl(q,r)) \\
  & = & \bor(\bnot(p),\bor(\bnot(q),r)) \\
- & = & \bor(\bor(\bnot(p),\bnot(q)),r) \\
- & = & \bor(\bor(\bnot(q),\bnot(p)),r) \\
- & = & \bor(\bnot(q),\bor(\bnot(p),r)) \\
+ &     \href{@or@#thm-or-associative}
+   = & \bor(\bor(\bnot(p),\bnot(q)),r) \\
+ &     \href{@or@#thm-or-commutative}
+   = & \bor(\bor(\bnot(q),\bnot(p)),r) \\
+ &     \href{@or@#thm-or-associative}
+   = & \bor(\bnot(q),\bor(\bnot(p),r)) \\
  & = & \bor(\bnot(q),\bimpl(p,r)) \\
  &   & \bimpl(q,\bimpl(p,r))
 \end{eqnarray*}$$
@@ -228,9 +233,11 @@ $$\begin{eqnarray*}
  & = & \bimpl(\bor(\bnot(p),q),\bor(\bnot(\bimpl(q,r)),\bimpl(p,r))) \\
  & = & \bimpl(\bor(\bnot(p),q),\bor(\bnot(\bor(\bnot(q),r)),\bor(\bnot(p),r))) \\
  & = & \bor(\bnot(\bor(\bnot(p),q)),\bor(\bnot(\bor(\bnot(q),r)),\bor(\bnot(p),r))) \\
- & = & \bor(\band(\bnot(\bnot(p)),\bnot(q)),\bor(\bnot(\bor(\bnot(q),r)),\bor(\bnot(p),r))) \\
+ &     \href{@or@#thm-demorgan-not-or}
+   = & \bor(\band(\bnot(\bnot(p)),\bnot(q)),\bor(\bnot(\bor(\bnot(q),r)),\bor(\bnot(p),r))) \\
  & = & \bor(\band(p,\bnot(q)),\bor(\bnot(\bor(\bnot(q),r)),\bor(\bnot(p),r))) \\
- & = & \bor(\band(p,\bnot(q)),\bor(\band(\bnot(\bnot(q)),\bnot(r)),\bor(\bnot(p),r))) \\
+ &     \href{@or@#thm-demorgan-not-or}
+   = & \bor(\band(p,\bnot(q)),\bor(\band(\bnot(\bnot(q)),\bnot(r)),\bor(\bnot(p),r))) \\
  & = & \bor(\band(p,\bnot(q)),\bor(\band(q,\bnot(r)),\bor(\bnot(p),r))) \\
  & = & Q.
 \end{eqnarray*}$$

@@ -261,14 +261,18 @@ For all $a,b \in \bool$, we have $\bor(a,b) = \bor(b,a)$.
 If $a = \btrue$ we have
 $$\begin{eqnarray*}
  &   & \bor(\btrue,b) \\
- & = & \btrue \\
- & = & \bor(b,\btrue)
+ &     \href{@or@#thm-or-true-left}
+   = & \btrue \\
+ &     \href{@or@#thm-or-true-right}
+   = & \bor(b,\btrue)
 \end{eqnarray*}$$
 and if $a = \bfalse$ we have
 $$\begin{eqnarray*}
  &   & \bor(\bfalse,b) \\
- & = & b \\
- & = & \bor(b,\bfalse)
+ &     \href{@or@#thm-or-false-left}
+   = & b \\
+ &     \href{@or@#thm-or-false-right}
+   = & \bor(b,\bfalse)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

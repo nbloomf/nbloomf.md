@@ -603,9 +603,12 @@ $$\begin{eqnarray*}
  & = & \bif{\beq(\cons(a,x),\cons(b,u))}{\btrue}{\elt(\cons(a,x),\map(\cons(b,-))(z))} \\
  & = & \bif{\beq(\cons(a,x),\cons(b,u))}{\btrue}{\band(\beq(a,b),\elt(x,z))} \\
  & = & \bif{\band(\beq(a,b),\beq(x,u))}{\btrue}{\band(\beq(a,b),\elt(x,z))} \\
- & = & \bor(\band(\beq(a,b),\beq(x,u)),\band(\beq(a,b),\elt(x,z))) \\
- & = & \band(\beq(a,b),\bor(\beq(x,u),\elt(x,z))) \\
- & = & \band(\beq(a,b),\bif{\beq(x,u)}{\btrue}{\elt(x,z)}) \\
+ &     \href{@or@#thm-or-is-if}
+   = & \bor(\band(\beq(a,b),\beq(x,u)),\band(\beq(a,b),\elt(x,z))) \\
+ &     \href{@or@#thm-and-or-distribute}
+   = & \band(\beq(a,b),\bor(\beq(x,u),\elt(x,z))) \\
+ &     \href{@or@#thm-or-is-if}
+   = & \band(\beq(a,b),\bif{\beq(x,u)}{\btrue}{\elt(x,z)}) \\
  & = & \band(\beq(a,b),\elt(x,\cons(u,z)))
 \end{eqnarray*}$$
 as needed.

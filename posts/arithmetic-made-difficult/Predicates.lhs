@@ -327,7 +327,8 @@ as needed.
 $$\begin{eqnarray*}
  &   & \por(p,q)(a) \\
  & = & \bor(p(a),q(a)) \\
- & = & \bor(q(a),p(a)) \\
+ &     \href{@or@#thm-or-commutative}
+   = & \bor(q(a),p(a)) \\
  & = & \por(q,p)(a)
 \end{eqnarray*}$$
 as needed.
@@ -336,7 +337,8 @@ $$\begin{eqnarray*}
  &   & \por(\por(p,q),r)(a) \\
  & = & \bor(\por(p,q)(a),r(a)) \\
  & = & \bor(\bor(p(a),q(a)),r(a)) \\
- & = & \bor(p(a),\bor(q(a),r(a))) \\
+ &     \href{@or@#thm-or-associative}
+   = & \bor(p(a),\bor(q(a),r(a))) \\
  & = & \bor(p(a),\por(q,r)(a)) \\
  & = & \por(p,\por(q,r))(a)
 \end{eqnarray*}$$
@@ -398,7 +400,8 @@ $$\begin{eqnarray*}
  &   & \pnot(\pand(p,q))(a) \\
  & = & \bnot(\pand(p,q)(a)) \\
  & = & \bnot(\band(p(a),q(a))) \\
- & = & \bor(\bnot(p(a)),\bnot(q(a))) \\
+ &     \href{@or@#thm-demorgan-not-and}
+   = & \bor(\bnot(p(a)),\bnot(q(a))) \\
  & = & \bor(\pnot(p)(a),\pnot(q)(a)) \\
  & = & \por(\pnot(p),\pnot(q))(a)
 \end{eqnarray*}$$
@@ -408,7 +411,8 @@ $$\begin{eqnarray*}
  &   & \pnot(\por(p,q))(a) \\
  & = & \bnot(\por(p,q)(a)) \\
  & = & \bnot(\bor(p(a),q(a))) \\
- & = & \band(\bnot(p(a)),\bnot(q(a))) \\
+ &     \href{@or@#thm-demorgan-not-or}
+   = & \band(\bnot(p(a)),\bnot(q(a))) \\
  & = & \band(\pnot(p)(a),\pnot(q)(a)) \\
  & = & \pand(\pnot(p),\pnot(q))(a)
 \end{eqnarray*}$$
@@ -418,7 +422,8 @@ $$\begin{eqnarray*}
  &   & \pand(p,\por(q,r))(a) \\
  & = & \band(p(a),\por(q,r)(a)) \\
  & = & \band(p(a),\bor(q(a),r(a))) \\
- & = & \bor(\band(p(a),q(a)),\band(p(a),r(a))) \\
+ &     \href{@or@#thm-and-or-distribute}
+   = & \bor(\band(p(a),q(a)),\band(p(a),r(a))) \\
  & = & \bor(\pand(p,q)(a),\pand(p,r)(a)) \\
  & = & \por(\pand(p,q),\pand(p,r))(a)
 \end{eqnarray*}$$
@@ -428,7 +433,8 @@ $$\begin{eqnarray*}
  &   & \por(p,\pand(q,r))(a) \\
  & = & \bor(p(a),\pand(q,r)(a)) \\
  & = & \bor(p(a),\band(q(a),r(a))) \\
- & = & \band(\bor(p(a),q(a)),\bor(p(a),r(a))) \\
+ &     \href{@or@#thm-or-and-distribute}
+   = & \band(\bor(p(a),q(a)),\bor(p(a),r(a))) \\
  & = & \band(\por(p,q)(a),\por(p,r)(a)) \\
  & = & \pand(\por(p,q),\por(p,r))(a)
 \end{eqnarray*}$$
