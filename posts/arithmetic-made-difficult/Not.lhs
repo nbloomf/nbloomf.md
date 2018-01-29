@@ -78,7 +78,23 @@ $\bnot$ is an involution.
 For all $a \in \bool$ we have $\bnot(\bnot(a)) = a$.
 
 ::: proof ::::::::::
-If $a = \btrue$ we have $$\bnot(\bnot(\btrue)) = \bnot(\bfalse) = \btrue,$$ and if $a = \bfalse$, we have $$\bnot(\bnot(\bfalse)) = \bnot(\btrue) = \bfalse$$ as claimed.
+If $a = \btrue$ we have
+$$\begin{eqnarray*}
+ &   & \bnot(\bnot(\btrue)) \\
+ &     \href{@not@#thm-not-true}
+   = & \bnot(\bfalse) \\
+ &     \href{@not@#thm-not-false}
+   = & \btrue
+\end{eqnarray*}$$
+and if $a = \bfalse$, we have
+$$\begin{eqnarray*}
+ &   & \bnot(\bnot(\bfalse)) \\
+ &     \href{@not@#thm-not-false}
+   = & \bnot(\btrue) \\
+ &     \href{@not@#thm-not-true}
+   = & \bfalse
+\end{eqnarray*}$$
+as claimed.
 ::::::::::::::::::::
 
 ::: test :::::::::::
@@ -102,26 +118,30 @@ Let $A$ be a set with $p \in \bool$ and $a,b \in A$. We have $$\bif{\bnot(p)}{a}
 If $p = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bif{\bnot(p)}{a}{b} \\
- & = & \bif{\bnot(\btrue)}{a}{b} \\
+ &     \let{p = \btrue}
+   = & \bif{\bnot(\btrue)}{a}{b} \\
  &     \href{@not@#thm-not-true}
    = & \bif{\bfalse}{a}{b} \\
  &     \href{@booleans@#cor-if-false}
    = & b \\
  &     \href{@booleans@#cor-if-true}
    = & \bif{\btrue}{b}{a} \\
- & = & \bif{p}{b}{a}
+ &     \let{p = \btrue}
+   = & \bif{p}{b}{a}
 \end{eqnarray*}$$
 and if $p = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bif{\bnot(p)}{a}{b} \\
- & = & \bif{\bnot(\bfalse)}{a}{b} \\
+ &     \let{p = \bfalse}
+   = & \bif{\bnot(\bfalse)}{a}{b} \\
  &     \href{@not@#thm-not-false}
    = & \bif{\btrue}{a}{b} \\
  &     \href{@booleans@#cor-if-true}
    = & a \\
  &     \href{@booleans@#cor-if-false}
    = & \bif{\bfalse}{b}{a} \\
- & = & \bif{p}{b}{a},
+ &     \let{p = \bfalse}
+   = & \bif{p}{b}{a}
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

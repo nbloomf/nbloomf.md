@@ -9,6 +9,7 @@ tags: literate-haskell
 > 
 > import Data.List (nub, unfoldr)
 > import Data.Maybe (catMaybes)
+> import Control.Monad (guard)
 > import Text.ParserCombinators.Parsec
 > import System.Environment
 > import System.Exit
@@ -187,17 +188,17 @@ And ``matchesIn`` constructs a list of all substitutions from one expression to 
 > matchesIn pattern expr = case expr of
 >   Con a -> case matches pattern expr of
 >     Nothing -> []
->     Just s -> [(H, s)]
+>     Just s  -> [(H, s)]
 >   Var x -> case matches pattern expr of
 >     Nothing -> []
->     Just s -> [(H, s)]
+>     Just s  -> [(H, s)]
 >   App x y -> do
 >     let
 >       mx = map (\(p,z) -> (L p, z)) $ matchesIn pattern x
 >       my = map (\(p,z) -> (R p, z)) $ matchesIn pattern y
 >     case matches pattern expr of
 >       Nothing -> mx ++ my
->       Just s -> (H,s) : mx ++ my
+>       Just s  -> (H,s) : mx ++ my
 
 Given a ``Path``, we can (attempt to) transform the subexpression it points to.
 
@@ -265,9 +266,10 @@ Interface
 Remember: this tool is specifically intended for use with the [Arithmetic Made Difficult](/pages/amd.html) posts, which include a few thousand lines worth of equational proofs. Those posts need two kinds of support.
 
 1. We'd like to statically check the equalities in our equational proofs. Some equalities are annotated with a cross reference to the theorem that justifies them. Some `sed` magic can turn these into rewrite rules, which we can use to verify that the left hand side of an equality rewrites to the right hand side. Verifying one equality at a time, rather than an entire proof, makes it possible to build up static checks incrementally.
-2. If an equality _doesn't_ have a cross referenced annotation, it'd be nice if our tool could also give suggestions for valid cross references based on a dictionary of rewrite rules. Bonus points if it also builds an edit script for inserting the annotation (hint, it will).
+2. We'd also like to statically check variable substitutions. This is similar to scenario 1, except instead of rewriting a single (complex) subexpression, in this case we only care about replacing all instances of a variable with some expression and validating the result.
+3. If an equality _doesn't_ have a cross referenced annotation, it'd be nice if our tool could also give suggestions for valid cross references based on a dictionary of rewrite rules. Bonus points if it also builds an edit script for inserting the annotation (hint, it will).
 
-These requirements suggest that the tool needs two modes, which we'll call *verify* mode and *suggest* mode, respectively.
+These requirements suggest that the tool needs three modes, which we'll call *verify* mode, *substitute* mode, and *suggest* mode, respectively.
 
 We'll keep this really simple. In verify mode, the tool expects its input on `stdin`, one rewrite check per line, in the form
 
@@ -297,7 +299,23 @@ And we'll need to process one untabbed line. We're assuming that the rewrite rul
 >     then return ()
 >     else putStrLn $ unwords [loc,"invalid!",r,"::",a,"-->",b]
 > processVerify xs = do
->   putStrLn $ unwords ("unrecognized input format:":xs)
+>   putStrLn $ unwords ("unrecognized input format:" : xs)
+
+In substitute mode, we'll accept input in the same format as for verify mode, with an extra check on the form of the rewrite rule.
+
+> processSubstitute :: [String] -> IO ()
+> processSubstitute [loc,r,a,b] = do
+>   (lhs,rhs) <- parseWithIO loc (pRule pLatexExpr) r
+>   e <- parseWithIO loc pLatexExpr a
+>   f <- parseWithIO loc pLatexExpr b
+>   case lhs of
+>     Var x -> if (f == substitute [(x,rhs)] e) || (e == substitute [(x,rhs)] f)
+>       then return ()
+>       else putStrLn $ unwords [loc,"invalid!",r,"::",a,"-->",b]
+>     _ -> do
+>       putStrLn $ unwords [loc,"rewrite rule must be of the form 'var = expr':",r]
+> processSubstitute xs = do
+>   putStrLn $ unwords ("unrecognized input:" : xs)
 
 In suggest mode, we'll assume that a dictionary of named rewrite rules is kept in some external file consisting of lines of the form
 
@@ -357,6 +375,11 @@ And `main`. In a departure from the unix philosophy, in verify mode we'll report
 >       mapM_ processVerify checks
 >       hPutStrLn stderr $ unwords [show $ length checks, "checks completed"]
 > 
+>     ["--substitute"] -> do
+>       checks <- fmap (map unTab . lines) getContents
+>       mapM_ processSubstitute checks
+>       hPutStrLn stderr $ unwords [show $ length checks, "checks completed"]
+> 
 >     ["--suggest", path] -> do
 >       rules <- (fmap (map unTab . filter (not . comment) . lines . unesc) $ readFile path)
 >         >>= mapM parseNamedRule
@@ -381,6 +404,7 @@ The parts of this tool are complicated enough that I'll feel better having some 
 >   parseSuccessTests
 >   parseFailureTests
 >   substituteTests
+>   validationTests
 
 Parsing tests helpers:
 
@@ -470,4 +494,27 @@ Substitution test cases:
 >   , ([("a", Con "b")], Con "a", Con "a")
 >   , ([("a", App (Con "f") (Var "x"))], App (Con "g") (Var "a"), App (Con "g") (App (Con "f") (Var "x")))
 >   , ([("a", Con "x")], App (Var "a") (Var "a"), App (Con "x") (Con "x"))
+>   , ([("x", Var "y")], App (Var "x") (Var "x"), App (Var "y") (Var "y"))
+>   , ([("x", Var "y")], App (Con "x") (Var "x"), App (Con "x") (Var "y"))
+>   ]
+
+Validation test helper:
+
+> testValidate :: Int -> (Rule, Expr, Expr, Bool) -> IO ()
+> testValidate k (rule,e1,e2,result) = do
+>   putStrLn $ "\nvalidation test " ++ show k
+>   putStrLn $ show rule
+>   putStrLn $ latex e1
+>   putStrLn $ latex e2
+>   if result == validate rule e1 e2
+>     then putStrLn "ok"
+>     else do
+>       putStrLn "validation error!"
+>       exitFailure
+
+Validation test cases:
+
+> validationTests :: IO ()
+> validationTests = sequence_ $ zipWith testValidate [1..]
+>   [
 >   ]

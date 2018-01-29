@@ -243,16 +243,16 @@ as claimed.
 We can simplify $\common$ if the second argument is a singleton.
 
 :::::: theorem :::::
-Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$ we have $$\common(x,\cons(a,\nil)) = \filter(\eq(a,-))(x).$$
+Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$ we have $$\common(x,\cons(a,\nil)) = \filter(\beq(a,-))(x).$$
 
 ::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \common(x,\cons(a,\nil)) \\
  & = & \filter(\elt(-,\cons(a,\nil)))(x) \\
- & = & \filter(\eq(-,a))(x) \\
- & = & \filter(\eq(a,-))(x)
-\end{eqnaray*}$$
+ & = & \filter(\beq(-,a))(x) \\
+ & = & \filter(\beq(a,-))(x)
+\end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
 
@@ -356,7 +356,7 @@ $$\begin{eqnarray*}
  & = & \bif{\elt(a,y)}{\filter(\elt(-,z))(\cons(a,\filter(\elt(-,y))(x)))}{\filter(\elt(-,z))(\filter(\elt(-,y))(x))} \\
  & = & \filter(\elt(-,z))(\bif{\elt(a,y)}{\cons(a,\filter(\elt(-,y))(x))}{\filter(\elt(-,y))(x)}) \\
  & = & \filter(\elt(-,z))(\filter(\elt(-,y))(\cons(a,x))) \\
- & = & \common(\filter(\elt(-,y))(\cons(a,x)),z)
+ & = & \common(\filter(\elt(-,y))(\cons(a,x)),z) \\
  & = & \common(\common(\cons(a,x),y),z)
 \end{eqnarray*}$$
 as needed.

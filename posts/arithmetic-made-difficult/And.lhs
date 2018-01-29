@@ -18,7 +18,8 @@ slug: and
 Next, $\band$.
 
 :::::: definition ::
-[](#def-and) We define a map $\band : \bool \times \bool \rightarrow \bool$ by $$\band(p,q) = \bif{p}{\bif{q}{\btrue}{\bfalse}}{\bfalse}.$$
+[]{#def-and}
+We define a map $\band : \bool \times \bool \rightarrow \bool$ by $$\band(p,q) = \bif{p}{\bif{q}{\btrue}{\bfalse}}{\bfalse}.$$
 
 In Haskell: 
 
@@ -30,7 +31,8 @@ In Haskell:
 We can compute $\band$ explicitly.
 
 :::::: theorem :::::
-[](#thm-and-eval) We have
+[]{#thm-and-eval}[]{#thm-and-eval-true-true}[]{#thm-and-eval-true-false}[]{#thm-and-eval-false-true}[]{#thm-and-eval-false-false}
+We have
 $$\begin{eqnarray*}
 \band(\btrue,\btrue)   & = & \btrue \\
 \band(\btrue,\bfalse)  & = & \bfalse \\
@@ -42,15 +44,18 @@ $$\begin{eqnarray*}
 Note that
 $$\begin{eqnarray*}
  &   & \band(\btrue,\btrue) \\
- & = & \bif{\btrue}{\bif{\btrue}{\btrue}{\bfalse}}{\bfalse} \\
+ &     \href{@and@#def-and}
+   = & \bif{\btrue}{\bif{\btrue}{\btrue}{\bfalse}}{\bfalse} \\
  &     \href{@booleans@#cor-if-true}
    = & \bif{\btrue}{\btrue}{\bfalse} \\
- & = & \btrue,
+ &     \href{@booleans@#cor-if-true}
+   = & \btrue
 \end{eqnarray*}$$
 that
 $$\begin{eqnarray*}
  &   & \band(\btrue,\bfalse) \\
- & = & \bif{\btrue}{\bif{\bfalse}{\btrue}{\bfalse}}{\bfalse} \\
+ &     \href{@and@#def-and}
+   = & \bif{\btrue}{\bif{\bfalse}{\btrue}{\bfalse}}{\bfalse} \\
  &     \href{@booleans@#cor-if-false}
    = & \bif{\btrue}{\bfalse}{\bfalse} \\
  &     \href{@booleans@#cor-if-true}
@@ -59,14 +64,16 @@ $$\begin{eqnarray*}
 that
 $$\begin{eqnarray*}
  &   & \band(\bfalse,\btrue) \\
- & = & \bif{\bfalse}{\bif{\btrue}{\btrue}{\bfalse}}{\bfalse} \\
+ &     \href{@and@#def-and}
+   = & \bif{\bfalse}{\bif{\btrue}{\btrue}{\bfalse}}{\bfalse} \\
  &     \href{@booleans@#cor-if-false}
    = & \bfalse
 \end{eqnarray*}$$
 and that
 $$\begin{eqnarray*}
  &   & \band(\bfalse,\bfalse) \\
- & = & \bif{\bfalse}{\bif{\bfalse}{\btrue}{\bfalse}}{\bfalse} \\
+ &     \href{@and@#def-and}
+   = & \bif{\bfalse}{\bif{\bfalse}{\btrue}{\bfalse}}{\bfalse} \\
  &     \href{@booleans@#cor-if-false}
    = & \bfalse
 \end{eqnarray*}$$
@@ -108,10 +115,25 @@ as claimed.
 $\bfalse$ absorbs under $\band$.
 
 :::::: theorem :::::
+[]{#thm-and-false}[]{#thm-and-false-left}[]{#thm-and-false-right}
 If $a \in \bool$, we have $$\band(\bfalse,a) = \band(a,\bfalse) = \bfalse.$$
 
 ::: proof ::::::::::
-If $a = \btrue$ we have $$\band(\bfalse,\btrue) = \bfalse = \band(\btrue,\bfalse),$$ and if $a = \bfalse$ we have $$\band(\bfalse,\bfalse) = \bfalse$$ as claimed.
+If $a = \btrue$ we have
+$$\begin{eqnarray*}
+ &   & \band(\bfalse,\btrue) \\
+ &     \href{@and@#thm-and-eval-false-true}
+   = & \bfalse \\
+ &     \href{@and@#thm-and-eval-true-false}
+   = & \band(\btrue,\bfalse)
+\end{eqnarray*}$$
+and if $a = \bfalse$ we have
+$$\begin{eqnarray*}
+ &   & \band(\bfalse,\bfalse) \\
+ &     \href{@and@#thm-and-eval-false-false}
+   = & \bfalse
+\end{eqnarray*}$$
+as claimed.
 ::::::::::::::::::::
 
 ::: test :::::::::::
@@ -128,10 +150,25 @@ If $a = \btrue$ we have $$\band(\bfalse,\btrue) = \bfalse = \band(\btrue,\bfalse
 $\btrue$ is neutral under $\band$.
 
 :::::: theorem :::::
+[]{#thm-and-true}[]{#thm-and-true-left}[]{#thm-and-true-right}
 If $a \in \bool$, we have $$\band(\btrue,a) = \band(a,\btrue) = a.$$
 
 ::: proof ::::::::::
-If $a = \btrue$ we have $$\band(\btrue,\btrue) = \btrue,$$ and if $a = \bfalse$ we have $$\band(\btrue,\bfalse) = \bfalse = \band(\bfalse,\btrue)$$ as claimed.
+If $a = \btrue$ we have
+$$\begin{eqnarray*}
+ &   & \band(\btrue,\btrue) \\
+ &     \href{@and@#thm-and-eval-true-true}
+   = & \btrue
+\end{eqnarray*}$$
+and if $a = \bfalse$ we have
+$$\begin{eqnarray*}
+ &   & \band(\btrue,\bfalse) \\
+ &     \href{@and@#thm-and-eval-true-false}
+   = & \bfalse \\
+ &     \href{@and@#thm-and-eval-false-true}
+   = & \band(\bfalse,\btrue)
+\end{eqnarray*}$$
+as claimed.
 ::::::::::::::::::::
 
 ::: test :::::::::::

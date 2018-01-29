@@ -92,18 +92,18 @@ $\bif{\ast}{\ast}{\ast}$ enjoys some other nice properties. For instance, $\bif{
 Let $A$ be a set with $a \in A$. If $p \in \bool$, we have $$\bif{p}{a}{a} = a.$$
 
 ::: proof ::::::::::
-If $\p = \btrue$, we have
+If $p = \btrue$, we have
 $$\begin{eqnarray*}
- &   & \bif{\p}{a}{a} \\
- &     \let{\p = \btrue}
+ &   & \bif{p}{a}{a} \\
+ &     \let{p = \btrue}
    = & \bif{\btrue}{a}{a} \\
  &     \href{@booleans@#cor-if-true}
    = & a
 \end{eqnarray*}$$
-and if $\p = \bfalse$, we have
+and if $p = \bfalse$, we have
 $$\begin{eqnarray*}
- &   & \bif{\p}{a}{a} \\
- &     \let{\p = \bfalse}
+ &   & \bif{p}{a}{a} \\
+ &     \let{p = \bfalse}
    = & \bif{\bfalse}{a}{a} \\
  &     \href{@booleans@#cor-if-false}
    = & a
@@ -128,29 +128,29 @@ $\bif{\ast}{\ast}{\ast}$ interacts with function application.
 Let $A$ and $B$ be sets with $f : A \rightarrow B$ a map. For all $p \in \bool$ and $u,v \in A$, we have $$f(\bif{p}{u}{v}) = \bif{p}{f(u)}{f(v)}.$$
 
 ::: proof ::::::::::
-If $\p = \btrue$, we have
+If $p = \btrue$, we have
 $$\begin{eqnarray*}
- &   & f(\bif{\p}{u}{v}) \\
- &     \let{\p = \btrue}
+ &   & f(\bif{p}{u}{v}) \\
+ &     \let{p = \btrue}
    = & f(\bif{\btrue}{u}{v}) \\
  &     \href{@booleans@#cor-if-true}
    = & f(u) \\
  &     \href{@booleans@#cor-if-true}
    = & \bif{\btrue}{f(u)}{f(v)} \\
- &     \let{\p = \btrue}
-   = & \bif{\p}{f(u)}{f(v)}
+ &     \let{p = \btrue}
+   = & \bif{p}{f(u)}{f(v)}
 \end{eqnarray*}$$
 as claimed. If $p = \bfalse$, we have
 $$\begin{eqnarray*}
- &   & f(\bif{\p}{u}{v}) \\
- &     \let{\p = \bfalse}
+ &   & f(\bif{p}{u}{v}) \\
+ &     \let{p = \bfalse}
    = & f(\bif{\bfalse}{u}{v}) \\
  &     \href{@booleans@#cor-if-false}
    = & f(v) \\
  &     \href{@booleans@#cor-if-false}
    = & \bif{\bfalse}{f(u)}{f(v)} \\
- &     \let{\p = \bfalse}
-   = & \bif{\p}{f(u)}{f(v)}
+ &     \let{p = \bfalse}
+   = & \bif{p}{f(u)}{f(v)}
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -177,13 +177,13 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 
 ::: proof ::::::::::
-We have four possibilities for $(p,q)$. If $\p = \btrue$ and $\q = \btrue$,
+We have four possibilities for $(p,q)$. If $p = \btrue$ and $q = \btrue$,
 $$\begin{eqnarray*}
- &   & \bif{\p}{\bif{\q}{a}{b}}{\bif{\q}{c}{d}} \\
- &     \let{\p = \btrue}
-   = & \bif{\btrue}{\bif{\q}{a}{b}}{\bif{\q}{c}{d}} \\
- &     \let{\q = \btrue}
-   = & \bif{\btrue}{\bif{\btrue}{a}{b}}{\bif{\q}{c}{d}} \\
+ &   & \bif{p}{\bif{q}{a}{b}}{\bif{q}{c}{d}} \\
+ &     \let{p = \btrue}
+   = & \bif{\btrue}{\bif{q}{a}{b}}{\bif{q}{c}{d}} \\
+ &     \let{q = \btrue}
+   = & \bif{\btrue}{\bif{\btrue}{a}{b}}{\bif{\btrue}{c}{d}} \\
  &     \href{@booleans@#cor-if-true}
    = & \bif{\btrue}{a}{b} \\
  &     \href{@booleans@#cor-if-true}
@@ -191,19 +191,19 @@ $$\begin{eqnarray*}
  &     \href{@booleans@#cor-if-true}
    = & \bif{\btrue}{a}{c} \\
  &     \href{@booleans@#cor-if-true}
-   = & \bif{\btrue}{\bif{\btrue}{a}{c}}{\bif{\p}{b}{d}} \\
- &     \let{\p = \btrue}
-   = & \bif{\btrue}{\bif{\p}{a}{c}}{\bif{\p}{b}{d}} \\
- &     \let{\q = \btrue}
-   = & \bif{\q}{\bif{\p}{a}{c}}{\bif{\p}{b}{d}} \\
+   = & \bif{\btrue}{\bif{\btrue}{a}{c}}{\bif{\btrue}{b}{d}} \\
+ &     \let{p = \btrue}
+   = & \bif{\btrue}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
+ &     \let{q = \btrue}
+   = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
 \end{eqnarray*}$$
-as claimed. If $\p = \btrue$ and $\q = \bfalse$,
+as claimed. If $p = \btrue$ and $q = \bfalse$,
 $$\begin{eqnarray*}
- &   & \bif{\p}{\bif{\q}{a}{b}}{\bif{\q}{c}{d}} \\
- &     \let{\p = \btrue}
-   = & \bif{\btrue}{\bif{\q}{a}{b}}{\bif{\q}{c}{d}} \\
- &     \let{\q = \bfalse}
-   = & \bif{\btrue}{\bif{\bfalse}{a}{b}}{\bif{\q}{c}{d}} \\
+ &   & \bif{p}{\bif{q}{a}{b}}{\bif{q}{c}{d}} \\
+ &     \let{p = \btrue}
+   = & \bif{\btrue}{\bif{q}{a}{b}}{\bif{q}{c}{d}} \\
+ &     \let{q = \bfalse}
+   = & \bif{\btrue}{\bif{\bfalse}{a}{b}}{\bif{\bfalse}{c}{d}} \\
  &     \href{@booleans@#cor-if-true}
    = & \bif{\bfalse}{a}{b} \\
  &     \href{@booleans@#cor-if-false}
@@ -211,51 +211,51 @@ $$\begin{eqnarray*}
  &     \href{@booleans@#cor-if-true}
    = & \bif{\btrue}{b}{d} \\
  &     \href{@booleans@#cor-if-false}
-   = & \bif{\bfalse}{\bif{\p}{a}{c}}{\bif{\btrue}{b}{d}} \\
- &     \let{\q = \bfalse}
-   = & \bif{\q}{\bif{\p}{a}{c}}{\bif{\btrue}{b}{d}} \\
- &     \let{\p = \btrue}
-   = & \bif{\q}{\bif{\p}{a}{c}}{\bif{\p}{b}{d}} \\
+   = & \bif{\bfalse}{\bif{\btrue}{a}{c}}{\bif{\btrue}{b}{d}} \\
+ &     \let{q = \bfalse}
+   = & \bif{q}{\bif{\btrue}{a}{c}}{\bif{\btrue}{b}{d}} \\
+ &     \let{p = \btrue}
+   = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
 \end{eqnarray*}$$
-as claimed. If $\p = \bfalse$ and $\q = \btrue$,
+as claimed. If $p = \bfalse$ and $q = \btrue$,
 $$\begin{eqnarray*}
- &   & \bif{\p}{\bif{\q}{a}{b}}{\bif{\q}{c}{d}} \\
- &     \let{\p = \bfalse}
-   = & \bif{\bfalse}{\bif{\q}{a}{b}}{\bif{\q}{c}{d}} \\
- &     \let{\q = \btrue}
-   = & \bif{\bfalse}{\bif{\q}{a}{b}}{\bif{\btrue}{c}{d}} \\
+ &   & \bif{p}{\bif{q}{a}{b}}{\bif{q}{c}{d}} \\
+ &     \let{p = \bfalse}
+   = & \bif{\bfalse}{\bif{q}{a}{b}}{\bif{q}{c}{d}} \\
+ &     \let{q = \btrue}
+   = & \bif{\bfalse}{\bif{\btrue}{a}{b}}{\bif{\btrue}{c}{d}} \\
  &     \href{@booleans@#cor-if-false}
    = & \bif{\btrue}{c}{d} \\
  &     \href{@booleans@#cor-if-true}
    = & c \\
  &     \href{@booleans@#cor-if-false}
    = & \bif{\bfalse}{a}{c} \\
- &     \let{\p = \bfalse}
-   = & \bif{\p}{a}{c} \\
+ &     \let{p = \bfalse}
+   = & \bif{p}{a}{c} \\
  &     \href{@booleans@#cor-if-true}
-   = & \bif{\btrue}{\bif{\p}{a}{c}}{\bif{\p}{b}{d}} \\
- &     \let{\q = \btrue}
-   = & \bif{\q}{\bif{\p}{a}{c}}{\bif{\p}{b}{d}} \\
+   = & \bif{\btrue}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
+ &     \let{q = \btrue}
+   = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
 \end{eqnarray*}$$
-as claimed. If $\p = \bfalse$ and $\q = \bfalse$,
+as claimed. If $p = \bfalse$ and $q = \bfalse$,
 $$\begin{eqnarray*}
- &   & \bif{\p}{\bif{\q}{a}{b}}{\bif{\q}{c}{d}} \\
- &     \let{\p = \bfalse}
-   = & \bif{\bfalse}{\bif{\q}{a}{b}}{\bif{\q}{c}{d}} \\
+ &   & \bif{p}{\bif{q}{a}{b}}{\bif{q}{c}{d}} \\
+ &     \let{p = \bfalse}
+   = & \bif{\bfalse}{\bif{q}{a}{b}}{\bif{q}{c}{d}} \\
  &     \href{@booleans@#cor-if-false}
-   = & \bif{\q}{c}{d} \\
- &     \let{\q = \bfalse}
+   = & \bif{q}{c}{d} \\
+ &     \let{q = \bfalse}
    = & \bif{\bfalse}{c}{d} \\
  &     \href{@booleans@#cor-if-false}
    = & d \\
  &     \href{@booleans@#cor-if-false}
    = & \bif{\bfalse}{b}{d} \\
- &     \let{\p = \bfalse}
-   = & \bif{\p}{b}{d} \\
+ &     \let{p = \bfalse}
+   = & \bif{p}{b}{d} \\
  &     \href{@booleans@#cor-if-false}
-   = & \bif{\bfalse}{\bif{\p}{a}{c}}{\bif{\p}{b}{d}} \\
- &     \let{\q = \bfalse}
-   = & \bif{\q}{\bif{\p}{a}{c}}{\bif{\p}{b}{d}} \\
+   = & \bif{\bfalse}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
+ &     \let{q = \bfalse}
+   = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -284,46 +284,50 @@ Let $A$ be a set with $p \in \bool$ and $a,b,c \in A$. We have the following.
 2. $\bif{p}{a}{\bif{p}{b}{c}} = \bif{p}{a}{c}$
 
 ::: proof ::::::::::
-1. If $\p = \btrue$, we have
+1. If $p = \btrue$, we have
 $$\begin{eqnarray*}
- &   & \bif{\p}{\bif{\p}{a}{b}}{c} \\
- &     \let{\p = \btrue}
-   = & \bif{\p}{\bif{\btrue}{a}{b}}{c} \\
+ &   & \bif{p}{\bif{p}{a}{b}}{c} \\
+ &     \let{p = \btrue}
+   = & \bif{\btrue}{\bif{\btrue}{a}{b}}{c} \\
  &     \href{@booleans@#cor-if-true}
-   = & \bif{\p}{a}{c}
+   = & \bif{\btrue}{a}{c} \\
+ &     \let{p = \btrue}
+   = & \bif{p}{a}{c}
 \end{eqnarray*}$$
-as needed. If $\p = \bfalse$, we have
+as needed. If $p = \bfalse$, we have
 $$\begin{eqnarray*}
- &   & \bif{\p}{\bif{\p}{a}{b}}{c} \\
- &     \let{\p = \bfalse}
-   = & \bif{\bfalse}{\bif{\p}{a}{b}}{c} \\
+ &   & \bif{p}{\bif{p}{a}{b}}{c} \\
+ &     \let{p = \bfalse}
+   = & \bif{\bfalse}{\bif{\bfalse}{a}{b}}{c} \\
  &     \href{@booleans@#cor-if-false}
    = & c \\
  &     \href{@booleans@#cor-if-false}
    = & \bif{\bfalse}{a}{c} \\
- &     \let{\p = \bfalse}
-   = & \bif{\p}{a}{c}
+ &     \let{p = \bfalse}
+   = & \bif{p}{a}{c}
 \end{eqnarray*}$$
 as needed.
-2. If $\p = \btrue$, we have
+2. If $p = \btrue$, we have
 $$\begin{eqnarray*}
- &   & \bif{\p}{a}{\bif{\p}{b}{c}} \\
- &     \let{\p = \btrue}
-   = & \bif{\btrue}{a}{\bif{\p}{b}{c}} \\
+ &   & \bif{p}{a}{\bif{p}{b}{c}} \\
+ &     \let{p = \btrue}
+   = & \bif{\btrue}{a}{\bif{\btrue}{b}{c}} \\
  &     \href{@booleans@#cor-if-true}
    = & a \\
  &     \href{@booleans@#cor-if-true}
    = & \bif{\btrue}{a}{c} \\
- &     \let{\p = \btrue}
-   = & \bif{\p}{a}{c}
+ &     \let{p = \btrue}
+   = & \bif{p}{a}{c}
 \end{eqnarray*}$$
-as claimed, and if $\p = \bfalse$, we have
+as claimed, and if $p = \bfalse$, we have
 $$\begin{eqnarray*}
- &   & \bif{\p}{a}{\bif{\p}{b}{c}} \\
- &     \let{\p = \bfalse}
-   = & \bif{\p}{a}{\bif{\bfalse}{b}{c}} \\
+ &   & \bif{p}{a}{\bif{p}{b}{c}} \\
+ &     \let{p = \bfalse}
+   = & \bif{\bfalse}{a}{\bif{\bfalse}{b}{c}} \\
  &     \href{@booleans@#cor-if-false}
-   = & \bif{\p}{a}{c}
+   = & \bif{\bfalse}{a}{c} \\
+ &     \let{p = \bfalse}
+   = & \bif{p}{a}{c}
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -356,98 +360,98 @@ Let $A$ be a set. For all $p,q \in \bool$ and $a,b \in A$, we have the following
 2. $\bif{p}{\bif{q}{a}{b}}{b} = \bif{q}{\bif{p}{a}{b}}{b}$
 
 ::: proof ::::::::::
-1. If $\p = \btrue$, we have
+1. If $p = \btrue$, we have
 $$\begin{eqnarray*}
- &   & \bif{\p}{a}{\bif{\q}{a}{b}} \\
- &     \let{\p = \btrue}
-   = & \bif{\btrue}{a}{\bif{\q}{a}{b}} \\
+ &   & \bif{p}{a}{\bif{q}{a}{b}} \\
+ &     \let{p = \btrue}
+   = & \bif{\btrue}{a}{\bif{q}{a}{b}} \\
  &     \href{@booleans@#cor-if-true}
    = & a \\
  &     \href{@booleans@#thm-if-same}
-   = & \bif{\q}{a}{a} \\
+   = & \bif{q}{a}{a} \\
  &     \href{@booleans@#cor-if-true}
-   = & \bif{\q}{a}{\bif{\btrue}{a}{c}}
- &     \let{\p = \btrue}
-   = & \bif{\q}{a}{\bif{\p}{a}{c}}
+   = & \bif{q}{a}{\bif{\btrue}{a}{c}} \\
+ &     \let{p = \btrue}
+   = & \bif{q}{a}{\bif{p}{a}{c}}
 \end{eqnarray*}$$
-as claimed. If $\q = \btrue$, we have
+as claimed. If $q = \btrue$, we have
 $$\begin{eqnarray*}
- &   & \bif{\q}{a}{\bif{\p}{a}{b}} \\
- &     \let{\q = \btrue}
-   = & \bif{\btrue}{a}{\bif{\p}{a}{b}} \\
+ &   & \bif{q}{a}{\bif{p}{a}{b}} \\
+ &     \let{q = \btrue}
+   = & \bif{\btrue}{a}{\bif{p}{a}{b}} \\
  &     \href{@booleans@#cor-if-true}
    = & a \\
  &     \href{@booleans@#thm-if-same}
-   = & \bif{\p}{a}{a} \\
+   = & \bif{p}{a}{a} \\
  &     \href{@booleans@#cor-if-true}
-   = & \bif{\p}{a}{\bif{\btrue}{a}{c}}
- &     \let{\q = \btrue}
-   = & \bif{\p}{a}{\bif{\q}{a}{c}}
+   = & \bif{p}{a}{\bif{\btrue}{a}{c}} \\
+ &     \let{q = \btrue}
+   = & \bif{p}{a}{\bif{q}{a}{c}}
 \end{eqnarray*}$$
-as claimed. Suppose then that $\p = \q = \bfalse$; now
+as claimed. Suppose then that $p = q = \bfalse$; now
 $$\begin{eqnarray*}
- &   & \bif{\p}{a}{\bif{\q}{a}{b}} \\
- &     \let{\p = \bfalse}
-   = & \bif{\bfalse}{a}{\bif{\q}{a}{b}} \\
+ &   & \bif{p}{a}{\bif{q}{a}{b}} \\
+ &     \let{p = \bfalse}
+   = & \bif{\bfalse}{a}{\bif{q}{a}{b}} \\
  &     \href{@booleans@#cor-if-false}
-   = & \bif{\q}{a}{b} \\
- &     \let{\q = \bfalse}
+   = & \bif{q}{a}{b} \\
+ &     \let{q = \bfalse}
    = & \bif{\bfalse}{a}{b} \\
  &     \href{@booleans@#cor-if-false}
    = & b \\
  &     \href{@booleans@#cor-if-false}
    = & \bif{\bfalse}{a}{b} \\
- &     \let{\p = \bfalse}
-   = & \bif{\p}{a}{b} \\
+ &     \let{p = \bfalse}
+   = & \bif{p}{a}{b} \\
  &     \href{@booleans@#cor-if-false}
-   = & \bif{\bfalse}{a}{\bif{\p}{a}{b}} \\
- &     \let{\q = \bfalse}
-   = & \bif{\q}{a}{\bif{\p}{a}{b}}
+   = & \bif{\bfalse}{a}{\bif{p}{a}{b}} \\
+ &     \let{q = \bfalse}
+   = & \bif{q}{a}{\bif{p}{a}{b}}
 \end{eqnarray*}$$
 as claimed.
-2. If $\p = \bfalse$, we have
+2. If $p = \bfalse$, we have
 $$\begin{eqnarray*}
- &   & \bif{\p}{\bif{\q}{a}{b}}{b} \\
- &     \let{\p = \bfalse}
-   = & \bif{\bfalse}{\bif{\q}{a}{b}}{b} \\
+ &   & \bif{p}{\bif{q}{a}{b}}{b} \\
+ &     \let{p = \bfalse}
+   = & \bif{\bfalse}{\bif{q}{a}{b}}{b} \\
  &     \href{@booleans@#cor-if-false}
    = & b \\
  &     \href{@booleans@#thm-if-same}
-   = & \bif{\q}{b}{b} \\
+   = & \bif{q}{b}{b} \\
  &     \href{@booleans@#cor-if-false}
-   = & \bif{\q}{\bif{\bfalse}{a}{b}}{b} \\
- &     \let{\p = \bfalse}
-   = & \bif{\q}{\bif{\p}{a}{b}}{b}
+   = & \bif{q}{\bif{\bfalse}{a}{b}}{b} \\
+ &     \let{p = \bfalse}
+   = & \bif{q}{\bif{p}{a}{b}}{b}
 \end{eqnarray*}$$
-as claimed. If $\q = \bfalse$, we have
+as claimed. If $q = \bfalse$, we have
 $$\begin{eqnarray*}
- &   & \bif{\p}{\bif{\q}{a}{b}}{b} \\
- &     \let{\q = \bfalse}
-   = & \bif{\p}{\bif{\bfalse}{a}{b}}{b} \\
+ &   & \bif{p}{\bif{q}{a}{b}}{b} \\
+ &     \let{q = \bfalse}
+   = & \bif{p}{\bif{\bfalse}{a}{b}}{b} \\
  &     \href{@booleans@#cor-if-false}
-   = & \bif{\p}{b}{b} \\
+   = & \bif{p}{b}{b} \\
  &     \href{@booleans@#thm-if-same}
    = & b \\
  &     \href{@booleans@#cor-if-false}
-   = & \bif{\bfalse}{\bif{\p}{a}{b}}{b} \\
- &     \let{\q = \bfalse}
-   = & \bif{\q}{\bif{\p}{a}{b}}{b}
+   = & \bif{\bfalse}{\bif{p}{a}{b}}{b} \\
+ &     \let{q = \bfalse}
+   = & \bif{q}{\bif{p}{a}{b}}{b}
 \end{eqnarray*}$$
-as claimed. If $\p = \q = \btrue$, we have
+as claimed. If $p = q = \btrue$, we have
 $$\begin{eqnarray*}
- &   & \bif{\p}{\bif{\q}{a}{b}}{b} \\
- &     \let{\q = \btrue}
-   = & \bif{\p}{\bif{\btrue}{a}{b}}{b} \\
+ &   & \bif{p}{\bif{q}{a}{b}}{b} \\
+ &     \let{q = \btrue}
+   = & \bif{p}{\bif{\btrue}{a}{b}}{b} \\
  &     \href{@booleans@#cor-if-true}
-   = & \bif{\p}{a}{b} \\
- &     \let{\p = \btrue}
+   = & \bif{p}{a}{b} \\
+ &     \let{p = \btrue}
    = & \bif{\btrue}{a}{b} \\
- &     \let{\q = \btrue}
-   = & \bif{\q}{a}{b} \\
+ &     \let{q = \btrue}
+   = & \bif{q}{a}{b} \\
  &     \href{@booleans@#cor-if-true}
-   = & \bif{\q}{\bif{\btrue}{a}{b}}{b} \\
- &     \let{\p = \btrue}
-   = & \bif{\q}{\bif{\p}{a}{b}}{b}
+   = & \bif{q}{\bif{\btrue}{a}{b}}{b} \\
+ &     \let{p = \btrue}
+   = & \bif{q}{\bif{p}{a}{b}}{b}
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -480,19 +484,21 @@ $\bif{\ast}{\ast}{\ast}$ interacts with functions of two arguments.
 We have $$f(\bif{p}{a}{c},\bif{p}{b}{d}) = \bif{p}{f(a,b)}{f(c,d)}.$$
 
 ::: proof ::::::::::
-If $\p = \btrue$, we have
+If $p = \btrue$, we have
 $$\begin{eqnarray*}
- &   & f(\bif{\p}{a}{c},\bif{\p}{b}{d}) \\
- & = & f(\bif{\btrue}{a}{c},\bif{\btrue}{b}{d}) \\
+ &   & f(\bif{p}{a}{c},\bif{p}{b}{d}) \\
+ &     \let{p = \btrue}
+   = & f(\bif{\btrue}{a}{c},\bif{\btrue}{b}{d}) \\
  &     \href{@booleans@#cor-if-true}
    = & f(a,\bif{\btrue}{b}{d}) \\
  &     \href{@booleans@#cor-if-true}
    = & f(a,b)
 \end{eqnarray*}$$
-and if $\p = \bfalse$,
+and if $p = \bfalse$,
 $$\begin{eqnarray*}
- &   & f(\bif{\p}{a}{c},\bif{\p}{b}{d}) \\
- & = & f(\bif{\bfalse}{a}{c},\bif{\bfalse}{b}{d}) \\
+ &   & f(\bif{p}{a}{c},\bif{p}{b}{d}) \\
+ &     \let{p = \bfalse}
+   = & f(\bif{\bfalse}{a}{c},\bif{\bfalse}{b}{d}) \\
  &     \href{@booleans@#cor-if-false}
    = & f(c,\bif{\bfalse}{b}{d}) \\
  &     \href{@booleans@#cor-if-false}

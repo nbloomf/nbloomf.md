@@ -20,6 +20,18 @@
 @not@#thm-not-involution	\\bnot(p) = p	
 @not@#thm-ifnot	\\bif{\\bnot(p)}{a}{b} = \bif{p}{b}{a}
 #=======================#
+#--- and ---------------#
+#=======================#
+@and@#def-and	\\band(p,q) = \\bif{p}{\\bif{q}{\\btrue}{\\bfalse}}{\\bfalse}
+@and@#thm-and-eval-true-true	\\band(\\btrue,\\btrue) = \\btrue
+@and@#thm-and-eval-true-false	\\band(\\btrue,\\bfalse) = \\bfalse
+@and@#thm-and-eval-false-true	\\band(\\bfalse,\\btrue) = \\bfalse
+@and@#thm-and-eval-false-false	\\band(\\bfalse,\\bfalse) = \\bfalse
+@and@#thm-and-false-left	\\band(\\bfalse,p) = \\bfalse
+@and@#thm-and-false-right	\\band(p,\\bfalse) = \\bfalse
+@and@#thm-and-true-left	\\band(\\btrue,p) = p
+@and@#thm-and-true-right	\\band(p,\\btrue) = p
+#=======================#
 #--- disjoint-unions ---#
 #=======================#
 @disjoint-unions@#dfn-disjoint-unions-isRgt	\\isRgt = \\either(\\const(\\bfalse),\\const(\\btrue))

@@ -140,7 +140,8 @@ sniff-amd:VQ: \
   sniff-amd-eqnarray \
   sniff-amd-slugs \
   sniff-amd-testtext \
-  sniff-amd-rewrite
+  sniff-amd-rewrite \
+  sniff-amd-let
 
 #-- use consistent syntax for fenced divs --#
 sniff-amd-fencediv:VQ:
@@ -314,7 +315,7 @@ sniff-amd-rewrite:VQ:
     | grep -v '^#' amd-rules.txt \
     | awk -F"\t" '{print "s|===" $1 "===|" $2 "|";}' \
     > amd-rules-sed.txt
-  REWRITE=$( grep -n -C 1 '^ &     \\' posts/arithmetic-made-difficult/* \
+  REWRITE=$( grep -n -C 1 '^ &     \\h' posts/arithmetic-made-difficult/* \
     | sed '/^--$/d' \
     | sed 's/^[a-zA-Z\/.-]*[0-9][0-9]*-//' \
     | sed 's/^ &   & //' \
@@ -324,7 +325,6 @@ sniff-amd-rewrite:VQ:
     | tr '&' '\n' \
     | sed 's/     \\href{\([^}]*\)}/===\1===/' \
     | sed 's/     \\hyp{\([^}]*\)}/\1/' \
-    | sed 's/     \\let{\([^}]*\)}/\1/' \
     | sed 's/[ ]*$//' \
     | paste - - - - \
     | awk -F"\t" '{print $2 "\t" $3 "\t" $1 "\t" $4}' \
@@ -336,6 +336,36 @@ sniff-amd-rewrite:VQ:
     echo 'Term rewrites OK' | doppler lightgreen
   else
     echo 'Term rewrites' | doppler lightred
+    echo $( echo "$REWRITE" | wc -l ) 'problems found' | doppler lightred
+    echo "$REWRITE"
+  fi
+
+#-- check term rewrites --#
+sniff-amd-let:VQ:
+  cat amd-rules.txt \
+    | grep -v '^#' amd-rules.txt \
+    | awk -F"\t" '{print "s|===" $1 "===|" $2 "|";}' \
+    > amd-rules-sed.txt
+  REWRITE=$( grep -n -C 1 '^ &     \\let' posts/arithmetic-made-difficult/* \
+    | sed '/^--$/d' \
+    | sed 's/^[a-zA-Z\/.-]*[0-9][0-9]*-//' \
+    | sed 's/^ &   & //' \
+    | sed 's/^ & = & //' \
+    | sed 's/^   = & //' \
+    | sed 's/ \\\\$//' \
+    | tr '&' '\n' \
+    | sed 's/     \\let{\([^}]*\)}/\1/' \
+    | sed 's/[ ]*$//' \
+    | paste - - - - \
+    | awk -F"\t" '{print $2 "\t" $3 "\t" $1 "\t" $4}' \
+    | sed -f amd-rules-sed.txt \
+    | rewrite-term --substitute \
+    || true )
+  rm amd-rules-sed.txt
+  if [ -z "$REWRITE" ]; then
+    echo 'Let rewrites OK' | doppler lightgreen
+  else
+    echo 'Let rewrites' | doppler lightred
     echo $( echo "$REWRITE" | wc -l ) 'problems found' | doppler lightred
     echo "$REWRITE"
   fi

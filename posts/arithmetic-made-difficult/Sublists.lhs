@@ -119,7 +119,7 @@ Let $A$ be a set. For all $x \in \lists{A}$, we have $$\elt(\nil,\sublists(x)).$
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
-
+ &   & (@@@)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the result holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
@@ -277,7 +277,7 @@ as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-$\choose(k)$ is a sublist of $\sublists$.
+$\select(k)$ is a sublist of $\sublists$.
 
 :::::: theorem :::::
 Let $A$ be a set and $k \in \nats$. For all $x \in \lists{A}$ we have $$\sublist(\select(k)(x),\sublists(x)).$$
