@@ -138,7 +138,8 @@ $$\begin{eqnarray*}
  &   & \elt(a)(\cat(x,y)) \\
  & = & \elt(a)(\cat(\nil,y)) \\
  & = & \elt(a)(y) \\
- & = & \bor(\bfalse,\elt(a)(y)) \\
+ &     \href{@or@#thm-or-false-left}
+   = & \bor(\bfalse,\elt(a)(y)) \\
  & = & \bor(\elt(a)(\nil),\elt(a)(y)) \\
  & = & \bor(\elt(a)(x),\elt(a)(y))
 \end{eqnarray*}$$
@@ -148,7 +149,8 @@ $$\begin{eqnarray*}
  & = & \elt(a)(\cons(b,\cat(x,y))) \\
  & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(\cat(x,y))} \\
  & = & \btrue \\
- & = & \bor(\btrue,\elt(a)(y)) \\
+ &     \href{@or@#thm-or-true-left}
+   = & \bor(\btrue,\elt(a)(y)) \\
  & = & \bor(\bif{\beq(a,b)}{\btrue}{\elt(a)(x)},\elt(a)(y)) \\
  & = & \bor(\elt(a)(\cons(b,x)),\elt(a)(y))
 \end{eqnarray*}$$

@@ -135,7 +135,8 @@ If $p = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bimpl(\btrue,\btrue) \\
  & = & \bor(\bnot(\btrue),\btrue) \\
- & = & \btrue
+ &     \href{@or@#thm-or-true-right}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -163,9 +164,12 @@ $$\begin{eqnarray*}
  & = & \bor(\bor(\bnot(p),q),\bor(\bnot(q),p)) \\
  & = & \bor(\bnot(p),\bor(q,\bor(\bnot(q),p))) \\
  & = & \bor(\bnot(p),\bor(\bor(q,\bnot(q)),p)) \\
- & = & \bor(\bnot(p),\bor(\btrue,p)) \\
- & = & \bor(\bnot(p),\btrue) \\
- & = & \btrue
+ &     \href{@or@#thm-or-not}
+   = & \bor(\bnot(p),\bor(\btrue,p)) \\
+ &     \href{@or@#thm-or-true-left}
+   = & \bor(\bnot(p),\btrue) \\
+ &     \href{@or@#thm-or-true-right}
+   = & \btrue
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -237,22 +241,26 @@ $$\begin{eqnarray*}
  &     \href{@not@#thm-not-false}
    = & \bor(\band(p,\bnot(q)),\bor(\band(q,\bnot(r)),\bor(\btrue,r))) \\
  & = & \bor(\band(p,\bnot(q)),\bor(\band(q,\bnot(r)),\btrue)) \\
- & = & \bor(\band(p,\bnot(q)),\btrue) \\
- & = & \btrue.
+ &     \href{@or@#thm-or-true-right}
+   = & \bor(\band(p,\bnot(q)),\btrue) \\
+ &     \href{@or@#thm-or-true-right}
+   = & \btrue
 \end{eqnarray*}$$
-If $p = \btrue$, we have
+as claimed. If $p = \btrue$, we have
 $$\begin{eqnarray*}
  &   & Q \\
  & = & \bor(\band(\btrue,\bnot(q)),\bor(\band(q,\bnot(r)),\bor(\bnot(\btrue),r))) \\
  & = & \bor(\bnot(q),\bor(\band(q,\bnot(r)),\bor(\bfalse,r))) \\
- & = & \bor(\bnot(q),\bor(\band(q,\bnot(r)),r)) \\
+ &     \href{@or@#thm-or-false-left}
+   = & \bor(\bnot(q),\bor(\band(q,\bnot(r)),r)) \\
  & = & \bor(\bnot(q),\band(\bor(q,r),\bor(\bnot(r),r))) \\
  & = & \bor(\bnot(q),\band(\bor(q,r),\btrue)) \\
  &     \href{@and@#thm-and-true-right}
    = & \bor(\bnot(q),\bor(q,r)) \\
  & = & \bor(\bor(\bnot(q),q),r) \\
  & = & \bor(\btrue,r) \\
- & = & \btrue
+ &     \href{@or@#thm-or-true-left}
+   = & \btrue
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

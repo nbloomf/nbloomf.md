@@ -94,7 +94,8 @@ We consider two possibilities for $y$. If $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \infix(x,\nil) \\
  & = & \isnil(x) \\
- & = & \bor(\isnil(x),\isnil(x)) \\
+ &     \href{@or@#thm-or-idempotent}
+   = & \bor(\isnil(x),\isnil(x)) \\
  & = & \bor(\prefix(x,\nil),\infix(x,\nil)) \\
  & = & \bor(\prefix(x,\nil),\infix(x,\tail(\nil)))
 \end{eqnarray*}$$
@@ -169,7 +170,8 @@ $$\begin{eqnarray*}
  & = & \infix(x,\cons(b,\cat(y,x))) \\
  & = & \bor(\prefix(x,\cons(b,\cat(y,x))),\infix(x,\cat(y,x))) \\
  & = & \bor(\prefix(x,\cons(b,\cat(y,x))),\btrue) \\
- & = & \btrue
+ &     \href{@or@#thm-or-true-right}
+   = & \btrue
 \end{eqnarray*}$$
 as needed.
 2. We consider two possibilities for $x$. If $x = \nil$, we have $$\infix(x,\cat(x,y)) = \infix(\nil,\cat(x,y)) = \btrue$$ as claimed. Suppose then that $x = \cons(a,u)$. Then we have
@@ -181,7 +183,8 @@ $$\begin{eqnarray*}
  & = & \bor(\prefix(x,\cat(\cons(a,u),y)),\infix(x,\cat(u,y))) \\
  & = & \bor(\prefix(x,\cat(x,y)),\infix(x,\cat(u,y))) \\
  & = & \bor(\btrue,\infix(x,\cat(u,y))) \\
- & = & \btrue
+ &     \href{@or@#thm-or-true-left}
+   = & \btrue
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -246,7 +249,8 @@ $$\begin{eqnarray*}
  &   & \infix(x,\cons(a,y)) \\
  & = & \bor(\prefix(x,\cons(a,y)),\infix(x,y)) \\
  & = & \bor(\prefix(x,\cons(a,y)),\btrue) \\
- & = & \btrue
+ &     \href{@or@#thm-or-true-right}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

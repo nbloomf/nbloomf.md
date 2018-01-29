@@ -45,21 +45,24 @@ $$\begin{eqnarray*}
 Note that
 $$\begin{eqnarray*}
  &   & \bor(\btrue,\btrue) \\
- & = & \bif{\btrue}{\btrue}{\bif{\btrue}{\btrue}{\bfalse}} \\
+ &     \href{@or@#def-or}
+   = & \bif{\btrue}{\btrue}{\bif{\btrue}{\btrue}{\bfalse}} \\
  &     \href{@booleans@#cor-if-true}
    = & \btrue
 \end{eqnarray*}$$
 that
 $$\begin{eqnarray*}
  &   & \bor(\btrue,\bfalse) \\
- & = & \bif{\btrue}{\btrue}{\bif{\bfalse}{\btrue}{\bfalse}} \\
+ &     \href{@or@#def-or}
+   = & \bif{\btrue}{\btrue}{\bif{\bfalse}{\btrue}{\bfalse}} \\
  &     \href{@booleans@#cor-if-true}
    = & \btrue
 \end{eqnarray*}$$
 that
 $$\begin{eqnarray*}
  &   & \bor(\bfalse,\btrue) \\
- & = & \bif{\bfalse}{\btrue}{\bif{\btrue}{\btrue}{\bfalse}} \\
+ &     \href{@or@#def-or}
+   = & \bif{\bfalse}{\btrue}{\bif{\btrue}{\btrue}{\bfalse}} \\
  &     \href{@booleans@#cor-if-true}
    = & \bif{\bfalse}{\btrue}{\btrue} \\
  &     \href{@booleans@#cor-if-false}
@@ -68,7 +71,8 @@ $$\begin{eqnarray*}
 and that
 $$\begin{eqnarray*}
  &   & \bor(\bfalse,\bfalse) \\
- & = & \bif{\bfalse}{\btrue}{\bif{\bfalse}{\btrue}{\bfalse}} \\
+ &     \href{@or@#def-or}
+   = & \bif{\bfalse}{\btrue}{\bif{\bfalse}{\btrue}{\bfalse}} \\
  &     \href{@booleans@#cor-if-false}
    = & \bif{\bfalse}{\btrue}{\bfalse} \\
  &     \href{@booleans@#cor-if-false}
@@ -119,13 +123,16 @@ For all $a \in \bool$, we have $$\bor(\btrue,a) = \bor(a,\btrue) = \btrue.$$
 If $a = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bor(\btrue,\btrue) \\
- & = & \btrue
+ &     \href{@or@#thm-or-eval-true-true}
+   = & \btrue
 \end{eqnarray*}$$
 and if $a = \bfalse$ we have
 $$\begin{eqnarray*}
  &   & \bor(\btrue,\bfalse) \\
- & = & \btrue \\
- & = & \bor(\bfalse,\btrue)
+ &     \href{@or@#thm-or-eval-true-false}
+   = & \btrue \\
+ &     \href{@or@#thm-or-eval-false-true}
+   = & \bor(\bfalse,\btrue)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -151,13 +158,16 @@ For all $a \in \bool$, we have $$\bor(\bfalse,a) = \bor(a,\bfalse) = a.$$
 If $a = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bor(\bfalse,\btrue) \\
- & = & \btrue \\
- & = & \bor(\btrue,\bfalse)
+ &     \href{@or@#thm-or-eval-false-true}
+   = & \btrue \\
+ &     \href{@or@#thm-or-eval-true-false}
+   = & \bor(\btrue,\bfalse)
 \end{eqnarray*}$$
 and if $a = \bfalse$ we have
 $$\begin{eqnarray*}
  &   & \bor(\bfalse,\bfalse) \\
- & = & \bfalse
+ &     \href{@or@#thm-or-eval-false-false}
+   = & \bfalse
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -183,13 +193,16 @@ For all $a \in \bool$, we have $\bor(p,\bnot(p)) = \btrue$.
 If $a = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bor(\btrue,\bnot(\btrue)) \\
- & = & \btrue
+ &     \href{@or@#thm-or-true-left}
+   = & \btrue
 \end{eqnarray*}$$
 and if $a = \bfalse$ we have
 $$\begin{eqnarray*}
  &   & \bor(\bfalse,\bnot(\bfalse)) \\
- & = & \bor(\bfalse,\btrue) \\
- & = & \btrue
+ &     \href{@not@#thm-not-false}
+   = & \bor(\bfalse,\btrue) \\
+ &     \href{@or@#thm-or-eval-false-true}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -215,12 +228,14 @@ For all $a \in \bool$, we have $\bor(a,a) = a$.
 If $a = \btrue$ we have
 $$\begin{eqnarray*}
  &   & \bor(\btrue,\btrue) \\
- & = & \btrue
+ &     \href{@or@#thm-or-eval-true-true}
+   = & \btrue
 \end{eqnarray*}$$
 and if $a = \bfalse$ then
 $$\begin{eqnarray*}
  &   & \bor(\bfalse,\bfalse) \\
- & = & \bfalse
+ &     \href{@or@#thm-or-eval-false-false}
+   = & \bfalse
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -266,16 +281,21 @@ If $a = \btrue$ we have
 $$\begin{eqnarray*}
  &   & \bor(\bor(a,b),c) \\
  & = & \bor(\bor(\btrue,b),c) \\
- & = & \bor(\btrue,c) \\
- & = & \btrue \\
- & = & \bor(\btrue,\bor(b,c))
+ &     \href{@or@#thm-or-true-left}
+   = & \bor(\btrue,c) \\
+ &     \href{@or@#thm-or-true-left}
+   = & \btrue \\
+ &     \href{@or@#thm-or-true-left}
+   = & \bor(\btrue,\bor(b,c))
 \end{eqnarray*}$$
 as claimed. If $a = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bor(\bor(a,b),c) \\
  & = & \bor(\bor(\bfalse,b),c) \\
- & = & \bor(b,c) \\
- & = & \bor(\bfalse,\bor(b,c))
+ &     \href{@or@#thm-or-false-left}
+   = & \bor(b,c) \\
+ &     \href{@or@#thm-or-false-left}
+   = & \bor(\bfalse,\bor(b,c))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -329,7 +349,8 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \bnot(\bor(a,b)) \\
  & = & \bnot(\bor(\btrue,b)) \\
- & = & \bnot(\btrue) \\
+ &     \href{@or@#thm-or-true-left}
+   = & \bnot(\btrue) \\
  &     \href{@not@#thm-not-true}
    = & \bfalse \\
  & = & \band(\bfalse,\bnot(b)) \\
@@ -341,7 +362,8 @@ as claimed. If $b = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bnot(\bor(a,b)) \\
  & = & \bnot(\bor(\bfalse,b)) \\
- & = & \bnot(b) \\
+ &     \href{@or@#thm-or-false-left}
+   = & \bnot(b) \\
  &     \href{@and@#thm-and-true-left}
    = & \band(\btrue,\bnot(b)) \\
  &     \href{@not@#thm-not-false}
@@ -402,7 +424,8 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \bor(a,\band(b,c)) \\
  & = & \bor(\btrue,\band(b,c)) \\
- & = & \btrue \\
+ &     \href{@or@#thm-or-true-left}
+   = & \btrue \\
  &     \href{@and@#thm-and-eval-true-true}
    = & \band(\btrue,\btrue) \\
  & = & \band(\bor(\btrue,b),\bor(\btrue,c)) \\
@@ -412,7 +435,8 @@ as claimed. If $a = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bor(a,\band(b,c)) \\
  & = & \bor(\bfalse,\band(b,c)) \\
- & = & \band(b,c) \\
+ &     \href{@or@#thm-or-false-left}
+   = & \band(b,c) \\
  & = & \band(\bor(\bfalse,b),\bor(\bfalse,c)) \\
  & = & \band(\bor(a,b),\bor(a,c))
 \end{eqnarray*}$$

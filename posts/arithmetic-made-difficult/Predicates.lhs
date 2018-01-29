@@ -301,7 +301,8 @@ $$\begin{eqnarray*}
  &   & \por(\ptrue,p)(a) \\
  & = & \bor(\ptrue(a),p(a)) \\
  & = & \bor(\btrue,p(a)) \\
- & = & \btrue \\
+ &     \href{@or@#thm-or-true-left}
+   = & \btrue \\
  & = & \ptrue(a)
 \end{eqnarray*}$$
 as needed; the other equality is similar.
@@ -310,14 +311,16 @@ $$\begin{eqnarray*}
  &   & \por(\pfalse,p)(a) \\
  & = & \bor(\pfalse(a),p(a)) \\
  & = & \bor(\bfalse,p(a)) \\
- & = & p(a)
+ &     \href{@or@#thm-or-false-left}
+   = & p(a)
 \end{eqnarray*}$$
 as needed; the other equality is similar.
 3. For all $a \in A$, we have
 $$\begin{eqnarray*}
  &   & \por(p,p)(a) \\
  & = & \bor(p(a),p(a)) \\
- & = & p(a)
+ &     \href{@or@#thm-or-idempotent}
+   = & p(a)
 \end{eqnarray*}$$
 as needed.
 4. For all $a \in A$, we have
