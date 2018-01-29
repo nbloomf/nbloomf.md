@@ -51,6 +51,14 @@
 @or@#thm-or-false-right	\\bor(p,\\bfalse) = p
 @or@#thm-or-not	\\bor(p,\\bnot(p)) = \\btrue
 @or@#thm-or-idempotent	\\bor(p,p) = p
+@or@#thm-or-commutative	\\bor(p,q) = \\bor(q,p)
+@or@#thm-or-associative	\\bor(\\bor(a,b),c) = \\bor(a,\\bor(b,c))
+@or@#thm-demorgan-not-and	\\bnot(\\band(a,b)) = \\bor(\\bnot(a),\\bnot(b))
+@or@#thm-demorgan-not-or	\\bnot(\\bor(a,b)) = \\band(\\bnot(a),\\bnot(b))
+@or@#thm-and-or-distribute	\\band(a,\\bor(b,c)) = \\bor(\\band(a,b),\\band(a,c))
+@or@#thm-or-and-distribute	\\bor(a,\\band(b,c)) = \\band(\\bor(a,b),\\bor(a,c))
+@or@#thm-or-is-if	\\bor(p,q) = \\bif{p}{\btrue}{q}
+@or@#thm-or-if-hyp	\\bif{\\bor(p,q)}{a}{b} = \\bif{p}{a}{\\bif{q}{a}{b}}
 #=======================#
 #--- disjoint-unions ---#
 #=======================#

@@ -254,10 +254,23 @@ as claimed.
 $\bor$ is commutative.
 
 :::::: theorem :::::
+[]{#thm-or-commutative}
 For all $a,b \in \bool$, we have $\bor(a,b) = \bor(b,a)$.
 
 ::: proof ::::::::::
-If $a = \btrue$ we have $$\bor(\btrue,b) = \btrue = \bor(b,\btrue),$$ and if $a = \bfalse$ we have $$\bor(\bfalse,b) = b = \bor(b,\bfalse)$$ as claimed.
+If $a = \btrue$ we have
+$$\begin{eqnarray*}
+ &   & \bor(\btrue,b) \\
+ & = & \btrue \\
+ & = & \bor(b,\btrue)
+\end{eqnarray*}$$
+and if $a = \bfalse$ we have
+$$\begin{eqnarray*}
+ &   & \bor(\bfalse,b) \\
+ & = & b \\
+ & = & \bor(b,\bfalse)
+\end{eqnarray*}$$
+as claimed.
 ::::::::::::::::::::
 
 ::: test :::::::::::
@@ -274,13 +287,15 @@ If $a = \btrue$ we have $$\bor(\btrue,b) = \btrue = \bor(b,\btrue),$$ and if $a 
 $\bor$ is associative.
 
 :::::: theorem :::::
+[]{#thm-or-associative}
 For all $a,b,c \in \bool$, we have $$\bor(\bor(a,b),c) = \bor(a,\bor(b,c)).$$
 
 ::: proof ::::::::::
 If $a = \btrue$ we have
 $$\begin{eqnarray*}
  &   & \bor(\bor(a,b),c) \\
- & = & \bor(\bor(\btrue,b),c) \\
+ &     \let{a = \btrue}
+   = & \bor(\bor(\btrue,b),c) \\
  &     \href{@or@#thm-or-true-left}
    = & \bor(\btrue,c) \\
  &     \href{@or@#thm-or-true-left}
@@ -291,7 +306,8 @@ $$\begin{eqnarray*}
 as claimed. If $a = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bor(\bor(a,b),c) \\
- & = & \bor(\bor(\bfalse,b),c) \\
+ &     \let{a = \bfalse}
+   = & \bor(\bor(\bfalse,b),c) \\
  &     \href{@or@#thm-or-false-left}
    = & \bor(b,c) \\
  &     \href{@or@#thm-or-false-left}
@@ -314,6 +330,7 @@ as claimed.
 DeMorgan's laws hold for $\bor$, $\band$, and $\bnot$.
 
 :::::: theorem :::::
+[]{#thm-demorgan}[]{#thm-demorgan-not-and}[]{#thm-demorgan-not-or}
 The following hold for all $a,b,c \in \bool$.
 
 1. $\bnot(\band(a,b)) = \bor(\bnot(a),\bnot(b))$.
@@ -323,7 +340,8 @@ The following hold for all $a,b,c \in \bool$.
 1. If $a = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bnot(\band(a,b)) \\
- & = & \bnot(\band(\btrue,b)) \\
+ &     \let{a = \btrue}
+   = & \bnot(\band(\btrue,b)) \\
  &     \href{@and@#thm-and-true-left}
    = & \bnot(b) \\
  & = & \bor(\bfalse,\bnot(b)) \\
@@ -334,7 +352,8 @@ $$\begin{eqnarray*}
 as claimed. If $a = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bnot(\band(a,b)) \\
- & = & \bnot(\band(\bfalse,b)) \\
+ &     \let{a = \bfalse}
+   = & \bnot(\band(\bfalse,b)) \\
  &     \href{@and@#thm-and-false-left}
    = & \bnot(\bfalse) \\
  &     \href{@not@#thm-not-false}
@@ -348,7 +367,8 @@ as claimed.
 2. If $a = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bnot(\bor(a,b)) \\
- & = & \bnot(\bor(\btrue,b)) \\
+ &     \let{a = \btrue}
+   = & \bnot(\bor(\btrue,b)) \\
  &     \href{@or@#thm-or-true-left}
    = & \bnot(\btrue) \\
  &     \href{@not@#thm-not-true}
@@ -356,19 +376,22 @@ $$\begin{eqnarray*}
  & = & \band(\bfalse,\bnot(b)) \\
  &     \href{@not@#thm-not-true}
    = & \band(\bnot(\btrue),\bnot(b)) \\
- & = & \band(\bnot(a),\bnot(b))
+ &     \let{a = \btrue}
+   = & \band(\bnot(a),\bnot(b))
 \end{eqnarray*}$$
 as claimed. If $b = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bnot(\bor(a,b)) \\
- & = & \bnot(\bor(\bfalse,b)) \\
+ &     \let{a = \bfalse}
+   = & \bnot(\bor(\bfalse,b)) \\
  &     \href{@or@#thm-or-false-left}
    = & \bnot(b) \\
  &     \href{@and@#thm-and-true-left}
    = & \band(\btrue,\bnot(b)) \\
  &     \href{@not@#thm-not-false}
    = & \band(\bnot(\bfalse),\bnot(b)) \\
- & = & \band(\bnot(a),\bnot(b))
+ &     \let{a = \bfalse}
+   = & \band(\bnot(a),\bnot(b))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -394,6 +417,7 @@ as claimed.
 $\band$ and $\bor$ distribute over each other.
 
 :::::: theorem :::::
+[]{#thm-and-or-distribute}[]{#thm-or-and-distribute}
 The following hold for all $a,b,c \in \bool$.
 
 1. $\band(a,\bor(b,c)) = \bor(\band(a,b),\band(a,c))$.
@@ -403,42 +427,50 @@ The following hold for all $a,b,c \in \bool$.
 1. If $a = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \band(a,\bor(b,c)) \\
- & = & \band(\btrue,\bor(b,c)) \\
+ &     \let{a = \btrue}
+   = & \band(\btrue,\bor(b,c)) \\
  &     \href{@and@#thm-and-true-left}
    = & \bor(b,c) \\
  & = & \bor(\band(\btrue,b),\band(\btrue,c)) \\
- & = & \bor(\band(a,b),\band(a,c))
+ &     \let{a = \btrue}
+   = & \bor(\band(a,b),\band(a,c))
 \end{eqnarray*}$$
 as claimed. If $a = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \band(a,\bor(b,c)) \\
- & = & \band(\bfalse,\bor(b,c)) \\
+ &     \let{a = \bfalse}
+   = & \band(\bfalse,\bor(b,c)) \\
  &     \href{@and@#thm-and-false-left}
    = & \bfalse \\
  & = & \bor(\bfalse,\bfalse) \\
  & = & \bor(\band(\bfalse,b),\band(\bfalse,c)) \\
- & = & \bor(\band(a,b),\band(a,c))
+ &     \let{a = \bfalse}
+   = & \bor(\band(a,b),\band(a,c))
 \end{eqnarray*}$$
 as claimed.
 2. If $a = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bor(a,\band(b,c)) \\
- & = & \bor(\btrue,\band(b,c)) \\
+ &     \let{a = \btrue}
+   = & \bor(\btrue,\band(b,c)) \\
  &     \href{@or@#thm-or-true-left}
    = & \btrue \\
  &     \href{@and@#thm-and-eval-true-true}
    = & \band(\btrue,\btrue) \\
  & = & \band(\bor(\btrue,b),\bor(\btrue,c)) \\
- & = & \band(\bor(a,b),\bor(a,c))
+ &     \let{a = \btrue}
+   = & \band(\bor(a,b),\bor(a,c))
 \end{eqnarray*}$$
 as claimed. If $a = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bor(a,\band(b,c)) \\
- & = & \bor(\bfalse,\band(b,c)) \\
+ &     \let{a = \bfalse}
+   = & \bor(\bfalse,\band(b,c)) \\
  &     \href{@or@#thm-or-false-left}
    = & \band(b,c) \\
  & = & \band(\bor(\bfalse,b),\bor(\bfalse,c)) \\
- & = & \band(\bor(a,b),\bor(a,c))
+ &     \let{a = \bfalse}
+   = & \band(\bor(a,b),\bor(a,c))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -464,7 +496,8 @@ as claimed.
 $\bif{\ast}{\ast}{\ast}$ on booleans is equivalent to an or.
 
 :::::: theorem :::::
-$$\bif{p}{\btrue}{q} = \bor(p,q).$$
+[]{#thm-or-is-if}
+If $p,q \in \bool$, we have $$\bif{p}{\btrue}{q} = \bor(p,q).$$
 
 ::: proof ::::::::::
 If $p = \btrue$, we have
@@ -498,26 +531,33 @@ as needed.
 $\bif{\ast}{\ast}{\ast}$ interacts with $\bor$.
 
 :::::: theorem :::::
+[]{#thm-or-if-hyp}
 Let $A$ be a set with $a,b \in A$, and let $p,q \in \bool$. Then we have $$\bif{p}{a}{\bif{q}{a}{b}} = \bif{\bor(p,q)}{a}{b}.$$
 
 ::: proof ::::::::::
 If $p = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bif{\bor(p,q)}{a}{b} \\
+ &     \let{p = \btrue}
+   = & \bif{\bor(\btrue,q)}{a}{b} \\
  & = & \bif{\btrue}{a}{b} \\
  &     \href{@booleans@#cor-if-true}
    = & a
  &     \href{@booleans@#cor-if-true}
    = & \bif{\btrue}{a}{\bif{q}{a}{b}} \\
- & = & \bif{p}{a}{\bif{q}{a}{b}}
+ &     \let{p = \btrue}
+   = & \bif{p}{a}{\bif{q}{a}{b}}
 \end{eqnarray*}$$
 as needed, and if $p = \bfalse$ we have
 $$\begin{eqnarray*}
  &   & \bif{\bor(p,q)}{a}{b} \\
+ &     \let{p = \bfalse}
+   = & \bif{\bor(\bfalse,q)}{a}{b} \\
  & = & \bif{q}{a}{b} \\
  &     \href{@booleans@#cor-if-false}
    = & \bif{\bfalse}{a}{\bif{q}{a}{b}} \\
- & = & \bif{p}{a}{\bif{q}{a}{b}}
+ &     \let{p = \bfalse}
+   = & \bif{p}{a}{\bif{q}{a}{b}}
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
