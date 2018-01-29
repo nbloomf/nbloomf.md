@@ -185,10 +185,22 @@ as claimed.
 $\band$ interacts with $\bnot$.
 
 :::::: theorem :::::
+[]{#thm-and-not}
 If $a \in \bool$, we have $\band(a,\bnot(a)) = \bfalse$.
 
 ::: proof ::::::::::
-If $a = \btrue$, we have $\band(\btrue,\bnot(\btrue)) = \band(\btrue,\bfalse) = \bfalse,$$ and if $a = \bfalse$, we have $$\band(\bfalse,\bnot(\bfalse)) = \bfalse$$ as claimed.
+If $a = \btrue$, we have
+$$\begin{eqnarray*}
+ &   & \band(\btrue,\bnot(\btrue)) \\
+ & = & \band(\btrue,\bfalse) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+and if $a = \bfalse$, we have
+$$\begin{eqnarray*}
+ &   & \band(\bfalse,\bnot(\bfalse)) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as claimed.
 ::::::::::::::::::::
 
 ::: test :::::::::::
@@ -205,10 +217,21 @@ If $a = \btrue$, we have $\band(\btrue,\bnot(\btrue)) = \band(\btrue,\bfalse) = 
 $\band$ is idempotent.
 
 :::::: theorem :::::
+[]{#thm-and-idempotent}
 If $a \in \bool$, we have $\band(a,a) = a$.
 
 ::: proof ::::::::::
-If $a = \btrue$ we have $$\band(\btrue,\btrue) = \btrue,$$ and if $a = \bfalse$ we have $$\band(\bfalse,\bfalse) = \bfalse$$ as claimed.
+If $a = \btrue$ we have
+$$\begin{eqnarray*}
+ &   & \band(\btrue,\btrue) \\
+ & = & \btrue
+\end{eqnarray*}$$
+and if $a = \bfalse$ we have
+$$\begin{eqnarray*}
+ &   & \band(\bfalse,\bfalse) \\
+ & = & \bfalse
+\end{eqnarray*}$$
+as claimed.
 ::::::::::::::::::::
 
 ::: test :::::::::::
@@ -225,10 +248,23 @@ If $a = \btrue$ we have $$\band(\btrue,\btrue) = \btrue,$$ and if $a = \bfalse$ 
 $\band$ is commutative.
 
 :::::: theorem :::::
+[]{#thm-and-commutative}
 If $a,b \in \bool$, we have $\band(a,b) = \band(b,a)$.
 
 ::: proof ::::::::::
-If $a = \btrue$ we have $$\band(\btrue,b) = b = \band(b,\btrue),$$ and if $a = \bfalse$ we have $$\band(\bfalse,b) = \bfalse = \band(b,\bfalse)$$ as claimed.
+If $a = \btrue$ we have
+$$\begin{eqnarray*}
+ &   & \band(\btrue,b) \\
+ & = & b \\
+ & = & \band(b,\btrue)
+\end{eqnarray*}$$
+and if $a = \bfalse$ we have
+$$\begin{eqnarray*}
+ &   & \band(\bfalse,b)
+ & = & \bfalse \\
+ & = & \band(b,\bfalse)
+\end{eqnarray*}$$
+as claimed.
 ::::::::::::::::::::
 
 ::: test :::::::::::
@@ -245,6 +281,7 @@ If $a = \btrue$ we have $$\band(\btrue,b) = b = \band(b,\btrue),$$ and if $a = \
 $\band$ is associative.
 
 :::::: theorem :::::
+[]{@#thm-and-associative}
 For all $a,b,c \in \bool$, we have $$\band(\band(a,b),c) = \band(a,\band(b,c)).$$
 
 ::: proof ::::::::::
@@ -286,6 +323,7 @@ as claimed.
 $\band$ interacts with $\bif{\ast}{\ast}{\ast}$ in the second argument.
 
 :::::: theorem :::::
+[]{#thm-and-if-right}
 Let $p,q,r \in \bool$. Then we have $$\band(p,\bif{p}{q}{r}) = \band(p,q).$$
 
 ::: proof ::::::::::
@@ -320,6 +358,7 @@ as claimed.
 $\band$ in the hypothesis of $\bif{\ast}{\ast}{\ast}$ expands.
 
 :::::: theorem :::::
+[]{#thm-and-if-hyp}
 Let $A$ be a set with $a,b \in A$, and let $p,q \in \bool$. Then we have $$\bif{\band(p,q)}{a}{b} = \bif{p}{\bif{q}{a}{b}}{b}.$$
 
 ::: proof ::::::::::

@@ -31,6 +31,12 @@
 @and@#thm-and-false-right	\\band(p,\\bfalse) = \\bfalse
 @and@#thm-and-true-left	\\band(\\btrue,p) = p
 @and@#thm-and-true-right	\\band(p,\\btrue) = p
+@and@#thm-and-not	\\band(p,\\bnot(p)) = \\bfalse
+@and@#thm-and-idempotent	\\band(p,p) = p
+@and@#thm-and-commutative	\\band(p,q) = \\band(q,p)
+@and@#thm-and-associative	\\band(\\band(p,q),r) = \\band(p,\\band(q,r))
+@and@#thm-and-if-right	\\band(p,\\bif{p}{q}{r}) = \\band(p,q)
+@and@#thm-and-if-hyp	\\bif{\\band(p,q)}{a}{b} = \bif{p}{\bif{q}{a}{b}}{b}
 #=======================#
 #--- disjoint-unions ---#
 #=======================#
