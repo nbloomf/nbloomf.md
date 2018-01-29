@@ -267,7 +267,7 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 and if $a = \bfalse$ we have
 $$\begin{eqnarray*}
- &   & \band(\bfalse,b)
+ &   & \band(\bfalse,b) \\
  &     \href{@and@#thm-and-false-left}
    = & \bfalse \\
  &     \href{@and@#thm-and-false-right}
@@ -297,17 +297,20 @@ For all $a,b,c \in \bool$, we have $$\band(\band(a,b),c) = \band(a,\band(b,c)).$
 If $a = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \band(\band(a,b),c) \\
- & = & \band(\band(\btrue,b),c) \\
+ &     \let{a = \btrue}
+   = & \band(\band(\btrue,b),c) \\
  &     \href{@and@#thm-and-true-left}
    = & \band(b,c) \\
  &     \href{@and@#thm-and-true-left}
    = & \band(\btrue,\band(b,c)) \\
- & = & \band(a,\band(b,c))
+ &     \let{a = \btrue}
+   = & \band(a,\band(b,c))
 \end{eqnarray*}$$
 as claimed. If $a = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \band(\band(a,b),c) \\
- & = & \band(\band(\bfalse,b),c) \\
+ &     \let{a = \bfalse}
+   = & \band(\band(\bfalse,b),c) \\
  &     \href{@and@#thm-and-false-left}
    = & \band(\bfalse,c) \\
  &     \href{@and@#thm-and-false-left}
