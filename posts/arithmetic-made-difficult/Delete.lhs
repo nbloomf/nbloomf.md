@@ -99,7 +99,8 @@ $$\begin{eqnarray*}
  &   & \filter(\bnot(\beq(a,-)))(\cons(b,x)) \\
  & = & \bif{\bnot(\beq(a,b))}{\cons(b,\filter(\bnot(\beq(a,-)))(x))}{\filter(\bnot(\beq(a,-)))(x)} \\
  & = & \bif{\bnot(\beq(a,b))}{\cons(b,\delete(a)(x))}{\delete(a)(x)} \\
- & = & \bif{\beq(a,b)}{\delete(a)(x)}{\cons(b,\delete(a)(x))} \\
+ &     \href{@not@#thm-ifnot}
+   = & \bif{\beq(a,b)}{\delete(a)(x)}{\cons(b,\delete(a)(x))} \\
  & = & \delete(a)(\cons(b,x))
 \end{eqnarray*}$$
 as needed.

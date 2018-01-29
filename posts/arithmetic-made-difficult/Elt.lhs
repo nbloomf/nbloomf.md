@@ -366,7 +366,8 @@ $$\begin{eqnarray*}
  &   & \elt(a,\filter(p)(\nil)) \\
  & = & \elt(a,\nil) \\
  & = & \bfalse \\
- & = & \band(p(a),\bfalse) \\
+ &     \href{@and@#thm-and-false-right}
+   = & \band(p(a),\bfalse) \\
  & = & \band(p(a),\elt(a,\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$ and let $b \in A$. Note that if $a = b$, then $p(a) = p(b)$. Now
@@ -588,7 +589,8 @@ $$\begin{eqnarray*}
  &   & \elt(\cons(a,x),\map(\cons(b,-))(\nil)) \\
  & = & \elt(\cons(a,x),\nil) \\
  & = & \bfalse \\
- & = & \band(\beq(a,b),\bfalse) \\
+ &     \href{@and@#thm-and-false-right}
+   = & \band(\beq(a,b),\bfalse) \\
  & = & \band(\beq(a,b),\elt(x,\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$, $b$, and $x$ for some $z$, and let $u \in \lists{A}$. Now

@@ -107,7 +107,8 @@ $$\begin{eqnarray*}
  & = & \all(p,\cons(a,\filter(p)(x))) \\
  & = & \band(p(a),\all(p,\filter(p)(x))) \\
  & = & \band(\btrue,\btrue) \\
- & = & \btrue
+ &     \href{@and@#thm-and-eval-true-true}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed, while if $p(a) = \bfalse$, we have
 $$\begin{eqnarray*}
@@ -353,9 +354,11 @@ $$\begin{eqnarray*}
    = & \beq(\cons(a,x),\cons(a,\filter(p)(x))) \\
  & = & \band(\beq(a,a),\beq(x,\filter(p)(x))) \\
  & = & \band(\btrue,\beq(x,\filter(p)(x))) \\
- & = & \beq(x,\filter(p)(x)) \\
+ &     \href{@and@#thm-and-true-left}
+   = & \beq(x,\filter(p)(x)) \\
  & = & \all(p,x) \\
- & = & \band(\btrue,\all(p,x)) \\
+ &     \href{@and@#thm-and-true-left}
+   = & \band(\btrue,\all(p,x)) \\
  & = & \band(p(a),\all(p,x)) \\
  & = & \all(p,\cons(a,x))
 \end{eqnarray*}$$
@@ -367,7 +370,8 @@ $$\begin{eqnarray*}
  &     \href{@booleans@#cor-if-false}
    = & \beq(\cons(a,x),\filter(p)(x)) \\
  & = & \bfalse \\
- & = & \band(\bfalse,\all(p,x)) \\
+ &     \href{@and@#thm-and-false-left}
+   = & \band(\bfalse,\all(p,x)) \\
  & = & \band(p(a),\all(p,x)) \\
  & = & \all(p,\cons(a,x))
 \end{eqnarray*}$$

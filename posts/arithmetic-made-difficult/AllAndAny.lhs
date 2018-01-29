@@ -162,7 +162,8 @@ $$\begin{eqnarray*}
  &   & \all(\ptrue)(\cons(a,x)) \\
  & = & \band(\ptrue(a),\all(\ptrue)(x)) \\
  & = & \band(\btrue,\btrue) \\
- & = & \btrue
+ &     \href{@and@#thm-and-eval-true-true}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed.
 2. We have two possibilities for $x$. If $x = \nil$, we have
@@ -175,7 +176,8 @@ $$\begin{eqnarray*}
  &   & \all(\pfalse)(\cons(a,u)) \\
  & = & \band(\pfalse(a),\all(\pfalse)(u)) \\
  & = & \band(\bfalse,\all(\pfalse)(u)) \\
- & = & \bfalse
+ &     \href{@and@#thm-and-false-left}
+   = & \bfalse
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -211,7 +213,8 @@ $$\begin{eqnarray*}
  &   & \all(p)(\cat(x,y)) \\
  & = & \all(p)(\cat(\nil,y)) \\
  & = & \all(p)(y) \\
- & = & \band(\btrue,\all(p)(y)) \\
+ &     \href{@and@#thm-and-true-left}
+   = & \band(\btrue,\all(p)(y)) \\
  & = & \band(\all(p)(\nil),\all(p)(y)) \\
  & = & \band(\all(p)(x),\all(p)(y))
 \end{eqnarray*}$$

@@ -189,7 +189,8 @@ $$\begin{eqnarray*}
  &   & \pand(\pfalse,p)(a) \\
  & = & \band(\pfalse(a),p(a)) \\
  & = & \band(\bfalse,p(a)) \\
- & = & \bfalse \\
+ &     \href{@and@#thm-and-false-left}
+   = & \bfalse \\
  & = & \pfalse(a)
 \end{eqnarray*}$$
 as needed; similarly for the other equality.
@@ -198,7 +199,8 @@ $$\begin{eqnarray*}
  &   & \pand(\ptrue,p)(a) \\
  & = & \band(\ptrue(a),p(a)) \\
  & = & \band(\btrue,p(a)) \\
- & = & p(a)
+ &     \href{@and@#thm-and-true-left}
+   = & p(a)
 \end{eqnarray*}$$
 as needed.
 3. For all $a \in A$, we have

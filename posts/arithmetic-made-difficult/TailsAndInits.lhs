@@ -250,7 +250,8 @@ $$\begin{eqnarray*}
  & = & \all(\suffix(-,\nil),\cons(\nil,\nil)) \\
  & = & \band(\suffix(\nil,\nil),\all(\suffix(-,\nil),\nil)) \\
  & = & \band(\btrue,\btrue) \\
- & = & \btrue
+ &     \href{@and@#thm-and-eval-true-true}
+   = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Note that if $\suffix(u,x) = \btrue$ then $\suffix(u,\cons(a,x)) = \btrue$. Using the inductive hypothesis, we have
 $$\begin{eqnarray*}

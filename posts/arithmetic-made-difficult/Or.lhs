@@ -256,7 +256,8 @@ The following hold for all $a,b,c \in \bool$.
 $$\begin{eqnarray*}
  &   & \bnot(\band(a,b)) \\
  & = & \bnot(\band(\btrue,b)) \\
- & = & \bnot(b) \\
+ &     \href{@and@#thm-and-true-left}
+   = & \bnot(b) \\
  & = & \bor(\bfalse,\bnot(b)) \\
  &     \href{@not@#thm-not-true}
    = & \bor(\bnot(\btrue),\bnot(b)) \\
@@ -266,7 +267,8 @@ as claimed. If $a = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bnot(\band(a,b)) \\
  & = & \bnot(\band(\bfalse,b)) \\
- & = & \bnot(\bfalse) \\
+ &     \href{@and@#thm-and-false-left}
+   = & \bnot(\bfalse) \\
  &     \href{@not@#thm-not-false}
    = & \btrue \\
  & = & \bor(\btrue,\bnot(b)) \\
@@ -292,7 +294,8 @@ $$\begin{eqnarray*}
  &   & \bnot(\bor(a,b)) \\
  & = & \bnot(\bor(\bfalse,b)) \\
  & = & \bnot(b) \\
- & = & \band(\btrue,\bnot(b)) \\
+ &     \href{@and@#thm-and-true-left}
+   = & \band(\btrue,\bnot(b)) \\
  &     \href{@not@#thm-not-false}
    = & \band(\bnot(\bfalse),\bnot(b)) \\
  & = & \band(\bnot(a),\bnot(b))
@@ -331,7 +334,8 @@ The following hold for all $a,b,c \in \bool$.
 $$\begin{eqnarray*}
  &   & \band(a,\bor(b,c)) \\
  & = & \band(\btrue,\bor(b,c)) \\
- & = & \bor(b,c) \\
+ &     \href{@and@#thm-and-true-left}
+   = & \bor(b,c) \\
  & = & \bor(\band(\btrue,b),\band(\btrue,c)) \\
  & = & \bor(\band(a,b),\band(a,c))
 \end{eqnarray*}$$
@@ -339,7 +343,8 @@ as claimed. If $a = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \band(a,\bor(b,c)) \\
  & = & \band(\bfalse,\bor(b,c)) \\
- & = & \bfalse \\
+ &     \href{@and@#thm-and-false-left}
+   = & \bfalse \\
  & = & \bor(\bfalse,\bfalse) \\
  & = & \bor(\band(\bfalse,b),\band(\bfalse,c)) \\
  & = & \bor(\band(a,b),\band(a,c))
@@ -350,7 +355,8 @@ $$\begin{eqnarray*}
  &   & \bor(a,\band(b,c)) \\
  & = & \bor(\btrue,\band(b,c)) \\
  & = & \btrue \\
- & = & \band(\btrue,\btrue) \\
+ &     \href{@and@#thm-and-eval-true-true}
+   = & \band(\btrue,\btrue) \\
  & = & \band(\bor(\btrue,b),\bor(\btrue,c)) \\
  & = & \band(\bor(a,b),\bor(a,c))
 \end{eqnarray*}$$

@@ -131,8 +131,10 @@ $$\begin{eqnarray*}
  & = & \beq(\cons(a,\nil),\cons(c,\snoc(b,u))) \\
  & = & \band(\beq(a,c),\beq(\nil,\snoc(b,u))) \\
  & = & \band(\beq(a,c),\bfalse) \\
- & = & \bfalse \\
- & = & \band(\beq(a,b),\bfalse) \\
+ &     \href{@and@#thm-and-false-right}
+   = & \bfalse \\
+ &     \href{@and@#thm-and-false-right}
+   = & \band(\beq(a,b),\bfalse) \\
  & = & \band(\beq(a,b),\beq(\nil,\cons(c,u))) \\
  & = & \band(\beq(a,b),\beq(x,y))
 \end{eqnarray*}$$
@@ -143,8 +145,10 @@ $$\begin{eqnarray*}
  & = & \beq(\cons(d,\snoc(a,x)),\cons(b,\nil)) \\
  & = & \band(\beq(d,b),\beq(\snoc(a,x),\nil)) \\
  & = & \band(\beq(d,b),\bfalse) \\
- & = & \bfalse \\
- & = & \band(\beq(a,b),\bfalse) \\
+ &     \href{@and@#thm-and-false-right}
+   = & \bfalse \\
+ &     \href{@and@#thm-and-false-right}
+   = & \band(\beq(a,b),\bfalse) \\
  & = & \band(\beq(a,b),\beq(\cons(d,x),\nil)) \\
  & = & \band(\beq(a,b),\beq(\cons(d,x),y))
 \end{eqnarray*}$$

@@ -151,7 +151,8 @@ $$\begin{eqnarray*}
  & = & \unique(\cons(a,\delete(a,\dedupeL(x)))) \\
  & = & \band(\bnot(\elt(a,\delete(a,\dedupeL(x)))),\unique(\delete(a,\dedupeL(x)))) \\
  & = & \band(\btrue,\unique(\delete(a,\dedupeL(x)))) \\
- & = & \unique(\delete(a,\dedupeL(x))) \\
+ &     \href{@and@#thm-and-true-left}
+   = & \unique(\delete(a,\dedupeL(x))) \\
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
@@ -226,7 +227,8 @@ $$\begin{eqnarray*}
  & = & \beq(\cons(a,x),\cons(a,\delete(a,\dedupeL(x)))) \\
  & = & \band(\beq(a,a),\beq(x,\delete(a,\dedupeL(x)))) \\
  & = & \band(\btrue,\beq(x,\delete(a,\dedupeL(x)))) \\
- & = & \beq(x,\delete(a,\dedupeL(x))) \\
+ &     \href{@and@#thm-and-true-left}
+   = & \beq(x,\delete(a,\dedupeL(x))) \\
  & = & \beq(x,\dedupeL(\delete(a,x))) \\
  & = & Q.
 \end{eqnarray*}$$
@@ -235,7 +237,8 @@ $$\begin{eqnarray*}
  &   & Q \\
  & = & \beq(x,\dedupeL(x)) \\
  & = & \unique(x) \\
- & = & \band(\btrue,\unique(x)) \\
+ &     \href{@and@#thm-and-true-left}
+   = & \band(\btrue,\unique(x)) \\
  & = & \band(\bnot(\elt(a,x)),\unique(x)) \\
  & = & \unique(\cons(a,x))
 \end{eqnarray*}$$
@@ -249,7 +252,8 @@ so that $\beq(x,\dedupeL(\delete(a,x))) = \bfalse$. Now
 $$\begin{eqnarray*}
  &   & Q \\
  & = & \bfalse \\
- & = & \band(\bfalse,\unique(x)) \\
+ &     \href{@and@#thm-and-false-left}
+   = & \band(\bfalse,\unique(x)) \\
  & = & \band(\bnot(\elt(a,x)),\unique(x)) \\
  & = & \unique(\cons(a,x))
 \end{eqnarray*}$$

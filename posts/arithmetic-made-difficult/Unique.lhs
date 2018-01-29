@@ -111,7 +111,8 @@ $$\begin{eqnarray*}
  &   & \unique(\cons(a,\cons(b,\nil))) \\
  & = & \band(\bnot(\elt(a,\cons(b,\nil))),\unique(\cons(b,\nil))) \\
  & = & \band(\bnot(\beq(a,b)),\btrue) \\
- & = & \bnot(\beq(a,b))
+ &     \href{@and@#thm-and-true-right}
+   = & \bnot(\beq(a,b))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -163,7 +164,8 @@ $$\begin{eqnarray*}
  & = & \unique(\cons(a,u)) \\
  & = & \band(\bnot(\elt(a,u)),\unique(u)) \\
  & = & \band(\btrue,\btrue) \\
- & = & \btrue
+ &     \href{@and@#thm-and-eval-true-true}
+   = & \btrue
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -254,7 +256,8 @@ $$\begin{eqnarray*}
  & = & \bif{\beq(a,b)}{\bfalse}{\band(\band(\bnot(\elt(b,x)),\bnot(\elt(a,x))),\unique(x))} \\
  & = & \bif{\beq(a,b)}{\bfalse}{\band(\band(\bnot(\elt(a,x)),\bnot(\elt(b,x))),\unique(x))} \\
  & = & \bif{\beq(a,b)}{\bfalse}{\band(\bnot(\elt(a,x)),\band(\bnot(\elt(b,x)),\unique(x)))} \\
- & = & \bif{\beq(a,b)}{\band(\bfalse,\band(\bnot(\elt(b,x)),\unique(x)))}{\band(\bnot(\elt(a,x)),\band(\bnot(\elt(b,x)),\unique(x)))} \\
+ &     \href{@and@#thm-and-false-left}
+   = & \bif{\beq(a,b)}{\band(\bfalse,\band(\bnot(\elt(b,x)),\unique(x)))}{\band(\bnot(\elt(a,x)),\band(\bnot(\elt(b,x)),\unique(x)))} \\
  & = & \band(\bif{\beq(a,b)}{\bfalse}{\bnot(\elt(a,x))},\band(\bnot(\elt(b,x)),\unique(x))) \\
  & = & \band(\bnot(\bif{\beq(a,b)}{\btrue}{\elt(a,x)}),\band(\bnot(\elt(b,x)),\unique(x))) \\
  & = & \band(\bnot(\elt(a,\cons(b,x))),\band(\bnot(\elt(b,x)),\unique(x))) \\
@@ -327,7 +330,8 @@ $$\begin{eqnarray*}
  & = & \unique(\cons(a,\range(\next(a),b))) \\
  & = & \band(\bnot(\elt(a,\range(\next(a),b))),\unique(\range(\next(a),b))) \\
  & = & \band(\bnot(\elt(a,\range(\next(a),b))),\btrue) \\
- & = & \bnot(\elt(a,\range(\next(a),b))) \\
+ &     \href{@and@#thm-and-true-right}
+   = & \bnot(\elt(a,\range(\next(a),b))) \\
  & = & \bnot(\bfalse) \\
  &     \href{@not@#thm-not-false}
    = & \btrue

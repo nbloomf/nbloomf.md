@@ -252,17 +252,22 @@ If $a = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \band(\band(a,b),c) \\
  & = & \band(\band(\btrue,b),c) \\
- & = & \band(b,c) \\
- & = & \band(\btrue,\band(b,c)) \\
+ &     \href{@and@#thm-and-true-left}
+   = & \band(b,c) \\
+ &     \href{@and@#thm-and-true-left}
+   = & \band(\btrue,\band(b,c)) \\
  & = & \band(a,\band(b,c))
 \end{eqnarray*}$$
 as claimed. If $a = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \band(\band(a,b),c) \\
  & = & \band(\band(\bfalse,b),c) \\
- & = & \band(\bfalse,c) \\
- & = & \bfalse \\
- & = & \band(\bfalse,\band(b,c))
+ &     \href{@and@#thm-and-false-left}
+   = & \band(\bfalse,c) \\
+ &     \href{@and@#thm-and-false-left}
+   = & \bfalse \\
+ &     \href{@and@#thm-and-false-left}
+   = & \band(\bfalse,\band(b,c))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -293,8 +298,10 @@ $$\begin{eqnarray*}
 as claimed. If $p = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \band(\bfalse,\bif{\bfalse}{q}{r}) \\
- & = & \bfalse \\
- & = & \band(\bfalse,q)
+ &     \href{@and@#thm-and-false-left}
+   = & \bfalse \\
+ &     \href{@and@#thm-and-false-left}
+   = & \band(\bfalse,q)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -319,14 +326,16 @@ Let $A$ be a set with $a,b \in A$, and let $p,q \in \bool$. Then we have $$\bif{
 If $p = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bif{\band(\btrue,q)}{a}{b} \\
- & = & \bif{q}{a}{b} \\
+ &     \href{@and@#thm-and-true-left}
+   = & \bif{q}{a}{b} \\
  &     \href{@booleans@#cor-if-true}
    = & \bif{\btrue}{\bif{q}{a}{b}}{b}
 \end{eqnarray*}$$
 and if $p = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bif{\band(\bfalse,q)}{a}{b} \\
- & = & \bif{\bfalse}{a}{b} \\
+ &     \href{@and@#thm-and-false-left}
+   = & \bif{\bfalse}{a}{b} \\
  &     \href{@booleans@#cor-if-false}
    = & b \\
  &     \href{@booleans@#cor-if-false}

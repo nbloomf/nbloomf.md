@@ -248,7 +248,8 @@ $$\begin{eqnarray*}
  & = & \bor(\bnot(q),\bor(\band(q,\bnot(r)),r)) \\
  & = & \bor(\bnot(q),\band(\bor(q,r),\bor(\bnot(r),r))) \\
  & = & \bor(\bnot(q),\band(\bor(q,r),\btrue)) \\
- & = & \bor(\bnot(q),\bor(q,r)) \\
+ &     \href{@and@#thm-and-true-right}
+   = & \bor(\bnot(q),\bor(q,r)) \\
  & = & \bor(\bor(\bnot(q),q),r) \\
  & = & \bor(\btrue,r) \\
  & = & \btrue
@@ -312,7 +313,8 @@ If $p = \bfalse$, then
 $$\begin{eqnarray*}
  &   & \bimpl(\band(p,q),\band(r,s)) \\
  & = & \bimpl(\band(\bfalse,q),\band(r,s)) \\
- & = & \bimpl(\bfalse,\band(r,s))
+ &     \href{@and@#thm-and-false-left}
+   = & \bimpl(\bfalse,\band(r,s))
  & = & \btrue.
 \end{eqnarray*}$$
 Similarly if $q = \bfalse$. Suppose then that $p = q = \btrue$. Now
@@ -356,12 +358,14 @@ Let $p,q,r \in \bool$. If $\bimpl(r,q)$, then $$\bif{\band(p,q)}{\btrue}{r} = \b
 If $r = \btrue$, then $q = \btrue$. Now
 $$\begin{eqnarray*}
  &   & \bif{\band(p,\btrue)}{\btrue}{\btrue} \\
- & = & \bif{p}{\btrue}{\btrue}
+ &     \href{@and@#thm-and-true-right}
+   = & \bif{p}{\btrue}{\btrue}
 \end{eqnarray*}$$
 as needed. Suppose instead that $r = \bfalse$. If $p = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bif{\band(\btrue,q)}{\btrue}{\bfalse} \\
- & = & \bif{q}{\btrue}{\bfalse} \\
+ &     \href{@and@#thm-and-true-left}
+   = & \bif{q}{\btrue}{\bfalse} \\
  & = & q \\
  &     \href{@booleans@#cor-if-true}
    = & \bif{\btrue}{q}{\bfalse}
@@ -369,7 +373,8 @@ $$\begin{eqnarray*}
 as needed. If $p = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bif{\band(\bfalse,q)}{\btrue}{r} \\
- & = & \bif{\bfalse}{\btrue}{r} \\
+ &     \href{@and@#thm-and-false-left}
+   = & \bif{\bfalse}{\btrue}{r} \\
  &     \href{@booleans@#cor-if-false}
    = & r \\
  &     \href{@booleans@#cor-if-false}

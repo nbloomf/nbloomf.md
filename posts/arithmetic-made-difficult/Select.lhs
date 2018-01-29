@@ -305,7 +305,8 @@ $$\begin{eqnarray*}
  & = & \all(\sublist(-,x),\cons(\nil,\nil)) \\
  & = & \band(\sublist(\nil,x),\all(\sublist(-,x),\nil)) \\
  & = & \band(\btrue,\btrue) \\
- & = & \btrue
+ &     \href{@and@#thm-and-eval-true-true}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed. Suppose instead that $k = \next(m)$; we proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
@@ -339,7 +340,8 @@ $$\begin{eqnarray*}
  & = & \all(\sublist(-,\cons(a,x)),\cat(\map(\cons(a,-))(\select(m,x)),\select(\next(m),x))) \\
  & = & \band(\all(\sublist(-,\cons(a,x)),\map(\cons(a,-))(\select(m,x))),\all(\sublist(-,\cons(a,x)),\select(\next(m),x))) \\
  & = & \band(\btrue,\btrue) \\
- & = & \btrue
+ &     \href{@and@#thm-and-eval-true-true}
+   = & \btrue
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -369,7 +371,8 @@ $$\begin{eqnarray*}
  & = & \band(\beq(\zero,\length(\nil)),\all(\beq(\zero,\length(-)),\nil)) \\
  & = & \band(\beq(\zero,\zero),\btrue) \\
  & = & \band(\btrue,\btrue) \\
- & = & \btrue
+ &     \href{@and@#thm-and-eval-true-true}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed. Suppose instead that $k = \next(m)$. We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
@@ -391,7 +394,8 @@ $$\begin{eqnarray*}
  & = & \band(\all(\beq(\next(m),\next(\length(-))),\select(m,x)),\btrue) \\
  & = & \band(\all(\beq(m,\length(-)),\select(m,x)),\btrue) \\
  & = & \band(\btrue,\btrue) \\
- & = & \btrue
+ &     \href{@and@#thm-and-eval-true-true}
+   = & \btrue
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

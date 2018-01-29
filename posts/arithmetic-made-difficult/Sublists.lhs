@@ -84,7 +84,8 @@ $$\begin{eqnarray*}
  & = & \all(\sublist(-,\nil))(\cons(\nil,\nil)) \\
  & = & \band(\sublist(\nil,\nil),\all(\sublist(-,\nil))(\nil)) \\
  & = & \band(\btrue,\btrue) \\
- & = & \btrue
+ &     \href{@and@#thm-and-eval-true-true}
+   = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the result holds for some $x$ and let $a \in A$. Note that $$\pimpl(\sublist(-,x),\sublist(-,\cons(a,x))),$$ so that $$\bimpl(\all(\sublist(-,x))(z),\all(\sublist(-,\cons(a,x)))(z))$$ for all $z \in \lists{\lists{A}}$. Since $\all(\sublist(-,x))(\sublists(x))$ by the inductive hypothesis, we have $\all(\sublist(-,\cons(a,x)))(\sublists(x)) = \btrue$. Now
 $$\begin{eqnarray*}
