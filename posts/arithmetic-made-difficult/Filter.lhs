@@ -341,7 +341,8 @@ $$\begin{eqnarray*}
  &   & \beq(x,\filter(p)(x)) \\
  & = & \beq(\nil,\filter(p)(\nil)) \\
  & = & \beq(\nil,\nil) \\
- & = & \btrue \\
+ &     \href{@booleans@#thm-eq-reflexive}
+   = & \btrue \\
  & = & \all(p,\nil) \\
  & = & \all(p,x)
 \end{eqnarray*}$$
@@ -353,7 +354,8 @@ $$\begin{eqnarray*}
  &     \href{@booleans@#cor-if-true}
    = & \beq(\cons(a,x),\cons(a,\filter(p)(x))) \\
  & = & \band(\beq(a,a),\beq(x,\filter(p)(x))) \\
- & = & \band(\btrue,\beq(x,\filter(p)(x))) \\
+ &     \href{@booleans@#thm-eq-reflexive}
+   = & \band(\btrue,\beq(x,\filter(p)(x))) \\
  &     \href{@and@#thm-and-true-left}
    = & \beq(x,\filter(p)(x)) \\
  & = & \all(p,x) \\

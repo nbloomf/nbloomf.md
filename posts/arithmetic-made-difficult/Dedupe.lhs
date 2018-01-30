@@ -217,7 +217,8 @@ $$\begin{eqnarray*}
  &   & \beq(x,\dedupeL(x)) \\
  & = & \beq(\nil,\dedupeL(\nil)) \\
  & = & \beq(\nil,\nil) \\
- & = & \btrue \\
+ &     \href{@booleans@#thm-eq-reflexive}
+   = & \btrue \\
  & = & \unique(\nil) \\
  & = & \unique(x)
 \end{eqnarray*}$$
@@ -226,7 +227,8 @@ $$\begin{eqnarray*}
  &   & \beq(\cons(a,x),\dedupeL(\cons(a,x))) \\
  & = & \beq(\cons(a,x),\cons(a,\delete(a,\dedupeL(x)))) \\
  & = & \band(\beq(a,a),\beq(x,\delete(a,\dedupeL(x)))) \\
- & = & \band(\btrue,\beq(x,\delete(a,\dedupeL(x)))) \\
+ &     \href{@booleans@#thm-eq-reflexive}
+   = & \band(\btrue,\beq(x,\delete(a,\dedupeL(x)))) \\
  &     \href{@and@#thm-and-true-left}
    = & \beq(x,\delete(a,\dedupeL(x))) \\
  & = & \beq(x,\dedupeL(\delete(a,x))) \\

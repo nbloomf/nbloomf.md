@@ -116,8 +116,10 @@ If $p \in \bool$, we have $\bimpl(p,\bfalse) = \bnot(p)$.
 We have
 $$\begin{eqnarray*}
  &   & \bimpl(p,\bfalse) \\
- & = & \bor(\bnot(p),\bfalse) \\
- & = & \bnot(p)
+ &     \href{@implies@#thm-implies-or}
+   = & \bor(\bnot(p),\bfalse) \\
+ &     \href{@or@#thm-or-false-right}
+   = & \bnot(p)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -290,8 +292,10 @@ $$\begin{eqnarray*}
  &     \let{p = \bfalse}
    = & \bimpl(\bimpl(\bfalse,q),\bimpl(\bimpl(q,r),\bimpl(\bfalse,r))) \\
  & = & \bimpl(\btrue,\bimpl(\bimpl(q,r),\btrue)) \\
- & = & \bimpl(\bimpl(q,r),\btrue) \\
- & = & \bor(\bnot(\bimpl(q,r)),\btrue) \\
+ &     \href{@implies@#thm-implies-true-hyp}
+   = & \bimpl(\bimpl(q,r),\btrue) \\
+ &     \href{@implies@#thm-implies-or}
+   = & \bor(\bnot(\bimpl(q,r)),\btrue) \\
  &     \href{@or@#thm-or-true-right}
    = & \btrue
 \end{eqnarray*}$$
@@ -301,8 +305,10 @@ $$\begin{eqnarray*}
  &     \let{p = \btrue}
    = & \bimpl(\bimpl(\btrue,q),\bimpl(\bimpl(q,r),\bimpl(\btrue,r))) \\
  & = & \bimpl(q,\bimpl(\bimpl(q,r),r)) \\
- & = & \bimpl(\bimpl(q,r),\bimpl(q,r)) \\
- & = & \btrue
+ &     \href{@implies@#thm-implies-left-commutative}
+   = & \bimpl(\bimpl(q,r),\bimpl(q,r)) \\
+ &     \href{@implies@#thm-implies-self}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -369,11 +375,16 @@ If $p = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bimpl(\band(\bimpl(p,r),\bimpl(q,s)),\bimpl(\band(p,q),\band(r,s))) \\
  & = & \bimpl(\band(\bimpl(\bfalse,r),\bimpl(q,s)),\bimpl(\band(\bfalse,q),\band(r,s))) \\
- & = & \bimpl(\band(\btrue,\bimpl(q,s)),\bimpl(\band(\bfalse,q),\band(r,s))) \\
- & = & \bimpl(\band(\btrue,\bimpl(q,s)),\bimpl(\bfalse,\band(r,s))) \\
- & = & \bimpl(\band(\btrue,\bimpl(q,s)),\btrue) \\
- & = & \bor(\bnot(\band(\btrue,\bimpl(q,s))),\btrue) \\
- & = & \btrue
+ &     \href{@implies@#thm-implies-false-hyp}
+   = & \bimpl(\band(\btrue,\bimpl(q,s)),\bimpl(\band(\bfalse,q),\band(r,s))) \\
+ &     \href{@and@#thm-and-false-left}
+   = & \bimpl(\band(\btrue,\bimpl(q,s)),\bimpl(\bfalse,\band(r,s))) \\
+ &     \href{@implies@#thm-implies-false-hyp}
+   = & \bimpl(\band(\btrue,\bimpl(q,s)),\btrue) \\
+ &     \href{@implies@#thm-implies-or}
+   = & \bor(\bnot(\band(\btrue,\bimpl(q,s))),\btrue) \\
+ &     \href{@or@#thm-or-true-right}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed. suppose $p = \btrue$. If $r = \bfalse$, we have
 $$\begin{eqnarray*}
@@ -381,11 +392,13 @@ $$\begin{eqnarray*}
  &     \let{p = \btrue}
    = & \bimpl(\band(\bimpl(\btrue,r),\bimpl(q,s)),\bimpl(\band(\btrue,q),\band(r,s))) \\
  & = & \bimpl(\band(\bimpl(\btrue,r),\bimpl(q,s)),\bimpl(q,\band(r,s))) \\
- & = & \bimpl(\band(r,\bimpl(q,s)),\bimpl(q,\band(r,s))) \\
+ &     \href{@implies@#thm-implies-true-hyp}
+   = & \bimpl(\band(r,\bimpl(q,s)),\bimpl(q,\band(r,s))) \\
  &     \let{r = \bfalse}
    = & \bimpl(\band(\bfalse,\bimpl(q,s)),\bimpl(q,\band(\bfalse,s))) \\
  & = & \bimpl(\bfalse,\bimpl(q,\band(\bfalse,s))) \\
- & = & \btrue
+ &     \href{@implies@#thm-implies-false-hyp}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed. If $r = \btrue$, we have
 $$\begin{eqnarray*}
@@ -393,12 +406,15 @@ $$\begin{eqnarray*}
  &     \let{p = \btrue}
    = & \bimpl(\band(\bimpl(\btrue,r),\bimpl(q,s)),\bimpl(\band(\btrue,q),\band(r,s))) \\
  & = & \bimpl(\band(\bimpl(\btrue,r),\bimpl(q,s)),\bimpl(q,\band(r,s))) \\
- & = & \bimpl(\band(r,\bimpl(q,s)),\bimpl(q,\band(r,s))) \\
+ &     \href{@implies@#thm-implies-true-hyp}
+   = & \bimpl(\band(r,\bimpl(q,s)),\bimpl(q,\band(r,s))) \\
  &     \let{r = \btrue}
    = & \bimpl(\band(\btrue,\bimpl(q,s)),\bimpl(q,\band(\btrue,s))) \\
  & = & \bimpl(\bimpl(q,s),\bimpl(q,\band(\btrue,s))) \\
- & = & \bimpl(\bimpl(q,s),\bimpl(q,s)) \\
- & = & \btrue
+ &     \href{@and@#thm-and-true-left}
+   = & \bimpl(\bimpl(q,s),\bimpl(q,s)) \\
+ &     \href{@implies@#thm-implies-self}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -427,9 +443,12 @@ $$\begin{eqnarray*}
  &   & \bimpl(\bimpl(r,q),\beq(\bif{\band(p,q)}{\btrue}{r},\bif{p}{q}{r})) \\
  & = & \bimpl(\bimpl(r,\btrue),\beq(\bif{\band(p,\btrue)}{\btrue}{r},\bif{p}{\btrue}{r})) \\
  & = & \bimpl(\btrue,\beq(\bif{\band(p,\btrue)}{\btrue}{r},\bif{p}{\btrue}{r})) \\
- & = & \bimpl(\btrue,\beq(\bif{p}{\btrue}{r},\bif{p}{\btrue}{r})) \\
- & = & \bimpl(\btrue,\btrue) \\
- & = & \btrue
+ &     \href{@and@#thm-and-true-right}
+   = & \bimpl(\btrue,\beq(\bif{p}{\btrue}{r},\bif{p}{\btrue}{r})) \\
+ &     \href{@booleans@#thm-eq-reflexive}
+   = & \bimpl(\btrue,\btrue) \\
+ &     \href{@implies@#thm-implies-true-hyp}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed. If $q = \bfalse$ and $r = \bfalse$, we have
 $$\begin{eqnarray*}
@@ -437,13 +456,17 @@ $$\begin{eqnarray*}
  &     \let{q = \bfalse}
    = & \bimpl(\bimpl(r,\bfalse),\beq(\bif{\band(p,\bfalse)}{\btrue}{r},\bif{p}{\bfalse}{r})) \\
  & = & \bimpl(\bnot(r),\beq(\bif{\bfalse}{\btrue}{r},\bif{p}{\bfalse}{r})) \\
- & = & \bimpl(\bnot(r),\beq(r,\bif{p}{\bfalse}{r})) \\
+ &     \href{@booleans@#cor-if-false}
+   = & \bimpl(\bnot(r),\beq(r,\bif{p}{\bfalse}{r})) \\
  &     \let{r = \bfalse}
    = & \bimpl(\bnot(\bfalse),\beq(\bfalse,\bif{p}{\bfalse}{\bfalse})) \\
  & = & \bimpl(\btrue,\beq(\bfalse,\bif{p}{\bfalse}{\bfalse})) \\
- & = & \bimpl(\btrue,\beq(\bfalse,\bfalse)) \\
- & = & \bimpl(\btrue,\btrue) \\
- & = & \btrue
+ &     \href{@booleans@#thm-if-same}
+   = & \bimpl(\btrue,\beq(\bfalse,\bfalse)) \\
+ &     \href{@booleans@#thm-eq-reflexive}
+   = & \bimpl(\btrue,\btrue) \\
+ &     \href{@implies@#thm-implies-true-hyp}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed. And if $q = \bfalse$ and $r = \btrue$, we have
 $$\begin{eqnarray*}
@@ -453,7 +476,8 @@ $$\begin{eqnarray*}
  &     \let{r = \btrue}
    = & \bimpl(\bimpl(\btrue,\bfalse),\beq(\bif{\band(p,\bfalse)}{\btrue}{\btrue},\bif{p}{\bfalse}{\btrue})) \\
  & = & \bimpl(\bfalse,\beq(\bif{\band(p,\bfalse)}{\btrue}{\btrue},\bif{p}{\bfalse}{\btrue})) \\
- & = & \btrue
+ &     \href{@implies@#thm-implies-false-hyp}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

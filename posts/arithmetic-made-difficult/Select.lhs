@@ -370,7 +370,8 @@ $$\begin{eqnarray*}
  & = & \all(\beq(\zero,\length(-)),\cons(\nil,\nil)) \\
  & = & \band(\beq(\zero,\length(\nil)),\all(\beq(\zero,\length(-)),\nil)) \\
  & = & \band(\beq(\zero,\zero),\btrue) \\
- & = & \band(\btrue,\btrue) \\
+ &     \href{@booleans@#thm-eq-reflexive}
+   = & \band(\btrue,\btrue) \\
  &     \href{@and@#thm-and-eval-true-true}
    = & \btrue
 \end{eqnarray*}$$
