@@ -36,6 +36,7 @@ In Haskell:
 First, the basic logic operators lift.
 
 :::::: definition ::
+[]{#def-pnot}
 Let $A$ be a set. We define $\pnot : \bool^A \rightarrow \bool^A$ by $$\pnot(p)(a) = \bnot(p(a)).$$
 
 In Haskell:

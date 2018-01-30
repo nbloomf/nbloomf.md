@@ -537,8 +537,14 @@ Now that we've algebraified truth values, we will also algebraify equality. Typi
 > instance Equal () where
 >   eq () () = true
 
+All our instances of `Equal` will be assumed to satisfy the following.
+
 :::::: axiom :::::::
-[]{#thm-eq-reflexive} Let $A$ be a set. For all $a \in A$, we have $\beq(a,a) = \btrue$.
+[]{#thm-eq-reflexive}[]{#thm-eq-symmetric}
+Let $A$ be a set.
+
+1. For all $a \in A$, we have $\beq(a,a) = \btrue$.
+2. For all $a,b \in A$, we have $\beq(a,b) = \beq(b,a)$.
 :::::::::::::::::::: 
 
 

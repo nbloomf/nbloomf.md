@@ -12,6 +12,7 @@
 @booleans@#thm-if-commute-false	\\bif{p}{a}{\\bif{q}{a}{b}} = \\bif{q}{a}{\\bif{p}{a}{b}}
 @booleans@#thm-if-func-two	f(\\bif{p}{a}{b},\\bif{p}{c}{d}) = \\bif{p}{f(a,c)}{f(b,d)}
 @booleans@#thm-eq-reflexive	\\beq(a,a) = \\btrue
+@booleans@#thm-eq-symmetric	\\beq(a,b) = \\beq(b,a)
 #=======================#
 #--- not ---------------#
 #=======================#
@@ -74,6 +75,10 @@
 @implies@#thm-implies-left-commutative	\\bimpl(p,\\bimpl(q,r)) = \\bimpl(q,\\bimpl(p,r))
 @implies@#thm-implies-transitive	\\bimpl(\\bimpl(p,q),\\bimpl(\\bimpl(q,r),\\bimpl(p,r))) = \\btrue
 @implies@#thm-implies-distribute	\\bimpl(\\bimpl(p,\\bimpl(q,r)),\\bimpl(\\bimpl(p,q),\\bimpl(p,r))) = \\btrue
+#=======================#
+#--- predicates --------#
+#=======================#
+@predicates@#def-pnot	\\pnot(p)(a) = \\bnot(p(a))
 #=======================#
 #--- disjoint-unions ---#
 #=======================#
