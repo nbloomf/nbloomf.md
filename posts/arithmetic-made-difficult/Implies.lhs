@@ -40,7 +40,8 @@ For all $p,q \in \bool$, we have $$\bimpl(p,q) = \bor(\bnot(p),q).$$
 If $p = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bimpl(\bfalse,q) \\
- & = & \bif{\bfalse}{q}{\btrue} \\
+ &     \href{@implies@#def-implies}
+   = & \bif{\bfalse}{q}{\btrue} \\
  &     \href{@booleans@#cor-if-false}
    = & \btrue \\
  &     \href{@or@#thm-or-true-left}
@@ -51,7 +52,8 @@ $$\begin{eqnarray*}
 as needed. Suppose then that $p = \btrue$. Then
 $$\begin{eqnarray*}
  &   & \bimpl(\btrue,q) \\
- & = & \bif{\btrue}{q}{\btrue} \\
+ &     \href{@implies@#def-implies}
+   = & \bif{\btrue}{q}{\btrue} \\
  &     \href{@booleans@#cor-if-true}
    = & q \\
  & = & \bor(\bfalse,q) \\
@@ -82,7 +84,8 @@ If $p \in \bool$, we have $\bimpl(\bfalse,p) = \btrue$.
 We have
 $$\begin{eqnarray*}
  &   & \bimpl(\bfalse,p) \\
- & = & \bor(\bnot(\bfalse),p) \\
+ &     \href{@implies@#thm-implies-or}
+   = & \bor(\bnot(\bfalse),p) \\
  &     \href{@not@#thm-not-false}
    = & \bor(\btrue,p) \\
  &     \href{@or@#thm-or-true-left}
@@ -112,7 +115,8 @@ For all $p \in \bool$ we have $\bimpl(\btrue,p) = p$.
 We have
 $$\begin{eqnarray*}
  &   & \bimpl(\btrue,p) \\
- & = & \bor(\bnot(\btrue),p) \\
+ &     \href{@implies@#thm-implies-or}
+   = & \bor(\bnot(\btrue),p) \\
  &     \href{@not@#thm-not-true}
    = & \bor(\bfalse,p) \\
  &     \href{@or@#thm-or-false-left}
@@ -142,14 +146,16 @@ If $p \in \bool$ we have $\bimpl(p,p) = \btrue$.
 If $p = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \bimpl(\btrue,\btrue) \\
- & = & \bor(\bnot(\btrue),\btrue) \\
+ &     \href{@implies@#thm-implies-or}
+   = & \bor(\bnot(\btrue),\btrue) \\
  &     \href{@or@#thm-or-true-right}
    = & \btrue
 \end{eqnarray*}$$
 as claimed. If $p = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bimpl{\bfalse,\bfalse} \\
- & = & \btrue
+ &     \href{@implies@#thm-implies-false-hyp}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -211,8 +217,10 @@ For all $p,q,r \in \bool$ we have $$\bimpl(p,\bimpl(q,r)) = \bimpl(q,\bimpl(p,r)
 We have
 $$\begin{eqnarray*}
  &   & \bimpl(p,\bimpl(q,r)) \\
- & = & \bor(\bnot(p),\bimpl(q,r)) \\
- & = & \bor(\bnot(p),\bor(\bnot(q),r)) \\
+ &     \href{@implies@#thm-implies-or}
+   = & \bor(\bnot(p),\bimpl(q,r)) \\
+ &     \href{@implies@#thm-implies-or}
+   = & \bor(\bnot(p),\bor(\bnot(q),r)) \\
  &     \href{@or@#thm-or-associative}
    = & \bor(\bor(\bnot(p),\bnot(q)),r) \\
  &     \href{@or@#thm-or-commutative}
@@ -248,7 +256,8 @@ $$\begin{eqnarray*}
  &   & \bimpl(\bimpl(p,q),\bimpl(\bimpl(q,r),\bimpl(p,r))) \\
  & = & \bimpl(\bor(\bnot(p),q),\bor(\bnot(\bimpl(q,r)),\bimpl(p,r))) \\
  & = & \bimpl(\bor(\bnot(p),q),\bor(\bnot(\bor(\bnot(q),r)),\bor(\bnot(p),r))) \\
- & = & \bor(\bnot(\bor(\bnot(p),q)),\bor(\bnot(\bor(\bnot(q),r)),\bor(\bnot(p),r))) \\
+ &     \href{@implies@#thm-implies-or}
+   = & \bor(\bnot(\bor(\bnot(p),q)),\bor(\bnot(\bor(\bnot(q),r)),\bor(\bnot(p),r))) \\
  &     \href{@or@#thm-demorgan-not-or}
    = & \bor(\band(\bnot(\bnot(p)),\bnot(q)),\bor(\bnot(\bor(\bnot(q),r)),\bor(\bnot(p),r))) \\
  & = & \bor(\band(p,\bnot(q)),\bor(\bnot(\bor(\bnot(q),r)),\bor(\bnot(p),r))) \\
@@ -311,15 +320,18 @@ $$\begin{eqnarray*}
  &   & \bimpl(\bimpl(p,\bimpl(q,r)),\bimpl(\bimpl(p,q),\bimpl(p,r))) \\
  & = & \bimpl(\bimpl(\bfalse,\bimpl(q,r)),\bimpl(\bimpl(\bfalse,q),\bimpl(\bfalse,r))) \\
  & = & \bimpl(\btrue,\bimpl(\btrue,\btrue)) \\
- & = & \bimpl(\btrue,\btrue) \\
- & = & \btrue.
+ &     \href{@implies@#thm-implies-true-hyp}
+   = & \bimpl(\btrue,\btrue) \\
+ &     \href{@implies@#thm-implies-true-hyp}
+   = & \btrue
 \end{eqnarray*}$$
 Suppose instead that $p = \btrue$. Now
 $$\begin{eqnarray*}
  &   & \bimpl(\bimpl(p,\bimpl(q,r)),\bimpl(\bimpl(p,q),\bimpl(p,r))) \\
  & = & \bimpl(\bimpl(\btrue,\bimpl(q,r)),\bimpl(\bimpl(\btrue,q),\bimpl(\btrue,r))) \\
  & = & \bimpl(\bimpl(q,r),\bimpl(q,r)) \\
- & = & \btrue
+ &     \href{@implies@#thm-implies-self}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -354,14 +366,16 @@ $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \bimpl(p,r) \\
  & = & \bimpl(\btrue,r) \\
- & = & r,
+ &     \href{@implies@#thm-implies-true-hyp}
+   = & r
 \end{eqnarray*}$$
 and similarly $s = \btrue$. Then
 $$\begin{eqnarray*}
  &   & \bimpl(\band(p,q),\band(r,s)) \\
  & = & \bimpl(\band(\btrue,\btrue),\band(\btrue,\btrue)) \\
  & = & \bimpl(\btrue,\btrue) \\
- & = & \btrue
+ &     \href{@implies@#thm-implies-true-hyp}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

@@ -291,7 +291,8 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \bimpl(\all(p,\nil),\all(q,\nil)) \\
  & = & \bimpl(\btrue,\btrue) \\
- & = & \btrue
+ &     \href{@implies@#thm-implies-true-hyp}
+   = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the implication holds for some $x$ and let $a \in A$. Now $\bimpl(p(a),q(a))$, and by the induction hypothesis $\bimpl(\all(p,x),\all(q,x))$. Then we have
 $$\begin{eqnarray*}
