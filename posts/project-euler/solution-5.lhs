@@ -1,5 +1,5 @@
 ---
-title: Project Euler #5: Smallest Multiple
+title: "Project Euler #5: Smallest Multiple"
 author: nbloomf
 date: 2017-03-10
 tags: project-euler, literate-haskell

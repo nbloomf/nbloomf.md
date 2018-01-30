@@ -1,5 +1,5 @@
 ---
-title: Project Euler #6: Sum Square Difference
+title: "Project Euler #6: Sum Square Difference"
 author: nbloomf
 date: 2017-03-11
 tags: project-euler, literate-haskell

@@ -1,5 +1,5 @@
 ---
-title: Project Euler #2: Even Fibonacci Numbers
+title: "Project Euler #2: Even Fibonacci Numbers"
 author: nbloomf
 date: 2017-03-06
 tags: project-euler, literate-haskell

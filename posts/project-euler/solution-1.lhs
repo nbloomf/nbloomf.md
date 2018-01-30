@@ -1,5 +1,5 @@
 ---
-title: Project Euler #1: Multiples of 3 and 5
+title: "Project Euler #1: Multiples of 3 and 5"
 author: nbloomf
 date: 2017-03-05
 tags: project-euler, literate-haskell

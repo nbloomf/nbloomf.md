@@ -1,5 +1,5 @@
 ---
-title: Project Euler #7: 10001st Prime
+title: "Project Euler #7: 10001st Prime"
 author: nbloomf
 date: 2017-03-12
 tags: project-euler, literate-haskell
