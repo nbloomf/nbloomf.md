@@ -17,6 +17,7 @@ slug: take-drop
 > import And
 > import Or
 > import Implies
+> import Functions
 > import Tuples
 > import NaturalNumbers
 > import BailoutRecursion

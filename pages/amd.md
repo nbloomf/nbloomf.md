@@ -12,6 +12,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * [And](/posts/arithmetic-made-difficult/And.html)
         * [Or](/posts/arithmetic-made-difficult/Or.html)
         * [Implies](/posts/arithmetic-made-difficult/Implies.html)
+    * [Functions](/posts/arithmetic-made-difficult/Functions.html)
     * [Predicates](/posts/arithmetic-made-difficult/Predicates.html)
     * [Tuples](/posts/arithmetic-made-difficult/Tuples.html)
     * [Disjoint Unions](/posts/arithmetic-made-difficult/DisjointUnions.html)

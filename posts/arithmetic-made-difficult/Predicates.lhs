@@ -49,6 +49,7 @@ In Haskell:
 $\pnot$ is an involution.
 
 :::::: theorem :::::
+[]{#thm-pnot-involution}
 Let $A$ be a set. For all $p : A \rightarrow \bool$, we have $$\pnot(\pnot(p)) = p.$$
 
 ::: proof ::::::::::

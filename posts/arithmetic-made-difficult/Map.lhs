@@ -17,6 +17,7 @@ slug: map
 > import And
 > import Or
 > import Implies
+> import Functions
 > import DisjointUnions
 > import NaturalNumbers
 > import Lists

@@ -17,6 +17,7 @@ slug: choose
 > import And
 > import Or
 > import Implies
+> import Functions
 > import NaturalNumbers
 > import DoubleNaturalRecursion
 > import Plus

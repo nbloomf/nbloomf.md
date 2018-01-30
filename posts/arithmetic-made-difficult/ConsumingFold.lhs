@@ -17,6 +17,7 @@ slug: cfoldr
 > import And
 > import Or
 > import Implies
+> import Functions
 > import Unary
 > import Lists
 

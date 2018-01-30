@@ -76,9 +76,22 @@
 @implies@#thm-implies-transitive	\\bimpl(\\bimpl(p,q),\\bimpl(\\bimpl(q,r),\\bimpl(p,r))) = \\btrue
 @implies@#thm-implies-distribute	\\bimpl(\\bimpl(p,\\bimpl(q,r)),\\bimpl(\\bimpl(p,q),\\bimpl(p,r))) = \\btrue
 #=======================#
+#--- functions ---------#
+#=======================#
+@functions@#def-id	\\id(x) = x
+@functions@#def-compose	\\compose(g)(f)(x) = g(f(x))
+@functions@#thm-compose-id-left	\\compose(\\id)(f) = f
+@functions@#thm-compose-id-right	\\compose(f)(\\id) = f
+@functions@#thm-compose-associative	\\compose(h)(\\compose(g)(f)) = \\compose(\\compose(h)(g))(f)
+@functions@#def-const	\\const(b)(a) = b
+@functions@#thm-compose-const-left	\\compose(\\const(c))(f) = \\const(c)
+@functions@#def-flip	\\flip(f)(b)(a) = f(a)(b)
+@functions@#thm-flip-involution	\\flip(\\flip(f)) = f
+#=======================#
 #--- predicates --------#
 #=======================#
 @predicates@#def-pnot	\\pnot(p)(a) = \\bnot(p(a))
+@predicates@#thm-pnot-involution	\\pnot(\\pnot(p)) = p
 #=======================#
 #--- disjoint-unions ---#
 #=======================#

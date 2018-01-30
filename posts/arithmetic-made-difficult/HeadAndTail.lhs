@@ -17,6 +17,7 @@ slug: head-tail
 > import And
 > import Or
 > import Implies
+> import Functions
 > import Tuples
 > import DisjointUnions
 > import NaturalNumbers

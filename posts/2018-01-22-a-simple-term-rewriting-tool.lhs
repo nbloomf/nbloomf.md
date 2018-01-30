@@ -391,6 +391,7 @@ And `main`. In a departure from the unix philosophy, in verify mode we'll report
 >       putStrLn $ unlines
 >         [ "usage:"
 >         , "  --verify       : validate rewrites on stdin"
+>         , "  --substitute   : validate substitutions on stdin"
 >         , "  --suggest PATH : suggest rewrite rules from PATH on stdin"
 >         ]
 

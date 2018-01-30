@@ -19,6 +19,7 @@ slug: disjoint-unions
 > import And
 > import Or
 > import Implies
+> import Functions
 
 Dual to sets of tuples are disjoint sums.
 

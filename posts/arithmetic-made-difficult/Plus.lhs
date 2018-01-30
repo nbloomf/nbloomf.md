@@ -17,6 +17,7 @@ slug: plus
 > import And
 > import Or
 > import Implies
+> import Functions
 > import NaturalNumbers
 > import SimpleRecursion
 
