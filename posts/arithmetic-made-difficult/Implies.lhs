@@ -56,7 +56,8 @@ $$\begin{eqnarray*}
    = & \bif{\btrue}{q}{\btrue} \\
  &     \href{@booleans@#cor-if-true}
    = & q \\
- & = & \bor(\bfalse,q) \\
+ &     \href{@or@#thm-or-false-left}
+   = & \bor(\bfalse,q) \\
  &     \href{@not@#thm-not-true}
    = & \bor(\bnot(\btrue),q)
 \end{eqnarray*}$$
@@ -181,7 +182,10 @@ For all $p,q \in \bool$ we have $\bor(\bimpl(p,q),\bimpl(q,p))$.
 We have
 $$\begin{eqnarray*}
  &   & \bor(\bimpl(p,q),\bimpl(q,p)) \\
- & = & \bor(\bor(\bnot(p),q),\bor(\bnot(q),p)) \\
+ &     \href{@implies@#thm-implies-or}
+   = & \bor(\bor(\bnot(p),q),\bimpl(q,p)) \\
+ &     \href{@implies@#thm-implies-or}
+   = & \bor(\bor(\bnot(p),q),\bor(\bnot(q),p)) \\
  &     \href{@or@#thm-or-associative}
    = & \bor(\bnot(p),\bor(q,\bor(\bnot(q),p))) \\
  &     \href{@or@#thm-or-associative}
@@ -227,8 +231,10 @@ $$\begin{eqnarray*}
    = & \bor(\bor(\bnot(q),\bnot(p)),r) \\
  &     \href{@or@#thm-or-associative}
    = & \bor(\bnot(q),\bor(\bnot(p),r)) \\
- & = & \bor(\bnot(q),\bimpl(p,r)) \\
- &   & \bimpl(q,\bimpl(p,r))
+ &     \href{@implies@#thm-implies-or}
+   = & \bor(\bnot(q),\bimpl(p,r)) \\
+ &     \href{@implies@#thm-implies-or}
+   = & \bimpl(q,\bimpl(p,r))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
