@@ -21,6 +21,7 @@ slug: predicates
 In the last post we defined the algebra of boolean values, true and false. Today we'll look at *predicates* -- functions from some set $A$ to $\bool$. It turns out the algebra on $\bool$ can be lifted to predicates, and is useful enough to collect some definitions and properties in one place.
 
 :::::: definition ::
+[]{#def-ptrue}[]{#def-pfalse}
 Let $A$ be a set. A *predicate* on $A$ is just a function $p : A \rightarrow \bool$. We define two special predicates, $\ptrue = \const(\btrue)$ and $\pfalse = \const(\bfalse)$.
 
 In Haskell:
@@ -60,7 +61,8 @@ $$\begin{eqnarray*}
    = & \bnot(\pnot(p)(a)) \\
  &     \href{@predicates@#def-pnot}
    = & \bnot(\bnot(p(a))) \\
- & = & p(a)
+ &     \href{@not@#thm-not-involution}
+   = & p(a)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -92,13 +94,16 @@ $$\begin{eqnarray*}
  &   & \pnot(\ptrue)(a) \\
  &     \href{@predicates@#def-pnot}
    = & \bnot(\ptrue(a)) \\
- & = & \bnot(\const(\btrue)(a)) \\
+ &     \href{@predicates@#def-ptrue}
+   = & \bnot(\const(\btrue)(a)) \\
  &     \href{@functions@#def-const}
    = & \bnot(\btrue) \\
  &     \href{@not@#thm-not-true}
    = & \bfalse \\
- & = & \const(\bfalse)(a) \\
- & = & \pfalse(a)
+ &     \href{@functions@#def-const}
+   = & \const(\bfalse)(a) \\
+ &     \href{@predicates@#def-pfalse}
+   = & \pfalse(a)
 \end{eqnarray*}$$
 as needed.
 2. If $a \in A$, we have
@@ -106,13 +111,16 @@ $$\begin{eqnarray*}
  &   & \pnot(\pfalse)(a) \\
  &     \href{@predicates@#def-pnot}
    = & \bnot(\pfalse(a)) \\
- & = & \bnot(\const(\bfalse)(a)) \\
+ &     \href{@predicates@#def-pfalse}
+   = & \bnot(\const(\bfalse)(a)) \\
  &     \href{@functions@#def-const}
    = & \bnot(\bfalse) \\
  &     \href{@not@#thm-not-false}
    = & \btrue \\
- & = & \const(\btrue)(a) \\
- & = & \ptrue(a)
+ &     \href{@functions@#def-const}
+   = & \const(\btrue)(a) \\
+ &     \href{@predicates@#def-ptrue}
+   = & \ptrue(a)
 \end{eqnarray*}$$
 as needed.
 3. If $a \in A$, we have

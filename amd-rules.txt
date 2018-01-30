@@ -19,7 +19,7 @@
 @not@#def-not	\\bnot(p) = \\bif{p}{\\bfalse}{\\btrue}
 @not@#thm-not-true	\\bnot(\\btrue) = \\bfalse
 @not@#thm-not-false	\\bnot(\\bfalse) = \\btrue
-@not@#thm-not-involution	\\bnot(p) = p	
+@not@#thm-not-involution	\\bnot(\\bnot(p)) = p	
 @not@#thm-ifnot	\\bif{\\bnot(p)}{a}{b} = \bif{p}{b}{a}
 #=======================#
 #--- and ---------------#
@@ -90,6 +90,8 @@
 #=======================#
 #--- predicates --------#
 #=======================#
+@predicates@#def-ptrue	\\ptrue = \\const(\\btrue)
+@predicates@#def-pfalse	\\pfalse = \\const(\\bfalse)
 @predicates@#def-pnot	\\pnot(p)(a) = \\bnot(p(a))
 @predicates@#thm-pnot-involution	\\pnot(\\pnot(p)) = p
 #=======================#
