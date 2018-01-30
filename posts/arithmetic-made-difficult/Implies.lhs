@@ -20,6 +20,7 @@ slug: implies
 Next we define implication on booleans.
 
 :::::: definition ::
+[]{#def-implies}
 We define $\bimpl : \bool \times \bool \rightarrow \bool$ by $$\bimpl(p,q) = \bif{p}{q}{\btrue}.$$
 
 In Haskell:
@@ -32,6 +33,7 @@ In Haskell:
 $\bimpl$ is equivalent to an $\bor$.
 
 :::::: theorem :::::
+[]{#thm-implies-or}
 For all $p,q \in \bool$, we have $$\bimpl(p,q) = \bor(\bnot(p),q).$$
 
 ::: proof ::::::::::
@@ -41,7 +43,8 @@ $$\begin{eqnarray*}
  & = & \bif{\bfalse}{q}{\btrue} \\
  &     \href{@booleans@#cor-if-false}
    = & \btrue \\
- & = & \bor(\btrue,q) \\
+ &     \href{@or@#thm-or-true-left}
+   = & \bor(\btrue,q) \\
  &     \href{@not@#thm-not-false}
    = & \bor(\bnot(\bfalse),q)
 \end{eqnarray*}$$
@@ -72,6 +75,7 @@ as needed.
 $\bfalse$ implies anything.
 
 :::::: theorem :::::
+[]{#thm-implies-false-hyp}
 If $p \in \bool$, we have $\bimpl(\bfalse,p) = \btrue$.
 
 ::: proof ::::::::::
@@ -81,7 +85,8 @@ $$\begin{eqnarray*}
  & = & \bor(\bnot(\bfalse),p) \\
  &     \href{@not@#thm-not-false}
    = & \bor(\btrue,p) \\
- & = & \btrue
+ &     \href{@or@#thm-or-true-left}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -100,6 +105,7 @@ as claimed.
 $\btrue$ is left-neutral.
 
 :::::: theorem :::::
+[]{#thm-implies-true-hyp}
 For all $p \in \bool$ we have $\bimpl(\btrue,p) = p$.
 
 ::: proof ::::::::::
@@ -109,7 +115,8 @@ $$\begin{eqnarray*}
  & = & \bor(\bnot(\btrue),p) \\
  &     \href{@not@#thm-not-true}
    = & \bor(\bfalse,p) \\
- & = & p
+ &     \href{@or@#thm-or-false-left}
+   = & p
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -128,7 +135,8 @@ as claimed.
 $\bimpl$ is... idemp-constant? Not sure what to call this.
 
 :::::: theorem :::::
-If $p \in \bool$ we have $\bimpl(p,p)$.
+[]{#thm-implies-self}
+If $p \in \bool$ we have $\bimpl(p,p) = \btrue$.
 
 ::: proof ::::::::::
 If $p = \btrue$, we have
@@ -137,6 +145,11 @@ $$\begin{eqnarray*}
  & = & \bor(\bnot(\btrue),\btrue) \\
  &     \href{@or@#thm-or-true-right}
    = & \btrue
+\end{eqnarray*}$$
+as claimed. If $p = \bfalse$, we have
+$$\begin{eqnarray*}
+ &   & \bimpl{\bfalse,\bfalse} \\
+ & = & \btrue
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -155,6 +168,7 @@ as claimed.
 $\bimpl$ is antisymmetric.
 
 :::::: theorem :::::
+[]{#thm-implies-antisymmetric}
 For all $p,q \in \bool$ we have $\bor(\bimpl(p,q),\bimpl(q,p))$.
 
 ::: proof ::::::::::
@@ -190,6 +204,7 @@ as needed.
 $\bimpl$ is left-commutative.
 
 :::::: theorem :::::
+[]{#thm-implies-left-commutative}
 For all $p,q,r \in \bool$ we have $$\bimpl(p,\bimpl(q,r)) = \bimpl(q,\bimpl(p,r)).$$
 
 ::: proof ::::::::::
@@ -224,6 +239,7 @@ as claimed.
 $\bimpl$ has a kind of transitivity.
 
 :::::: theorem :::::
+[]{#thm-implies-transitive}
 For all $p,q,r \in \bool$ we have $$\bimpl(\bimpl(p,q),\bimpl(\bimpl(q,r),\bimpl(p,r))).$$
 
 ::: proof ::::::::::
@@ -286,6 +302,7 @@ as needed.
 $\bimpl$ has a kind of distributivity.
 
 :::::: theorem :::::
+[]{#thm-implies-distribute}
 For all $p,q,r \in \bool$ we have $$\bimpl(\bimpl(p,\bimpl(q,r)),\bimpl(\bimpl(p,q),\bimpl(p,r))).$$
 
 ::: proof ::::::::::
@@ -412,7 +429,6 @@ as needed.
 
 ::::::::::::::::::::
 ::::::::::::::::::::
-
 
 
 Testing

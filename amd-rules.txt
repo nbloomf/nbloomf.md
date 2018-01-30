@@ -60,6 +60,18 @@
 @or@#thm-or-is-if	\\bor(p,q) = \\bif{p}{\btrue}{q}
 @or@#thm-or-if-hyp	\\bif{\\bor(p,q)}{a}{b} = \\bif{p}{a}{\\bif{q}{a}{b}}
 #=======================#
+#--- implies -----------#
+#=======================#
+@implies@#def-implies	\\bimpl(p,q) = \\bif{p}{q}{\\btrue}
+@implies@#thm-implies-or	\\bimpl(p,q) = \\bor(\\bnot(p),q)
+@implies@#thm-implies-false-hyp	\\bimpl(\\bfalse,p) = \\btrue
+@implies@#thm-implies-true-hyp	\\bimpl(\\btrue,p) = p
+@implies@#thm-implies-self	\\bimpl(p,p) = \\btrue
+@implies@#thm-implies-antisymmetric	\\bor(\\bimpl(p,q),\\bimpl(q,p)) = \\btrue
+@implies@#thm-implies-left-commutative	\\bimpl(p,\\bimpl(q,r)) = \\bimpl(q,\\bimpl(p,r))
+@implies@#thm-implies-transitive	\\bimpl(\\bimpl(p,q),\\bimpl(\\bimpl(q,r),\\bimpl(p,r))) = \\btrue
+@implies@#thm-implies-distribute	\\bimpl(\\bimpl(p,\\bimpl(q,r)),\\bimpl(\\bimpl(p,q),\\bimpl(p,r))) = \\btrue
+#=======================#
 #--- disjoint-unions ---#
 #=======================#
 @disjoint-unions@#dfn-disjoint-unions-isRgt	\\isRgt = \\either(\\const(\\bfalse),\\const(\\btrue))
