@@ -73,14 +73,16 @@ similarly. By the universal property of $A + B$, we thus have $$\Psi = \either(\
 2. Suppose to the contrary that we have $z \in A + B$ with $\lft(a) = z = \rgt(b)$ for some $a \in A$ and $b \in B$, and consider now $\Theta : A+B \rightarrow \bool$ given by $$\Theta = \either(\const(\btrue),\const(\bfalse)).$$ We then have
 $$\begin{eqnarray*}
  &   & \btrue \\
- & = & \const(\btrue)(a) \\
+ &     \href{@functions@#def-const}
+   = & \const(\btrue)(a) \\
  & = & (\Theta \circ \lft)(a) \\
  & = & \Theta(\lft(a)) \\
  & = & \Theta(z) \\
  & = & \Theta(\rgt(b)) \\
  & = & (\Theta \circ \rgt)(b) \\
  & = & \const(\bfalse)(b) \\
- & = & \bfalse,
+ &     \href{@functions@#def-const}
+   = & \bfalse
 \end{eqnarray*}$$
 which is absurd.
 3. Let $u,v \in A$, and suppose $\lft(u) = \lft(v)$. Now define $f : A \rightarrow \bool$ by
@@ -571,7 +573,8 @@ $$\begin{eqnarray*}
  &     \href{@disjoint-unions@#dfn-disjoint-unions-isLft}
    = & \either(\const(\btrue),\const(\bfalse))(\lft(a)) \\
  & = & \const(\btrue)(a) \\
- & = & \btrue
+ &     \href{@functions@#def-const}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed.
 2. We have
@@ -580,7 +583,8 @@ $$\begin{eqnarray*}
  &     \href{@disjoint-unions@#dfn-disjoint-unions-isLft}
    = & \either(\const(\btrue),\const(\bfalse))(\rgt(b)) \\
  & = & \const(\bfalse)(b) \\
- & = & \bfalse
+ &     \href{@functions@#def-const}
+   = & \bfalse
 \end{eqnarray*}$$
 as claimed.
 3. We have
@@ -589,7 +593,8 @@ $$\begin{eqnarray*}
  &     \href{@disjoint-unions@#dfn-disjoint-unions-isRgt}
    = & \either(\const(\bfalse),\const(\btrue))(\lft(a)) \\
  & = & \const(\bfalse)(a) \\
- & = & \bfalse
+ &     \href{@functions@#def-const}
+   = & \bfalse
 \end{eqnarray*}$$
 as claimed.
 4. We have
@@ -598,7 +603,8 @@ $$\begin{eqnarray*}
  &     \href{@disjoint-unions@#dfn-disjoint-unions-isRgt}
    = & \either(\const(\bfalse),\const(\btrue))(\rgt(b)) \\
  & = & \const(\btrue)(b) \\
- & = & \btrue
+ &     \href{@functions@#def-const}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

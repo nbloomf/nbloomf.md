@@ -56,8 +56,10 @@ Let $A$ be a set. For all $p : A \rightarrow \bool$, we have $$\pnot(\pnot(p)) =
 Let $a \in A$. Then we have
 $$\begin{eqnarray*}
  &   & \pnot(\pnot(p))(a) \\
- & = & \bnot(\pnot(p)(a)) \\
- & = & \bnot(\bnot(p(a))) \\
+ &     \href{@predicates@#def-pnot}
+   = & \bnot(\pnot(p)(a)) \\
+ &     \href{@predicates@#def-pnot}
+   = & \bnot(\bnot(p(a))) \\
  & = & p(a)
 \end{eqnarray*}$$
 as needed.
@@ -88,9 +90,11 @@ Let $A$ be a set. Then we have the following.
 1. If $a \in A$, we have
 $$\begin{eqnarray*}
  &   & \pnot(\ptrue)(a) \\
- & = & \bnot(\ptrue(a)) \\
+ &     \href{@predicates@#def-pnot}
+   = & \bnot(\ptrue(a)) \\
  & = & \bnot(\const(\btrue)(a)) \\
- & = & \bnot(\btrue) \\
+ &     \href{@functions@#def-const}
+   = & \bnot(\btrue) \\
  &     \href{@not@#thm-not-true}
    = & \bfalse \\
  & = & \const(\bfalse)(a) \\
@@ -100,9 +104,11 @@ as needed.
 2. If $a \in A$, we have
 $$\begin{eqnarray*}
  &   & \pnot(\pfalse)(a) \\
- & = & \bnot(\pfalse(a)) \\
+ &     \href{@predicates@#def-pnot}
+   = & \bnot(\pfalse(a)) \\
  & = & \bnot(\const(\bfalse)(a)) \\
- & = & \bnot(\bfalse) \\
+ &     \href{@functions@#def-const}
+   = & \bnot(\bfalse) \\
  &     \href{@not@#thm-not-false}
    = & \btrue \\
  & = & \const(\btrue)(a) \\
@@ -400,7 +406,8 @@ Let $A$ be a set. The following hold for all $p,q,r \in \bool^A$.
 1. For all $a \in A$, we have
 $$\begin{eqnarray*}
  &   & \pnot(\pand(p,q))(a) \\
- & = & \bnot(\pand(p,q)(a)) \\
+ &     \href{@predicates@#def-pnot}
+   = & \bnot(\pand(p,q)(a)) \\
  & = & \bnot(\band(p(a),q(a))) \\
  &     \href{@or@#thm-demorgan-not-and}
    = & \bor(\bnot(p(a)),\bnot(q(a))) \\
@@ -411,7 +418,8 @@ as needed.
 2. For all $a \in A$, we have
 $$\begin{eqnarray*}
  &   & \pnot(\por(p,q))(a) \\
- & = & \bnot(\por(p,q)(a)) \\
+ &     \href{@predicates@#def-pnot}
+   = & \bnot(\por(p,q)(a)) \\
  & = & \bnot(\bor(p(a),q(a))) \\
  &     \href{@or@#thm-demorgan-not-or}
    = & \band(\bnot(p(a)),\bnot(q(a))) \\

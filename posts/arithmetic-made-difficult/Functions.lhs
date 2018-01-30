@@ -55,15 +55,19 @@ Let $A$ and $B$ be sets, with $f : A \rightarrow B$. Then we have the following.
 1. Let $a \in A$. Then we have
 $$\begin{eqnarray*}
  &   & \compose(\id)(f)(a) \\
- & = & \id(f(a)) \\
- & = & f(a)
+ &     \href{@functions@#def-compose}
+   = & \id(f(a)) \\
+ &     \href{@functions@#def-id}
+   = & f(a)
 \end{eqnarray*}$$
 as needed.
 2. Let $a \in A$. Then we have
 $$\begin{eqnarray*}
  &   & \compose(f)(\id)(a) \\
- & = & f(\id(a)) \\
- & = & f(a)
+ &     \href{@functions@#def-compose}
+   = & f(\id(a)) \\
+ &     \href{@functions@#def-id}
+   = & f(a)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -95,10 +99,14 @@ Let $A$, $B$, $C$, and $D$ be sets. For all $f : A \rightarrow B$, $g : B \right
 Let $a \in A$. Then we have
 $$\begin{eqnarray*}
  &   & \compose(h)(\compose(g)(f))(a) \\
- & = & h(\compose(g)(f)(a)) \\
- & = & h(g(f(a))) \\
- & = & \compose(h)(g)(f(a)) \\
- & = & \compose(\compose(h)(g))(f)(a)
+ &     \href{@functions@#def-compose}
+   = & h(\compose(g)(f)(a)) \\
+ &     \href{@functions@#def-compose}
+   = & h(g(f(a))) \\
+ &     \href{@functions@#def-compose}
+   = & \compose(h)(g)(f(a)) \\
+ &     \href{@functions@#def-compose}
+   = & \compose(\compose(h)(g))(f)(a)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -139,9 +147,12 @@ Let $A$, $B$, and $C$ be sets. For all $f : A \rightarrow B$ and $c \in C$ we ha
 Let $a \in A$. Note that
 $$\begin{eqnarray*}
  &   & \compose(\const(c))(f)(a) \\
- & = & \const(c)(f(a)) \\
- & = & c \\
- & = & \const(c)(a)
+ &     \href{@functions@#def-compose}
+   = & \const(c)(f(a)) \\
+ &     \href{@functions@#def-const}
+   = & c \\
+ &     \href{@functions@#def-const}
+   = & \const(c)(a)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -180,8 +191,10 @@ Let $A$, $B$, and $C$ be sets. For all $f : A \rightarrow C^B$, we have $$\flip(
 Let $a \in A$ and $b \in B$. Then we have
 $$\begin{eqnarray*}
  &   & \flip(\flip(f))(a)(b) \\
- & = & \flip(f)(b)(a) \\
- & = & f(a)(b)
+ &     \href{@functions@#def-flip}
+   = & \flip(f)(b)(a) \\
+ &     \href{@functions@#def-flip}
+   = & f(a)(b)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

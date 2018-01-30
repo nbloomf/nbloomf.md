@@ -38,11 +38,13 @@ Let $A$ be a set. Then we have the following.
 1. We have
 $$\begin{eqnarray*}
  &   & \lft(\ast) \\
- & = & \id(\lft(\ast)) \\
+ &     \href{@functions@#def-id}
+   = & \id(\lft(\ast)) \\
  & = & (\uncons \circ \either(\const(\nil),\cons))(\lft(\ast)) \\
  & = & \uncons(\either(\const(\nil),\cons)(\lft(\ast))) \\
  & = & \uncons(\const(\nil)(\ast)) \\
- & = & \uncons(\nil)
+ &     \href{@functions@#def-const}
+   = & \uncons(\nil)
 \end{eqnarray*}$$
 as claimed.
 2. We have
@@ -72,7 +74,8 @@ $$\begin{eqnarray*}
  & = & (\either(\const(\nil),\cons) \circ \uncons)(z) \\
  & = & \either(\const(\nil),\cons)(\lft(\ast)) \\
  & = & \const(\nil)(\ast) \\
- & = & \nil,
+ &     \href{@functions@#def-const}
+   = & \nil
 \end{eqnarray*}$$
 and if $\uncons(z) = \rgt(a,x)$, then
 $$\begin{eqnarray*}

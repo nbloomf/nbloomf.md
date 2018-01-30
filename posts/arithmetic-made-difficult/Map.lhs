@@ -309,7 +309,8 @@ $$\begin{eqnarray*}
  &   & \at(\map(f)(\nil),k) \\
  & = & \at(\nil,k) \\
  & = & \lft(\ast) \\
- & = & \lft(\id(\ast)) \\
+ &     \href{@functions@#def-id}
+   = & \lft(\id(\ast)) \\
  & = & \uPair(\id,f)(\lft(\ast)) \\
  & = & \uPair(\id,f)(\at(\nil,k))
 \end{eqnarray*}$$

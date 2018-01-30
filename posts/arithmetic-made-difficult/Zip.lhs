@@ -294,7 +294,8 @@ as claimed.
 2. We have
 $$\begin{eqnarray*}
  &   & \zip(x,\zip(y,z)) \\
- & = & \id(\zip(x,\zip(y,z))) \\
+ &     \href{@functions@#def-id}
+   = & \id(\zip(x,\zip(y,z))) \\
  & = & \map(\id)(\zip(x,\zip(y,z))) \\
  & = & \map(\tAssocR \circ \tAssocL)(\zip(x,\zip(y,z))) \\
  & = & \map(\tAssocR)(\map(\tAssocL)(\zip(x,\zip(y,z)))) \\

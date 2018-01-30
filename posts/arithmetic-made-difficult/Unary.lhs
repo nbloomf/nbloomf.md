@@ -38,7 +38,8 @@ $$\begin{eqnarray*}
  &   & \Omega(\lft(\ast)) \\
  & = & \either(\const(\zero),\id)(\lft(\ast)) \\
  & = & \const(\zero)(\ast) \\
- & = & \zero
+ &     \href{@functions@#def-const}
+   = & \zero
 \end{eqnarray*}$$
 and if $x \in 1 + \nats$, we have two possibilities. If $x = \lft(\ast)$, we have
 $$\begin{eqnarray*}
@@ -46,7 +47,8 @@ $$\begin{eqnarray*}
  & = & \Omega((\rgt \circ \either(\const(\zero),\next))(\lft(\ast))) \\
  & = & \Omega(\rgt(\either(\const(\zero),\next)(\lft(\ast)))) \\
  & = & \Omega(\rgt(\const(\zero)(\ast))) \\
- & = & \Omega(\rgt(\zero)) \\
+ &     \href{@functions@#def-const}
+   = & \Omega(\rgt(\zero)) \\
  & = & \either(\const(\zero),\next)(\rgt(\zero)) \\
  & = & \next(\zero) \\
  & = & \next(\Omega(\lft(\ast)))
@@ -71,7 +73,8 @@ $$\begin{eqnarray*}
  & = & \either(\const(\zero),\next)(\natrec{\lft(\ast)}{\varphi}(\zero)) \\
  & = & \either(\const(\zero),\next)(\lft(\ast)) \\
  & = & \const(\zero)(\ast) \\
- & = & \zero \\
+ &     \href{@functions@#def-const}
+   = & \zero \\
  & = & n,
 \end{eqnarray*}$$
 and if the equality holds for $n$, we have
@@ -94,7 +97,8 @@ $$\begin{eqnarray*}
  & = & \Theta(\Omega(\lft(\ast))) \\
  & = & \Theta(\either(\const(\zero),\next)(\lft(\ast))) \\
  & = & \Theta(\const(\zero)(\ast)) \\
- & = & \Theta(\zero) \\
+ &     \href{@functions@#def-const}
+   = & \Theta(\zero) \\
  & = & \lft(\ast).
 \end{eqnarray*}$$
 To see that $(\Theta \circ \Omega)(\rgt(n)) = \rgt(n)$ for all $n \in \nats$, we proceed by induction. For the base case $n = \zero$ we have
@@ -109,7 +113,8 @@ $$\begin{eqnarray*}
  & = & (\rgt \circ \either(\const(\zero),\next))(\lft(\ast)) \\
  & = & \rgt(\either(\const(\zero),\next)(\lft(\ast))) \\
  & = & \rgt(\const(\zero)(\ast)) \\
- & = & \rgt(\zero) \\
+ &     \href{@functions@#def-const}
+   = & \rgt(\zero) \\
  & = & \rgt(n)
 \end{eqnarray*}$$
 as needed. For the inductive step, if the equality holds for some $n$, we have
@@ -173,7 +178,8 @@ $$\begin{eqnarray*}
  & = & \either(\const(\zero),\id)(\unnext(\zero)) \\
  & = & \either(\const(\zero),\id)(\lft(\ast)) \\
  & = & \const(\zero)(\ast) \\
- & = & \zero
+ &     \href{@functions@#def-const}
+   = & \zero
 \end{eqnarray*}$$
 as claimed.
 4. We have
@@ -183,7 +189,8 @@ $$\begin{eqnarray*}
  & = & \either(\const(\zero),\id)(\unnext(\next(n))) \\
  & = & \either(\const(\zero),\id)(\rgt(n)) \\
  & = & \id(n) \\
- & = & n
+ &     \href{@functions@#def-id}
+   = & n
 \end{eqnarray*}$$
 as claimed.
 5. We have
@@ -193,7 +200,8 @@ $$\begin{eqnarray*}
  & = & \either(\const(\btrue),\const(\bfalse))(\unnext(\zero)) \\
  & = & \either(\const(\btrue),\const(\bfalse))(\lft(\ast)) \\
  & = & \const(\btrue)(\ast) \\
- & = & \btrue
+ &     \href{@functions@#def-const}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed.
 6. We have
@@ -203,7 +211,8 @@ $$\begin{eqnarray*}
  & = & \either(\const(\btrue),\const(\bfalse))(\unnext(\next(n))) \\
  & = & \either(\const(\btrue),\const(\bfalse))(\rgt(n)) \\
  & = & \const(\bfalse)(n) \\
- & = & \bfalse
+ &     \href{@functions@#def-const}
+   = & \bfalse
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -223,7 +232,8 @@ $$\begin{eqnarray*}
  & = & \Omega(\unnext(n)) \\
  & = & \Omega(\lft(\ast)) \\
  & = & \const(\zero)(\ast) \\
- & = & \zero,
+ &     \href{@functions@#def-const}
+   = & \zero
 \end{eqnarray*}$$
 and in the second case we have
 $$\begin{eqnarray*}

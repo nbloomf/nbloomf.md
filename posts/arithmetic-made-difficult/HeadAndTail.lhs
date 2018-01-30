@@ -58,7 +58,8 @@ $$\begin{eqnarray*}
  & = & \either(\const(\btrue),\const(\bfalse))(\uncons(\nil)) \\
  & = & \either(\const(\btrue),\const(\bfalse))(\lft(\ast)) \\
  & = & \const(\btrue)(\ast) \\
- & = & \btrue
+ &     \href{@functions@#def-const}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed.
 2. We have
@@ -106,7 +107,8 @@ $$\begin{eqnarray*}
  & = & \uPair(\id,\fst)(\uncons(\nil)) \\
  & = & \uPair(\id,\fst)(\lft(\ast)) \\
  & = & \lft(\id(\ast)) \\
- & = & \lft(\ast)
+ &     \href{@functions@#def-id}
+   = & \lft(\ast)
 \end{eqnarray*}$$
 as claimed.
 2. We have
@@ -154,7 +156,8 @@ $$\begin{eqnarray*}
  & = & \either(\const(\nil),\snd)(\uncons(\nil)) \\
  & = & \either(\const(\nil),\snd)(\lft(\ast)) \\
  & = & \const(\nil)(\ast) \\
- & = & \nil
+ &     \href{@functions@#def-const}
+   = & \nil
 \end{eqnarray*}$$
 as claimed.
 2. We have

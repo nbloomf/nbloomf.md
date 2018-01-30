@@ -37,7 +37,8 @@ $$\begin{eqnarray*}
  &   & \Omega(\nil) \\
  & = & \foldr{\const(\gamma)}{\varphi}(\nil)(\nil) \\
  & = & \const(\gamma)(\nil) \\
- & = & \gamma
+ &     \href{@functions@#def-const}
+   = & \gamma
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}

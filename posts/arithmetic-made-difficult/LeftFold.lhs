@@ -33,7 +33,8 @@ $$\begin{eqnarray*}
  &   & \Theta(e,\nil) \\
  & = & \foldr{\id}{\psi}(\nil)(e) \\
  & = & \id(e) \\
- & = & e
+ &     \href{@functions@#def-id}
+   = & e
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}

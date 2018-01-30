@@ -82,7 +82,8 @@ $$\begin{eqnarray*}
  &   & \either(\const(a),\id)(Q) \\
  & = & \either(\const(a),\id)(\rgt(t)) \\
  & = & \id(t) \\
- & = & t.
+ &     \href{@functions@#def-id}
+   = & t
 \end{eqnarray*}$$
 By the properties of $\findsmallest{\sigma(a)}$ we have $\nleq(\next(\next(\zero)),t)$ and $\nleq(t,\next(m))$ (so $t \neq \zero$ and $t \neq \next(\zero)$) and $\ndiv(t,a)$, and moreover if $\nleq(\next(\next(\zero)),k)$ and $\nleq(k,\next(m))$ and $\ndiv(k,a)$ then $\nleq(t,k)$ as claimed.
 

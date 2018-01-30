@@ -73,7 +73,8 @@ $$\begin{eqnarray*}
  &   & \cat(x,\nil) \\
  & = & \foldr{\nil}{\cons}(x) \\
  & = & \id(x) \\
- & = & x
+ &     \href{@functions@#def-id}
+   = & x
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
