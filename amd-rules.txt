@@ -11,6 +11,7 @@
 @booleans@#thm-if-commute-true	\\bif{p}{\\bif{q}{a}{b}}{b} = \\bif{q}{\\bif{p}{a}{b}}{b}
 @booleans@#thm-if-commute-false	\\bif{p}{a}{\\bif{q}{a}{b}} = \\bif{q}{a}{\\bif{p}{a}{b}}
 @booleans@#thm-if-func-two	f(\\bif{p}{a}{b},\\bif{p}{c}{d}) = \\bif{p}{f(a,c)}{f(b,d)}
+@booleans@#thm-eq-reflexive	\\beq(a,a) = \\btrue
 #=======================#
 #--- not ---------------#
 #=======================#

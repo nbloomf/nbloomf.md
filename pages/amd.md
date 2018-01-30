@@ -83,8 +83,6 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * [Dedupe](/posts/arithmetic-made-difficult/Dedupe.html)
         * [Common](/posts/arithmetic-made-difficult/Common.html)
         * [Disjoint](/posts/arithmetic-made-difficult/Disjoint.html)
-        * [Sublists](/posts/arithmetic-made-difficult/Sublists.html)
-        * Infixes
         * Concat
         * Transpose
         * Cycle
@@ -93,6 +91,9 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
             * [Take and Drop](/posts/arithmetic-made-difficult/TakeAndDrop.html)
             * [TakeBut and DropBut](/posts/arithmetic-made-difficult/TakeButAndDropBut.html)
             * [TakeWhile and DropWhile](/posts/arithmetic-made-difficult/TakeWhileAndDropWhile.html)
+        * Lists of sublists
+            * [Sublists](/posts/arithmetic-made-difficult/Sublists.html)
+            * Infixes
         * Cat Factorization
             * ChunksOf
             * ChunksBy

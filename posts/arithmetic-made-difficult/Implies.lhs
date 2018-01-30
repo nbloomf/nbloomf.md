@@ -97,11 +97,38 @@ as claimed.
 
 ::: test :::::::::::
 
-> _test_impl_false :: (Boolean b, Equal b)
+> _test_impl_false_hyp :: (Boolean b, Equal b)
 >   => b -> Test (b -> Bool)
-> _test_impl_false _ =
+> _test_impl_false_hyp _ =
 >   testName "impl(false,p) == true" $
 >   \p -> eq (impl false p) true
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+$\bfalse$ interacts with $\bimpl$ in the right argument.
+
+:::::: theorem :::::
+[]{#thm-implies-false-conc}
+If $p \in \bool$, we have $\bimpl(p,\bfalse) = \bnot(p)$.
+
+::: proof ::::::::::
+We have
+$$\begin{eqnarray*}
+ &   & \bimpl(p,\bfalse) \\
+ & = & \bor(\bnot(p),\bfalse) \\
+ & = & \bnot(p)
+\end{eqnarray*}$$
+as claimed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_impl_false_conc :: (Boolean b, Equal b)
+>   => b -> Test (b -> Bool)
+> _test_impl_false_conc _ =
+>   testName "impl(p,false) == not(p)" $
+>   \p -> eq (impl p false) (not p)
 
 ::::::::::::::::::::
 ::::::::::::::::::::
@@ -257,50 +284,27 @@ $\bimpl$ has a kind of transitivity.
 For all $p,q,r \in \bool$ we have $$\bimpl(\bimpl(p,q),\bimpl(\bimpl(q,r),\bimpl(p,r))).$$
 
 ::: proof ::::::::::
-We have
-$$\begin{eqnarray*}
- &   & \bimpl(\bimpl(p,q),\bimpl(\bimpl(q,r),\bimpl(p,r))) \\
- & = & \bimpl(\bor(\bnot(p),q),\bor(\bnot(\bimpl(q,r)),\bimpl(p,r))) \\
- & = & \bimpl(\bor(\bnot(p),q),\bor(\bnot(\bor(\bnot(q),r)),\bor(\bnot(p),r))) \\
- &     \href{@implies@#thm-implies-or}
-   = & \bor(\bnot(\bor(\bnot(p),q)),\bor(\bnot(\bor(\bnot(q),r)),\bor(\bnot(p),r))) \\
- &     \href{@or@#thm-demorgan-not-or}
-   = & \bor(\band(\bnot(\bnot(p)),\bnot(q)),\bor(\bnot(\bor(\bnot(q),r)),\bor(\bnot(p),r))) \\
- & = & \bor(\band(p,\bnot(q)),\bor(\bnot(\bor(\bnot(q),r)),\bor(\bnot(p),r))) \\
- &     \href{@or@#thm-demorgan-not-or}
-   = & \bor(\band(p,\bnot(q)),\bor(\band(\bnot(\bnot(q)),\bnot(r)),\bor(\bnot(p),r))) \\
- & = & \bor(\band(p,\bnot(q)),\bor(\band(q,\bnot(r)),\bor(\bnot(p),r))) \\
- & = & Q.
-\end{eqnarray*}$$
 If $p = \bfalse$, we have
 $$\begin{eqnarray*}
- &   & Q \\
- & = & \bor(\band(p,\bnot(q)),\bor(\band(q,\bnot(r)),\bor(\bnot(\bfalse),r))) \\
- &     \href{@not@#thm-not-false}
-   = & \bor(\band(p,\bnot(q)),\bor(\band(q,\bnot(r)),\bor(\btrue,r))) \\
- & = & \bor(\band(p,\bnot(q)),\bor(\band(q,\bnot(r)),\btrue)) \\
- &     \href{@or@#thm-or-true-right}
-   = & \bor(\band(p,\bnot(q)),\btrue) \\
+ &   & \bimpl(\bimpl(p,q),\bimpl(\bimpl(q,r),\bimpl(p,r))) \\
+ &     \let{p = \bfalse}
+   = & \bimpl(\bimpl(\bfalse,q),\bimpl(\bimpl(q,r),\bimpl(\bfalse,r))) \\
+ & = & \bimpl(\btrue,\bimpl(\bimpl(q,r),\btrue)) \\
+ & = & \bimpl(\bimpl(q,r),\btrue) \\
+ & = & \bor(\bnot(\bimpl(q,r)),\btrue) \\
  &     \href{@or@#thm-or-true-right}
    = & \btrue
 \end{eqnarray*}$$
 as claimed. If $p = \btrue$, we have
 $$\begin{eqnarray*}
- &   & Q \\
- & = & \bor(\band(\btrue,\bnot(q)),\bor(\band(q,\bnot(r)),\bor(\bnot(\btrue),r))) \\
- & = & \bor(\bnot(q),\bor(\band(q,\bnot(r)),\bor(\bfalse,r))) \\
- &     \href{@or@#thm-or-false-left}
-   = & \bor(\bnot(q),\bor(\band(q,\bnot(r)),r)) \\
- & = & \bor(\bnot(q),\band(\bor(q,r),\bor(\bnot(r),r))) \\
- & = & \bor(\bnot(q),\band(\bor(q,r),\btrue)) \\
- &     \href{@and@#thm-and-true-right}
-   = & \bor(\bnot(q),\bor(q,r)) \\
- & = & \bor(\bor(\bnot(q),q),r) \\
- & = & \bor(\btrue,r) \\
- &     \href{@or@#thm-or-true-left}
-   = & \btrue
+ &   & \bimpl(\bimpl(p,q),\bimpl(\bimpl(q,r),\bimpl(p,r))) \\
+ &     \let{p = \btrue}
+   = & \bimpl(\bimpl(\btrue,q),\bimpl(\bimpl(q,r),\bimpl(\btrue,r))) \\
+ & = & \bimpl(q,\bimpl(\bimpl(q,r),r)) \\
+ & = & \bimpl(\bimpl(q,r),\bimpl(q,r)) \\
+ & = & \btrue
 \end{eqnarray*}$$
-as needed.
+as claimed.
 ::::::::::::::::::::
 
 ::: test :::::::::::
@@ -324,7 +328,8 @@ For all $p,q,r \in \bool$ we have $$\bimpl(\bimpl(p,\bimpl(q,r)),\bimpl(\bimpl(p
 If $p = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \bimpl(\bimpl(p,\bimpl(q,r)),\bimpl(\bimpl(p,q),\bimpl(p,r))) \\
- & = & \bimpl(\bimpl(\bfalse,\bimpl(q,r)),\bimpl(\bimpl(\bfalse,q),\bimpl(\bfalse,r))) \\
+ &     \let{p = \bfalse}
+   = & \bimpl(\bimpl(\bfalse,\bimpl(q,r)),\bimpl(\bimpl(\bfalse,q),\bimpl(\bfalse,r))) \\
  & = & \bimpl(\btrue,\bimpl(\btrue,\btrue)) \\
  &     \href{@implies@#thm-implies-true-hyp}
    = & \bimpl(\btrue,\btrue) \\
@@ -334,7 +339,8 @@ $$\begin{eqnarray*}
 Suppose instead that $p = \btrue$. Now
 $$\begin{eqnarray*}
  &   & \bimpl(\bimpl(p,\bimpl(q,r)),\bimpl(\bimpl(p,q),\bimpl(p,r))) \\
- & = & \bimpl(\bimpl(\btrue,\bimpl(q,r)),\bimpl(\bimpl(\btrue,q),\bimpl(\btrue,r))) \\
+ &     \let{p = \btrue}
+   = & \bimpl(\bimpl(\btrue,\bimpl(q,r)),\bimpl(\bimpl(\btrue,q),\bimpl(\btrue,r))) \\
  & = & \bimpl(\bimpl(q,r),\bimpl(q,r)) \\
  &     \href{@implies@#thm-implies-self}
    = & \btrue
@@ -359,29 +365,40 @@ $\bimpl$ interacts with $\band$.
 For all $p,q,r,s \in \bool$, if $\bimpl(p,r)$ and $\bimpl(q,s)$, then $\bimpl(\band(p,q),\band(r,s))$.
 
 ::: proof ::::::::::
-If $p = \bfalse$, then
+If $p = \bfalse$, we have
 $$\begin{eqnarray*}
- &   & \bimpl(\band(p,q),\band(r,s)) \\
- & = & \bimpl(\band(\bfalse,q),\band(r,s)) \\
- &     \href{@and@#thm-and-false-left}
-   = & \bimpl(\bfalse,\band(r,s))
- & = & \btrue.
+ &   & \bimpl(\band(\bimpl(p,r),\bimpl(q,s)),\bimpl(\band(p,q),\band(r,s))) \\
+ & = & \bimpl(\band(\bimpl(\bfalse,r),\bimpl(q,s)),\bimpl(\band(\bfalse,q),\band(r,s))) \\
+ & = & \bimpl(\band(\btrue,\bimpl(q,s)),\bimpl(\band(\bfalse,q),\band(r,s))) \\
+ & = & \bimpl(\band(\btrue,\bimpl(q,s)),\bimpl(\bfalse,\band(r,s))) \\
+ & = & \bimpl(\band(\btrue,\bimpl(q,s)),\btrue) \\
+ & = & \bor(\bnot(\band(\btrue,\bimpl(q,s))),\btrue) \\
+ & = & \btrue
 \end{eqnarray*}$$
-Similarly if $q = \bfalse$. Suppose then that $p = q = \btrue$. Now
+as claimed. suppose $p = \btrue$. If $r = \bfalse$, we have
 $$\begin{eqnarray*}
- &   & \btrue \\
- & = & \bimpl(p,r) \\
- & = & \bimpl(\btrue,r) \\
- &     \href{@implies@#thm-implies-true-hyp}
-   = & r
+ &   & \bimpl(\band(\bimpl(p,r),\bimpl(q,s)),\bimpl(\band(p,q),\band(r,s))) \\
+ &     \let{p = \btrue}
+   = & \bimpl(\band(\bimpl(\btrue,r),\bimpl(q,s)),\bimpl(\band(\btrue,q),\band(r,s))) \\
+ & = & \bimpl(\band(\bimpl(\btrue,r),\bimpl(q,s)),\bimpl(q,\band(r,s))) \\
+ & = & \bimpl(\band(r,\bimpl(q,s)),\bimpl(q,\band(r,s))) \\
+ &     \let{r = \bfalse}
+   = & \bimpl(\band(\bfalse,\bimpl(q,s)),\bimpl(q,\band(\bfalse,s))) \\
+ & = & \bimpl(\bfalse,\bimpl(q,\band(\bfalse,s))) \\
+ & = & \btrue
 \end{eqnarray*}$$
-and similarly $s = \btrue$. Then
+as claimed. If $r = \btrue$, we have
 $$\begin{eqnarray*}
- &   & \bimpl(\band(p,q),\band(r,s)) \\
- & = & \bimpl(\band(\btrue,\btrue),\band(\btrue,\btrue)) \\
- & = & \bimpl(\btrue,\btrue) \\
- &     \href{@implies@#thm-implies-true-hyp}
-   = & \btrue
+ &   & \bimpl(\band(\bimpl(p,r),\bimpl(q,s)),\bimpl(\band(p,q),\band(r,s))) \\
+ &     \let{p = \btrue}
+   = & \bimpl(\band(\bimpl(\btrue,r),\bimpl(q,s)),\bimpl(\band(\btrue,q),\band(r,s))) \\
+ & = & \bimpl(\band(\bimpl(\btrue,r),\bimpl(q,s)),\bimpl(q,\band(r,s))) \\
+ & = & \bimpl(\band(r,\bimpl(q,s)),\bimpl(q,\band(r,s))) \\
+ &     \let{r = \btrue}
+   = & \bimpl(\band(\btrue,\bimpl(q,s)),\bimpl(q,\band(\btrue,s))) \\
+ & = & \bimpl(\bimpl(q,s),\bimpl(q,\band(\btrue,s))) \\
+ & = & \bimpl(\bimpl(q,s),\bimpl(q,s)) \\
+ & = & \btrue
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -401,38 +418,44 @@ as claimed.
 
 $\bimpl$ interacts with $\band$ and $\bif{\ast}{\ast}{\ast}$.
 
-$\band$ interacts with $\bif{\ast}{\ast}{\ast}$.
-
 :::::: theorem :::::
 Let $p,q,r \in \bool$. If $\bimpl(r,q)$, then $$\bif{\band(p,q)}{\btrue}{r} = \bif{p}{q}{r}.$$
 
 ::: proof ::::::::::
-If $r = \btrue$, then $q = \btrue$. Now
+If $q = \btrue$ then
 $$\begin{eqnarray*}
- &   & \bif{\band(p,\btrue)}{\btrue}{\btrue} \\
- &     \href{@and@#thm-and-true-right}
-   = & \bif{p}{\btrue}{\btrue}
+ &   & \bimpl(\bimpl(r,q),\beq(\bif{\band(p,q)}{\btrue}{r},\bif{p}{q}{r})) \\
+ & = & \bimpl(\bimpl(r,\btrue),\beq(\bif{\band(p,\btrue)}{\btrue}{r},\bif{p}{\btrue}{r})) \\
+ & = & \bimpl(\btrue,\beq(\bif{\band(p,\btrue)}{\btrue}{r},\bif{p}{\btrue}{r})) \\
+ & = & \bimpl(\btrue,\beq(\bif{p}{\btrue}{r},\bif{p}{\btrue}{r})) \\
+ & = & \bimpl(\btrue,\btrue) \\
+ & = & \btrue
 \end{eqnarray*}$$
-as needed. Suppose instead that $r = \bfalse$. If $p = \btrue$, we have
+as claimed. If $q = \bfalse$ and $r = \bfalse$, we have
 $$\begin{eqnarray*}
- &   & \bif{\band(\btrue,q)}{\btrue}{\bfalse} \\
- &     \href{@and@#thm-and-true-left}
-   = & \bif{q}{\btrue}{\bfalse} \\
- & = & q \\
- &     \href{@booleans@#cor-if-true}
-   = & \bif{\btrue}{q}{\bfalse}
+ &   & \bimpl(\bimpl(r,q),\beq(\bif{\band(p,q)}{\btrue}{r},\bif{p}{q}{r})) \\
+ &     \let{q = \bfalse}
+   = & \bimpl(\bimpl(r,\bfalse),\beq(\bif{\band(p,\bfalse)}{\btrue}{r},\bif{p}{\bfalse}{r})) \\
+ & = & \bimpl(\bnot(r),\beq(\bif{\bfalse}{\btrue}{r},\bif{p}{\bfalse}{r})) \\
+ & = & \bimpl(\bnot(r),\beq(r,\bif{p}{\bfalse}{r})) \\
+ &     \let{r = \bfalse}
+   = & \bimpl(\bnot(\bfalse),\beq(\bfalse,\bif{p}{\bfalse}{\bfalse})) \\
+ & = & \bimpl(\btrue,\beq(\bfalse,\bif{p}{\bfalse}{\bfalse})) \\
+ & = & \bimpl(\btrue,\beq(\bfalse,\bfalse)) \\
+ & = & \bimpl(\btrue,\btrue) \\
+ & = & \btrue
 \end{eqnarray*}$$
-as needed. If $p = \bfalse$, we have
+as claimed. And if $q = \bfalse$ and $r = \btrue$, we have
 $$\begin{eqnarray*}
- &   & \bif{\band(\bfalse,q)}{\btrue}{r} \\
- &     \href{@and@#thm-and-false-left}
-   = & \bif{\bfalse}{\btrue}{r} \\
- &     \href{@booleans@#cor-if-false}
-   = & r \\
- &     \href{@booleans@#cor-if-false}
-   = & \bif{\bfalse}{q}{r}
+ &   & \bimpl(\bimpl(r,q),\beq(\bif{\band(p,q)}{\btrue}{r},\bif{p}{q}{r})) \\
+ &     \let{q = \bfalse}
+   = & \bimpl(\bimpl(r,\bfalse),\beq(\bif{\band(p,\bfalse)}{\btrue}{r},\bif{p}{\bfalse}{r})) \\
+ &     \let{r = \btrue}
+   = & \bimpl(\bimpl(\btrue,\bfalse),\beq(\bif{\band(p,\bfalse)}{\btrue}{\btrue},\bif{p}{\bfalse}{\btrue})) \\
+ & = & \bimpl(\bfalse,\beq(\bif{\band(p,\bfalse)}{\btrue}{\btrue},\bif{p}{\bfalse}{\btrue})) \\
+ & = & \btrue
 \end{eqnarray*}$$
-as needed.
+as claimed.
 ::::::::::::::::::::
 
 ::: test :::::::::::
@@ -469,7 +492,8 @@ Suite:
 >       }
 > 
 >   runTest args (_test_impl_or p)
->   runTest args (_test_impl_false p)
+>   runTest args (_test_impl_false_hyp p)
+>   runTest args (_test_impl_false_conc p)
 >   runTest args (_test_impl_true p)
 >   runTest args (_test_impl_reflexive p)
 >   runTest args (_test_impl_total p)
