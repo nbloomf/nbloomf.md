@@ -99,7 +99,26 @@
 @predicates@#thm-compose-bnot-ptrue	\\compose(\\bnot)(\\ptrue) = \\pfalse
 @predicates@#thm-compose-bnot-pfalse	\\compose(\\bnot)(\\pfalse) = \\ptrue
 @predicates@#def-pand	\\pand(p,q)(a) = \\band(p(a),q(a))
+@predicates@#thm-pand-pfalse-left	\\pand(\\pfalse,p) = \\pfalse
+@predicates@#thm-pand-pfalse-right	\\pand(p,\\pfalse) = \\pfalse
+@predicates@#thm-pand-ptrue-left	\\pand(\\ptrue,p) = p
+@predicates@#thm-pand-ptrue-right	\\pand(p,\\ptrue) = p
+@predicates@#thm-pand-idempotent	\\pand(p,p) = p
+@predicates@#thm-pand-commutative	\\pand(p,q) = \\pand(q,p)
+@predicates@#thm-pand-associative	\\pand(\\pand(p,q),r) = \\pand(p,\\pand(q,r))
 @predicates@#def-por	\\por(p,q)(a) = \\bor(p(a),q(a))
+@predicates@#thm-por-ptrue-left	\\por(\\ptrue,p) = \\ptrue
+@predicates@#thm-por-ptrue-right	\\por(p,\\ptrue) = \\ptrue
+@predicates@#thm-por-pfalse-left	\\por(\\pfalse,p) = p
+@predicates@#thm-por-pfalse-right	\\por(p,\\pfalse) = p
+@predicates@#thm-por-idempotent	\\por(p,p) = p
+@predicates@#thm-por-commutative	\\por(p,q) = \\por(q,p)
+@predicates@#thm-por-associative	\\por(\\por(p,q),r) = \\por(p,\\por(q,r))
+@predicates@#thm-demorgan-pnot-pand	\\pnot(\\pand(p,q)) = \\por(\\pnot(p),\\pnot(q))
+@predicates@#thm-demorgan-pnot-por	\\pnot(\\por(p,q)) = \\pand(\\pnot(p),\\pnot(q))
+@predicates@#thm-pand-por-distribute	\\pand(p,\\por(q,r)) = \\por(\\pand(p,q),\\pand(p,r))
+@predicates@#thm-por-pand-distribute	\\por(p,\\pand(p,r)) = \\pand(\\por(p,q),\\por(p,r))
+@predicates@#def-pimpl	\\pimpl(p,q)(a) = \bimpl(p(a),q(a))
 #=======================#
 #--- disjoint-unions ---#
 #=======================#

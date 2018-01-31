@@ -135,7 +135,8 @@ $$\begin{eqnarray*}
    = & \bnot(\btrue) \\
  &     \href{@not@#thm-not-true}
    = & \bfalse \\
- & = & \const(\bfalse)(a) \\
+ &     \href{@functions@#def-const}
+   = & \const(\bfalse)(a) \\
  &     \href{@predicates@#def-pfalse}
    = & \pfalse(a)
 \end{eqnarray*}$$
@@ -151,7 +152,8 @@ $$\begin{eqnarray*}
    = & \bnot(\bfalse) \\
  &     \href{@not@#thm-not-false}
    = & \btrue \\
- & = & \const(\btrue)(a) \\
+ &     \href{@functions@#def-const}
+   = & \const(\btrue)(a) \\
  &     \href{@predicates@#def-ptrue}
    = & \ptrue(a)
 \end{eqnarray*}$$
@@ -205,6 +207,7 @@ In Haskell:
 The usual properties of $\band$ lift to $\pand$.
 
 :::::: theorem :::::
+[]{#thm-pand-pfalse-left}[]{#thm-pand-pfalse-right}[]{#thm-pand-ptrue-left}[]{#thm-pand-ptrue-right}[]{#thm-pand-idempotent}[]{#thm-pand-commutative}[]{#thm-pand-associative}
 Let $A$ be a set. The following hold for all p,q,r \in \bool^A$.
 
 1. $\pand(\pfalse,p) = \pand(p,\pfalse) = \pfalse$.
@@ -225,7 +228,10 @@ $$\begin{eqnarray*}
    = & \band(\bfalse,p(a)) \\
  &     \href{@and@#thm-and-false-left}
    = & \bfalse \\
- & = & \pfalse(a)
+ &     \href{@functions@#def-const}
+   = & \const(\bfalse)(a) \\
+ &     \href{@predicates@#def-pfalse}
+   = & \pfalse(a)
 \end{eqnarray*}$$
 as needed; similarly for the other equality.
 2. For all $a \in A$, we have
@@ -257,7 +263,8 @@ $$\begin{eqnarray*}
    = & \band(p(a),q(a)) \\
  &     \href{@and@#thm-and-commutative}
    = & \band(q(a),p(a)) \\
- & = & \pand(q,p)(a)
+ &     \href{@predicates@#def-pand}
+   = & \pand(q,p)(a)
 \end{eqnarray*}$$
 as needed.
 5. For all $a \in A$, we have
@@ -269,8 +276,10 @@ $$\begin{eqnarray*}
    = & \band(\band(p(a),q(a)),r(a)) \\
  &     \href{@and@#thm-and-associative}
    = & \band(p(a),\band(q(a),r(a))) \\
- & = & \band(p(a),\pand(q,r)(a)) \\
- & = & \pand(p,\band(q,r))(a)
+ &     \href{@predicates@#def-pand}
+   = & \band(p(a),\pand(q,r)(a)) \\
+ &     \href{@predicates@#def-pand}
+   = & \pand(p,\pand(q,r))(a)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -330,6 +339,7 @@ In Haskell:
 The usual properties of $\bor$ lift to $\por$.
 
 :::::: theorem :::::
+[]{#thm-por-ptrue-left}[]{#thm-por-ptrue-right}[]{#thm-por-pfalse-left}[]{#thm-por-pfalse-right}[]{#thm-por-idempotent}[]{#thm-por-commutative}[]{#thm-por-associative}
 Let $A$ be a set. The following hold for all $p,q,r \in \bool^A$.
 
 1. $\por(\ptrue,p) = \por(p,\ptrue) = \ptrue$.
@@ -344,10 +354,16 @@ $$\begin{eqnarray*}
  &   & \por(\ptrue,p)(a) \\
  &     \href{@predicates@#def-por}
    = & \bor(\ptrue(a),p(a)) \\
- & = & \bor(\btrue,p(a)) \\
+ &     \href{@predicates@#def-ptrue}
+   = & \bor(\const(\btrue)(a),p(a)) \\
+ &     \href{@functions@#def-const}
+   = & \bor(\btrue,p(a)) \\
  &     \href{@or@#thm-or-true-left}
    = & \btrue \\
- & = & \ptrue(a)
+ &     \href{@functions@#def-const}
+   = & \const(\btrue)(a) \\
+ &     \href{@predicates@#def-ptrue}
+   = & \ptrue(a)
 \end{eqnarray*}$$
 as needed; the other equality is similar.
 2. For all $a \in A$, we have
@@ -355,7 +371,10 @@ $$\begin{eqnarray*}
  &   & \por(\pfalse,p)(a) \\
  &     \href{@predicates@#def-por}
    = & \bor(\pfalse(a),p(a)) \\
- & = & \bor(\bfalse,p(a)) \\
+ &     \href{@predicates@#def-pfalse}
+   = & \bor(\const(\bfalse)(a),p(a)) \\
+ &     \href{@functions@#def-const}
+   = & \bor(\bfalse,p(a)) \\
  &     \href{@or@#thm-or-false-left}
    = & p(a)
 \end{eqnarray*}$$
@@ -376,7 +395,8 @@ $$\begin{eqnarray*}
    = & \bor(p(a),q(a)) \\
  &     \href{@or@#thm-or-commutative}
    = & \bor(q(a),p(a)) \\
- & = & \por(q,p)(a)
+ &     \href{@predicates@#def-por}
+   = & \por(q,p)(a)
 \end{eqnarray*}$$
 as needed.
 5. For all $a \in A$, we have
@@ -388,7 +408,8 @@ $$\begin{eqnarray*}
    = & \bor(\bor(p(a),q(a)),r(a)) \\
  &     \href{@or@#thm-or-associative}
    = & \bor(p(a),\bor(q(a),r(a))) \\
- & = & \bor(p(a),\por(q,r)(a)) \\
+ &     \href{@predicates@#def-por}
+   = & \bor(p(a),\por(q,r)(a)) \\
  &     \href{@predicates@#def-por}
    = & \por(p,\por(q,r))(a)
 \end{eqnarray*}$$
@@ -437,6 +458,7 @@ as needed.
 And $\pnot$, $\pand$, and $\por$ interact.
 
 :::::: theorem :::::
+[]{#thm-demorgan-pnot-pand}[]{#thm-demorgan-pnot-por}[]{#thm-pand-por-distribute}[]{#thm-por-pand-distribute}
 Let $A$ be a set. The following hold for all $p,q,r \in \bool^A$.
 
 1. $\pnot(\pand(p,q)) = \por(\pnot(p),\pnot(q))$.
@@ -450,10 +472,14 @@ $$\begin{eqnarray*}
  &   & \pnot(\pand(p,q))(a) \\
  &     \href{@predicates@#def-pnot}
    = & \bnot(\pand(p,q)(a)) \\
- & = & \bnot(\band(p(a),q(a))) \\
+ &     \href{@predicates@#def-pand}
+   = & \bnot(\band(p(a),q(a))) \\
  &     \href{@or@#thm-demorgan-not-and}
    = & \bor(\bnot(p(a)),\bnot(q(a))) \\
- & = & \bor(\pnot(p)(a),\pnot(q)(a)) \\
+ &     \href{@predicates@#def-pnot}
+   = & \bor(\pnot(p)(a),\bnot(q(a))) \\
+ &     \href{@predicates@#def-pnot}
+   = & \bor(\pnot(p)(a),\pnot(q)(a)) \\
  &     \href{@predicates@#def-por}
    = & \por(\pnot(p),\pnot(q))(a)
 \end{eqnarray*}$$
@@ -463,10 +489,14 @@ $$\begin{eqnarray*}
  &   & \pnot(\por(p,q))(a) \\
  &     \href{@predicates@#def-pnot}
    = & \bnot(\por(p,q)(a)) \\
- & = & \bnot(\bor(p(a),q(a))) \\
+ &     \href{@predicates@#def-por}
+   = & \bnot(\bor(p(a),q(a))) \\
  &     \href{@or@#thm-demorgan-not-or}
    = & \band(\bnot(p(a)),\bnot(q(a))) \\
- & = & \band(\pnot(p)(a),\pnot(q)(a)) \\
+ &     \href{@predicates@#def-pnot}
+   = & \band(\pnot(p)(a),\bnot(q(a))) \\
+ &     \href{@predicates@#def-pnot}
+   = & \band(\pnot(p)(a),\pnot(q)(a)) \\
  &     \href{@predicates@#def-pand}
    = & \pand(\pnot(p),\pnot(q))(a)
 \end{eqnarray*}$$
@@ -480,7 +510,10 @@ $$\begin{eqnarray*}
    = & \band(p(a),\bor(q(a),r(a))) \\
  &     \href{@or@#thm-and-or-distribute}
    = & \bor(\band(p(a),q(a)),\band(p(a),r(a))) \\
- & = & \bor(\pand(p,q)(a),\pand(p,r)(a)) \\
+ &     \href{@predicates@#def-pand}
+   = & \bor(\pand(p,q)(a),\band(p(a),r(a))) \\
+ &     \href{@predicates@#def-pand}
+   = & \bor(\pand(p,q)(a),\pand(p,r)(a)) \\
  &     \href{@predicates@#def-por}
    = & \por(\pand(p,q),\pand(p,r))(a)
 \end{eqnarray*}$$
@@ -494,7 +527,10 @@ $$\begin{eqnarray*}
    = & \bor(p(a),\band(q(a),r(a))) \\
  &     \href{@or@#thm-or-and-distribute}
    = & \band(\bor(p(a),q(a)),\bor(p(a),r(a))) \\
- & = & \band(\por(p,q)(a),\por(p,r)(a)) \\
+ &     \href{@predicates@#def-por}
+   = & \band(\por(p,q)(a),\bor(p(a),r(a))) \\
+ &     \href{@predicates@#def-por}
+   = & \band(\por(p,q)(a),\por(p,r)(a)) \\
  &     \href{@predicates@#def-pand}
    = & \pand(\por(p,q),\por(p,r))(a)
 \end{eqnarray*}$$
@@ -536,7 +572,8 @@ as needed.
 Implication lifts to predicates.
 
 :::::: definition ::
-Let $A$ be a set. We define $\pimpl : \bool^A \times \bool^A \rightarrow \bool^A$ by $\pimpl(p,q) = \btrue$ if $\pimpl(p(a),q(a)) = \btrue$ for all $a \in A$, and $\bfalse$ otherwise.
+[]{#def-pimpl}
+Let $A$ be a set. We define $\pimpl : \bool^A \times \bool^A \rightarrow \bool^A$ by $$\pimpl(p,q)(a) = \bimpl(p(a),q(a)).$$
 ::::::::::::::::::::
 
 
