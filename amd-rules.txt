@@ -94,6 +94,12 @@
 @predicates@#def-pfalse	\\pfalse = \\const(\\bfalse)
 @predicates@#def-pnot	\\pnot(p)(a) = \\bnot(p(a))
 @predicates@#thm-pnot-involution	\\pnot(\\pnot(p)) = p
+@predicates@#thm-pnot-ptrue	\\pnot(\\ptrue) = \\pfalse
+@predicates@#thm-pnot-pfalse	\\pnot(\\bfalse) = \\btrue
+@predicates@#thm-compose-bnot-ptrue	\\compose(\\bnot)(\\ptrue) = \\pfalse
+@predicates@#thm-compose-bnot-pfalse	\\compose(\\bnot)(\\pfalse) = \\ptrue
+@predicates@#def-pand	\\pand(p,q)(a) = \\band(p(a),q(a))
+@predicates@#def-por	\\por(p,q)(a) = \\bor(p(a),q(a))
 #=======================#
 #--- disjoint-unions ---#
 #=======================#

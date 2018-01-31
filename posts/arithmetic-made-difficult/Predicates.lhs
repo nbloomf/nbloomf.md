@@ -81,12 +81,13 @@ as needed.
 Special cases.
 
 :::::: theorem :::::
+[]{#thm-pnot-ptrue}[]{#thm-pnot-pfalse}[]{#thm-compose-bnot-ptrue}[]{#thm-compose-bnot-pfalse}
 Let $A$ be a set. Then we have the following.
 
 1. $\pnot(\ptrue) = \pfalse$.
 2. $\pnot(\pfalse) = \ptrue$.
-3. $\bnot \circ \ptrue = \pfalse$.
-4. $\bnot \circ \pfalse = \ptrue$.
+3. $\compose(\bnot)(\ptrue) = \pfalse$.
+4. $\compose(\bnot)(\pfalse) = \ptrue$.
 
 ::: proof ::::::::::
 1. If $a \in A$, we have
@@ -125,21 +126,25 @@ $$\begin{eqnarray*}
 as needed.
 3. If $a \in A$, we have
 $$\begin{eqnarray*}
- &   & (\bnot \circ \ptrue)(a) \\
+ &   & \compose(\bnot)(\ptrue)(a) \\
  & = & \bnot(\ptrue(a)) \\
+ & = & \bnot(\const(\btrue)(a)) \\
  & = & \bnot(\btrue) \\
  &     \href{@not@#thm-not-true}
    = & \bfalse \\
+ & = & \const(\bfalse)(a) \\
  & = & \pfalse(a)
 \end{eqnarray*}$$
 as needed.
 4. If $a \in A$, we have
 $$\begin{eqnarray*}
- &   & (\bnot \circ \pfalse)(a) \\
+ &   & \compose(\bnot)(\pfalse)(a) \\
  & = & \bnot(\pfalse(a)) \\
+ & = & \bnot(\const(\bfalse)(a)) \\
  & = & \bnot(\bfalse) \\
  &     \href{@not@#thm-not-false}
    = & \btrue \\
+ & = & \const(\btrue)(a) \\
  & = & \ptrue(a)
 \end{eqnarray*}$$
 ::::::::::::::::::::
@@ -179,6 +184,7 @@ $$\begin{eqnarray*}
 Next, $\pand$.
 
 :::::: definition ::
+[]{#def-pand}
 Let $A$ be a set. We define $\pand : \bool^A \times \bool^A \rightarrow \bool^A$ by $$\pand(p,q)(a) = \band(p(a),q(a)).$$
 
 In Haskell:
@@ -204,6 +210,7 @@ Let $A$ be a set. The following hold for all p,q,r \in \bool^A$.
 $$\begin{eqnarray*}
  &   & \pand(\pfalse,p)(a) \\
  & = & \band(\pfalse(a),p(a)) \\
+ & = & \band(\const(\bfalse)(a),p(a)) \\
  & = & \band(\bfalse,p(a)) \\
  &     \href{@and@#thm-and-false-left}
    = & \bfalse \\
@@ -214,6 +221,7 @@ as needed; similarly for the other equality.
 $$\begin{eqnarray*}
  &   & \pand(\ptrue,p)(a) \\
  & = & \band(\ptrue(a),p(a)) \\
+ & = & \band(\const(\btrue)(a),p(a)) \\
  & = & \band(\btrue,p(a)) \\
  &     \href{@and@#thm-and-true-left}
    = & p(a)
@@ -291,6 +299,7 @@ as needed.
 Then $\por$.
 
 :::::: definition ::
+[]{#def-por}
 Let $A$ be a set. We define $\por : \bool^A \times \bool^A \rightarrow \bool^A$ by $$\por(p,q)(a) = \bor(p(a),q(a)).$$
 
 In Haskell:
