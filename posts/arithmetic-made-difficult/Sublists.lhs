@@ -24,6 +24,7 @@ slug: sublists
 > import Map
 > import Elt
 > import AllAndAny
+> import Unique
 > import Sublist
 > import Select
 
@@ -120,7 +121,9 @@ Let $A$ be a set. For all $x \in \lists{A}$, we have $$\elt(\nil,\sublists(x)).$
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & (@@@)
+ &   & \elt(\nil,\sublists(\nil)) \\
+ & = & \elt(\nil,\cons(\nil,\nil)) \\
+ & = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the result holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
@@ -405,71 +408,13 @@ as needed.
 
 ::: test :::::::::::
 
-(@@@)
-
-::::::::::::::::::::
-::::::::::::::::::::
-
-(@@@)
-
-:::::: theorem :::::
-Let $A$ be a set. (@@@)
-
-::: proof ::::::::::
-(@@@)
-::::::::::::::::::::
-
-::: test :::::::::::
-
-(@@@)
-
-::::::::::::::::::::
-::::::::::::::::::::
-
-(@@@)
-
-:::::: theorem :::::
-Let $A$ be a set. (@@@)
-
-::: proof ::::::::::
-(@@@)
-::::::::::::::::::::
-
-::: test :::::::::::
-
-(@@@)
-
-::::::::::::::::::::
-::::::::::::::::::::
-
-(@@@)
-
-:::::: theorem :::::
-Let $A$ be a set. (@@@)
-
-::: proof ::::::::::
-(@@@)
-::::::::::::::::::::
-
-::: test :::::::::::
-
-(@@@)
-
-::::::::::::::::::::
-::::::::::::::::::::
-
-(@@@)
-
-:::::: theorem :::::
-Let $A$ be a set. (@@@)
-
-::: proof ::::::::::
-(@@@)
-::::::::::::::::::::
-
-::: test :::::::::::
-
-(@@@)
+> _test_sublists_unique :: (List t, Boolean bool, Equal a, Equal (t a), Equal (t (t a)))
+>   => t a -> bool -> Test (t a -> Bool)
+> _test_sublists_unique _ _ =
+>   testName "unique(sublists(x)) == unique(x)" $
+>   \x -> eq
+>     (unique (sublists x))
+>     (unique x)
 
 ::::::::::::::::::::
 ::::::::::::::::::::
@@ -506,6 +451,7 @@ Suite:
 >   runTest args (_test_sublists_length t k)
 >   runTest args (_test_sublists_select t k)
 >   runTest args (_test_sublists_filter t p)
+>   runTest args (_test_sublists_unique t p)
 
 Main:
 
