@@ -947,7 +947,8 @@ $$\begin{eqnarray*}
    = & \bnot(\btrue) \\
  & = & \bnot(\all(\bnot \circ p,x)) \\
  & = & \bnot(\bnot(\any(p,x))) \\
- & = & \any(p,x)
+ &     \href{@not@#thm-not-involution}
+   = & \any(p,x)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

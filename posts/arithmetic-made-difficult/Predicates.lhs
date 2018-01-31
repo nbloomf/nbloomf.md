@@ -127,25 +127,33 @@ as needed.
 3. If $a \in A$, we have
 $$\begin{eqnarray*}
  &   & \compose(\bnot)(\ptrue)(a) \\
- & = & \bnot(\ptrue(a)) \\
- & = & \bnot(\const(\btrue)(a)) \\
- & = & \bnot(\btrue) \\
+ &     \href{@functions@#def-compose}
+   = & \bnot(\ptrue(a)) \\
+ &     \href{@predicates@#def-ptrue}
+   = & \bnot(\const(\btrue)(a)) \\
+ &     \href{@functions@#def-const}
+   = & \bnot(\btrue) \\
  &     \href{@not@#thm-not-true}
    = & \bfalse \\
  & = & \const(\bfalse)(a) \\
- & = & \pfalse(a)
+ &     \href{@predicates@#def-pfalse}
+   = & \pfalse(a)
 \end{eqnarray*}$$
 as needed.
 4. If $a \in A$, we have
 $$\begin{eqnarray*}
  &   & \compose(\bnot)(\pfalse)(a) \\
- & = & \bnot(\pfalse(a)) \\
- & = & \bnot(\const(\bfalse)(a)) \\
- & = & \bnot(\bfalse) \\
+ &     \href{@functions@#def-compose}
+   = & \bnot(\pfalse(a)) \\
+ &     \href{@predicates@#def-pfalse}
+   = & \bnot(\const(\bfalse)(a)) \\
+ &     \href{@functions@#def-const}
+   = & \bnot(\bfalse) \\
  &     \href{@not@#thm-not-false}
    = & \btrue \\
  & = & \const(\btrue)(a) \\
- & = & \ptrue(a)
+ &     \href{@predicates@#def-ptrue}
+   = & \ptrue(a)
 \end{eqnarray*}$$
 ::::::::::::::::::::
 
@@ -209,9 +217,12 @@ Let $A$ be a set. The following hold for all p,q,r \in \bool^A$.
 1. For all $a \in A$ we have
 $$\begin{eqnarray*}
  &   & \pand(\pfalse,p)(a) \\
- & = & \band(\pfalse(a),p(a)) \\
- & = & \band(\const(\bfalse)(a),p(a)) \\
- & = & \band(\bfalse,p(a)) \\
+ &     \href{@predicates@#def-pand}
+   = & \band(\pfalse(a),p(a)) \\
+ &     \href{@predicates@#def-pfalse}
+   = & \band(\const(\bfalse)(a),p(a)) \\
+ &     \href{@functions@#def-const}
+   = & \band(\bfalse,p(a)) \\
  &     \href{@and@#thm-and-false-left}
    = & \bfalse \\
  & = & \pfalse(a)
@@ -220,9 +231,12 @@ as needed; similarly for the other equality.
 2. For all $a \in A$, we have
 $$\begin{eqnarray*}
  &   & \pand(\ptrue,p)(a) \\
- & = & \band(\ptrue(a),p(a)) \\
- & = & \band(\const(\btrue)(a),p(a)) \\
- & = & \band(\btrue,p(a)) \\
+ &     \href{@predicates@#def-pand}
+   = & \band(\ptrue(a),p(a)) \\
+ &     \href{@predicates@#def-ptrue}
+   = & \band(\const(\btrue)(a),p(a)) \\
+ &     \href{@functions@#def-const}
+   = & \band(\btrue,p(a)) \\
  &     \href{@and@#thm-and-true-left}
    = & p(a)
 \end{eqnarray*}$$
@@ -230,7 +244,8 @@ as needed.
 3. For all $a \in A$, we have
 $$\begin{eqnarray*}
  &   & \pand(p,p)(a) \\
- & = & \band(p(a),p(a)) \\
+ &     \href{@predicates@#def-pand}
+   = & \band(p(a),p(a)) \\
  &     \href{@and@#thm-and-idempotent}
    = & p(a)
 \end{eqnarray*}$$
@@ -238,7 +253,8 @@ as needed.
 4. For all $a \in A$, we have
 $$\begin{eqnarray*}
  &   & \pand(p,q)(a) \\
- & = & \band(p(a),q(a)) \\
+ &     \href{@predicates@#def-pand}
+   = & \band(p(a),q(a)) \\
  &     \href{@and@#thm-and-commutative}
    = & \band(q(a),p(a)) \\
  & = & \pand(q,p)(a)
@@ -247,8 +263,10 @@ as needed.
 5. For all $a \in A$, we have
 $$\begin{eqnarray*}
  &   & \pand(\pand(p,q),r)(a) \\
- & = & \band(\pand(p,q)(a),r(a)) \\
- & = & \band(\band(p(a),q(a)),r(a)) \\
+ &     \href{@predicates@#def-pand}
+   = & \band(\pand(p,q)(a),r(a)) \\
+ &     \href{@predicates@#def-pand}
+   = & \band(\band(p(a),q(a)),r(a)) \\
  &     \href{@and@#thm-and-associative}
    = & \band(p(a),\band(q(a),r(a))) \\
  & = & \band(p(a),\pand(q,r)(a)) \\
@@ -324,7 +342,8 @@ Let $A$ be a set. The following hold for all $p,q,r \in \bool^A$.
 1. For all $a \in A$, we have
 $$\begin{eqnarray*}
  &   & \por(\ptrue,p)(a) \\
- & = & \bor(\ptrue(a),p(a)) \\
+ &     \href{@predicates@#def-por}
+   = & \bor(\ptrue(a),p(a)) \\
  & = & \bor(\btrue,p(a)) \\
  &     \href{@or@#thm-or-true-left}
    = & \btrue \\
@@ -334,7 +353,8 @@ as needed; the other equality is similar.
 2. For all $a \in A$, we have
 $$\begin{eqnarray*}
  &   & \por(\pfalse,p)(a) \\
- & = & \bor(\pfalse(a),p(a)) \\
+ &     \href{@predicates@#def-por}
+   = & \bor(\pfalse(a),p(a)) \\
  & = & \bor(\bfalse,p(a)) \\
  &     \href{@or@#thm-or-false-left}
    = & p(a)
@@ -343,7 +363,8 @@ as needed; the other equality is similar.
 3. For all $a \in A$, we have
 $$\begin{eqnarray*}
  &   & \por(p,p)(a) \\
- & = & \bor(p(a),p(a)) \\
+ &     \href{@predicates@#def-por}
+   = & \bor(p(a),p(a)) \\
  &     \href{@or@#thm-or-idempotent}
    = & p(a)
 \end{eqnarray*}$$
@@ -351,7 +372,8 @@ as needed.
 4. For all $a \in A$, we have
 $$\begin{eqnarray*}
  &   & \por(p,q)(a) \\
- & = & \bor(p(a),q(a)) \\
+ &     \href{@predicates@#def-por}
+   = & \bor(p(a),q(a)) \\
  &     \href{@or@#thm-or-commutative}
    = & \bor(q(a),p(a)) \\
  & = & \por(q,p)(a)
@@ -360,12 +382,15 @@ as needed.
 5. For all $a \in A$, we have
 $$\begin{eqnarray*}
  &   & \por(\por(p,q),r)(a) \\
- & = & \bor(\por(p,q)(a),r(a)) \\
- & = & \bor(\bor(p(a),q(a)),r(a)) \\
+ &     \href{@predicates@#def-por}
+   = & \bor(\por(p,q)(a),r(a)) \\
+ &     \href{@predicates@#def-por}
+   = & \bor(\bor(p(a),q(a)),r(a)) \\
  &     \href{@or@#thm-or-associative}
    = & \bor(p(a),\bor(q(a),r(a))) \\
  & = & \bor(p(a),\por(q,r)(a)) \\
- & = & \por(p,\por(q,r))(a)
+ &     \href{@predicates@#def-por}
+   = & \por(p,\por(q,r))(a)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -429,7 +454,8 @@ $$\begin{eqnarray*}
  &     \href{@or@#thm-demorgan-not-and}
    = & \bor(\bnot(p(a)),\bnot(q(a))) \\
  & = & \bor(\pnot(p)(a),\pnot(q)(a)) \\
- & = & \por(\pnot(p),\pnot(q))(a)
+ &     \href{@predicates@#def-por}
+   = & \por(\pnot(p),\pnot(q))(a)
 \end{eqnarray*}$$
 as needed.
 2. For all $a \in A$, we have
@@ -441,29 +467,36 @@ $$\begin{eqnarray*}
  &     \href{@or@#thm-demorgan-not-or}
    = & \band(\bnot(p(a)),\bnot(q(a))) \\
  & = & \band(\pnot(p)(a),\pnot(q)(a)) \\
- & = & \pand(\pnot(p),\pnot(q))(a)
+ &     \href{@predicates@#def-pand}
+   = & \pand(\pnot(p),\pnot(q))(a)
 \end{eqnarray*}$$
 as needed.
 3. For all $a \in A$, we have
 $$\begin{eqnarray*}
  &   & \pand(p,\por(q,r))(a) \\
- & = & \band(p(a),\por(q,r)(a)) \\
- & = & \band(p(a),\bor(q(a),r(a))) \\
+ &     \href{@predicates@#def-pand}
+   = & \band(p(a),\por(q,r)(a)) \\
+ &     \href{@predicates@#def-por}
+   = & \band(p(a),\bor(q(a),r(a))) \\
  &     \href{@or@#thm-and-or-distribute}
    = & \bor(\band(p(a),q(a)),\band(p(a),r(a))) \\
  & = & \bor(\pand(p,q)(a),\pand(p,r)(a)) \\
- & = & \por(\pand(p,q),\pand(p,r))(a)
+ &     \href{@predicates@#def-por}
+   = & \por(\pand(p,q),\pand(p,r))(a)
 \end{eqnarray*}$$
 as needed.
 4. For all $a \in A$, we have
 $$\begin{eqnarray*}
  &   & \por(p,\pand(q,r))(a) \\
- & = & \bor(p(a),\pand(q,r)(a)) \\
- & = & \bor(p(a),\band(q(a),r(a))) \\
+ &     \href{@predicates@#def-por}
+   = & \bor(p(a),\pand(q,r)(a)) \\
+ &     \href{@predicates@#def-pand}
+   = & \bor(p(a),\band(q(a),r(a))) \\
  &     \href{@or@#thm-or-and-distribute}
    = & \band(\bor(p(a),q(a)),\bor(p(a),r(a))) \\
  & = & \band(\por(p,q)(a),\por(p,r)(a)) \\
- & = & \pand(\por(p,q),\por(p,r))(a)
+ &     \href{@predicates@#def-pand}
+   = & \pand(\por(p,q),\por(p,r))(a)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
