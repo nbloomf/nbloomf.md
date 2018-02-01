@@ -6,7 +6,7 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: tuples
 ---
 
-> {-# LANGUAGE NoImplicitPrelude #-}
+> {-# LANGUAGE NoImplicitPrelude, FlexibleContexts #-}
 > module Tuples
 >   ( Pair(Pair,fst,snd), dup, tup, tswap, tpair, tassocL, tassocR, uncurry
 >   , _test_tuple, main_tuple
@@ -114,6 +114,9 @@ In Haskell we can model $A \times B$, and the maps in the universal property, wi
 >     a <- arbitrary
 >     b <- arbitrary
 >     return (Pair a b)
+> 
+> instance (CoArbitrary a, CoArbitrary b) => CoArbitrary (Pair a b) where
+>   coarbitrary (Pair a b) = coarbitrary a . coarbitrary b
 
 $\dup$ is a $\tup$.
 
@@ -372,10 +375,24 @@ $$\begin{eqnarray*}
  &   & \tAssocL(\tup(a)(\tup(b)(c))) \\
  &     \href{@tuples@#def-tAssocL}
    = & \dup(\dup(\fst,\compose(\fst)(\snd)),\compose(\snd)(\snd))(\tup(a)(\tup(b)(c))) \\
- & = & (\dup(\fst,\compose(\fst)(\snd))(\tup(a)(\tup(b)(c))),(\compose(\snd)(\snd))(\tup(a)(\tup(b)(c)))) \\
- & = & ((\fst(\tup(a)(\tup(b)(c))),\fst(\snd(\tup(a)(\tup(b)(c))))),\snd(\snd(\tup(a)(\tup(b)(c))))) \\
- & = & ((a,\fst(b,c)),\snd(b,c)) \\
- & = & \tup(\tup(a)(b))(c)
+ &     \href{@tuples@#thm-dup-tup}
+   = & \tup(\dup(\fst,\compose(\fst)(\snd))(\tup(a)(\tup(b)(c))))(\compose(\snd)(\snd)(\tup(a)(\tup(b)(c)))) \\
+ &     \href{@functions@#def-compose}
+   = & \tup(\dup(\fst,\compose(\fst)(\snd))(\tup(a)(\tup(b)(c))))(\snd(\snd(\tup(a)(\tup(b)(c))))) \\
+ &     \href{@tuples@#thm-snd-tup}
+   = & \tup(\dup(\fst,\compose(\fst)(\snd))(\tup(a)(\tup(b)(c))))(\snd(\tup(b)(c))) \\
+ &     \href{@tuples@#thm-snd-tup}
+   = & \tup(\dup(\fst,\compose(\fst)(\snd))(\tup(a)(\tup(b)(c))))(c) \\
+ &     \href{@tuples@#thm-dup-tup}
+   = & \tup(\tup(\fst(\tup(a)(\tup(b)(c))))(\compose(\fst)(\snd)(\tup(a)(\tup(b)(c)))))(c) \\
+ &     \href{@functions@#def-compose}
+   = & \tup(\tup(\fst(\tup(a)(\tup(b)(c))))(\fst(\snd(\tup(a)(\tup(b)(c))))))(c) \\
+ &     \href{@tuples@#thm-snd-tup}
+   = & \tup(\tup(\fst(\tup(a)(\tup(b)(c))))(\fst(\tup(b)(c))))(c) \\
+ &     \href{@tuples@#thm-fst-tup}
+   = & \tup(\tup(\fst(\tup(a)(\tup(b)(c))))(b))(c) \\
+ &     \href{@tuples@#thm-fst-tup}
+   = & \tup(\tup(a)(b))(c) \\
 \end{eqnarray*}$$
 as claimed.
 2. Note that
@@ -383,16 +400,31 @@ $$\begin{eqnarray*}
  &   & \tAssocR(\tup(\tup(a)(b))(c)) \\
  &     \href{@tuples@#def-tAssocR}
    = & \dup(\compose(\fst)(\fst),\dup(\compose(\snd)(\fst),\snd))(\tup(\tup(a)(b))(c)) \\
- & = & (\fst(\fst(\tup(\tup(a)(b))(c))),\dup(\compose(\snd)(\fst), \snd)(\tup(\tup(a)(b))(c))) \\
- & = & (\fst(a,b),(\snd(\fst(\tup(\tup(a)(b))(c))),\snd(\tup(\tup(a)(b))(c)))) \\
- & = & \tup(a)(\tup(\snd(\tup(a)(b)))(c)) \\
- & = & \tup(a)(\tup(b)(c))
+ &     \href{@tuples@#thm-dup-tup}
+   = & \tup(\compose(\fst)(\fst)(\tup(\tup(a)(b))(c)))(\dup(\compose(\snd)(\fst),\snd)(\tup(\tup(a)(b))(c))) \\
+ &     \href{@functions@#def-compose}
+   = & \tup(\fst(\fst(\tup(\tup(a)(b))(c))))(\dup(\compose(\snd)(\fst),\snd)(\tup(\tup(a)(b))(c))) \\
+ &     \href{@tuples@#thm-fst-tup}
+   = & \tup(\fst(\tup(a)(b)))(\dup(\compose(\snd)(\fst),\snd)(\tup(\tup(a)(b))(c))) \\
+ &     \href{@tuples@#thm-fst-tup}
+   = & \tup(a)(\dup(\compose(\snd)(\fst),\snd)(\tup(\tup(a)(b))(c))) \\
+ &     \href{@tuples@#thm-dup-tup}
+   = & \tup(a)(\tup(\compose(\snd)(\fst)(\tup(\tup(a)(b))(c)))(\snd(\tup(\tup(a)(b))(c)))) \\
+ &     \href{@tuples@#thm-snd-tup}
+   = & \tup(a)(\tup(\compose(\snd)(\fst)(\tup(\tup(a)(b))(c)))(c)) \\
+ &     \href{@functions@#def-compose}
+   = & \tup(a)(\tup(\snd(\fst(\tup(\tup(a)(b))(c))))(c)) \\
+ &     \href{@tuples@#thm-fst-tup}
+   = & \tup(a)(\tup(\snd(\tup(a)(b)))(c)) \\
+ &     \href{@tuples@#thm-snd-tup}
+   = & \tup(a)(\tup(b)(c)) \\
 \end{eqnarray*}$$
 as claimed.
 3. Note that
 $$\begin{eqnarray*}
- &   & (\tAssocR \circ \tAssocL)(\tup(a)(\tup(b)(c))) \\
- & = & \tAssocR(\tAssocL(\tup(a)(\tup(b)(c)))) \\
+ &   & \compose(\tAssocR)(\tAssocL)(\tup(a)(\tup(b)(c))) \\
+ &     \href{@functions@#def-compose}
+   = & \tAssocR(\tAssocL(\tup(a)(\tup(b)(c)))) \\
  &     \href{@tuples@#thm-tAssocL-tup}
    = & \tAssocR(\tup(\tup(a)(b))(c)) \\
  &     \href{@tuples@#thm-tAssocR-tup}
@@ -401,8 +433,9 @@ $$\begin{eqnarray*}
 as claimed.
 4. Note that
 $$\begin{eqnarray*}
- &   & (\tAssocL \circ \tAssocR)(\tup(\tup(a)(b))(c)) \\
- & = & \tAssocL(\tAssocR(\tup(\tup(a)(b))(c))) \\
+ &   & \compose(\tAssocL)(\tAssocR)(\tup(\tup(a)(b))(c)) \\
+ &     \href{@functions@#def-compose}
+   = & \tAssocL(\tAssocR(\tup(\tup(a)(b))(c))) \\
  &     \href{@tuples@#thm-tAssocR-tup}
    = & \tAssocL(\tup(a)(\tup(b)(c))) \\
  &     \href{@tuples@#thm-tAssocL-tup}
