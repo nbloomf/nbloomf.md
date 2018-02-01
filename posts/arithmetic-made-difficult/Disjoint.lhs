@@ -73,7 +73,7 @@ $$\begin{eqnarray*}
  & = & \isnil(\common(x,\dedupeL(y))) \\
  & = & \isnil(\common(x,y)) \\
  & = & \disjoint(x,y)
-\end{eqnarray*}$$d
+\end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
 

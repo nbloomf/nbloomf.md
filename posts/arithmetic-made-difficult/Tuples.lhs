@@ -338,7 +338,7 @@ as claimed.
 > _test_tassocL_entries :: (Equal a, Equal b, Equal c)
 >   => a -> b -> c -> Test (a -> b -> c -> Bool)
 > _test_tassocL_entries _ _ _ =
->   testName "tassocL(tup(a)(tup(b)(c)) == tup(tup(a)(b))(c)" $
+>   testName "tassocL(tup(a)(tup(b)(c))) == tup(tup(a)(b))(c)" $
 >   \a b c -> eq (tassocL (tup a (tup b c))) (tup (tup a b) c)
 > 
 > 
