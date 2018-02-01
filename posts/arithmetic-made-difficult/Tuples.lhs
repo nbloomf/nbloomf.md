@@ -23,7 +23,7 @@ slug: tuples
 Today we'll establish a few basic utility functions on *tuples*. First, recall some definitions.
 
 :::::: definition ::
-[]{#def-fst-dup}[]{#def-snd-dup}
+[]{#def-dup}[]{#def-fst-dup}[]{#def-snd-dup}
 Let $A$ and $B$ be sets. There is a set $A \times B$ together with two functions $\fst : A \times B \rightarrow A$ and $\snd : A \times B \rightarrow B$ having the property that if $X$ is a set and $\sigma : X \rightarrow A$ and $\tau : X \rightarrow B$ functions then there is a unique map $\Theta : X \rightarrow A \times B$ such that $\fst \circ \Theta = \sigma$ and $\snd \circ \Theta = \tau$. That is, there is a unique $\Theta$ such that the following diagram commutes.
 
 $$\require{AMScd}
@@ -69,19 +69,21 @@ $$\begin{eqnarray*}
    = & b
 \end{eqnarray*}$$
 as claimed.
-2. Define $\omega : \ast \rightarrow A \times B$ by $\omega = \const(w)$. Now
+2. Suppose $\fst(w) = a$ and $\snd(w) = b$, and consider $\const(w)$ as a function $\ast \rightarrow A \times B$. Note that
 $$\begin{eqnarray*}
- &   & \fst(\omega(\ast)) \\
+ &   & \fst(\const(w)(\ast)) \\
  & = & \fst(w) \\
- & = & a \\
+ &     \hyp{\fst(w) = a}
+   = & a \\
  &     \href{@functions@#def-const}
    = & \const(a)(\ast)
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
- &   & \snd(\omega(\ast)) \\
+ &   & \snd(\const(w)(\ast)) \\
  & = & \snd(w) \\
- & = & b \\
+ &     \hyp{\snd(w) = b}
+   = & b \\
  &     \href{@functions@#def-const}
    = & \const(b)(\ast)
 \end{eqnarray*}$$
@@ -110,6 +112,39 @@ In Haskell we can model $A \times B$, and the maps in the universal property, wi
 >     a <- arbitrary
 >     b <- arbitrary
 >     return (Pair a b)
+
+$\dup$ is a $\tup$.
+
+:::::: theorem :::::
+Let $A$ and $B$ be sets. For all $x \in A \times B$ we have $$\dup(f,g)(x) = \tup(f(x))(g(x)).$$
+
+::: proof ::::::::::
+We have
+$$\begin{eqnarray*}
+ &   & \fst(\dup(f,g)(x)) \\
+ &     \href{@tuples@#def-fst-dup}
+   = & f(x)
+\end{eqnarray*}$$
+and
+$$\begin{eqnarray*}
+ &   & \snd(\dup(f,g)(x)) \\
+ &     \href{@tuples@#def-snd-dup}
+   = & g(x)
+\end{eqnarray*}$$
+so that $\dup(f,g)(x) = \tup(f(x))(g(x))$ by the uniqueness of $\tup$.
+as claimed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_dup_tup :: (Equal a, Equal b)
+>   => a -> b -> Test ((Pair a b -> a) -> (Pair a b -> b) -> Pair a b -> Bool)
+> _test_dup_tup _ _ =
+>   testName "dup(f,g)(x) == tup(f(x))(f(x))" $
+>   \f g x -> eq (dup f g x) (tup (f x) (g x))
+
+::::::::::::::::::::
+::::::::::::::::::::
 
 For example, $\id_{A \times B}$ is a $\dup$.
 
@@ -151,7 +186,7 @@ so that $\dup(\fst,\snd)(\tup(a)(b)) = \tup(a)(b)$ for all $a \in A$ and $b \in 
 We define $\tSwap$ on tuples like so.
 
 :::::: definition ::
-[]{#def-tswap}
+[]{#def-tSwap}
 Let $A$ and $B$ be sets. We define $\tSwap : A \times B \rightarrow B \times A$ by $$\tSwap = \dup(\snd,\fst).$$
 
 In Haskell,
@@ -164,7 +199,7 @@ In Haskell,
 Elements of $A \times B$ act like "ordered pairs", and $\tSwap$ effectively reverses the order of the pair.
 
 :::::: theorem :::::
-[]{#thm-tswap-swap}[]{#thm-tswap-involution}
+[]{#thm-tSwap-swap}[]{#thm-tSwap-involution}
 Let $A$ and $B$ be sets. Then we have the following.
 
 1. $\tSwap(\tup(a)(b)) = \tup(b)(a)$.
@@ -174,7 +209,7 @@ Let $A$ and $B$ be sets. Then we have the following.
 1. Note that
 $$\begin{eqnarray*}
  &   & \fst(\tSwap(\tup(a)(b))) \\
- &     \href{@tuples@#def-tswap}
+ &     \href{@tuples@#def-tSwap}
    = & \fst(\dup(\snd,\fst)(\tup(a)(b))) \\
  &     \href{@tuples@#def-fst-dup}
    = & \snd(\tup(a)(b)) \\
@@ -184,7 +219,7 @@ $$\begin{eqnarray*}
 and
 $$\begin{eqnarray*}
  &   & \snd(\tSwap(\tup(a)(b))) \\
- &     \href{@tuples@#def-tswap}
+ &     \href{@tuples@#def-tSwap}
    = & \snd(\dup(\snd,\fst)(\tup(a)(b))) \\
  &     \href{@tuples@#def-snd-dup}
    = & \fst(\tup(a)(b)) \\
@@ -195,9 +230,9 @@ so that $\tSwap(\tup(a)(b)) = \tup(b)(a)$ as claimed.
 2. Note that
 $$\begin{eqnarray*}
  &   & \tSwap(\tSwap(\tup(a)(b))) \\
- &     \href{@tuples@#thm-tswap-swap}
+ &     \href{@tuples@#thm-tSwap-swap}
    = & \tSwap(\tup(b)(a)) \\
- &     \href{@tuples@#thm-tswap-swap}
+ &     \href{@tuples@#thm-tSwap-swap}
    = & \tup(a)(b)
 \end{eqnarray*}$$
 as claimed.
@@ -224,7 +259,7 @@ as claimed.
 Next, the utility $\tPair$ facilitates defining functions from one tuple to another.
 
 :::::: definition ::
-[]{#def-tpair}
+[]{#def-tPair}
 Let $A$, $B$, $U$, and $V$ be sets. We define $\tPair : U^A \times V^B \rightarrow (U \times V)^{A \times B}$ by $$\tPair(f,g) = \dup(\compose(f)(\fst),\compose(g)(\snd)).$$
 
 In Haskell:
@@ -237,7 +272,7 @@ In Haskell:
 $\tPair$ has some nice properties.
 
 :::::: theorem :::::
-[]{#thm-tpair-tup}[]{#thm-tpair-compose}
+[]{#thm-tPair-tup}[]{#thm-tPair-compose}
 For all $f$, $g$, $h$, $k$, $a$, and $b$ we have the following.
 
 1. $\tPair(f,g)(\tup(a)(b)) = \tup(f(a))(g(b))$.
@@ -246,21 +281,36 @@ For all $f$, $g$, $h$, $k$, $a$, and $b$ we have the following.
 ::: proof ::::::::::
 1. Note that
 $$\begin{eqnarray*}
- &   & \tPair(f,g)(a,b) \\
- & = & \dup(f \circ \fst, g \circ \snd)(a,b) \\
- & = & ((f \circ \fst)(a,b),(g \circ \snd)(a,b)) \\
- & = & (f(\fst(a,b)),g(\snd(a,b))) \\
- & = & (f(a),g(b))
+ &   & \tPair(f,g)(\tup(a)(b)) \\
+ &     \href{@tuples@#def-tPair}
+   = & \dup(\compose(f)(\fst))(\compose(g)(\snd))(\tup(a)(b)) \\
+ &     \href{@tuples@#thm-dup-tup}
+   = & \tup(\compose(f)(\fst)(\tup(a)(b)))(\compose(g)(\snd)(\tup(a)(b))) \\
+ &     \href{@functions@#def-compose}
+   = & \tup(f(\fst(\tup(a)(b))))(\compose(g)(\snd)(\tup(a)(b))) \\
+ &     \href{@functions@#def-compose}
+   = & \tup(f(\fst(\tup(a)(b))))(g(\snd(\tup(a)(b)))) \\
+ &     \href{@tuples@#thm-fst-tup}
+   = & \tup(f(a))(g(\snd(\tup(a)(b)))) \\
+ &     \href{@tuples@#thm-snd-tup}
+   = & \tup(f(a))(g(b))
 \end{eqnarray*}$$
 as claimed.
-2. Note that for all $(a,b)$ we have
+2. Note that
 $$\begin{eqnarray*}
- &   & (\tPair(f,g) \circ \tPair(h,k))(a,b) \\
- & = & \tPair(f,g)(\tPair(h,k)(a,b)) \\
- & = & \tPair(f,g)(h(a),k(b)) \\
- & = & (f(h(a)),g(k(b))) \\
- & = & ((f \circ h)(a),(g \circ k)(b)) \\
- & = & \tPair(f \circ h, g \circ k)(a,b)
+ &   & \compose(\tPair(f,g))(\tPair(h,k))(\tup(a)(b)) \\
+ &     \href{@functions@#def-compose}
+   = & \tPair(f,g)(\tPair(h,k)(\tup(a)(b))) \\
+ &     \href{@tuples@#thm-tPair-tup}
+   = & \tPair(f,g)(\tup(h(a))(k(b))) \\
+ &     \href{@tuples@#thm-tPair-tup}
+   = & \tup(f(h(a)))(g(k(b))) \\
+ &     \href{@functions@#def-compose}
+   = & \tup(f(h(a)))(\compose(g)(k)(b)) \\
+ &     \href{@functions@#def-compose}
+   = & \tup(\compose(f)(h)(a))(\compose(g)(k)(b)) \\
+ &     \href{@tuples@#thm-tPair-tup}
+   = & \tPair(\compose(f)(h),\compose(g)(k))(\tup(a)(b))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -317,38 +367,38 @@ The following hold whenever everything has the appropriate type.
 ::: proof ::::::::::
 1. Note that
 $$\begin{eqnarray*}
- &   & \tAssocL(a,(b,c)) \\
- & = & \dup(\dup(\fst, \fst \circ \snd),\snd \circ \snd)(a,(b,c)) \\
- & = & (\dup(\fst,\fst \circ \snd)(a,(b,c)),(\snd \circ \snd)(a,(b,c))) \\
- & = & ((\fst(a,(b,c)),\fst(\snd(a,(b,c)))),\snd(\snd(a,(b,c)))) \\
+ &   & \tAssocL(\tup(a)(\tup(b)(c))) \\
+ & = & \dup(\dup(\fst,\compose(\fst)(\snd)),\compose(\snd)(\snd))(\tup(a)(\tup(b)(c))) \\
+ & = & (\dup(\fst,\compose(\fst)(\snd))(\tup(a)(\tup(b)(c))),(\compose(\snd)(\snd))(\tup(a)(\tup(b)(c)))) \\
+ & = & ((\fst(\tup(a)(\tup(b)(c))),\fst(\snd(\tup(a)(\tup(b)(c))))),\snd(\snd(\tup(a)(\tup(b)(c))))) \\
  & = & ((a,\fst(b,c)),\snd(b,c)) \\
- & = & ((a,b),c)
+ & = & \tup(\tup(a)(b))(c)
 \end{eqnarray*}$$
 as claimed.
 2. Note that
 $$\begin{eqnarray*}
- &   & \tAssocR((a,b),c) \\
- & = & \dup(\fst \circ \fst, \dup(\snd \circ \fst, \snd))((a,b),c) \\
- & = & (\fst(\fst((a,b),c)),\dup(\snd \circ \fst, \snd)((a,b),c)) \\
- & = & (\fst(a,b),(\snd(\fst((a,b),c)),\snd((a,b),c))) \\
+ &   & \tAssocR(\tup(\tup(a)(b))(c)) \\
+ & = & \dup(\compose(\fst)(\fst),\dup(\compose(\snd)(\fst),\snd))(\tup(\tup(a)(b))(c)) \\
+ & = & (\fst(\fst(\tup(\tup(a)(b))(c))),\dup(\compose(\snd)(\fst), \snd)(\tup(\tup(a)(b))(c))) \\
+ & = & (\fst(a,b),(\snd(\fst(\tup(\tup(a)(b))(c))),\snd(\tup(\tup(a)(b))(c)))) \\
  & = & (a,(\snd(a,b),c)) \\
- & = & (a,(b,c))
+ & = & \tup(a)(\tup(b)(c))
 \end{eqnarray*}$$
 as claimed.
 3. Note that
 $$\begin{eqnarray*}
- &   & (\tAssocR \circ \tAssocL)(a,(b,c)) \\
- & = & \tAssocR(\tAssocL(a,(b,c))) \\
- & = & \tAssocR((a,b),c) \\
- & = & (a,(b,c))
+ &   & (\tAssocR \circ \tAssocL)(\tup(a)(\tup(b)(c))) \\
+ & = & \tAssocR(\tAssocL(\tup(a)(\tup(b)(c)))) \\
+ & = & \tAssocR(\tup(\tup(a)(b))(c)) \\
+ & = & \tup(a)(\tup(b)(c))
 \end{eqnarray*}$$
 as claimed.
 4. Note that
 $$\begin{eqnarray*}
- &   & (\tAssocL \circ \tAssocR)((a,b),c) \\
- & = & \tAssocL(\tAssocR((a,b),c)) \\
- & = & \tAssocL(a,(b,c)) \\
- & = & ((a,b),c)
+ &   & (\tAssocL \circ \tAssocR)(\tup(\tup(a)(b))(c)) \\
+ & = & \tAssocL(\tAssocR(\tup(\tup(a)(b))(c))) \\
+ & = & \tAssocL(\tup(a)(\tup(b)(c))) \\
+ & = & \tup(\tup(a)(b))(c)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -420,6 +470,7 @@ Suite:
 >       }
 > 
 >   runTest args (_test_dup_fst_snd a b)
+>   runTest args (_test_dup_tup a b)
 >   runTest args (_test_tswap_entries a b)
 >   runTest args (_test_tswap_tswap a b)
 >   runTest args (_test_tpair_apply a b)
