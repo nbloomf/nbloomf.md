@@ -72,7 +72,8 @@ as claimed.
 2. Suppose $\fst(w) = a$ and $\snd(w) = b$, and consider $\const(w)$ as a function $\ast \rightarrow A \times B$. Note that
 $$\begin{eqnarray*}
  &   & \fst(\const(w)(\ast)) \\
- & = & \fst(w) \\
+ &     \href{@functions@#def-const}
+   = & \fst(w) \\
  &     \hyp{\fst(w) = a}
    = & a \\
  &     \href{@functions@#def-const}
@@ -81,7 +82,8 @@ $$\begin{eqnarray*}
 and
 $$\begin{eqnarray*}
  &   & \snd(\const(w)(\ast)) \\
- & = & \snd(w) \\
+ &     \href{@functions@#def-const}
+   = & \snd(w) \\
  &     \hyp{\snd(w) = b}
    = & b \\
  &     \href{@functions@#def-const}
@@ -368,7 +370,8 @@ The following hold whenever everything has the appropriate type.
 1. Note that
 $$\begin{eqnarray*}
  &   & \tAssocL(\tup(a)(\tup(b)(c))) \\
- & = & \dup(\dup(\fst,\compose(\fst)(\snd)),\compose(\snd)(\snd))(\tup(a)(\tup(b)(c))) \\
+ &     \href{@tuples@#def-tAssocL}
+   = & \dup(\dup(\fst,\compose(\fst)(\snd)),\compose(\snd)(\snd))(\tup(a)(\tup(b)(c))) \\
  & = & (\dup(\fst,\compose(\fst)(\snd))(\tup(a)(\tup(b)(c))),(\compose(\snd)(\snd))(\tup(a)(\tup(b)(c)))) \\
  & = & ((\fst(\tup(a)(\tup(b)(c))),\fst(\snd(\tup(a)(\tup(b)(c))))),\snd(\snd(\tup(a)(\tup(b)(c))))) \\
  & = & ((a,\fst(b,c)),\snd(b,c)) \\
@@ -378,7 +381,8 @@ as claimed.
 2. Note that
 $$\begin{eqnarray*}
  &   & \tAssocR(\tup(\tup(a)(b))(c)) \\
- & = & \dup(\compose(\fst)(\fst),\dup(\compose(\snd)(\fst),\snd))(\tup(\tup(a)(b))(c)) \\
+ &     \href{@tuples@#def-tAssocR}
+   = & \dup(\compose(\fst)(\fst),\dup(\compose(\snd)(\fst),\snd))(\tup(\tup(a)(b))(c)) \\
  & = & (\fst(\fst(\tup(\tup(a)(b))(c))),\dup(\compose(\snd)(\fst), \snd)(\tup(\tup(a)(b))(c))) \\
  & = & (\fst(a,b),(\snd(\fst(\tup(\tup(a)(b))(c))),\snd(\tup(\tup(a)(b))(c)))) \\
  & = & (a,(\snd(a,b),c)) \\
@@ -389,16 +393,20 @@ as claimed.
 $$\begin{eqnarray*}
  &   & (\tAssocR \circ \tAssocL)(\tup(a)(\tup(b)(c))) \\
  & = & \tAssocR(\tAssocL(\tup(a)(\tup(b)(c)))) \\
- & = & \tAssocR(\tup(\tup(a)(b))(c)) \\
- & = & \tup(a)(\tup(b)(c))
+ &     \href{@tuples@#thm-tAssocL-tup}
+   = & \tAssocR(\tup(\tup(a)(b))(c)) \\
+ &     \href{@tuples@#thm-tAssocR-tup}
+   = & \tup(a)(\tup(b)(c))
 \end{eqnarray*}$$
 as claimed.
 4. Note that
 $$\begin{eqnarray*}
  &   & (\tAssocL \circ \tAssocR)(\tup(\tup(a)(b))(c)) \\
  & = & \tAssocL(\tAssocR(\tup(\tup(a)(b))(c))) \\
- & = & \tAssocL(\tup(a)(\tup(b)(c))) \\
- & = & \tup(\tup(a)(b))(c)
+ &     \href{@tuples@#thm-tAssocR-tup}
+   = & \tAssocL(\tup(a)(\tup(b)(c))) \\
+ &     \href{@tuples@#thm-tAssocL-tup}
+   = & \tup(\tup(a)(b))(c)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
