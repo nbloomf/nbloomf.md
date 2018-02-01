@@ -128,9 +128,18 @@
 @tuples@#thm-fst-tup	\\fst(\\tup(a)(b)) = a
 @tuples@#thm-snd-tup	\\snd(\\tup(a)(b)) = b
 @tuples@#thm-dup-fst-snd	\\dup(\\fst,\\snd) = \\id
-@tuples@#def-tswap	\\tswap = \\dup(\\snd,\\fst)
-@tuples@#thm-tswap-swap	\\tswap(\\tup(a)(b)) = \\tup(b)(a)
-@tuples@#thm-tswap-involution	\\tswap(\\tswap(\\tup(a)(b))) = \\tup(a)(b)
+@tuples@#def-tswap	\\tSwap = \\dup(\\snd,\\fst)
+@tuples@#thm-tswap-swap	\\tSwap(\\tup(a)(b)) = \\tup(b)(a)
+@tuples@#thm-tswap-involution	\\tSwap(\\tswap(\\tup(a)(b))) = \\tup(a)(b)
+@tuples@#def-tpair	\\tPair(f,g) = \\dup(\\compose(f)(\\fst),\\compose(g)(\\snd))
+@tuples@#thm-tpair-tup	\\tPair(f,g)(\\tup(a)(b)) = \\tup(f(a))(g(b))
+@tuples@#thm-tpair-compose	\\compose(\\tPair(f,g),\\tPair(h,k)) = \\tPair(\\compose(f)(h),\\compose(g)(k))
+@tuples@#def-tAssocL	\\tAssocL = \\dup(\\dup(\\fst,\\compose(\\fst)(\\snd)),\\compose(\\snd)(\\snd))
+@tuples@#def-tAssocR	\\tAssocR = \\dup(\\compose(\\fst)(\\fst),\\dup(\\compose(\\snd)(\\fst),\\snd))
+@tuples@#thm-tAssocL-tup	\\tAssocL(\\tup(a)(\\tup(b)(c))) = \\tup(\\tup(a)(b))(c)
+@tuples@#thm-tAssocR-tup	\\tAssocR(\\tup(\\tup(a)(b))(c)) = \\tup(a)(\\tup(b)(c))
+@tuples@#thm-tAssocR-tAssocL	\\compose(\\tAssocR)(\\tAssocL) = \\id
+@tuples@#thm-tAssocL-tAssocR	\\compose(\\tAssocL)(\\tAssocR) = \\id
 #=======================#
 #--- disjoint-unions ---#
 #=======================#

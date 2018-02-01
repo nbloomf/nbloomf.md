@@ -174,7 +174,8 @@ test-suite amd-tuple
     Not,
     And,
     Or,
-    Implies
+    Implies,
+    Functions
 
 test-suite amd-disjoint-union
   default-language: Haskell2010
@@ -664,6 +665,7 @@ test-suite amd-foldl
     Or,
     Implies,
     Functions,
+    Tuples,
     DisjointUnions,
     Unary,
     Lists
@@ -682,6 +684,7 @@ test-suite amd-cfoldr
     Or,
     Implies,
     Functions,
+    Tuples,
     DisjointUnions,
     Unary,
     Lists

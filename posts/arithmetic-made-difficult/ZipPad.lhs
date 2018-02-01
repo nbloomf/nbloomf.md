@@ -17,6 +17,7 @@ slug: zippad
 > import And
 > import Or
 > import Implies
+> import Functions
 > import Tuples
 > import DisjointUnions
 > import NaturalNumbers
@@ -113,7 +114,7 @@ as needed.
 >   => t a -> t b -> Test (a -> b -> t a -> Bool)
 > _test_zipPad_nil_right _ tb =
 >   testName "zipPad(u,v)(x,nil) == map(tupR(v))(x)" $
->   \u v x -> eq (zipPad u v x nil) (map (tupR v) x)
+>   \u v x -> eq (zipPad u v x nil) (map ((flip tup) v) x)
 
 ::::::::::::::::::::
 ::::::::::::::::::::
