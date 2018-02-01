@@ -385,7 +385,7 @@ $$\begin{eqnarray*}
    = & \dup(\compose(\fst)(\fst),\dup(\compose(\snd)(\fst),\snd))(\tup(\tup(a)(b))(c)) \\
  & = & (\fst(\fst(\tup(\tup(a)(b))(c))),\dup(\compose(\snd)(\fst), \snd)(\tup(\tup(a)(b))(c))) \\
  & = & (\fst(a,b),(\snd(\fst(\tup(\tup(a)(b))(c))),\snd(\tup(\tup(a)(b))(c)))) \\
- & = & (a,(\snd(a,b),c)) \\
+ & = & \tup(a)(\tup(\snd(\tup(a)(b)))(c)) \\
  & = & \tup(a)(\tup(b)(c))
 \end{eqnarray*}$$
 as claimed.
