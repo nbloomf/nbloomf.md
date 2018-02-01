@@ -107,7 +107,8 @@ $$\begin{eqnarray*}
  &   & \head(\nil) \\
  & = & \uPair(\id,\fst)(\uncons(\nil)) \\
  & = & \uPair(\id,\fst)(\lft(\ast)) \\
- & = & \lft(\id(\ast)) \\
+ &     \href{@disjoint-unions@#thm-uPair-lft}
+   = & \lft(\id(\ast)) \\
  &     \href{@functions@#def-id}
    = & \lft(\ast)
 \end{eqnarray*}$$

@@ -319,7 +319,8 @@ $$\begin{eqnarray*}
  &   & \at(\map(f)(\cons(a,y)),\zero) \\
  & = & \at(\cons(f(a),\map(f)(y)),\zero) \\
  & = & \rgt(f(a)) \\
- & = & \uPair(\id,f)(\rgt(a)) \\
+ &     \href{@disjoint-unions@#thm-uPair-rgt}
+   = & \uPair(\id,f)(\rgt(a)) \\
  & = & \uPair(\id,f)(\at(\cons(a,y),\zero))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ and $y$ for some $k$. Now

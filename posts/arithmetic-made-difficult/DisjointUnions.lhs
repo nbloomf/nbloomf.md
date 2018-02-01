@@ -77,7 +77,8 @@ $$\begin{eqnarray*}
  &     \href{@functions@#def-const}
    = & \const(\btrue)(a) \\
  & = & \compose(\Theta)(\lft)(a) \\
- & = & \Theta(\lft(a)) \\
+ &     \href{@functions@#def-compose}
+   = & \Theta(\lft(a)) \\
  & = & \Theta(z) \\
  & = & \Theta(\rgt(b)) \\
  & = & (\Theta \circ \rgt)(b) \\
@@ -203,7 +204,8 @@ as claimed.
 3. Let $x \in A+B$; we have two possibilities. If $x = \lft(a)$, we have
 $$\begin{eqnarray*}
  &   & \compose(\uSwap)(\uSwap)(\lft(a)) \\
- & = & \uSwap(\uSwap(\lft(a))) \\
+ &     \href{@functions@#def-compose}
+   = & \uSwap(\uSwap(\lft(a))) \\
  &     \href{@disjoint-unions@#thm-uSwap-lft}
    = & \uSwap(\rgt(a)) \\
  &     \href{@disjoint-unions@#thm-uSwap-rgt}
@@ -212,7 +214,8 @@ $$\begin{eqnarray*}
 and if $x = \rgt(b)$ we have
 $$\begin{eqnarray*}
  &   & \compose(\uSwap)(\uSwap)(\rgt(b)) \\
- & = & \uSwap(\uSwap(\rgt(b))) \\
+ &     \href{@functions@#def-compose}
+   = & \uSwap(\uSwap(\rgt(b))) \\
  &     \href{@disjoint-unions@#thm-uSwap-rgt}
    = & \uSwap(\lft(b)) \\
  &     \href{@disjoint-unions@#thm-uSwap-lft}
@@ -277,35 +280,46 @@ For all $f$, $g$, $h$, $k$, $a$, and $b$ we have the following.
 1. Note that
 $$\begin{eqnarray*}
  &   & \uPair(f,g)(\lft(a)) \\
- & = & \either(\compose(\lft)(f),\compose(\rgt)(g))(\lft(a)) \\
- & = & \compose(\lft)(f)(a) \\
- & = & \lft(f(a))
+ &     \href{@disjoint-unions@#def-uPair}
+   = & \either(\compose(\lft)(f),\compose(\rgt)(g))(\lft(a)) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \compose(\lft)(f)(a) \\
+ &     \href{@functions@#def-compose}
+   = & \lft(f(a))
 \end{eqnarray*}$$
 as claimed.
 2. Note that
 $$\begin{eqnarray*}
  &   & \uPair(f,g)(\rgt(b)) \\
- & = & \either(\compose(\lft)(f),\compose(\rgt)(g))(\rgt(b)) \\
- & = & \compose(\rgt)(g)(b) \\
- & = & \rgt(g(b))
+ &     \href{@disjoint-unions@#def-uPair}
+   = & \either(\compose(\lft)(f),\compose(\rgt)(g))(\rgt(b)) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \compose(\rgt)(g)(b) \\
+ &     \href{@functions@#def-compose}
+   = & \rgt(g(b))
 \end{eqnarray*}$$
 as claimed.
 3. We consider two possibilities: note that
 $$\begin{eqnarray*}
  &   & (\uPair(f,g) \circ \uPair(h,k))(\lft(a)) \\
  & = & \uPair(f,g)(\uPair(h,k)(\lft(a))) \\
- & = & \uPair(f,g)(\lft(h(a))) \\
- & = & \lft(f(h(a))) \\
+ &     \href{@disjoint-unions@#thm-uPair-lft}
+   = & \uPair(f,g)(\lft(h(a))) \\
+ &     \href{@disjoint-unions@#thm-uPair-lft}
+   = & \lft(f(h(a))) \\
  & = & \uPair(f \circ h, g \circ k)(\lft(a))
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
  &   & \compose(\uPair(f,g))(\uPair(h,k))(\rgt(b)) \\
- & = & \uPair(f,g)(\uPair(h,k)(\rgt(b))) \\
+ &     \href{@functions@#def-compose}
+   = & \uPair(f,g)(\uPair(h,k)(\rgt(b))) \\
  & = & \uPair(f,g)(\rgt(h(b))) \\
  & = & \rgt(g(k(b))) \\
- & = & \rgt(\compose(g)(k)(b)) \\
- & = & \uPair(\compose(f)(h),\compose(g)(k))(\rgt(b))
+ &     \href{@functions@#def-compose}
+   = & \rgt(\compose(g)(k)(b)) \\
+ &     \href{@disjoint-unions@#thm-uPair-rgt}
+   = & \uPair(\compose(f)(h),\compose(g)(k))(\rgt(b))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
