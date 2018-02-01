@@ -17,6 +17,7 @@ slug: elt
 > import And
 > import Or
 > import Implies
+> import Tuples
 > import NaturalNumbers
 > import LessThanOrEqualTo
 > import Lists
@@ -636,7 +637,7 @@ Suite:
 > _test_elt ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t, Arbitrary (t n), Show (t n), Equal (t n)
->   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (a,a))
+>   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (Pair a a))
 >   , TypeName n, Equal n, Show n, Arbitrary n, Natural n
 >   , Arbitrary (t (t a)), Show (t (t a)), Equal (t (t a))
 >   ) => t a -> n -> Int -> Int -> IO ()

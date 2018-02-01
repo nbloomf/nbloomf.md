@@ -17,6 +17,7 @@ slug: lcp-lcs
 > import And
 > import Or
 > import Implies
+> import Tuples
 > import NaturalNumbers
 > import Lists
 > import DoubleFold
@@ -433,7 +434,7 @@ as claimed.
 
 ::: test :::::::::::
 
-> _test_lcp_zip :: (List t, Equal a, Equal (t (a,a)))
+> _test_lcp_zip :: (List t, Equal a, Equal (t (Pair a a)))
 >   => t a -> Test (t a -> t a -> t a -> t a -> Bool)
 > _test_lcp_zip _ =
 >   testName "zip(lcp(x,y),lcp(u,v)) == lcp(zip(x,u),zip(y,v))" $
@@ -817,7 +818,7 @@ Suite:
 > _test_lcp ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a
 >   , TypeName (t a), List t
->   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (a,a))
+>   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (Pair a a))
 >   , Arbitrary (t (t a)), Show (t (t a)), Equal (t (t a))
 >   ) => t a -> Int -> Int -> IO ()
 > _test_lcp t maxSize numCases = do

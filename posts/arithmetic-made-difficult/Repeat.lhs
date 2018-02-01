@@ -17,6 +17,7 @@ slug: repeat
 > import And
 > import Or
 > import Implies
+> import Tuples
 > import DisjointUnions
 > import NaturalNumbers
 > import Plus
@@ -46,7 +47,7 @@ In Haskell:
 > repeat :: (List t, Natural n) => n -> a -> t a
 > repeat n a = unfoldN f n a
 >   where
->     f x = rgt (x,x)
+>     f x = rgt (tup x x)
 
 ::::::::::::::::::::
 
@@ -279,7 +280,7 @@ Suite:
 >   , TypeName b, Equal b, Show b, Arbitrary b, CoArbitrary b
 >   , TypeName (t a), List t
 >   , TypeName n, Natural n, Arbitrary n, Show n, Equal n
->   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (a,a)), Equal (t b)
+>   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (Pair a a)), Equal (t b)
 >   ) => t a -> t b -> n -> Int -> Int -> IO ()
 > _test_repeat t u n maxSize numCases = do
 >   testLabel2 "repeat" t n

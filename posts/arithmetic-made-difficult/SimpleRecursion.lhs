@@ -132,8 +132,8 @@ There's the naive way:
 There's the definition from the proof:
 
 > simpleRec' phi mu n a =
->   let t (m,h) = (next m, \x -> mu m x (h x))
->   in snd (naturalRec (zero,phi) t n) $ a
+>   let t (Pair m h) = tup (next m) (\x -> mu m x (h x))
+>   in snd (naturalRec (tup zero phi) t n) $ a
 
 And the tail recursive strategy:
 

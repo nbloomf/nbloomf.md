@@ -35,12 +35,12 @@ Let $A$ and $B$ be sets, with $u \in A$ and $v \in B$. Define $\delta : \lists{B
 
 In Haskell:
 
-> zipPad :: (List t) => a -> b -> t a -> t b -> t (a,b)
+> zipPad :: (List t) => a -> b -> t a -> t b -> t (Pair a b)
 > zipPad u v = dfoldr delta psi chi
 >   where
->     delta y = map (tupL u) y
->     psi a z = cons (a,v) z
->     chi a b _ z _ = cons (a,b) z
+>     delta y = map (tup u) y
+>     psi a z = cons (tup a v) z
+>     chi a b _ z _ = cons (tup a b) z
 
 ::::::::::::::::::::
 
@@ -56,27 +56,27 @@ $$\left\{\begin{array}{l}
 
 ::: test :::::::::::
 
-> _test_zipPad_nil_list :: (List t, Equal (t (a,b)))
+> _test_zipPad_nil_list :: (List t, Equal (t (Pair a b)))
 >   => t a -> t b -> Test (a -> b -> t b -> Bool)
 > _test_zipPad_nil_list ta _ =
 >   testName "zipPad(u,v)(nil,y) == map(tupL(u))(y)" $
->   \u v y -> eq (zipPad u v (nil `withTypeOf` ta) y) (map (tupL u) y)
+>   \u v y -> eq (zipPad u v (nil `withTypeOf` ta) y) (map (tup u) y)
 > 
 > 
-> _test_zipPad_cons_nil :: (List t, Equal (t (a,b)))
+> _test_zipPad_cons_nil :: (List t, Equal (t (Pair a b)))
 >   => t a -> t b -> Test (a -> b -> a -> t a -> Bool)
 > _test_zipPad_cons_nil _ tb =
 >   testName "zipPad(u,v)(cons(a,x),nil) == nil" $
 >   \u v a x -> eq
 >     (zipPad u v (cons a x) (nil `withTypeOf` tb))
->     (cons (a,v) (zipPad u v x nil))
+>     (cons (tup a v) (zipPad u v x nil))
 > 
 > 
-> _test_zipPad_cons_cons :: (List t, Equal (t (a,b)))
+> _test_zipPad_cons_cons :: (List t, Equal (t (Pair a b)))
 >   => t a -> t b -> Test (a -> b -> a -> t a -> b -> t b -> Bool)
 > _test_zipPad_cons_cons _ _ =
 >   testName "zipPad(u,v)(cons(a,x),cons(b,y)) == cons((a,b),zipPad(u,v)(x,y))" $
->   \u v a x b y -> eq (zipPad u v (cons a x) (cons b y)) (cons (a,b) (zipPad u v x y))
+>   \u v a x b y -> eq (zipPad u v (cons a x) (cons b y)) (cons (tup a b) (zipPad u v x y))
 
 ::::::::::::::::::::
 ::::::::::::::::::::
@@ -109,7 +109,7 @@ as needed.
 
 ::: test :::::::::::
 
-> _test_zipPad_nil_right :: (List t, Equal (t (a,b)))
+> _test_zipPad_nil_right :: (List t, Equal (t (Pair a b)))
 >   => t a -> t b -> Test (a -> b -> t a -> Bool)
 > _test_zipPad_nil_right _ tb =
 >   testName "zipPad(u,v)(x,nil) == map(tupR(v))(x)" $
@@ -161,7 +161,7 @@ as needed.
 
 ::: test :::::::::::
 
-> _test_zipPad_tswap :: (List t, Equal (t (b,a)))
+> _test_zipPad_tswap :: (List t, Equal (t (Pair b a)))
 >   => t a -> t b -> Test (a -> b -> t a -> t b -> Bool)
 > _test_zipPad_tswap _ _ =
 >   testName "map(tswap)(zipPad(u,v)(x,y)) == zipPad(v,u)(y,x)" $
@@ -215,7 +215,7 @@ as needed.
 
 ::: test :::::::::::
 
-> _test_zipPad_tpair :: (List t, Equal (t (a,b)))
+> _test_zipPad_tpair :: (List t, Equal (t (Pair a b)))
 >   => t a -> t b -> Test ((a -> a) -> (b -> b) -> a -> b -> t a -> t b -> Bool)
 > _test_zipPad_tpair _ _ =
 >   testName "map(tpair(f,g))(zipPad(u,v)(x,y)) == zipPad(f(u),g(v))(map(f)(x),map(g)(y))" $
@@ -354,22 +354,22 @@ as claimed.
 
 ::: test :::::::::::
 
-> _test_zipPad_zipPad_left :: (List t, Equal a, Equal (t ((a,a),a)))
+> _test_zipPad_zipPad_left :: (List t, Equal a, Equal (t (Pair (Pair a a) a)))
 >   => t a -> Test (a -> a -> a -> t a -> t a -> t a -> Bool)
 > _test_zipPad_zipPad_left _ =
 >   testName "zipPad((a,b),c)(zipPad(a,b)(x,y),z) == map(tassocL)zipPad(a,(b,c))(x,zipPad(b,c)(y,z))" $
 >   \a b c x y z -> eq
->     (zipPad (a,b) c (zipPad a b x y) z)
->     (map tassocL (zipPad a (b,c) x (zipPad b c y z)))
+>     (zipPad (tup a b) c (zipPad a b x y) z)
+>     (map tassocL (zipPad a (tup b c) x (zipPad b c y z)))
 > 
 > 
-> _test_zipPad_zipPad_right :: (List t, Equal a, Equal (t (a,(a,a))))
+> _test_zipPad_zipPad_right :: (List t, Equal a, Equal (t (Pair a (Pair a a))))
 >   => t a -> Test (a -> a -> a -> t a -> t a -> t a -> Bool)
 > _test_zipPad_zipPad_right _ =
 >   testName "zipPad((a,b),c)(zipPad(a,b)(x,y),z) == map(tassocR)zipPad(a,(b,c))(x,zipPad(b,c)(y,z))" $
 >   \a b c x y z -> eq
->     (zipPad a (b,c) x (zipPad b c y z))
->     (map tassocR (zipPad (a,b) c (zipPad a b x y) z))
+>     (zipPad a (tup b c) x (zipPad b c y z))
+>     (map tassocR (zipPad (tup a b) c (zipPad a b x y) z))
 
 ::::::::::::::::::::
 ::::::::::::::::::::
@@ -385,8 +385,8 @@ Suite:
 >   , TypeName b, Equal b, Show b, Arbitrary b, CoArbitrary b
 >   , TypeName n, Natural n, Equal n, Show n, Arbitrary n
 >   , TypeName (t a), TypeName (t b), List t, Equal (t a), Show (t a), Arbitrary (t a)
->   , Equal (t b), Show (t b), Arbitrary (t b), Equal (t (a,b)), Equal (t (b,a))
->   , Equal (t (a,(a,a))), Equal (t ((a,a),a))
+>   , Equal (t b), Show (t b), Arbitrary (t b), Equal (t (Pair a b)), Equal (t (Pair b a))
+>   , Equal (t (Pair a (Pair a a))), Equal (t (Pair (Pair a a) a))
 >   ) => t a -> t b -> n -> Int -> Int -> IO ()
 > _test_zipPad t u n maxSize numCases = do
 >   testLabel3 "zipPad" t u n

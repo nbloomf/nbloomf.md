@@ -17,6 +17,7 @@ slug: cfoldr
 > import And
 > import Or
 > import Implies
+> import Tuples
 > import Functions
 > import Unary
 > import Lists
@@ -80,14 +81,14 @@ There's the definition from the theorem:
 > cfoldr' gamma sigma x = foldr (const gamma) phi x x
 >   where
 >     phi a g x = case uncons x of
->       Left () -> sigma a nil (g nil)
->       Right (b,u) -> sigma b u (g u)
+>       Left ()          -> sigma a nil (g nil)
+>       Right (Pair b u) -> sigma b u (g u)
 
 And there's the definition using the universal property.
 
 > cfoldr gamma sigma x = case uncons x of
->   Left () -> gamma
->   Right (a,x) -> sigma a x (cfoldr gamma sigma x)
+>   Left ()          -> gamma
+>   Right (Pair a x) -> sigma a x (cfoldr gamma sigma x)
 
 We should test that the two implementations are not *not* equivalent.
 

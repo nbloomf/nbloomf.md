@@ -161,9 +161,9 @@ And there's the definition from the proof:
 >         then psi m x
 >         else h $ omega m x
 >  
->     t (m,h) = (next m, w m h)
+>     t (Pair m h) = tup (next m) (w m h)
 > 
->   in snd (naturalRec (zero, phi) t n) $ a
+>   in snd (naturalRec (tup zero phi) t n) $ a
 
 Unlike simple recursion, the naive implementation of bailout recursion is already tail recursive.
 

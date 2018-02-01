@@ -17,6 +17,7 @@ slug: dfoldr
 > import And
 > import Or
 > import Implies
+> import Tuples
 > import DisjointUnions
 > import Lists
 
@@ -41,8 +42,8 @@ In Haskell:
 > dfoldr delta psi chi = foldr delta phi
 >   where
 >     phi a f w = case uncons w of
->       Left ()     -> psi a (f nil)
->       Right (b,y) -> chi a b y (f y) (f (cons b y))
+>       Left ()          -> psi a (f nil)
+>       Right (Pair b y) -> chi a b y (f y) (f (cons b y))
 
 ::: proof ::::::::::
 Define a map $\varphi : A \times C^{\lists{B}} \rightarrow C^{\lists{B}}$ casewise by

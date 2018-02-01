@@ -17,6 +17,7 @@ slug: bfoldr
 > import And
 > import Or
 > import Implies
+> import Tuples
 > import NaturalNumbers
 > import Lists
 > import HeadAndTail
@@ -75,17 +76,17 @@ We can implement $\bfoldr{\ast}{\ast}{\ast}{\ast}$ using the definition or the u
 >   -> t a -> b -> c
 > 
 > 
-> bfoldr' delta beta psi omega x u = foldr epsilon phi x (u,x)
+> bfoldr' delta beta psi omega x u = foldr epsilon phi x (tup u x)
 >   where
->     epsilon (b,_) = delta b
->     phi a g (b,y) = if beta a (tail y) b
+>     epsilon (Pair b _) = delta b
+>     phi a g (Pair b y) = if beta a (tail y) b
 >       then psi a (tail y) b
->       else g (omega a (tail y) b, tail y)
+>       else g (tup (omega a (tail y) b) (tail y))
 > 
 > 
 > bfoldr delta beta psi omega z u = case uncons z of
 >   Left () -> delta u
->   Right (a,x) -> if beta a x u
+>   Right (Pair a x) -> if beta a x u
 >     then psi a x u
 >     else bfoldr delta beta psi omega x (omega a x u)
 

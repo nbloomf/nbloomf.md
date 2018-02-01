@@ -17,6 +17,7 @@ slug: unfoldn
 > import And
 > import Or
 > import Implies
+> import Tuples
 > import DisjointUnions
 > import NaturalNumbers
 > import BailoutRecursion
@@ -117,28 +118,28 @@ We can implement $\tacunfoldN{f}$ using the definition from the proof, or by pat
 
 > tacunfoldN', tacunfoldN
 >   :: (List t, Natural n)
->   => (a -> Either () (a,b)) -> t b -> n -> a -> t b
+>   => (a -> Either () (Pair a b)) -> t b -> n -> a -> t b
 > 
-> tacunfoldN' f x n a = bailoutRec phi beta psi omega n (a,x)
+> tacunfoldN' f x n a = bailoutRec phi beta psi omega n (tup a x)
 >   where
->     phi (a,x) = x
->     beta n (a,x) = isLft (f a)
->     psi n (a,x) = x
->     omega n (a,x) = case f a of
->       Left () -> (a,x)
->       Right (c,b) -> (c, snoc b x)
+>     phi (Pair a x) = x
+>     beta n (Pair a x) = isLft (f a)
+>     psi n (Pair a x) = x
+>     omega n (Pair a x) = case f a of
+>       Left () -> tup a x
+>       Right (Pair c b) -> tup c (snoc b x)
 > 
 > 
 > tacunfoldN f x n a = case unnext n of
 >   Left () -> x
 >   Right k -> case f a of
 >     Left () -> x
->     Right (c,b) -> tacunfoldN f (snoc b x) k c
+>     Right (Pair c b) -> tacunfoldN f (snoc b x) k c
 
 We should test that these two implementations agree.
 
 > _test_tacunfoldN_equiv :: (List t, Equal (t a), Natural n)
->   => t a -> n -> Test ((a -> Either () (a,a)) -> t a -> n -> a -> Bool)
+>   => t a -> n -> Test ((a -> Either () (Pair a a)) -> t a -> n -> a -> Bool)
 > _test_tacunfoldN_equiv _ _ =
 >   testName "tacunfoldN(x,n,a) == tacunfoldN'(x,n,a)" $
 >   \f x n a -> eq (tacunfoldN f x n a) (tacunfoldN' f x n a)
@@ -146,19 +147,19 @@ We should test that these two implementations agree.
 And while we're at it, test that $\tacunfoldN{f}$ does satisfy the universal property.
 
 > _test_tacunfoldN_zero :: (List t, Equal (t a), Natural n)
->   => t a -> n -> Test ((a -> Either () (a,a)) -> t a -> a -> Bool)
+>   => t a -> n -> Test ((a -> Either () (Pair a a)) -> t a -> a -> Bool)
 > _test_tacunfoldN_zero _ k =
 >   testName "tacunfoldN(x,zero,a) == x" $
 >   \f x a -> eq (tacunfoldN f x (zero `withTypeOf` k) a) x
 > 
 > 
 > _test_tacunfoldN_next :: (List t, Equal (t a), Natural n)
->   => t a -> n -> Test ((a -> Either () (a,a)) -> t a -> n -> a -> Bool)
+>   => t a -> n -> Test ((a -> Either () (Pair a a)) -> t a -> n -> a -> Bool)
 > _test_tacunfoldN_next _ _ =
 >   testName "tacunfoldN(x,next(n),a) == if(isLft(f(a)),x,tacunfoldN(snoc(b,x),n,c))" $
 >   \f x n a -> case f a of
->     Left () -> eq (tacunfoldN f x (next n) a) x
->     Right (c,b) -> eq (tacunfoldN f x (next n) a) (tacunfoldN f (snoc b x) n c)
+>     Left ()          -> eq (tacunfoldN f x (next n) a) x
+>     Right (Pair c b) -> eq (tacunfoldN f x (next n) a) (tacunfoldN f (snoc b x) n c)
 
 $\tacunfoldN{f}$ interacts with $\cons$.
 
@@ -192,7 +193,7 @@ as needed.
 ::: test :::::::::::
 
 > _test_tacunfoldN_cons :: (List t, Equal (t a), Natural n)
->   => t a -> n -> Test ((a -> Either () (a,a)) -> t a -> a -> n -> a -> Bool)
+>   => t a -> n -> Test ((a -> Either () (Pair a a)) -> t a -> a -> n -> a -> Bool)
 > _test_tacunfoldN_cons _ _ =
 >   testName "tacunfoldN(cons(b,x),n,a) == cons(b,tacunfoldN(x,n,a))" $
 >   \f x b n a -> eq (tacunfoldN f (cons b x) n a) (cons b (tacunfoldN f x n a))
@@ -232,7 +233,7 @@ as needed.
 ::: test :::::::::::
 
 > _test_tacunfoldN_cat :: (List t, Equal (t a), Natural n)
->   => t a -> n -> Test ((a -> Either () (a,a)) -> t a -> t a -> n -> a -> Bool)
+>   => t a -> n -> Test ((a -> Either () (Pair a a)) -> t a -> t a -> n -> a -> Bool)
 > _test_tacunfoldN_cat _ _ =
 >   testName "tacunfoldN(cat(x,y),n,a) == cat(x,tacunfoldN(y,n,a))" $
 >   \f x y n a -> eq (tacunfoldN f (cat x y) n a) (cat x (tacunfoldN f y n a))
@@ -249,7 +250,7 @@ In Haskell:
 
 > unfoldN
 >   :: (List t, Natural n)
->   => (a -> Either () (a,b)) -> n -> a -> t b
+>   => (a -> Either () (Pair a b)) -> n -> a -> t b
 > unfoldN f = tacunfoldN f nil
 
 ::::::::::::::::::::
@@ -331,19 +332,19 @@ as needed.
 ::: test :::::::::::
 
 > _test_unfoldN_zero :: (List t, Equal (t a), Natural n)
->   => t a -> n -> Test ((a -> Either () (a,a)) -> a -> Bool)
+>   => t a -> n -> Test ((a -> Either () (Pair a a)) -> a -> Bool)
 > _test_unfoldN_zero t k =
 >   testName "unfoldN(zero,a) == nil" $
 >   \f a -> eq (unfoldN f (zero `withTypeOf` k) a) (nil `withTypeOf` t)
 > 
 > 
 > _test_unfoldN_next :: (List t, Equal (t a), Natural n)
->   => t a -> n -> Test ((a -> Either () (a,a)) -> n -> a -> Bool)
+>   => t a -> n -> Test ((a -> Either () (Pair a a)) -> n -> a -> Bool)
 > _test_unfoldN_next t _ =
 >   testName "unfoldN(next(n),a) == if(isLft(f(a)),nil,cons(b,unfoldN(n,c)))" $
 >   \f n a -> case f a of
->     Left ()     -> eq (unfoldN f (next n) a) (nil `withTypeOf` t)
->     Right (c,b) -> eq (unfoldN f (next n) a) ((cons b (unfoldN f n c)) `withTypeOf` t)
+>     Left ()          -> eq (unfoldN f (next n) a) (nil `withTypeOf` t)
+>     Right (Pair c b) -> eq (unfoldN f (next n) a) ((cons b (unfoldN f n c)) `withTypeOf` t)
 
 ::::::::::::::::::::
 ::::::::::::::::::::

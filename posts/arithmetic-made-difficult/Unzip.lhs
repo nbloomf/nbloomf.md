@@ -51,10 +51,10 @@ Let $A$ and $B$ be sets. Define $\varphi : (A \times B) \times (\lists{A} \times
 
 In Haskell:
 
-> unzip :: (List t) => t (a,b) -> (t a, t b)
-> unzip = foldr (nil,nil) phi
+> unzip :: (List t) => t (Pair a b) -> Pair (t a) (t b)
+> unzip = foldr (tup nil nil) phi
 >   where
->     phi (a,b) (u,v) = (cons a u, cons b v)
+>     phi (Pair a b) (Pair u v) = tup (cons a u) (cons b v)
 
 ::::::::::::::::::::
 
@@ -73,14 +73,16 @@ $$\left\{\begin{array}{l}
 >   => t a -> t b -> Test Bool
 > _test_unzip_nil ta tb =
 >   testName "unzip(nil) == (nil,nil)" $
->   eq (unzip nil) (nil `withTypeOf` ta, nil `withTypeOf` tb)
+>   eq (unzip nil) (tup (nil `withTypeOf` ta) (nil `withTypeOf` tb))
 > 
 > 
 > _test_unzip_cons :: (List t, Equal (t a), Equal (t b))
->   => t a -> t b -> Test (a -> b -> t (a,b) -> Bool)
+>   => t a -> t b -> Test (a -> b -> t (Pair a b) -> Bool)
 > _test_unzip_cons ta tb =
 >   testName "unzip(cons((a,b),z)) == (cons(a,fst(unzip(z))),cons(b,snd(unzip(z))))" $
->   \a b z -> eq (unzip (cons (a,b) z)) (cons a (fst (unzip z)), cons b (snd (unzip z)))
+>   \a b z -> eq
+>     (unzip (cons (tup a b) z))
+>     (tup (cons a (fst (unzip z))) (cons b (snd (unzip z))))
 
 ::::::::::::::::::::
 ::::::::::::::::::::
@@ -112,8 +114,8 @@ as needed.
 
 ::: test :::::::::::
 
-> _test_unzip_zip :: (List t, Equal a, Equal b, Equal (t (a,b)))
->   => t a -> t b -> Test (t (a,b) -> Bool)
+> _test_unzip_zip :: (List t, Equal a, Equal b, Equal (t (Pair a b)))
+>   => t a -> t b -> Test (t (Pair a b) -> Bool)
 > _test_unzip_zip _ _ =
 >   testName "zip(unzip(x)) == x" $
 >   \x -> eq ((uncurry zip) (unzip x)) x
@@ -154,7 +156,7 @@ as claimed.
 ::: test :::::::::::
 
 > _test_unzip_tswap :: (List t, Equal (t b), Equal (t a))
->   => t a -> t b -> Test (t (a,b) -> Bool)
+>   => t a -> t b -> Test (t (Pair a b) -> Bool)
 > _test_unzip_tswap _ _ =
 >   testName "tswap(unzip(x)) == unzip(map(tswap)(x))" $
 >   \x -> eq (unzip (map tswap x)) (tswap (unzip x))
@@ -199,7 +201,7 @@ as needed.
 ::: test :::::::::::
 
 > _test_unzip_tpair :: (List t, Equal (t b), Equal (t a))
->   => t a -> t b -> Test ((a -> a) -> (b -> b) -> t (a,b) -> Bool)
+>   => t a -> t b -> Test ((a -> a) -> (b -> b) -> t (Pair a b) -> Bool)
 > _test_unzip_tpair _ _ =
 >   testName "unzip(map(tpair(f,g))(x)) == tpair(map(f),map(g))(unzip(x))" $
 >   \f g x -> eq (unzip (map (tpair f g) x)) (tpair (map f) (map g) (unzip x))
@@ -217,8 +219,8 @@ Suite:
 >   ( TypeName a, Show a, Equal a, Arbitrary a, CoArbitrary a
 >   , TypeName b, Show b, Equal b, Arbitrary b, CoArbitrary b
 >   , TypeName (t a), TypeName (t b), List t
->   , Equal (t (a,b)), Arbitrary (t a), Show (t a), Arbitrary (t b), Show (t b)
->   , Show (t (a,b)), Arbitrary (t (a,b)), Equal (t b), Equal (t a)
+>   , Equal (t (Pair a b)), Arbitrary (t a), Show (t a), Arbitrary (t b), Show (t b)
+>   , Show (t (Pair a b)), Arbitrary (t (Pair a b)), Equal (t b), Equal (t a)
 >   ) => t a -> t b -> Int -> Int -> IO ()
 > _test_unzip t u maxSize numCases = do
 >   testLabel2 "unzip" t u

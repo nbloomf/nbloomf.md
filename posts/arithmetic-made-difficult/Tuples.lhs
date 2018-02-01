@@ -8,7 +8,7 @@ slug: tuples
 
 > {-# LANGUAGE NoImplicitPrelude #-}
 > module Tuples
->   ( fst, snd, dup, tswap, tpair, tassocL, tassocR, tupL, tupR
+>   ( Pair(Pair,fst,snd), dup, tup, tswap, tpair, tassocL, tassocR, tupL, tupR, uncurry
 >   , _test_tuple, main_tuple
 >   ) where
 > 
@@ -18,10 +18,12 @@ slug: tuples
 > import And
 > import Or
 > import Implies
+> import Functions
 
 Today we'll establish a few basic utility functions on *tuples*. First, recall some definitions.
 
 :::::: definition ::
+[]{#def-fst-dup}[]{#def-snd-dup}
 Let $A$ and $B$ be sets. There is a set $A \times B$ together with two functions $\fst : A \times B \rightarrow A$ and $\snd : A \times B \rightarrow B$ having the property that if $X$ is a set and $\sigma : X \rightarrow A$ and $\tau : X \rightarrow B$ functions then there is a unique map $\Theta : X \rightarrow A \times B$ such that $\fst \circ \Theta = \sigma$ and $\snd \circ \Theta = \tau$. That is, there is a unique $\Theta$ such that the following diagram commutes.
 
 $$\require{AMScd}
@@ -39,82 +41,94 @@ More concretely, if $f : X \rightarrow A \times B$ such that $\fst(f(x)) = \sigm
 Now $A \times B$ uniquely represents all possible pairs of elements of $A$ and $B$ in a precise sense.
 
 :::::: theorem :::::
-Let $A$ and $B$ be sets.
+[]{#def-tup}[]{#thm-fst-tup}[]{#thm-snd-tup}
+Let $A$ and $B$ be sets. Given $a \in A$ and $b \in B$, we define $\tup : A \rightarrow B \rightarrow A \times B$ by $$\tup(a)(b) = \dup(\const(a),\const(b))(\ast).$$ Now we have the following.
 
-1. If $a \in A$ and $b \in B$, then there exists $w \in A \times B$ such that $\fst(w) = a$ and $\snd(w) = b$.
-2. If $x,y \in A \times B$ such that $\fst(x) = \fst(y)$ and $\snd(x) = \snd(y)$, then $x = y$.
+1. $\fst(\tup(a)(b)) = a$ and $\snd(\tup(a)(b)) = b$.
+2. If $w \in A \times B$ such that $\fst(w) = a$ and $\snd(w) = b$, then $w = \tup(a)(b)$.
 
 ::: proof ::::::::::
-1. Let $a \in A$ and $b \in B$. Define $\sigma : \{\ast\} \rightarrow A$ by $\sigma(\ast) = a$, and $\tau : \{\ast\} \rightarrow B$ by $\tau(\ast) = b$. Let $\Theta = \dup(\sigma,\tau)$, and consider $w = \Theta(\ast) \in A \times B$. In particular, note that
+1. We have
 $$\begin{eqnarray*}
- &   & \fst(w) \\
- & = & \fst(\Theta(\ast)) \\
- & = & (\fst \circ \Theta)(\ast) \\
- & = & \sigma(\ast) \\
+ &   & \fst(\tup(a)(b)) \\
+ & = & \fst(\dup(\const(a),\const(b))(\ast)) \\
+ & = & \const(a)(\ast) \\
  & = & a
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
- &   & \snd(w) \\
- & = & \snd(\Theta(\ast)) \\
- & = & (\snd \circ \Theta)(\ast) \\
- & = & \tau(\ast) \\
+ &   & \snd(\tup(a)(b)) \\
+ & = & \snd(\dup(\const(a),\const(b))(\ast)) \\
+ & = & \const(b)(\ast) \\
  & = & b
 \end{eqnarray*}$$
-as needed.
-2. Say $a = \fst(x) = \fst(y)$ and $b = \snd(x) = \snd(y)$. Define $\sigma : \{\ast\} \rightarrow A$ by $\sigma(\ast) = a$, and $\tau : \{\ast\} \rightarrow B$ by $\tau(\ast) = b$. Now consider $f,g : \{\ast\} \rightarrow A \times B$ given by $f(\ast) = x$ and $g(\ast) = y$. Note that
+as claimed.
+2. Define $\omega : \ast \rightarrow A \times B$ by $\omega = \const(w)$. Now
 $$\begin{eqnarray*}
- &   & \fst(f(\ast)) \\
- & = & \fst(x) \\
+ &   & \fst(\omega(\ast)) \\
+ & = & \fst(w) \\
  & = & a \\
- & = & \fst(y) \\
- & = & \fst(g(\ast))
+ & = & \const(a)(\ast)
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
- &   & \snd(f(\ast)) \\
- & = & \snd(x) \\
+ &   & \snd(\omega(\ast)) \\
+ & = & \snd(w) \\
  & = & b \\
- & = & \snd(y) \\
- & = & \snd(g(\ast)).
+ & = & \const(b)(\ast)
 \end{eqnarray*}$$
-In particular, we have $$f = \dup(\sigma,\tau) = g$$ and thus $$x = f(\ast) = g(\ast) = y$$ as claimed.
+so by the universal property of $A \times B$, $w = \tup(a)(b)$.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-In Haskell we can model $A \times B$ with the tuple type ``(a,b)``, and the maps in the universal property like so.
+In Haskell we can model $A \times B$, and the maps in the universal property, with the following type.
 
-> fst :: (a,b) -> a
-> fst (a,_) = a
+> data Pair a b = Pair
+>   { fst :: a
+>   , snd :: b
+>   } deriving Show
 > 
-> snd :: (a,b) -> b
-> snd (_,b) = b
+> dup :: (x -> a) -> (x -> b) -> x -> Pair a b
+> dup f g x = Pair (f x) (g x)
 > 
-> dup :: (x -> a) -> (x -> b) -> x -> (a,b)
-> dup f g x = (f x, g x)
+> tup :: a -> b -> Pair a b
+> tup a b = dup (const a) (const b) undefined
 > 
-> instance (Equal a, Equal b) => Equal (a,b) where
->   eq (a1,b1) (a2,b2) = and (eq a1 a2) (eq b1 b2)
+> instance (Equal a, Equal b) => Equal (Pair a b) where
+>   eq a b = and (eq (fst a) (fst b)) (eq (snd a) (snd b))
+> 
+> instance (Arbitrary a, Arbitrary b) => Arbitrary (Pair a b) where
+>   arbitrary = do
+>     a <- arbitrary
+>     b <- arbitrary
+>     return (Pair a b)
 
 For example, $\id_{A \times B}$ is a $\dup$.
 
 :::::: theorem :::::
+[]{#thm-dup-fst-snd}
 Provided the types match up, we have $$\dup(\fst,\snd) = \id_{A \times B}.$$
 
 ::: proof ::::::::::
-Note that for all $(a,b) \in A \times B$ we have
+Note that
 $$\begin{eqnarray*}
- &   & \dup(\fst,\snd)(a,b) \\
- & = & (\fst(a,b),\snd(a,b)) \\
- & = & (a,b)
+ &   & \fst(\dup(\fst,\snd)(\tup(a)(b))) \\
+ & = & \fst(\tup(a)(b)) \\
+ & = & a
 \end{eqnarray*}$$
-as claimed.
+and
+$$\begin{eqnarray*}
+ &   & \snd(\dup(\fst,\snd)(\tup(a)(b))) \\
+ & = & \snd(\tup(a)(b)) \\
+ & = & b
+\end{eqnarray*}$$
+so that $\dup(\fst,\snd)(\tup(a)(b)) = \tup(a)(b)$ for all $a \in A$ and $b \in B$.
 ::::::::::::::::::::
 
 ::: test :::::::::::
 
 > _test_dup_fst_snd :: (Equal a, Equal b)
->   => a -> b -> Test ((a,b) -> Bool)
+>   => a -> b -> Test (Pair a b -> Bool)
 > _test_dup_fst_snd _ _ =
 >   testName "dup(fst,snd) == id" $
 >   \x -> eq (dup fst snd x) x
@@ -125,11 +139,12 @@ as claimed.
 We define $\tSwap$ on tuples like so.
 
 :::::: definition ::
+[]{#def-tswap}
 Let $A$ and $B$ be sets. We define $\tSwap : A \times B \rightarrow B \times A$ by $$\tSwap = \dup(\snd,\fst).$$
 
 In Haskell,
 
-> tswap :: (a,b) -> (b,a)
+> tswap :: Pair a b -> Pair b a
 > tswap = dup snd fst
 
 ::::::::::::::::::::
@@ -137,25 +152,33 @@ In Haskell,
 Elements of $A \times B$ act like "ordered pairs", and $\tSwap$ effectively reverses the order of the pair.
 
 :::::: theorem :::::
+[]{#thm-tswap-swap}[]{#thm-tswap-involution}
 Let $A$ and $B$ be sets. Then we have the following.
 
-1. $\tSwap(a,b) = (b,a)$.
-2. $\tSwap(\tSwap(a,b)) = (a,b)$.
+1. $\tSwap(\tup(a)(b)) = \tup(b)(a)$.
+2. $\tSwap(\tSwap(\tup(a)(b))) = \tup(a)(b)$.
 
 ::: proof ::::::::::
 1. Note that
 $$\begin{eqnarray*}
- &   & \tSwap(a,b) \\
- & = & \dup(\snd,\fst)(a,b) \\
- & = & (\snd(a,b),\fst(a,b)) \\
- & = & (b,a)
+ &   & \fst(\tSwap(\tup(a)(b))) \\
+ & = & \fst(\dup(\snd,\fst)(\tup(a)(b))) \\
+ & = & \snd(\tup(a)(b)) \\
+ & = & b
 \end{eqnarray*}$$
-as claimed.
-2. Note that for all $(a,b) \in A \times B$ we have
+and
 $$\begin{eqnarray*}
- &   & \tSwap(\tSwap(a,b)) \\
- & = & \tSwap(b,a) \\
- & = & (a,b)
+ &   & \snd(\tSwap(\tup(a)(b))) \\
+ & = & \snd(\dup(\snd,\fst)(\tup(a)(b))) \\
+ & = & \fst(\tup(a)(b)) \\
+ & = & a
+\end{eqnarray*}$$
+so that $\tSwap(\tup(a)(b)) = \tup(b)(a)$ as claimed.
+2. Note that
+$$\begin{eqnarray*}
+ &   & \tSwap(\tSwap(\tup(a)(b))) \\
+ & = & \tSwap(\tup(b)(a)) \\
+ & = & \tup(a)(b)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -163,14 +186,14 @@ as claimed.
 ::: test :::::::::::
 
 > _test_tswap_entries :: (Equal a, Equal b)
->   => a -> b -> Test ((a,b) -> Bool)
+>   => a -> b -> Test (Pair a b -> Bool)
 > _test_tswap_entries _ _ =
->   testName "tswap(a,b) == (b,a)" $
->   \(a,b) -> eq (tswap (a,b)) (b,a)
+>   testName "tswap(tup(a)(b)) == tup(b)(a)" $
+>   \(Pair a b) -> eq (tswap (tup a b)) (tup b a)
 > 
 > 
 > _test_tswap_tswap :: (Equal a, Equal b)
->   => a -> b -> Test ((a,b) -> Bool)
+>   => a -> b -> Test (Pair a b -> Bool)
 > _test_tswap_tswap _ _ =
 >   testName "tswap(tswap(x)) == x" $
 >   \x -> eq (tswap (tswap x)) x
@@ -185,8 +208,8 @@ Let $A$, $B$, $U$, and $V$ be sets. We define $\tPair : U^A \times V^B \rightarr
 
 In Haskell:
 
-> tpair :: (a -> u) -> (b -> v) -> (a,b) -> (u,v)
-> tpair f g = dup (f . fst) (g . snd)
+> tpair :: (a -> u) -> (b -> v) -> Pair a b -> Pair u v
+> tpair f g = dup (compose f fst) (compose g snd)
 
 ::::::::::::::::::::
 
@@ -195,8 +218,8 @@ $\tPair$ has some nice properties.
 :::::: theorem :::::
 For all $f$, $g$, $h$, $k$, $a$, and $b$ we have the following.
 
-1. $\tPair(f,g)(a,b) = (f(a),g(b))$.
-2. $\tPair(f,g) \circ \tPair(h,k) = \tPair(f \circ h, g \circ k)$.
+1. $\tPair(f,g)(\tup(a)(b)) = \tup(f(a))(g(b))$.
+2. $\compose(\tPair(f,g))(\tPair(h,k)) = \tPair(\compose(f)(h),\compose(g)(k))$.
 
 ::: proof ::::::::::
 1. Note that
@@ -223,21 +246,21 @@ as claimed.
 ::: test :::::::::::
 
 > _test_tpair_apply :: (Equal a, Equal b)
->   => a -> b -> Test ((a -> a) -> (b -> b) -> (a,b) -> Bool)
+>   => a -> b -> Test ((a -> a) -> (b -> b) -> Pair a b -> Bool)
 > _test_tpair_apply _ _ =
->   testName "tpair(f,g)(a,b) == (f(a),g(b))" $
->   \f g (a,b) -> eq (tpair f g (a,b)) (f a, g b)
+>   testName "tpair(f,g)(tup(a)(b)) == tup(f(a))(g(b))" $
+>   \f g (Pair a b) -> eq (tpair f g (tup a b)) (tup (f a) (g b))
 > 
 > 
 > _test_tpair_tpair :: (Equal a, Equal b)
 >   => a -> b
->   -> Test ((a -> a) -> (b -> b) -> (a -> a) -> (b -> b) -> (a,b) -> Bool)
+>   -> Test ((a -> a) -> (b -> b) -> (a -> a) -> (b -> b) -> Pair a b -> Bool)
 > _test_tpair_tpair _ _ =
 >   testName "tpair(f,g) . tpair(h,k) == tpair(f . h, g . k)" $
 >   \f g h k x ->
 >     eq
 >       (tpair f g (tpair h k x))
->       (tpair (f . h) (g . k) x)
+>       (tpair (compose f h) (compose g k) x)
 
 ::::::::::::::::::::
 ::::::::::::::::::::
@@ -249,11 +272,11 @@ Let $A$, $B$, and $C$ be sets. We define $\tAssocL : A \times (B \times C) \righ
 
 In Haskell:
 
-> tassocL :: (a,(b,c)) -> ((a,b),c)
-> tassocL = dup (dup fst (fst . snd)) (snd . snd)
+> tassocL :: Pair a (Pair b c) -> Pair (Pair a b) c
+> tassocL = dup (dup fst (compose fst snd)) (compose snd snd)
 > 
-> tassocR :: ((a,b),c) -> (a,(b,c))
-> tassocR = dup (fst . fst) (dup (snd . fst) snd)
+> tassocR :: Pair (Pair a b) c -> Pair a (Pair b c)
+> tassocR = dup (compose fst fst) (dup (compose snd fst) snd)
 
 ::::::::::::::::::::
 
@@ -311,28 +334,28 @@ as claimed.
 > _test_tassocL_entries :: (Equal a, Equal b, Equal c)
 >   => a -> b -> c -> Test (a -> b -> c -> Bool)
 > _test_tassocL_entries _ _ _ =
->   testName "tassocL(a,(b,c)) == ((a,b),c)" $
->   \a b c -> eq (tassocL (a,(b,c))) ((a,b),c)
+>   testName "tassocL(tup(a)(tup(b)(c)) == tup(tup(a)(b))(c)" $
+>   \a b c -> eq (tassocL (tup a (tup b c))) (tup (tup a b) c)
 > 
 > 
 > _test_tassocR_entries :: (Equal a, Equal b, Equal c)
 >   => a -> b -> c -> Test (a -> b -> c -> Bool)
 > _test_tassocR_entries _ _ _ =
->   testName "tassocR((a,b),c) == (a,(b,c))" $
->   \a b c -> eq (tassocR ((a,b),c)) (a,(b,c))
+>   testName "tassocR(tup(tup(a)(b))(c)) == tup(a)(tup(b)(c))" $
+>   \a b c -> eq (tassocR (tup (tup a b) c)) (tup a (tup b c))
 > 
 > 
 > _test_tassocL_tassocR :: (Equal a, Equal b, Equal c)
->   => a -> b -> c -> Test (((a,b),c) -> Bool)
+>   => a -> b -> c -> Test (Pair (Pair a b) c -> Bool)
 > _test_tassocL_tassocR _ _ _ =
->   testName "tassocL . tassocR == id" $
+>   testName "compose(tassocL)(tassocR) == id" $
 >   \x -> eq (tassocL (tassocR x)) x
 > 
 > 
 > _test_tassocR_tassocL :: (Equal a, Equal b, Equal c)
->   => a -> b -> c -> Test ((a,(b,c)) -> Bool)
+>   => a -> b -> c -> Test (Pair a (Pair b c) -> Bool)
 > _test_tassocR_tassocL _ _ _ =
->   testName "tassocR . tassocL == id" $
+>   testName "compare(tassocR)(tassocL) == id" $
 >   \x -> eq (tassocR (tassocL x)) x
 
 ::::::::::::::::::::
@@ -345,12 +368,11 @@ Let $A$ and $B$ be sets. We define $\tupL : A \rightarrow (A \times B)^B$ by $$\
 
 In Haskell:
 
-> tupL :: a -> b -> (a,b)
-> tupL a b = (a,b)
+> tupL :: a -> b -> Pair a b
+> tupL a b = tup a b
 > 
-> 
-> tupR :: b -> a -> (a,b)
-> tupR b a = (a,b)
+> tupR :: b -> a -> Pair a b
+> tupR b a = tup a b
 
 ::::::::::::::::::::
 
@@ -499,6 +521,18 @@ as claimed.
 >     (((tupR (g b)) . f) a)
 
 ::::::::::::::::::::
+::::::::::::::::::::
+
+(@@@)
+
+:::::: definition ::
+Let $A$, $B$, and $C$ be sets. If $f : A \rightarrow B \rightarrow C$, we define $\uncurry(f) : A \times B \rightarrow C$ by $$\uncurry(f)(\tup(a)(b)) = f(a)(b).$$
+
+In Haskell:
+
+> uncurry :: (a -> b -> c) -> Pair a b -> c
+> uncurry f (Pair a b) = f a b
+
 ::::::::::::::::::::
 
 

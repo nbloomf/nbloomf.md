@@ -41,7 +41,7 @@ We'll use the ``QuickCheck`` library to make our theorems testable. This is not 
 > 
 > import Prelude
 >   ( Show(show), IO, Bool(), Int, Maybe(..), Either(..), undefined, concat
->   , putStrLn, (>>), return, (++), String, (.), ($), Integer, uncurry
+>   , putStrLn, (>>), return, (++), String, (.), ($), Integer
 >   )
 > import Test.QuickCheck
 >   ( Testable(..), Args(..), Arbitrary(..), CoArbitrary(..)

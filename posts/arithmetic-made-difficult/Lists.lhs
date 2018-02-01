@@ -18,6 +18,7 @@ slug: lists
 > import And
 > import Or
 > import Implies
+> import Tuples
 > import DisjointUnions
 
 In the previous post, we saw how the process of describing $\nats$ in terms of its universal map $\natrec{\ast}{\ast}$ can be generalized: take an endofunctor $F$, assume it has an initial algebra, and see how it behaves. Here's an example.
@@ -26,13 +27,13 @@ In the previous post, we saw how the process of describing $\nats$ in terms of i
 Let $A$ be a set, and define a functor $F_A$ by $F_A(X) = 1 + A \times X$. We assume that $F_A$ has an initial algebra, which we will denote $\lists{A}$. We denote the component maps of the isomorphism $$\theta : 1 + A \times \lists{A} \rightarrow \lists{A}$$ by $\const(\nil) : 1 \rightarrow \lists{A}$ and $\cons : A \times \lists{A} \rightarrow \lists{A}$. That is, $$\Theta = \either(\const(\nil),\cons).$$
 ::::::::::::::::::::
 
-The names *nil* and *cons* come from the Lisp programming language, where they were first introduced. Now because the algebra map $\nil + \cons$ is an isomorphism, it has an inverse; we'll denote this map $\uncons : \lists{A} \rightarrow 1 + \lists{A}$.
+The names *nil* and *cons* come from the Lisp programming language, where they were first introduced. Now because the algebra map $\nil + \cons$ is an isomorphism, it has an inverse; we'll denote this map $\uncons : \lists{A} \rightarrow 1 + (A \times \lists{A})$.
 
 :::::: theorem :::::
 Let $A$ be a set. Then we have the following.
 
 1. $\uncons(\nil) = \lft(\ast)$.
-2. $\uncons(\cons(a,x)) = \rgt((a,x))$.
+2. $\uncons(\cons(a,x)) = \rgt(\tup(a)(x))$.
 
 ::: proof ::::::::::
 1. We have
@@ -119,7 +120,7 @@ We will wrap this definition up in code both as a concrete type and as a type cl
 > 
 >   cons :: a -> t a -> t a
 > 
->   uncons :: t a -> Either () (a, t a)
+>   uncons :: t a -> Either () (Pair a (t a))
 > 
 >   list :: [a] -> t a
 
@@ -136,7 +137,7 @@ And the concrete type:
 > 
 >   uncons m = case m of
 >     N     -> lft ()
->     C a x -> rgt (a,x)
+>     C a x -> rgt (tup a x)
 > 
 >   list m = case m of
 >     []     -> N
@@ -188,8 +189,8 @@ In Haskell:
 
 > foldr :: (List t) => b -> (a -> b -> b) -> t a -> b
 > foldr e phi x = case uncons x of
->   Left ()      -> e
->   Right (a,as) -> phi a (foldr e phi as)
+>   Left ()           -> e
+>   Right (Pair a as) -> phi a (foldr e phi as)
 
 ::::::::::::::::::::
 

@@ -43,12 +43,12 @@ Let $A$ and $B$ be sets. Define $\delta : \lists{B} \rightarrow \lists{A \times 
 
 In Haskell:
 
-> zip :: (List t) => t a -> t b -> t (a,b)
+> zip :: (List t) => t a -> t b -> t (Pair a b)
 > zip = dfoldr delta psi chi
 >   where
 >     delta _ = nil
 >     psi _ _ = nil
->     chi a b _ z _ = cons (a,b) z
+>     chi a b _ z _ = cons (tup a b) z
 
 ::::::::::::::::::::
 
@@ -64,25 +64,25 @@ $$\left\{\begin{array}{l}
 
 ::: test :::::::::::
 
-> _test_zip_nil_list :: (List t, Equal (t (a,b)))
+> _test_zip_nil_list :: (List t, Equal (t (Pair a b)))
 >   => t a -> t b -> Test (t b -> Bool)
 > _test_zip_nil_list ta _ =
 >   testName "zip(nil,y) == nil" $
 >   \y -> eq (zip (nil `withTypeOf` ta) y) nil
 > 
 > 
-> _test_zip_cons_nil :: (List t, Equal (t (a,b)))
+> _test_zip_cons_nil :: (List t, Equal (t (Pair a b)))
 >   => t a -> t b -> Test (a -> t a -> Bool)
 > _test_zip_cons_nil _ tb =
 >   testName "zip(cons(a,x),nil) == nil" $
 >   \a x -> eq (zip (cons a x) (nil `withTypeOf` tb)) nil
 > 
 > 
-> _test_zip_cons_cons :: (List t, Equal (t (a,b)))
+> _test_zip_cons_cons :: (List t, Equal (t (Pair a b)))
 >   => t a -> t b -> Test (a -> t a -> b -> t b -> Bool)
 > _test_zip_cons_cons _ _ =
 >   testName "zip(cons(a,x),cons(b,y)) == cons((a,b),zip(x,y))" $
->   \a x b y -> eq (zip (cons a x) (cons b y)) (cons (a,b) (zip x y))
+>   \a x b y -> eq (zip (cons a x) (cons b y)) (cons (tup a b) (zip x y))
 
 ::::::::::::::::::::
 ::::::::::::::::::::
@@ -126,7 +126,7 @@ as needed.
 
 ::: test :::::::::::
 
-> _test_zip_tswap :: (List t, Equal (t (b,a)))
+> _test_zip_tswap :: (List t, Equal (t (Pair b a)))
 >   => t a -> t b -> Test (t a -> t b -> Bool)
 > _test_zip_tswap _ _ =
 >   testName "map(tswap)(zip(x,y)) == zip(y,x)" $
@@ -178,7 +178,7 @@ as needed.
 
 ::: test :::::::::::
 
-> _test_zip_tpair :: (List t, Equal (t (a,b)))
+> _test_zip_tpair :: (List t, Equal (t (Pair a b)))
 >   => t a -> t b -> Test ((a -> a) -> (b -> b) -> t a -> t b -> Bool)
 > _test_zip_tpair _ _ =
 >   testName "map(tpair(f,g))(zip(x,y)) == zip(map(f)(x),map(g)(y))" $
@@ -306,14 +306,14 @@ as claimed.
 
 ::: test :::::::::::
 
-> _test_zip_zip_left :: (List t, Equal (t ((a,a),a)))
+> _test_zip_zip_left :: (List t, Equal (t (Pair (Pair a a) a)))
 >   => t a -> Test (t a -> t a -> t a -> Bool)
 > _test_zip_zip_left _ =
 >   testName "zip(zip(x,y),z) == map(tassocL)(zip(x,zip(y,z)))" $
 >   \x y z -> eq (zip (zip x y) z) (map tassocL (zip x (zip y z)))
 > 
 > 
-> _test_zip_zip_right :: (List t, Equal (t (a,(a,a))))
+> _test_zip_zip_right :: (List t, Equal (t (Pair a (Pair a a))))
 >   => t a -> Test (t a -> t a -> t a -> Bool)
 > _test_zip_zip_right _ =
 >   testName "zip(zip(x,y),z) == map(tassocR)(zip(x,zip(y,z)))" $
@@ -333,8 +333,8 @@ Suite:
 >   , TypeName b, Equal b, Show b, Arbitrary b, CoArbitrary b
 >   , TypeName n, Natural n, Equal n, Show n, Arbitrary n
 >   , TypeName (t a), TypeName (t b), List t, Equal (t a), Show (t a), Arbitrary (t a)
->   , Equal (t b), Show (t b), Arbitrary (t b), Equal (t (a,b)), Equal (t (b,a))
->   , Equal (t (a,(a,a))), Equal (t ((a,a),a))
+>   , Equal (t b), Show (t b), Arbitrary (t b), Equal (t (Pair a b)), Equal (t (Pair b a))
+>   , Equal (t (Pair a (Pair a a))), Equal (t (Pair (Pair a a) a))
 >   ) => t a -> t b -> n -> Int -> Int -> IO ()
 > _test_zip t u n maxSize numCases = do
 >   testLabel3 "zip" t u n

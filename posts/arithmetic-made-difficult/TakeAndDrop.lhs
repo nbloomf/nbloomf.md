@@ -65,7 +65,7 @@ In Haskell:
 >   where
 >     f z = case uncons z of
 >       Left () -> Left ()
->       Right (a,u) -> Right (u,a)
+>       Right (Pair a u) -> Right (tup u a)
 
 ::::::::::::::::::::
 
@@ -264,7 +264,7 @@ as needed.
 
 ::: test :::::::::::
 
-> _test_take_zip :: (List t, Natural n, Equal (t (a,b)))
+> _test_take_zip :: (List t, Natural n, Equal (t (Pair a b)))
 >   => t a -> t b -> n -> Test (n -> t a -> t b -> Bool)
 > _test_take_zip _ _ _ =
 >   testName "zip(take(n)(x),take(n)(y)) == take(n)(zip(x,y))" $
@@ -518,7 +518,7 @@ Suite:
 >   , TypeName (t a), List t
 >   , TypeName n, Natural n, Show n, Arbitrary n, Equal n
 >   , Equal (t a), Show (t a), Arbitrary (t a)
->   , Equal (t b), Show (t b), Arbitrary (t b), Equal (t (a,b))
+>   , Equal (t b), Show (t b), Arbitrary (t b), Equal (t (Pair a b))
 >   , Arbitrary (t n), Show (t n), Equal (t n)
 >   ) => t a -> t b -> n -> Int -> Int -> IO ()
 > _test_take_drop t u k maxSize numCases = do

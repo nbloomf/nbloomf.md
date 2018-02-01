@@ -17,6 +17,7 @@ slug: filter
 > import And
 > import Or
 > import Implies
+> import Tuples
 > import NaturalNumbers
 > import Lists
 > import HeadAndTail
@@ -441,7 +442,7 @@ Suite:
 > _test_filter ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
->   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (a,a))
+>   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (Pair a a))
 >   ) => t a -> Int -> Int -> IO ()
 > _test_filter t maxSize numCases = do
 >   testLabel1 "filter" t

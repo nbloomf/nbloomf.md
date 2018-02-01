@@ -17,6 +17,7 @@ slug: foldl
 > import And
 > import Or
 > import Implies
+> import Tuples
 > import Functions
 > import DisjointUnions
 > import Unary
@@ -82,8 +83,8 @@ $\psi : A \times \lists{A}^B \rightarrow \lists{A}^B$ by $$\psi(a,g)(b) = g(f(a,
 And there's the definition from the universal property:
 
 > foldl f e z = case uncons z of
->   Left ()     -> e
->   Right (a,x) -> foldl f (f e a) x
+>   Left ()          -> e
+>   Right (Pair a x) -> foldl f (f e a) x
 
 We should verify that the two implementations are not *not* equivalent.
 

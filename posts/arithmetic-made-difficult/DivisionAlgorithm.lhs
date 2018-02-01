@@ -46,13 +46,13 @@ Then define $\ndivalg : \nats \times \nats \rightarrow \nats \times \nats$ by $$
 
 In Haskell:
 
-> divalg :: (Natural n, Equal n) => n -> n -> (n,n)
+> divalg :: (Natural n, Equal n) => n -> n -> Pair n n
 > divalg = simpleRec phi mu
 >   where
->     phi _ = (zero, zero)
->     mu _ b (q,r) = if eq b (next r)
->       then (next q, zero)
->       else (q, next r)
+>     phi _ = tup zero zero
+>     mu _ b (Pair q r) = if eq b (next r)
+>       then tup (next q) zero
+>       else tup q (next r)
 > 
 > 
 > quo :: (Natural n, Equal n) => n -> n -> n
@@ -79,24 +79,24 @@ $$\left\{\begin{array}{l}
 >   => n -> Test (n -> Bool)
 > _test_divalg_zero_left _ =
 >   testName "divalg(0,a) = (0,0)" $
->   \a -> eq (divalg zero a) (zero, zero)
+>   \a -> eq (divalg zero a) (tup zero zero)
 > 
 > 
 > _test_divalg_next_left :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
 > _test_divalg_next_left _ =
 >   testName "divalg(next(a),b) == if(eq(b,next(r)),(next(q),0),(q,next(r)))" $
->   \a b -> let (q,r) = divalg a b in
+>   \a b -> let (Pair q r) = divalg a b in
 >     eq
 >       (divalg (next a) b)
->       (if (eq b (next r)) then (next q, zero) else (q, next r))
+>       (if (eq b (next r)) then (tup (next q) zero) else (tup q (next r)))
 > 
 > 
 > _test_divalg_quo :: (Natural n, Equal n)
 >   => n -> Test (n -> n -> Bool)
 > _test_divalg_quo _ =
 >   testName "quo(a,b) = q where (q,_) = divalg(a,b)" $
->   \a b -> let (q,_) = divalg a b in
+>   \a b -> let (Pair q _) = divalg a b in
 >   eq q (quo a b)
 > 
 > 
@@ -104,7 +104,7 @@ $$\left\{\begin{array}{l}
 >   => n -> Test (n -> n -> Bool)
 > _test_divalg_rem _ =
 >   testName "rem(a,b) = r where (_,r) = divalg(a,b)" $
->   \a b -> let (_,r) = divalg a b in
+>   \a b -> let (Pair _ r) = divalg a b in
 >   eq r (rem a b)
 
 ::::::::::::::::::::
@@ -156,7 +156,7 @@ If $\nleq(\next(r_1),b) = \bfalse$, then $\nleq(b,\next(r_1)) = \btrue$ and $\ne
 >   => n -> Test (n -> n -> Bool)
 > _test_divalg_equality _ =
 >   testName "a == plus(times(q,b),r) where (q,r) = divalg(a,b)" $
->   \a b -> let (q,r) = divalg a b in
+>   \a b -> let (Pair q r) = divalg a b in
 >   eq a (plus (times q b) r)
 > 
 > 
@@ -164,7 +164,7 @@ If $\nleq(\next(r_1),b) = \bfalse$, then $\nleq(b,\next(r_1)) = \btrue$ and $\ne
 >   => n -> Test (n -> n -> Bool)
 > _test_divalg_inequality _ =
 >   testName "leq(r,b) where (_,r) = divalg(a,next(b))" $
->   \a b -> let (_,r) = divalg a (next b) in
+>   \a b -> let (Pair _ r) = divalg a (next b) in
 >   leq r b
 
 ::::::::::::::::::::
@@ -227,7 +227,7 @@ So we have $k = \zero$, and thus $$\ntimes(q_1,\next(b)) = \ntimes(q_2,\next(b))
 > _test_divalg_unique _ =
 >   testName "if and(eq(a,plus(times(q,next(b)),r)),leq(r,b)) then (q,r) = divalg(a,b)" $
 >   \a b q r -> if and (eq a (plus (times q (next b)) r)) (leq r b)
->     then eq (q,r) (divalg a (next b))
+>     then eq (Pair q r) (divalg a (next b))
 >     else true
 
 ::::::::::::::::::::
@@ -271,14 +271,14 @@ Since $\next(a) \neq \zero$, by the uniqueness of the division algorithm, we hav
 >   => n -> Test (n -> Bool)
 > _test_divalg_zero_right _ =
 >   testName "divalg(a,0) = (0,a)" $
->   \a -> eq (divalg a zero) (zero, a)
+>   \a -> eq (divalg a zero) (tup zero a)
 > 
 > 
 > _test_divalg_one_right :: (Natural n, Equal n)
 >   => n -> Test (n -> Bool)
 > _test_divalg_one_right _ =
 >   testName "divalg(a,next(0)) = (a,0)" $
->   \a -> eq (divalg a (next zero)) (a, zero)
+>   \a -> eq (divalg a (next zero)) (tup a zero)
 > 
 > 
 > _test_divalg_leq :: (Natural n, Equal n)
@@ -286,7 +286,7 @@ Since $\next(a) \neq \zero$, by the uniqueness of the division algorithm, we hav
 > _test_divalg_leq _ =
 >   testName "if leq(a,b) then divalg(a,next(b)) = (0,a)" $
 >   \a b -> if leq a b
->     then eq (divalg a (next b)) (zero, a)
+>     then eq (divalg a (next b)) (tup zero a)
 >     else true
 > 
 > 
@@ -294,7 +294,7 @@ Since $\next(a) \neq \zero$, by the uniqueness of the division algorithm, we hav
 >   => n -> Test (n -> Bool)
 > _test_divalg_self_next _ =
 >   testName "divalg(next(a),next(a)) == (next(0),0)" $
->   \a -> eq (divalg (next a) (next a)) (next zero, zero)
+>   \a -> eq (divalg (next a) (next a)) (tup (next zero) zero)
 
 ::::::::::::::::::::
 ::::::::::::::::::::

@@ -120,6 +120,18 @@
 @predicates@#thm-por-pand-distribute	\\por(p,\\pand(p,r)) = \\pand(\\por(p,q),\\por(p,r))
 @predicates@#def-pimpl	\\pimpl(p,q)(a) = \bimpl(p(a),q(a))
 #=======================#
+#--- tuples ------------#
+#=======================#
+@tuples@#def-fst-dup	\\fst(\\dup(h,k)(x)) = h(x)
+@tuples@#def-snd-dup	\\snd(\\dup(h,k)(x)) = k(x)
+@tuples@#def-tup	\\tup(a)(b) = \\dup(\\const(a),\\const(b))(\\ast)
+@tuples@#thm-fst-tup	\\fst(\\tup(a)(b)) = a
+@tuples@#thm-snd-tup	\\snd(\\tup(a)(b)) = b
+@tuples@#thm-dup-fst-snd	\\dup(\\fst,\\snd) = \\id
+@tuples@#def-tswap	\\tswap = \\dup(\\snd,\\fst)
+@tuples@#thm-tswap-swap	\\tswap(\\tup(a)(b)) = \\tup(b)(a)
+@tuples@#thm-tswap-involution	\\tswap(\\tswap(\\tup(a)(b))) = \\tup(a)(b)
+#=======================#
 #--- disjoint-unions ---#
 #=======================#
 @disjoint-unions@#dfn-disjoint-unions-isRgt	\\isRgt = \\either(\\const(\\bfalse),\\const(\\btrue))

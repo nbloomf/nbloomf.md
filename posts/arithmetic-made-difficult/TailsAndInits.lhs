@@ -17,6 +17,7 @@ slug: tails-inits
 > import And
 > import Or
 > import Implies
+> import Tuples
 > import NaturalNumbers
 > import Lists
 > import HeadAndTail
@@ -522,7 +523,7 @@ Suite:
 >   ( TypeName a, Show a, Equal a, Arbitrary a, CoArbitrary a
 >   , TypeName n, Natural n, Equal n
 >   , TypeName (t a), List t
->   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (a,a)), Equal (t (t a))
+>   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (Pair a a)), Equal (t (t a))
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_tails_inits t n maxSize numCases = do
 >   testLabel2 "tails & inits" t n

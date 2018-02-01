@@ -1042,7 +1042,7 @@ Suite:
 > _test_sublist ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
->   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (a,a))
+>   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (Pair a a))
 >   , Natural n
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_sublist t n maxSize numCases = do

@@ -17,6 +17,7 @@ slug: count
 > import And
 > import Or
 > import Implies
+> import Tuples
 > import NaturalNumbers
 > import Plus
 > import Lists
@@ -516,7 +517,7 @@ Suite:
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
 >   , TypeName n, Natural n, Equal n, Show n, Arbitrary n
->   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (a,a))
+>   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (Pair a a))
 >   ) => t a -> n -> Int -> Int -> IO ()
 > _test_count t n maxSize numCases = do
 >   testLabel2 "count" t n

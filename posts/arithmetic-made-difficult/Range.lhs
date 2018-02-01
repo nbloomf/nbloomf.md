@@ -17,6 +17,7 @@ slug: range
 > import And
 > import Or
 > import Implies
+> import Tuples
 > import DisjointUnions
 > import NaturalNumbers
 > import Plus
@@ -38,7 +39,7 @@ In Haskell:
 
 > range :: (List t, Natural n, Equal n) => n -> n -> t n
 > range a b = unfoldN f b a
->   where f k = rgt (next k, k)
+>   where f k = rgt (tup (next k) k)
 
 ::::::::::::::::::::
 

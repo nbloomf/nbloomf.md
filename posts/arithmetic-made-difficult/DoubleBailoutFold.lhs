@@ -17,6 +17,7 @@ slug: dbfoldr
 > import And
 > import Or
 > import Implies
+> import Tuples
 > import NaturalNumbers
 > import Lists
 > import HeadAndTail
@@ -100,7 +101,7 @@ We can implement $\dbfoldr{\ast}{\ast}{\ast}{\ast}{\ast}$ using the definition o
 >   where
 >     ξ z b = case uncons z of
 >       Left () -> δ b
->       Right (a,x) -> if β a x b
+>       Right (Pair a x) -> if β a x b
 >         then ψ a x b
 >         else χ a x b (ξ x b) (ξ x (μ b))
 

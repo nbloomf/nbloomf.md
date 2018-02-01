@@ -57,14 +57,14 @@ in particular, $$\nleq(\eta(\varphi(a,b)),\nplus(b,\nrem(a,b))).$$ Now if $\nleq
 
 ::: test :::::::::::
 
-> phi :: (Natural n, Equal n) => (n,n) -> (n,n)
-> phi (a,b) = if isZero b
->   then (a, zero)
->   else (b, rem a b)
+> phi :: (Natural n, Equal n) => Pair n n -> Pair n n
+> phi (Pair a b) = if isZero b
+>   then tup a zero
+>   else tup b (rem a b)
 > 
 > 
-> eta :: (Natural n) => (n,n) -> n
-> eta (a,b) = if isZero b
+> eta :: (Natural n) => Pair n n -> n
+> eta (Pair a b) = if isZero b
 >   then zero
 >   else if leq a b
 >     then next (plus a b)
@@ -72,7 +72,7 @@ in particular, $$\nleq(\eta(\varphi(a,b)),\nplus(b,\nrem(a,b))).$$ Now if $\nleq
 > 
 > 
 > _test_gcd_eta_norm :: (Natural n, Equal n)
->   => n -> Test ((n,n) -> Bool)
+>   => n -> Test (Pair n n -> Bool)
 > _test_gcd_eta_norm _ =
 >   testName "eta is iterative norm" $
 >   \x -> case unnext (eta x) of
@@ -91,7 +91,7 @@ In Haskell:
 
 > gcd :: (Natural n, Equal n)
 >   => n -> n -> n
-> gcd a b = normRec phi eta fst (a,b)
+> gcd a b = normRec phi eta fst (tup a b)
 
 ::::::::::::::::::::
 
