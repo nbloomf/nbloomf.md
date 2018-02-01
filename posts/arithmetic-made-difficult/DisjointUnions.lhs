@@ -202,7 +202,7 @@ $$\begin{eqnarray*}
 as claimed.
 3. Let $x \in A+B$; we have two possibilities. If $x = \lft(a)$, we have
 $$\begin{eqnarray*}
- &   & (\uSwap \circ \uSwap)(\lft(a)) \\
+ &   & \compose(\uSwap)(\uSwap)(\lft(a)) \\
  & = & \uSwap(\uSwap(\lft(a))) \\
  &     \href{@disjoint-unions@#thm-uSwap-lft}
    = & \uSwap(\rgt(a)) \\
@@ -211,7 +211,7 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 and if $x = \rgt(b)$ we have
 $$\begin{eqnarray*}
- &   & (\uSwap \circ \uSwap)(\rgt(b)) \\
+ &   & \compose(\uSwap)(\uSwap)(\rgt(b)) \\
  & = & \uSwap(\uSwap(\rgt(b))) \\
  &     \href{@disjoint-unions@#thm-uSwap-rgt}
    = & \uSwap(\lft(b)) \\
@@ -266,26 +266,27 @@ In Haskell:
 $\uPair$ has some nice properties.
 
 :::::: theorem :::::
+[]{#thm-uPair-lft}[]{#thm-uPair-rgt}[]{#thm-uPair-compose}
 For all $f$, $g$, $h$, $k$, $a$, and $b$ we have the following.
 
 1. $\uPair(f,g)(\lft(a)) = \lft(f(a))$.
 2. $\uPair(f,g)(\rgt(b)) = \rgt(g(b))$.
-2. $\uPair(f,g) \circ \uPair(h,k) = \uPair(f \circ h, g \circ k)$.
+2. $\compose(\uPair(f,g))(\uPair(h,k)) = \uPair(\compose(f)(h),\compose(g)(k))$.
 
 ::: proof ::::::::::
 1. Note that
 $$\begin{eqnarray*}
  &   & \uPair(f,g)(\lft(a)) \\
- & = & \either(\lft \circ f, \rgt \circ g)(\lft(a)) \\
- & = & (\lft \circ f)(a) \\
+ & = & \either(\compose(\lft)(f),\compose(\rgt)(g))(\lft(a)) \\
+ & = & \compose(\lft)(f)(a) \\
  & = & \lft(f(a))
 \end{eqnarray*}$$
 as claimed.
 2. Note that
 $$\begin{eqnarray*}
  &   & \uPair(f,g)(\rgt(b)) \\
- & = & \either(\lft \circ f, \rgt \circ g)(\rgt(b)) \\
- & = & (\rgt \circ g)(b) \\
+ & = & \either(\compose(\lft)(f),\compose(\rgt)(g))(\rgt(b)) \\
+ & = & \compose(\rgt)(g)(b) \\
  & = & \rgt(g(b))
 \end{eqnarray*}$$
 as claimed.
@@ -299,11 +300,12 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
- &   & (\uPair(f,g) \circ \uPair(h,k))(\rgt(b)) \\
+ &   & \compose(\uPair(f,g))(\uPair(h,k))(\rgt(b)) \\
  & = & \uPair(f,g)(\uPair(h,k)(\rgt(b))) \\
  & = & \uPair(f,g)(\rgt(h(b))) \\
  & = & \rgt(g(k(b))) \\
- & = & \uPair(f \circ h, g \circ k)(\rgt(b))
+ & = & \rgt(\compose(g)(k)(b)) \\
+ & = & \uPair(\compose(f)(h),\compose(g)(k))(\rgt(b))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -345,7 +347,7 @@ as needed.
 Finally, note that although as sets $A + (B + C)$ and $(A + B) + C$ cannot possibly be equal to each other in general, they are naturally isomorphic via $\uAssocL$ and $\uAssocR$.
 
 :::::: definition ::
-Let $A$, $B$, and $C$ be sets. We define $\uAssocL : A + (B + C) \rightarrow (A + B) + C$ by $$\uAssocL = \either(\lft \circ \lft, \either(\lft \circ \rgt, \rgt))$$ and define $\uAssocR : (A + B) + C \rightarrow A + (B + C)$ by $$\uAssocR = \either(\either(\lft,\rgt \circ \lft),\rgt \circ \rgt).$$
+Let $A$, $B$, and $C$ be sets. We define $\uAssocL : A + (B + C) \rightarrow (A + B) + C$ by $$\uAssocL = \either(\compose(\lft)(\lft),\either(\compose(\lft)(\rgt),\rgt))$$ and define $\uAssocR : (A + B) + C \rightarrow A + (B + C)$ by $$\uAssocR = \either(\either(\lft,\compose(\rgt)(\lft)),\compose(\rgt)(\rgt)).$$
 
 In Haskell:
 
@@ -368,8 +370,8 @@ The following hold whenever everything has the appropriate type.
 4. $\uAssocR(\lft(\lft(a))) = \lft(a)$.
 5. $\uAssocR(\lft(\rgt(b))) = \rgt(\lft(b))$.
 6. $\uAssocR(\rgt(c)) = \rgt(\rgt(c))$.
-7. $\uAssocR \circ \uAssocL = \id_{A + (B + C)}$.
-8. $\uAssocL \circ \uAssocR = \id_{(A + B) + C}$.
+7. $\compose(\uAssocR)(\uAssocL) = \id_{A + (B + C)}$.
+8. $\compose(\uAssocL)(\uAssocR) = \id_{(A + B) + C}$.
 
 ::: proof ::::::::::
 1. We have
@@ -449,27 +451,30 @@ $$\begin{eqnarray*}
 as needed.
 8. If $x \in (A + B) + C$, we have three possibilities. If $x = \lft(\lft(a))$, note that
 $$\begin{eqnarray*}
- &   & (\uAssocL \circ \uAssocR)(x) \\
+ &   & \compose(\uAssocL)(\uAssocR)(x) \\
+ &     \let{x = \lft(\lft(a))}
+   = & \compose(\uAssocL)(\uAssocR)(\lft(\lft(a))) \\
  & = & \uAssocL(\uAssocR(\lft(\lft(a)))) \\
  & = & \uAssocL(\lft(a)) \\
  & = & \lft(\lft(a)) \\
- & = & x;
+ &     \let{x = \lft(\lft(a))}
+   = & x
 \end{eqnarray*}$$
 if $x = \lft(\rgt(b))$, note that
 $$\begin{eqnarray*}
- &   & (\uAssocL \circ \uAssocR)(x) \\
+ &   & \compose(\uAssocL)(\uAssocR)(x) \\
  & = & \uAssocL(\uAssocR(\lft(\rgt(b)))) \\
  & = & \uAssocL(\rgt(\lft(b))) \\
  & = & \lft(\rgt(b)) \\
- & = & x;
+ & = & x
 \end{eqnarray*}$$
 and if $x = \rgt(c)$, note that
 $$\begin{eqnarray*}
- &   & (\uAssocL \circ \uAssocR)(x) \\
+ &   & \compose(\uAssocL)(\uAssocR)(x) \\
  & = & \uAssocL(\uAssocR(\rgt(c))) \\
  & = & \uAssocL(\rgt(\rgt(c))) \\
  & = & \rgt(c) \\
- & = & x,
+ & = & x
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -587,7 +592,8 @@ $$\begin{eqnarray*}
  &   & \isLft(\lft(a)) \\
  &     \href{@disjoint-unions@#dfn-isLft}
    = & \either(\const(\btrue),\const(\bfalse))(\lft(a)) \\
- & = & \const(\btrue)(a) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \const(\btrue)(a) \\
  &     \href{@functions@#def-const}
    = & \btrue
 \end{eqnarray*}$$
@@ -597,7 +603,8 @@ $$\begin{eqnarray*}
  &   & \isLft(\rgt(b)) \\
  &     \href{@disjoint-unions@#dfn-isLft}
    = & \either(\const(\btrue),\const(\bfalse))(\rgt(b)) \\
- & = & \const(\bfalse)(b) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \const(\bfalse)(b) \\
  &     \href{@functions@#def-const}
    = & \bfalse
 \end{eqnarray*}$$
@@ -607,7 +614,8 @@ $$\begin{eqnarray*}
  &   & \isRgt(\lft(a)) \\
  &     \href{@disjoint-unions@#dfn-isRgt}
    = & \either(\const(\bfalse),\const(\btrue))(\lft(a)) \\
- & = & \const(\bfalse)(a) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \const(\bfalse)(a) \\
  &     \href{@functions@#def-const}
    = & \bfalse
 \end{eqnarray*}$$
@@ -617,7 +625,8 @@ $$\begin{eqnarray*}
  &   & \isRgt(\rgt(b)) \\
  &     \href{@disjoint-unions@#dfn-isRgt}
    = & \either(\const(\bfalse),\const(\btrue))(\rgt(b)) \\
- & = & \const(\btrue)(b) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \const(\btrue)(b) \\
  &     \href{@functions@#def-const}
    = & \btrue
 \end{eqnarray*}$$
@@ -706,4 +715,5 @@ Suite:
 Main:
 
 > main_disjoint_union :: IO ()
-> main_disjoint_union = _test_disjoint_union (true :: Bool) (true :: Bool) (true :: Bool) 20 100
+> main_disjoint_union = do
+>   _test_disjoint_union (true :: Bool) (true :: Bool) (true :: Bool) 20 100
