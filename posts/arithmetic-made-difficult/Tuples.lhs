@@ -51,16 +51,22 @@ Let $A$ and $B$ be sets. Given $a \in A$ and $b \in B$, we define $\tup : A \rig
 1. We have
 $$\begin{eqnarray*}
  &   & \fst(\tup(a)(b)) \\
- & = & \fst(\dup(\const(a),\const(b))(\ast)) \\
- & = & \const(a)(\ast) \\
- & = & a
+ &     \href{@tuples@#def-tup}
+   = & \fst(\dup(\const(a),\const(b))(\ast)) \\
+ &     \href{@tuples@#def-fst-dup}
+   = & \const(a)(\ast) \\
+ &     \href{@functions@#def-const}
+   = & a
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
  &   & \snd(\tup(a)(b)) \\
- & = & \snd(\dup(\const(a),\const(b))(\ast)) \\
- & = & \const(b)(\ast) \\
- & = & b
+ &     \href{@tuples@#def-tup}
+   = & \snd(\dup(\const(a),\const(b))(\ast)) \\
+ &     \href{@tuples@#def-snd-dup}
+   = & \const(b)(\ast) \\
+ &     \href{@functions@#def-const}
+   = & b
 \end{eqnarray*}$$
 as claimed.
 2. Define $\omega : \ast \rightarrow A \times B$ by $\omega = \const(w)$. Now
@@ -68,14 +74,16 @@ $$\begin{eqnarray*}
  &   & \fst(\omega(\ast)) \\
  & = & \fst(w) \\
  & = & a \\
- & = & \const(a)(\ast)
+ &     \href{@functions@#def-const}
+   = & \const(a)(\ast)
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
  &   & \snd(\omega(\ast)) \\
  & = & \snd(w) \\
  & = & b \\
- & = & \const(b)(\ast)
+ &     \href{@functions@#def-const}
+   = & \const(b)(\ast)
 \end{eqnarray*}$$
 so by the universal property of $A \times B$, $w = \tup(a)(b)$.
 ::::::::::::::::::::
@@ -113,14 +121,18 @@ Provided the types match up, we have $$\dup(\fst,\snd) = \id_{A \times B}.$$
 Note that
 $$\begin{eqnarray*}
  &   & \fst(\dup(\fst,\snd)(\tup(a)(b))) \\
- & = & \fst(\tup(a)(b)) \\
- & = & a
+ &     \href{@tuples@#def-fst-dup}
+   = & \fst(\tup(a)(b)) \\
+ &     \href{@tuples@#thm-fst-tup}
+   = & a
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
  &   & \snd(\dup(\fst,\snd)(\tup(a)(b))) \\
- & = & \snd(\tup(a)(b)) \\
- & = & b
+ &     \href{@tuples@#def-snd-dup}
+   = & \snd(\tup(a)(b)) \\
+ &     \href{@tuples@#thm-snd-tup}
+   = & b
 \end{eqnarray*}$$
 so that $\dup(\fst,\snd)(\tup(a)(b)) = \tup(a)(b)$ for all $a \in A$ and $b \in B$.
 ::::::::::::::::::::
@@ -162,23 +174,31 @@ Let $A$ and $B$ be sets. Then we have the following.
 1. Note that
 $$\begin{eqnarray*}
  &   & \fst(\tSwap(\tup(a)(b))) \\
- & = & \fst(\dup(\snd,\fst)(\tup(a)(b))) \\
- & = & \snd(\tup(a)(b)) \\
- & = & b
+ &     \href{@tuples@#def-tswap}
+   = & \fst(\dup(\snd,\fst)(\tup(a)(b))) \\
+ &     \href{@tuples@#def-fst-dup}
+   = & \snd(\tup(a)(b)) \\
+ &     \href{@tuples@#thm-snd-tup}
+   = & b
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
  &   & \snd(\tSwap(\tup(a)(b))) \\
- & = & \snd(\dup(\snd,\fst)(\tup(a)(b))) \\
- & = & \fst(\tup(a)(b)) \\
- & = & a
+ &     \href{@tuples@#def-tswap}
+   = & \snd(\dup(\snd,\fst)(\tup(a)(b))) \\
+ &     \href{@tuples@#def-snd-dup}
+   = & \fst(\tup(a)(b)) \\
+ &     \href{@tuples@#thm-fst-tup}
+   = & a
 \end{eqnarray*}$$
 so that $\tSwap(\tup(a)(b)) = \tup(b)(a)$ as claimed.
 2. Note that
 $$\begin{eqnarray*}
  &   & \tSwap(\tSwap(\tup(a)(b))) \\
- & = & \tSwap(\tup(b)(a)) \\
- & = & \tup(a)(b)
+ &     \href{@tuples@#thm-tswap-swap}
+   = & \tSwap(\tup(b)(a)) \\
+ &     \href{@tuples@#thm-tswap-swap}
+   = & \tup(a)(b)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

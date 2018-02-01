@@ -424,7 +424,8 @@ $$\begin{eqnarray*}
  & = & \bif{\elt(a)(\cat(y,\cons(a,x)))}{\cons(a,x)}{\common(x,\cat(\snoc(a,y),x))} \\
  & = & \bif{\elt(a)(\cat(y,\cons(a,x)))}{\cons(a,x)}{x} \\
  & = & \bif{\btrue}{\cons(a,x)}{x} \\
- & = & \cons(a,x)
+ &     \href{@booleans@#cor-if-true}
+   = & \cons(a,x)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -458,9 +459,12 @@ $$\begin{eqnarray*}
  &   & \common(\cons(a,x),\cons(a,x)) \\
  & = & \bif{\elt(a,\cons(a,x))}{\cons(a,\common(x,\cons(a,x)))}{\common(x,\cons(a,x))} \\
  & = & \bif{\bif{\beq(a,a)}{\btrue}{\elt(a)(x)}}{\cons(a,\common(x,\cons(a,x)))}{\common(x,\cons(a,x))} \\
- & = & \bif{\bif{\btrue}{\btrue}{\elt(a)(x)}}{\cons(a,\common(x,\cons(a,x)))}{\common(x,\cons(a,x))} \\
- & = & \bif{\btrue}{\cons(a,\common(x,\cons(a,x)))}{\common(x,\cons(a,x))} \\
- & = & \cons(a,\common(x,\cons(a,x))) \\
+ &     \href{@booleans@#thm-eq-reflexive}
+   = & \bif{\bif{\btrue}{\btrue}{\elt(a)(x)}}{\cons(a,\common(x,\cons(a,x)))}{\common(x,\cons(a,x))} \\
+ &     \href{@booleans@#cor-if-true}
+   = & \bif{\btrue}{\cons(a,\common(x,\cons(a,x)))}{\common(x,\cons(a,x))} \\
+ &     \href{@booleans@#cor-if-true}
+   = & \cons(a,\common(x,\cons(a,x))) \\
  & = & (@@@)
  & = & \cons(a,\common(x,x)) \\
  & = & \cons(a,x)
