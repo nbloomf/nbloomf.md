@@ -57,7 +57,8 @@ $$\begin{eqnarray*}
  &   & \isnil(\nil) \\
  & = & \either(\const(\btrue),\const(\bfalse))(\uncons(\nil)) \\
  & = & \either(\const(\btrue),\const(\bfalse))(\lft(\ast)) \\
- & = & \const(\btrue)(\ast) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \const(\btrue)(\ast) \\
  &     \href{@functions@#def-const}
    = & \btrue
 \end{eqnarray*}$$
@@ -155,7 +156,8 @@ $$\begin{eqnarray*}
  &   & \tail(\nil) \\
  & = & \either(\const(\nil),\snd)(\uncons(\nil)) \\
  & = & \either(\const(\nil),\snd)(\lft(\ast)) \\
- & = & \const(\nil)(\ast) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \const(\nil)(\ast) \\
  &     \href{@functions@#def-const}
    = & \nil
 \end{eqnarray*}$$

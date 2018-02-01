@@ -81,7 +81,8 @@ Suppose $Q = \rgt(t)$; then we have
 $$\begin{eqnarray*}
  &   & \either(\const(a),\id)(Q) \\
  & = & \either(\const(a),\id)(\rgt(t)) \\
- & = & \id(t) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \id(t) \\
  &     \href{@functions@#def-id}
    = & t
 \end{eqnarray*}$$
@@ -91,7 +92,8 @@ Suppose instead that $Q = \lft(\ast)$; then we have
 $$\begin{eqnarray*}
  &   & \either(\const(a),\id)(Q) \\
  & = & \either(\const(a),\id)(\lft(\ast)) \\
- & = & \const(a)(\ast) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \const(a)(\ast) \\
  & = & a. 
 \end{eqnarray*}$$
 Again by the properties of $\findsmallest{\sigma(a)}$, there does not exist $k$ such that $\nleq(\next(\next(\zero)),k)$ and $\nleq(k,\next(m))$ and $\ndiv(k,a)$ as claimed.

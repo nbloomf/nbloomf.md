@@ -37,7 +37,8 @@ We need to show two results: first that $\Omega$ is an inductive set homomorphis
 $$\begin{eqnarray*}
  &   & \Omega(\lft(\ast)) \\
  & = & \either(\const(\zero),\id)(\lft(\ast)) \\
- & = & \const(\zero)(\ast) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \const(\zero)(\ast) \\
  &     \href{@functions@#def-const}
    = & \zero
 \end{eqnarray*}$$
@@ -46,11 +47,13 @@ $$\begin{eqnarray*}
  &   & \Omega(\varphi(\lft(\ast))) \\
  & = & \Omega((\rgt \circ \either(\const(\zero),\next))(\lft(\ast))) \\
  & = & \Omega(\rgt(\either(\const(\zero),\next)(\lft(\ast)))) \\
- & = & \Omega(\rgt(\const(\zero)(\ast))) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \Omega(\rgt(\const(\zero)(\ast))) \\
  &     \href{@functions@#def-const}
    = & \Omega(\rgt(\zero)) \\
  & = & \either(\const(\zero),\next)(\rgt(\zero)) \\
- & = & \next(\zero) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \next(\zero) \\
  & = & \next(\Omega(\lft(\ast)))
 \end{eqnarray*}$$
 and if $x = \rgt(n)$, with $n \in \nats$, we have
@@ -58,10 +61,13 @@ $$\begin{eqnarray*}
  &   & \Omega(\varphi(\rgt(n))) \\
  & = & \Omega((\rgt \circ \either(\const(\zero),\next))(\rgt(n))) \\
  & = & \Omega(\rgt(\either(\const(\zero),\next)(\rgt(n)))) \\
- & = & \Omega(\rgt(\next(n))) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \Omega(\rgt(\next(n))) \\
  & = & \either(\const(\zero),\next)(\rgt(\next(n))) \\
- & = & \next(\next(n)) \\
- & = & \next(\either(\const(\zero),\next)(\rgt(n))) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \next(\next(n)) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \next(\either(\const(\zero),\next)(\rgt(n))) \\
  & = & \next(\Omega(\rgt(n)))
 \end{eqnarray*}$$
 as needed.
@@ -72,7 +78,8 @@ $$\begin{eqnarray*}
  & = & \Omega(\Theta(\zero)) \\
  & = & \either(\const(\zero),\next)(\natrec{\lft(\ast)}{\varphi}(\zero)) \\
  & = & \either(\const(\zero),\next)(\lft(\ast)) \\
- & = & \const(\zero)(\ast) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \const(\zero)(\ast) \\
  &     \href{@functions@#def-const}
    = & \zero \\
  & = & n,
@@ -86,7 +93,8 @@ $$\begin{eqnarray*}
  & = & \either(\const(\zero),\next)(\varphi(\Theta(n))) \\
  & = & \either(\const(\zero),\next)((\rgt \circ \either(\const(\zero),\next))(\Theta(n))) \\
  & = & \either(\const(\zero),\next)(\rgt(\either(\const(\zero),\next)(\Theta(n)))) \\
- & = & \next(\either(\const(\zero),\next)(\Theta(n))) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \next(\either(\const(\zero),\next)(\Theta(n))) \\
  & = & \next(\Omega(\Theta(n))) \\
  & = & \next((\Omega \circ \Theta)(n)) \\
  & = & \next(n)
@@ -96,7 +104,8 @@ $$\begin{eqnarray*}
  &   & (\Theta \circ \Omega)(\lft(\ast)) \\
  & = & \Theta(\Omega(\lft(\ast))) \\
  & = & \Theta(\either(\const(\zero),\next)(\lft(\ast))) \\
- & = & \Theta(\const(\zero)(\ast)) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \Theta(\const(\zero)(\ast)) \\
  &     \href{@functions@#def-const}
    = & \Theta(\zero) \\
  & = & \lft(\ast).
@@ -106,13 +115,15 @@ $$\begin{eqnarray*}
  &   & (\Theta \circ \Omega)(\rgt(n)) \\
  & = & \Theta(\Omega(\rgt(\zero))) \\
  & = & \Theta(\either(\const(\zero),\next)(\rgt(\zero))) \\
- & = & \Theta(\next(\zero)) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \Theta(\next(\zero)) \\
  & = & \natrec{\lft(\ast)}{\varphi}(\next(\zero)) \\
  & = & \varphi(\natrec{\lft(\ast)}{\varphi}(\zero)) \\
  & = & \varphi(\lft(\ast)) \\
  & = & (\rgt \circ \either(\const(\zero),\next))(\lft(\ast)) \\
  & = & \rgt(\either(\const(\zero),\next)(\lft(\ast))) \\
- & = & \rgt(\const(\zero)(\ast)) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \rgt(\const(\zero)(\ast)) \\
  &     \href{@functions@#def-const}
    = & \rgt(\zero) \\
  & = & \rgt(n)
@@ -122,16 +133,19 @@ $$\begin{eqnarray*}
  &   & (\Theta \circ \Omega)(\rgt(\next(n))) \\
  & = & \Theta(\Omega(\rgt(\next(n)))) \\
  & = & \Theta(\either(\const(\zero),\next)(\rgt(\next(n)))) \\
- & = & \Theta(\next(\next(n))) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \Theta(\next(\next(n))) \\
  & = & \natrec{\lft(\ast)}{\varphi}(\next(\next(n))) \\
  & = & \varphi(\natrec{\lft(\ast)}{\varphi}(\next(n))) \\
  & = & \varphi(\Theta(\next(n))) \\
- & = & \varphi(\Theta(\either(\const(\zero),\next)(\rgt(n)))) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \varphi(\Theta(\either(\const(\zero),\next)(\rgt(n)))) \\
  & = & \varphi((\Theta \circ \Omega)(\rgt(n))) \\
  & = & \varphi(\rgt(n)) \\
  & = & (\rgt \circ \either(\const(\zero),\next))(\rgt(n)) \\
  & = & \rgt(\either(\const(\zero),\next)(\rgt(n))) \\
- & = & \rgt(\next(n))
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \rgt(\next(n))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -165,7 +179,8 @@ as claimed.
 2. Letting $\Omega$ be the inverse of $\unnext$, we have
 $$\begin{eqnarray*}
  &   & \unnext(\next(n)) \\
- & = & \unnext(\either(\const(\zero),\next)(\rgt(n))) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \unnext(\either(\const(\zero),\next)(\rgt(n))) \\
  & = & \unnext(\Omega(\rgt(n))) \\
  & = & (\unnext \circ \Omega)(\rgt(n)) \\
  & = & \rgt(n)
@@ -177,7 +192,8 @@ $$\begin{eqnarray*}
  & = & (\either(\const(\zero),\id) \circ \unnext)(\zero) \\
  & = & \either(\const(\zero),\id)(\unnext(\zero)) \\
  & = & \either(\const(\zero),\id)(\lft(\ast)) \\
- & = & \const(\zero)(\ast) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \const(\zero)(\ast) \\
  &     \href{@functions@#def-const}
    = & \zero
 \end{eqnarray*}$$
@@ -188,7 +204,8 @@ $$\begin{eqnarray*}
  & = & (\either(\const(\zero),\id) \circ \unnext)(\next(n)) \\
  & = & \either(\const(\zero),\id)(\unnext(\next(n))) \\
  & = & \either(\const(\zero),\id)(\rgt(n)) \\
- & = & \id(n) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \id(n) \\
  &     \href{@functions@#def-id}
    = & n
 \end{eqnarray*}$$
@@ -199,7 +216,8 @@ $$\begin{eqnarray*}
  & = & (\either(\const(\btrue),\const(\bfalse)) \circ \unnext)(\zero) \\
  & = & \either(\const(\btrue),\const(\bfalse))(\unnext(\zero)) \\
  & = & \either(\const(\btrue),\const(\bfalse))(\lft(\ast)) \\
- & = & \const(\btrue)(\ast) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \const(\btrue)(\ast) \\
  &     \href{@functions@#def-const}
    = & \btrue
 \end{eqnarray*}$$
@@ -210,7 +228,8 @@ $$\begin{eqnarray*}
  & = & (\either(\const(\btrue),\const(\bfalse)) \circ \unnext)(\next(n)) \\
  & = & \either(\const(\btrue),\const(\bfalse))(\unnext(\next(n))) \\
  & = & \either(\const(\btrue),\const(\bfalse))(\rgt(n)) \\
- & = & \const(\bfalse)(n) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \const(\bfalse)(n) \\
  &     \href{@functions@#def-const}
    = & \bfalse
 \end{eqnarray*}$$

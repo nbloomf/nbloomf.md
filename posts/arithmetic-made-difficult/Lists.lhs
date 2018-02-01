@@ -43,7 +43,8 @@ $$\begin{eqnarray*}
    = & \id(\lft(\ast)) \\
  & = & (\uncons \circ \either(\const(\nil),\cons))(\lft(\ast)) \\
  & = & \uncons(\either(\const(\nil),\cons)(\lft(\ast))) \\
- & = & \uncons(\const(\nil)(\ast)) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \uncons(\const(\nil)(\ast)) \\
  &     \href{@functions@#def-const}
    = & \uncons(\nil)
 \end{eqnarray*}$$
@@ -74,7 +75,8 @@ $$\begin{eqnarray*}
  &   & z \\
  & = & (\either(\const(\nil),\cons) \circ \uncons)(z) \\
  & = & \either(\const(\nil),\cons)(\lft(\ast)) \\
- & = & \const(\nil)(\ast) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \const(\nil)(\ast) \\
  &     \href{@functions@#def-const}
    = & \nil
 \end{eqnarray*}$$

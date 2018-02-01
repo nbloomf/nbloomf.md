@@ -76,7 +76,7 @@ $$\begin{eqnarray*}
  &   & \btrue \\
  &     \href{@functions@#def-const}
    = & \const(\btrue)(a) \\
- & = & (\compose(\Theta)(\lft)(a) \\
+ & = & \compose(\Theta)(\lft)(a) \\
  & = & \Theta(\lft(a)) \\
  & = & \Theta(z) \\
  & = & \Theta(\rgt(b)) \\
@@ -133,14 +133,17 @@ Provided the types match up, we have $$\either(\lft,\rgt) = \id_{A + B}.$$
 If $a \in A$, we have
 $$\begin{eqnarray*}
  &   & \compose(\id)(\lft)(a) \\
- & = & \id(\lft(a)) \\
- & = & \lft(a)
+ &     \href{@functions@#def-compose}
+   = & \id(\lft(a)) \\
+ &     \href{@functions@#def-id}
+   = & \lft(a)
 \end{eqnarray*}$$
 and likewise if $b \in B$ we have
 $$\begin{eqnarray*}
  &   & \compose(\id)(\rgt)(a) \\
  & = & \id(\rgt(b)) \\
- & = & \rgt(b)
+ &     \href{@functions@#def-id}
+   = & \rgt(b)
 \end{eqnarray*}$$
 Since $\either(\lft,\rgt)$ is unique with this property, we have $\either(\lft,\rgt) = \id_{A+B}$ as claimed.
 ::::::::::::::::::::
@@ -183,30 +186,37 @@ Let $A$ and $B$ be sets. Then we have the following for all $a \in A$ and $b \in
 1. Note that
 $$\begin{eqnarray*}
  &   & \uSwap(\lft(a)) \\
- & = & \either(\rgt,\lft)(\lft(a)) \\
- & = & \rgt(a)
+ &     \href{@disjoint-unions@#def-uSwap}
+   = & \either(\rgt,\lft)(\lft(a)) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \rgt(a)
 \end{eqnarray*}$$
 as claimed.
 2. Note that
 $$\begin{eqnarray*}
  &   & \uSwap(\rgt(a)) \\
  & = & \either(\rgt,\lft)(\lft(a)) \\
- & = & \rgt(a)
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \rgt(a)
 \end{eqnarray*}$$
 as claimed.
 3. Let $x \in A+B$; we have two possibilities. If $x = \lft(a)$, we have
 $$\begin{eqnarray*}
  &   & (\uSwap \circ \uSwap)(\lft(a)) \\
  & = & \uSwap(\uSwap(\lft(a))) \\
- & = & \uSwap(\rgt(a)) \\
- & = & \lft(a),
+ &     \href{@disjoint-unions@#thm-uSwap-lft}
+   = & \uSwap(\rgt(a)) \\
+ &     \href{@disjoint-unions@#thm-uSwap-rgt}
+   = & \lft(a)
 \end{eqnarray*}$$
 and if $x = \rgt(b)$ we have
 $$\begin{eqnarray*}
  &   & (\uSwap \circ \uSwap)(\rgt(b)) \\
  & = & \uSwap(\uSwap(\rgt(b))) \\
- & = & \uSwap(\lft(b)) \\
- & = & \rgt(b)
+ &     \href{@disjoint-unions@#thm-uSwap-rgt}
+   = & \uSwap(\lft(b)) \\
+ &     \href{@disjoint-unions@#thm-uSwap-lft}
+   = & \rgt(b)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
