@@ -144,12 +144,20 @@
 #=======================#
 #--- disjoint-unions ---#
 #=======================#
-@disjoint-unions@#dfn-disjoint-unions-isRgt	\\isRgt = \\either(\\const(\\bfalse),\\const(\\btrue))
-@disjoint-unions@#dfn-disjoint-unions-isLft	\\isLft = \\either(\\const(\\btrue),\\const(\\bfalse))
-@disjoint-unions@#thm-disjoint-unions-isLft-lft	\\isLft(\\lft(a)) = \\btrue
-@disjoint-unions@#thm-disjoint-unions-isLft-rgt	\\isLft(\\rgt(b)) = \\bfalse
-@disjoint-unions@#thm-disjoint-unions-isRgt-lft	\\isRgt(\\lft(a)) = \\bfalse
-@disjoint-unions@#thm-disjoint-unions-isRgt-rgt	\\isRgt(\\rgt(b)) = \\btrue
+@disjoint-unions@#def-either-lft	\\either(f,g)(\\lft(x)) = f(x)
+@disjoint-unions@#def-either-rgt	\\either(f,g)(\\rgt(x)) = g(x)
+@disjoint-unions@#either-lft-rgt	\\either(\\lft,\\rgt) = \\id
+@disjoint-unions@#def-uSwap	\\uSwap = \\either(\\rgt,\\lft)
+@disjoint-unions@#thm-uSwap-lft	\\uSwap(\\lft(x)) = \\rgt(x)
+@disjoint-unions@#thm-uSwap-rgt	\\uSwap(\\rgt(x)) = \\lft(x)
+@disjoint-unions@#thm-uSwap-involution	\\compose(\\uSwap)(\\uSwap) = \\id
+@disjoint-unions@#def-uPair	\\uPair(f,g) = \\either(\\compose(\\lft)(f),\\compose(\\rgt)(g))
+@disjoint-unions@#dfn-isRgt	\\isRgt = \\either(\\const(\\bfalse),\\const(\\btrue))
+@disjoint-unions@#dfn-isLft	\\isLft = \\either(\\const(\\btrue),\\const(\\bfalse))
+@disjoint-unions@#thm-isLft-lft	\\isLft(\\lft(a)) = \\btrue
+@disjoint-unions@#thm-isLft-rgt	\\isLft(\\rgt(b)) = \\bfalse
+@disjoint-unions@#thm-isRgt-lft	\\isRgt(\\lft(a)) = \\bfalse
+@disjoint-unions@#thm-isRgt-rgt	\\isRgt(\\rgt(b)) = \\btrue
 #=======================#
 #--- unary -------------#
 #=======================#

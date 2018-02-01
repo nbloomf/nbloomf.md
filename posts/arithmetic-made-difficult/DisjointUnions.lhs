@@ -24,7 +24,8 @@ slug: disjoint-unions
 Dual to sets of tuples are disjoint sums.
 
 :::::: definition ::
-[](#def-disjoint-union) Let $A$ and $B$ be sets. There is a set $A + B$ together with two functions $\lft : A \rightarrow A + B$ and $\rgt : B \rightarrow A + B$ having the property that if $X$ is a set and $\sigma : A \rightarrow X$ and $\tau : B \rightarrow X$ functions then there is a unique map $\Theta : A + B \rightarrow X$ such that $\Theta \circ \lft = \sigma$ and $\Theta \circ \rgt = \tau$. That is, there is a unique $\Theta$ such that the following diagram commutes.
+[]{#def-disjoint-union}[]{#def-either-lft}[]{#def-either-rgt}
+Let $A$ and $B$ be sets. There is a set $A + B$ together with two functions $\lft : A \rightarrow A + B$ and $\rgt : B \rightarrow A + B$ having the property that if $X$ is a set and $\sigma : A \rightarrow X$ and $\tau : B \rightarrow X$ functions then there is a unique map $\Theta : A + B \rightarrow X$ such that $\Theta \circ \lft = \sigma$ and $\Theta \circ \rgt = \tau$. That is, there is a unique $\Theta$ such that the following diagram commutes.
 
 $$\require{AMScd}
 \begin{CD}
@@ -75,7 +76,7 @@ $$\begin{eqnarray*}
  &   & \btrue \\
  &     \href{@functions@#def-const}
    = & \const(\btrue)(a) \\
- & = & (\Theta \circ \lft)(a) \\
+ & = & (\compose(\Theta)(\lft)(a) \\
  & = & \Theta(\lft(a)) \\
  & = & \Theta(z) \\
  & = & \Theta(\rgt(b)) \\
@@ -125,20 +126,21 @@ The previous results suggest that we can model $A + B$ with the Haskell type ``E
 For example, $\id_{A + B}$ is an $\either$.
 
 :::::: theorem :::::
+[]{#thm-either-lft-rgt}
 Provided the types match up, we have $$\either(\lft,\rgt) = \id_{A + B}.$$
 
 ::: proof ::::::::::
 If $a \in A$, we have
 $$\begin{eqnarray*}
- &   & (\id_{A + B} \circ \lft)(a) \\
- & = & \id_{A+B}(\lft(a)) \\
+ &   & \compose(\id)(\lft)(a) \\
+ & = & \id(\lft(a)) \\
  & = & \lft(a)
 \end{eqnarray*}$$
 and likewise if $b \in B$ we have
 $$\begin{eqnarray*}
- &   & (\id_{A + B} \circ \rgt)(a) \\
- & = & \id_{A + B}(\rgt(b)) \\
- & = & \rgt(b).
+ &   & \compose(\id)(\rgt)(a) \\
+ & = & \id(\rgt(b)) \\
+ & = & \rgt(b)
 \end{eqnarray*}$$
 Since $\either(\lft,\rgt)$ is unique with this property, we have $\either(\lft,\rgt) = \id_{A+B}$ as claimed.
 ::::::::::::::::::::
@@ -157,7 +159,8 @@ Since $\either(\lft,\rgt)$ is unique with this property, we have $\either(\lft,\
 We define $\uSwap$ on disjoint unions like so.
 
 :::::: definition ::
-[](#def-uswap) Let $A$ and $B$ be sets. We define $\uSwap : A + B \rightarrow B + A$ by $$\uSwap = \either(\rgt,\lft).$$
+[]{#def-uSwap}
+Let $A$ and $B$ be sets. We define $\uSwap : A + B \rightarrow B + A$ by $$\uSwap = \either(\rgt,\lft).$$
 
 In Haskell:
 
@@ -169,11 +172,12 @@ In Haskell:
 Now $\uSwap$ effectively toggles the tag of its argument.
 
 :::::: theorem :::::
+[]{#thm-uSwap-lft}[]{#thm-uSwap-rgt}[]{#thm-uSwap-involution}
 Let $A$ and $B$ be sets. Then we have the following for all $a \in A$ and $b \in B$.
 
 1. $\uSwap(\lft(a)) = \rgt(a)$.
 2. $\uSwap(\rgt(b)) = \lft(b)$.
-3. $\uSwap \circ \uSwap = \id_{A + B}$.
+3. $\compose(\uSwap)(\uSwap) = \id$.
 
 ::: proof ::::::::::
 1. Note that
@@ -239,7 +243,8 @@ as needed.
 Next, the utility $\uPair$ facilitates defining functions from one disjoint union to another.
 
 :::::: definition ::
-Let $A$, $B$, $U$, and $V$ be sets. We define $\uPair : U^A \times V^B \rightarrow (U + V)^{A + B}$ by $$\uPair(f,g) = \either(\lft \circ f, \rgt \circ g).$$
+[]{#def-uPair}
+Let $A$, $B$, $U$, and $V$ be sets. We define $\uPair : U^A \times V^B \rightarrow (U + V)^{A + B}$ by $$\uPair(f,g) = \either(\compose(\lft)(f),\compose(\rgt)(g)).$$
 
 In Haskell:
 
@@ -542,7 +547,7 @@ as needed.
 We also define some helper functions which detect whether an element of $A + B$ is a $\lft$ or a $\rgt$.
 
 :::::: definition ::
-[]{#dfn-disjoint-unions-isRgt}[]{#dfn-disjoint-unions-isLft}
+[]{#dfn-isRgt}[]{#dfn-isLft}
 Let $A$ and $B$ be sets. We define $\isLft : A + B \rightarrow \bool$ by $$\isLft = \either(\const(\btrue),\const(\bfalse))$$ and $\isRgt : A + B \rightarrow \bool$ by $$\isRgt = \either(\const(\bfalse),\const(\btrue)).$$
 
 In Haskell:
@@ -558,7 +563,7 @@ In Haskell:
 Now $\isLft$ and $\isRgt$ have some nice properties.
 
 :::::: theorem :::::
-[]{#thm-disjoint-unions-isLft-lft}[]{#thm-disjoint-unions-isLft-rgt}[]{#thm-disjoint-unions-isRgt-lft}[]{#thm-disjoint-unions-isRgt-rgt}
+[]{#thm-isLft-lft}[]{#thm-isLft-rgt}[]{#thm-isRgt-lft}[]{#thm-isRgt-rgt}
 Let $A$ and $B$ be sets. Then we have the following for all $a \in A$ and $b \in B$.
 
 1. $\isLft(\lft(a)) = \btrue$.
@@ -570,7 +575,7 @@ Let $A$ and $B$ be sets. Then we have the following for all $a \in A$ and $b \in
 1. We have
 $$\begin{eqnarray*}
  &   & \isLft(\lft(a)) \\
- &     \href{@disjoint-unions@#dfn-disjoint-unions-isLft}
+ &     \href{@disjoint-unions@#dfn-isLft}
    = & \either(\const(\btrue),\const(\bfalse))(\lft(a)) \\
  & = & \const(\btrue)(a) \\
  &     \href{@functions@#def-const}
@@ -580,7 +585,7 @@ as claimed.
 2. We have
 $$\begin{eqnarray*}
  &   & \isLft(\rgt(b)) \\
- &     \href{@disjoint-unions@#dfn-disjoint-unions-isLft}
+ &     \href{@disjoint-unions@#dfn-isLft}
    = & \either(\const(\btrue),\const(\bfalse))(\rgt(b)) \\
  & = & \const(\bfalse)(b) \\
  &     \href{@functions@#def-const}
@@ -590,7 +595,7 @@ as claimed.
 3. We have
 $$\begin{eqnarray*}
  &   & \isRgt(\lft(a)) \\
- &     \href{@disjoint-unions@#dfn-disjoint-unions-isRgt}
+ &     \href{@disjoint-unions@#dfn-isRgt}
    = & \either(\const(\bfalse),\const(\btrue))(\lft(a)) \\
  & = & \const(\bfalse)(a) \\
  &     \href{@functions@#def-const}
@@ -600,7 +605,7 @@ as claimed.
 4. We have
 $$\begin{eqnarray*}
  &   & \isRgt(\rgt(b)) \\
- &     \href{@disjoint-unions@#dfn-disjoint-unions-isRgt}
+ &     \href{@disjoint-unions@#dfn-isRgt}
    = & \either(\const(\bfalse),\const(\btrue))(\rgt(b)) \\
  & = & \const(\btrue)(b) \\
  &     \href{@functions@#def-const}

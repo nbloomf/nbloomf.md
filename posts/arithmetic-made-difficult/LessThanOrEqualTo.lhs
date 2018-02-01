@@ -54,7 +54,7 @@ $$\begin{eqnarray*}
    = & \isRgt(\nminus(\zero,\next(a))) \\
  &     \href{@minus@#thm-minus-zero-next}
    = & \isRgt(\lft(\ast)) \\
- &     \href{@disjoint-unions@#thm-disjoint-unions-isRgt-lft}
+ &     \href{@disjoint-unions@#thm-isRgt-lft}
    = & \bfalse
 \end{eqnarray*}$$
 as claimed.
@@ -67,7 +67,7 @@ $$\begin{eqnarray*}
    = & \isRgt(\nminus(\zero,\next(a))) \\
  &     \href{@minus@#thm-minus-zero-next}
    = & \isRgt(\lft(\ast)) \\
- &     \href{@disjoint-unions@#thm-disjoint-unions-isRgt-lft}
+ &     \href{@disjoint-unions@#thm-isRgt-lft}
    = & \bfalse
 \end{eqnarray*}$$
 as claimed.
@@ -78,7 +78,7 @@ $$\begin{eqnarray*}
    = & \isRgt(\nminus(a,\next(a))) \\
  &     \href{@minus@#thm-minus-next-self}
    = & \isRgt(\lft(\ast)) \\
- &     \href{@disjoint-unions@#thm-disjoint-unions-isRgt-lft}
+ &     \href{@disjoint-unions@#thm-isRgt-lft}
    = & \bfalse
 \end{eqnarray*}$$
 as claimed.
