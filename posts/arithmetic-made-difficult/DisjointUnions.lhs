@@ -411,51 +411,71 @@ The following hold whenever everything has the appropriate type.
 1. We have
 $$\begin{eqnarray*}
  &   & \uAssocL(\lft(a)) \\
- & = & \either(\compose(\lft)(\lft),\either(\compose(\lft)(\rgt),\rgt))(\lft(a)) \\
- & = & \compose(\lft)(\lft)(a) \\
- & = & \lft(\lft(a))
+ &     \href{@disjoint-unions@#def-uAssocL}
+   = & \either(\compose(\lft)(\lft),\either(\compose(\lft)(\rgt),\rgt))(\lft(a)) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \compose(\lft)(\lft)(a) \\
+ &     \href{@functions@#def-compose}
+   = & \lft(\lft(a))
 \end{eqnarray*}$$
 as claimed.
 2. We have
 $$\begin{eqnarray*}
  &   & \uAssocL(\rgt(\lft(b))) \\
- & = & \either(\compose(\lft)(\lft),\either(\compose(\lft)(\rgt),\rgt))(\rgt(\lft(b))) \\
- & = & \either(\compose(\lft)(\rgt),\rgt)(\lft(b)) \\
- & = & \compose(\lft)(\rgt)(b) \\
- & = & \lft(\rgt(b))
+ &     \href{@disjoint-unions@#def-uAssocL}
+   = & \either(\compose(\lft)(\lft),\either(\compose(\lft)(\rgt),\rgt))(\rgt(\lft(b))) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \either(\compose(\lft)(\rgt),\rgt)(\lft(b)) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \compose(\lft)(\rgt)(b) \\
+ &     \href{@functions@#def-compose}
+   = & \lft(\rgt(b))
 \end{eqnarray*}$$
 as claimed.
 3. We have
 $$\begin{eqnarray*}
  &   & \uAssocL(\rgt(\rgt(c))) \\
- & = & \either(\compose(\lft)(\lft),\either(\compose(\lft)(\rgt),\rgt))(\rgt(\rgt(c))) \\
- & = & \either(\compose(\lft)(\rgt),\rgt)(\rgt(c)) \\
- & = & \rgt(c)
+ &     \href{@disjoint-unions@#def-uAssocL}
+   = & \either(\compose(\lft)(\lft),\either(\compose(\lft)(\rgt),\rgt))(\rgt(\rgt(c))) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \either(\compose(\lft)(\rgt),\rgt)(\rgt(c)) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \rgt(c)
 \end{eqnarray*}$$
 as claimed.
 4. We have
 $$\begin{eqnarray*}
  &   & \uAssocR(\lft(\lft(a))) \\
- & = & \either(\either(\lft,\compose(\rgt)(\lft)),\compose(\rgt)(\rgt))(\lft(\lft(a))) \\
- & = & \either(\lft,\compose(\rgt)(\lft))(\lft(a)) \\
- & = & \lft(a)
+ &     \href{@disjoint-unions@#def-uAssocR}
+   = & \either(\either(\lft,\compose(\rgt)(\lft)),\compose(\rgt)(\rgt))(\lft(\lft(a))) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \either(\lft,\compose(\rgt)(\lft))(\lft(a)) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \lft(a)
 \end{eqnarray*}$$
 as claimed.
 5. We have
 $$\begin{eqnarray*}
  &   & \uAssocR(\lft(\rgt(b))) \\
- & = & \either(\either(\lft,\compose(\rgt)(\lft)),\compose(\rgt)(\rgt))(\lft(\rgt(b))) \\
- & = & \either(\lft,\compose(\rgt)(\lft))(\rgt(b)) \\
- & = & \compose(\rgt)(\lft)(b) \\
- & = & \rgt(\lft(b))
+ &     \href{@disjoint-unions@#def-uAssocR}
+   = & \either(\either(\lft,\compose(\rgt)(\lft)),\compose(\rgt)(\rgt))(\lft(\rgt(b))) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \either(\lft,\compose(\rgt)(\lft))(\rgt(b)) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \compose(\rgt)(\lft)(b) \\
+ &     \href{@functions@#def-compose}
+   = & \rgt(\lft(b))
 \end{eqnarray*}$$
 as claimed.
 6. We have
 $$\begin{eqnarray*}
  &   & \uAssocR(\rgt(c)) \\
- & = & \either(\either(\lft,\compose(\rgt)(\lft)),\compose(\rgt)(\rgt))(\rgt(c)) \\
- & = & \compose(\rgt)(\rgt)(c) \\
- & = & \rgt(\rgt(c))
+ &     \href{@disjoint-unions@#def-uAssocR}
+   = & \either(\either(\lft,\compose(\rgt)(\lft)),\compose(\rgt)(\rgt))(\rgt(c)) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \compose(\rgt)(\rgt)(c) \\
+ &     \href{@functions@#def-compose}
+   = & \rgt(\rgt(c))
 \end{eqnarray*}$$
 as claimed.
 7. If $x \in A + (B + C)$, we have three possibilities. If $x = \lft(a)$, note that
