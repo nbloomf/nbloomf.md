@@ -24,19 +24,76 @@ slug: unary
 A nice consequence of wrapping up recursion in the $\natrec{\ast}{\ast}$ function is that it allows us to write programs, independent of any implementation, and prove things about them. We'll see lots of examples of this, but first we need to establish some structural results.
 
 :::::: definition ::
-Let $1 = \{\ast\}$, and define $\varphi : 1 + \nats \rightarrow 1 + \nats$ by $$\varphi = \rgt \circ \either(\const(\zero),\next).$$ In this post we consider $$(1 + \nats, \lft(\ast), \varphi)$$ as an inductive set.
+[]{#def-unnext}
+Let $1 = \{\ast\}$, and define $\varphi : 1 + \nats \rightarrow 1 + \nats$ by $$\varphi = \compose(\rgt)(\either(\const(\zero),\id)).$$ In this post we consider $$(1 + \nats, \lft(\ast), \varphi)$$ as an inductive set, and denote the natural recursion map $\nats \rightarrow 1 + \nats$ by $\unnext$.
+::::::::::::::::::::
+
+We can evaluate $\unnext$ directly.
+
+:::::: theorem :::::
+[]{#thm-unnext-zero}[]{#thm-unnext-next}
+If $n \in \nats$, we have the following.
+
+1. $\unnext(\zero) = \lft(\ast)$.
+2. $\unnext(\next(n)) = \rgt(n)$.
+
+::: proof ::::::::::
+1. Note that
+$$\begin{eqnarray*}
+ &   & \unnext(\zero) \\
+ &     \href{@unary@#def-unnext}
+   = & \natrec{\lft(\ast)}{\compose(\rgt)(\either(\const(\zero),\next))}(\zero) \\
+ &     \href{@peano@#cor-natrec-zero}
+   = & \lft(\ast)
+\end{eqnarray*}$$
+as claimed.
+2. We proceed by induction on $n$. For the base case $n = \zero$, note that
+$$\begin{eqnarray*}
+ &   & \unnext(\next(\zero)) \\
+ &     \href{@unary@#def-unnext}
+   = & \natrec{\lft(\ast)}{\compose(\rgt)(\either(\const(\zero),\next))}(\next(\zero)) \\
+ &     \href{@peano@#cor-natrec-next}
+   = & \compose(\rgt)(\either(\const(\zero),\next))(\natrec{\lft(\ast)}{\compose(\rgt)(\either(\const(\zero),\next))}(\zero)) \\
+ &     \href{@peano@#cor-natrec-zero}
+   = & \compose(\rgt)(\either(\const(\zero),\next))(\lft(\ast)) \\
+ &     \href{@functions@#def-compose}
+   = & \rgt(\either(\const(\zero),\next)(\lft(\ast))) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \rgt(\const(\zero)(\ast)) \\
+ &     \href{@functions@#def-const}
+   = & \rgt(\zero)
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $n$. Now we have
+$$\begin{eqnarray*}
+ &   & \unnext(\next(\next(n))) \\
+ &     \href{@unary@#def-unnext}
+   = & \natrec{\lft(\ast)}{\compose(\rgt)(\either(\const(\zero),\next))}(\next(\next(n))) \\
+ &     \href{@peano@#cor-natrec-next}
+   = & \compose(\rgt)(\either(\const(\zero),\next))(\natrec{\lft(\ast)}{\compose(\rgt)(\either(\const(\zero),\next))}(\next(n))) \\
+ &     \href{@unary@#def-unnext}
+   = & \compose(\rgt)(\either(\const(\zero),\next))(\unnext(\next(n))) \\
+ &     \hyp{\unnext(\next(n)) = \rgt(n)}
+   = & \compose(\rgt)(\either(\const(\zero),\next))(\rgt(n)) \\
+ &     \href{@functions@#def-compose}
+   = & \rgt(\either(\const(\zero),\next)(\rgt(n))) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \rgt(\next(n))
+\end{eqnarray*}$$
+as needed.
+::::::::::::::::::::
 ::::::::::::::::::::
 
 It turns out that $1 + \nats$ is isomorphic to $\nats$, and the map that achieves this is useful.
 
 :::::: theorem :::::
-The natural recursion map $\Theta : \nats \rightarrow 1 + \nats$ is an isomorphism; in particular, the inverse of $\Theta$ is $$\Omega = \either(\const(\zero),\next).$$ We denote this $\Theta$ by $\unnext$.
+The map $\unnext : \nats \rightarrow 1 + \nats$ is an isomorphism; in particular, the inverse of $\unnext$ is $$Ω = \either(\const(\zero),\next).$$
 
 ::: proof ::::::::::
-We need to show two results: first that $\Omega$ is an inductive set homomorphism, and second that $\Omega$ and $\Theta$ are mutual inverses. To the first point, note that
+We need to show two results: first that $Ω$ is an inductive set homomorphism, and second that $Ω$ and $\Theta$ are mutual inverses. To the first point, note that
 $$\begin{eqnarray*}
- &   & \Omega(\lft(\ast)) \\
- & = & \either(\const(\zero),\id)(\lft(\ast)) \\
+ &   & Ω(\lft(\ast)) \\
+ &     \let{Ω = \either(\const(\zero),\next)}
+   = & \either(\const(\zero),\next)(\lft(\ast)) \\
  &     \href{@disjoint-unions@#def-either-lft}
    = & \const(\zero)(\ast) \\
  &     \href{@functions@#def-const}
@@ -44,94 +101,98 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 and if $x \in 1 + \nats$, we have two possibilities. If $x = \lft(\ast)$, we have
 $$\begin{eqnarray*}
- &   & \Omega(\varphi(\lft(\ast))) \\
- & = & \Omega((\rgt \circ \either(\const(\zero),\next))(\lft(\ast))) \\
- & = & \Omega(\rgt(\either(\const(\zero),\next)(\lft(\ast)))) \\
+ & = & Ω(\compose(\rgt)(\either(\const(\zero),\next))(\lft(\ast))) \\
+ &     \href{@functions@#def-compose}
+   = & Ω(\rgt(\either(\const(\zero),\next)(\lft(\ast)))) \\
  &     \href{@disjoint-unions@#def-either-lft}
-   = & \Omega(\rgt(\const(\zero)(\ast))) \\
+   = & Ω(\rgt(\const(\zero)(\ast))) \\
  &     \href{@functions@#def-const}
-   = & \Omega(\rgt(\zero)) \\
- & = & \either(\const(\zero),\next)(\rgt(\zero)) \\
+   = & Ω(\rgt(\zero)) \\
+ &     \let{Ω = \either(\const(\zero),\next)}
+   = & \either(\const(\zero),\next)(\rgt(\zero)) \\
  &     \href{@disjoint-unions@#def-either-rgt}
    = & \next(\zero) \\
- & = & \next(\Omega(\lft(\ast)))
+ &     \href{@functions@#def-const}
+   = & \next(\const(\zero)(\ast)) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \next(\either(\const(\zero),\next)(\lft(\ast))) \\
+ &     \let{Ω = \either(\const(\zero),\next)}
+   = & \next(Ω(\lft(\ast)))
 \end{eqnarray*}$$
 and if $x = \rgt(n)$, with $n \in \nats$, we have
 $$\begin{eqnarray*}
- &   & \Omega(\varphi(\rgt(n))) \\
- & = & \Omega((\rgt \circ \either(\const(\zero),\next))(\rgt(n))) \\
- & = & \Omega(\rgt(\either(\const(\zero),\next)(\rgt(n)))) \\
+ & = & Ω(\compose(\rgt)(\either(\const(\zero),\next))(\rgt(n))) \\
+ &     \href{@functions@#def-compose}
+   = & Ω(\rgt(\either(\const(\zero),\next)(\rgt(n)))) \\
  &     \href{@disjoint-unions@#def-either-rgt}
-   = & \Omega(\rgt(\next(n))) \\
- & = & \either(\const(\zero),\next)(\rgt(\next(n))) \\
+   = & Ω(\rgt(\next(n))) \\
+ &     \let{Ω = \either(\const(\zero),\next)}
+   = & \either(\const(\zero),\next)(\rgt(\next(n))) \\
  &     \href{@disjoint-unions@#def-either-rgt}
    = & \next(\next(n)) \\
  &     \href{@disjoint-unions@#def-either-rgt}
    = & \next(\either(\const(\zero),\next)(\rgt(n))) \\
- & = & \next(\Omega(\rgt(n)))
+ &     \let{Ω = \either(\const(\zero),\next)}
+   = & \next(Ω(\rgt(n)))
 \end{eqnarray*}$$
 as needed.
 
-Next to see that $\Omega$ and $\Theta$ are mutual inverses. First we show that $(\Omega \circ \Theta)(n) = \id(n)$ for all $n \in \nats$, proceeding by induction. For the base case $n = \zero$ we have
+Next to see that $Ω$ and $\Theta$ are mutual inverses. First we show that $\compose(Ω)(\unnext)(n) = \id(n)$ for all $n \in \nats$, proceeding by induction. For the base case $n = \zero$ we have
 $$\begin{eqnarray*}
- &   & (\Omega \circ \Theta)(n) \\
- & = & \Omega(\Theta(\zero)) \\
- & = & \either(\const(\zero),\next)(\natrec{\lft(\ast)}{\varphi}(\zero)) \\
- & = & \either(\const(\zero),\next)(\lft(\ast)) \\
+ &   & \compose(Ω)(\unnext)(\zero) \\
+ &     \href{@functions@#def-compose}
+   = & Ω(\unnext(\zero)) \\
+ &     \let{Ω = \either(\const(\zero),\next)}
+   = & \either(\const(\zero),\next)(\unnext(\zero)) \\
+ &     \href{@unary@#thm-unnext-zero}
+   = & \either(\const(\zero),\next)(\lft(\ast)) \\
  &     \href{@disjoint-unions@#def-either-lft}
    = & \const(\zero)(\ast) \\
  &     \href{@functions@#def-const}
-   = & \zero \\
- & = & n,
+   = & \zero
 \end{eqnarray*}$$
 and if the equality holds for $n$, we have
 $$\begin{eqnarray*}
- &   & (\Omega \circ \Theta)(\next(n)) \\
- & = & \Omega(\Theta(\next(n))) \\
- & = & \either(\const(\zero),\next)(\natrec{\lft(\ast)}{\varphi}(\next(n))) \\
- & = & \either(\const(\zero),\next)(\varphi(\natrec{\lft(\ast)}{\varphi}(n))) \\
- & = & \either(\const(\zero),\next)(\varphi(\Theta(n))) \\
- & = & \either(\const(\zero),\next)((\rgt \circ \either(\const(\zero),\next))(\Theta(n))) \\
- & = & \either(\const(\zero),\next)(\rgt(\either(\const(\zero),\next)(\Theta(n)))) \\
+ &   & \compose(Ω)(\unnext)(\next(n)) \\
+ &     \href{@functions@#def-compose}
+   = & Ω(\unnext(\next(n))) \\
+ &     \href{@unary@#thm-unnext-next}
+   = & Ω(\rgt(n)) \\
+ &     \let{Ω = \either(\const(\zero),\next)}
+   = & \either(\const(\zero),\next)(\rgt(n)) \\
  &     \href{@disjoint-unions@#def-either-rgt}
-   = & \next(\either(\const(\zero),\next)(\Theta(n))) \\
- & = & \next(\Omega(\Theta(n))) \\
- & = & \next((\Omega \circ \Theta)(n)) \\
- & = & \next(n)
+   = & \next(n)
 \end{eqnarray*}$$
-as needed. Now to see that $\Theta \circ \Omega = \id$, we consider two possibilities. First note that
+as needed. Now to see that $\Theta \circ Ω = \id$, we consider two possibilities. First note that
 $$\begin{eqnarray*}
- &   & (\Theta \circ \Omega)(\lft(\ast)) \\
- & = & \Theta(\Omega(\lft(\ast))) \\
- & = & \Theta(\either(\const(\zero),\next)(\lft(\ast))) \\
+ &   & \compose(\unnext)(Ω)(\lft(\ast)) \\
+ &     \href{@functions@#def-compose}
+   = & \unnext(Ω(\lft(\ast))) \\
+ &     \let{Ω = \either(\const(\zero),\next)}
+   = & \unnext(\either(\const(\zero),\next)(\lft(\ast))) \\
  &     \href{@disjoint-unions@#def-either-lft}
-   = & \Theta(\const(\zero)(\ast)) \\
+   = & \unnext(\const(\zero)(\ast)) \\
  &     \href{@functions@#def-const}
-   = & \Theta(\zero) \\
- & = & \lft(\ast).
+   = & \unnext(\zero) \\
+ &     \href{@unary@#thm-unnext-zero}
+   = & \lft(\ast)
 \end{eqnarray*}$$
-To see that $(\Theta \circ \Omega)(\rgt(n)) = \rgt(n)$ for all $n \in \nats$, we proceed by induction. For the base case $n = \zero$ we have
+To see that $(\Theta \circ Ω)(\rgt(n)) = \rgt(n)$ for all $n \in \nats$, we proceed by induction. For the base case $n = \zero$ we have
 $$\begin{eqnarray*}
- &   & (\Theta \circ \Omega)(\rgt(n)) \\
- & = & \Theta(\Omega(\rgt(\zero))) \\
- & = & \Theta(\either(\const(\zero),\next)(\rgt(\zero))) \\
+ &   & \compose(\unnext)(Ω)(\rgt(\zero)) \\
+ &     \href{@functions@#def-compose}
+   = & \unnext(Ω(\rgt(\zero))) \\
+ &     \let{Ω = \either(\const(\zero),\next)}
+   = & \unnext(\either(\const(\zero),\next)(\rgt(\zero))) \\
  &     \href{@disjoint-unions@#def-either-rgt}
-   = & \Theta(\next(\zero)) \\
- & = & \natrec{\lft(\ast)}{\varphi}(\next(\zero)) \\
- & = & \varphi(\natrec{\lft(\ast)}{\varphi}(\zero)) \\
- & = & \varphi(\lft(\ast)) \\
- & = & (\rgt \circ \either(\const(\zero),\next))(\lft(\ast)) \\
- & = & \rgt(\either(\const(\zero),\next)(\lft(\ast))) \\
- &     \href{@disjoint-unions@#def-either-lft}
-   = & \rgt(\const(\zero)(\ast)) \\
- &     \href{@functions@#def-const}
+   = & \unnext(\next(\zero)) \\
+ &     \href{@unary@#thm-unnext-zero}
    = & \rgt(\zero) \\
- & = & \rgt(n)
 \end{eqnarray*}$$
 as needed. For the inductive step, if the equality holds for some $n$, we have
 $$\begin{eqnarray*}
- &   & (\Theta \circ \Omega)(\rgt(\next(n))) \\
- & = & \Theta(\Omega(\rgt(\next(n)))) \\
+ &   & (\Theta \circ Ω)(\rgt(\next(n))) \\
+ & = & \Theta(Ω(\rgt(\next(n)))) \\
  & = & \Theta(\either(\const(\zero),\next)(\rgt(\next(n)))) \\
  &     \href{@disjoint-unions@#def-either-rgt}
    = & \Theta(\next(\next(n))) \\
@@ -140,7 +201,7 @@ $$\begin{eqnarray*}
  & = & \varphi(\Theta(\next(n))) \\
  &     \href{@disjoint-unions@#def-either-rgt}
    = & \varphi(\Theta(\either(\const(\zero),\next)(\rgt(n)))) \\
- & = & \varphi((\Theta \circ \Omega)(\rgt(n))) \\
+ & = & \varphi((\Theta \circ Ω)(\rgt(n))) \\
  & = & \varphi(\rgt(n)) \\
  & = & (\rgt \circ \either(\const(\zero),\next))(\rgt(n)) \\
  & = & \rgt(\either(\const(\zero),\next)(\rgt(n))) \\
@@ -154,80 +215,74 @@ as needed.
 From $\unnext$ we define two helper functions.
 
 :::::: definition ::
-We define $\prev : \nats \rightarrow \nats$ by $$\prev = \either(\const(\zero),\id) \circ \unnext$$ and $\iszero : \nats \rightarrow \bool$ by $$\iszero = \either(\const(\btrue),\const(\bfalse)) \circ \unnext.$$
+[]{#def-prev}[]{#def-iszero}
+We define $\prev : \nats \rightarrow \nats$ by $$\prev = \compose(\either(\const(\zero),\id))(\unnext)$$ and $\iszero : \nats \rightarrow \bool$ by $$\iszero = \compose(\either(\const(\btrue),\const(\bfalse)))(\unnext).$$
 ::::::::::::::::::::
 
-Now $\unnext$, $\prev$, and $\iszero$ have some useful properties.
+Now $\prev$, and $\iszero$ have some useful properties.
 
 :::::: theorem :::::
 []{@unary@#thm-prev-zero}[]{@unary@#thm-prev-next}[]{@unary@#thm-iszero-zero}[]{@unary@#thm-iszero-next}
-1. $\unnext(\zero) = \lft(\ast)$.
-2. $\unnext(\next(n)) = \rgt(n)$.
-3. $\prev(\zero) = \zero$.
-4. $\prev(\next(n)) = n$.
-5. $\iszero(\zero) = \btrue$.
-6. $\iszero(\next(n)) = \bfalse$.
+1. $\prev(\zero) = \zero$.
+2. $\prev(\next(n)) = n$.
+3. $\iszero(\zero) = \btrue$.
+4. $\iszero(\next(n)) = \bfalse$.
 
 ::: proof ::::::::::
-1. Note that
-$$\begin{eqnarray*}
- &   & \unnext(\zero) \\
- & = & \natrec{\lft(\ast)}{\varphi}(\zero) \\
- & = & \lft(\ast)
-\end{eqnarray*}$$
-as claimed.
-2. Letting $\Omega$ be the inverse of $\unnext$, we have
-$$\begin{eqnarray*}
- &   & \unnext(\next(n)) \\
- &     \href{@disjoint-unions@#def-either-rgt}
-   = & \unnext(\either(\const(\zero),\next)(\rgt(n))) \\
- & = & \unnext(\Omega(\rgt(n))) \\
- & = & (\unnext \circ \Omega)(\rgt(n)) \\
- & = & \rgt(n)
-\end{eqnarray*}$$
-as claimed.
-3. We have
+1. We have
 $$\begin{eqnarray*}
  &   & \prev(\zero) \\
- & = & (\either(\const(\zero),\id) \circ \unnext)(\zero) \\
- & = & \either(\const(\zero),\id)(\unnext(\zero)) \\
- & = & \either(\const(\zero),\id)(\lft(\ast)) \\
+ &     \href{@unary@#def-prev}
+   = & \compose(\either(\const(\zero),\id))(\unnext)(\zero) \\
+ &     \href{@functions@#def-compose}
+   = & \either(\const(\zero),\id)(\unnext(\zero)) \\
+ &     \href{@unary@#thm-unnext-zero}
+   = & \either(\const(\zero),\id)(\lft(\ast)) \\
  &     \href{@disjoint-unions@#def-either-lft}
    = & \const(\zero)(\ast) \\
  &     \href{@functions@#def-const}
    = & \zero
 \end{eqnarray*}$$
 as claimed.
-4. We have
+2. We have
 $$\begin{eqnarray*}
  &   & \prev(\next(n)) \\
- & = & (\either(\const(\zero),\id) \circ \unnext)(\next(n)) \\
- & = & \either(\const(\zero),\id)(\unnext(\next(n))) \\
- & = & \either(\const(\zero),\id)(\rgt(n)) \\
+ &     \href{@unary@#def-prev}
+   = & \compose(\either(\const(\zero),\id))(\unnext)(\next(n)) \\
+ &     \href{@functions@#def-compose}
+   = & \either(\const(\zero),\id)(\unnext(\next(n))) \\
+ &     \href{@unary@#thm-unnext-next}
+   = & \either(\const(\zero),\id)(\rgt(n)) \\
  &     \href{@disjoint-unions@#def-either-rgt}
    = & \id(n) \\
  &     \href{@functions@#def-id}
    = & n
 \end{eqnarray*}$$
 as claimed.
-5. We have
+3. We have
 $$\begin{eqnarray*}
  &   & \iszero(\zero) \\
- & = & (\either(\const(\btrue),\const(\bfalse)) \circ \unnext)(\zero) \\
- & = & \either(\const(\btrue),\const(\bfalse))(\unnext(\zero)) \\
- & = & \either(\const(\btrue),\const(\bfalse))(\lft(\ast)) \\
+ &     \href{@unary@#def-iszero}
+   = & \compose(\either(\const(\btrue),\const(\bfalse)))(\unnext)(\zero) \\
+ &     \href{@functions@#def-compose}
+   = & \either(\const(\btrue),\const(\bfalse))(\unnext(\zero)) \\
+ &     \href{@unary@#thm-unnext-zero}
+   = & \either(\const(\btrue),\const(\bfalse))(\lft(\ast)) \\
  &     \href{@disjoint-unions@#def-either-lft}
    = & \const(\btrue)(\ast) \\
  &     \href{@functions@#def-const}
    = & \btrue
 \end{eqnarray*}$$
 as claimed.
-6. We have
+4. We have
 $$\begin{eqnarray*}
  &   & \iszero(\next(n)) \\
- & = & (\either(\const(\btrue),\const(\bfalse)) \circ \unnext)(\next(n)) \\
- & = & \either(\const(\btrue),\const(\bfalse))(\unnext(\next(n))) \\
- & = & \either(\const(\btrue),\const(\bfalse))(\rgt(n)) \\
+ &     \href{@unary@#def-iszero}
+   = & \compose(\either(\const(\btrue),\const(\bfalse)))(\unnext)(\next(n)) \\
+ &     \href{@functions@#def-compose}
+   = & \either(\const(\btrue),\const(\bfalse))(\unnext(\next(n))) \\
+ &     \href{@unary@#thm-unnext-next}
+   = & \either(\const(\btrue),\const(\bfalse))(\rgt(n)) \\
  &     \href{@disjoint-unions@#def-either-rgt}
    = & \const(\bfalse)(n) \\
  &     \href{@functions@#def-const}
@@ -245,11 +300,11 @@ We're now ready to finish off the Peano axioms.
 3. $\next(n) = \next(m)$ if and only if $n = m$.
 
 ::: proof ::::::::::
-1. Let $n \in \nats$ and let $\Omega$ be the inverse of $\unnext$. Consider $\unnext(n) \in 1 + \nats$; we have either $\unnext(n) = \lft(\ast)$ or $\unnext(n) = \rgt(m)$ for some $m \in \nats$. In the first case we have
+1. Let $n \in \nats$ and let $Ω$ be the inverse of $\unnext$. Consider $\unnext(n) \in 1 + \nats$; we have either $\unnext(n) = \lft(\ast)$ or $\unnext(n) = \rgt(m)$ for some $m \in \nats$. In the first case we have
 $$\begin{eqnarray*}
  &   & n \\
- & = & \Omega(\unnext(n)) \\
- & = & \Omega(\lft(\ast)) \\
+ & = & Ω(\unnext(n)) \\
+ & = & Ω(\lft(\ast)) \\
  & = & \const(\zero)(\ast) \\
  &     \href{@functions@#def-const}
    = & \zero
@@ -257,8 +312,8 @@ $$\begin{eqnarray*}
 and in the second case we have
 $$\begin{eqnarray*}
  &   & n \\
- & = & \Omega(\unnext(n)) \\
- & = & \Omega(\rgt(m)) \\
+ & = & Ω(\unnext(n)) \\
+ & = & Ω(\rgt(m)) \\
  & = & \next(m)
 \end{eqnarray*}$$
 as claimed.

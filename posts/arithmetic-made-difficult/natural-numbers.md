@@ -23,6 +23,7 @@ Iterative Sets
 The basic setup of the Peano axioms -- the element 0 and the function $S$ -- form a kind of structure on $N$, which we give a name.
 
 :::::: definition ::
+[]{#def-iterative-set}
 A set $A$ with a distinguished element $e$ and a distinguished function $\varphi : A \rightarrow A$ is called an *iterative set*.
 ::::::::::::::::::::
 
@@ -38,6 +39,7 @@ $$\begin{eqnarray*}
 As a kind of algebra, the iterative sets come with a corresponding class of structure-preserving maps. In this case, the only structure to be preserved is the distinguished element and the distinguished function.
 
 :::::: definition ::
+[]{#def-iterative-set-hom}
 Suppose $(A,e,\varphi)$ and $(B,f,\psi)$ are iterative sets. A mapping $\theta : A \rightarrow B$ is called an *iterative homomorphism* if $\theta(e) = f$ and $\theta(\varphi(x)) = \psi(\theta(x))$ for all $x \in A$.
 ::::::::::::::::::::
 
@@ -65,6 +67,7 @@ Natural Numbers
 As an axiom, we define the natural numbers to be a special iterative set.
 
 :::::: axiom :::::::
+[]{#cor-natrec-zero}[]{#cor-natrec-next}
 There is a special inductive set $(\nats,\zero,\next)$ which has the following *universal property*: if $(A,e,\varphi)$ is an iterative set, then there is a unique iterative homomorphism $\Theta : \nats \rightarrow A$. This unique function $\Theta$ will be denoted $\natrec{e}{\varphi}$.
 ::::::::::::::::::::
 

@@ -172,8 +172,18 @@
 @disjoint-unions@#thm-isRgt-lft	\\isRgt(\\lft(a)) = \\bfalse
 @disjoint-unions@#thm-isRgt-rgt	\\isRgt(\\rgt(b)) = \\btrue
 #=======================#
+#--- peano -------------#
+#=======================#
+@peano@#cor-natrec-zero	\\natrec{e}{f}(\\zero) = e
+@peano@#cor-natrec-next	\\natrec{e}{f}(\\next(n)) = f(\\natrec{e}{f}(n))
+#=======================#
 #--- unary -------------#
 #=======================#
+@unary@#def-unnext	\\unnext = \\natrec{\\lft(\\ast)}{\\compose(\\rgt)(\\either(\\const(\\zero),\\next))}
+@unary@#thm-unnext-zero	\\unnext(\\zero) = \\lft(\\ast)
+@unary@#thm-unnext-next	\\unnext(\\next(n)) = \\rgt(n)
+@unary@#def-prev	\\prev = \\compose(\\either(\\const(\\zero),\\id))(\\unnext)
+@unary@#def-iszero	\\iszero = \\compose(\\either(\\const(\\btrue),\\const(\\bfalse)))(\\unnext)
 @unary@#thm-prev-zero	\\prev(\\zero) = \\zero
 @unary@#thm-prev-next	\\prev(\\next(a)) = a
 @unary@#thm-iszero-zero	\\iszero(\\zero) = \\btrue
