@@ -462,24 +462,30 @@ as claimed.
 $$\begin{eqnarray*}
  &   & (\uAssocR \circ \uAssocL)(x) \\
  & = & \uAssocR(\uAssocL(\lft(a))) \\
- & = & \uAssocR(\lft(\lft(a))) \\
- & = & \lft(a) \\
+ &     \href{@disjoint-unions@#thm-uAssocL-lft}
+   = & \uAssocR(\lft(\lft(a))) \\
+ &     \href{@disjoint-unions@#thm-uAssocR-lft-lft}
+   = & \lft(a) \\
  & = & x;
 \end{eqnarray*}$$
 if $x = \rgt(\lft(b))$, note that
 $$\begin{eqnarray*}
  &   & (\uAssocR \circ \uAssocL)(x) \\
  & = & \uAssocR(\uAssocL(\rgt(\lft(b)))) \\
- & = & \uAssocR(\lft(\rgt(b))) \\
- & = & \rgt(\lft(b)) \\
+ &     \href{@disjoint-unions@#thm-uAssocL-rgt-lft}
+   = & \uAssocR(\lft(\rgt(b))) \\
+ &     \href{@disjoint-unions@#thm-uAssocR-lft-rgt}
+   = & \rgt(\lft(b)) \\
  & = & x;
 \end{eqnarray*}$$
 and if $x = \rgt(\rgt(c))$, note that
 $$\begin{eqnarray*}
  &   & (\uAssocR \circ \uAssocL)(x) \\
  & = & \uAssocR(\uAssocL(\rgt(\rgt(c)))) \\
- & = & \uAssocR(\rgt(c)) \\
- & = & \rgt(\rgt(c)) \\
+ &     \href{@disjoint-unions@#thm-uAssocL-rgt-rgt}
+   = & \uAssocR(\rgt(c)) \\
+ &     \href{@disjoint-unions@#thm-uAssocR-rgt}
+   = & \rgt(\rgt(c)) \\
  & = & x,
 \end{eqnarray*}$$
 as needed.
@@ -489,8 +495,10 @@ $$\begin{eqnarray*}
  &     \let{x = \lft(\lft(a))}
    = & \compose(\uAssocL)(\uAssocR)(\lft(\lft(a))) \\
  & = & \uAssocL(\uAssocR(\lft(\lft(a)))) \\
- & = & \uAssocL(\lft(a)) \\
- & = & \lft(\lft(a)) \\
+ &     \href{@disjoint-unions@#thm-uAssocR-lft-lft}
+   = & \uAssocL(\lft(a)) \\
+ &     \href{@disjoint-unions@#thm-uAssocL-lft}
+   = & \lft(\lft(a)) \\
  &     \let{x = \lft(\lft(a))}
    = & x
 \end{eqnarray*}$$
@@ -498,16 +506,20 @@ if $x = \lft(\rgt(b))$, note that
 $$\begin{eqnarray*}
  &   & \compose(\uAssocL)(\uAssocR)(x) \\
  & = & \uAssocL(\uAssocR(\lft(\rgt(b)))) \\
- & = & \uAssocL(\rgt(\lft(b))) \\
- & = & \lft(\rgt(b)) \\
+ &     \href{@disjoint-unions@#thm-uAssocR-lft-rgt}
+   = & \uAssocL(\rgt(\lft(b))) \\
+ &     \href{@disjoint-unions@#thm-uAssocL-rgt-lft}
+   = & \lft(\rgt(b)) \\
  & = & x
 \end{eqnarray*}$$
 and if $x = \rgt(c)$, note that
 $$\begin{eqnarray*}
  &   & \compose(\uAssocL)(\uAssocR)(x) \\
  & = & \uAssocL(\uAssocR(\rgt(c))) \\
- & = & \uAssocL(\rgt(\rgt(c))) \\
- & = & \rgt(c) \\
+ &     \href{@disjoint-unions@#thm-uAssocR-rgt}
+   = & \uAssocL(\rgt(\rgt(c))) \\
+ &     \href{@disjoint-unions@#thm-uAssocL-rgt-rgt}
+   = & \rgt(c) \\
  & = & x
 \end{eqnarray*}$$
 as needed.
