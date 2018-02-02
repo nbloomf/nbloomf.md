@@ -191,6 +191,11 @@
 @unary@#thm-iszero-zero	\\iszero(\\zero) = \\btrue
 @unary@#thm-iszero-next	\\iszero(\\next(a)) = \\bfalse
 #=======================#
+#--- simprec -----------#
+#=======================#
+@simprec@#def-simprec-zero	\\simprec{f}{m}(\\zero,a) = f(a)
+@simprec@#def-simprec-next	\\simprec{f}{m}(\\next(n),a) = m(n,a,\\simprec{f}{m}(n,a))
+#=======================#
 #--- plus --------------#
 #=======================#
 @plus@#cor-plus-up-zero	\\nplus(\\zero,b) = b

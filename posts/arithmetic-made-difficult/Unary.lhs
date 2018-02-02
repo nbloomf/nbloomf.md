@@ -102,7 +102,7 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 and if $x \in 1 + \nats$, we have two possibilities. If $x = \lft(\ast)$, we have
 $$\begin{eqnarray*}
- & = & Ω(\compose(\rgt)(\either(\const(\zero),\next))(\lft(\ast))) \\
+ &   & Ω(\compose(\rgt)(\either(\const(\zero),\next))(\lft(\ast))) \\
  &     \href{@functions@#def-compose}
    = & Ω(\rgt(\either(\const(\zero),\next)(\lft(\ast)))) \\
  &     \href{@disjoint-unions@#def-either-lft}
@@ -122,7 +122,7 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 and if $x = \rgt(n)$, with $n \in \nats$, we have
 $$\begin{eqnarray*}
- & = & Ω(\compose(\rgt)(\either(\const(\zero),\next))(\rgt(n))) \\
+ &   & Ω(\compose(\rgt)(\either(\const(\zero),\next))(\rgt(n))) \\
  &     \href{@functions@#def-compose}
    = & Ω(\rgt(\either(\const(\zero),\next)(\rgt(n)))) \\
  &     \href{@disjoint-unions@#def-either-rgt}

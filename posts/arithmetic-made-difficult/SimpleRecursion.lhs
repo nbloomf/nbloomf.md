@@ -3,11 +3,10 @@ title: Simple Recursion
 author: nbloomf
 date: 2014-05-07
 tags: arithmetic-made-difficult, literate-haskell
-slug: simplerec
+slug: simprec
 ---
 
-> {-# LANGUAGE BangPatterns #-}
-> {-# LANGUAGE NoImplicitPrelude #-}
+> {-# LANGUAGE NoImplicitPrelude, BangPatterns #-}
 > module SimpleRecursion
 >   ( simpleRec, _test_simplerec, main_simplerec
 >   ) where
@@ -24,6 +23,7 @@ slug: simplerec
 So far we've defined the natural numbers as an iterative set with a special *universal property*, which was encapsulated in the existence of a simple recursion operator $\natrec{\ast}{\ast}$. Anything we will wish to do with the natural numbers can be done using this operator alone. However, in practice, it will be handy to define synonyms for some more complicated recursive functions; the first of these is *simple recursion with a parameter*.
 
 :::::: theorem :::::
+[]{#def-simprec-zero}[]{#def-simprec-next}
 Suppose we have sets $A$ and $B$ and functions $\varphi : A \rightarrow B$ and $\mu : \nats \times A \times B \rightarrow B$. Then there is a unique function $\Theta : \nats \times A \rightarrow B$ such that, for all $n \in \nats$ and $a \in A$, $$\Theta(\zero, a) = \varphi(a)$$ and $$\Theta(\next(n), a) = \mu(n, a, \Theta(n, a)).$$
 
 This function $\Theta$ will be denoted $\simprec{\varphi}{\mu}$.
@@ -31,17 +31,20 @@ This function $\Theta$ will be denoted $\simprec{\varphi}{\mu}$.
 ::: proof ::::::::::
 First we establish existence. Define a mapping $t : \nats \times {}^AB \rightarrow \nats \times {}^AB$ by $$t(n,h) = (\next(n), \lambda x : \mu(n, x, h(x))).$$ Note that we are using the $\lambda$ notation to define an anonymous function $A \rightarrow B$ on the right hand side; specifically, $\lambda x : \mu(n, x, h(x))$ is the function $q : A \rightarrow B$ such that $q(x) = \mu(n,x,h(x))$.
 
-Now we define $\Theta$ as follows: $$\Theta(n,a) = (\snd \circ \natrec{(\zero, \varphi)}{t})(n)(a).$$
+Now we define $\Theta$ as follows: $$Θ(n,a) = \compose(\snd)(\natrec{\tup(\zero)(\varphi)}{t})(n)(a).$$
 
 ($\snd$ is the map which selects the second entry of a pair.)
 
 Note that
 $$\begin{eqnarray*}
- &   & \Theta(\zero,a) \\
- & = & (\snd \circ \natrec{(\zero, \varphi)}{t})(\zero)(a) \\
- & = & (\snd(\natrec{(\zero, \varphi)}{t})(\zero))(a) \\
- & = & (\snd(\zero, \varphi))(a) \\
- & = & \varphi(a).
+ &   & Θ(\zero,a) \\
+ & = & \compose(\snd)(\natrec{\tup(\zero)(\varphi)}{t})(\zero)(a) \\
+ &     \href{@functions@#def-compose}
+   = & \snd(\natrec{\tup(\zero)(\varphi)}{t}(\zero))(a) \\
+ &     \href{@peano@#cor-natrec-zero}
+   = & \snd(\tup(\zero)(\varphi))(a) \\
+ &     \href{@tuples@#thm-snd-tup}
+   = & \varphi(a)
 \end{eqnarray*}$$
 
 To show the second property of $\Theta$, we will show by induction that the following (compound) statement holds for all $n \in \nats$:
