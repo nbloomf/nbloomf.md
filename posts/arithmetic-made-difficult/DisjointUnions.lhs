@@ -411,82 +411,94 @@ The following hold whenever everything has the appropriate type.
 1. We have
 $$\begin{eqnarray*}
  &   & \uAssocL(\lft(a)) \\
- & = & \either(\lft \circ \lft, \either(\lft \circ \rgt, \rgt))(\lft(a)) \\
- & = & (\lft \circ \lft)(a) \\
+ & = & \either(\compose(\lft)(\lft),\either(\compose(\lft)(\rgt),\rgt))(\lft(a)) \\
+ & = & \compose(\lft)(\lft)(a) \\
  & = & \lft(\lft(a))
 \end{eqnarray*}$$
 as claimed.
 2. We have
 $$\begin{eqnarray*}
  &   & \uAssocL(\rgt(\lft(b))) \\
- & = & \either(\lft \circ \lft, \either(\lft \circ \rgt, \rgt))(\rgt(\lft(b))) \\
- & = & \either(\lft \circ \rgt, \rgt)(\lft(b)) \\
- & = & (\lft \circ \rgt)(b) \\
+ & = & \either(\compose(\lft)(\lft),\either(\compose(\lft)(\rgt),\rgt))(\rgt(\lft(b))) \\
+ & = & \either(\compose(\lft)(\rgt),\rgt)(\lft(b)) \\
+ & = & \compose(\lft)(\rgt)(b) \\
  & = & \lft(\rgt(b))
 \end{eqnarray*}$$
 as claimed.
 3. We have
 $$\begin{eqnarray*}
  &   & \uAssocL(\rgt(\rgt(c))) \\
- & = & \either(\lft \circ \lft, \either(\lft \circ \rgt, \rgt))(\rgt(\rgt(c))) \\
- & = & \either(\lft \circ \rgt, \rgt)(\rgt(c)) \\
+ & = & \either(\compose(\lft)(\lft),\either(\compose(\lft)(\rgt),\rgt))(\rgt(\rgt(c))) \\
+ & = & \either(\compose(\lft)(\rgt),\rgt)(\rgt(c)) \\
  & = & \rgt(c)
 \end{eqnarray*}$$
 as claimed.
 4. We have
 $$\begin{eqnarray*}
  &   & \uAssocR(\lft(\lft(a))) \\
- & = & \either(\either(\lft,\rgt \circ \lft),\rgt \circ \rgt)(\lft(\lft(a))) \\
- & = & \either(\lft,\rgt \circ \lft)(\lft(a)) \\
+ & = & \either(\either(\lft,\compose(\rgt)(\lft)),\compose(\rgt)(\rgt))(\lft(\lft(a))) \\
+ & = & \either(\lft,\compose(\rgt)(\lft))(\lft(a)) \\
  & = & \lft(a)
 \end{eqnarray*}$$
 as claimed.
 5. We have
 $$\begin{eqnarray*}
  &   & \uAssocR(\lft(\rgt(b))) \\
- & = & \either(\either(\lft,\rgt \circ \lft),\rgt \circ \rgt)(\lft(\rgt(b))) \\
- & = & \either(\lft,\rgt \circ \lft)(\rgt(b)) \\
- & = & (\rgt \circ \lft)(b) \\
+ & = & \either(\either(\lft,\compose(\rgt)(\lft)),\compose(\rgt)(\rgt))(\lft(\rgt(b))) \\
+ & = & \either(\lft,\compose(\rgt)(\lft))(\rgt(b)) \\
+ & = & \compose(\rgt)(\lft)(b) \\
  & = & \rgt(\lft(b))
 \end{eqnarray*}$$
 as claimed.
 6. We have
 $$\begin{eqnarray*}
  &   & \uAssocR(\rgt(c)) \\
- & = & \either(\either(\lft,\rgt \circ \lft),\rgt \circ \rgt)(\rgt(c)) \\
- & = & (\rgt \circ \rgt)(c) \\
+ & = & \either(\either(\lft,\compose(\rgt)(\lft)),\compose(\rgt)(\rgt))(\rgt(c)) \\
+ & = & \compose(\rgt)(\rgt)(c) \\
  & = & \rgt(\rgt(c))
 \end{eqnarray*}$$
 as claimed.
 7. If $x \in A + (B + C)$, we have three possibilities. If $x = \lft(a)$, note that
 $$\begin{eqnarray*}
- &   & (\uAssocR \circ \uAssocL)(x) \\
- & = & \uAssocR(\uAssocL(\lft(a))) \\
+ &   & \compose(\uAssocR)(\uAssocL)(x) \\
+ &     \let{x = \lft(a)}
+   = & \compose(\uAssocR)(\uAssocL)(\lft(a)) \\
+ &     \href{@functions@#def-compose}
+   = & \uAssocR(\uAssocL(\lft(a))) \\
  &     \href{@disjoint-unions@#thm-uAssocL-lft}
    = & \uAssocR(\lft(\lft(a))) \\
  &     \href{@disjoint-unions@#thm-uAssocR-lft-lft}
    = & \lft(a) \\
- & = & x;
+ &     \let{x = \lft(a)}
+   = & x
 \end{eqnarray*}$$
 if $x = \rgt(\lft(b))$, note that
 $$\begin{eqnarray*}
- &   & (\uAssocR \circ \uAssocL)(x) \\
- & = & \uAssocR(\uAssocL(\rgt(\lft(b)))) \\
+ &   & \compose(\uAssocR)(\uAssocL)(x) \\
+ &     \let{x = \rgt(\lft(b))}
+   = & \compose(\uAssocR)(\uAssocL)(\rgt(\lft(b))) \\
+ &     \href{@functions@#def-compose}
+   = & \uAssocR(\uAssocL(\rgt(\lft(b)))) \\
  &     \href{@disjoint-unions@#thm-uAssocL-rgt-lft}
    = & \uAssocR(\lft(\rgt(b))) \\
  &     \href{@disjoint-unions@#thm-uAssocR-lft-rgt}
    = & \rgt(\lft(b)) \\
- & = & x;
+ &     \let{x = \rgt(\lft(b))}
+   = & x
 \end{eqnarray*}$$
 and if $x = \rgt(\rgt(c))$, note that
 $$\begin{eqnarray*}
- &   & (\uAssocR \circ \uAssocL)(x) \\
- & = & \uAssocR(\uAssocL(\rgt(\rgt(c)))) \\
+ &   & \compose(\uAssocR)(\uAssocL)(x) \\
+ &     \let{x = \rgt(\rgt(c))}
+   = & \compose(\uAssocR)(\uAssocL)(\rgt(\rgt(c))) \\
+ &     \href{@functions@#def-compose}
+   = & \uAssocR(\uAssocL(\rgt(\rgt(c)))) \\
  &     \href{@disjoint-unions@#thm-uAssocL-rgt-rgt}
    = & \uAssocR(\rgt(c)) \\
  &     \href{@disjoint-unions@#thm-uAssocR-rgt}
    = & \rgt(\rgt(c)) \\
- & = & x,
+ &     \let{x = \rgt(\rgt(c))}
+   = & x
 \end{eqnarray*}$$
 as needed.
 8. If $x \in (A + B) + C$, we have three possibilities. If $x = \lft(\lft(a))$, note that
@@ -494,7 +506,8 @@ $$\begin{eqnarray*}
  &   & \compose(\uAssocL)(\uAssocR)(x) \\
  &     \let{x = \lft(\lft(a))}
    = & \compose(\uAssocL)(\uAssocR)(\lft(\lft(a))) \\
- & = & \uAssocL(\uAssocR(\lft(\lft(a)))) \\
+ &     \href{@functions@#def-compose}
+   = & \uAssocL(\uAssocR(\lft(\lft(a)))) \\
  &     \href{@disjoint-unions@#thm-uAssocR-lft-lft}
    = & \uAssocL(\lft(a)) \\
  &     \href{@disjoint-unions@#thm-uAssocL-lft}
@@ -505,22 +518,30 @@ $$\begin{eqnarray*}
 if $x = \lft(\rgt(b))$, note that
 $$\begin{eqnarray*}
  &   & \compose(\uAssocL)(\uAssocR)(x) \\
- & = & \uAssocL(\uAssocR(\lft(\rgt(b)))) \\
+ &     \let{x = \lft(\rgt(b))}
+   = & \compose(\uAssocL)(\uAssocR)(\lft(\rgt(b))) \\
+ &     \href{@functions@#def-compose}
+   = & \uAssocL(\uAssocR(\lft(\rgt(b)))) \\
  &     \href{@disjoint-unions@#thm-uAssocR-lft-rgt}
    = & \uAssocL(\rgt(\lft(b))) \\
  &     \href{@disjoint-unions@#thm-uAssocL-rgt-lft}
    = & \lft(\rgt(b)) \\
- & = & x
+ &     \let{x = \lft(\rgt(b))}
+   = & x
 \end{eqnarray*}$$
 and if $x = \rgt(c)$, note that
 $$\begin{eqnarray*}
  &   & \compose(\uAssocL)(\uAssocR)(x) \\
- & = & \uAssocL(\uAssocR(\rgt(c))) \\
+ &     \let{x = \rgt(c)}
+   = & \compose(\uAssocL)(\uAssocR)(\rgt(c)) \\
+ &     \href{@functions@#def-compose}
+   = & \uAssocL(\uAssocR(\rgt(c))) \\
  &     \href{@disjoint-unions@#thm-uAssocR-rgt}
    = & \uAssocL(\rgt(\rgt(c))) \\
  &     \href{@disjoint-unions@#thm-uAssocL-rgt-rgt}
    = & \rgt(c) \\
- & = & x
+ &     \let{x = \rgt(c)}
+   = & x
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
