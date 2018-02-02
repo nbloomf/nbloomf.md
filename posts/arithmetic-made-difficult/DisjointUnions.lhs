@@ -49,58 +49,68 @@ Let $A$ and $B$ be sets.
 3. $\lft : A \rightarrow A+B$ and $\rgt : B \rightarrow A+B$ are injective.
 
 ::: proof ::::::::::
-1. Suppose to the contrary that there exists some $z \in A+B$ which is not of the form $\lft(a)$ or $\rgt(b)$ for any $a$ or $b$. Now consider the following two functions $A+B \rightarrow \bool$: $$\Psi(x) = \btrue$$ and
-$$\Omega(x) = \left\{\begin{array}{ll}
- \bfalse & \mathrm{if}\ x = z \\
- \btrue  & \mathrm{otherwise.}
-\end{array}\right.$$
-Note in particular that if $a \in A$ we have
+1. Suppose to the contrary that there exists some $z \in A+B$ which is not of the form $\lft(a)$ or $\rgt(b)$ for any $a$ or $b$. Now consider $$f = \const(\btrue)$$ and $$g(x) = \\bif{\beq(x,z)}{\bfalse}{\btrue}$$ as functions $A+B \rightarrow \bool$. Note in particular that if $a \in A$ we have
 $$\begin{eqnarray*}
- &   & (\Omega \circ \lft)(a) \\
- & = & \Omega(\lft(a)) \\
- & = & \btrue \\
- & = & \Psi(\lft(a)) \\
- & = & (\Psi \circ \lft)(a)
+ &   & \compose(f)(\lft)(a) \\
+ &     \href{@functions@#def-compose}
+   = & f(\lft(a)) \\
+ &     \let{f = \const(\btrue)}
+   = & \const(\btrue)(\lft(a)) \\
+ &     \href{@functions@#def-const}
+   = & \btrue \\
+ &     \hyp{g(\lft(a)) = \btrue}
+   = & g(\lft(a)) \\
+ &     \href{@functions@#def-compose}
+   = & \compose(g)(\lft)(a)
 \end{eqnarray*}$$
 since $z \neq \lft(a)$, and if $b \in B$ we have
 $$\begin{eqnarray*}
- &   & (\Omega \circ \rgt)(b) \\
- & = & \Omega(\rgt(b)) \\
- & = & \btrue \\
- & = & \Psi(\rgt(b)) \\
- & = & (\Psi \circ \rgt)(b)
+ &   & \compose(f)(\rgt)(b) \\
+ &     \href{@functions@#def-compose}
+   = & f(\rgt(b)) \\
+ &     \let{f = \const(\btrue)}
+   = & \const(\btrue)(\rgt(b)) \\
+ &     \href{@functions@#def-const}
+   = & \btrue \\
+ &     \hyp{g(\rgt(b)) = \btrue}
+   = & g(\rgt(b)) \\
+ &     \href{@functions@#def-compose}
+   = & \compose(g)(\rgt)(b)
 \end{eqnarray*}$$
-similarly. By the universal property of $A + B$, we thus have $$\Psi = \either(\const(\btrue),\const(\btrue)) = \Omega.$$ But now we have $$\btrue = \Psi(z) = \Omega(z) = \bfalse,$$ which is absurd.
-2. Suppose to the contrary that we have $z \in A + B$ with $\lft(a) = z = \rgt(b)$ for some $a \in A$ and $b \in B$, and consider now $\Theta : A+B \rightarrow \bool$ given by $$\Theta = \either(\const(\btrue),\const(\bfalse)).$$ We then have
+similarly. By the universal property of $A + B$, we thus have $$f = \either(\const(\btrue),\const(\btrue)) = g.$$ But now we have $$\btrue = f(z) = g(z) = \bfalse,$$ which is absurd.
+2. Suppose to the contrary that we have $z \in A + B$ with $\lft(a) = z = \rgt(b)$ for some $a \in A$ and $b \in B$, and consider now $f : A+B \rightarrow \bool$ given by $$f = \either(\const(\btrue),\const(\bfalse)).$$ We then have
 $$\begin{eqnarray*}
  &   & \btrue \\
  &     \href{@functions@#def-const}
    = & \const(\btrue)(a) \\
- & = & \compose(\Theta)(\lft)(a) \\
- &     \href{@functions@#def-compose}
-   = & \Theta(\lft(a)) \\
- & = & \Theta(z) \\
- & = & \Theta(\rgt(b)) \\
- & = & (\Theta \circ \rgt)(b) \\
- & = & \const(\bfalse)(b) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \either(\const(\btrue),\const(\bfalse))(\lft(a)) \\
+ &     \let{z = \lft(a)}
+   = & \either(\const(\btrue),\const(\bfalse))(z) \\
+ &     \let{z = \rgt(b)}
+   = & \either(\const(\btrue),\const(\bfalse))(\rgt(b)) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \const(\bfalse)(b) \\
  &     \href{@functions@#def-const}
    = & \bfalse
 \end{eqnarray*}$$
 which is absurd.
 3. Let $u,v \in A$, and suppose $\lft(u) = \lft(v)$. Now define $f : A \rightarrow \bool$ by
-$$f(x) = \left\{\begin{array}{ll}
- \bfalse & \mathrm{if}\ x = u \\
- \btrue  & \mathrm{otherwise},
-\end{array}\right.$$
-and consider $\Theta = \either(f,\const(\btrue))$. We have
+$$f(x) = \bif{\beq(x,u)}{\bfalse}{\btrue},$$ and consider $g = \either(f,\const(\btrue))$. We have
 $$\begin{eqnarray*}
  &   & \bfalse \\
+ &     \href{@booleans@#cor-if-true}
+   = & \bif{\btrue}{\bfalse}{\btrue} \\
+ &     \href{@booleans@#thm-eq-reflexive}
+   = & \bif{\beq(u,u)}{\bfalse}{\btrue} \\
  & = & f(u) \\
- & = & (\Theta \circ \lft)(u) \\
- & = & \Theta(\lft(u)) \\
- & = & \Theta(\lft(v)) \\
- & = & (\Theta \circ \lft)(v) \\
- & = & f(v);
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \either(f,\const(\btrue))(\lft(u)) \\
+ &     \hyp{\lft(u) = \lft(v)}
+   = & \either(f,\const(\btrue))(\lft(v)) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & f(v) \\
+ & = & \bif{\beq(v,u)}{\bfalse}{\btrue}
 \end{eqnarray*}$$
 thus $v = u$ as needed. A similar argument holds for $\rgt$.
 ::::::::::::::::::::
@@ -141,8 +151,9 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 and likewise if $b \in B$ we have
 $$\begin{eqnarray*}
- &   & \compose(\id)(\rgt)(a) \\
- & = & \id(\rgt(b)) \\
+ &   & \compose(\id)(\rgt)(b) \\
+ &     \href{@functions@#def-compose}
+   = & \id(\rgt(b)) \\
  &     \href{@functions@#def-id}
    = & \rgt(b)
 \end{eqnarray*}$$
@@ -196,9 +207,10 @@ as claimed.
 2. Note that
 $$\begin{eqnarray*}
  &   & \uSwap(\rgt(a)) \\
- & = & \either(\rgt,\lft)(\lft(a)) \\
- &     \href{@disjoint-unions@#def-either-lft}
-   = & \rgt(a)
+ &     \href{@disjoint-unions@#def-uSwap}
+   = & \either(\rgt,\lft)(\rgt(a)) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \lft(a)
 \end{eqnarray*}$$
 as claimed.
 3. Let $x \in A+B$; we have two possibilities. If $x = \lft(a)$, we have
@@ -301,21 +313,27 @@ $$\begin{eqnarray*}
 as claimed.
 3. We consider two possibilities: note that
 $$\begin{eqnarray*}
- &   & (\uPair(f,g) \circ \uPair(h,k))(\lft(a)) \\
- & = & \uPair(f,g)(\uPair(h,k)(\lft(a))) \\
+ &   & \compose(\uPair(f,g))(\uPair(h,k))(\lft(a)) \\
+ &     \href{@functions@#def-compose}
+   = & \uPair(f,g)(\uPair(h,k)(\lft(a))) \\
  &     \href{@disjoint-unions@#thm-uPair-lft}
    = & \uPair(f,g)(\lft(h(a))) \\
  &     \href{@disjoint-unions@#thm-uPair-lft}
    = & \lft(f(h(a))) \\
- & = & \uPair(f \circ h, g \circ k)(\lft(a))
+ &     \href{@functions@#def-compose}
+   = & \lft(\compose(f)(h)(a)) \\
+ &     \href{@disjoint-unions@#thm-uPair-lft}
+   = & \uPair(\compose(f)(h),\compose(g)(k))(\lft(a))
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
  &   & \compose(\uPair(f,g))(\uPair(h,k))(\rgt(b)) \\
  &     \href{@functions@#def-compose}
    = & \uPair(f,g)(\uPair(h,k)(\rgt(b))) \\
- & = & \uPair(f,g)(\rgt(h(b))) \\
- & = & \rgt(g(k(b))) \\
+ &     \href{@disjoint-unions@#thm-uPair-rgt}
+   = & \uPair(f,g)(\rgt(k(b))) \\
+ &     \href{@disjoint-unions@#thm-uPair-rgt}
+   = & \rgt(g(k(b))) \\
  &     \href{@functions@#def-compose}
    = & \rgt(\compose(g)(k)(b)) \\
  &     \href{@disjoint-unions@#thm-uPair-rgt}
@@ -361,6 +379,7 @@ as needed.
 Finally, note that although as sets $A + (B + C)$ and $(A + B) + C$ cannot possibly be equal to each other in general, they are naturally isomorphic via $\uAssocL$ and $\uAssocR$.
 
 :::::: definition ::
+[]{#def-uAssocL}[]{#def-uAssocR}
 Let $A$, $B$, and $C$ be sets. We define $\uAssocL : A + (B + C) \rightarrow (A + B) + C$ by $$\uAssocL = \either(\compose(\lft)(\lft),\either(\compose(\lft)(\rgt),\rgt))$$ and define $\uAssocR : (A + B) + C \rightarrow A + (B + C)$ by $$\uAssocR = \either(\either(\lft,\compose(\rgt)(\lft)),\compose(\rgt)(\rgt)).$$
 
 In Haskell:
@@ -376,6 +395,7 @@ In Haskell:
 Now $\uAssocL$ and $\uAssocR$ have some nice properties.
 
 :::::: theorem :::::
+[]{#thm-uAssocL-lft}[]{#thm-uAssocL-rgt-lft}[]{#thm-uAssocL-rgt-rgt}[]{#thm-uAssocR-lft-lft}[]{#thm-uAssocR-lft-rgt}[]{#thm-uAssocR-rgt}[]{#thm-uAssocR-uAssocL}[]{#thm-uAssocL-uAssocR}
 The following hold whenever everything has the appropriate type.
 
 1. $\uAssocL(\lft(a)) = \lft(\lft(a))$.
