@@ -86,6 +86,7 @@ as needed.
 It turns out that $1 + \nats$ is isomorphic to $\nats$, and the map that achieves this is useful.
 
 :::::: theorem :::::
+[]{#thm-unnext-inverse}
 The map $\unnext : \nats \rightarrow 1 + \nats$ is an isomorphism; in particular, the inverse of $\unnext$ is $$Ω = \either(\const(\zero),\next).$$
 
 ::: proof ::::::::::
@@ -186,26 +187,19 @@ $$\begin{eqnarray*}
    = & \unnext(\either(\const(\zero),\next)(\rgt(\zero))) \\
  &     \href{@disjoint-unions@#def-either-rgt}
    = & \unnext(\next(\zero)) \\
- &     \href{@unary@#thm-unnext-zero}
+ &     \href{@unary@#thm-unnext-next}
    = & \rgt(\zero) \\
 \end{eqnarray*}$$
 as needed. For the inductive step, if the equality holds for some $n$, we have
 $$\begin{eqnarray*}
- &   & (\Theta \circ Ω)(\rgt(\next(n))) \\
- & = & \Theta(Ω(\rgt(\next(n)))) \\
- & = & \Theta(\either(\const(\zero),\next)(\rgt(\next(n)))) \\
+ &   & \compose(\unnext)(Ω)(\rgt(\next(n))) \\
+ &     \href{@functions@#def-compose}
+   = & \unnext(Ω(\rgt(\next(n)))) \\
+ &     \let{Ω = \either(\const(\zero),\next)}
+   = & \unnext(\either(\const(\zero),\next)(\rgt(\next(n)))) \\
  &     \href{@disjoint-unions@#def-either-rgt}
-   = & \Theta(\next(\next(n))) \\
- & = & \natrec{\lft(\ast)}{\varphi}(\next(\next(n))) \\
- & = & \varphi(\natrec{\lft(\ast)}{\varphi}(\next(n))) \\
- & = & \varphi(\Theta(\next(n))) \\
- &     \href{@disjoint-unions@#def-either-rgt}
-   = & \varphi(\Theta(\either(\const(\zero),\next)(\rgt(n)))) \\
- & = & \varphi((\Theta \circ Ω)(\rgt(n))) \\
- & = & \varphi(\rgt(n)) \\
- & = & (\rgt \circ \either(\const(\zero),\next))(\rgt(n)) \\
- & = & \rgt(\either(\const(\zero),\next)(\rgt(n))) \\
- &     \href{@disjoint-unions@#def-either-rgt}
+   = & \unnext(\next(\next(n))) \\
+ &     \href{@unary@#thm-unnext-next}
    = & \rgt(\next(n))
 \end{eqnarray*}$$
 as needed.
@@ -300,25 +294,57 @@ We're now ready to finish off the Peano axioms.
 3. $\next(n) = \next(m)$ if and only if $n = m$.
 
 ::: proof ::::::::::
-1. Let $n \in \nats$ and let $Ω$ be the inverse of $\unnext$. Consider $\unnext(n) \in 1 + \nats$; we have either $\unnext(n) = \lft(\ast)$ or $\unnext(n) = \rgt(m)$ for some $m \in \nats$. In the first case we have
+1. Let $n \in \nats$. Consider $\unnext(n) \in 1 + \nats$; we have either $\unnext(n) = \lft(\ast)$ or $\unnext(n) = \rgt(m)$ for some $m \in \nats$. In the first case we have
 $$\begin{eqnarray*}
  &   & n \\
- & = & Ω(\unnext(n)) \\
- & = & Ω(\lft(\ast)) \\
- & = & \const(\zero)(\ast) \\
+ &     \href{@functions@#def-id}
+   = & \id(n) \\
+ &     \href{@unary@#thm-unnext-inverse-left}
+   = & \compose(\either(\const(\zero),\next))(\unnext)(n) \\
+ &     \href{@functions@#def-compose}
+   = & \either(\const(\zero),\next)(\unnext(n)) \\
+ &     \hyp{\unnext(n) = \lft(\ast)}
+   = & \either(\const(\zero),\next)(\lft(\ast)) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \const(\zero)(\ast) \\
  &     \href{@functions@#def-const}
    = & \zero
 \end{eqnarray*}$$
 and in the second case we have
 $$\begin{eqnarray*}
  &   & n \\
- & = & Ω(\unnext(n)) \\
- & = & Ω(\rgt(m)) \\
- & = & \next(m)
+ &     \href{@functions@#def-id}
+   = & \id(n) \\
+ &     \compose(\either(\const(\zero),\next))(\unnext)(n) \\
+   = & \either(\const(\zero),\next)(\unnext(n)) \\
+ &     \hyp{\unnext(n) = \rgt(m)}
+   = & \either(\const(\zero),\next)(\rgt(m)) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \next(m)
 \end{eqnarray*}$$
 as claimed.
-2. If $\zero = \next(n)$, we have $$\btrue = \iszero(\zero) = \iszero(\next(n)) = \bfalse,$$ which is absurd.
-3. The "if" part is trivial. To see the "only if" part, suppose we have $\next(n) = \next(m)$; then $$n = \prev(\next(n)) = \prev(\next(m)) = m$$ as claimed.
+2. If $\zero = \next(n)$, we have
+$$\begin{eqnarray*}
+ &   & \btrue \\
+ &     \href{@unary@#thm-iszero-zero}
+   = & \iszero(\zero) \\
+ &     \hyp{\next(n) = \zero}
+   = & \iszero(\next(n)) \\
+ &     \href{@unary@#thm-iszero-next}
+   = & \bfalse
+\end{eqnarray*}$$
+which is absurd.
+3. The "if" part is trivial. To see the "only if" part, suppose we have $\next(n) = \next(m)$; then
+$$\begin{eqnarray*}
+ &   & n \\
+ &     \href{@unary@#thm-prev-next}
+   = & \prev(\next(n)) \\
+ &     \hyp{\next(n) = \next(m)}
+   = & \prev(\next(m)) \\
+ &     \href{@unary@#thm-prev-next}
+   = & m
+\end{eqnarray*}$$
+as claimed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
