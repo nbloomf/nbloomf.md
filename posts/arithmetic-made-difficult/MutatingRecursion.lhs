@@ -34,14 +34,16 @@ To see that $\Theta$ has the claimed properties, note that
 $$\begin{eqnarray*}
  &   & \Theta(\zero,a) \\
  & = & \natrec{\delta}{\sigma}(\zero)(a,\zero) \\
- & = & \delta(a,\zero) \\
+ &     \href{@peano@#cor-natrec-zero}
+   = & \delta(a,\zero) \\
  & = & \varepsilon(a)
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
  &   & \Theta(\next(n),a) \\
  & = & \natrec{\delta}{\sigma}(\next(n))(a,\next(n)) \\
- & = & \sigma(\natrec{\delta}{\sigma}(n))(a,\next(n)) \\
+ &     \href{@peano@#cor-natrec-next}
+   = & \sigma(\natrec{\delta}{\sigma}(n))(a,\next(n)) \\
  & = & \bif{\beta(\prev(\next(n)),a)}{\psi(\prev(\next(n)),a)}{\chi(\prev(\next(n)),a,\natrec{\delta}{\sigma}(n)(\omega(\prev(\next(n)),a),\prev(\next(n))))} \\
  & = & \bif{\beta(n,a)}{\psi(n,a)}{\chi(n,a,\natrec{\delta}{\sigma}(n)(\omega(n,a),n))}
 \end{eqnarray*}$$

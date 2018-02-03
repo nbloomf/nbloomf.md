@@ -36,13 +36,15 @@ First we show that $\Theta$ satisfies the claimed equations. To this end, note t
 $$\begin{eqnarray*}
  &   & \Theta(\zero,k) \\
  & = & \natrec{\delta}{\varphi}(\zero)(k) \\
- & = & \delta(k),
+ &     \href{@peano@#cor-natrec-zero}
+   = & \delta(k)
 \end{eqnarray*}$$
 that
 $$\begin{eqnarray*}
  &   & \Theta(\next(n),\zero) \\
  & = & \natrec{\delta}{\varphi}(\next(n))(\zero) \\
- & = & \varphi(\natrec{\delta}{\varphi}(n))(\zero) \\
+ &     \href{@peano@#cor-natrec-next}
+   = & \varphi(\natrec{\delta}{\varphi}(n))(\zero) \\
  & = & \psi(\natrec{\delta}{\varphi}(n)(\zero)) \\
  & = & \psi(\Theta(n,\zero)),
 \end{eqnarray*}$$
@@ -50,7 +52,8 @@ and that
 $$\begin{eqnarray*}
  &   & \Theta(\next(n),\next(k)) \\
  & = & \natrec{\delta}{\varphi}(\next(n))(\next(k)) \\
- & = & \varphi(\natrec{\delta}{\varphi}(n))(\next(k)) \\
+ &     \href{@peano@#cor-natrec-next}
+   = & \varphi(\natrec{\delta}{\varphi}(n))(\next(k)) \\
  & = & \chi(k,\natrec{\delta}{\varphi}(n)(k),\natrec{\delta}{\varphi}(n)(\next(k))) \\
  & = & \chi(k,\Theta(n,k),\Theta(n,\next(k)))
 \end{eqnarray*}$$

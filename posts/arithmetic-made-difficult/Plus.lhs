@@ -29,7 +29,8 @@ $$\begin{eqnarray*}
 (m+n)+1
  & = & (m+1)+n \\
  & = & \simprec{\varphi}{\mu}(\next(m),n) \\
- & = & \mu(m,n,\simprec{\varphi}{\mu}(m,n)) \\
+ &     \href{@simprec@#def-simprec-next}
+   = & \mu(m,n,\simprec{\varphi}{\mu}(m,n)) \\
  & = & \mu(m,n,m+n).
 \end{eqnarray*}$$
 
