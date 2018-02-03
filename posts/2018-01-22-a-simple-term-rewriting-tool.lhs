@@ -217,6 +217,29 @@ As a special case, ``rewrite`` replaces the subexpression at a given location.
 > rewrite :: Expr -> Path -> Expr -> Maybe Expr
 > rewrite p = transform (const p)
 
+Substituting application expressions, where we want to match the arguments, is a little different.
+
+> funMatch :: Expr -> Expr -> Maybe Substitution
+> funMatch (Con a) (Con b) =
+>   if a == b then return [] else Nothing
+> funMatch (Var x) (Var y) =
+>   if x == y then return [] else Nothing
+> funMatch (App e (Var x)) (App f g) = do
+>   fmap ((x,g):) $ funMatch e f
+> funMatch _ _ = Nothing
+> 
+> funSub :: Expr -> Expr -> Expr -> Maybe Expr
+> funSub _ _ (Con a) = return (Con a)
+> funSub _ _ (Var x) = return (Var x)
+> funSub repl func (App f x) = do
+>   y <- funSub repl func x
+>   g <- funSub repl func f
+>   case funMatch func (App g y) of
+>     Nothing  -> return $ App g y
+>     Just sub -> if wellDefined sub
+>       then return $ substitute sub repl
+>       else Nothing
+
 
 Rewrite Rules
 -------------
@@ -310,6 +333,9 @@ In substitute mode, we'll accept input in the same format as for verify mode, wi
 >   f <- parseWithIO loc pLatexExpr b
 >   case lhs of
 >     Var x -> if (f == substitute [(x,rhs)] e) || (e == substitute [(x,rhs)] f)
+>       then return ()
+>       else putStrLn $ unwords [loc,"invalid!",r,"::",a,"-->",b]
+>     App _ _ -> if (Just f == funSub rhs lhs e) || (Just e == funSub rhs lhs e)
 >       then return ()
 >       else putStrLn $ unwords [loc,"invalid!",r,"::",a,"-->",b]
 >     _ -> do

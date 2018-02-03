@@ -103,14 +103,16 @@ $$\begin{eqnarray*}
    = & \bif{\btrue}{\bfalse}{\btrue} \\
  &     \href{@booleans@#thm-eq-reflexive}
    = & \bif{\beq(u,u)}{\bfalse}{\btrue} \\
- & = & f(u) \\
+ &     \let{f(x) = \bif{\beq(x,u)}{\bfalse}{\btrue}}
+   = & f(u) \\
  &     \href{@disjoint-unions@#def-either-lft}
    = & \either(f,\const(\btrue))(\lft(u)) \\
  &     \hyp{\lft(u) = \lft(v)}
    = & \either(f,\const(\btrue))(\lft(v)) \\
  &     \href{@disjoint-unions@#def-either-lft}
    = & f(v) \\
- & = & \bif{\beq(v,u)}{\bfalse}{\btrue}
+ &     \let{f(x) = \bif{\beq(x,u)}{\bfalse}{\btrue}}
+   = & \bif{\beq(v,u)}{\bfalse}{\btrue}
 \end{eqnarray*}$$
 thus $v = u$ as needed. A similar argument holds for $\rgt$.
 ::::::::::::::::::::

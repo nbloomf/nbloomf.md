@@ -24,21 +24,18 @@ So far we've defined the natural numbers as an iterative set with a special *uni
 
 :::::: theorem :::::
 []{#def-simprec-zero}[]{#def-simprec-next}
-Suppose we have sets $A$ and $B$ and functions $\varphi : A \rightarrow B$ and $\mu : \nats \times A \times B \rightarrow B$. Then there is a unique function $\Theta : \nats \times A \rightarrow B$ such that, for all $n \in \nats$ and $a \in A$, $$\Theta(\zero, a) = \varphi(a)$$ and $$\Theta(\next(n), a) = \mu(n, a, \Theta(n, a)).$$
+Suppose we have sets $A$ and $B$ and functions $\varphi : A \rightarrow B$ and $\mu : \nats \times A \times B \rightarrow B$. Then there is a unique function $Θ : \nats \times A \rightarrow B$ such that, for all $n \in \nats$ and $a \in A$, $$Θ(\zero,a) = \varphi(a)$$ and $$Θ(\next(n),a) = \mu(n,a,Θ(n,a)).$$
 
-This function $\Theta$ will be denoted $\simprec{\varphi}{\mu}$.
+This function $Θ$ will be denoted $\simprec{\varphi}{\mu}$.
 
 ::: proof ::::::::::
-First we establish existence. Define a mapping $t : \nats \times {}^AB \rightarrow \nats \times {}^AB$ by $$t(n,h) = (\next(n), \lambda x : \mu(n, x, h(x))).$$ Note that we are using the $\lambda$ notation to define an anonymous function $A \rightarrow B$ on the right hand side; specifically, $\lambda x : \mu(n, x, h(x))$ is the function $q : A \rightarrow B$ such that $q(x) = \mu(n,x,h(x))$.
-
-Now we define $\Theta$ as follows: $$Θ(n,a) = \compose(\snd)(\natrec{\tup(\zero)(\varphi)}{t})(n)(a).$$
-
-($\snd$ is the map which selects the second entry of a pair.)
+First we establish existence. Define a map $$q : \nats \rightarrow {}^AB \rightarrow A \rightarrow B$$ by $$q(n)(h)(x) = \mu(n,x,h(x)),$$ and define $t : \nats \times {}^AB \rightarrow \nats \times {}^AB$ by $$t(n,h) = \tup(\next(n))(q(n)(h)).$$ Now we define $Θ$ as follows: $$Θ(n,a) = \compose(\snd)(\natrec{\tup(\zero)(\varphi)}{t})(n)(a).$$
 
 Note that
 $$\begin{eqnarray*}
  &   & Θ(\zero,a) \\
- & = & \compose(\snd)(\natrec{\tup(\zero)(\varphi)}{t})(\zero)(a) \\
+ &     \let{Θ(n,a) = \compose(\snd)(\natrec{\tup(\zero)(\varphi)}{t})(n)(a)}
+   = & \compose(\snd)(\natrec{\tup(\zero)(\varphi)}{t})(\zero)(a) \\
  &     \href{@functions@#def-compose}
    = & \snd(\natrec{\tup(\zero)(\varphi)}{t}(\zero))(a) \\
  &     \href{@peano@#cor-natrec-zero}
@@ -46,72 +43,101 @@ $$\begin{eqnarray*}
  &     \href{@tuples@#thm-snd-tup}
    = & \varphi(a)
 \end{eqnarray*}$$
+as claimed.
 
-To show the second property of $\Theta$, we will show by induction that the following (compound) statement holds for all $n \in \nats$:
+Next we define an auxiliary map $w : \nats \rightarrow A \rightarrow B$ by $w(n)(x) = Θ(n,x)$. Note that
+$$\begin{eqnarray*}
+ &   & w(\zero)(x) \\
+ & = & Θ(\zero,x) \\
+ & = \varphi(x)
+\\end{eqnarray*}$$
+As an intermediate result, we also claim that $$q(n)(w(n)) = w(\next(n));$$ we show this by induction on $n$. For the base case $n = \zero$, if $x \in A$ we have
+$$\begin{eqnarray*}
+ &   & q(\zero)(w(\zero))(x) \\
+ & = & \mu(\zero,x,w(\zero)(x)) \\
+ & = & 
+\end{eqnarray*}$$
 
-1. $\natrec{(\zero,\varphi)}{t}(n) = (n, \lambda x : \Theta(n,x))$ and
-2. $\Theta(\next(n), a) = \mu(n, a, \Theta(n, a))$ for all $a \in A$.
+
+To see the second property of $Θ$, we will show by induction that the following (compound) statement holds for all $n \in \nats$:
+
+1. $\natrec{\tup(\zero)(\varphi)}{t}(n) = \tup(n)(w(n))$ and
+2. $Θ(\next(n),a) = \mu(n,a,Θ(n,a))$ for all $a \in A$.
 
 For the base case, note that
 
 $$\begin{eqnarray*}
- &   & \natrec{(\zero, \varphi)}{t}(\zero) \\
- & = & (\zero, \varphi) \\
- & = & (\zero, \lambda x : \varphi(x)) \\
- & = & (\zero, \lambda x : \Theta(\zero, x))
+ &   & \natrec{\tup(\zero)(\varphi)}{t}(\zero) \\
+ &     \href{@peano@#cor-natrec-zero}
+   = & \tup(\zero)(\varphi) \\
+ &     \hyp{w(\zero) = \varphi}
+   = & \tup(\zero)(w(\zero)) \\
 \end{eqnarray*}$$
 
 and that for all $a \in A$,
 
 $$\begin{eqnarray*}
- &   & \Theta(\next\ \zero, a) \\
- & = & (\snd \circ \natrec{(\zero, \varphi)}{t})(\next\ \zero)(a) \\
- & = & (\snd (\natrec{(\zero, \varphi)}{t}(\next\ \zero)))(a) \\
- & = & (\snd (t(\natrec{(\zero, \varphi)}{t}(\zero))))(a) \\
- & = & (\snd (t(\zero, \varphi)))(a) \\
- & = & (\snd (\next\ \zero, \lambda x : \mu(\zero, x, \varphi(x))))(a) \\
- & = & (\lambda x : \mu(\zero, x, \varphi(x)))(a) \\
- & = & \mu(\zero, a, \varphi(a)) \\
- & = & \mu(\zero, a, \Theta(\zero, a)).
+ &   & Θ(\next(\zero),a) \\
+ &     \let{Θ(n,a) = \compose(\snd)(\natrec{\tup(\zero)(\varphi)}{t})(n)(a)}
+   = & \compose(\snd)(\natrec{\tup(\zero)(\varphi)}{t})(\next(\zero))(a) \\
+ &     \href{@functions@#def-compose}
+   = & \snd(\natrec{\tup(\zero)(\varphi)}{t}(\next(\zero)))(a) \\
+ &     \href{@peano@#cor-natrec-next}
+   = & \snd(t(\natrec{\tup(\zero)(\varphi)}{t}(\zero)))(a) \\
+ &     \href{@peano@#cor-natrec-zero}
+   = & \snd(t(\tup(\zero)(\varphi)))(a) \\
+ &     \let{t(\tup(n)(h)) = \tup(\next(n))(q(n)(h))}
+   = & \snd(\tup(\next(\zero))(q(\zero)(\varphi)))(a) \\
+ &     \href{@tuples@#thm-snd-tup}
+   = & q(\zero)(\varphi)(a) \\
+ &     \let{q(n)(h)(x) = \mu(n,x,h(x))}
+   = & \mu(\zero,a,\varphi(a)) \\
+ &     \hyp{Θ(\zero,a) = \varphi(a)}
+   = & \mu(\zero,a,Θ(\zero,a))
 \end{eqnarray*}$$
+as claimed.
 
 Now for the inductive step, suppose the statement holds for $n \in \nats$. Then we have
 
 $$\begin{eqnarray*}
- &   & \natrec{(\zero, \varphi)}{t}(\next\ n) \\
- & = & t(\natrec{(\zero, \varphi)}{t}(n)) \\
- & = & t(n, \lambda x : \Theta(n,x)) \\
- & = & (\next(n), \lambda y : \mu(n, y, \Theta(n,y))) \\
- & = & (\next(n), \lambda x : \Theta(\next\ n, x)).
+ &   & \natrec{\tup(\zero)(\varphi)}{t}(\next(n)) \\
+ &     \href{@peano@#cor-natrec-next}
+   = & t(\natrec{\tup(\zero)(\varphi)}{t}(n)) \\
+ &     \hyp{\natrec{\tup(\zero)(\varphi)}{t}(n) = \tup(n)(w(n))}
+   = & t(\tup(n)(w(n))) \\
+ &     \let{t(\tup(n)(h)) = \tup(\next(n))(q(n)(h))}
+   = & \tup(\next(n))(q(n)(w(n))) \\
+ & = & (\next(n), \lambda y : \mu(n, y, Θ(n,y))) \\
+ & = & (\next(n), \lambda x : Θ(\next\ n, x)).
 \end{eqnarray*}$$
 
 (Note that we used both parts of the induction hypothesis here.) Also note that
 
 $$\begin{eqnarray*}
- &   & \Theta(\next(\next\ n), a) \\
+ &   & Θ(\next(\next(n)), a) \\
  & = & (\snd \circ \natrec{(\zero, \varphi)}{t})(\next(\next\ n))(a) \\
  & = & \snd(\natrec{(\zero, \varphi)}{t}(\next(\next\ n)))(a) \\
  & = & \snd(t(\natrec{(\zero, \varphi)}{t}(\next\ n)))(a) \\
- & = & (\snd (t (\next\ n, \lambda x : \Theta(\next\ n, x))))(a) \\
- & = & (\snd (\next(\next\ n), \lambda y : \mu(\next\ n, y, \Theta(\next\ n, y))))(a) \\
- & = & (\lambda y : \mu(\next\ n, y, \Theta(\next\ n, y)))(a) \\
- & = & \mu(\next\ n, a, \Theta(\next\ n, a))
+ & = & (\snd (t (\next\ n, \lambda x : Θ(\next\ n, x))))(a) \\
+ & = & (\snd (\next(\next\ n), \lambda y : \mu(\next\ n, y, Θ(\next\ n, y))))(a) \\
+ & = & (\lambda y : \mu(\next\ n, y, Θ(\next\ n, y)))(a) \\
+ & = & \mu(\next\ n, a, Θ(\next\ n, a))
 \end{eqnarray*}$$
 
-So $\Theta$ has the claimed properties by induction. To see that $\Theta$ is unique, we again use induction. Suppose $\Psi : \nats \times A \rightarrow B$ is another mapping which satisfies the properties of $\Theta$. Then we have $$\Psi(\zero, a) = \varphi(a) = \Theta(\zero, a)$$ for all $a \in A$, and if $n \in \nats$ such that $\Psi(n, a) = \Theta(n, a)$ for all $a \in A$, we have
+So $Θ$ has the claimed properties by induction. To see that $Θ$ is unique, we again use induction. Suppose $\Psi : \nats \times A \rightarrow B$ is another mapping which satisfies the properties of $Θ$. Then we have $$\Psi(\zero, a) = \varphi(a) = Θ(\zero, a)$$ for all $a \in A$, and if $n \in \nats$ such that $\Psi(n, a) = Θ(n, a)$ for all $a \in A$, we have
 
 $$\begin{eqnarray*}
  &   & \Psi(\next\ n, a) \\
  & = & \mu(n, a, \Psi(n, a)) \\
- & = & \mu(n, a, \Theta(n, a)) \\
- & = & \Theta(\next\ n, a)
+ & = & \mu(n, a, Θ(n, a)) \\
+ & = & Θ(\next\ n, a)
 \end{eqnarray*}$$
 
-for all $a \in A$. Thus $\Psi = \Theta$ as needed.
+for all $a \in A$. Thus $\Psi = Θ$ as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-That proof may look complicated, but structurally it's very simple. We defined $\Theta$ and showed it has the claimed properties with induction, then we showed it is unique by induction.
+That proof may look complicated, but structurally it's very simple. We defined $Θ$ and showed it has the claimed properties with induction, then we showed it is unique by induction.
 
 
 Implementation
