@@ -196,6 +196,11 @@
 @simprec@#def-simprec-zero	\\simprec{f}{m}(\\zero,a) = f(a)
 @simprec@#def-simprec-next	\\simprec{f}{m}(\\next(n),a) = m(n,a,\\simprec{f}{m}(n,a))
 #=======================#
+#--- bailrec -----------#
+#=======================#
+@bailrec@#thm-bailrec-zero	\\bailrec{f}{b}{p}{w}(\zero,a) = f(a)
+@bailrec@#thm-bailrec-next	\\bailrec{f}{b}{p}{w}(\next(n),a) = \\bif{b(n,a)}{p(n,a)}{\\bailrec{f}{b}{p}{w}(n,w(n,a))}
+#=======================#
 #--- plus --------------#
 #=======================#
 @plus@#cor-plus-up-zero	\\nplus(\\zero,b) = b

@@ -6,8 +6,7 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: bailrec
 ---
 
-> {-# LANGUAGE BangPatterns #-}
-> {-# LANGUAGE NoImplicitPrelude #-}
+> {-# LANGUAGE NoImplicitPrelude, BangPatterns #-}
 > module BailoutRecursion
 >   ( bailoutRec, _test_bailoutrec, main_bailoutrec
 >   ) where
@@ -18,12 +17,15 @@ slug: bailrec
 > import And
 > import Or
 > import Implies
+> import Functions
 > import Tuples
+> import DisjointUnions
 > import NaturalNumbers
 
 So far we have defined two special *recursion operators*, $\natrec{\ast}{\ast}$ and $\simprec{\ast}{\ast}$. These act like program skeletons: fill in the slots with functions of the right signatures and get a computable function out. In this post we'll define another operator, which we will call *bailout recursion*.
 
 :::::: theorem :::::
+[]{#thm-bailrec-zero}[]{#thm-bailrec-next}
 Suppose we have sets $A$ and $B$ and functions with the following signatures:
 $$\begin{eqnarray*}
 \varphi & : & A \rightarrow B \\
@@ -37,92 +39,66 @@ Then there is a unique function $\Theta : \nats \times A \rightarrow B$ such tha
 This function $\Theta$ will be denoted $\bailrec{\varphi}{\beta}{\psi}{\omega}$.
 
 ::: proof ::::::::::
-This proof will be very similar to the analogous proof for simple recursion.
+We define $ε : \nats \times A \rightarrow A + (\nats \times A)$ by $ε(\tup(n)(a)) = \lft(a)$ and $\chi : (A+(\nats \times A))^{\nats \times A} \rightarrow (A + (\nats \times A))^{\nats \times A}$ by $$\chi(h)(\tup(n)(a)) = \bif{\beta(\prev(n),a)}{\rgt(\tup(\prev(n))(a))}{h(\prev(n),\omega(\prev(n),a))}.$$ Now thinking of $((A+(\nats \times A))^{\nats \times A},ε,\chi)$ as an inductive set, we define $Θ : \nats \times A \rightarrow B$ by $$Θ(n,a) = \either(\varphi,\psi)(\natrec{ε}{\chi}(n)(\tup(n)(a))).$$
 
-First we establish existence. To this end, define a map $W : \nats \times {}^AB \rightarrow {}^AB$ by $$W(m,h)(x) = \left\{ \begin{array}{ll} \psi(m,x) & \mathrm{if}\ \beta(m,x) \\ h(\omega(m,x)) & \mathrm{otherwise}, \end{array} \right.$$ and define $t : \nats \times {}^AB \rightarrow \nats \times {}^AB$ by $$t(m,h) = (\next(m), W(m,h)).$$
-
-Now we define $\Theta$ as follows: $$\Theta(m,a) = \snd((\natrec{(\zero, \varphi)}{t})(m))(a).$$
-
-($\snd$ is the map which selects the second entry of a pair.)
-
-Note that
+To see that $Θ$ has the claimed properties, note that
 $$\begin{eqnarray*}
- &   & \Theta(\zero,a) \\
- & = & (\snd(\natrec{(\zero,\varphi)}{t})(\zero))(a) \\
- & = & (\snd(\zero,\varphi))(a) \\
- & = & \varphi(a).
+ &   & Θ(\zero,a) \\
+ &     \let{Θ(n,a) = \either(\varphi,\psi)(\natrec{ε}{\chi}(n)(\tup(n)(a)))}
+   = & \either(\varphi,\psi)(\natrec{ε}{\chi}(\zero)(\tup(\zero)(a))) \\
+ &     \href{@peano@#cor-natrec-zero}
+   = & \either(\varphi,\psi)(ε(\tup(\zero)(a))) \\
+ &     \hyp{ε(\tup(n)(a)) = \lft(a)}
+   = & \either(\varphi,\psi)(\lft(a)) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \varphi(a)
+\end{eqnarray*}$$
+and
+$$\begin{eqnarray*}
+ &   & Θ(\next(n),a) \\
+ &     \let{Θ(n,a) = \either(\varphi,\psi)(\natrec{ε}{\chi}(n)(\tup(n)(a)))}
+   = & \either(\varphi,\psi)(\natrec{ε}{\chi}(\next(n))(\tup(\next(n))(a))) \\
+ &     \href{@peano@#cor-natrec-next}
+   = & \either(\varphi,\psi)(\chi(\natrec{ε}{\chi}(n))(\tup(\next(n))(a))) \\
+ &     \hyp{\chi(h)(\tup(n)(a)) = \bif{\beta(\prev(n),a)}{\rgt(\tup(\prev(n))(a))}{h(\tup(\prev(n))(a))}}
+   = & \either(\varphi,\psi)(\bif{\beta(\prev(\next(n)),a)}{\rgt(\tup(\prev(\next(n)))(a))}{\natrec{ε}{\chi}(n)(\tup(\prev(\next(n)))(a))}) \\
+ &     \href{@unary@#thm-prev-next}
+   = & \either(\varphi,\psi)(\bif{\beta(n,a)}{\rgt(\tup(\prev(\next(n)))(a))}{\natrec{ε}{\chi}(n)(\tup(\prev(\next(n)))(a))}) \\
+ &     \href{@unary@#thm-prev-next}
+   = & \either(\varphi,\psi)(\bif{\beta(n,a)}{\rgt(\tup(n)(a))}{\natrec{ε}{\chi}(n)(\tup(\prev(\next(n)))(a))}) \\
+ &     \href{@unary@#thm-prev-next}
+   = & \either(\varphi,\psi)(\bif{\beta(n,a)}{\rgt(\tup(n)(a))}{\natrec{ε}{\chi}(n)(\tup(n)(a))}) \\
+ &     \href{@booleans@#thm-iffunc}
+   = & \bif{\beta(n,a)}{\either(\varphi,\psi)(\rgt(\tup(n)(a)))}{\either(\varphi,\psi)(\natrec{ε}{\chi}(n)(\tup(n)(a)))} \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \bif{\beta(n,a)}{\psi(\tup(n)(a))}{\either(\varphi,\psi)(\natrec{ε}{\chi}(n)(\tup(n)(a)))} \\
+ &     \let{Θ(n,a) = \either(\varphi,\psi)(\natrec{ε}{\chi}(n)(\tup(n)(a)))}
+   = & \bif{\beta(n,a)}{\psi(\tup(n)(a))}{Θ(n,a)}
 \end{eqnarray*}$$
 
-To show the second property of $\Theta$, we will show by induction that the following (compound) statement holds for all $n \in \nats$:
-
-1. $\natrec{(\zero,\varphi)}{t}(n) = (n, \lambda x: \Theta(n,x))$ and
-2. $\Theta(\next(n), a) = W(n,\lambda x: \Theta(n,x))(a)$ for all $a \in A$.
-
-For the base case, note that
-
+Next suppose $\Psi : \nats \times A \rightarrow B$ is another mapping which satisfies the properties of $\Theta$; we show that $\Psi = \Theta$ by induction on $n$. For the base case $n = \zero$, we have
 $$\begin{eqnarray*}
- &   & \natrec{(\zero,\varphi)}{t}(\zero) \\
- & = & (\zero, \varphi) \\
- & = & (\zero, \lambda x : \varphi(x)) \\
- & = & (\zero, \lambda x : \Theta(\zero, x))
+ &   & \Psi(\zero,a) \\
+ &     \hyp{\Psi(\zero,a) = \varphi(a)}
+   = & \varphi(a) \\
+ &     \hyp{\Theta(\zero,a) = \varphi(a)}
+   = & \Theta(\zero,a)
 \end{eqnarray*}$$
-
-and that for all $a \in A$,
-
+for all $a \in A$. For the inductive step, suppose the equality holds for some $n$, and let $a \in A$. Then we have
 $$\begin{eqnarray*}
- &   & \Theta(\next\ \zero, a) \\
- & = & (\snd (\natrec{(\zero, \varphi)}{t}(\next\ \zero)))(a) \\
- & = & (\snd (t(\natrec{(\zero, \varphi)}{t}(\zero))))(a) \\
- & = & (\snd (t(\zero, \varphi)))(a) \\
- & = & (\snd (\next\ \zero, W(\zero, \varphi)))(a). \\
- & = & W(\zero, \varphi)(a). \\
- & = & W(\zero, \lambda x: \varphi(x))(a). \\
- & = & W(\zero, \lambda x: \Theta(\zero,x))(a). \\
+ &   & \Psi(\next(n),a) \\
+ &     \hyp{\Psi(\next(n),a) = \bif{\beta(n,a)}{\psi(n,a)}{\Psi(n,\omega(n,a))}}
+   = & \bif{\beta(n,a)}{\psi(n,a)}{\Psi(n,\omega(n,a))} \\
+ &     \hyp{\Psi(n,a) = \Theta(n,a)}
+   = & \bif{\beta(n,a)}{\psi(n,a)}{\Theta(n,\omega(n,a))} \\
+ &     \hyp{\Theta(\next(n),a) = \bif{\beta(n,a)}{\psi(n,a)}{\Theta(n,\omega(n,a))}}
+   = & \Theta(\next(n),a)
 \end{eqnarray*}$$
-
-Now for the inductive step, suppose the statement holds for $n \in \nats$. Then we have
-
-$$\begin{eqnarray*}
- &   & \natrec{(\zero, \varphi)}{t}(\next\ n) \\
- & = & t(\natrec{(\zero, \varphi)}{t}(n)) \\
- & = & t(n, \lambda x : \Theta(n,x)) \\
- & = & (\next(n), W(n, \lambda x : \Theta(n,x))) \\
- & = & (\next(n), \lambda y : W(n, \lambda x : \Theta(n,x))(y)) \\
- & = & (\next(n), \lambda y : \Theta(\next(n),y))
-\end{eqnarray*}$$
-
-(Note that we used both parts of the induction hypothesis here.) Also note that
-$$\begin{eqnarray*}
- &   & \Theta(\next(\next(n)), a) \\
- & = & \snd (\natrec{(\zero,\varphi)}{t}(\next(\next(n))))(a) \\
- & = & \snd (t (\natrec{(\zero, \varphi)}{t}(\next(n))))(a) \\
- & = & \snd (t (\next(n), \lambda x : \Theta(\next(n), x)))(a) \\
- & = & \snd (\next(\next(n)), W(\next(n), \lambda x : \Theta(\next\ n,x)))(a) \\
- & = & W(\next\ n, \lambda x : \Theta(\next\ n, x))(a).
-\end{eqnarray*}$$
-
-So $\Theta$ has the claimed properties by induction. To see that $\Theta$ is unique, we again use induction. Suppose $\Psi : \nats \times A \rightarrow B$ is another mapping which satisfies the properties of $\Theta$. Then we have $$\Psi(\zero, a) = \varphi(a) = \Theta(\zero, a)$$ for all $a \in A$, and if $n \in \nats$ such that $\Psi(n, a) = \Theta(n, a)$ for all $a \in A$, we have
-
-$$\begin{eqnarray*}
- &   & \Psi(\next\ n, a) \\
- & = & \psi(n,a) \\
- & = & \Theta(\next\ n, a)
-\end{eqnarray*}$$
-
-if $\beta(n,a) = \btrue$, and
-
-$$\begin{eqnarray*}
- &   & \Psi(\next\ n, a) \\
- & = & \Psi(n, \omega(n,a)) \\
- & = & \Theta(n, \omega(n,a)) \\
- & = & \Theta(\next\ n, a)
-\end{eqnarray*}$$
-
-if not, for all $a \in A$. Thus $\Psi = \Theta$ as needed.
+as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-You might notice that in this proof, we didn't really use $\beta$ or $\psi$, and the fact that $W$ is piecewise-defined plays no role. When this happens in a proof it usually means we've got some unnecessary details. But in this case, we will be using $\beta$ and $\psi$ later, and the piecewiseness of $\Theta$ will be crucial in constructing an efficient tail-recursive evaluation strategy. Stay tuned.
+You might notice that in this proof, we didn't really use $\beta$ or $\psi$. When this happens in a proof it usually means we've got some unnecessary details. But in this case, we will be using $\beta$ and $\psi$ later, and the piecewiseness of $\Theta$ will be crucial in constructing an efficient tail-recursive evaluation strategy.
 
 
 Implementation
@@ -154,16 +130,13 @@ There's the naive way:
 
 And there's the definition from the proof:
 
-> bailoutRec' phi beta psi omega = \n a ->
->   let
->     w m h x =
->       if beta m x
->         then psi m x
->         else h $ omega m x
->  
->     t (Pair m h) = tup (next m) (w m h)
-> 
->   in snd (naturalRec (tup zero phi) t n) $ a
+> bailoutRec' phi beta psi omega n a =
+>   either phi (uncurry psi) (naturalRec epsilon chi n (tup n a))
+>   where
+>     epsilon (Pair _ a) = lft a
+>     chi h (Pair n a) = if beta (prev n) a
+>       then rgt (tup (prev n) a)
+>       else h (tup (prev n) (omega (prev n) a))
 
 Unlike simple recursion, the naive implementation of bailout recursion is already tail recursive.
 
