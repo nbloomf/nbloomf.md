@@ -29,111 +29,89 @@ Suppose we have sets $A$ and $B$ and functions $\varphi : A \rightarrow B$ and $
 This function $Θ$ will be denoted $\simprec{\varphi}{\mu}$.
 
 ::: proof ::::::::::
-First we establish existence. Define a map $$q : \nats \rightarrow {}^AB \rightarrow A \rightarrow B$$ by $$q(n)(h)(x) = \mu(n,x,h(x)),$$ and define $t : \nats \times {}^AB \rightarrow \nats \times {}^AB$ by $$t(n,h) = \tup(\next(n))(q(n)(h)).$$ Now we define $Θ$ as follows: $$Θ(n,a) = \compose(\snd)(\natrec{\tup(\zero)(\varphi)}{t})(n)(a).$$
+First we establish existence. Define $\varepsilon : A \rightarrow \nats \times B$ by $\varepsilon(a) = \tup(\zero)(\varphi(a))$, and define $\chi : A \rightarrow \nats \times B \rightarrow \nats \times B$ by $$\chi(a)(\tup(n)(b)) = \tup(\next(n))(\mu(n,a,b)).$$ Thinking of $(\nats \times B, \varepsilon(a), \chi(a))$ as an inductive set, we define $Ω : \nats \times A \rightarrow \nats \times B$ by $$Ω(n,a) = \natrec{\varepsilon(a)}{\chi(a)}(n)$$ and $Θ : \nats \times A \rightarrow B$ by $Θ(n,a) = \snd(Ω(n,a))$.
 
-Note that
+Now note that
 $$\begin{eqnarray*}
  &   & Θ(\zero,a) \\
- &     \let{Θ(n,a) = \compose(\snd)(\natrec{\tup(\zero)(\varphi)}{t})(n)(a)}
-   = & \compose(\snd)(\natrec{\tup(\zero)(\varphi)}{t})(\zero)(a) \\
- &     \href{@functions@#def-compose}
-   = & \snd(\natrec{\tup(\zero)(\varphi)}{t}(\zero))(a) \\
+ &     \let{Θ(n,a) = \snd(\natrec{\varepsilon(a)}{\chi(a)}(n))}
+   = & \snd(\natrec{\varepsilon(a)}{\chi(a)}(\zero)) \\
  &     \href{@peano@#cor-natrec-zero}
-   = & \snd(\tup(\zero)(\varphi))(a) \\
+   = & \snd(\varepsilon(a)) \\
+ &     \hyp{\varepsilon(a) = \tup(\zero)(\varphi(a))}
+   = & \snd(\tup(\zero)(\varphi(a))) \\
  &     \href{@tuples@#thm-snd-tup}
    = & \varphi(a)
 \end{eqnarray*}$$
 as claimed.
 
-Next we define an auxiliary map $w : \nats \rightarrow A \rightarrow B$ by $w(n)(x) = Θ(n,x)$. Note that
+Next we show that $$Ω(\next(n),a) = \tup(\next(n))(\mu(n,a,Θ(n,a)))$$ for all $a \in A$ and $n \in \nats$ by induction on $n$. For the base case $n = \zero$, we have
 $$\begin{eqnarray*}
- &   & w(\zero)(x) \\
- & = & Θ(\zero,x) \\
- & = \varphi(x)
-\\end{eqnarray*}$$
-As an intermediate result, we also claim that $$q(n)(w(n)) = w(\next(n));$$ we show this by induction on $n$. For the base case $n = \zero$, if $x \in A$ we have
-$$\begin{eqnarray*}
- &   & q(\zero)(w(\zero))(x) \\
- & = & \mu(\zero,x,w(\zero)(x)) \\
- & = & 
-\end{eqnarray*}$$
-
-
-To see the second property of $Θ$, we will show by induction that the following (compound) statement holds for all $n \in \nats$:
-
-1. $\natrec{\tup(\zero)(\varphi)}{t}(n) = \tup(n)(w(n))$ and
-2. $Θ(\next(n),a) = \mu(n,a,Θ(n,a))$ for all $a \in A$.
-
-For the base case, note that
-
-$$\begin{eqnarray*}
- &   & \natrec{\tup(\zero)(\varphi)}{t}(\zero) \\
- &     \href{@peano@#cor-natrec-zero}
-   = & \tup(\zero)(\varphi) \\
- &     \hyp{w(\zero) = \varphi}
-   = & \tup(\zero)(w(\zero)) \\
-\end{eqnarray*}$$
-
-and that for all $a \in A$,
-
-$$\begin{eqnarray*}
- &   & Θ(\next(\zero),a) \\
- &     \let{Θ(n,a) = \compose(\snd)(\natrec{\tup(\zero)(\varphi)}{t})(n)(a)}
-   = & \compose(\snd)(\natrec{\tup(\zero)(\varphi)}{t})(\next(\zero))(a) \\
- &     \href{@functions@#def-compose}
-   = & \snd(\natrec{\tup(\zero)(\varphi)}{t}(\next(\zero)))(a) \\
+ &   & Ω(\next(\zero),a) \\
+ &     \let{Ω(n,a) = \natrec{\varepsilon(a)}{\chi(a)}(n)}
+   = & \natrec{\varepsilon(a)}{\chi(a)}(\next(\zero)) \\
  &     \href{@peano@#cor-natrec-next}
-   = & \snd(t(\natrec{\tup(\zero)(\varphi)}{t}(\zero)))(a) \\
+   = & \chi(a)(\natrec{\varepsilon(a)}{\chi(a)}(\zero)) \\
  &     \href{@peano@#cor-natrec-zero}
-   = & \snd(t(\tup(\zero)(\varphi)))(a) \\
- &     \let{t(\tup(n)(h)) = \tup(\next(n))(q(n)(h))}
-   = & \snd(\tup(\next(\zero))(q(\zero)(\varphi)))(a) \\
- &     \href{@tuples@#thm-snd-tup}
-   = & q(\zero)(\varphi)(a) \\
- &     \let{q(n)(h)(x) = \mu(n,x,h(x))}
-   = & \mu(\zero,a,\varphi(a)) \\
+   = & \chi(a)(\varepsilon(a)) \\
+ &     \hyp{\varepsilon(a) = \tup(\zero)(\varphi(a))}
+   = & \chi(a)(\tup(\zero)(\varphi(a))) \\
+ &     \hyp{\chi(a)(\tup(n)(b)) = \tup(\next(n))(\mu(n,a,b))}
+   = & \tup(\next(\zero))(\mu(\zero,a,\varphi(a))) \\
  &     \hyp{Θ(\zero,a) = \varphi(a)}
-   = & \mu(\zero,a,Θ(\zero,a))
+   = & \tup(\next(\zero))(\mu(\zero,a,Θ(\zero,a)))
+\end{eqnarray*}$$
+as needed. For the inductive step, suppose the equality holds for some $n$. Now
+$$\begin{eqnarray*}
+ &   & Ω(\next(\next(n)),a) \\
+ &     \let{Ω(n,a) = \natrec{\varepsilon(a)}{\chi(a)}(n)}
+   = & \natrec{\varepsilon(a)}{\chi(a)}(\next(\next(n))) \\
+ &     \href{@peano@#cor-natrec-next}
+   = & \chi(a)(\natrec{\varepsilon(a)}{\chi(a)}(\next(n))) \\
+ &     \let{Ω(n,a) = \natrec{\varepsilon(a)}{\chi(a)}(n)}
+   = & \chi(a)(Ω(\next(n),a)) \\
+ &     \hyp{Ω(\next(n),a) = \tup(\next(n))(\mu(n,a,Θ(n,a)))}
+   = & \chi(a)(\tup(\next(n))(\mu(n,a,Θ(n,a)))) \\
+ &     \hyp{\chi(a)(\tup(n)(b)) = \tup(\next(n))(\mu(n,a,b))}
+   = & \tup(\next(\next(n)))(\mu(\next(n),a,\mu(n,a,Θ(n,a)))) \\
+ &     \href{@tuples@#thm-snd-tup}
+   = & \tup(\next(\next(n)))(\mu(\next(n),a,\snd(\tup(\next(n))(\mu(n,a,Θ(n,a)))))) \\
+ &     \hyp{Ω(\next(n),a) = \tup(\next(n))(\mu(n,a,Θ(n,a)))}
+   = & \tup(\next(\next(n)))(\mu(\next(n),a,\snd(Ω(\next(n),a)))) \\
+ &     \hyp{Θ(n,a) = \snd(Ω(n,a))}
+   = & \tup(\next(\next(n)))(\mu(\next(n),a,Θ(\next(n),a))) \\
+\end{eqnarray*}$$
+as needed. Thus for all $a$ and $n$ we have
+$$\begin{eqnarray*}
+ &   & Θ(\next(n),a) \\
+ &     \hyp{Θ(n,a) = \snd(Ω(n,a))}
+   = & \snd(Ω(\next(n),a)) \\
+ &     \hyp{Ω(\next(n),a) = \tup(\next(n))(\mu(n,a,Θ(n,a)))}
+   = & \snd(\tup(\next(n))(\mu(n,a,Θ(n,a)))) \\
+ &     \href{@tuples@#thm-snd-tup}
+   = & \mu(n,a,Θ(n,a))
 \end{eqnarray*}$$
 as claimed.
 
-Now for the inductive step, suppose the statement holds for $n \in \nats$. Then we have
-
+To see that $Θ$ is unique, we again use induction. Suppose $\Psi : \nats \times A \rightarrow B$ is another mapping which satisfies the properties of $Θ$. Then we have
 $$\begin{eqnarray*}
- &   & \natrec{\tup(\zero)(\varphi)}{t}(\next(n)) \\
- &     \href{@peano@#cor-natrec-next}
-   = & t(\natrec{\tup(\zero)(\varphi)}{t}(n)) \\
- &     \hyp{\natrec{\tup(\zero)(\varphi)}{t}(n) = \tup(n)(w(n))}
-   = & t(\tup(n)(w(n))) \\
- &     \let{t(\tup(n)(h)) = \tup(\next(n))(q(n)(h))}
-   = & \tup(\next(n))(q(n)(w(n))) \\
- & = & (\next(n), \lambda y : \mu(n, y, Θ(n,y))) \\
- & = & (\next(n), \lambda x : Θ(\next\ n, x)).
+ &   & \Psi(\zero,a) \\
+ &     \hyp{\Psi(\zero,a) = \varphi(a)}
+   = & \varphi(a) \\
+ &     \hyp{Θ(\zero,a) = \varphi(a)}
+   = & Θ(\zero,a)
 \end{eqnarray*}$$
-
-(Note that we used both parts of the induction hypothesis here.) Also note that
-
+for all $a \in A$, and if $n \in \nats$ such that $\Psi(n, a) = Θ(n, a)$ for all $a \in A$, we have
 $$\begin{eqnarray*}
- &   & Θ(\next(\next(n)), a) \\
- & = & (\snd \circ \natrec{(\zero, \varphi)}{t})(\next(\next\ n))(a) \\
- & = & \snd(\natrec{(\zero, \varphi)}{t}(\next(\next\ n)))(a) \\
- & = & \snd(t(\natrec{(\zero, \varphi)}{t}(\next\ n)))(a) \\
- & = & (\snd (t (\next\ n, \lambda x : Θ(\next\ n, x))))(a) \\
- & = & (\snd (\next(\next\ n), \lambda y : \mu(\next\ n, y, Θ(\next\ n, y))))(a) \\
- & = & (\lambda y : \mu(\next\ n, y, Θ(\next\ n, y)))(a) \\
- & = & \mu(\next\ n, a, Θ(\next\ n, a))
+ &   & \Psi(\next(n),a) \\
+ &     \hyp{\Psi(\next(n),a) = \mu(n,a,\Psi(n,a))}
+   = & \mu(n,a,\Psi(n,a)) \\
+ &     \hyp{\Psi(n,a) = Θ(n,a)}
+   = & \mu(n,a,Θ(n,a)) \\
+ &     \hyp{Θ(\next(n),a) = \mu(n,a,Θ(n,a))}
+   = & Θ(\next(n),a)
 \end{eqnarray*}$$
-
-So $Θ$ has the claimed properties by induction. To see that $Θ$ is unique, we again use induction. Suppose $\Psi : \nats \times A \rightarrow B$ is another mapping which satisfies the properties of $Θ$. Then we have $$\Psi(\zero, a) = \varphi(a) = Θ(\zero, a)$$ for all $a \in A$, and if $n \in \nats$ such that $\Psi(n, a) = Θ(n, a)$ for all $a \in A$, we have
-
-$$\begin{eqnarray*}
- &   & \Psi(\next\ n, a) \\
- & = & \mu(n, a, \Psi(n, a)) \\
- & = & \mu(n, a, Θ(n, a)) \\
- & = & Θ(\next\ n, a)
-\end{eqnarray*}$$
-
-for all $a \in A$. Thus $\Psi = Θ$ as needed.
+as needed. Thus $\Psi = Θ$.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
@@ -160,9 +138,10 @@ There's the naive way:
 
 There's the definition from the proof:
 
-> simpleRec' phi mu n a =
->   let t (Pair m h) = tup (next m) (\x -> mu m x (h x))
->   in snd (naturalRec (tup zero phi) t n) $ a
+> simpleRec' phi mu n a = snd (naturalRec (epsilon a) (chi a) n)
+>   where
+>     epsilon a = tup zero (phi a)
+>     chi a (Pair n b) = tup (next n) (mu n a b)
 
 And the tail recursive strategy:
 
