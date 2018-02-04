@@ -201,6 +201,11 @@
 @bailrec@#thm-bailrec-zero	\\bailrec{f}{b}{p}{w}(\zero,a) = f(a)
 @bailrec@#thm-bailrec-next	\\bailrec{f}{b}{p}{w}(\next(n),a) = \\bif{b(n,a)}{p(n,a)}{\\bailrec{f}{b}{p}{w}(n,w(n,a))}
 #=======================#
+#--- mutrec ------------#
+#=======================#
+@mutrec@#thm-mutrec-zero	\\mutrec{e}{b}{p}{k}{w}(\\zero,a) = f(a)
+@mutrec@#thm-mutrec-next	\\mutrec{e}{b}{p}{k}{w}(\\next(n),a) = \\bif{b(n,a)}{p(n,a)}{k(n,a,\\mutrec{e}{b}{p}{k}{w}(n,w(n,a)))}
+#=======================#
 #--- plus --------------#
 #=======================#
 @plus@#cor-plus-up-zero	\\nplus(\\zero,b) = b

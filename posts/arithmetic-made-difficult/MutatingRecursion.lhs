@@ -25,42 +25,61 @@ Note that both simple recursion and bailout recursion produce functions with typ
 For this situation we introduce yet another recursion operator on $\nats$, which we'll call *mutating recursion*.
 
 :::::: theorem :::::
-Let $A$ and $B$ be sets. Suppose we have mappings $\varepsilon : A \rightarrow B$, $\beta : \nats \times A \rightarrow B$, $\psi : \nats \times A \rightarrow B$, $\chi : \nats \times A \times B \rightarrow B$, and $\omega : \nats \times A \rightarrow A$. Then there is a unique map $\Theta : \nats \times A \rightarrow B$ such that $$\Theta(\zero,a) = \varepsilon(a)$$ and $$\Theta(\next(n),a) = \bif{\beta(n,a)}{\psi(n,a)}{\chi(n,a,\Theta(n,\omega(n,a)))}.$$ We denote this $\Theta$ by $\mutrec{\varepsilon}{\beta}{\psi}{\chi}{\omega}$.
+[]{#thm-mutrec-zero}[]{#thm-mutrec-next}
+Let $A$ and $B$ be sets. Suppose we have mappings $\varepsilon : A \rightarrow B$, $\beta : \nats \times A \rightarrow B$, $\psi : \nats \times A \rightarrow B$, $\chi : \nats \times A \times B \rightarrow B$, and $\omega : \nats \times A \rightarrow A$. Then there is a unique map $Θ : \nats \times A \rightarrow B$ such that $$Θ(\zero,a) = \varepsilon(a)$$ and $$Θ(\next(n),a) = \bif{\beta(n,a)}{\psi(n,a)}{\chi(n,a,Θ(n,\omega(n,a)))}.$$ We denote this $Θ$ by $\mutrec{\varepsilon}{\beta}{\psi}{\chi}{\omega}$.
 
 ::: proof ::::::::::
-Define $\delta \in B^{A \times \nats}$ by $$\delta(a,n) = \varepsilon(a)$$ and $\sigma : B^{A \times \nats} \rightarrow B^{A \times \nats}$ by $$\sigma(g)(a,n) = \bif{\beta(\prev(n),a)}{\psi(\prev(n),a)}{\chi(\prev(n),a,g(\omega(\prev(n),a)),\prev(n))}.$$ Now $(B^{A \times \nats},\delta,\sigma)$ is an iterative set. We now define $$\Theta(n,a) = \natrec{\delta}{\sigma}(n)(a,n).$$
+Define $δ \in B^{A \times \nats}$ by $$δ(a,n) = \varepsilon(a)$$ and $σ : B^{A \times \nats} \rightarrow B^{A \times \nats}$ by $$σ(g)(a,n) = \bif{\beta(\prev(n),a)}{\psi(\prev(n),a)}{\chi(\prev(n),a,g(\omega(\prev(n),a)),\prev(n))}.$$ Now $(B^{A \times \nats},δ,σ)$ is an iterative set. We now define $$Θ(n,a) = \natrec{δ}{σ}(n)(\tup(a)(n)).$$
 
-To see that $\Theta$ has the claimed properties, note that
+To see that $Θ$ has the claimed properties, note that
 $$\begin{eqnarray*}
- &   & \Theta(\zero,a) \\
- & = & \natrec{\delta}{\sigma}(\zero)(a,\zero) \\
+ &   & Θ(\zero,a) \\
+ &     \let{Θ(n,a) = \natrec{δ}{σ}(n)(\tup(a)(n))}
+   = & \natrec{δ}{σ}(\zero)(\tup(a)(\zero)) \\
  &     \href{@peano@#cor-natrec-zero}
-   = & \delta(a,\zero) \\
- & = & \varepsilon(a)
+   = & δ(\tup(a)(\zero)) \\
+ &     \let{δ(\tup(a)(n)) = \varepsilon(a)}
+   = & \varepsilon(a)
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
- &   & \Theta(\next(n),a) \\
- & = & \natrec{\delta}{\sigma}(\next(n))(a,\next(n)) \\
+ &   & Θ(\next(n),a) \\
+ &     \let{Θ(n,a) = \natrec{δ}{σ}(n)(\tup(a)(n))}
+   = & \natrec{δ}{σ}(\next(n))(\tup(a)(\next(n))) \\
  &     \href{@peano@#cor-natrec-next}
-   = & \sigma(\natrec{\delta}{\sigma}(n))(a,\next(n)) \\
- & = & \bif{\beta(\prev(\next(n)),a)}{\psi(\prev(\next(n)),a)}{\chi(\prev(\next(n)),a,\natrec{\delta}{\sigma}(n)(\omega(\prev(\next(n)),a),\prev(\next(n))))} \\
- & = & \bif{\beta(n,a)}{\psi(n,a)}{\chi(n,a,\natrec{\delta}{\sigma}(n)(\omega(n,a),n))}
+   = & σ(\natrec{δ}{σ}(n))(\tup(a)(\next(n))) \\
+ &     \let{σ(g)(\tup(a)(n)) = \bif{\beta(\prev(n),a)}{\psi(\prev(n),a)}{\chi(\prev(n),a,g(\omega(\prev(n),a),\prev(n)))}}
+   = & \bif{\beta(\prev(\next(n)),a)}{\psi(\prev(\next(n)),a)}{\chi(\prev(\next(n)),a,\natrec{δ}{σ}(n)(\omega(\prev(\next(n)),a),\prev(\next(n))))} \\
+ &     \href{@unary@#thm-prev-next}
+   = & \bif{\beta(n,a)}{\psi(\prev(\next(n)),a)}{\chi(\prev(\next(n)),a,\natrec{δ}{σ}(n)(\omega(\prev(\next(n)),a),\prev(\next(n))))} \\
+ &     \href{@unary@#thm-prev-next}
+   = & \bif{\beta(n,a)}{\psi(\prev(\next(n)),a)}{\chi(n,a,\natrec{δ}{σ}(n)(\omega(\prev(\next(n)),a),\prev(\next(n))))} \\
+ &     \href{@unary@#thm-prev-next}
+   = & \bif{\beta(n,a)}{\psi(\prev(\next(n)),a)}{\chi(n,a,\natrec{δ}{σ}(n)(\omega(n,a),\prev(\next(n))))} \\
+ &     \href{@unary@#thm-prev-next}
+   = & \bif{\beta(n,a)}{\psi(\prev(\next(n)),a)}{\chi(n,a,\natrec{δ}{σ}(n)(\omega(n,a),n))} \\
+ &     \href{@unary@#thm-prev-next}
+   = & \bif{\beta(n,a)}{\psi(n,a)}{\chi(n,a,\natrec{δ}{σ}(n)(\omega(n,a),n))}
 \end{eqnarray*}$$
 as claimed.
 
-Now we show that $\Theta$ is unique with this property. To that end, suppose $\Psi$ does as well; we show that $\Theta(n,a) = \Psi(n,a)$ for all $n$ by induction. For the base case $n = \zero$, we have
+Now we show that $Θ$ is unique with this property. To that end, suppose $\Psi$ does as well; we show that $Θ(n,a) = \Psi(n,a)$ for all $n$ by induction. For the base case $n = \zero$, we have
 $$\begin{eqnarray*}
- &   & \Theta(\zero,a) \\
- & = & \varepsilon(a) \\
- & = & \Psi(\zero,a).
+ &   & Θ(\zero,a) \\
+ &     \hyp{Θ(\zero,a) = \varepsilon(a)}
+   = & \varepsilon(a) \\
+ &     \hyp{\Psi(\zero,a) = \varepsilon(a)}
+   = & \Psi(\zero,a)
 \end{eqnarray*}$$
 For the inductive step, suppose the equality holds for all $a$ for some $n$. Now
 $$\begin{eqnarray*}
- &   & \Theta(\next(n),a) \\
- & = & \bif{\beta(n,a)}{\psi(n,a)}{\chi(n,a,\Theta(n,\omega(n,a)))} \\
- & = & \bif{\beta(n,a)}{\psi(n,a)}{\chi(n,a,\Psi(n,\omega(n,a)))} \\
- & = & \Psi(\next(n),a)
+ &   & Θ(\next(n),a) \\
+ &     \hyp{Θ(\next(n),a) = \bif{\beta(n,a)}{\psi(n,a)}{\chi(n,a,Θ(n,\omega(n,a)))}}
+   = & \bif{\beta(n,a)}{\psi(n,a)}{\chi(n,a,Θ(n,\omega(n,a)))} \\
+ &     \hyp{Θ(n,a) = \Psi(n,a)}
+   = & \bif{\beta(n,a)}{\psi(n,a)}{\chi(n,a,\Psi(n,\omega(n,a)))} \\
+ &     \hyp{\Psi(\next(n),a) = \bif{\beta(n,a)}{\psi(n,a)}{\chi(n,a,\Psi(n,\omega(n,a)))}}
+   = & \Psi(\next(n),a)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
