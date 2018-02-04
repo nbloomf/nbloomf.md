@@ -206,6 +206,12 @@
 @mutrec@#thm-mutrec-zero	\\mutrec{e}{b}{p}{k}{w}(\\zero,a) = f(a)
 @mutrec@#thm-mutrec-next	\\mutrec{e}{b}{p}{k}{w}(\\next(n),a) = \\bif{b(n,a)}{p(n,a)}{k(n,a,\\mutrec{e}{b}{p}{k}{w}(n,w(n,a)))}
 #=======================#
+#--- dnatrec -----------#
+#=======================#
+@dnatrec@#thm-dnatrec-zero-nat	\\dnatrec{d}{p}{c}(\\zero,k) = d(k)
+@dnatrec@#thm-dnatrec-next-zero	\\dnatrec{d}{p}{c}(\\next(n),\\zero) = p(\\dnatrec{d}{p}{c}(n,\\zero))
+@dnatrec@#thm-dnatrec-next-next	\\dnatrec{d}{p}{c}(\\next(n),\\next(k)) = c(k,\\dnatrec{d}{p}{c}(n,k),\\dnatrec{d}{p}{c}(n,\\next(k)))
+#=======================#
 #--- plus --------------#
 #=======================#
 @plus@#cor-plus-up-zero	\\nplus(\\zero,b) = b

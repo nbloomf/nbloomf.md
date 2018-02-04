@@ -22,62 +22,80 @@ slug: dnaturalrec
 Today we'll implement a slight generalization of natural recursion that allows recursion on two arguments.
 
 :::::: theorem :::::
-Let $A$ be a set. Let $\delta : \nats \rightarrow A$, $\psi : A \rightarrow A$, and $\chi : \nats \times A \times A \rightarrow A$. Then there is a unique map $\Theta : \nats \times \nats \rightarrow A$ such that $$\Theta(\zero,k) = \delta(k),$$ $$\Theta(\next(n),\zero) = \psi(\Theta(n,\zero)),$$ and $$\Theta(\next(n),\next(k)) = \chi(k,\Theta(n,k),\Theta(n,\next(k))).$$ We denote this map by $\dnatrec{\delta}{\psi}{\chi}.$$
+[]{@#thm-dnatrec-zero-nat}[]{#thm-dnatrec-next-zero}[]{#thm-dnatrec-next-next}
+Let $A$ be a set. Let $\delta : \nats \rightarrow A$, $\psi : A \rightarrow A$, and $\chi : \nats \times A \times A \rightarrow A$. Then there is a unique map $Θ : \nats \times \nats \rightarrow A$ such that $$Θ(\zero,k) = \delta(k),$$ $$Θ(\next(n),\zero) = \psi(Θ(n,\zero)),$$ and $$Θ(\next(n),\next(k)) = \chi(k,Θ(n,k),Θ(n,\next(k))).$$ We denote this map by $\dnatrec{\delta}{\psi}{\chi}.$$
 
 ::: proof ::::::::::
-Define $\varphi : A^\nats \rightarrow A^\nats$ casewise by
+Define $φ : A^\nats \rightarrow A^\nats$ casewise by
 $$\begin{eqnarray*}
- \varphi(g)(\zero) & = & \psi(g(\zero)) \\
- \varphi(g)(\next(k)) & = & \chi(k,g(k),g(\next(k))).
+ φ(g)(\zero) & = & \psi(g(\zero)) \\
+ φ(g)(\next(k)) & = & \chi(k,g(k),g(\next(k))).
 \end{eqnarray*}$$
-We then define $\Theta : \nats \times \nats \rightarrow A$ by $$\Theta(n,k) = \natrec{\delta}{\varphi}(n)(k).$$
+We then define $Θ : \nats \times \nats \rightarrow A$ by $$Θ(n,k) = \natrec{\delta}{φ}(n)(k).$$
 
-First we show that $\Theta$ satisfies the claimed equations. To this end, note that
+First we show that $Θ$ satisfies the claimed equations. To this end, note that
 $$\begin{eqnarray*}
- &   & \Theta(\zero,k) \\
- & = & \natrec{\delta}{\varphi}(\zero)(k) \\
+ &   & Θ(\zero,k) \\
+ &     \let{Θ(n,k) = \natrec{\delta}{φ}(n)(k)}
+   = & \natrec{\delta}{φ}(\zero)(k) \\
  &     \href{@peano@#cor-natrec-zero}
    = & \delta(k)
 \end{eqnarray*}$$
 that
 $$\begin{eqnarray*}
- &   & \Theta(\next(n),\zero) \\
- & = & \natrec{\delta}{\varphi}(\next(n))(\zero) \\
+ &   & Θ(\next(n),\zero) \\
+ &     \let{Θ(n,k) = \natrec{\delta}{φ}(n)(k)}
+   = & \natrec{\delta}{φ}(\next(n))(\zero) \\
  &     \href{@peano@#cor-natrec-next}
-   = & \varphi(\natrec{\delta}{\varphi}(n))(\zero) \\
- & = & \psi(\natrec{\delta}{\varphi}(n)(\zero)) \\
- & = & \psi(\Theta(n,\zero)),
+   = & φ(\natrec{\delta}{φ}(n))(\zero) \\
+ &     \hyp{φ(g)(\zero) = \psi(g(\zero))}
+   = & \psi(\natrec{\delta}{φ}(n)(\zero)) \\
+ &     \let{Θ(n,k) = \natrec{\delta}{φ}(n)(k)}
+   = & \psi(Θ(n,\zero))
 \end{eqnarray*}$$
 and that
 $$\begin{eqnarray*}
- &   & \Theta(\next(n),\next(k)) \\
- & = & \natrec{\delta}{\varphi}(\next(n))(\next(k)) \\
+ &   & Θ(\next(n),\next(k)) \\
+ &     \let{Θ(n,k) = \natrec{\delta}{φ}(n)(k)}
+   = & \natrec{\delta}{φ}(\next(n))(\next(k)) \\
  &     \href{@peano@#cor-natrec-next}
-   = & \varphi(\natrec{\delta}{\varphi}(n))(\next(k)) \\
- & = & \chi(k,\natrec{\delta}{\varphi}(n)(k),\natrec{\delta}{\varphi}(n)(\next(k))) \\
- & = & \chi(k,\Theta(n,k),\Theta(n,\next(k)))
+   = & φ(\natrec{\delta}{φ}(n))(\next(k)) \\
+ &     \hyp{φ(g)(\next(k)) = \chi(k,g(k),g(\next(k)))}
+   = & \chi(k,\natrec{\delta}{φ}(n)(k),\natrec{\delta}{φ}(n)(\next(k))) \\
+ &     \hyp{Θ(n,k) = \natrec{\delta}{φ}(n)(k)}
+   = & \chi(k,Θ(n,k),\natrec{\delta}{φ}(n)(\next(k))) \\
+ &     \hyp{Θ(n,k) = \natrec{\delta}{φ}(n)(k)}
+   = & \chi(k,Θ(n,k),Θ(n,\next(k)))
 \end{eqnarray*}$$
 as claimed.
 
-Next suppose $\Psi : \nats \times \nats \rightarrow A$ also satisfies these equations. We show that $\Psi = \Theta$ by induction on $n$. For the base case $n = \zero$ for all $k$ we have
+Next suppose $\Psi : \nats \times \nats \rightarrow A$ also satisfies these equations. We show that $\Psi = Θ$ by induction on $n$. For the base case $n = \zero$ for all $k$ we have
 $$\begin{eqnarray*}
  &   & \Psi(\zero,k) \\
- & = & \delta(k) \\
- & = & \Theta(\zero,k)
+ &     \hyp{\Psi(\zero,k) = \delta(k)}
+   = & \delta(k) \\
+ &     \hyp{Θ(\zero,k) = \delta(k)}
+   = & Θ(\zero,k)
 \end{eqnarray*}$$
-as needed. For the inductive step, suppose $\Psi(n,k) = \Theta(n,k)$ for all $k$ for some $n$. Now let $k \in \nats$. We have two possibilities; if $k = \zero$, then
+as needed. For the inductive step, suppose $\Psi(n,k) = Θ(n,k)$ for all $k$ for some $n$. Now let $k \in \nats$. We have two possibilities; if $k = \zero$, then
 $$\begin{eqnarray*}
  &   & \Psi(\next(n),\zero) \\
- & = & \psi(\Psi(n,\zero)) \\
- & = & \psi(\Theta(n,\zero)) \\
- & = & \Theta(\next(n),\zero),
+ &     \hyp{\Psi(\next(n),\zero) = \psi(\Psi(n,\zero))}
+   = & \psi(\Psi(n,\zero)) \\
+ &     \hyp{Θ(n,\zero) = \Psi(n,\zero)}
+   = & \psi(Θ(n,\zero)) \\
+ &     \hyp{Θ(\next(n),\zero) = \psi(Θ(n,\zero))}
+   = & Θ(\next(n),\zero)
 \end{eqnarray*}$$
 and if $k = \next(m)$, we have
 $$\begin{eqnarray*}
  &   & \Psi(\next(n),\next(m)) \\
- & = & \chi(k,\Psi(n,m),\Psi(n,\next(m))) \\
- & = & \chi(k,\Theta(n,m),\Theta(n,\next(m))) \\
- & = & \Theta(\next(n),\next(m))
+ &     \hyp{\Psi(\next(n),\next(m)) = \chi(\next(m),\Psi(n,m),\Psi(n,\next(m)))}
+   = & \chi(\next(m),\Psi(n,m),\Psi(n,\next(m))) \\
+ &     \let{Θ(n,m) = \Psi(n,m)}
+   = & \chi(\next(m),Θ(n,m),Θ(n,\next(m))) \\
+ &     \hyp{Θ(\next(n),\next(m)) = \chi(\next(m),Θ(n,m),Θ(n,\next(m)))}
+   = & Θ(\next(n),\next(m))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
