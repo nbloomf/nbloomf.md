@@ -95,7 +95,8 @@ $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \nleq(\next(\next(n)),k) \\
  & = & \nleq(\next(\next(n)),\next(m)) \\
- & = & \nleq(\next(n),m).
+ &     \href{@leq@#thm-leq-next-cancel}
+   = & \nleq(\next(n),m)
 \end{eqnarray*}$$
 Using the inductive hypothesis, we have
 $$\begin{eqnarray*}

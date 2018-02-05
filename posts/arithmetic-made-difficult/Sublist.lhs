@@ -353,7 +353,8 @@ we have $x = \nil$, so that $\length(x) = \zero$. Thus
 $$\begin{eqnarray*}
  &   & \nleq(\length(x),\length(y)) \\
  & = & \nleq(\zero,\zero) \\
- & = & \btrue
+ &     \href{@leq@#thm-leq-reflexive}
+   = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the implication holds for all $x$ for some $y$, and let $b \in A$. We consider two cases for $x$. If $x = \nil$, we have
 $$\begin{eqnarray*}
@@ -378,7 +379,8 @@ By the induction hypothesis, we have
 $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \nleq(\length(u),\length(y)) \\
- & = & \nleq(\next(\length(u)),\next(\length(y))) \\
+ &     \href{@leq@#thm-leq-next-cancel}
+   = & \nleq(\next(\length(u)),\next(\length(y))) \\
  & = & \nleq(\length(\cons(a,u)),\length(\cons(b,y))) \\
  & = & \nleq(\length(x),\length(\cons(b,y)))
 \end{eqnarray*}$$
@@ -580,7 +582,8 @@ $$\begin{eqnarray*}
  & = & \nleq(\next(\length(x)),\next(\length(\nil))) \\
  & = & \nleq(\next(\length(\cons(c,u))),\next(\zero)) \\
  & = & \nleq(\next(\next(\length(u))),\next(\zero)) \\
- & = & \bfalse,
+ &     \href{@leq@#thm-leq-next-next-one}
+   = & \bfalse
 \end{eqnarray*}$$
 a contradiction.
 

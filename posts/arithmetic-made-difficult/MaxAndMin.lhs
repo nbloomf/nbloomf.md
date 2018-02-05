@@ -62,7 +62,8 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \nmax(a,a) \\
  & = & \bif{\nleq(a,a)}{a}{a} \\
- & = & \bif{\btrue}{a}{a} \\
+ &     \href{@leq@#thm-leq-reflexive}
+   = & \bif{\btrue}{a}{a} \\
  &     \href{@booleans@#cor-if-true}
    = & a
 \end{eqnarray*}$$
@@ -80,7 +81,8 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \nmin(a,a) \\
  & = & \bif{\nleq(a,a)}{a}{a} \\
- & = & \bif{\btrue}{a}{a} \\
+ &     \href{@leq@#thm-leq-reflexive}
+   = & \bif{\btrue}{a}{a} \\
  &     \href{@booleans@#cor-if-true}
    = & a
 \end{eqnarray*}$$
@@ -183,7 +185,8 @@ Let $a,b,c \in \nats$. Then we have the following.
 $$\begin{eqnarray*}
  &   & \nmax(\next(a),\next(b)) \\
  & = & \bif{\nleq(\next(a),\next(b))}{\next(b)}{\next(a)} \\
- & = & \bif{\nleq(a,b)}{\next(b)}{\next(a)} \\
+ &     \href{@leq@#thm-leq-next-cancel}
+   = & \bif{\nleq(a,b)}{\next(b)}{\next(a)} \\
  &     \href{@booleans@#thm-iffunc}
    = & \next(\bif{\nleq(a,b)}{b}{a}) \\
  & = & \next(\nmax(a,b))
@@ -193,7 +196,8 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \nmax(\nplus(c,a),\nplus(c,b)) \\
  & = & \bif{\nleq(\nplus(c,a),\nplus(c,b))}{\nplus(c,b)}{\nplus(c,a)} \\
- & = & \bif{\nleq(a,b)}{\nplus(c,b)}{\nplus(c,a)} \\
+ &     \href{@leq@#thm-leq-plus-compatible-left}
+   = & \bif{\nleq(a,b)}{\nplus(c,b)}{\nplus(c,a)} \\
  &     \href{@booleans@#thm-iffunc}
    = & \nplus(c,\bif{\nleq(a,b)}{b}{a}) \\
  & = & \nplus(c,\nmax(a,b))
@@ -203,7 +207,8 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \nmin(\next(a),\next(b)) \\
  & = & \bif{\nleq(\next(a),\next(b))}{\next(a)}{\next(b)} \\
- & = & \bif{\nleq(a,b)}{\next(a)}{\next(b)} \\
+ &     \href{@leq@#thm-leq-next-cancel}
+   = & \bif{\nleq(a,b)}{\next(a)}{\next(b)} \\
  &     \href{@booleans@#thm-iffunc}
    = & \next(\bif{\nleq(a,b)}{a}{b}) \\
  & = & \next(\nmin(a,b))
@@ -213,7 +218,8 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \nmin(\nplus(c,a),\nplus(c,b)) \\
  & = & \bif{\nleq(\nplus(c,a),\nplus(c,b))}{\nplus(c,a)}{\nplus(c,b)} \\
- & = & \bif{\nleq(a,b)}{\nplus(c,a)}{\nplus(c,b)} \\
+ &     \href{@leq@#thm-leq-plus-compatible-left}
+   = & \bif{\nleq(a,b)}{\nplus(c,a)}{\nplus(c,b)} \\
  &     \href{@booleans@#thm-iffunc}
    = & \nplus(c,\bif{\nleq(a,b)}{a}{b}) \\
  & = & \nplus(c,\nmin(a,b))

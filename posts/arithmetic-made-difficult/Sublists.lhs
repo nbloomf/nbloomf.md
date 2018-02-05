@@ -259,7 +259,8 @@ $$\begin{eqnarray*}
  & = & \length(\cat(\map(\cons(a,-))(\sublists(x)),\sublists(x))) \\
  & = & \nplus(\length(\map(\cons(a,-))(\sublists(x))),\length(\sublists(x))) \\
  & = & \nplus(\length(\sublists(x)),\length(\sublists(x))) \\
- & = & \ntimes(\next(\next(\zero)),\length(\sublists(x))) \\
+ &     \href{@times@#thm-times-two}
+   = & \ntimes(\next(\next(\zero)),\length(\sublists(x))) \\
  & = & \ntimes(\next(\next(\zero)),\npower(\next(\next(\zero)),\length(x))) \\
  &     \href{@times@#thm-times-commutative}
    = & \ntimes(\npower(\next(\next(\zero)),\length(x)),\next(\next(\zero))) \\

@@ -237,8 +237,10 @@ The following hold for all $a,b,c,d \in \nats$.
 $$\begin{eqnarray*}
  &   & \nleq(\nplus(a,\next(c)),\nplus(b,\next(c))) \\
  & = & \nleq(\nplus(\next(a),c),\nplus(\next(b),c)) \\
- & = & \nleq(\next(a),\next(b)) \\
- & = & \nleq(a,b)
+ &     \href{@leq@#thm-leq-plus-compatible-right}
+   = & \nleq(\next(a),\next(b)) \\
+ &     \href{@leq@#thm-leq-next-cancel}
+   = & \nleq(a,b)
 \end{eqnarray*}$$
 as needed.
 2. We have $$\nleq(\nplus(c,a),\nplus(c,b)) = \nleq(\nplus(a,c),\nplus(b,c)) = \nleq(a,b).$$
@@ -246,7 +248,8 @@ as needed.
 $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \nleq(c,d) \\
- & = & \nleq(\nplus(c,b),\nplus(d,b)) \\
+ &     \href{@leq@#thm-leq-plus-compatible-right}
+   = & \nleq(\nplus(c,b),\nplus(d,b)) \\
  & = & \nleq(\nplus(b,c),\nplus(b,d)).
 \end{eqnarray*}$$
 The result holds by transitivity.
@@ -360,7 +363,8 @@ Suppose instead that $c = \next(u)$. Now there are two possibilities for $b$. If
 $$\begin{eqnarray*}
  &   & \nleq(\ntimes(a,c),\ntimes(b,d)) \\
  & = & \nleq(\zero,\zero) \\
- & = & \btrue
+ &     \href{@leq@#thm-leq-reflexive}
+   = & \btrue
 \end{eqnarray*}$$
 as needed. Suppose then that $b = \next(v)$. Now we have
 $$\begin{eqnarray*}

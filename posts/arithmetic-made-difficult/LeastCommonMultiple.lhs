@@ -174,7 +174,8 @@ $$\begin{eqnarray*}
  &   & \nlcm(a,b) \\
  & = & \nquo(\ntimes(a,b),\ngcd(a,b)) \\
  & = & \nquo(\ntimes(a,\ntimes(t,d)),d) \\
- & = & \nquo(\ntimes(\ntimes(a,t),d),d) \\
+ &     \href{@times@#thm-times-associative}
+   = & \nquo(\ntimes(\ntimes(a,t),d),d) \\
  & = & \ntimes(a,t).
 \end{eqnarray*}$$
 Since $c = \ntimes(a,u)$, we have
