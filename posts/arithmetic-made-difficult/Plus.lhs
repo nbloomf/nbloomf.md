@@ -27,11 +27,11 @@ Natural number addition has signature $\nats \times \nats \rightarrow \nats$, so
 
 $$\begin{eqnarray*}
 (m+n)+1
- & = & (m+1)+n \\
- & = & \simprec{\varphi}{\mu}(\next(m),n) \\
- &     \href{@simprec@#def-simprec-next}
-   = & \mu(m,n,\simprec{\varphi}{\mu}(m,n)) \\
- & = & \mu(m,n,m+n).
+  & = & (m+1)+n \\
+  & = & \simprec{\varphi}{\mu}(\next(m),n) \\
+  &     \href{@simprec@#def-simprec-next}
+    = & \mu(m,n,\simprec{\varphi}{\mu}(m,n)) \\
+  & = & \mu(m,n,m+n).
 \end{eqnarray*}$$
 
 With this in mind, we define a binary operation $\nplus$ on $\nats$ as follows.

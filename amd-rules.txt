@@ -232,6 +232,8 @@
 @times@#thm-times-commutative	\\ntimes(a,b) = \\ntimes(b,a)
 @times@#thm-times-plus-distribute-left	\\ntimes(a,\\nplus(b,c)) = \\nplus(\\ntimes(a,b),\\ntimes(a,c))
 @times@#thm-times-plus-distribute-right	\\ntimes(\\nplus(a,b),c) = \\nplus(\\ntimes(a,c),\\ntimes(b,c))
+@times@#thm-times-associative	\\ntimes(\\ntimes(a,b),c) = \\ntimes(a,\\ntimes(b,c))
+@times@#thm-times-two	\\ntimes(\\next(\\next(\\zero)),a) = \\nplus(a,a)
 #=======================#
 #--- minus -------------#
 #=======================#
@@ -241,7 +243,19 @@
 @minus@#thm-minus-zero-next	\\nminus(\\zero,\\next(a)) = \\lft(\\ast)
 @minus@#thm-minus-next-cancel	\\nminus(\\next(a),\\next(b)) = \\nminus(a,b)
 @minus@#thm-minus-next-self	\\nminus(a,\\next(a)) = \\lft(\\ast)
+@minus@#thm-minus-plus-left	\\nminus(\\nplus(b,a),b) = \\rgt(a)
+@minus@#thm-minus-plus-right	\\nminus(\\nplus(a,b),b) = \\rgt(a)
 #=======================#
 #--- leq ---------------#
 #=======================#
 @leq@#dfn-leq	\\nleq(a,b) = \\isRgt(\\nminus(b,a))
+@leq@#thm-leq-next-zero	\\nleq(\\next(a),\\zero) = \\bfalse
+@leq@#thm-leq-next-next-one	\\nleq(\\next(\\next(n)),\\next(\\zero)) = \\bfalse
+@leq@#thm-leq-next-nat	\\nleq(\\next(a),a) = \\bfalse
+@leq@#thm-leq-nat-plus	\\nleq(a,\\nplus(a,b)) = \\btrue
+@leq@#thm-leq-next-cancel	\\nleq(\\next(a),\\next(b)) = \\nleq(a,b)
+@leq@#thm-leq-reflexive	\\nleq(a,a) = \\btrue
+@leq@#thm-leq-antisymmetric	\\bimpl(\\band(\\nleq(a,b),\\nleq(b,a)),\\beq(a,b)) = \\btrue
+@leq@#thm-leq-transitive	\\bimpl(\\band(\\nleq(a,b),\\nleq(b,c)),\\nleq(a,c)) = \\btrue
+@leq@#thm-leq-plus-compatible-right	\\nleq(a,b) = \\nleq(\\nplus(a,c),\\nplus(b,c))
+@leq@#thm-leq-plus-compatible-left	\\nleq(a,b) = \\nleq(\\nplus(c,a),\\nplus(c,b))

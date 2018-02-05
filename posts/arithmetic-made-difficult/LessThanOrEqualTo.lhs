@@ -39,6 +39,7 @@ In Haskell:
 First some basic (but important!) special cases.
 
 :::::: theorem :::::
+[]{#thm-leq-next-zero}[]{#thm-leq-next-next-one}[]{#thm-leq-next-nat}[]{#thm-leq-nat-plus}
 Let $a,b \in \nats$. Then we have the following.
 
 1. $\nleq(\next(a),\zero) = \bfalse$.
@@ -120,6 +121,7 @@ as claimed.
 This lemma will also come in handy.
 
 :::::: theorem :::::
+[]{#thm-leq-next-cancel}
 For all $a,b \in \nats$ we have $\nleq(\next(a),\next(b)) = \nleq(a,b)$.
 
 ::: proof ::::::::::
@@ -160,6 +162,7 @@ We have $\nleq(a,b) = \btrue$ if and only if $\nminus(b,a) = \rgt(c)$ for some $
 From here we can more easily prove some familiar properties of $\nleq$.
 
 :::::: theorem :::::
+[]{#thm-leq-reflexive}[]{#thm-leq-antisymmetric}[]{#thm-leq-transitive}
 We have the following.
 
 1. (Reflexivity) Let $a \in \nats$. Then $\nleq(a,a)$.
@@ -222,6 +225,7 @@ as needed.
 Now $\nleq$ interacts nicely with $\nplus$.
 
 :::::: theorem :::::
+[]{#thm-leq-plus-compatible-right}[]{#thm-leq-plus-compatible-left}
 The following hold for all $a,b,c,d \in \nats$.
 
 1. $\nleq(a,b) = \nleq(\nplus(a,c),\nplus(b,c))$.
@@ -333,10 +337,10 @@ The following hold for all $a,b \in \nats$.
 And here comes $\ntimes$:
 
 :::::: theorem :::::
-The following hold.
+The following hold for all $a,b,c,d \in \nats$.
 
-1. Let $a,b,c \in \nats$. Then $$\nleq(a,b) = \nleq(\ntimes(a,\next(c)),\nplus(b,\next(c))).$$
-2. Let $a,b,c,d \in \nats$. If $\nleq(a,b)$ and $\nleq(c,d)$, then $$\nleq(\ntimes(a,c),\ntimes(b,d)).$$
+1. $\nleq(a,b) = \nleq(\ntimes(a,\next(c)),\nplus(b,\next(c)))$.
+2. Let $a,b,c,d \in \nats$. If $\nleq(a,b)$ and $\nleq(c,d)$, then $\nleq(\ntimes(a,c),\ntimes(b,d))$.
 
 ::: proof ::::::::::
 1. We proceed by induction on $c$. For the base case, note that $$\nleq(\ntimes(a,\next(\zero)),\ntimes(b,\next(\zero))) = \nleq(a,b).$$ For the inductive step, suppose the result holds for some $c$. We consider three possibilities. First suppose $a = b$; in this case we have $\nleq(a,b) = \btrue$ and $$\ntimes(a,\next(\next(c))) = \ntimes(b,\next(\next(c))),$$ so the conclusion holds. Next, suppose $a \neq b$ and $\nleq(a,b) = \btrue$. By the inductive hypothesis we have $$\nleq(\ntimes(a,\next(c)),\nplus(b,\next(c))) = \btrue,$$ and so

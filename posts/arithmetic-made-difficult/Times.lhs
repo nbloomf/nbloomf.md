@@ -240,17 +240,22 @@ $$\begin{eqnarray*}
  &   & \ntimes(\next(a),\nplus(b,c)) \\
  &     \href{@times@#cor-times-up-next}
    = & \nplus(\ntimes(a,\nplus(b,c)),\nplus(b,c)) \\
- &     \href{@times@#thm-times-plus-distribute-left}
+ &     \hyp{\ntimes(a,\nplus(b,c)) = \nplus(\ntimes(a,b),\ntimes(a,c))}
    = & \nplus(\nplus(\ntimes(a,b),\ntimes(a,c)),\nplus(b,c)) \\
- & = & \nplus(\nplus(\nplus(\nplus(\ntimes(a,b),\ntimes(a,c))),b),c) \\
- & = & \nplus(\nplus(\ntimes(a,b),\nplus(\ntimes(a,c),b)),c) \\
+ &     \href{@plus@#thm-plus-associative}
+   = & \nplus(\nplus(\nplus(\ntimes(a,b),\ntimes(a,c)),b),c) \\
+ &     \href{@plus@#thm-plus-associative}
+   = & \nplus(\nplus(\ntimes(a,b),\nplus(\ntimes(a,c),b)),c) \\
  &     \href{@plus@#thm-plus-commutative}
    = & \nplus(\nplus(\ntimes(a,b),\nplus(b,\ntimes(a,c))),c) \\
  &     \href{@plus@#thm-plus-associative}
    = & \nplus(\nplus(\nplus(\ntimes(a,b),b),\ntimes(a,c)),c) \\
  &     \href{@plus@#thm-plus-associative}
    = & \nplus(\nplus(\ntimes(a,b),b),\nplus(\ntimes(a,c),c)) \\
- & = & \nplus(\ntimes(\next(a),b),\ntimes(\next(a),c))
+ &     \href{@times@#cor-times-up-next}
+   = & \nplus(\ntimes(\next(a),b),\nplus(\ntimes(a,c),c)) \\
+ &     \href{@times@#cor-times-up-next}
+   = & \nplus(\ntimes(\next(a),b),\ntimes(\next(a),c))
 \end{eqnarray*}$$
 as needed.
 2. We have
@@ -260,7 +265,10 @@ $$\begin{eqnarray*}
    = & \ntimes(c,\nplus(a,b)) \\
  &     \href{@times@#thm-times-plus-distribute-left}
    = & \nplus(\ntimes(c,a),\ntimes(c,b)) \\
- & = & \nplus(\ntimes(a,c),\ntimes(b,c))
+ &     \href{@times@#thm-times-commutative}
+   = & \nplus(\ntimes(a,c),\ntimes(c,b)) \\
+ &     \href{@times@#thm-times-commutative}
+   = & \nplus(\ntimes(a,c),\ntimes(b,c))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -286,6 +294,7 @@ as claimed.
 $\ntimes$ is associative,
 
 :::::: theorem :::::
+[]{#thm-times-associative}
 For all $a,b,c \in \nats$, we have $$\ntimes(\ntimes(a,b),c) = \ntimes(a,\ntimes(b,c)).$$
 
 ::: proof ::::::::::
@@ -306,7 +315,8 @@ $$\begin{eqnarray*}
    = & \ntimes(\nplus(\ntimes(a,b),b),c) \\
  &     \href{@times@#thm-times-plus-distribute-right}
    = & \nplus(\ntimes(\ntimes(a,b),c),\ntimes(b,c)) \\
- & = & \nplus(\ntimes(a,\ntimes(b,c)),\ntimes(b,c)) \\
+ &     \hyp{\ntimes(a,\ntimes(b,c)) = \ntimes(\ntimes(a,b),c)}
+   = & \nplus(\ntimes(a,\ntimes(b,c)),\ntimes(b,c)) \\
  &     \href{@times@#cor-times-up-next}
    = & \ntimes(\next(a),\ntimes(b,c))
 \end{eqnarray*}$$
@@ -387,6 +397,7 @@ as needed.
 As a special case, $\ntimes(\next(\next(\zero)),-)$ is equivalent to a $\nplus$.
 
 :::::: theorem :::::
+[]{#thm-times-two}
 For all $a \in \nats$ we have $$\ntimes(\next(\next(\zero)),a) = \nplus(a,a).$$
 
 ::: proof ::::::::::

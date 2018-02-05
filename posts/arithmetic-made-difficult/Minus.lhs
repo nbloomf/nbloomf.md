@@ -240,45 +240,52 @@ Let $a,b,c \in \nats$. Then the following are equivalent.
 First we show (1) implies (2) by induction on $b$. For the base case, suppose we have $\nminus(\zero,a) = \rgt(c)$. Now
 $$\begin{eqnarray*}
  &   & \rgt(c) \\
- & = & \nminus(\zero,a) \\
+ &     \hyp{\nminus(\zero,a) = \rgt(c)}
+   = & \nminus(\zero,a) \\
  &     \href{@minus@#cor-minus-up-zero}
    = & \bif{\iszero(a)}{\rgt(\zero)}{\lft(\ast)}
 \end{eqnarray*}$$
 as needed. If $\iszero(a) = \bfalse$, we have $\rgt(c) = \lft(\ast)$, which is absurd. So $\iszero(a) = \btrue$, and thus $a = \zero$, and moreover $\rgt(c) = \rgt(\zero)$, so $c = \zero$. Then $\zero = \nplus(a,c)$ as needed. For the inductive step, suppose the result holds for all $a$ and $c$ for some $b$, and suppose further that $\nminus(\next(b),a) = \rgt(c)$. If $a = \zero$, we have
 $$\begin{eqnarray*}
  &   & \rgt(c) \\
- & = & \nminus(\next(b),\zero) \\
+ &     \hyp{\nminus(\next(b),a) = \rgt(c)}
+   = & \nminus(\next(b),\zero) \\
  &     \href{@minus@#thm-minus-nat-zero}
    = & \rgt(\next(b))
 \end{eqnarray*}$$
 so that $\next(b) = c = \nplus(c,\zero)$ as needed. Suppose instead that $a = \next(d)$ for some $d$. Now
 $$\begin{eqnarray*}
  &   & \rgt(c) \\
- & = & \nminus(\next(b),a) \\
- & = & \nminus(\next(b),\next(d)) \\
+ &     \hyp{\nminus(\next(b),a) = \rgt(c)}
+   = & \nminus(\next(b),a) \\
+ &     \hyp{a = \next(d)}
+   = & \nminus(\next(b),\next(d)) \\
  &     \href{@minus@#thm-minus-next-cancel}
    = & \nminus(b,d) \\
 \end{eqnarray*}$$
 and thus $\nplus(d,c) = b$. But then
 $$\begin{eqnarray*}
  &   & \next(b) \\
- & = & \next(\nplus(d,c)) \\
+ &     \hyp{b = \nplus(d,c)}
+   = & \next(\nplus(d,c)) \\
  &     \href{@plus@#cor-plus-up-next}
    = & \nplus(\next(d),c) \\
- & = & \nplus(a,c)
+ &     \hyp{a = \next(d)}
+   = & \nplus(a,c)
 \end{eqnarray*}$$
 as needed.
 
 Next we show that (2) implies (1) by induction on $a$. For the base case $a = \zero$, if $b = \nplus(a,c) = c$ then $\nminus(b,\zero) = b = c$ as needed. For the inductive step, suppose the implication holds for all $b$ and $c$ for some $a$. In particular, if $\nplus(a,c) = b$, then $\nminus(b,a) = \rgt(c)$. Suppose further that $b = \nplus(\next(a),c)$. Now $b = \next(\nplus(a,c)) = \next(d)$ for some $d$, where $\nminus(d,a) = \rgt(c)$. Then we have
 $$\begin{eqnarray*}
  &   & \nminus(b,\next(a)) \\
- & = & \nminus(\nplus(\next(a),c),\next(a)) \\
- &     \href{@plus@#cor-plus-up-next}
+ &     \hyp{b = \next(\nplus(a,c))}
    = & \nminus(\next(\nplus(a,c)),\next(a)) \\
  &     \href{@minus@#thm-minus-next-cancel}
    = & \nminus(\nplus(a,c),a) \\
- & = & \nminus(d,a) \\
- & = & \rgt(c)
+ &     \hyp{d = \nplus(a,c)}
+   = & \nminus(d,a) \\
+ &     \hyp{\nminus(d,a) = \rgt(c)}
+   = & \rgt(c)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -334,7 +341,8 @@ Let $a,b,c \in \nats$. Then the following are equivalent.
 $\nminus$ "undoes" $\nplus$.
 
 :::::: theorem :::::
-Let $a,b \in \nats$. Then the following are equivalent.
+[]{#thm-minus-plus-left}[]{#thm-minus-plus-right}
+Let $a,b \in \nats$. Then we have the following.
 
 1. $\nminus(\nplus(b,a),b) = \rgt(a)$.
 2. $\nminus(\nplus(a,b),b) = \rgt(a)$.
@@ -441,15 +449,24 @@ Let $a,b,c \in \nats$. If $\nminus(a,b) = \rgt(d)$ for some $d \in \nats$, then 
 We proceed by induction on $a$. For the base case $a = \zero$, suppose we have $\nminus(\zero,b) = \rgt(d)$; then $d = \zero$ and $b = \zero$. Now
 $$\begin{eqnarray*}
  &   & \nminus(\ntimes(c,a),\ntimes(c,b)) \\
- & = & \nminus(\zero,\zero) \\
+ &     \let{a = \zero}
+   = & \nminus(\ntimes(c,\zero),\ntimes(c,b)) \\
+ &     \href{@times@#thm-times-zero-right}
+   = & \nminus(\zero,\ntimes(c,b))
+ &     \let{b = \zero}
+   = & \nminus(\zero,\ntimes(c,\zero)) \\
+ &     \href{@times@#thm-times-zero-right}
+   = & \nminus(\zero,\zero) \\
  &     \href{@minus@#thm-minus-nat-zero}
    = & \rgt(\zero)
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
  &   & \rgt(\ntimes(c,d)) \\
- & = & \rgt(\ntimes(c,\zero)) \\
- & = & \zero
+ &     \let{d = \zero}
+   = & \rgt(\ntimes(c,\zero)) \\
+ &     \href{@times@#thm-times-zero-right}
+   = & \rgt(\zero)
 \end{eqnarray*}$$
 as claimed.
 
