@@ -239,7 +239,8 @@ $$\begin{eqnarray*}
  & = & \length(\zipPad(u,v)(\nil,y)) \\
  & = & \length(\map(\tupL(u))(y)) \\
  & = & \length(y) \\
- & = & \nmax(\zero,\length(y)) \\
+ &     \href{@max-min@#thm-max-zero-left}
+   = & \nmax(\zero,\length(y)) \\
  & = & \nmax(\length(\nil),\length(y)) \\
  & = & \nmax(\length(x),\length(y)) \\
 \end{eqnarray*}$$
@@ -260,7 +261,8 @@ $$\begin{eqnarray*}
  & = & \length(\cons((a,b),\zipPad(u,v)(x,w))) \\
  & = & \next(\length(\zipPad(u,v)(x,w))) \\
  & = & \next(\nmax(\length(x),\length(w))) \\
- & = & \nmax(\next(\length(x)),\next(\length(w))) \\
+ &     \href{@max-min@#thm-next-max-distribute}
+   = & \nmax(\next(\length(x)),\next(\length(w))) \\
  & = & \nmax(\length(\cons(a,x)),\length(\cons(b,w))) \\
  & = & \nmax(\length(\cons(a,x)),\length(y)) \\
 \end{eqnarray*}$$

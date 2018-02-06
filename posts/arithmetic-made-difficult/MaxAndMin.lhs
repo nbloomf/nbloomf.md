@@ -54,7 +54,8 @@ Let $a \in \nats$. Then we have the following.
 1. We have
 $$\begin{eqnarray*}
  &   & \nmax(\zero,a) \\
- & = & \bif{\nleq(\zero,a)}{a}{\zero} \\
+ &     \href{@max-min@#def-max}
+   = & \bif{\nleq(\zero,a)}{a}{\zero} \\
  & = & \bif{\btrue}{a}{\zero} \\
  &     \href{@booleans@#cor-if-true}
    = & a
@@ -63,7 +64,8 @@ as claimed.
 2. We have
 $$\begin{eqnarray*}
  &   & \nmax(a,a) \\
- & = & \bif{\nleq(a,a)}{a}{a} \\
+ &     \href{@max-min@#def-max}
+   = & \bif{\nleq(a,a)}{a}{a} \\
  &     \href{@leq@#thm-leq-reflexive}
    = & \bif{\btrue}{a}{a} \\
  &     \href{@booleans@#cor-if-true}
@@ -73,7 +75,8 @@ as claimed.
 3. We have
 $$\begin{eqnarray*}
  &   & \nmin(\zero,a) \\
- & = & \bif{\nleq(\zero,a)}{\zero}{a} \\
+ &     \href{@max-min@#def-min}
+   = & \bif{\nleq(\zero,a)}{\zero}{a} \\
  & = & \bif{\btrue}{\zero}{a} \\
  &     \href{@booleans@#cor-if-true}
    = & \zero
@@ -82,7 +85,8 @@ as claimed.
 4. We have
 $$\begin{eqnarray*}
  &   & \nmin(a,a) \\
- & = & \bif{\nleq(a,a)}{a}{a} \\
+ &     \href{@max-min@#def-min}
+   = & \bif{\nleq(a,a)}{a}{a} \\
  &     \href{@leq@#thm-leq-reflexive}
    = & \bif{\btrue}{a}{a} \\
  &     \href{@booleans@#cor-if-true}
@@ -136,20 +140,24 @@ Let $a,b \in \nats$. Then we have the following.
 1. If $\nleq(a,b) = \bfalse, we have
 $$\begin{eqnarray*}
  &   & \nmax(a,b) \\
- & = & \bif{\nleq(a,b)}{b}{a} \\
+ &     \href{@max-min@#def-max}
+   = & \bif{\nleq(a,b)}{b}{a} \\
  & = & \bif{\not(\not(\nleq(a,b)))}{b}{a} \\
  & = & \bif{\nleq(b,a)}{a}{b} \\
- & = & \nmax(b,a)
+ &     \href{@max-min@#def-max}
+   = & \nmax(b,a)
 \end{eqnarray*}$$
 as claimed; similarly, if $\nleq(b,a) = \bfalse$ then $\nmax(a,b) = \nmax(b,a)$. Suppose then that $\nleq(a,b) = \nleq(b,a) = \btrue$. By antisymmetry we have $a = b$, and thus
 $\nmax(a,b) = \nmax(b,a)$.
 2. If $\nleq(a,b) = \bfalse, we have
 $$\begin{eqnarray*}
  &   & \nmin(a,b) \\
- & = & \bif{\nleq(a,b)}{a}{b} \\
+ &     \href{@max-min@#def-min}
+   = & \bif{\nleq(a,b)}{a}{b} \\
  & = & \bif{\not(\not(\nleq(a,b)))}{a}{b} \\
  & = & \bif{\nleq(b,a)}{b}{a} \\
- & = & \nmin(b,a)
+ &     \href{@max-min@#def-min}
+   = & \nmin(b,a)
 \end{eqnarray*}$$
 as claimed; similarly, if $\nleq(b,a) = \bfalse$ then $\nmin(a,b) = \nmin(b,a)$. Suppose then that $\nleq(a,b) = \nleq(b,a) = \btrue$. By antisymmetry we have $a = b$, and thus
 $\nmin(a,b) = \nmin(b,a)$.
@@ -188,7 +196,8 @@ Let $a,b,c \in \nats$. Then we have the following.
 1. We have
 $$\begin{eqnarray*}
  &   & \nmax(\next(a),\next(b)) \\
- & = & \bif{\nleq(\next(a),\next(b))}{\next(b)}{\next(a)} \\
+ &     \href{@max-min@#def-max}
+   = & \bif{\nleq(\next(a),\next(b))}{\next(b)}{\next(a)} \\
  &     \href{@leq@#thm-leq-next-cancel}
    = & \bif{\nleq(a,b)}{\next(b)}{\next(a)} \\
  &     \href{@booleans@#thm-iffunc}
@@ -199,7 +208,8 @@ as claimed.
 2. We have
 $$\begin{eqnarray*}
  &   & \nmax(\nplus(c,a),\nplus(c,b)) \\
- & = & \bif{\nleq(\nplus(c,a),\nplus(c,b))}{\nplus(c,b)}{\nplus(c,a)} \\
+ &     \href{@max-min@#def-max}
+   = & \bif{\nleq(\nplus(c,a),\nplus(c,b))}{\nplus(c,b)}{\nplus(c,a)} \\
  &     \href{@leq@#thm-leq-plus-compatible-left}
    = & \bif{\nleq(a,b)}{\nplus(c,b)}{\nplus(c,a)} \\
  &     \href{@booleans@#thm-iffunc}
@@ -210,7 +220,8 @@ as claimed.
 3. We have
 $$\begin{eqnarray*}
  &   & \nmin(\next(a),\next(b)) \\
- & = & \bif{\nleq(\next(a),\next(b))}{\next(a)}{\next(b)} \\
+ &     \href{@max-min@#def-min}
+   = & \bif{\nleq(\next(a),\next(b))}{\next(a)}{\next(b)} \\
  &     \href{@leq@#thm-leq-next-cancel}
    = & \bif{\nleq(a,b)}{\next(a)}{\next(b)} \\
  &     \href{@booleans@#thm-iffunc}
@@ -221,7 +232,8 @@ as claimed.
 4. We have
 $$\begin{eqnarray*}
  &   & \nmin(\nplus(c,a),\nplus(c,b)) \\
- & = & \bif{\nleq(\nplus(c,a),\nplus(c,b))}{\nplus(c,a)}{\nplus(c,b)} \\
+ &     \href{@max-min@#def-min}
+   = & \bif{\nleq(\nplus(c,a),\nplus(c,b))}{\nplus(c,a)}{\nplus(c,b)} \\
  &     \href{@leq@#thm-leq-plus-compatible-left}
    = & \bif{\nleq(a,b)}{\nplus(c,a)}{\nplus(c,b)} \\
  &     \href{@booleans@#thm-iffunc}
@@ -278,7 +290,8 @@ $$\begin{eqnarray*}
  &   & \nmax(\ntimes(c,a),\ntimes(c,b)) \\
  & = & \nmax(\ntimes(\zero,a),\ntimes(\zero,b)) \\
  & = & \nmax(\zero,\zero) \\
- & = & \zero \\
+ &     \href{@max-min@#thm-max-zero-left}
+   = & \zero \\
  &     \href{@times@#cor-times-up-zero}
    = & \ntimes(\zero,\nmax(a,b)) \\
  & = & \ntimes(c,\nmax(a,b))
@@ -286,7 +299,8 @@ $$\begin{eqnarray*}
 as claimed. If $c = \next(d)$, we have
 $$\begin{eqnarray*}
  &   & \nmax(\ntimes(c,a),\ntimes(c,b)) \\
- & = & \bif{\nleq(\ntimes(c,a),\ntimes(c,b))}{\ntimes(c,b)}{\ntimes(c,a)} \\
+ &     \href{@max-min@#def-max}
+   = & \bif{\nleq(\ntimes(c,a),\ntimes(c,b))}{\ntimes(c,b)}{\ntimes(c,a)} \\
  & = & \bif{\nleq(\ntimes(\next(d),a),\ntimes(\next(d),b))}{\ntimes(c,b)}{\ntimes(c,a)} \\
  & = & \bif{\nleq(a,b)}{\ntimes(c,b)}{\ntimes(c,a)} \\
  &     \href{@booleans@#thm-iffunc}
@@ -299,7 +313,8 @@ $$\begin{eqnarray*}
  &   & \nmin(\ntimes(c,a),\ntimes(c,b)) \\
  & = & \nmin(\ntimes(\zero,a),\ntimes(\zero,b)) \\
  & = & \nmin(\zero,\zero) \\
- & = & \zero \\
+ &     \href{@max-min@#thm-min-zero-left}
+   = & \zero \\
  &     \href{@times@#cor-times-up-zero}
    = & \ntimes(\zero,\nmin(a,b)) \\
  & = & \ntimes(c,\nmin(a,b))
@@ -307,7 +322,8 @@ $$\begin{eqnarray*}
 as claimed. If $c = \next(d)$, we have
 $$\begin{eqnarray*}
  &   & \nmin(\ntimes(c,a),\ntimes(c,b)) \\
- & = & \bif{\nleq(\ntimes(c,a),\ntimes(c,b))}{\ntimes(c,a)}{\ntimes(c,b)} \\
+ &     \href{@max-min@#def-min}
+   = & \bif{\nleq(\ntimes(c,a),\ntimes(c,b))}{\ntimes(c,a)}{\ntimes(c,b)} \\
  & = & \bif{\nleq(\ntimes(\next(d),a),\ntimes(\next(d),b))}{\ntimes(c,a)}{\ntimes(c,b)} \\
  & = & \bif{\nleq(a,b)}{\ntimes(c,b)}{\ntimes(c,a)} \\
  &     \href{@booleans@#thm-iffunc}
@@ -347,8 +363,10 @@ Let $a,b,c \in \nats$. Then we have the following.
 1. Set
 $$\begin{eqnarray*}
  &   & \nmax(a,\nmax(b,c)) \\
- & = & \bif{\nleq(a,\nmax(b,c))}{\nmax(b,c)}{a} \\
- & = & \bif{\nleq(a,\bif{\nleq(b,c)}{c}{b})}{\nmax(b,c)}{a} \\
+ &     \href{@max-min@#def-max}
+   = & \bif{\nleq(a,\nmax(b,c))}{\nmax(b,c)}{a} \\
+ &     \href{@max-min@#def-max}
+   = & \bif{\nleq(a,\bif{\nleq(b,c)}{c}{b})}{\nmax(b,c)}{a} \\
  &     \href{@booleans@#thm-iffunc}
    = & \bif{\bif{\nleq(b,c)}{\nleq(a,c)}{\nleq(a,b)}}{\nmax(b,c)}{a} \\
  & = & \bif{\bif{\nleq(b,c)}{\nleq(a,c)}{\nleq(a,b)}}{\bif{\nleq(b,c)}{c}{b}}{a} \\
@@ -357,10 +375,13 @@ $$\begin{eqnarray*}
 and
 $$\begin{eqnarray*}
  &   & \nmax(\nmax(a,b),c) \\
- & = & \bif{\nleq(\nmax(a,b),c)}{c}{\nmax(a,b)} \\
- & = & \bif{\nleq(\bif{\nleq(a,b)}{b}{a},c)}{c}{\nmax(a,b)} \\
+ &     \href{@max-min@#def-max}
+   = & \bif{\nleq(\nmax(a,b),c)}{c}{\nmax(a,b)} \\
+ &     \href{@max-min@#def-max}
+   = & \bif{\nleq(\bif{\nleq(a,b)}{b}{a},c)}{c}{\nmax(a,b)} \\
  & = & \bif{\bif{\nleq(a,b)}{\nleq(b,c)}{\nleq(a,c)}}{c}{\nmax(a,b)} \\
- & = & \bif{\bif{\nleq(a,b)}{\nleq(b,c)}{\nleq(a,c)}}{c}{\bif{\nleq(a,b)}{b}{a}} \\
+ &     \href{@max-min@#def-max}
+   = & \bif{\bif{\nleq(a,b)}{\nleq(b,c)}{\nleq(a,c)}}{c}{\bif{\nleq(a,b)}{b}{a}} \\
  & = & R.
 \end{eqnarray*}$$
 as claimed. If $\nleq(a,b) = \btrue$ and $\nleq(b,c) = \btrue$, by transitivity we have $\nleq(a,c) = \btrue$ and $$Q = \bif{\nleq(a,c)}{c}{a} = c = \bif{\nleq(b,c)}{c}{b} = R.$$ If $\nleq(a,b) = \btrue$ and $\nleq(b,c) = \bfalse$, we have $$Q = \bif{\nleq(a,b)}{b}{a} = b = \bif{\nleq(b,c)}{c}{b} = R.$$
@@ -475,7 +496,8 @@ Let $a,b,c \in \nats$. Then we have the following.
 $$\begin{eqnarray*}
  &   & \nmax(\nmin(a,b),\nmin(a,c)) \\
  & = & \nmax(a,a) \\
- & = & a \\
+ &     \href{@max-min@#thm-max-idempotent}
+   = & a \\
  & = & \nmin(a,\nmax(b,c)).
 \end{eqnarray*}$$
 Suppose $\nleq(a,c) = \bfalse$; then $\nleq(c,a) = \btrue$, and by transitivity $\nleq(c,b) = \btrue$ so that $\nmax(b,c) = b$. Now

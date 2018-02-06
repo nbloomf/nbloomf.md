@@ -209,7 +209,8 @@ $$\begin{eqnarray*}
  & = & \length(\zip(\nil,\cons(b,y))) \\
  & = & \length(\nil) \\
  & = & \zero \\
- & = & \nmin(\zero,\length(\cons(b,y))) \\
+ &     \href{@max-min@#thm-min-zero-left}
+   = & \nmin(\zero,\length(\cons(b,y))) \\
  & = & \nmin(\length(\nil),\length(\cons(b,y))) \\
  & = & \nmin(\length(x),\length(\cons(b,y)))
 \end{eqnarray*}$$

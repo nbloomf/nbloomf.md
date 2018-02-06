@@ -178,7 +178,8 @@ $$\begin{eqnarray*}
  & = & \length(\take(\zero,x)) \\
  & = & \length(\nil) \\
  & = & \zero \\
- & = & \nmin(\zero,\length(x)) \\
+ &     \href{@max-min@#thm-min-zero-left}
+   = & \nmin(\zero,\length(x)) \\
  & = & \nmin(k,\length(x))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $x$ for some $k$. We now proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -197,7 +198,8 @@ $$\begin{eqnarray*}
  & = & \length(\cons(a,\take(k,x))) \\
  & = & \next(\length(\take(k,x))) \\
  & = & \next(\nmin(k,\length(x))) \\
- & = & \nmin(\next(k),\next(\length(x))) \\
+ &     \href{@max-min@#thm-next-min-distribute}
+   = & \nmin(\next(k),\next(\length(x))) \\
  & = & \nmin(\next(k),\length(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
@@ -287,7 +289,8 @@ $$\begin{eqnarray*}
  & = & \take(\zero,\range(a,b)) \\
  & = & \nil \\
  & = & \range(a,\zero) \\
- & = & \range(a,\nmin(\zero,b)) \\
+ &     \href{@max-min@#thm-min-zero-left}
+   = & \range(a,\nmin(\zero,b)) \\
  & = & \range(a,\nmin(k,b))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ and $b$ for some $k$. We consider two possibilities for $b$. If $b = \zero$, we have
@@ -308,7 +311,8 @@ $$\begin{eqnarray*}
  & = & \cons(a,\take(k,\range(\next(a),m))) \\
  & = & \cons(a,\range(\next(a),\nmin(k,m))) \\
  & = & \range(a,\next(\nmin(k,m))) \\
- & = & \range(a,\nmin(\next(k),\next(m))) \\
+ &     \href{@max-min@#thm-next-min-distribute}
+   = & \range(a,\nmin(\next(k),\next(m))) \\
  & = & \range(a,\nmin(\next(k),b))
 \end{eqnarray*}$$
 as needed.
