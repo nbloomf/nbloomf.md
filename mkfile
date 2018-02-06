@@ -11,6 +11,7 @@ targets:VQ:
   echo '  blankpost : echo empty post template'       | doppler lightcyan
   echo '  sniff-amd : style sniffs'                   | doppler lightcyan
   echo '  test-info : test stats'                     | doppler lightcyan
+  echo '  add-hooks : link git hooks'                 | doppler lightcyan
 
 all:VQ: build watch install test
 
@@ -42,6 +43,9 @@ site:Q:
 check:VQ:
   wget -r -nv --spider https://nbloomf.github.io
   rm -r nbloomf.github.io
+
+add-hooks:VQ:
+  ln hooks/pre-commit.sh .git/hooks/pre-commit
 
 
 
