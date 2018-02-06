@@ -259,3 +259,20 @@
 @leq@#thm-leq-transitive	\\bimpl(\\band(\\nleq(a,b),\\nleq(b,c)),\\nleq(a,c)) = \\btrue
 @leq@#thm-leq-plus-compatible-right	\\nleq(a,b) = \\nleq(\\nplus(a,c),\\nplus(b,c))
 @leq@#thm-leq-plus-compatible-left	\\nleq(a,b) = \\nleq(\\nplus(c,a),\\nplus(c,b))
+#=======================#
+#--- max-min -----------#
+#=======================#
+@max-min@#def-max	\\nmax(a,b) = \\bif{\\nleq(a,b)}{b}{a}
+@max-min@#def-min	\\nmin(a,b) = \\bif{\\nleq(a,b)}{a}{b}
+@max-min@#thm-max-zero-left	\\nmax(\\zero,a) = a
+@max-min@#thm-max-idempotent	\\nmax(a,a) = a
+@max-min@#thm-min-zero-left	\\nmin(\\zero,a) = \\zero
+@max-min@#thm-min-idempotent	\\nmin(a,a) = a
+@max-min@#thm-max-commutative	\\nmax(a,b) = \\nmax(b,a)
+@max-min@#thm-min-commutative	\\nmin(a,b) = \\nmin(b,a)
+@max-min@#thm-next-max-distribute	\\nmax(\\next(a),\\next(b)) = \\next(\\nmax(a,b))
+@max-min@#thm-plus-max-distribute	\\nmax(\\nplus(c,a),\\nplus(c,b)) = \\nplus(c,\\nmax(a,b))
+@max-min@#thm-next-min-distribute	\\nmin(\\next(a),\\next(b)) = \\next(\\nmin(a,b))
+@max-min@#thm-plus-min-distribute	\\nmin(\\nplus(c,a),\\nplus(c,b)) = \\nplus(c,\\nmin(a,b))
+@max-min@#thm-times-max-distribute	\\nmax(\\ntimes(c,a),\\ntimes(c,b)) = \\ntimes(c,\\nmax(a,b))
+@max-min@#thm-times-min-distribute	\\nmin(\\ntimes(c,a),\\ntimes(c,b)) = \\ntimes(c,\\nmin(a,b))

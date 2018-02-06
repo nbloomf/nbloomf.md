@@ -26,6 +26,7 @@ slug: max-min
 With $\nleq$ in hand we can also define max and min functions. These are less interesting since they do not have to be defined recursively.
 
 :::::: definition ::
+[]{#def-max}[]{#def-min}
 We define $\nmax : \nats \times \nats \rightarrow \nats$ by $$\nmax(a,b) = \bif{\nleq(a,b)}{b}{a}$$ and $\nmin : \nats \times \nats \rightarrow \nats$ by $$\nmin(a,b) = \bif{\nleq(a,b)}{a}{b}.$$
 
 In Haskell:
@@ -41,6 +42,7 @@ In Haskell:
 Special cases.
 
 :::::: theorem :::::
+[]{#thm-max-zero-left}[]{#thm-max-idempotent}[]{#thm-min-zero-left}[]{#thm-min-idempotent}
 Let $a \in \nats$. Then we have the following.
 
 1. $\nmax(\zero,a) = a$.
@@ -124,6 +126,7 @@ as claimed.
 $\nmax$ and $\nmin$ are commutative.
 
 :::::: theorem :::::
+[]{#thm-max-commutative}[]{#thm-min-commutative}
 Let $a,b \in \nats$. Then we have the following.
 
 1. $\nmax(a,b) = \nmax(b,a)$.
@@ -173,6 +176,7 @@ $\nmin(a,b) = \nmin(b,a)$.
 $\nplus$ and $\next$ distribute over $\nmax$ and $\nmin$.
 
 :::::: theorem :::::
+[]{#thm-next-max-distribute}[]{#thm-plus-max-distribute}[]{#thm-next-min-distribute}[]{#thm-plus-min-distribute}
 Let $a,b,c \in \nats$. Then we have the following.
 
 1. $\nmax(\next(a),\next(b)) = \next(\nmax(a,b))$.
@@ -262,6 +266,7 @@ as claimed.
 $\ntimes$ distributes over $\nmax$ and $\nmin$.
 
 :::::: theorem :::::
+[]{#thm-times-max-distribute}[]{#thm-times-min-distribute}
 Let $a,b,c \in \nats$. Then we have the following.
 
 1. $\nmax(\ntimes(c,a),\ntimes(c,b)) = \ntimes(c,\nmax(a,b))$.
