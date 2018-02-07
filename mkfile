@@ -45,6 +45,7 @@ check:VQ:
   rm -r nbloomf.github.io
 
 add-hooks:VQ:
+  rm .git/hooks/pre-commit
   ln hooks/pre-commit.sh .git/hooks/pre-commit
 
 
