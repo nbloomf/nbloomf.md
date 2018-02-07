@@ -339,8 +339,8 @@ sniff-amd-testtext:VQ:
 #-- check term rewrites --#
 sniff-amd-rewrite:VQ:
   echo 'Checking Term rewrites' | doppler lightblue
-  cat amd-rules.txt \
-    | grep -v '^#' amd-rules.txt \
+  cat sniff/amd/rules.txt \
+    | grep -v '^#' \
     | awk -F"\t" '{print "s|===" $1 "===|" $2 "|";}' \
     > amd-rules-sed.txt
   REWRITE=$( grep -n -C 1 '^ &     \\h' posts/arithmetic-made-difficult/* \
@@ -369,11 +369,11 @@ sniff-amd-rewrite:VQ:
     exit 1
   fi
 
-#-- check term rewrites --#
+#-- check let rewrites --#
 sniff-amd-let:VQ:
   echo 'Checking Let rewrites' | doppler lightblue
-  cat amd-rules.txt \
-    | grep -v '^#' amd-rules.txt \
+  cat sniff/amd/rules.txt \
+    | grep -v '^#' \
     | awk -F"\t" '{print "s|===" $1 "===|" $2 "|";}' \
     > amd-rules-sed.txt
   REWRITE=$( grep -n -C 1 '^ &     \\let' posts/arithmetic-made-difficult/* \
@@ -443,7 +443,7 @@ sniff-amd-latex:VQ:
     | grep -o '\\[a-zA-Z][a-zA-Z]*' \
     | sort \
     | uniq \
-    | diff amd-latex-whitelist.txt - \
+    | diff sniff/amd/latex-whitelist.txt - \
     || true )
   if [ -z "$LATEX" ]; then
     echo 'Latex commands OK' | doppler lightgreen
