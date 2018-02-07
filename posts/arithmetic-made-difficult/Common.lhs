@@ -14,16 +14,16 @@ slug: common
 > import Testing
 > import Booleans
 > import And
-> import Lists
 > import Unary
 > import NaturalNumbers
-> import Filter
-> import Cat
-> import Reverse
-> import Elt
-> import Dedupe
+> import Lists
 > import Snoc
+> import Reverse
+> import Cat
+> import Filter
+> import Elt
 > import Sublist
+> import Dedupe
 
 Today we'll define a map, $\common(x,y)$, that deletes from $x$ any items that don't also appear in $y$. This doesn't require explicit recursion.
 

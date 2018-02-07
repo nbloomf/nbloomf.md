@@ -17,8 +17,8 @@ slug: foldl
 > import And
 > import Or
 > import Implies
-> import Tuples
 > import Functions
+> import Tuples
 > import DisjointUnions
 > import Unary
 > import Lists

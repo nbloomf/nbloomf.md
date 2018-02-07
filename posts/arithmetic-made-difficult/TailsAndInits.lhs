@@ -24,9 +24,9 @@ slug: tails-inits
 > import ConsumingFold
 > import Snoc
 > import Reverse
+> import Cat
 > import Length
 > import Map
-> import Cat
 > import Zip
 > import PrefixAndSuffix
 > import LongestCommonPrefix

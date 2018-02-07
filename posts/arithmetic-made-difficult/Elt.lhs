@@ -23,10 +23,10 @@ slug: elt
 > import Lists
 > import Snoc
 > import Reverse
+> import Cat
 > import Length
 > import Map
 > import Range
-> import Cat
 > import Zip
 > import PrefixAndSuffix
 > import AllAndAny

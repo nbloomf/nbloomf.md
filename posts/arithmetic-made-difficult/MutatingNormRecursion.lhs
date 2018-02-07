@@ -10,7 +10,7 @@ slug: mnormrec
 >   mnormrec
 > ) where
 > 
-> import Testing ()
+> import Testing
 > import Booleans
 > import Unary
 > import NaturalNumbers

@@ -32,3 +32,9 @@ executable align
   build-depends:    base == 4.*
   ghc-options:      -main-is Align.main
   default-language: Haskell2010
+
+executable orderedby
+  main-is:          OrderedBy.lhs
+  build-depends:    base == 4.*
+  ghc-options:      -main-is OrderedBy.main
+  default-language: Haskell2010

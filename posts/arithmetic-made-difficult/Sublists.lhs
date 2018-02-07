@@ -20,13 +20,13 @@ slug: sublists
 > import Snoc
 > import Cat
 > import Length
-> import Filter
 > import Map
-> import Elt
 > import AllAndAny
-> import Unique
+> import Filter
+> import Elt
 > import Sublist
 > import Select
+> import Unique
 
 We've already defined a predicate that detects when one list is a sublist of another. Today we'll define a function that constructs a list of all sublists of a given list.
 

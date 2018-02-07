@@ -25,9 +25,9 @@ slug: repeat
 > import HeadAndTail
 > import Snoc
 > import Reverse
+> import Cat
 > import Length
 > import Map
-> import Cat
 > import UnfoldN
 > import Zip
 > import PrefixAndSuffix

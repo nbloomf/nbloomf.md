@@ -147,7 +147,8 @@ sniff-amd:VQ: \
   sniff-amd-testtext \
   sniff-amd-rewrite \
   sniff-amd-let \
-  sniff-amd-latex
+  sniff-amd-latex \
+  sniff-amd-import
 
 #-- use consistent syntax for fenced divs --#
 sniff-amd-fencediv:VQ:
@@ -433,7 +434,7 @@ sniff-amd-crossref:VQ:
   else
     echo 'Cross references' | doppler lightred
     echo "$CROSS"
-    echo #( echo "$CROSS" | wc -l ) 'problems found' | doppler lightred
+    echo $( echo "$CROSS" | wc -l ) 'problems found' | doppler lightred
   fi
 
 #-- check latex commands against whitelist --#
@@ -450,7 +451,32 @@ sniff-amd-latex:VQ:
     echo 'Latex commands OK' | doppler lightgreen
   else
     echo 'Latex commands' | doppler lightred
-    echo #( echo "$LATEX" | wc -l ) 'problems found' | doppler lightred
+    echo $( echo "$LATEX" | wc -l ) 'problems found' | doppler lightred
     echo "$LATEX"
     exit 1
   fi
+
+sniff-amd-import:VQ:
+  echo 'Checking Import order' | doppler lightblue
+  for file in posts/arithmetic-made-difficult/*
+  do
+    IMPORT=$( cat "$file" \
+      | grep '^> import' \
+      | grep -v '^> import Prelude' \
+      | grep -v '^> import Test\.QuickCheck' \
+      | grep -v '^> import Text.Show.Functions' \
+      | grep -v '^> import System.Exit' \
+      | orderedby --dict sniff/amd/import-list.txt \
+      || true )
+    if [ "$IMPORT" ]; then
+      echo "$file"
+      echo 'Import order' | doppler lightred
+      echo $( echo "$IMPORT" | wc -l ) 'problems found' | doppler lightred
+      echo "$IMPORT"
+      FAILED='oh no'
+    fi
+  done
+  if [ "$FAILED" ]; then
+    exit 1
+  fi
+  echo 'Import order OK' | doppler lightgreen

@@ -24,9 +24,9 @@ slug: select
 > import Lists
 > import DoubleBailoutFold
 > import Reverse
+> import Cat
 > import Length
 > import Map
-> import Cat
 > import UnfoldN
 > import Zip
 > import PrefixAndSuffix

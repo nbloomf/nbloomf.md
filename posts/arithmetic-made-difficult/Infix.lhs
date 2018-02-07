@@ -25,9 +25,9 @@ slug: infix
 > import BailoutFold
 > import Snoc
 > import Reverse
+> import Cat
 > import Length
 > import Map
-> import Cat
 > import PrefixAndSuffix
 > import AllAndAny
 > import TailsAndInits

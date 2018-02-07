@@ -26,9 +26,9 @@ slug: sublist
 > import DoubleFold
 > import Snoc
 > import Reverse
+> import Cat
 > import Length
 > import Map
-> import Cat
 > import UnfoldN
 > import Zip
 > import PrefixAndSuffix

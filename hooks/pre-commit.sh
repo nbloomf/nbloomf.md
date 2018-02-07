@@ -1,4 +1,4 @@
 #!/bin/bash
 
-echo '===> Running pre-commit check' | doppler yellow 
+echo '===> Running pre-commit checks for amd' | doppler yellow 
 mk sniff-amd

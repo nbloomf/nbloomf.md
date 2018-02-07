@@ -22,8 +22,8 @@ slug: all-any
 > import Lists
 > import Snoc
 > import Reverse
-> import Map
 > import Cat
+> import Map
 > import Zip
 > import PrefixAndSuffix
 

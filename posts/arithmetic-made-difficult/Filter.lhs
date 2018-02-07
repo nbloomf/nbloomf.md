@@ -23,9 +23,9 @@ slug: filter
 > import HeadAndTail
 > import Snoc
 > import Reverse
+> import Cat
 > import Length
 > import Map
-> import Cat
 > import Zip
 > import PrefixAndSuffix
 > import AllAndAny
