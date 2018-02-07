@@ -85,24 +85,24 @@ The following hold for all natural numbers $a$ and $b$.
 2. $\nplus(a,\next(b)) = \next(\nplus(a,b))$.
 
 ::: proof ::::::::::
-1. We proceed by induction on $a$. For the base case, we have $\nplus(\zero,\zero) = \zero$ by the universal property of $\nplus$. For the inductive step, suppose we have $\nplus(\a,\zero) = \a$ for some $\a \in \nats$. Then
+1. We proceed by induction on $a$. For the base case, we have $\nplus(\zero,\zero) = \zero$ by the universal property of $\nplus$. For the inductive step, suppose we have $\nplus(a,\zero) = a$ for some $a \in \nats$. Then
 $$\begin{eqnarray*}
- &   & \nplus(\next(\a),\zero) \\
+ &   & \nplus(\next(a),\zero) \\
  &     \href{@plus@#cor-plus-up-next}
-   = & \next(\nplus(\a,\zero)) \\
- &     \hyp{\nplus(\a,\zero) = \a}
-   = & \next(\a)
+   = & \next(\nplus(a,\zero)) \\
+ &     \hyp{\nplus(a,\zero) = a}
+   = & \next(a)
 \end{eqnarray*}$$
 as needed.
-2. We proceed by induction on $a$. For the base case, note that $$\nplus(\zero,\next(b)) = \next(b).$$ For the inductive step, suppose we have $\next(\nplus(\a,b)) = \nplus(\a,\next(b))$ for all $b$ for some $\a$. Then
+2. We proceed by induction on $a$. For the base case, note that $$\nplus(\zero,\next(b)) = \next(b).$$ For the inductive step, suppose we have $\next(\nplus(a,b)) = \nplus(a,\next(b))$ for all $b$ for some $a$. Then
 $$\begin{eqnarray*}
- &   & \nplus(\next(\a),\next(b)) \\
+ &   & \nplus(\next(a),\next(b)) \\
  &     \href{@plus@#cor-plus-up-next}
-   = & \next(\nplus(\a,\next(b))) \\
- &     \hyp{\next(\nplus(\a,b)) = \nplus(\a,\next(b))}
-   = & \next(\next(\nplus(\a,b))) \\
+   = & \next(\nplus(a,\next(b))) \\
+ &     \hyp{\next(\nplus(a,b)) = \nplus(a,\next(b))}
+   = & \next(\next(\nplus(a,b))) \\
  &     \href{@plus@#cor-plus-up-next}
-   = & \next(\nplus(\next(\a),b))
+   = & \next(\nplus(\next(a),b))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -135,28 +135,28 @@ The following hold for all natural numbers $a$, $b$, and $c$.
 2. $\nplus(a,b) = \nplus(b,a)$.
 
 ::: proof ::::::::::
-1. We will show this by induction on $a$. For the base case, note that $$\nplus(\nplus(\zero,b),c) = \nplus(b,c) = \nplus(\zero,\nplus(b,c)).$$ For the inductive step, suppose the result holds for some $\a$. Then
+1. We will show this by induction on $a$. For the base case, note that $$\nplus(\nplus(\zero,b),c) = \nplus(b,c) = \nplus(\zero,\nplus(b,c)).$$ For the inductive step, suppose the result holds for some $a$. Then
 $$\begin{eqnarray*}
- &   & \nplus(\nplus(\next(\a),b),c) \\
+ &   & \nplus(\nplus(\next(a),b),c) \\
  &     \href{@plus@#cor-plus-up-next}
-   = & \nplus(\next(\nplus(\a,b)),c) \\
+   = & \nplus(\next(\nplus(a,b)),c) \\
  &     \href{@plus@#cor-plus-up-next}
-   = & \next(\nplus(\nplus(\a,b),c)) \\
- &     \hyp{\nplus(\a,\nplus(b,c)) = \nplus(\nplus(\a,b),c)}
-   = & \next(\nplus(\a,\nplus(b,c))) \\
+   = & \next(\nplus(\nplus(a,b),c)) \\
+ &     \hyp{\nplus(a,\nplus(b,c)) = \nplus(\nplus(a,b),c)}
+   = & \next(\nplus(a,\nplus(b,c))) \\
  &     \href{@plus@#cor-plus-up-next}
-   = & \nplus(\next(\a),\nplus(b,c))
+   = & \nplus(\next(a),\nplus(b,c))
 \end{eqnarray*}$$
 as needed.
-2. We proceed by induction on $a$. For the base case, note that $$\nplus(\zero,b) = b = \nplus(b,\zero).$$ For the inductive step, suppose the result holds for some $\a$. Then we have
+2. We proceed by induction on $a$. For the base case, note that $$\nplus(\zero,b) = b = \nplus(b,\zero).$$ For the inductive step, suppose the result holds for some $a$. Then we have
 $$\begin{eqnarray*}
- &   & \nplus(\next(\a),b) \\
+ &   & \nplus(\next(a),b) \\
  &     \href{@plus@#cor-plus-up-next}
-   = & \next(\nplus(\a,b)) \\
- &     \hyp{\nplus(\a,b) = \nplus(b,\a)}
-   = & \next(\nplus(b,\a)) \\
+   = & \next(\nplus(a,b)) \\
+ &     \hyp{\nplus(a,b) = \nplus(b,a)}
+   = & \next(\nplus(b,a)) \\
  &     \href{@plus@#thm-plus-next-right}
-   = & \nplus(b,\next(\a))
+   = & \nplus(b,\next(a))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

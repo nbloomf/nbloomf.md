@@ -206,12 +206,12 @@ $$\begin{eqnarray*}
  &     \href{@minus@#thm-minus-zero-next}
    = & \lft(\ast)
 \end{eqnarray*}$$
-as needed. For the inductive step, suppose the equality holds for some $\a$; now
+as needed. For the inductive step, suppose the equality holds for some $a$; now
 $$\begin{eqnarray*}
- &   & \nminus(\next(\a),\next(\next(\a))) \\
+ &   & \nminus(\next(a),\next(\next(a))) \\
  &     \href{@minus@#thm-minus-next-cancel}
-   = & \nminus(\a,\next(\a)) \\
- &     \hyp{\nminus(\a,\next(a)) = \lft(\ast)}
+   = & \nminus(a,\next(a)) \\
+ &     \hyp{\nminus(a,\next(a)) = \lft(\ast)}
    = & \lft(\ast)
 \end{eqnarray*}$$
 as needed.

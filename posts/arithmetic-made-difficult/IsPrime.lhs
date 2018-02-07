@@ -124,7 +124,7 @@ Again by the properties of $\findsmallest{\sigma(a)}$, there does not exist $k$ 
 Now we define a boolean function $\nisprime$ as follows.
 
 :::::: definition ::
-Define $\nisprime : \nats \rightarrow \bool$ by $$\nisprime(a) = \left\{ \begin{array}{ll} \bfalse & \mathrm{if} a = \zero\ \mathrm{or}\ a = \next(\zero) \\ \nequal(a,\nmindiv(a)) & \mathrm{otherwise}. \end{array} \right.$$
+Define $\nisprime : \nats \rightarrow \bool$ by $$\nisprime(a) = \left\{ \begin{array}{ll} \bfalse & \mathrm{if} a = \zero\ \mathrm{or}\ a = \next(\zero) \\ \beq(a,\nmindiv(a)) & \mathrm{otherwise}. \end{array} \right.$$
 
 In Haskell:
 

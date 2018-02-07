@@ -145,10 +145,12 @@ sniff-amd:VQ: \
   sniff-amd-slugs \
   sniff-amd-testtext \
   sniff-amd-rewrite \
-  sniff-amd-let
+  sniff-amd-let \
+  sniff-amd-latex
 
 #-- use consistent syntax for fenced divs --#
 sniff-amd-fencediv:VQ:
+  echo 'Checking Fenced Divs' | doppler lightblue
   FENCEDIV=$( grep '^:::' posts/arithmetic-made-difficult/* \
     | grep -v ':::::: axiom :::::::' \
     | grep -v ':::::: definition ::' \
@@ -164,10 +166,12 @@ sniff-amd-fencediv:VQ:
     echo 'Fenced Divs' | doppler lightred
     echo $(echo "$FENCEDIV" | wc -l) 'problems found' | doppler lightred
     echo "$FENCEDIV"
+    exit 1
   fi
 
 #-- do not use literal divs --#
 sniff-amd-plaindiv:VQ:
+  echo 'Checking Plain Divs' | doppler lightblue
   PLAINDIV=$( grep -e '<div[> ]' -e '</div>' posts/arithmetic-made-difficult/* \
     || true )
   if [ -z "$PLAINDIV" ]; then
@@ -176,10 +180,12 @@ sniff-amd-plaindiv:VQ:
     echo 'Plain Divs' | doppler lightred
     echo $(echo "$PLAINDIV" | wc -l) 'problems found' | doppler lightred
     echo "$PLAINDIV"
+    exit 1
   fi
 
 #-- use consistent structure for divs --#
 sniff-amd-nestdiv:VQ:
+  echo 'Checking Nested Divs' | doppler lightblue
   NESTDIV=$( grep '^:::' posts/arithmetic-made-difficult/* \
     | sed 's/posts\/arithmetic-made-difficult\///' \
     | sed 's/:::::: axiom :::::::$/axm/' \
@@ -205,10 +211,12 @@ sniff-amd-nestdiv:VQ:
     echo 'Nested Divs' | doppler lightred
     echo $( echo "$NESTDIV" | wc -l ) 'problems found' | doppler lightred
     echo "$NESTDIV"
+    exit 1
   fi
 
 #-- balanced delimiters --#
 sniff-amd-balance:VQ:
+  echo 'Checking Delimiters' | doppler lightblue
   BALANCE=$( balance -d '\left\{ \right. ( ) { }' posts/arithmetic-made-difficult/* )
   if [ -z "$BALANCE" ]; then
     echo 'Delimiters OK' | doppler lightgreen
@@ -216,8 +224,10 @@ sniff-amd-balance:VQ:
     echo 'Delimiters' | doppler lightred
     echo $( echo "$BALANCE" | wc -l ) 'problems found' | doppler lightred
     echo "$BALANCE"
+    exit 1
   fi
   
+  echo 'Checking Eqnarray Delimiters' | doppler lightblue
   BALANCE=$( grep -n '^ & ' posts/arithmetic-made-difficult/* | balance -l || true )
   if [ -z "$BALANCE" ]; then
     echo "Eqnarray Delimiters OK" | doppler lightgreen
@@ -225,10 +235,12 @@ sniff-amd-balance:VQ:
     echo "Eqnarray Delimiters" | doppler lightred
     echo $( echo "$BALANCE" | wc -l ) 'problems found' | doppler lightred
     echo "$BALANCE"
+    exit 1
   fi
 
 #-- consistent reference names --#
 sniff-amd-refname:VQ:
+  echo 'Checking Reference Names' | doppler lightblue
   REFNAME=$( grep '^\[\](#' posts/arithmetic-made-difficult/* \
     | sed 's/\[\](\(#[^)]*\)).*/ \1/' \
     | grep -v '#def-[a-z-]*$' \
@@ -240,10 +252,12 @@ sniff-amd-refname:VQ:
     echo 'Reference Names' | doppler lightred
     echo $( echo "$REFNAME" | wc -l ) 'problems found' | doppler lightred
     echo "$REFNAME"
+    exit 1
   fi
 
 #-- eqnarray command on separate line --#
 sniff-amd-eqnarray:VQ:
+  echo 'Checking Eqnarray' | doppler lightblue
   EQNARRAY=$( grep \
       -e '.$$\\begin{eqnarray\*}' \
       -e '$$\\begin{eqnarray\*}.' \
@@ -257,10 +271,12 @@ sniff-amd-eqnarray:VQ:
     echo 'Eqnarray' | doppler lightred
     echo $( echo "$EQNARRAY" | wc -l ) 'problems found' | doppler lightred
     echo "$EQNARRAY"
+    exit 1
   fi
 
 #-- slugs exist, have consistent form, and are unique --#
 sniff-amd-slugs:VQ:
+  echo 'Checking Slug form' | doppler lightblue
   SLUGS=$( grep '^slug: ' posts/arithmetic-made-difficult/* \
     | grep -v 'slug: [a-z-]*$' \
     || true )
@@ -270,8 +286,10 @@ sniff-amd-slugs:VQ:
     echo 'Slug form' | doppler lightred
     echo $( echo "$SLUGS" | wc -l ) 'problems found' | doppler lightred
     echo "$SLUGS"
+    exit 1
   fi
   
+  echo 'Checking Slug uniqueness' | doppler lightblue
   SLUGS=$( grep '^slug: ' posts/arithmetic-made-difficult/* \
     | cut -d ' ' -f 2 \
     | sort \
@@ -284,8 +302,10 @@ sniff-amd-slugs:VQ:
     echo 'Slug uniqueness' | doppler lightred
     echo $( echo "$SLUGS" | wc -l ) 'problems found' | doppler lightred
     echo "$SLUGS"
+    exit 1
   fi
   
+  echo 'Checking Slug existence' | doppler lightblue
   SLUGS=$( grep -L '^slug: ' \
     posts/arithmetic-made-difficult/*.lhs \
     posts/arithmetic-made-difficult/*.md \
@@ -296,10 +316,12 @@ sniff-amd-slugs:VQ:
     echo 'Slug existence' | doppler lightred
     echo $( echo "$SLUGS" | wc -l ) 'problems found' | doppler lightred
     echo "$SLUGS"
+    exit 1
   fi
 
 #-- test descriptions are unique --#
 sniff-amd-testtext:VQ:
+  echo 'Checking Test text' | doppler lightblue
   TESTTEXT=$( grep '^>   testName ' posts/arithmetic-made-difficult/* \
     | sed 's/" \$$//' \
     | sed 's/>   testName "/ @ /' \
@@ -311,10 +333,12 @@ sniff-amd-testtext:VQ:
     echo 'Test text' | doppler lightred
     echo $( echo "$TESTTEXT" | wc -l ) 'problems found' | doppler lightred
     echo "$TESTTEXT"
+    exit 1
   fi
 
 #-- check term rewrites --#
 sniff-amd-rewrite:VQ:
+  echo 'Checking Term rewrites' | doppler lightblue
   cat amd-rules.txt \
     | grep -v '^#' amd-rules.txt \
     | awk -F"\t" '{print "s|===" $1 "===|" $2 "|";}' \
@@ -342,10 +366,12 @@ sniff-amd-rewrite:VQ:
     echo 'Term rewrites' | doppler lightred
     echo $( echo "$REWRITE" | wc -l ) 'problems found' | doppler lightred
     echo "$REWRITE"
+    exit 1
   fi
 
 #-- check term rewrites --#
 sniff-amd-let:VQ:
+  echo 'Checking Let rewrites' | doppler lightblue
   cat amd-rules.txt \
     | grep -v '^#' amd-rules.txt \
     | awk -F"\t" '{print "s|===" $1 "===|" $2 "|";}' \
@@ -372,6 +398,7 @@ sniff-amd-let:VQ:
     echo 'Let rewrites' | doppler lightred
     echo $( echo "$REWRITE" | wc -l ) 'problems found' | doppler lightred
     echo "$REWRITE"
+    exit 1
   fi
 
 #-- brute force search for valid crossrefs and edit script generator --#
@@ -406,4 +433,23 @@ sniff-amd-crossref:VQ:
     echo 'Cross references' | doppler lightred
     echo "$CROSS"
     echo #( echo "$CROSS" | wc -l ) 'problems found' | doppler lightred
+  fi
+
+#-- check latex commands against whitelist --#
+sniff-amd-latex:VQ:
+  echo 'Checking Latex commands' | doppler lightblue
+  LATEX=$( cat posts/arithmetic-made-difficult/* \
+    | grep -v '^>' \
+    | grep -o '\\[a-zA-Z][a-zA-Z]*' \
+    | sort \
+    | uniq \
+    | diff amd-latex-whitelist.txt - \
+    || true )
+  if [ -z "$LATEX" ]; then
+    echo 'Latex commands OK' | doppler lightgreen
+  else
+    echo 'Latex commands' | doppler lightred
+    echo #( echo "$LATEX" | wc -l ) 'problems found' | doppler lightred
+    echo "$LATEX"
+    exit 1
   fi

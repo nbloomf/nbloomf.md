@@ -116,8 +116,8 @@ as claimed.
 2. We have
 $$\begin{eqnarray*}
  &   & \head(\cons(a,x)) \\
- & = & \upair(\id,\fst)(\uncons(\cons(a,x))) \\
- & = & \upair(\id,\fst)(\rgt((a,x))) \\
+ & = & \uPair(\id,\fst)(\uncons(\cons(a,x))) \\
+ & = & \uPair(\id,\fst)(\rgt((a,x))) \\
  & = & \rgt(\fst((a,x))) \\
  & = & \rgt(a)
 \end{eqnarray*}$$

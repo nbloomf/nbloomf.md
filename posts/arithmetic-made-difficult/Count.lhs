@@ -351,7 +351,7 @@ Note that
 $$\begin{eqnarray*}
  &   & \count(a)(\rev(x)) \\
  & = & \addcount(a)(\zero,\rev(x)) \\
- & = & \addcount(a)(\zero,\x) \\
+ & = & \addcount(a)(\zero,x) \\
  & = & \count(a)(x)
 \end{eqnarray*}$$
 as claimed.

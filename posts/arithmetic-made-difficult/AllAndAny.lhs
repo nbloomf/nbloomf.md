@@ -430,8 +430,8 @@ Let $A$ be a set with $p : A \rightarrow \bool$. Then the following hold for all
 ::: proof ::::::::::
 1. We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \bnot(\all(\not \circ p,x)) \\
- & = & \bnot(\all(\not \circ p,\nil)) \\
+ &   & \bnot(\all(\bnot \circ p,x)) \\
+ & = & \bnot(\all(\bnot \circ p,\nil)) \\
  & = & \bnot(\btrue) \\
  &     \href{@not@#thm-not-true}
    = & \bfalse \\

@@ -220,7 +220,7 @@ $$\begin{eqnarray*}
  & = & \length(\zip(\cons(a,z),\cons(b,y))) \\
  & = & \length(\cons((a,b),\zip(z,y))) \\
  & = & \next(\length(\zip(z,y))) \\
- & = & \next(\min(\length(z),\length(y))) \\
+ & = & \next(\nmin(\length(z),\length(y))) \\
  & = & \nmin(\next(\length(z)),\next(\length(y))) \\
  & = & \nmin(\length(\cons(a,z)),\length(\cons(b,y))) \\
  & = & \nmin(x,\length(\cons(b,y))) \\

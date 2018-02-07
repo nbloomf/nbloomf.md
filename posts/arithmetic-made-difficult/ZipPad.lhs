@@ -32,7 +32,7 @@ slug: zippad
 Now to define $\zipPad$, an alternate interpretation of $\zip$.
 
 :::::: definition ::
-Let $A$ and $B$ be sets, with $u \in A$ and $v \in B$. Define $\delta : \lists{B} \rightarrow \lists{A \times B}$ by $$\delta(y) = \map(\tupL(u))(y),$$ $\psi : A \times \lists{A \times B} \rightarrow \lists{A \times B}$ by $$\psi(a,z) = \cons((a,v),z),$$ and $\chi : A \times B \times \lists{B} \times \lists{A \times B} \times \lists{A \times B} \rightarrow \lists{A \times B}$ by $$\chi(a,b,y,z,w) = \cons((a,b),z).$$ We then define $\zipPad(u,v) : \lists{A} \times \lists{B} \rightarrow \lists{A \times B}$ by $$\zipPad(u,v) = \dfoldr{\delta}{\psi}{\chi}.$$
+Let $A$ and $B$ be sets, with $u \in A$ and $v \in B$. Define $\delta : \lists{B} \rightarrow \lists{A \times B}$ by $$\delta(y) = \map(\tup(u))(y),$$ $\psi : A \times \lists{A \times B} \rightarrow \lists{A \times B}$ by $$\psi(a,z) = \cons((a,v),z),$$ and $\chi : A \times B \times \lists{B} \times \lists{A \times B} \times \lists{A \times B} \rightarrow \lists{A \times B}$ by $$\chi(a,b,y,z,w) = \cons((a,b),z).$$ We then define $\zipPad(u,v) : \lists{A} \times \lists{B} \rightarrow \lists{A \times B}$ by $$\zipPad(u,v) = \dfoldr{\delta}{\psi}{\chi}.$$
 
 In Haskell:
 
@@ -50,7 +50,7 @@ Since $\zipPad(u,v)$ is defined as a $\dfoldr{\ast}{\ast}{\ast}$, it is the uniq
 :::::: corollary :::
 Let $A$ and $B$ be sets. Then $\zip$ is the unique solution $f : \lists{A} \times \lists{B} \rightarrow \lists{A \times B}$ to the following equations for all $a \in A$, $b \in B$, $x \in \lists{A}$, and $y \in \lists{B}$.
 $$\left\{\begin{array}{l}
- f(\nil,y) = \map(\tupL(u))(y) \\
+ f(\nil,y) = \map(\tup(u))(y) \\
  f(\cons(a,x),\nil) = \cons((a,v),f(x,nil)) \\
  f(\cons(a,x),\cons(b,y)) = \cons((a,b),f(x,y))
 \end{array}\right.$$
@@ -86,24 +86,24 @@ $\zipPad$ with a nil right argument is a $\map$.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets, with $u \in A$ and $v \in B$. For all $x \in \lists{A}$, we have 
-$$\zipPad(u,v)(x,\nil) = \map(\tupR(v))(x)$.
+$$\zipPad(u,v)(x,\nil) = \map(\flip(\tup)(v))(x)$.
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \zipPad(u,v)(\nil,\nil) \\
- & = & \map(\tupL(u))(\nil) \\
+ & = & \map(\tup(u))(\nil) \\
  & = & \nil \\
- & = & \map(\tupR(v))(\nil) \\
- & = & \map(\tupR(v))(x)
+ & = & \map(\flip(\tup)(v))(\nil) \\
+ & = & \map(\flip(\tup)(v))(x)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \zipPad(u,v)(\cons(a,x),\nil) \\
  & = & \cons((a,v),\zipPad(u,v)(x,\nil)) \\
- & = & \cons(\tupR(v)(a),\zipPad(u,v)(x,\nil)) \\
- & = & \cons(\tupR(v)(a),\map(\tupR(v))(x)) \\
- & = & \map(\tupR(v))(\cons(a,x))
+ & = & \cons(\flip(\tup)(v)(a),\zipPad(u,v)(x,\nil)) \\
+ & = & \cons(\flip(\tup)(v)(a),\map(\flip(\tup)(v))(x)) \\
+ & = & \map(\flip(\tup)(v))(\cons(a,x))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -129,10 +129,10 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \map(\tSwap)(\zipPad(u,v)(x,y)) \\
  & = & \map(\tSwap)(\zipPad(u,v)(\nil,y)) \\
- & = & \map(\tSwap)(\map(\tupL(u))(y)) \\
- & = & (\map(\tSwap) \circ \map(\tupL(u)))(y) \\
- & = & \map(\tSwap \circ \tupL(u))(y) \\
- & = & \map(\tupR(u))(y) \\
+ & = & \map(\tSwap)(\map(\tup(u))(y)) \\
+ & = & (\map(\tSwap) \circ \map(\tup(u)))(y) \\
+ & = & \map(\tSwap \circ \tup(u))(y) \\
+ & = & \map(\flip(\tup)(u))(y) \\
  & = & \zipPad(v,u)(y,\nil) \\
  & = & \zipPad(v,u)(y,x)
 \end{eqnarray*}$$
@@ -140,10 +140,10 @@ as needed. For the inductive step, suppose the equality holds for some $x$ and l
 $$\begin{eqnarray*}
  &   & \map(\tSwap)(\zipPad(u,v)(\cons(a,x),y)) \\
  & = & \map(\tSwap)(\zipPad(u,v)(\cons(a,x),\nil)) \\
- & = & \map(\tSwap)(\map(\tupR(v))(\cons(a,x))) \\
- & = & (\map(\tSwap) \circ \map(\tupR(v)))(\cons(a,x)) \\
- & = & \map(\tSwap \circ \tupR(v))(\cons(a,x)) \\
- & = & \map(\tupL(v))(\cons(a,x)) \\
+ & = & \map(\tSwap)(\map(\flip(\tup)(v))(\cons(a,x))) \\
+ & = & (\map(\tSwap) \circ \map(\flip(\tup)(v)))(\cons(a,x)) \\
+ & = & \map(\tSwap \circ \flip(\tup)(v))(\cons(a,x)) \\
+ & = & \map(\tup(v))(\cons(a,x)) \\
  & = & \zipPad(u,v)(\nil,\cons(a,x)) \\
  & = & \zipPad(u,v)(y,\cons(a,x))
 \end{eqnarray*}$$
@@ -181,11 +181,11 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \map(\tPair(f,g))(\zipPad(u,v)(x,y)) \\
  & = & \map(\tPair(f,g))(\zipPad(u,v)(\nil,y)) \\
- & = & \map(\tPair(f,g))(\map(\tupL(u))(y)) \\
- & = & (\map(\tPair(f,g)) \circ \map(\tupL(u)))(y) \\
- & = & \map(\tPair(f,g) \circ \tupL(u))(y) \\
- & = & \map(\tupL(f(u)) \circ g)(y) \\
- & = & \map(\tupL(f(u)))(\map(g)(y)) \\
+ & = & \map(\tPair(f,g))(\map(\tup(u))(y)) \\
+ & = & (\map(\tPair(f,g)) \circ \map(\tup(u)))(y) \\
+ & = & \map(\tPair(f,g) \circ \tup(u))(y) \\
+ & = & \map(\tup(f(u)) \circ g)(y) \\
+ & = & \map(\tup(f(u)))(\map(g)(y)) \\
  & = & \zipPad(f(u),g(v))(\nil,\map(g)(y)) \\
  & = & \zipPad(f(u),g(v))(x,\map(g)(y))
 \end{eqnarray*}$$
@@ -193,11 +193,11 @@ as needed. Now suppose the equality holds for some $x$ and let $a \in A$. We con
 $$\begin{eqnarray*}
  &   & \map(\tPair(f,g))(\zipPad(u,v)(\cons(a,x),y)) \\
  & = & \map(\tPair(f,g))(\zipPad(u,v)(\cons(a,x),\nil)) \\
- & = & \map(\tPair(f,g))(\map(\tupR(v))(\cons(a,x))) \\
- & = & (\map(\tPair(f,g)) \circ \map(\tupR(v)))(\cons(a,x)) \\
- & = & \map(\tPair(f,g) \circ \tupR(v))(\cons(a,x)) \\
- & = & \map(\tupR(g(v)) \circ f)(\cons(a,x)) \\
- & = & \map(\tupR(g(v)))(\map(f)(\cons(a,x))) \\
+ & = & \map(\tPair(f,g))(\map(\flip(\tup)(v))(\cons(a,x))) \\
+ & = & (\map(\tPair(f,g)) \circ \map(\flip(\tup)(v)))(\cons(a,x)) \\
+ & = & \map(\tPair(f,g) \circ \flip(\tup)(v))(\cons(a,x)) \\
+ & = & \map(\flip(\tup)(g(v)) \circ f)(\cons(a,x)) \\
+ & = & \map(\flip(\tup)(g(v)))(\map(f)(\cons(a,x))) \\
  & = & \zipPad(f(u),g(v))(\map(f)(\cons(a,x)),\nil) \\
  & = & \zipPad(f(u),g(v))(\map(f)(\cons(a,x)),y) \\
 \end{eqnarray*}$$
@@ -237,7 +237,7 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \length(\zipPad(u,v)(x,y)) \\
  & = & \length(\zipPad(u,v)(\nil,y)) \\
- & = & \length(\map(\tupL(u))(y)) \\
+ & = & \length(\map(\tup(u))(y)) \\
  & = & \length(y) \\
  &     \href{@max-min@#thm-max-zero-left}
    = & \nmax(\zero,\length(y)) \\
@@ -248,7 +248,7 @@ as needed. For the inductive step, suppose the equality holds for some $x$ and l
 $$\begin{eqnarray*}
  &   & \length(\zipPad(u,v)(\cons(a,x),y)) \\
  & = & \length(\zipPad(u,v)(\cons(a,x),\nil)) \\
- & = & \length(\map(\tupR(v))(\cons(a,x))) \\
+ & = & \length(\map(\flip(\tup)(v))(\cons(a,x))) \\
  & = & \length(\cons(a,x)) \\
  & = & \nmax(\length(\cons(a,x)),\zero) \\
  & = & \nmax(\length(\cons(a,x)),\length(\nil)) \\

@@ -142,7 +142,7 @@ $$\begin{eqnarray*}
  &   & \nmax(a,b) \\
  &     \href{@max-min@#def-max}
    = & \bif{\nleq(a,b)}{b}{a} \\
- & = & \bif{\not(\not(\nleq(a,b)))}{b}{a} \\
+ & = & \bif{\bnot(\bnot(\nleq(a,b)))}{b}{a} \\
  & = & \bif{\nleq(b,a)}{a}{b} \\
  &     \href{@max-min@#def-max}
    = & \nmax(b,a)
@@ -154,7 +154,7 @@ $$\begin{eqnarray*}
  &   & \nmin(a,b) \\
  &     \href{@max-min@#def-min}
    = & \bif{\nleq(a,b)}{a}{b} \\
- & = & \bif{\not(\not(\nleq(a,b)))}{a}{b} \\
+ & = & \bif{\bnot(\bnot(\nleq(a,b)))}{a}{b} \\
  & = & \bif{\nleq(b,a)}{b}{a} \\
  &     \href{@max-min@#def-min}
    = & \nmin(b,a)
@@ -354,6 +354,7 @@ as claimed.
 $\nmax$ and $\nmin$ are associative.
 
 :::::: theorem :::::
+[]{#thm-max-associative}[]{#thm-min-associative}
 Let $a,b,c \in \nats$. Then we have the following.
 
 1. $\nmax(a,\nmax(b,c)) = \nmax(\nmax(a,b),c)$.
@@ -369,7 +370,8 @@ $$\begin{eqnarray*}
    = & \bif{\nleq(a,\bif{\nleq(b,c)}{c}{b})}{\nmax(b,c)}{a} \\
  &     \href{@booleans@#thm-iffunc}
    = & \bif{\bif{\nleq(b,c)}{\nleq(a,c)}{\nleq(a,b)}}{\nmax(b,c)}{a} \\
- & = & \bif{\bif{\nleq(b,c)}{\nleq(a,c)}{\nleq(a,b)}}{\bif{\nleq(b,c)}{c}{b}}{a} \\
+ &     \href{@max-min@#def-max}
+   = & \bif{\bif{\nleq(b,c)}{\nleq(a,c)}{\nleq(a,b)}}{\bif{\nleq(b,c)}{c}{b}}{a} \\
  & = & Q
 \end{eqnarray*}$$
 and
@@ -454,6 +456,7 @@ Let $a,b,c \in \nats$. Then we have the following.
 $\nmax$ and $\nmin$ interact with $\nplus$ and $\ntimes$.
 
 :::::: theorem :::::
+[]{#thm-plus-min-max}[]{#thm-times-min-max}
 Let $a,b,c \in \nats$. Then we have the following.
 
 1. $\nplus(\nmin(a,b),\nmax(a,b)) = \nplus(a,b)$.
@@ -484,6 +487,7 @@ We'll prove both of these at once. Suppose $\nleq(a,b)$. Now $\nmin(a,b) = a$ an
 And $\nmax$ and $\nmin$ distribute over each other.
 
 :::::: theorem :::::
+[]{}[#thm-min-max-distribute]{#thm-max-min-distribute}
 Let $a,b,c \in \nats$. Then we have the following.
 
 1. $\nmin(a,\nmax(b,c)) = \nmax(\nmin(a,b),\nmin(a,c))$.
@@ -492,7 +496,7 @@ Let $a,b,c \in \nats$. Then we have the following.
 4. $\nmax(\nmin(b,c),a) = \nmin(\nmax(b,a),\nmax(c,a))$.
 
 ::: proof ::::::::::
-4. Brute force time! Suppose $\nleq(a,b) = \btrue$. If $\nleq(a,c) = \btrue$, then $\nleq(a,\nmin(b,c))$, so that $\nleq(a,\nmax(b,c))$. Now we have
+1. Brute force time! Suppose $\nleq(a,b) = \btrue$. If $\nleq(a,c) = \btrue$, then $\nleq(a,\nmin(b,c))$, so that $\nleq(a,\nmax(b,c))$. Now we have
 $$\begin{eqnarray*}
  &   & \nmax(\nmin(a,b),\nmin(a,c)) \\
  & = & \nmax(a,a) \\
@@ -522,9 +526,9 @@ $$\begin{eqnarray*}
  & = & \nmax(b,c) \\
  & = & \nmin(a,\nmax(b,c)).
 \end{eqnarray*}$$
-5. Similar to (4), which we can agree was super tedious.
-6. Follows from (4) and commutativity.
-7. Follows from (5) and commutativity.
+2. Similar to (4), which we can agree was super tedious.
+3. Follows from (4) and commutativity.
+4. Follows from (5) and commutativity.
 ::::::::::::::::::::
 
 ::: test :::::::::::
@@ -567,7 +571,6 @@ Testing
 
 Suite:
 
-> -- run all tests for max and min
 > _test_max_min ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
