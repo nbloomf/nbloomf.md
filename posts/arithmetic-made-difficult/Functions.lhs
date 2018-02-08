@@ -33,7 +33,7 @@ Given two functions, one with domain $B$ and the other with codomain $B$, we can
 
 :::::: definition ::
 []{#def-compose}
-Let $A$, $B$, and $C$ be sets. Given $f : A \rightarrow B$ and $B : B \rightarrow C$, we define $\compose(g,f) : A \rightarrow C$ by $$\compose(g)(f)(x) = g(f(x)).$$
+Let $A$, $B$, and $C$ be sets. Given $f : A \rightarrow B$ and $B : B \rightarrow C$, we define $\compose{g}{f} : A \rightarrow C$ by $$\compose{g}{f}(x) = g(f(x)).$$
 
 In Haskell:
 
@@ -42,19 +42,19 @@ In Haskell:
 
 ::::::::::::::::::::
 
-$\id$ is neutral under $\compose$.
+$\id$ is neutral under $\compose{\ast}{\ast}$.
 
 :::::: theorem :::::
 []{#thm-compose-id}[]{#thm-compose-id-left}[]{#thm-compose-id-right}
 Let $A$ and $B$ be sets, with $f : A \rightarrow B$. Then we have the following.
 
-1. $\compose(\id)(f) = f$.
-2. $\compose(f)(\id) = f$.
+1. $\compose{\id}{f} = f$.
+2. $\compose{f}{\id} = f$.
 
 ::: proof ::::::::::
 1. Let $a \in A$. Then we have
 $$\begin{eqnarray*}
- &   & \compose(\id)(f)(a) \\
+ &   & \compose{\id}{f}(a) \\
  &     \href{@functions@#def-compose}
    = & \id(f(a)) \\
  &     \href{@functions@#def-id}
@@ -63,7 +63,7 @@ $$\begin{eqnarray*}
 as needed.
 2. Let $a \in A$. Then we have
 $$\begin{eqnarray*}
- &   & \compose(f)(\id)(a) \\
+ &   & \compose{f}{\id}(a) \\
  &     \href{@functions@#def-compose}
    = & f(\id(a)) \\
  &     \href{@functions@#def-id}
@@ -89,24 +89,24 @@ as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-$\compose$ is associative.
+$\compose{\ast}{\ast}$ is associative.
 
 :::::: theorem :::::
 []{#thm-compose-associative}
-Let $A$, $B$, $C$, and $D$ be sets. For all $f : A \rightarrow B$, $g : B \rightarrow C$, and $h : C \rightarrow D$, we have $$\compose(h)(\compose(g,f)) = \compose(\compose(h)(g))(f).$$
+Let $A$, $B$, $C$, and $D$ be sets. For all $f : A \rightarrow B$, $g : B \rightarrow C$, and $h : C \rightarrow D$, we have $$\compose{h}{\compose{g}{f}} = \compose{\compose{h}{g}}{f}.$$
 
 ::: proof ::::::::::
 Let $a \in A$. Then we have
 $$\begin{eqnarray*}
- &   & \compose(h)(\compose(g)(f))(a) \\
+ &   & \compose{h}{\compose{g}{f}}(a) \\
  &     \href{@functions@#def-compose}
-   = & h(\compose(g)(f)(a)) \\
+   = & h(\compose{g}{f}(a)) \\
  &     \href{@functions@#def-compose}
    = & h(g(f(a))) \\
  &     \href{@functions@#def-compose}
-   = & \compose(h)(g)(f(a)) \\
+   = & \compose{h}{g}(f(a)) \\
  &     \href{@functions@#def-compose}
-   = & \compose(\compose(h)(g))(f)(a)
+   = & \compose{\compose{h}{g}}(f)(a)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -137,16 +137,16 @@ In Haskell:
 
 ::::::::::::::::::::
 
-$\const(b)$ absorbs under $\compose$ from the left.
+$\const(b)$ absorbs under $\compose{\ast}{\ast}$ from the left.
 
 :::::: theorem :::::
 []{#thm-compose-const-left}
-Let $A$, $B$, and $C$ be sets. For all $f : A \rightarrow B$ and $c \in C$ we have $$\compose(\const(c))(f) = \const(c).$$
+Let $A$, $B$, and $C$ be sets. For all $f : A \rightarrow B$ and $c \in C$ we have $$\compose{\const(c)}{f} = \const(c).$$
 
 ::: proof ::::::::::
 Let $a \in A$. Note that
 $$\begin{eqnarray*}
- &   & \compose(\const(c))(f)(a) \\
+ &   & \compose{\const(c)}{f}(a) \\
  &     \href{@functions@#def-compose}
    = & \const(c)(f(a)) \\
  &     \href{@functions@#def-const}

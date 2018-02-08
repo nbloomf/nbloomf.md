@@ -416,7 +416,7 @@ sniff-amd-suggest:VQ:
     | grep -v ' ' \
     | grep -v ':' \
     | grep -v '{(' \
-    | rewrite-term --suggest amd-rules.txt \
+    | rewrite-term --suggest sniff/amd/rules.txt \
     || true )
   echo "$SUGGEST"
 
