@@ -106,7 +106,7 @@ $$\begin{eqnarray*}
  &     \href{@functions@#def-compose}
    = & \compose{h}{g}(f(a)) \\
  &     \href{@functions@#def-compose}
-   = & \compose{\compose{h}{g}}(f)(a)
+   = & \compose{\compose{h}{g}}{f}(a)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
