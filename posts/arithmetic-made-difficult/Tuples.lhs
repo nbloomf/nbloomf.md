@@ -476,15 +476,19 @@ as claimed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-Higher-order functions can be converted to functions on tuples.
+Higher-order functions can be converted to functions on tuples (and back).
 
 :::::: definition ::
-Let $A$, $B$, and $C$ be sets. If $f : A \rightarrow B \rightarrow C$, we define $\uncurry(f) : A \times B \rightarrow C$ by $$\uncurry(f)(\tup(a)(b)) = f(a)(b).$$
+[]{#def-uncurry}[]{#def-curry}
+Let $A$, $B$, and $C$ be sets. If $f : A \rightarrow B \rightarrow C$, we define $\uncurry(f) : A \times B \rightarrow C$ by $$\uncurry(f)(\tup(a)(b)) = f(a)(b).$$ If $g : A \times B \rightarrow C$, we define $\curry(g) : A \rightarrow B \rightarrow C$ by $$\curry(g)(a)(b) = g(\tup(a)(b)).$$
 
 In Haskell:
 
 > uncurry :: (a -> b -> c) -> Pair a b -> c
 > uncurry f (Pair a b) = f a b
+> 
+> curry :: (Pair a b -> c) -> a -> b -> c
+> curry g a b = g (tup a b)
 
 ::::::::::::::::::::
 

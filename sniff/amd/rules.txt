@@ -141,6 +141,8 @@
 @tuples@#thm-tAssocR-tup	\\tAssocR(\\tup(\\tup(a)(b))(c)) = \\tup(a)(\\tup(b)(c))
 @tuples@#thm-tAssocR-tAssocL	\\compose{\\tAssocR}{\\tAssocL} = \\id
 @tuples@#thm-tAssocL-tAssocR	\\compose{\\tAssocL}{\\tAssocR} = \\id
+@tuples@#def-uncurry	\\uncurry(f)(\tup(a)(b)) = f(a)(b)
+@tuples@#def-curry	\\curry(g)(a)(b) = g(\tup(a)(b))
 #=======================#
 #--- disjoint-unions ---#
 #=======================#
@@ -282,3 +284,10 @@
 @max-min@#thm-times-min-max	\\ntimes(\\nmin(a,b),\\nmax(a,b)) = \\ntimes(a,b)
 @max-min@#thm-min-max-distribute	\\nmin(a,\\nmax(b,c)) = \\nmax(\\nmin(a,b),\\nmin(a,c))
 @max-min@#thm-max-min-distribute	\\nmax(a,\\nmin(b,c)) = \\nmin(\\nmax(a,b),\\nmax(a,c))
+#=======================#
+#--- lists -------------#
+#=======================#
+@lists@#def-uncons-inverse-left	\\compose{\\uncons}{\\either(\\const(\\nil),\\uncurry(\\cons))} = \\id
+@lists@#def-uncons-inverse-right	\\compose{\\either(\\const(\\nil),\\uncurry(\\cons))}{\\uncons} = \\id
+@lists@#thm-uncons-nil	\\uncons(\\nil) = \\lft(\\ast)
+@lists@#thm-uncons-cons	\\uncons(\\cons(a,x)) = \\rgt(\\tup(a)(x))

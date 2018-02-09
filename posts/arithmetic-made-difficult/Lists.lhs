@@ -6,8 +6,7 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: lists
 ---
 
-> {-# LANGUAGE ScopedTypeVariables #-}
-> {-# LANGUAGE NoImplicitPrelude #-}
+> {-# LANGUAGE NoImplicitPrelude, ScopedTypeVariables #-}
 > module Lists
 >   ( List(..), ConsList(), foldr
 >   ) where
@@ -30,6 +29,7 @@ Let $A$ be a set, and define a functor $F_A$ by $F_A(X) = 1 + A \times X$. We as
 The names *nil* and *cons* come from the Lisp programming language, where they were first introduced. Now because the algebra map $\nil + \cons$ is an isomorphism, it has an inverse; we'll denote this map $\uncons : \lists{A} \rightarrow 1 + (A \times \lists{A})$.
 
 :::::: theorem :::::
+[]{#thm-uncons-inverse-left}[]{#thm-uncons-inverse-right}[]{#thm-uncons-nil}[]{#thm-uncons-cons}
 Let $A$ be a set. Then we have the following.
 
 1. $\uncons(\nil) = \lft(\ast)$.
@@ -41,8 +41,9 @@ $$\begin{eqnarray*}
  &   & \lft(\ast) \\
  &     \href{@functions@#def-id}
    = & \id(\lft(\ast)) \\
- & = & (\uncons \circ \either(\const(\nil),\cons))(\lft(\ast)) \\
- & = & \uncons(\either(\const(\nil),\cons)(\lft(\ast))) \\
+ &     \href{@lists@#def-uncons-inverse-left}
+   = & \compose{\uncons}{\either(\const(\nil),\uncurry(\cons))}(\lft(\ast)) \\
+ & = & \uncons(\either(\const(\nil),\uncurry(\cons))(\lft(\ast))) \\
  &     \href{@disjoint-unions@#def-either-lft}
    = & \uncons(\const(\nil)(\ast)) \\
  &     \href{@functions@#def-const}
@@ -51,9 +52,10 @@ $$\begin{eqnarray*}
 as claimed.
 2. We have
 $$\begin{eqnarray*}
- &   & \rgt((a,x)) \\
- & = & (\uncons \circ \either(\const(\nil),\cons))(\rgt((a,x))) \\
- & = & \uncons(\either(\const(\nil),\cons)(\rgt((a,x)))) \\
+ &   & \rgt(\tup(a)(x)) \\
+ & = & \compose{\uncons}{\either(\const(\nil),\uncurry(\cons))}(\rgt(\tup(a)(x))) \\
+ & = & \uncons(\either(\const(\nil),\uncurry(\cons))(\rgt(\tup(a)(x)))) \\
+ & = & \uncons(\uncurry(\cons)(\tup(a)(x))) \\
  & = & \uncons(\cons(a,x))
 \end{eqnarray*}$$
 as claimed.
@@ -73,8 +75,12 @@ Let $A$ be a set. Then we have the following.
 1. Let $z \in \lists{A}$. We have two possibilities for $\uncons(z)$. If $\uncons(z) = \lft(\ast)$, then
 $$\begin{eqnarray*}
  &   & z \\
- & = & (\either(\const(\nil),\cons) \circ \uncons)(z) \\
- & = & \either(\const(\nil),\cons)(\lft(\ast)) \\
+ & = & \id(z) \\
+ &     \href{@lists@#def-uncons-inverse-right}
+   = & \compose{\either(\const(\nil),\uncurry(\cons))}{\uncons}(z) \\
+ & = & \either(\const(\nil),\uncurry(\cons))(\uncons(z)) \\
+ &     \hyp{\uncons(z) = \lft(\ast)}
+   = & \either(\const(\nil),\uncurry(\cons))(\lft(\ast)) \\
  &     \href{@disjoint-unions@#def-either-lft}
    = & \const(\nil)(\ast) \\
  &     \href{@functions@#def-const}
@@ -83,17 +89,24 @@ $$\begin{eqnarray*}
 and if $\uncons(z) = \rgt(a,x)$, then
 $$\begin{eqnarray*}
  &   & z \\
- & = & (\either(\const(\nil),\cons) \circ \uncons)(z) \\
- & = & \either(\const(\nil),\cons)(\rgt((a,x))) \\
+ & = & \id(z) \\
+ &     \href{@lists@#def-uncons-inverse-right}
+   = & \compose{\either(\const(\nil),\uncurry(\cons))}{\uncons}(z) \\
+ & = & \either(\const(\nil),\cons)(\uncons(z)) \\
+ &     \hyp{\uncons(z) = \rgt(\tup(a)(x))}
+   = & \either(\const(\nil),\cons)(\rgt(\tup(a)(x))) \\
  & = & \cons(a,x) \\
 \end{eqnarray*}$$
 as claimed.
 2. If $\nil = \cons(a,x)$, we have
 $$\begin{eqnarray*}
  &   & \lft(\ast) \\
- & = & \uncons(\nil) \\
- & = & \uncons(\cons(a,x)) \\
- & = & \rgt((a,x)),
+ &     \href{@lists@#thm-uncons-nil}
+   = & \uncons(\nil) \\
+ &     \hyp{\cons(a,x) = \nil}
+   = & \uncons(\cons(a,x)) \\
+ &     \href{@lists@#thm-uncons-cons}
+   = & \rgt(\tup(a)(x))
 \end{eqnarray*}$$
 which is absurd.
 3. The "if" direction is clear. To see the "only if" direction, suppose $\cons(a,x) = \cons(b,y)$. Then we have
