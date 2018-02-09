@@ -291,3 +291,5 @@
 @lists@#def-uncons-inverse-right	\\compose{\\either(\\const(\\nil),\\uncurry(\\cons))}{\\uncons} = \\id
 @lists@#thm-uncons-nil	\\uncons(\\nil) = \\lft(\\ast)
 @lists@#thm-uncons-cons	\\uncons(\\cons(a,x)) = \\rgt(\\tup(a)(x))
+@lists@#def-foldr-nil	\\foldr{e}{f}(\\nil) = e
+@lists@#def-foldr-cons	\\foldr{e}{f}(\\cons(a,x)) = f(a,\\foldr{e}{f}(x))

@@ -198,6 +198,7 @@ And a more concrete decription of $F_A$-algebra morphisms:
 And finally, a more concrete description of the universal algebra from $\lists{A}$.
 
 :::::: axiom :::::::
+[]{#def-foldr-nil}[]{#def-foldr-cons}
 (Fold.) Let $A$ be a set, and let $(B,e,\varphi)$ be an $A$-inductive set. Then there is a unique map $\Theta : \lists{A} \rightarrow B$ which solves the system of functional equations $$\left\{ \begin{array}{l} \Theta(\nil) = e \\ \Theta(\cons(a,x)) = \varphi(a,\Theta(x)). \end{array} \right.$$ We denote this unique $\Theta$ by $\foldr{e}{\varphi}$.
 
 In Haskell:
