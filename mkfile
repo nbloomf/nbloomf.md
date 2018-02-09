@@ -148,7 +148,8 @@ sniff-amd:VQ: \
   sniff-amd-rewrite \
   sniff-amd-let \
   sniff-amd-latex \
-  sniff-amd-import
+  sniff-amd-import \
+  sniff-amd-labels
 
 #-- use consistent syntax for fenced divs --#
 sniff-amd-fencediv:VQ:
@@ -480,3 +481,20 @@ sniff-amd-import:VQ:
     exit 1
   fi
   echo 'Import order OK' | doppler lightgreen
+
+#-- labels are unique --#
+sniff-amd-labels:VQ:
+  echo 'Checking Unique labels' | doppler lightblue
+  LABELS=$( cat posts/arithmetic-made-difficult/* \
+    | grep -o '\[\]{#[a-zA-Z-][a-zA-Z-]*}' \
+    | sort \
+    | uniq -d \
+    || true )
+  if [ -z "$LABELS" ]; then
+    echo 'Unique labels OK' | doppler lightgreen
+  else
+    echo 'Unique labels' | doppler lightred
+    echo $( echo "$LABELS" | wc -l ) 'problems found' | doppler lightred
+    echo "$LABELS"
+    exit 1
+  fi
