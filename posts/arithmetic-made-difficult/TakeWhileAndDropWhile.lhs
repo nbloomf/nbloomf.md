@@ -54,7 +54,8 @@ $$\begin{eqnarray*}
  &   & \nil \\
  & = & \takeWhile(p)(\nil) \\
  & = & \foldr{e}{\varphi}(\nil) \\
- & = & e
+ &     \href{@lists@#def-foldr-nil}
+   = & e
 \end{eqnarray*}$$
 
 and
@@ -63,7 +64,8 @@ $$\begin{eqnarray*}
  &   & \bif{p(a)}{\cons(a,\takeWhile(p,x))}{\nil} \\
  & = & \takeWhile(p)(\cons(a,x)) \\
  & = & \foldr{e}{\varphi}(\cons(a,x)) \\
- & = & \varphi(a,\foldr{e}{\varphi}(x)) \\
+ &     \href{@lists@#def-foldr-cons}
+   = & \varphi(a,\foldr{e}{\varphi}(x)) \\
  & = & \varphi(a,\takeWhile(p,x))
 \end{eqnarray*}$$
 
@@ -266,12 +268,14 @@ $$\begin{eqnarray*}
  &   & \nil \\
  & = & \dropWhile(p,\nil) \\
  & = & \foldr{e}{\varphi}(\nil)(\nil) \\
- & = & e(\nil)
+ &     \href{@lists@#def-foldr-nil}
+   = & e(\nil)
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
  &   & \varphi(a,\foldr{e}{\varphi}(x))(\cons(a,x)) \\
- & = & \foldr{e}{\varphi}(\cons(a,x))(\cons(a,x)) \\
+ &     \href{@lists@#def-foldr-cons}
+   = & \foldr{e}{\varphi}(\cons(a,x))(\cons(a,x)) \\
  & = & \dropWhile(p,\cons(a,x)) \\
  & = & \bif{p(a)}{\dropWhile(p,x)}{\cons(a,x)}
 \end{eqnarray*}$$

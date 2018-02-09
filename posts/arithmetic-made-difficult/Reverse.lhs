@@ -150,14 +150,16 @@ We have $$\rev(x) = \foldr{\nil}{\snoc}(x).$$
 Let $\varphi$ be as defined in the definition of $\rev$. We proceed by list induction on $x$. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \foldr{\nil}{\snoc}(\nil) \\
- & = & \nil \\
+ &     \href{@lists@#def-foldr-nil}
+   = & \nil \\
  & = & \revcat(\nil,\nil) \\
  & = & \rev(\nil).
 \end{eqnarray*}$$
 For the inductive step, suppose the equality holds for some $x \in \lists{A}$, and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \foldr{\nil}{\snoc}(\cons(a,x)) \\
- & = & \snoc(a,\foldr{\nil}{\snoc}(x)) \\
+ &     \href{@lists@#def-foldr-cons}
+   = & \snoc(a,\foldr{\nil}{\snoc}(x)) \\
  & = & \snoc(a,\rev(x)) \\
  & = & \snoc(a,\revcat(\nil,x)) \\
  & = & \revcat(\snoc(a,\nil),x) \\
@@ -401,7 +403,8 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \foldl{\varphi}(e,\nil) \\
  & = & e \\
- & = & \foldr{e,\psi}(\nil) \\
+ &     \href{@lists@#def-foldr-nil}
+   = & \foldr{e,\psi}(\nil) \\
  & = & \foldr{e,\psi}(\rev(\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $e$ for some $x$, and let $a \in A$. Now

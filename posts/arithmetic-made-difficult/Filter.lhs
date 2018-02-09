@@ -36,13 +36,15 @@ $$\begin{eqnarray*}
  &   & \nil \\
  & = & \filter(p)(\nil) \\
  & = & \foldr{\varepsilon}{\varphi}(\nil) \\
- & = & \varepsilon.
+ &     \href{@lists@#def-foldr-nil}
+   = & \varepsilon
 \end{eqnarray*}$$
 On the other hand, we want
 $$\begin{eqnarray*}
  &   & \filter(p)(\cons(a,x)) \\
  & = & \foldr{\varepsilon}{\varphi}(\cons(a,x)) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x)) \\
+ &     \href{@lists@#def-foldr-cons}
+   = & \varphi(a,\foldr{\varepsilon}{\varphi}(x)) \\
  & = & \varphi(a,\filter(p)(x)).
 \end{eqnarray*}$$
 Intuitively, if $p(a)$ is $\btrue$ we want $$\filter(p)(\cons(a,x)) = \cons(a,\filter(p)(x)),$$ while if $p(a)$ is $\bfalse$ we want $$\filter(p)(\cons(a,x)) = \filter(p)(x).$$ With this in mind we define $\filter$ like so.

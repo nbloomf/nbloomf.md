@@ -54,9 +54,12 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \rgt(\tup(a)(x)) \\
  & = & \compose{\uncons}{\either(\const(\nil),\uncurry(\cons))}(\rgt(\tup(a)(x))) \\
- & = & \uncons(\either(\const(\nil),\uncurry(\cons))(\rgt(\tup(a)(x)))) \\
- & = & \uncons(\uncurry(\cons)(\tup(a)(x))) \\
- & = & \uncons(\cons(a,x))
+ &     \href{@functions@#def-compose}
+   = & \uncons(\either(\const(\nil),\uncurry(\cons))(\rgt(\tup(a)(x)))) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \uncons(\uncurry(\cons)(\tup(a)(x))) \\
+ &     \href{@tuples@#def-uncurry}
+   = & \uncons(\cons(a,x))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -75,7 +78,8 @@ Let $A$ be a set. Then we have the following.
 1. Let $z \in \lists{A}$. We have two possibilities for $\uncons(z)$. If $\uncons(z) = \lft(\ast)$, then
 $$\begin{eqnarray*}
  &   & z \\
- & = & \id(z) \\
+ &     \href{@functions@#def-id}
+   = & \id(z) \\
  &     \href{@lists@#def-uncons-inverse-right}
    = & \compose{\either(\const(\nil),\uncurry(\cons))}{\uncons}(z) \\
  & = & \either(\const(\nil),\uncurry(\cons))(\uncons(z)) \\
@@ -89,7 +93,8 @@ $$\begin{eqnarray*}
 and if $\uncons(z) = \rgt(a,x)$, then
 $$\begin{eqnarray*}
  &   & z \\
- & = & \id(z) \\
+ &     \href{@functions@#def-id}
+   = & \id(z) \\
  &     \href{@lists@#def-uncons-inverse-right}
    = & \compose{\either(\const(\nil),\uncurry(\cons))}{\uncons}(z) \\
  & = & \either(\const(\nil),\cons)(\uncons(z)) \\
@@ -238,7 +243,8 @@ Let $A$ be a set. Then we have $$\foldr{\nil}{\cons}(x) = x$$ for all $x \in \li
 We proceed by list induction on $x$. For the base case $x = \nil$, we have $$\foldr{\nil}{\cons}(\nil) = \nil$$ as claimed. For the inductive step, suppose the equality holds for some $x \in \lists{A}$, and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \foldr{\nil}{\cons}(\cons(a,x)) \\
- & = & \cons(a,\foldr{\nil}{\cons}(x)) \\
+ &     \href{@lists@#def-foldr-cons}
+   = & \cons(a,\foldr{\nil}{\cons}(x)) \\
  & = & \cons(a,x)
 \end{eqnarray*}$$
 as claimed.

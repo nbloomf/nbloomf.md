@@ -184,14 +184,16 @@ Let $A$ be a set, and define $\psi : A \times \nats \rightarrow \nats$ by $\psi(
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \foldr{\zero}{\psi}(\nil) \\
- & = & \zero \\
+ &     \href{@lists@#def-foldr-nil}
+   = & \zero \\
  & = & \addlength(\zero,\nil) \\
  & = & \length(\nil)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \foldr{\zero}{\psi}(\cons(a,x)) \\
- & = & \psi(a,\foldr{\zero}{\psi}(x)) \\
+ &     \href{@lists@#def-foldr-cons}
+   = & \psi(a,\foldr{\zero}{\psi}(x)) \\
  & = & \psi(a,\length(x)) \\
  & = & \next(\length(x)) \\
  & = & \next(\addlength(\zero,x)) \\

@@ -116,7 +116,8 @@ $$\begin{eqnarray*}
  &   & \all(p,x) \\
  & = & \all(p,\nil) \\
  & = & \btrue \\
- & = & \foldr{\btrue}{\band}(\nil) \\
+ &     \href{@lists@#def-foldr-nil}
+   = & \foldr{\btrue}{\band}(\nil) \\
  & = & \foldr{\btrue}{\band}(\map(p)(\nil)) \\
  & = & \foldr{\btrue}{\band}(\map(p)(x))
 \end{eqnarray*}$$
@@ -125,7 +126,8 @@ $$\begin{eqnarray*}
  &   & \all(p,\cons(a,x)) \\
  & = & \band(p(a),\all(p,x)) \\
  & = & \band(p(a),\foldr{\btrue}{\band}(\map(p)(x))) \\
- & = & \foldr{\btrue}{\band}(\cons(p(a),\map(p)(x))) \\
+ &     \href{@lists@#def-foldr-cons}
+   = & \foldr{\btrue}{\band}(\cons(p(a),\map(p)(x))) \\
  & = & \foldr{\btrue}{\band}(\map(p)(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
@@ -393,7 +395,8 @@ $$\begin{eqnarray*}
  &   & \any(p,x) \\
  & = & \any(p,\nil) \\
  & = & \bfalse \\
- & = & \foldr{\bfalse}{\bor}(\nil) \\
+ &     \href{@lists@#def-foldr-nil}
+   = & \foldr{\bfalse}{\bor}(\nil) \\
  & = & \foldr{\bfalse}{\bor}(\map(p)(\nil)) \\
  & = & \foldr{\bfalse}{\bor}(\map(p)(x))
 \end{eqnarray*}$$
@@ -402,7 +405,8 @@ $$\begin{eqnarray*}
  &   & \any(p,\cons(a,x)) \\
  & = & \bor(p(a),\any(x)) \\
  & = & \bor(p(a),\foldr{\bfalse}{\bor}(\map(p)(x))) \\
- & = & \foldr{\bfalse}{\bor}(\cons(p(a),\map(p)(x))) \\
+ &     \href{@lists@#def-foldr-cons}
+   = & \foldr{\bfalse}{\bor}(\cons(p(a),\map(p)(x))) \\
  & = & \foldr{\bfalse}{\bor}(\map(p)(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.

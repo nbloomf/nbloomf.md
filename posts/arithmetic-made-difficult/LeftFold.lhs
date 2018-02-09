@@ -33,7 +33,8 @@ First we show existence. Define $\psi : A \times \lists{A}^B \rightarrow \lists{
 $$\begin{eqnarray*}
  &   & \Theta(e,\nil) \\
  & = & \foldr{\id}{\psi}(\nil)(e) \\
- & = & \id(e) \\
+ &     \href{@lists@#def-foldr-nil}
+   = & \id(e) \\
  &     \href{@functions@#def-id}
    = & e
 \end{eqnarray*}$$

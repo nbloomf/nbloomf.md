@@ -42,14 +42,16 @@ and let $\Theta(x,b) = \foldr{\varepsilon}{\varphi}(x)(b,x)$. To see that $\Thet
 $$\begin{eqnarray*}
  &   & \Theta(\nil,b) \\
  & = & \foldr{\varepsilon}{\varphi}(\nil)(b,\nil) \\
- & = & \varepsilon(b,\nil) \\
+ &     \href{@lists@#def-foldr-nil}
+   = & \varepsilon(b,\nil) \\
  & = & \delta(b),
 \end{eqnarray*}$$
 that
 $$\begin{eqnarray*}
  &   & \Theta(\cons(a,x),b) \\
  & = & \foldr{\delta}{\varphi}(\cons(a,x))(b,\cons(a,x)) \\
- & = & \varphi(a,\foldr{\delta}{\varphi}(x))(b,\cons(a,x)) \\
+ &     \href{@lists@#def-foldr-cons}
+   = & \varphi(a,\foldr{\delta}{\varphi}(x))(b,\cons(a,x)) \\
  & = & \bif{\beta(a,\tail(\cons(a,x)),b)}{\psi(a,\tail(\cons(a,x)),b)}{\chi(a,\tail(\cons(a,x)),b,\foldr{\varepsilon}{\varphi}(x)(b,\tail(\cons(a,x))),\foldr{\varepsilon}{\varphi}(x)(\mu(b),\tail(\cons(a,x))))} \\
  & = & \bif{\beta(a,x,b)}{\psi(a,x,b)}{\chi(a,x,b,\foldr{\varepsilon}{\varphi}(x)(b,x),\foldr{\varepsilon}{\varphi}(x)(\mu(b),x))} \\
  & = & \bif{\beta(a,x,b)}{\psi(a,x,b)}{\chi(a,x,b,\Theta(x,b),\Theta(x,\mu(b)))}

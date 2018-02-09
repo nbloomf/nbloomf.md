@@ -37,7 +37,8 @@ and define $\Omega(x) = \foldr{\const(\gamma)}{\varphi}(x)(x)$. Note that
 $$\begin{eqnarray*}
  &   & \Omega(\nil) \\
  & = & \foldr{\const(\gamma)}{\varphi}(\nil)(\nil) \\
- & = & \const(\gamma)(\nil) \\
+ &     \href{@lists@#def-foldr-nil}
+   = & \const(\gamma)(\nil) \\
  &     \href{@functions@#def-const}
    = & \gamma
 \end{eqnarray*}$$
@@ -45,7 +46,8 @@ and
 $$\begin{eqnarray*}
  &   & \Omega(\cons(a,x)) \\
  & = & \foldr{\const(\gamma)}{\varphi}(\cons(a,x))(\cons(a,x)) \\
- & = & \varphi(a,\foldr{\const(\gamma)}{\varphi}(x))(\cons(a,x)) \\
+ &     \href{@lists@#def-foldr-cons}
+   = & \varphi(a,\foldr{\const(\gamma)}{\varphi}(x))(\cons(a,x)) \\
  & = & \sigma(a,x,\foldr{\const(\gamma)}{\varphi}(x)(x)) \\
  & = & \sigma(a,x,\Omega(x))
 \end{eqnarray*}$$

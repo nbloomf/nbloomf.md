@@ -193,7 +193,8 @@ Note that
 $$\begin{eqnarray*}
  &   & \addcount(a)(k,\nil) \\
  & = & k \\
- & = & \foldr{k}{\psi}(\nil)
+ &     \href{@lists@#def-foldr-nil}
+   = & \foldr{k}{\psi}(\nil)
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
@@ -433,7 +434,8 @@ $$\begin{eqnarray*}
  &   & \count(a,x) \\
  & = & \count(a,\nil) \\
  & = & \foldr{\zero}{\varphi(a)}(\nil) \\
- & = & \zero \\
+ &     \href{@lists@#def-foldr-nil}
+   = & \zero \\
  & = & \length(\nil) \\
  & = & \length(\filter(\beq(a,-),\nil)) \\
  & = & \length(\filter(\beq(a,-),x))

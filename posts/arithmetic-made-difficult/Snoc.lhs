@@ -78,17 +78,22 @@ We proceed by list induction. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \foldr{e}{\varphi}(\snoc(a,\nil)) \\
  & = & \foldr{e}{\varphi}(\cons(a,\nil)) \\
- & = & \varphi(a,\foldr{e}{\varphi}(\nil)) \\
- & = & \varphi(a,e) \\
- & = & \foldr{\varphi(a,e)}{\varphi}(\nil)
+ &     \href{@lists@#def-foldr-cons}
+   = & \varphi(a,\foldr{e}{\varphi}(\nil)) \\
+ &     \href{@lists@#def-foldr-nil}
+   = & \varphi(a,e) \\
+ &     \href{@lists@#def-foldr-nil}
+   = & \foldr{\varphi(a,e)}{\varphi}(\nil)
 \end{eqnarray*}$$
 as claimed. Suppose now that the equality holds for some $x \in \lists{A}$. Now
 $$\begin{eqnarray*}
  &   & \foldr{e}{\varphi}(\snoc(a,\cons(b,x))) \\
  & = & \foldr{e}{\varphi}(\cons(b,\snoc(a,x))) \\
- & = & \varphi(b,\foldr{e}{\varphi}(\snoc(a,x))) \\
+ &     \href{@lists@#def-foldr-cons}
+   = & \varphi(b,\foldr{e}{\varphi}(\snoc(a,x))) \\
  & = & \varphi(b,\foldr{\varphi(a,e)}{\varphi}(x)) \\
- & = & \foldr{\varphi(a,e)}{\varphi}(\cons(b,x))
+ &     \href{@lists@#def-foldr-cons}
+   = & \foldr{\varphi(a,e)}{\varphi}(\cons(b,x))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -283,13 +288,15 @@ as needed.
 2. We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \foldr{e}{\varphi}(\nil) \\
- & = & e \\
+ &     \href{@lists@#def-foldr-nil}
+   = & e \\
  & = & \foldl{\psi}(e,\nil)
 \end{eqnarray*}$$
 as needed. If $x = \cons(a,\nil)$, we have
 $$\begin{eqnarray*}
  &   & \foldr{e}{\varphi}(\cons(a,x)) \\
- & = & \varphi(a,\foldr{e}{\varphi}(x)) \\
+ &     \href{@lists@#def-foldr-cons}
+   = & \varphi(a,\foldr{e}{\varphi}(x)) \\
  & = & \varphi(a,\foldl{\psi}(e,x)) \\
  & = & \psi(\foldl{\psi}(e,x),a) \\
  & = & \foldl{\psi}(e,\snoc(a,x)) \\

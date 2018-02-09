@@ -32,14 +32,16 @@ Define $\varepsilon : B \times \lists{A} \rightarrow C$ by $$\varepsilon(u,x) = 
 $$\begin{eqnarray*}
  &   & \Theta(\nil,u) \\
  & = & \foldr{\varepsilon}{\varphi}(\nil)(u,\nil) \\
- & = & \varepsilon(u,\nil) \\
+ &     \href{@lists@#def-foldr-nil}
+   = & \varepsilon(u,\nil) \\
  & = & \delta(u)
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
  &   & \Theta(\cons(a,x),u) \\
  & = & \foldr{\varepsilon}{\varphi}(\cons(a,x))(u,\cons(a,x)) \\
- & = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(u,\cons(a,x)) \\
+ &     \href{@lists@#def-foldr-cons}
+   = & \varphi(a,\foldr{\varepsilon}{\varphi}(x))(u,\cons(a,x)) \\
  & = & \bif{\beta(a,\tail(\cons(a,x)),u)}{\psi(a,\tail(\cons(a,x)),u)}{\foldr{\varepsilon}{\varphi}(x)(\omega(a,\tail(\cons(a,x)),u),\tail(\cons(a,x)))} \\
  & = & \bif{\beta(a,x,u)}{\psi(a,x,u)}{\foldr{\varepsilon}{\varphi}(x)(\omega(a,x,u),x)} \\
  & = & \bif{\beta(a,x,u)}{\psi(a,x,u)}{\Theta(x,\omega(a,x,u))}

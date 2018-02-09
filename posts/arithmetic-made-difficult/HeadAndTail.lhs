@@ -56,7 +56,8 @@ Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have the following
 $$\begin{eqnarray*}
  &   & \isnil(\nil) \\
  & = & \either(\const(\btrue),\const(\bfalse))(\uncons(\nil)) \\
- & = & \either(\const(\btrue),\const(\bfalse))(\lft(\ast)) \\
+ &     \href{@lists@#thm-uncons-nil}
+   = & \either(\const(\btrue),\const(\bfalse))(\lft(\ast)) \\
  &     \href{@disjoint-unions@#def-either-lft}
    = & \const(\btrue)(\ast) \\
  &     \href{@functions@#def-const}
@@ -106,7 +107,8 @@ Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have the following
 $$\begin{eqnarray*}
  &   & \head(\nil) \\
  & = & \uPair(\id,\fst)(\uncons(\nil)) \\
- & = & \uPair(\id,\fst)(\lft(\ast)) \\
+ &     \href{@lists@#thm-uncons-nil}
+   = & \uPair(\id,\fst)(\lft(\ast)) \\
  &     \href{@disjoint-unions@#thm-uPair-lft}
    = & \lft(\id(\ast)) \\
  &     \href{@functions@#def-id}
@@ -156,7 +158,8 @@ Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have the following
 $$\begin{eqnarray*}
  &   & \tail(\nil) \\
  & = & \either(\const(\nil),\snd)(\uncons(\nil)) \\
- & = & \either(\const(\nil),\snd)(\lft(\ast)) \\
+ &     \href{@lists@#thm-uncons-nil}
+   = & \either(\const(\nil),\snd)(\lft(\ast)) \\
  &     \href{@disjoint-unions@#def-either-lft}
    = & \const(\nil)(\ast) \\
  &     \href{@functions@#def-const}

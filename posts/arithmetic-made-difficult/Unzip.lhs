@@ -33,7 +33,8 @@ $$\begin{eqnarray*}
  &   & (\nil,\nil) \\
  & = & \unzip(\nil) \\
  & = & \foldr{\varepsilon}{\varphi}(\nil) \\
- & = & \varepsilon
+ &     \href{@lists@#def-foldr-nil}
+   = & \varepsilon
 \end{eqnarray*}$$
 and if $\unzip(x) = (u,v)$, then
 $$\begin{eqnarray*}

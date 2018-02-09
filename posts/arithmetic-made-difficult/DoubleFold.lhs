@@ -55,13 +55,15 @@ We claim the unique solution $\Omega : \lists{A} \times \lists{B} \rightarrow C$
 $$\begin{eqnarray*}
  &   & \Omega(\nil,y) \\
  & = & \foldr{\delta}{\varphi}(\nil)(y) \\
- & = & \delta(y),
+ &     \href{@lists@#def-foldr-nil}
+   = & \delta(y)
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
  &   & \Omega(\cons(a,x),\nil) \\
  & = & \foldr{\delta}{\varphi}(\cons(a,x))(\nil) \\
- & = & \varphi(a,\foldr{\delta}{\varphi}(x))(\nil) \\
+ &     \href{@lists@#def-foldr-cons}
+   = & \varphi(a,\foldr{\delta}{\varphi}(x))(\nil) \\
  & = & \psi(a,\foldr{\delta}{\varphi}(x)(\nil)) \\
  & = & \psi(a,\Omega(x,\nil)),
 \end{eqnarray*}$$
@@ -69,7 +71,8 @@ and
 $$\begin{eqnarray*}
  &   & \Omega(\cons(a,x),\cons(b,y)) \\
  & = & \foldr{\delta}{\varphi}(\cons(a,x))(\cons(b,y)) \\
- & = & \varphi(a,\foldr{\delta}{\varphi}(x))(\cons(b,y)) \\
+ &     \href{@lists@#def-foldr-cons}
+   = & \varphi(a,\foldr{\delta}{\varphi}(x))(\cons(b,y)) \\
  & = & \chi(a,b,y,\foldr{\delta}{\varphi}(x)(y),\foldr{\delta}{\varphi}(x)(\cons(b,y))) \\
  & = & \chi(a,b,y,\Omega(x,y),\Omega(x,\cons(b,y)))
 \end{eqnarray*}$$
@@ -77,7 +80,8 @@ as needed. To see uniqueness, suppose $f$ is a solution to the system; we claim 
 $$\begin{eqnarray*}
  &   & f(\nil,y) \\
  & = & \delta(y) \\
- & = & \foldr{\delta}{\varphi}(\nil)(y)
+ &     \href{@lists@#def-foldr-nil}
+   = & \foldr{\delta}{\varphi}(\nil)(y)
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for all $w \in \lists{B}$ for some $x \in \lists{A}$, and let $a \in A$. We consider two possibilities for $w$. If $w = \nil$, we have
 $$\begin{eqnarray*}
@@ -85,7 +89,8 @@ $$\begin{eqnarray*}
  & = & \psi(a,f(x,\nil)) \\
  & = & \psi(a,\foldr{\delta}{\varphi}(x)(\nil)) \\
  & = & \varphi(a,\foldr{\delta}{\varphi}(x))(\nil) \\
- & = & \foldr{\delta}{\varphi}(\cons(a,x))(\nil)
+ &     \href{@lists@#def-foldr-cons}
+   = & \foldr{\delta}{\varphi}(\cons(a,x))(\nil)
 \end{eqnarray*}$$
 as claimed. If $w = \cons(b,y)$, we instead have
 $$\begin{eqnarray*}
@@ -93,7 +98,8 @@ $$\begin{eqnarray*}
  & = & \chi(a,b,y,f(x,y),f(x,\cons(b,y))) \\
  & = & \chi(a,b,y,\foldr{\delta}{\varphi}(x)(y),\foldr{\delta}{\varphi}(x)(\cons(b,y))) \\
  & = & \varphi(a,\foldr{\delta}{\varphi}(x))(\cons(b,y)) \\
- & = & \foldr{\delta}{\varphi}(\cons(a,x))(\cons(b,y)) \\
+ &     \href{@lists@#def-foldr-cons}
+   = & \foldr{\delta}{\varphi}(\cons(a,x))(\cons(b,y)) \\
 \end{eqnarray*}$$
 as claimed. By induction, we thus have $$f(x,y) = \foldr{\delta}{\varphi}(x)(y) = \Omega(x,y).$$
 ::::::::::::::::::::

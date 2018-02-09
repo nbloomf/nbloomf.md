@@ -45,7 +45,8 @@ $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \elt(a)(\cons(b,x)) \\
  & = & \foldr{\varepsilon}{\varphi}(\cons(b,x)) \\
- & = & \varphi(b,\foldr{\varepsilon}{\varphi}(x)) \\
+ &     \href{@lists@#def-foldr-cons}
+   = & \varphi(b,\foldr{\varepsilon}{\varphi}(x)) \\
  & = & \varphi(b,\elt(a)(x))
 \end{eqnarray*}$$
 while if $a \neq b$ we want
@@ -53,7 +54,8 @@ $$\begin{eqnarray*}
  &   & \elt(a)(x) \\
  & = & \elt(a)(\cons(b,x)) \\
  & = & \foldr{\varepsilon}{\varphi}(\cons(b,x)) \\
- & = & \varphi(b,\foldr{\varepsilon}{\varphi}(x)) \\
+ &     \href{@lists@#def-foldr-cons}
+   = & \varphi(b,\foldr{\varepsilon}{\varphi}(x)) \\
  & = & \varphi(b,\elt(a)(x)).
 \end{eqnarray*}$$
 With this in mind we define $\elt$ like so.
