@@ -332,7 +332,8 @@ Note that
 $$\begin{eqnarray*}
  &   & \inits(\cons(a,x)) \\
  & = & \rev(\map(\rev)(\tails(\rev(\cons(a,x))))) \\
- & = & \rev(\map(\rev)(\tails(\snoc(a,\rev(x))))) \\
+ &     \href{@rev@#cor-rev-cons}
+   = & \rev(\map(\rev)(\tails(\snoc(a,\rev(x))))) \\
  & = & \rev(\map(\rev)(\snoc(\nil,\map(\snoc(a,-))(\tails(\rev(a)))))) \\
  & = & \rev(\snoc(\rev(\nil),\map(\rev)(\map(\snoc(a,-))(\tails(\rev(a)))))) \\
  & = & \rev(\snoc(\nil,\map(\rev)(\map(\snoc(a,-))(\tails(\rev(a)))))) \\

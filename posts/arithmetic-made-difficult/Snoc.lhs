@@ -170,7 +170,8 @@ $$\begin{eqnarray*}
  & = & \beq(\snoc(a,\cons(d,x)),\snoc(b,\cons(c,u))) \\
  & = & \beq(\cons(d,\snoc(a,x)),\cons(c,\snoc(b,u))) \\
  & = & \band(\beq(d,c),\beq(\snoc(a,x),\snoc(b,u))) \\
- & = & \band(\beq(d,c),\band(\beq(a,b),\beq(x,u))) \\
+ &     \href{@snoc@#thm-snoc-eq}
+   = & \band(\beq(d,c),\band(\beq(a,b),\beq(x,u))) \\
  & = & \band(\beq(a,b),\band(\beq(d,c),\beq(x,u))) \\
  & = & \band(\beq(a,b),\band(\cons(d,x),\cons(c,u))) \\
  & = & \band(\beq(a,b),\band(\cons(d,x),y))
@@ -328,7 +329,8 @@ $$\begin{eqnarray*}
    = & \varphi(a,\foldr{e}{\varphi}(x)) \\
  & = & \varphi(a,\foldl{\psi}(e,x)) \\
  & = & \psi(\foldl{\psi}(e,x),a) \\
- & = & \foldl{\psi}(e,\snoc(a,x)) \\
+ &     \href{@snoc@#thm-snoc-foldl}
+   = & \foldl{\psi}(e,\snoc(a,x)) \\
  & = & \foldl{\psi}(e,\cons(a,x))
 \end{eqnarray*}$$
 as needed.

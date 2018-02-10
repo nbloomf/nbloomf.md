@@ -220,19 +220,23 @@ Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $x \in \list
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \filter(p)(\rev(\nil)) \\
- & = & \filter(p)(\nil) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \filter(p)(\nil) \\
  & = & \nil \\
- & = & \rev(\nil) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \rev(\nil) \\
  & = & \rev(\filter(p)(\nil))
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. If $p(a) = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \rev(\filter(p)(\cons(a,x))) \\
  & = & \rev(\cons(a,\filter(p)(x))) \\
- & = & \snoc(a,\rev(\filter(p)(x))) \\
+ &     \href{@rev@#cor-rev-cons}
+   = & \snoc(a,\rev(\filter(p)(x))) \\
  & = & \snoc(a,\filter(p)(\rev(x))) \\
  & = & \filter(p)(\snoc(a,\rev(x))) \\
- & = & \filter(p)(\rev(\cons(a,x)))
+ &     \href{@rev@#cor-rev-cons}
+   = & \filter(p)(\rev(\cons(a,x)))
 \end{eqnarray*}$$
 as claimed. If $p(a) = \bfalse$, we have
 $$\begin{eqnarray*}
@@ -240,7 +244,8 @@ $$\begin{eqnarray*}
  & = & \rev(\filter(p)(x)) \\
  & = & \filter(p)(\rev(x)) \\
  & = & \filter(p)(\snoc(a,\rev(x))) \\
- & = & \filter(p)(\rev(\cons(a,x)))
+ &     \href{@rev@#cor-rev-cons}
+   = & \filter(p)(\rev(\cons(a,x)))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

@@ -244,14 +244,16 @@ We proceed by induction on $n$. For the base case $n = \zero$, we have
 $$\begin{eqnarray*}
  &   & \rev(\repeat(\zero,a)) \\
  & = & \rev(\nil) \\
- & = & \nil \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \nil \\
  & = & \repeat(\zero,a)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $n$. Then we have
 $$\begin{eqnarray*}
  &   & \rev(\repeat(\next(n),a)) \\
  & = & \rev(\cons(a,\repeat(n,a))) \\
- & = & \snoc(a,\rev(\repeat(n,a))) \\
+ &     \href{@rev@#cor-rev-cons}
+   = & \snoc(a,\rev(\repeat(n,a))) \\
  & = & \snoc(a,\repeat(n,a)) \\
  & = & \repeat(\next(n),a)
 \end{eqnarray*}$$

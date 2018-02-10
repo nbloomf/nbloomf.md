@@ -80,9 +80,11 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \takeBut(\next(k))(\nil) \\
  & = & \rev(\drop(\next(k))(\rev(\nil))) \\
- & = & \rev(\drop(\next(k))(\nil)) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \rev(\drop(\next(k))(\nil)) \\
  & = & \rev(\nil) \\
- & = & \nil
+ &     \href{@rev@#cor-rev-nil}
+   = & \nil
 \end{eqnarray*}$$
 as claimed.
 3. We have
@@ -186,16 +188,19 @@ $$\begin{eqnarray*}
  &   & \dropBut(\zero,x) \\
  & = & \rev(\take(\zero,\rev(x))) \\
  & = & \rev(\nil) \\
- & = & \nil
+ &     \href{@rev@#cor-rev-nil}
+   = & \nil
 \end{eqnarray*}$$
 as claimed.
 2. We have
 $$\begin{eqnarray*}
  &   & \dropBut(k,\nil) \\
  & = & \rev(\take(k,\rev(\nil))) \\
- & = & \rev(\take(k,\nil)) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \rev(\take(k,\nil)) \\
  & = & \rev(\nil) \\
- & = & \nil
+ &     \href{@rev@#cor-rev-nil}
+   = & \nil
 \end{eqnarray*}$$
 as claimed.
 3. We have
@@ -204,7 +209,8 @@ $$\begin{eqnarray*}
  & = & \rev(\take(\next(k),\rev(\snoc(a,x)))) \\
  & = & \rev(\take(\next(k),\cons(a,\rev(x)))) \\
  & = & \rev(\cons(a,\take(k,\rev(x)))) \\
- & = & \snoc(a,\rev(\take(k,\rev(x)))) \\
+ &     \href{@rev@#cor-rev-cons}
+   = & \snoc(a,\rev(\take(k,\rev(x)))) \\
  & = & \snoc(a,\dropBut(k,x))
 \end{eqnarray*}$$
 as claimed.

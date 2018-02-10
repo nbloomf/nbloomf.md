@@ -207,7 +207,8 @@ $$\begin{eqnarray*}
  & = & \at(\cons(b,x),length(x)) \\
  & = & \head(\rev(\cons(b,x))) \\
  & = & \head(\snoc(a,\rev(\cons(b,x)))) \\
- & = & \head(\rev(\cons(a,\cons(b,x))))
+ &     \href{@rev@#cor-rev-cons}
+   = & \head(\rev(\cons(a,\cons(b,x))))
 \end{eqnarray*}$$
 as needed.
 2. We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -329,7 +330,8 @@ $$\begin{eqnarray*}
  & = & \rgt(a) \\
  & = & \at(\snoc(a,\rev(x)),\length(\rev(x))) \\
  & = & \at(\snoc(a,\rev(x)),\length(x)) \\
- & = & \at(\rev(\cons(a,x)),\length(x)) \\
+ &     \href{@rev@#cor-rev-cons}
+   = & \at(\rev(\cons(a,x)),\length(x)) \\
  & = & \at(\rev(\cons(a,x)),v)
 \end{eqnarray*}$$
 as needed. If $u = \next(w)$, then we have $\next(\nplus(w,v)) = \length(x)$. In particular, we have $x \neq \nil$ and thus $\rev(x) \neq \nil$; say $\rev(x) = \cons(c,y)$. Now $\nleq(v,\length(y))$, and moreover
@@ -341,7 +343,8 @@ $$\begin{eqnarray*}
  & = & \at(\cons(c,y),v) \\
  & = & \at(\snoc(a,\cons(c,y)),v) \\
  & = & \at(\snoc(a,\rev(x)),v) \\
- & = & \at(\rev(\cons(a,x)),v)
+ &     \href{@rev@#cor-rev-cons}
+   = & \at(\rev(\cons(a,x)),v)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

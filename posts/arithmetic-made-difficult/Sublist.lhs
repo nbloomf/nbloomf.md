@@ -568,7 +568,8 @@ $$\begin{eqnarray*}
  &   & \sublist(\snoc(a,x),y) \\
  & = & \sublist(\snoc(a,x),\nil) \\
  & = & \isnil(\snoc(a,x)) \\
- & = & \bfalse.
+ &     \href{@snoc@#thm-isnil-snoc}
+   = & \bfalse
 \end{eqnarray*}$$
 We will now show that $\sublist(\snoc(a,x),\snoc(b,\nil)) = \bfalse$ by considering two cases for $x$. If $x = nil$, we have
 $$\begin{eqnarray*}
@@ -649,7 +650,8 @@ $$\begin{eqnarray*}
  & = & \isnil(x) \\
  & = & \isnil(\rev(x)) \\
  & = & \sublist(\rev(x),\nil) \\
- & = & \sublist(\rev(x),\rev(\nil)) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \sublist(\rev(x),\rev(\nil)) \\
  & = & \sublist(\rev(x),\rev(y))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $x$ for some $y$ and let $b \in A$. We consider two possibilities for $x$. If $x = \nil$, we have
@@ -658,7 +660,8 @@ $$\begin{eqnarray*}
  & = & \sublist(\nil,\cons(b,y)) \\
  & = & \btrue \\
  & = & \sublist(\nil,\rev(\cons(b,y))) \\
- & = & \sublist(\rev(\nil),\rev(\cons(b,y))) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \sublist(\rev(\nil),\rev(\cons(b,y))) \\
  & = & \sublist(\rev(x),\rev(\cons(b,y)))
 \end{eqnarray*}$$
 as needed. Suppose instead that $x = \cons(a,w)$. Then we have

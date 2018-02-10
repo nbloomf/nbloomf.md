@@ -533,18 +533,22 @@ Let $A$ be a set with $a \in A$ and $x \in \lists{A}$. Then we have $$\delete(a,
 We proceed by list induction on $x$. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \delete(a,\rev(\nil)) \\
- & = & \delete(a,\nil) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \delete(a,\nil) \\
  & = & \nil \\
- & = & \rev(\nil) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \rev(\nil) \\
  & = & \rev(\delete(a,\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$ and let $b \in A$. Using the inductive hypothesis, we have
 $$\begin{eqnarray*}
  &   & \delete(a,\rev(\cons(b,x))) \\
- & = & \delete(a,\snoc(b,\rev(x))) \\
+ &     \href{@rev@#cor-rev-cons}
+   = & \delete(a,\snoc(b,\rev(x))) \\
  & = & \bif{\beq(a,b)}{\delete(a,\rev(x))}{\snoc(b,\delete(a,\rev(x)))} \\
  & = & \bif{\beq(a,b)}{\rev(\delete(a,x))}{\snoc(b,\rev(\delete(a,x)))} \\
- & = & \bif{\beq(a,b)}{\rev(\delete(a,x))}{\rev(\cons(b,\delete(a,x)))} \\
+ &     \href{@rev@#cor-rev-cons}
+   = & \bif{\beq(a,b)}{\rev(\delete(a,x))}{\rev(\cons(b,\delete(a,x)))} \\
  &     \href{@booleans@#thm-iffunc}
    = & \rev(\bif{\beq(a,b)}{\delete(a,x)}{\cons(b,\delete(a,x))}) \\
  & = & \rev(\delete(a,\cons(b,x)))

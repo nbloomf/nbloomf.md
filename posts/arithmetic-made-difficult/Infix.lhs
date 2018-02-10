@@ -427,7 +427,8 @@ Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have $$\infix(\sno
 $$\begin{eqnarray*}
  &   & \infix(\snoc(a,x),\nil) \\
  & = & \isnil(\snoc(a,x)) \\
- & = & \bfalse
+ &     \href{@snoc@#thm-isnil-snoc}
+   = & \bfalse
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

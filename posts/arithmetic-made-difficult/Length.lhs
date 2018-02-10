@@ -84,7 +84,8 @@ Let $A$ be a set. For all $n \in \nats$, $a \in A$, and $x \in \lists{A}$, we ha
 $$\begin{eqnarray*}
  &   & \addlength(n,\snoc(a,x)) \\
  & = & \foldl{\varphi}(n,\snoc(a,x)) \\
- & = & \varphi(\foldl{\varphi}(n,x),a) \\
+ &     \href{@snoc@#thm-snoc-foldl}
+   = & \varphi(\foldl{\varphi}(n,x),a) \\
  & = & \next(\foldl{\varphi}(n,x)) \\
  & = & \next(\addlength(n,x))
 \end{eqnarray*}$$
@@ -137,12 +138,14 @@ Let $A$ be a set. For all $n \in \nats$ and $x \in \lists{A}$, we have $$\addlen
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \addlength(n,\rev(\nil)) \\
- & = & \addlength(n,\nil)
+ &     \href{@rev@#cor-rev-nil}
+   = & \addlength(n,\nil)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $n$ for some $x$, and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \addlength(n,\rev(\cons(a,x))) \\
- & = & \addlength(n,\snoc(a,\rev(x))) \\
+ &     \href{@rev@#cor-rev-cons}
+   = & \addlength(n,\snoc(a,\rev(x))) \\
  & = & \next(\addlength(n,\rev(x))) \\
  & = & \next(\addlength(n,x)) \\
  & = & \addlength(n,\cons(a,x))

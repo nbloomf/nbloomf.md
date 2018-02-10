@@ -384,7 +384,8 @@ Let $A$ be a set. For all $a,b \in A$ and $x,y \in \lists{A}$, we have the follo
 $$\begin{eqnarray*}
  &   & \suffix(\nil,y) \\
  & = & \prefix(\rev(\nil),\rev(y)) \\
- & = & \prefix(\nil,\rev(y)) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \prefix(\nil,\rev(y)) \\
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.
@@ -492,7 +493,8 @@ $$\begin{eqnarray*}
  & = & \suffix(x,y) \\
  & = & \prefix(\rev(x),\rev(y)) \\
  & = & \prefix(\rev(x),\snoc(a,\rev(y))) \\
- & = & \prefix(\rev(x),\rev(\cons(a,y))) \\
+ &     \href{@rev@#cor-rev-cons}
+   = & \prefix(\rev(x),\rev(\cons(a,y))) \\
  & = & \suffix(x,\cons(a,y))
 \end{eqnarray*}$$
 as claimed.

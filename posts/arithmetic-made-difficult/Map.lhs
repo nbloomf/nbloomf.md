@@ -277,19 +277,23 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \map(f)(\rev(x)) \\
  & = & \map(f)(\rev(\nil)) \\
- & = & \map(f)(\nil) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \map(f)(\nil) \\
  & = & \nil \\
- & = & \rev(\nil) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \rev(\nil) \\
  & = & \rev(\map(f)(\nil)) \\
  & = & \rev(\map(f)(x)) \\
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equation holds for some $x \in \lists{A}$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \map(f)(\rev(\cons(a,x))) \\
- & = & \map(f)(\snoc(a,\rev(x))) \\
+ &     \href{@rev@#cor-rev-cons}
+   = & \map(f)(\snoc(a,\rev(x))) \\
  & = & \snoc(f(a),\map(f)(\rev(x))) \\
  & = & \snoc(f(a),\rev(\map(f)(x))) \\
- & = & \rev(\cons(f(a),\map(f)(x))) \\
+ &     \href{@rev@#cor-rev-cons}
+   = & \rev(\cons(f(a),\map(f)(x))) \\
  & = & \rev(\map(f)(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.

@@ -465,9 +465,11 @@ Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$ we have the following.
 $$\begin{eqnarray*}
  &   & \dedupeR(\nil) \\
  & = & \rev(\dedupeL(\rev(\nil))) \\
- & = & \rev(\dedupeL(\nil)) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \rev(\dedupeL(\nil)) \\
  & = & \rev(\nil) \\
- & = & \nil
+ &     \href{@rev@#cor-rev-nil}
+   = & \nil
 \end{eqnarray*}$$
 as needed.
 2. Note that
@@ -476,7 +478,8 @@ $$\begin{eqnarray*}
  & = & \rev(\dedupeL(\rev(\snoc(a,x)))) \\
  & = & \rev(\dedupeL(\cons(a,\rev(x)))) \\
  & = & \rev(\cons(a,\delete(a,\dedupeL(\rev(x))))) \\
- & = & \snoc(a,\rev(\delete(a,\dedupeL(\rev(x))))) \\
+ &     \href{@rev@#cor-rev-cons}
+   = & \snoc(a,\rev(\delete(a,\dedupeL(\rev(x))))) \\
  & = & \snoc(a,\delete(a,\rev(\dedupeL(\rev(x))))) \\
  & = & \snoc(a,\delete(a,\dedupeR(x)))
 \end{eqnarray*}$$

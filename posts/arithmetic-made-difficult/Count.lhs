@@ -161,12 +161,14 @@ Let $A$ be a set with $a \in A$. For all $k \in \nats$ and $x \in \lists{A}$, we
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \addcount(a)(k,\rev(\nil)) \\
- & = & \addcount(a)(k,\nil)
+ &     \href{@rev@#cor-rev-nil}
+   = & \addcount(a)(k,\nil)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $k$ for some $x$, and let $b \in A$. Now
 $$\begin{eqnarray*}
  &   & \addcount(a)(k,\rev(\cons(b,x))) \\
- & = & \addcount(a)(k,\snoc(b,\rev(x))) \\
+ &     \href{@rev@#cor-rev-cons}
+   = & \addcount(a)(k,\snoc(b,\rev(x))) \\
  & = & \addcount(a)(\bif{\beq(a,b)}{\next(k)}{k},\rev(x)) \\
  & = & \addcount(a)(\bif{\beq(a,b)}{\next(k)}{k},x) \\
  & = & \addcount(a)(k,\cons(b,x))

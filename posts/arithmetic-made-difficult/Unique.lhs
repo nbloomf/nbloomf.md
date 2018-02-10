@@ -291,13 +291,15 @@ We proceed by list induction on $x$. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \unique(\rev(x)) \\
  & = & \unique(\rev(\nil)) \\
- & = & \unique(\nil) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \unique(\nil) \\
  & = & \unique(x)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \unique(\rev(\cons(a,x))) \\
- & = & \unique(\snoc(a,\rev(x))) \\
+ &     \href{@rev@#cor-rev-cons}
+   = & \unique(\snoc(a,\rev(x))) \\
  & = & \band(\bnot(\elt(a,\rev(x))),\unique(\rev(x))) \\
  & = & \band(\bnot(\elt(a,x)),\unique(x)) \\
  & = & \unique(\cons(a,x))

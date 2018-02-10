@@ -229,13 +229,15 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \elt(a)(\rev(x)) \\
  & = & \elt(a)(\rev(\nil)) \\
- & = & \elt(a)(\nil) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \elt(a)(\nil) \\
  & = & \elt(a)(x)
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for some $x$ and let $b \in A$. Now
 $$\begin{eqnarray*}
  &   & \elt(a)(\rev(\cons(b,x))) \\
- & = & \elt(a)(\snoc(b,\rev(x))) \\
+ &     \href{@rev@#cor-rev-cons}
+   = & \elt(a)(\snoc(b,\rev(x))) \\
  & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(\rev(x))} \\
  & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(x)} \\
  & = & \elt(a)(\cons(b,x))

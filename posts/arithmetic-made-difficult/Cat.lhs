@@ -227,7 +227,8 @@ $$\begin{eqnarray*}
  &   & \rev(\cat(x,\nil)) \\
  & = & \rev(x) \\
  & = & \cat(\nil,\rev(x)) \\
- & = & \cat(\rev(\nil),\rev(x))
+ &     \href{@rev@#cor-rev-nil}
+   = & \cat(\rev(\nil),\rev(x))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $y \in \lists{A}$ and let $a \in A$. Then we have
 $$\begin{eqnarray*}
@@ -236,7 +237,8 @@ $$\begin{eqnarray*}
  & = & \cat(\rev(y),\rev(\snoc(a,x))) \\
  & = & \cat(\rev(y),\cons(a,\rev(x))) \\
  & = & \cat(\snoc(a,\rev(y)),\rev(x)) \\
- & = & \cat(\rev(\cons(a,y)),\rev(x))
+ &     \href{@rev@#cor-rev-cons}
+   = & \cat(\rev(\cons(a,y)),\rev(x))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

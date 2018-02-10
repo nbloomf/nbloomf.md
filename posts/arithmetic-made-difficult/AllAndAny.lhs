@@ -256,7 +256,8 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \all(p,\rev(x)) \\
  & = & \all(p,\rev(\nil)) \\
- & = & \all(p,\nil) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \all(p,\nil) \\
  & = & \all(p,x)
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Using the inductive hypothesis, we have

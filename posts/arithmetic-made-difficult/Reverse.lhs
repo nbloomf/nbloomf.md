@@ -82,13 +82,16 @@ Let $A$ be a set. For all $a \in A$ and $x,y \in \lists{A}$ we have the followin
 1. We proceed by list induction on $y$. For the base case $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \revcat(\snoc(a,x),\nil) \\
- & = & \snoc(a,x) \\
- & = & \snoc(a,\revcat(x,\nil))
+ &     \href{@rev@#cor-revcat-nil}
+   = & \snoc(a,x) \\
+ &     \href{@rev@#cor-revcat-nil}
+   = & \snoc(a,\revcat(x,\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ and $x$ for some $y$, and let $b \in A$. Now we have
 $$\begin{eqnarray*}
  &   & \revcat(\snoc(a,x),\cons(b,y)) \\
- & = & \revcat(\cons(b,\snoc(a,x)),y) \\
+ &     \href{@rev@#cor-revcat-cons}
+   = & \revcat(\cons(b,\snoc(a,x)),y) \\
  &     \href{@snoc@#cor-snoc-cons}
    = & \revcat(\snoc(a,\cons(b,x)),y) \\
  & = & \snoc(a,\revcat(\cons(b,x)),y) \\
@@ -101,8 +104,10 @@ $$\begin{eqnarray*}
  &     \href{@snoc@#cor-snoc-nil}
    = & \revcat(x,\cons(a,\nil)) \\
  & = & \revcat(\cons(a,x),\nil) \\
- & = & \cons(a,x) \\
- & = & \cons(a,\revcat(x,\nil))
+ &     \href{@rev@#cor-revcat-nil}
+   = & \cons(a,x) \\
+ &     \href{@rev@#cor-revcat-nil}
+   = & \cons(a,\revcat(x,\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ and $x$ for some $y$, and let $b \in A$. Now we have
 $$\begin{eqnarray*}
@@ -110,8 +115,10 @@ $$\begin{eqnarray*}
  &     \href{@snoc@#cor-snoc-cons}
    = & \revcat(x,\cons(b,\snoc(a,y))) \\
  & = & \revcat(\cons(b,x),\snoc(a,y)) \\
- & = & \cons(a,\revcat(\cons(b,x),y)) \\
- & = & \cons(a,\revcat(x,\cons(b,y)))
+ &     \href{@rev@#thm-revcat-snoc-right}
+   = & \cons(a,\revcat(\cons(b,x),y)) \\
+ &     \href{@rev@#cor-revcat-cons}
+   = & \cons(a,\revcat(x,\cons(b,y)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -160,7 +167,8 @@ $$\begin{eqnarray*}
  &     \href{@lists@#def-foldr-nil}
    = & \nil \\
  & = & \revcat(\nil,\nil) \\
- & = & \rev(\nil)
+ &     \href{@rev@#def-rev}
+   = & \rev(\nil)
 \end{eqnarray*}$$
 For the inductive step, suppose the equality holds for some $x \in \lists{A}$, and let $a \in A$. Now
 $$\begin{eqnarray*}
@@ -168,12 +176,15 @@ $$\begin{eqnarray*}
  &     \href{@lists@#def-foldr-cons}
    = & \snoc(a,\foldr{\nil}{\snoc}(x)) \\
  & = & \snoc(a,\rev(x)) \\
- & = & \snoc(a,\revcat(\nil,x)) \\
- & = & \revcat(\snoc(a,\nil),x) \\
+ &     \href{@rev@#def-rev}
+   = & \snoc(a,\revcat(\nil,x)) \\
+ &     \href{@rev@#thm-revcat-snoc-left}
+   = & \revcat(\snoc(a,\nil),x) \\
  &     \href{@snoc@#cor-snoc-nil}
    = & \revcat(\cons(a,\nil),x) \\
  & = & \revcat(\nil,\cons(a,x)) \\
- & = & \rev(\cons(a,x))
+ &     \href{@rev@#def-rev}
+   = & \rev(\cons(a,x))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -230,18 +241,25 @@ Let $A$ be a set. For all $a,b \in A$ we have the following.
 1. Note that
 $$\begin{eqnarray*}
  &   & \rev(\cons(a,\nil)) \\
- & = & \revcat(\nil,\cons(a,\nil)) \\
- & = & \revcat(\cons(a,\nil),\nil) \\
- & = & \cons(a,\nil)
+ &     \href{@rev@#def-rev}
+   = & \revcat(\nil,\cons(a,\nil)) \\
+ &     \href{@rev@#cor-revcat-cons}
+   = & \revcat(\cons(a,\nil),\nil) \\
+ &     \href{@rev@#cor-revcat-nil}
+   = & \cons(a,\nil)
 \end{eqnarray*}$$
 as claimed.
 2. Note that
 $$\begin{eqnarray*}
  &   & \rev(\cons(a,\cons(b,\nil))) \\
- & = & \revcat(\nil,\cons(a,\cons(b,\nil))) \\
- & = & \revcat(\cons(a,\nil),\cons(b,\nil)) \\
- & = & \revcat(\cons(b,\cons(a,\nil)),\nil) \\
- & = & \cons(b,\cons(a,\nil))
+ &     \href{@rev@#def-rev}
+   = & \revcat(\nil,\cons(a,\cons(b,\nil))) \\
+ &     \href{@rev@#cor-revcat-cons}
+   = & \revcat(\cons(a,\nil),\cons(b,\nil)) \\
+ &     \href{@rev@#cor-revcat-cons}
+   = & \revcat(\cons(b,\cons(a,\nil)),\nil) \\
+ &     \href{@rev@#cor-revcat-nil}
+   = & \cons(b,\cons(a,\nil))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -280,8 +298,10 @@ We have
 $$\begin{eqnarray*}
  &   & \rev(\snoc(a,\nil)) \\
  & = & \revcat(\nil,\snoc(a,x)) \\
- & = & \cons(a,\revcat(\nil,x)) \\
- & = & \cons(a,\rev(x))
+ &     \href{@rev@#thm-revcat-snoc-right}
+   = & \cons(a,\revcat(\nil,x)) \\
+ &     \href{@rev@#def-rev}
+   = & \cons(a,\rev(x))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -306,13 +326,16 @@ Let $A$ be a set. For all $x \in \lists{A}$, we have $\rev(\rev(x)) = x$.
 We proceed by list induction. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \rev(\rev(\nil)) \\
- & = & \rev(\nil) \\
- & = & \nil
+ &     \href{@rev@#cor-rev-nil}
+   = & \rev(\nil) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \nil
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for some $x \in \lists{A}$, and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \rev(\rev(\cons(a,x))) \\
- & = & \rev(\snoc(a,\rev(x))) \\
+ &     \href{@rev@#cor-rev-cons}
+   = & \rev(\snoc(a,\rev(x))) \\
  & = & \cons(a,\rev(\rev(x))) \\
  & = & \cons(a,x)
 \end{eqnarray*}$$
@@ -358,7 +381,8 @@ $$\begin{eqnarray*}
  & = & \isnil(y) \\
  & = & \isnil(\rev(y)) \\
  & = & \beq(\nil,\rev(y)) \\
- & = & \beq(\rev(\nil),\rev(y)) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \beq(\rev(\nil),\rev(y)) \\
  & = & \beq(\rev(x),\rev(y))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $y$ for some $x$ and let $a \in A$. We consider two possibilities for $y$. If $y = \nil$, we have
@@ -368,7 +392,8 @@ $$\begin{eqnarray*}
  & = & \isnil(\cons(a,x)) \\
  & = & \isnil(\rev(\cons(a,x))) \\
  & = & \beq(\rev(\cons(a,x)),\nil) \\
- & = & \beq(\rev(\cons(a,x)),\rev(\nil)) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \beq(\rev(\cons(a,x)),\rev(\nil)) \\
  & = & \beq(\rev(\cons(a,x)),\rev(y))
 \end{eqnarray*}$$
 as needed. Suppose instead that $y = \cons(b,u)$. Using the inductive hypothsis, we have
@@ -377,7 +402,8 @@ $$\begin{eqnarray*}
  & = & \beq(\cons(a,x),\cons(b,u)) \\
  & = & \band(\beq(a,b),\beq(x,u)) \\
  & = & \band(\beq(a,b),\beq(\rev(x),\rev(u))) \\
- & = & \beq(\snoc(a,\rev(x)),\snoc(b,\rev(u))) \\
+ &     \href{@snoc@#thm-snoc-eq}
+   = & \beq(\snoc(a,\rev(x)),\snoc(b,\rev(u))) \\
  & = & \beq(\rev(\cons(a,x)),\rev(\cons(b,u))) \\
  & = & \beq(\rev(\cons(a,x)),\rev(y))
 \end{eqnarray*}$$
@@ -427,7 +453,8 @@ $$\begin{eqnarray*}
  & = & \foldr{\varphi(e,a)}{\psi}(\rev(x)) \\
  & = & \foldr{\psi(a,e)}{\psi}(\rev(x)) \\
  & = & \foldr{e}{\psi}(\snoc(a,\rev(x))) \\
- & = & \foldr{e}{\psi}(\rev(\cons(a,x)))
+ &     \href{@rev@#cor-rev-cons}
+   = & \foldr{e}{\psi}(\rev(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
