@@ -140,7 +140,8 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \elt(a)(\cat(x,y)) \\
  & = & \elt(a)(\cat(\nil,y)) \\
- & = & \elt(a)(y) \\
+ &     \href{@cat@#cor-cat-nil}
+   = & \elt(a)(y) \\
  &     \href{@or@#thm-or-false-left}
    = & \bor(\bfalse,\elt(a)(y)) \\
  & = & \bor(\elt(a)(\nil),\elt(a)(y)) \\
@@ -149,7 +150,8 @@ $$\begin{eqnarray*}
 as claimed. For the inductive step, suppose the equality holds for all $y$ some $x$, and let $b \in A$. If $b = a$ we have
 $$\begin{eqnarray*}
  &   & \elt(a)(\cat(\cons(b,x),y)) \\
- & = & \elt(a)(\cons(b,\cat(x,y))) \\
+ &     \href{@cat@#cor-cat-cons}
+   = & \elt(a)(\cons(b,\cat(x,y))) \\
  & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(\cat(x,y))} \\
  & = & \btrue \\
  &     \href{@or@#thm-or-true-left}
@@ -160,7 +162,8 @@ $$\begin{eqnarray*}
 as claimed. If $b \neq a$, we have
 $$\begin{eqnarray*}
  &   & \elt(a)(\cat(\cons(b,x),y)) \\
- & = & \elt(a)(\cons(b,\cat(x,y))) \\
+ &     \href{@cat@#cor-cat-cons}
+   = & \elt(a)(\cons(b,\cat(x,y))) \\
  & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(\cat(x,y))} \\
  & = & \elt(a)(\cat(x,y)) \\
  & = & \bor(\elt(a)(x),\elt(a)(y)) \\

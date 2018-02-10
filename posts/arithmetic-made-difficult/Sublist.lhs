@@ -757,7 +757,8 @@ Let $A$ be a set, with $x,y,z \in \lists{A}$.
 $$\begin{eqnarray*}
  &   & \sublist(x,\cat(z,y)) \\
  & = & \sublist(x,\cat(\nil,y)) \\
- & = & \sublist(x,y) \\
+ &     \href{@cat@#cor-cat-nil}
+   = & \sublist(x,y) \\
  & = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the implication holds for some $z$ and let $a \in A$. Suppose further that $\sublist(x,y) = \btrue$. Then we have
@@ -766,7 +767,8 @@ $$\begin{eqnarray*}
  & = & \sublist(x,y) \\
  & = & \sublist(x,\cat(z,y)) \\
  & = & \sublist(x,\cons(a,\cat(z,y))) \\
- & = & \sublist(x,\cat(\cons(a,z),y))
+ &     \href{@cat@#cor-cat-cons}
+   = & \sublist(x,\cat(\cons(a,z),y))
 \end{eqnarray*}$$
 as needed.
 2. Suppose $\sublist(x,y) = \btrue$. Now
@@ -784,13 +786,15 @@ $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \sublist(\cat(z,x),y) \\
  & = & \sublist(\cat(\nil,x),y) \\
- & = & \sublist(x,y)
+ &     \href{@cat@#cor-cat-nil}
+   = & \sublist(x,y)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the implication holds for all $x$ and $y$ for some $z$ and let $a \in A$. Suppose further that $\sublist(\cat(\cons(a,z),x),y) = \btrue$. Then we have
 $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \sublist(\cat(\cons(a,z),x),y) \\
- & = & \sublist(\cons(a,\cat(z,x)),y) \\
+ &     \href{@cat@#cor-cat-cons}
+   = & \sublist(\cons(a,\cat(z,x)),y) \\
  & = & \sublist(\cat(z,x),y) \\
  & = & \sublist(x,y)
 \end{eqnarray*}$$

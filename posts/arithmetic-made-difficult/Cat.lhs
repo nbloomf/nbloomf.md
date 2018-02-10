@@ -73,7 +73,8 @@ Let $A$ be a set. For all $x \in \lists{A}$, we have $\cat(x,\nil) = x$.
 Note that
 $$\begin{eqnarray*}
  &   & \cat(x,\nil) \\
- & = & \foldr{\nil}{\cons}(x) \\
+ &     \href{@cat@#def-cat}
+   = & \foldr{\nil}{\cons}(x) \\
  & = & \id(x) \\
  &     \href{@functions@#def-id}
    = & x
@@ -104,7 +105,8 @@ Let $A$ be a set. The following hold for all $a \in A$ and $x,y \in \lists{A}$.
 1. We have
 $$\begin{eqnarray*}
  &   & \cat(x,\cons(a,y)) \\
- & = & \foldr{\cons(a,y)}{\cons}(x) \\
+ &     \href{@cat@#def-cat}
+   = & \foldr{\cons(a,y)}{\cons}(x) \\
  & = & \foldr{y}{\cons}(\snoc(a,y)) \\
  & = & \cat(x,\snoc(a,y))
 \end{eqnarray*}$$
@@ -160,7 +162,8 @@ $$\begin{eqnarray*}
    = & \isnil(\nil) \\
  & = & \isnil(\cat(x,y)) \\
  & = & \isnil(\cat(\cons(a,u),y)) \\
- & = & \isnil(\cons(a,\cat(u,y))) \\
+ &     \href{@cat@#cor-cat-cons}
+   = & \isnil(\cons(a,\cat(u,y))) \\
  &     \href{@head-tail@#thm-isnil-cons}
    = & \bfalse
 \end{eqnarray*}$$
@@ -168,7 +171,8 @@ which is absurd. Thus $x = \nil$, and we have
 $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \isnil(\cat(\nil,y)) \\
- & = & \isnil(y)
+ &     \href{@cat@#cor-cat-nil}
+   = & \isnil(y)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -228,7 +232,8 @@ We proceed by list induction on $y$. For the base case $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \rev(\cat(x,\nil)) \\
  & = & \rev(x) \\
- & = & \cat(\nil,\rev(x)) \\
+ &     \href{@cat@#cor-cat-nil}
+   = & \cat(\nil,\rev(x)) \\
  &     \href{@rev@#cor-rev-nil}
    = & \cat(\rev(\nil),\rev(x))
 \end{eqnarray*}$$
@@ -268,11 +273,13 @@ Let $A$ be a set. For all $x,y,z \in \lists{A}$ we have the following.
 1. The "only if" direction is clear. For the "if" direction we proceed by list induction on $z$. For the base case $z = \nil$, suppose $\cat(z,x) = \cat(z,y)$. Then we have
 $$\begin{eqnarray*}
  &   & x \\
- & = & \cat(\nil,x) \\
+ &     \href{@cat@#cor-cat-nil}
+   = & \cat(\nil,x) \\
  & = & \cat(z,x) \\
  & = & \cat(z,y) \\
  & = & \cat(\nil,y) \\
- & = & y
+ &     \href{@cat@#cor-cat-nil}
+   = & y
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the implication holds for some $z$, and let $a \in A$. Now suppose we have $$\cat(\cons(a,z),x) = \cat(\cons(a,z),y).$$ Then we have $\cons(a,\cat(z,x)) = \cons(a,\cat(z,y)),$$ so that $$\cat(z,x) = \cat(z,y).$$ By the inductive hypothesis, $x = y$ as claimed.
 2. The "only if" direction is clear. For the "if" direction, note that
@@ -327,7 +334,8 @@ so that $v = \nil$ by cancellation.
 2. Note that
 $$\begin{eqnarray*}
  &   & \cat(\nil,x) \\
- & = & x \\
+ &     \href{@cat@#cor-cat-nil}
+   = & x \\
  & = & \cat(u,x),
 \end{eqnarray*}$$
 so that $u = \nil$ by cancellation.
@@ -337,14 +345,16 @@ $$\begin{eqnarray*}
  & = & x \\
  & = & \cat(u,\cat(x,v)) \\
  & = & \cat(u,\cat(\nil,v)) \\
- & = & \cat(u,v)
+ &     \href{@cat@#cor-cat-nil}
+   = & \cat(u,v)
 \end{eqnarray*}$$
 so that $v = u = \nil$ as needed. For the inductive step, suppose the implication holds for all $u$ and $v$ for some $x$, and let $a \in A$. Suppose further that $\cons(a,x) = \cat(u,\cat(\cons(a,x),v))$ for some $u$ and $v$. We consider two possibilities for $u$. If $u = \cons(b,w)$, we have
 $$\begin{eqnarray*}
  &   & \cons(a,x) \\
  & = & \cat(u,\cat(\cons(a,x),v)) \\
  & = & \cat(\cons(b,w),\cat(\cons(a,x),v)) \\
- & = & \cons(b,\cat(w,\cat(\cons(a,x),v))).
+ &     \href{@cat@#cor-cat-cons}
+   = & \cons(b,\cat(w,\cat(\cons(a,x),v)))
 \end{eqnarray*}$$
 So in fact we have $a = b$, and
 $$\begin{eqnarray*}
@@ -359,7 +369,8 @@ $$\begin{eqnarray*}
  &   & \cons(a,x) \\
  & = & \cat(u,\cat(\cons(a,x),v)) \\
  & = & \cat(\nil,\cat(\cons(a,x),v)) \\
- & = & \cat(\cons(a,x),v)
+ &     \href{@cat@#cor-cat-nil}
+   = & \cat(\cons(a,x),v)
 \end{eqnarray*}$$
 so that $v = u = \nil$ as claimed.
 ::::::::::::::::::::

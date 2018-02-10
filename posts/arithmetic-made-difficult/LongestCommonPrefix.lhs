@@ -290,14 +290,16 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \cat(x,\lcp(y,z)) \\
  & = & \cat(\nil,\lcp(y,z)) \\
- & = & \lcp(y,z) \\
+ &     \href{@cat@#cor-cat-nil}
+   = & \lcp(y,z) \\
  & = & \lcp(\cat(\nil,y),\cat(\nil,z)) \\
  & = & \lcp(\cat(x,y),\cat(x,z))
 \end{eqnarray*}$$
 as needed. Suppose now that the equality holds for all $y$ and $z$ for some $x$, and let $a \in A$. Then we have
 $$\begin{eqnarray*}
  &   & \cat(\cons(a,x),\lcp(y,z)) \\
- & = & \cons(a,\cat(x,\lcp(y,z))) \\
+ &     \href{@cat@#cor-cat-cons}
+   = & \cons(a,\cat(x,\lcp(y,z))) \\
  & = & \cons(a,\lcp(\cat(x,y),\cat(x,z))) \\
  & = & \lcp(\cons(a,\cat(x,y)),\cons(a,\cat(x,z))) \\
  & = & \lcp(\cat(\cons(a,x),y),\cat(\cons(a,x),z))

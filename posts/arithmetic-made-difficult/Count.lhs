@@ -383,7 +383,8 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \count(a,\cat(x,y)) \\
  & = & \count(a,\cat(\nil,y)) \\
- & = & \count(a,y) \\
+ &     \href{@cat@#cor-cat-nil}
+   = & \count(a,y) \\
  &     \href{@plus@#cor-plus-up-zero}
    = & \nplus(\zero,\count(a,y)) \\
  & = & \nplus(\count(a,\nil),\count(a,y)) \\
@@ -392,7 +393,8 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equality holds for all $y$ and $a$ for some $x$, and let $b \in A$. We consider two possibilities. If $a = b$, we have
 $$\begin{eqnarray*}
  &   & \count(a,\cat(\cons(b,x),y)) \\
- & = & \count(a,\cons(b,\cat(x,y))) \\
+ &     \href{@cat@#cor-cat-cons}
+   = & \count(a,\cons(b,\cat(x,y))) \\
  & = & \bif{\beq(a,b)}{\next(\count(a,\cat(x,y)))}{\count(a,\cat(x,y))} \\
  & = & \next(\count(a,\cat(x,y))) \\
  & = & \next(\nplus(\count(a,x),\count(a,y))) \\
@@ -404,7 +406,8 @@ $$\begin{eqnarray*}
 as needed. If $a \neq b$, we have
 $$\begin{eqnarray*}
  &   & \count(a,\cat(\cons(b,x),y)) \\
- & = & \count(a,\cons(b,\cat(x,y))) \\
+ &     \href{@cat@#cor-cat-cons}
+   = & \count(a,\cons(b,\cat(x,y))) \\
  & = & \bif{\beq(a,b)}{\next(\count(a,\cat(x,y)))}{\count(a,\cat(x,y))} \\
  & = & \count(a,\cat(x,y)) \\
  & = & \nplus(\count(a,x),\count(a,y)) \\

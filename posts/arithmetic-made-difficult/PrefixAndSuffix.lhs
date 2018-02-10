@@ -96,13 +96,15 @@ Let $A$ be a set. The following hold for all $x,y \in \lists{A}$.
 $$\begin{eqnarray*}
  &   & \prefix(x,\cat(x,y)) \\
  & = & \prefix(\nil,\cat(\nil,y)) \\
- & = & \prefix(\nil,y) \\
+ &     \href{@cat@#cor-cat-nil}
+   = & \prefix(\nil,y) \\
  & = & \btrue.
 \end{eqnarray*}$$
 For the inductive step, suppose the equality holds for some $x$, and let $a \in A$. Now we have
 $$\begin{eqnarray*}
  &   & \prefix(\cons(a,x),\cat(\cons(a,x),y)) \\
- & = & \prefix(\cons(a,x),\cons(a,\cat(x,y))) \\
+ &     \href{@cat@#cor-cat-cons}
+   = & \prefix(\cons(a,x),\cons(a,\cat(x,y))) \\
  & = & \prefix(x,\cat(x,y)) \\
  & = & \btrue
 \end{eqnarray*}$$
@@ -112,7 +114,8 @@ $$\begin{eqnarray*}
  &   & y \\
  & = & \cons(a,w) \\
  & = & \cons(a,\cat(x,z)) \\
- & = & \cat(\cons(a,x),z)
+ &     \href{@cat@#cor-cat-cons}
+   = & \cat(\cons(a,x),z)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -533,7 +536,8 @@ as claimed.
 2. If $\suffix(x,y)$, we have $y = \cat(u,x)$ for some $u$. Similarly, if $\suffix(y,x)$ then $x = \cat(v,y)$ for some $v$. Now
 $$\begin{eqnarray*}
  &   & \cat(\nil,x) \\
- & = & x \\
+ &     \href{@cat@#cor-cat-nil}
+   = & x \\
  & = & \cat(v,y) \\
  & = & \cat(v,\cat(u,x)) \\
  & = & \cat(\cat(v,u),x).

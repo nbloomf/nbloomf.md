@@ -163,13 +163,15 @@ Let $A$ be a set and $x,y \in \lists{A}$.
 $$\begin{eqnarray*}
  &   & \infix(x,\cat(y,x)) \\
  & = & \infix(x,\cat(\nil,x)) \\
- & = & \infix(x,x) \\
+ &     \href{@cat@#cor-cat-nil}
+   = & \infix(x,x) \\
  & = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $y$ and let $b \in A$. Now
 $$\begin{eqnarray*}
  &   & \infix(x,\cat(\cons(b,y),x)) \\
- & = & \infix(x,\cons(b,\cat(y,x))) \\
+ &     \href{@cat@#cor-cat-cons}
+   = & \infix(x,\cons(b,\cat(y,x))) \\
  & = & \bor(\prefix(x,\cons(b,\cat(y,x))),\infix(x,\cat(y,x))) \\
  & = & \bor(\prefix(x,\cons(b,\cat(y,x))),\btrue) \\
  &     \href{@or@#thm-or-true-right}
@@ -180,9 +182,11 @@ as needed.
 $$\begin{eqnarray*}
  &   & \infix(x,\cat(x,y)) \\
  & = & \infix(x,\cat(\cons(a,u),y)) \\
- & = & \infix(x,\cons(a,\cat(u,y))) \\
+ &     \href{@cat@#cor-cat-cons}
+   = & \infix(x,\cons(a,\cat(u,y))) \\
  & = & \bor(\prefix(x,\cons(a,\cat(u,y))),\infix(x,\cat(u,y))) \\
- & = & \bor(\prefix(x,\cat(\cons(a,u),y)),\infix(x,\cat(u,y))) \\
+ &     \href{@cat@#cor-cat-cons}
+   = & \bor(\prefix(x,\cat(\cons(a,u),y)),\infix(x,\cat(u,y))) \\
  & = & \bor(\prefix(x,\cat(x,y)),\infix(x,\cat(u,y))) \\
  & = & \bor(\btrue,\infix(x,\cat(u,y))) \\
  &     \href{@or@#thm-or-true-left}
@@ -325,7 +329,8 @@ $$\begin{eqnarray*}
  & = & \infix(x,y) \\
  & = & \infix(x,\cat(z,y)) \\
  & = & \infix(x,\cons(a,\cat(z,y))) \\
- & = & \infix(x,\cat(\cons(a,z),y))
+ &     \href{@cat@#cor-cat-cons}
+   = & \infix(x,\cat(\cons(a,z),y))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -375,7 +380,8 @@ We have two possibilities. If $\prefix(x,\cons(a,y)) = \btrue$, then $\cons(a,y)
 $$\begin{eqnarray*}
  &   & \cons(a,y) \\
  & = & \cons(a,\cat(u,\cat(x,v))) \\
- & = & \cat(\cons(a,u),\cat(x,v))
+ &     \href{@cat@#cor-cat-cons}
+   = & \cat(\cons(a,u),\cat(x,v))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -495,7 +501,8 @@ $$\begin{eqnarray*}
  & = & \cat(h,\cat(y,k)) \\
  & = & \cat(\nil,\cat(y,\nil)) \\
  & = & \cat(\nil,y) \\
- & = & y
+ &     \href{@cat@#cor-cat-nil}
+   = & y
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

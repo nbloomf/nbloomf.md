@@ -368,7 +368,8 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \cat(\takeWhile(p)(\nil),\dropWhile(p)(\nil)) \\
  & = & \cat(\nil,\nil) \\
- & = & \nil
+ &     \href{@cat@#cor-cat-nil}
+   = & \nil
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}

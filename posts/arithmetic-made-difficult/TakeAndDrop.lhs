@@ -480,21 +480,24 @@ $$\begin{eqnarray*}
  &   & \cat(\take(k,x),\drop(k,x)) \\
  & = & \cat(\take(\zero,x),\drop(\zero,x)) \\
  & = & \cat(\nil,x) \\
- & = & x
+ &     \href{@cat@#cor-cat-nil}
+   = & x
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $x$ for some $k$. We proceed by list induction on $x$. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \cat(\take(\next(k),x),\drop(\next(k),x)) \\
  & = & \cat(\take(\next(k),\nil),\drop(\next(k),\nil)) \\
  & = & \cat(\nil,\nil) \\
- & = & \nil \\
+ &     \href{@cat@#cor-cat-nil}
+   = & \nil \\
  & = & x
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \cat(\take(\next(k),\cons(a,x)),\drop(\next(k),\cons(a,x))) \\
  & = & \cat(\cons(a,\take(k,x)),\drop(k,x)) \\
- & = & \cons(a,\cat(\take(k,x),\drop(k,x))) \\
+ &     \href{@cat@#cor-cat-cons}
+   = & \cons(a,\cat(\take(k,x),\drop(k,x))) \\
  & = & \cons(a,x)
 \end{eqnarray*}$$
 as needed.

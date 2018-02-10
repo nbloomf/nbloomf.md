@@ -271,24 +271,29 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \filter(p)(\cat(x,y)) \\
  & = & \filter(p)(\cat(\nil,y)) \\
- & = & \filter(p)(y) \\
- & = & \cat(\nil,\filter(p)(y)) \\
+ &     \href{@cat@#cor-cat-nil}
+   = & \filter(p)(y) \\
+ &     \href{@cat@#cor-cat-nil}
+   = & \cat(\nil,\filter(p)(y)) \\
  & = & \cat(\filter(p)(\nil),\filter(p)(y)) \\
  & = & \cat(\filter(p)(x),\filter(p)(y))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. If $p(a) = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \filter(p)(\cat(\cons(a,x),y)) \\
- & = & \filter(p)(\cons(a,\cat(x,y))) \\
+ &     \href{@cat@#cor-cat-cons}
+   = & \filter(p)(\cons(a,\cat(x,y))) \\
  & = & \cons(a,\filter(p)(\cat(x,y))) \\
  & = & \cons(a,\cat(\filter(p)(x),\filter(p)(y))) \\
- & = & \cat(\cons(a,\filter(p)(x)),\filter(p)(y)) \\
+ &     \href{@cat@#cor-cat-cons}
+   = & \cat(\cons(a,\filter(p)(x)),\filter(p)(y)) \\
  & = & \cat(\filter(p)(\cons(a,x)),\filter(p)(y))
 \end{eqnarray*}$$
 as needed. If $p(a) = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \filter(p)(\cat(\cons(a,x),y)) \\
- & = & \filter(p)(\cons(a,\cat(x,y))) \\
+ &     \href{@cat@#cor-cat-cons}
+   = & \filter(p)(\cons(a,\cat(x,y))) \\
  & = & \filter(p)(\cat(x,y)) \\
  & = & \cat(\filter(p)(x),\filter(p)(y)) \\
  & = & \cat(\filter(p)(\cons(a,x)),\filter(p)(y))

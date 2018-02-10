@@ -197,18 +197,22 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \map(f)(\cat(x,y)) \\
  & = & \map(f)(\cat(\nil,y)) \\
- & = & \map(f)(y) \\
- & = & \cat(\nil,\map(f)(y)) \\
+ &     \href{@cat@#cor-cat-nil}
+   = & \map(f)(y) \\
+ &     \href{@cat@#cor-cat-nil}
+   = & \cat(\nil,\map(f)(y)) \\
  & = & \cat(\map(f)(\nil),\map(f)(y)) \\
  & = & \cat(\map(f)(x),\map(f)(y))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x \in \lists{A}$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \map(f)(\cat(\cons(a,x),y)) \\
- & = & \map(f)(\cons(a,\cat(x,y))) \\
+ &     \href{@cat@#cor-cat-cons}
+   = & \map(f)(\cons(a,\cat(x,y))) \\
  & = & \cons(f(a),\map(f)(\cat(x,y))) \\
  & = & \cons(f(a),\cat(\map(f)(x),\map(f)(y))) \\
- & = & \cat(\cons(f(a),\map(f)(x)),\map(f)(y)) \\
+ &     \href{@cat@#cor-cat-cons}
+   = & \cat(\cons(f(a),\map(f)(x)),\map(f)(y)) \\
  & = & \cat(\map(f)(\cons(a,x)),\map(f)(y))
 \end{eqnarray*}$$
 as needed.

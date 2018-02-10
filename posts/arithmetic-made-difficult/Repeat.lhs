@@ -175,7 +175,8 @@ $$\begin{eqnarray*}
    = & \repeat(\next(\nplus(m,n)),a) \\
  & = & \cons(a,\repeat(\nplus(m,n),a)) \\
  & = & \cons(a,\cat(\repeat(m,a),\repeat(n,a))) \\
- & = & \cat(\cons(a,\repeat(m,a)),\repeat(n,a)) \\
+ &     \href{@cat@#cor-cat-cons}
+   = & \cat(\cons(a,\repeat(m,a)),\repeat(n,a)) \\
  & = & \cat(\repeat(\next(m),a),\repeat(n,a))
 \end{eqnarray*}$$
 as needed.

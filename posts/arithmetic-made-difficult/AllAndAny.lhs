@@ -216,7 +216,8 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \all(p)(\cat(x,y)) \\
  & = & \all(p)(\cat(\nil,y)) \\
- & = & \all(p)(y) \\
+ &     \href{@cat@#cor-cat-nil}
+   = & \all(p)(y) \\
  &     \href{@and@#thm-and-true-left}
    = & \band(\btrue,\all(p)(y)) \\
  & = & \band(\all(p)(\nil),\all(p)(y)) \\
@@ -225,7 +226,8 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \all(p)(\cat(\cons(a,x),y)) \\
- & = & \all(p)(\cons(a,\cat(x,y))) \\
+ &     \href{@cat@#cor-cat-cons}
+   = & \all(p)(\cons(a,\cat(x,y))) \\
  & = & \band(p(a),\all(p)(\cat(x,y))) \\
  & = & \band(p(a),\band(\all(p)(x),\all(p)(y))) \\
  &     \href{@and@#thm-and-associative}
