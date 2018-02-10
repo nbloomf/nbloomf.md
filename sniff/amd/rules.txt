@@ -316,3 +316,18 @@
 @snoc@#def-snoc	\\snoc(a,x) = \\foldr{\\cons(a,\\nil)}{\\cons}(x)
 @snoc@#cor-snoc-nil	\\snoc(a,\\nil) = \\cons(a,\\nil)
 @snoc@#cor-snoc-cons	\\snoc(a,\\cons(b,x)) = \\cons(b,\\snoc(a,x))
+@snoc@#thm-snoc-eq	\\beq(\\snoc(a,x),\\snoc(b,y)) = \\band(\\beq(a,b),\\beq(x,y))
+@snoc@#thm-snoc-foldl	\\foldl{f}(e,\\snoc(a,x)) = f(\\foldl{f}(e,x),a)
+@snoc@#thm-isnil-snoc	\\isnil(\\snoc(a,x)) = \\bfalse
+#=======================#
+#--- rev ---------------#
+#=======================#
+@rev@#def-revcat	\\revcat = \\foldl{\\flip(\\cons)}
+@rev@#cor-revcat-nil	\\revcat(x,\\nil) = x
+@rev@#cor-revcat-cons	\\revcat(x,\\cons(a,y)) = \\revcat(\\cons(a,x),y)
+@rev@#thm-revcat-snoc-left	\\revcat(\\snoc(a,x),y) = \\snoc(a,\\revcat(x,y))
+@rev@#thm-revcat-snoc-right	\\revcat(x,\\snoc(a,y)) = \\cons(a,\\revcat(x,y))
+@rev@#def-rev	\\rev(x) = \\revcat(\\nil,x)
+@rev@#thm-rev-foldr	\\rev = \\foldr{\\nil}{\\snoc}
+@rev@#cor-rev-nil	\\rev(\\nil) = \\nil
+@rev@#cor-rev-cons	\\rev(\\cons(a,x)) = \\snoc(a,\\rev(x))

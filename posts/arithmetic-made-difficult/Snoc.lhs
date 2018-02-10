@@ -112,7 +112,8 @@ Let $A$ be a set and let $x \in \lists{A}$. Then either $x = \nil$ or $x = \snoc
 We proceed by list induction on $x$. For the base case $x = \nil$, the conclusion holds trivially. For the inductive step, suppose the conclusion holds for some $x$ and let $a \in A$. Now $\cons(a,x) \neq \nil$. We have two cases for $x$; if $x = \nil$, then $$\cons(a,x) = \cons(a,\nil) = \snoc(a,\nil)$$ as needed. Suppose instead that $x \neq \nil$; by the inductive hypothesis we have $x = \snoc(b,w)$ for some $b \in A$ and $w \in \lists{A}$. Then we have
 $$\begin{eqnarray*}
  &   & \cons(a,x) \\
- & = & \cons(a,\snoc(b,w)) \\
+ &     \hyp{x = \snoc(b,w)}
+   = & \cons(a,\snoc(b,w)) \\
  &     \href{@snoc@#cor-snoc-cons}
    = & \snoc(b,\cons(a,w))
 \end{eqnarray*}$$
@@ -123,6 +124,7 @@ as claimed.
 Also, $\snoc$ interacts with $\beq$.
 
 :::::: theorem :::::
+[]{#thm-snoc-eq}
 Let $A$ be a set with $a,b \in A$ and $x,y \in \lists{A}$. Then $$\beq(\snoc(a,x),\snoc(b,y)) = \band(\beq(a,b),\beq(x,y)).$$
 
 ::: proof ::::::::::
@@ -192,6 +194,7 @@ as needed.
 Now $\foldl{\ast}$ interacts with $\snoc$.
 
 :::::: theorem :::::
+[]{#thm-snoc-foldl}
 We have $$\foldl{\varphi}(e,\snoc(a,x)) = \varphi(\foldl{\varphi}(e,x),a).$$
 
 ::: proof ::::::::::
@@ -214,7 +217,8 @@ $$\begin{eqnarray*}
    = & \foldl{\varphi}(e,\cons(b,\snoc(a,x))) \\
  &     \href{@foldl@#def-foldl-cons}
    = & \foldl{\varphi}(\varphi(e,b),\snoc(a,x)) \\
- & = & \varphi(\foldl{\varphi}(\varphi(e,b),x),a) \\
+ &     \hyp{\foldl{\varphi}(c,\snoc(a,x)) = \varphi(\foldl{\varphi}(c,x),a)}
+   = & \varphi(\foldl{\varphi}(\varphi(e,b),x),a) \\
  &     \href{@foldl@#def-foldl-cons}
    = & \varphi(\foldl{\varphi}(e,\cons(b,x)),a)
 \end{eqnarray*}$$
@@ -237,6 +241,7 @@ as needed.
 And $\snoc$ is not $\nil$.
 
 :::::: theorem :::::
+[]{#thm-isnil-snoc}
 We have $$\isnil(\snoc(a,x)) = \bfalse.$$
 
 ::: proof ::::::::::

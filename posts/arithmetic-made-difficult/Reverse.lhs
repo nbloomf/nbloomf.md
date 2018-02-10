@@ -17,6 +17,7 @@ slug: rev
 > import And
 > import Or
 > import Implies
+> import Functions
 > import NaturalNumbers
 > import Lists
 > import HeadAndTail
@@ -28,20 +29,20 @@ Today we'll define a function that takes a list and reverses the order of its el
 First we define a utility as follows.
 
 :::::: definition ::
-Let $A$ be a set, and define $\varphi : \lists{A} \times A \rightarrow \lists{A}$ by $\varphi(x,a) = \cons(a,x)$. We now define a map $\revcat : \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\revcat = \foldl{\varphi}.$$
+[]{#def-revcat}
+Let $A$ be a set. We define a map $\revcat : \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\revcat = \foldl{\flip(\cons)}.$$
 
 In Haskell:
 
 > revcat :: (List t) => t a -> t a -> t a
-> revcat = foldl phi
->   where
->     phi x a = cons a x
+> revcat = foldl (flip cons)
 
 ::::::::::::::::::::
 
 Since $\revcat$ is defined as a $\foldl{\ast}$, it can be characterized as the unique solution to a system of functional equations.
 
 :::::: corollary :::
+[]{#cor-revcat-nil}[]{#cor-revcat-cons}
 Let $A$ be a set. Then $\revcat$ is the unique solution $f : \lists{A} \times \lists{A} \rightarrow \lists{A}$ to the following system of equations for all $a \in A$ and $x,y \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(x,\nil) = x \\
@@ -71,6 +72,7 @@ $$\left\{\begin{array}{l}
 Now $\revcat$ interacts with $\snoc$.
 
 :::::: theorem :::::
+[]{#thm-revcat-snoc-left}[]{#thm-revcat-snoc-right}
 Let $A$ be a set. For all $a \in A$ and $x,y \in \lists{A}$ we have the following.
 
 1. $\revcat(\snoc(a,x),y) = \snoc(a,\revcat(x,y))$.
@@ -135,6 +137,7 @@ as needed.
 And we define list reversal in terms of $\revcat$.
 
 :::::: definition ::
+[]{#def-rev}
 Let $A$ be a set. We define $\rev : \lists{A} \rightarrow \lists{A}$ by $$\rev(x) = \revcat(\nil,x).$$
 
 In Haskell:
@@ -147,6 +150,7 @@ In Haskell:
 Now $\rev$ is essentially defined here as a left fold, but it can also be characterized as a right fold.
 
 :::::: theorem :::::
+[]{#thm-rev-foldr}
 We have $$\rev(x) = \foldr{\nil}{\snoc}(x).$$
 
 ::: proof ::::::::::
@@ -156,7 +160,7 @@ $$\begin{eqnarray*}
  &     \href{@lists@#def-foldr-nil}
    = & \nil \\
  & = & \revcat(\nil,\nil) \\
- & = & \rev(\nil).
+ & = & \rev(\nil)
 \end{eqnarray*}$$
 For the inductive step, suppose the equality holds for some $x \in \lists{A}$, and let $a \in A$. Now
 $$\begin{eqnarray*}
@@ -188,6 +192,7 @@ as needed.
 Because $\rev$ is equivalent to a $\foldr{\ast}{\ast}$, it can be characterized as the unique solution to a system of functional equations.
 
 :::::: corollary :::
+[]{#cor-rev-nil}[]{#cor-rev-cons}
 Let $A$ be a set. Then $\rev$ is the unique function $f : \lists{A} \rightarrow \lists{A}$ having the property that for all $a \in A$ and $x \in \lists{A}$ we have
 $$\left\{\begin{array}{l}
  f(\nil) = \nil \\
