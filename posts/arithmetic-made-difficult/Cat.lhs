@@ -26,6 +26,7 @@ slug: cat
 In this post we'll consider the function that takes two lists and appends one to the "end" of the other. This function is known as $\cat$, which is short for *catenate* -- a jargony word that means *to connect in a series*.
 
 :::::: definition ::
+[]{#def-cat}
 We define a map $\cat : \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\cat(x,y) = \foldr{y}{\cons}(x).$$
 
 In Haskell:
@@ -38,6 +39,7 @@ In Haskell:
 Because $\cat$ is defined in terms of fold, it is the unique solution to a system of functional equations.
 
 :::::: corollary :::
+[]{#cor-cat-nil}[]{#cor-cat-cons}
 Let $A$ be a set. Then $\cat$ is the unique mapping $f : \lists{A} \times \lists{A} \rightarrow \lists{A}$ with the property that for all $a \in A$ and $x,y \in \lists{A}$ we have
 $$\left\{\begin{array}{l}
  f(\nil,y) = y \\

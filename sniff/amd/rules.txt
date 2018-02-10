@@ -331,3 +331,9 @@
 @rev@#thm-rev-foldr	\\rev = \\foldr{\\nil}{\\snoc}
 @rev@#cor-rev-nil	\\rev(\\nil) = \\nil
 @rev@#cor-rev-cons	\\rev(\\cons(a,x)) = \\snoc(a,\\rev(x))
+#=======================#
+#--- cat ---------------#
+#=======================#
+@cat@#def-cat	\\cat(x,y) = \\foldr{y}{\\cons}(x)
+@cat@#cor-cat-nil	\\cat(\\nil,y) = y
+@cat@#cor-cat-cons	\\cat(\\cons(a,x),y) = \\cons(a,\\cat(x,y))
