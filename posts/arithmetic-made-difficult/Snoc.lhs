@@ -30,6 +30,7 @@ The $\cons$ function attaches a new item to the "beginning" of a list; we want a
 First let's tackle adding items to the end of a list; traditionally this operator is called $\snoc$ as a bad pun on "reverse $\cons$". Now the signature of $\snoc$ should be something like $$\snoc : A \times \lists{A} \rightarrow \lists{A},$$ and $\foldr{e}{\varphi}$ can be used to build a map $\lists{A} \rightarrow \lists{A}$, provided $e$ is in $\lists{A}$ and $\varphi : A \times \lists{A} \rightarrow \lists{A}$. Considering the behavior we want $\snoc$ to have, we define the following.
 
 :::::: definition ::
+[]{#def-snoc}
 Let $A$ be a set. We now define a map $\snoc : A \times \lists{A} \rightarrow \lists{A}$ by $$\snoc(a,x) = \foldr{\cons(a,\nil)}{\cons}(x).$$
 
 In Haskell:
@@ -42,6 +43,7 @@ In Haskell:
 Because $\snoc$ is defined directly as a fold, it is the unique solution to a system of functional equations.
 
 :::::: corollary :::
+[]{#cor-snoc-nil}[]{#cor-snoc-cons}
 Let $A$ be a set. Then $\snoc$ is the unique function $f : A \times \lists{A} \rightarrow \lists{A}$ with the property that for all $a,b \in A$ and $x \in \lists{A}$ we have
 $$\left\{ \begin{array}{ll}
  f(a,\nil) = \cons(a,\nil) \\

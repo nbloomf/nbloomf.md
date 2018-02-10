@@ -305,3 +305,14 @@
 @head-tail@#thm-head-cons	\\head(\\cons(a,x)) = \\rgt(a)
 @head-tail@#thm-tail-nil	\\tail(\\nil) = \\nil
 @head-tail@#thm-tail-cons	\\tail(\\cons(a,x)) = x
+#=======================#
+#--- foldl -------------#
+#=======================#
+@foldl@#def-foldl-nil	\\foldl{f}(e,\\nil) = e
+@foldl@#def-foldl-cons	\\foldl{f}(e,\\cons(a,x)) = \\foldl{f}(f(e,a),x)
+#=======================#
+#--- snoc --------------#
+#=======================#
+@snoc@#def-snoc	\\snoc(a,x) = \\foldr{\\cons(a,\\nil)}{\\cons}(x)
+@snoc@#cor-snoc-nil	\\snoc(a,\\nil) = \\cons(a,\\nil)
+@snoc@#cor-snoc-cons	\\snoc(a,\\cons(b,x)) = \\cons(b,\\snoc(a,x))
