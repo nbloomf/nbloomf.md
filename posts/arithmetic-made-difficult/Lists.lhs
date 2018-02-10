@@ -43,7 +43,8 @@ $$\begin{eqnarray*}
    = & \id(\lft(\ast)) \\
  &     \href{@lists@#def-uncons-inverse-left}
    = & \compose{\uncons}{\either(\const(\nil),\uncurry(\cons))}(\lft(\ast)) \\
- & = & \uncons(\either(\const(\nil),\uncurry(\cons))(\lft(\ast))) \\
+ &     \href{@functions@#def-compose}
+   = & \uncons(\either(\const(\nil),\uncurry(\cons))(\lft(\ast))) \\
  &     \href{@disjoint-unions@#def-either-lft}
    = & \uncons(\const(\nil)(\ast)) \\
  &     \href{@functions@#def-const}
@@ -53,7 +54,10 @@ as claimed.
 2. We have
 $$\begin{eqnarray*}
  &   & \rgt(\tup(a)(x)) \\
- & = & \compose{\uncons}{\either(\const(\nil),\uncurry(\cons))}(\rgt(\tup(a)(x))) \\
+ &     \href{@functions@#def-id}
+   = & \id(\rgt(\tup(a)(x))) \\
+ &     \href{@lists@#def-uncons-inverse-left}
+   = & \compose{\uncons}{\either(\const(\nil),\uncurry(\cons))}(\rgt(\tup(a)(x))) \\
  &     \href{@functions@#def-compose}
    = & \uncons(\either(\const(\nil),\uncurry(\cons))(\rgt(\tup(a)(x)))) \\
  &     \href{@disjoint-unions@#def-either-rgt}
@@ -82,7 +86,8 @@ $$\begin{eqnarray*}
    = & \id(z) \\
  &     \href{@lists@#def-uncons-inverse-right}
    = & \compose{\either(\const(\nil),\uncurry(\cons))}{\uncons}(z) \\
- & = & \either(\const(\nil),\uncurry(\cons))(\uncons(z)) \\
+ &     \href{@functions@#def-compose}
+   = & \either(\const(\nil),\uncurry(\cons))(\uncons(z)) \\
  &     \hyp{\uncons(z) = \lft(\ast)}
    = & \either(\const(\nil),\uncurry(\cons))(\lft(\ast)) \\
  &     \href{@disjoint-unions@#def-either-lft}
@@ -97,10 +102,14 @@ $$\begin{eqnarray*}
    = & \id(z) \\
  &     \href{@lists@#def-uncons-inverse-right}
    = & \compose{\either(\const(\nil),\uncurry(\cons))}{\uncons}(z) \\
- & = & \either(\const(\nil),\cons)(\uncons(z)) \\
+ &     \href{@functions@#def-compose}
+   = & \either(\const(\nil),\uncurry(\cons))(\uncons(z)) \\
  &     \hyp{\uncons(z) = \rgt(\tup(a)(x))}
-   = & \either(\const(\nil),\cons)(\rgt(\tup(a)(x))) \\
- & = & \cons(a,x) \\
+   = & \either(\const(\nil),\uncurry(\cons))(\rgt(\tup(a)(x))) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \uncurry(\cons)(\tup(a)(x)) \\
+ &     \href{@tuples@#def-uncurry}
+   = & \cons(a,x) \\
 \end{eqnarray*}$$
 as claimed.
 2. If $\nil = \cons(a,x)$, we have
@@ -116,10 +125,13 @@ $$\begin{eqnarray*}
 which is absurd.
 3. The "if" direction is clear. To see the "only if" direction, suppose $\cons(a,x) = \cons(b,y)$. Then we have
 $$\begin{eqnarray*}
- &   & \rgt((a,x)) \\
- & = & \uncons(\cons(a,x)) \\
- & = & \uncons(\cons(b,y)) \\
- & = & \rgt((b,y)),
+ &   & \rgt(\tup(a)(x)) \\
+ &     \href{@lists@#thm-uncons-cons}
+   = & \uncons(\cons(a,x)) \\
+ &     \hyp{\cons(a,x) = \cons(b,y)}
+   = & \uncons(\cons(b,y)) \\
+ &     \href{@lists@#thm-uncons-cons}
+   = & \rgt(\tup(b)(y))
 \end{eqnarray*}$$
 so that $(a,x) = (b,y)$, and thus $a = b$ and $x = y$ as claimed.
 ::::::::::::::::::::
@@ -245,7 +257,8 @@ $$\begin{eqnarray*}
  &   & \foldr{\nil}{\cons}(\cons(a,x)) \\
  &     \href{@lists@#def-foldr-cons}
    = & \cons(a,\foldr{\nil}{\cons}(x)) \\
- & = & \cons(a,x)
+ &     \hyp{\foldr{\nil}{\cons}(x) = x}
+   = & \cons(a,x)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

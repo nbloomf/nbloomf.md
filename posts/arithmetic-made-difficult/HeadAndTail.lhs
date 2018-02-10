@@ -26,7 +26,8 @@ slug: head-tail
 We define some helper functions in terms of $\uncons$, analogous to $\prev$ and $\iszero$ on $\nats$. These do not require recursion.
 
 :::::: definition ::
-Let $A$ be a set. We define $\isnil : \lists{A} \rightarrow \bool$ by $$\isnil = \either(\const(\btrue),\const(\bfalse)) \circ \uncons$$ and $\head : \lists{A} \rightarrow 1 + A$ by $$\head = \uPair(\id,\fst) \circ \uncons$$ and $\tail : \lists{A} \rightarrow \lists{A}$ by $$\tail = \either(\const(\nil),\snd) \circ \uncons.$$
+[]{#def-isnil}[]{#def-head}[]{#def-tail}
+Let $A$ be a set. We define $\isnil : \lists{A} \rightarrow \bool$ by $$\isnil = \compose{\either(\const(\btrue),\const(\bfalse))}{\uncons}$$ and $\head : \lists{A} \rightarrow 1 + A$ by $$\head = \compose{\uPair(\id,\fst)}{\uncons}$$ and $\tail : \lists{A} \rightarrow \lists{A}$ by $$\tail = \compose{\either(\const(\nil),\snd)}{\uncons}.$$
 
 In Haskell:
 
@@ -46,6 +47,7 @@ In Haskell:
 Now $\isnil$ detects $\nil$:
 
 :::::: theorem :::::
+[]{#thm-isnil-nil}[]{#thm-isnil-cons}
 Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have the following.
 
 1. $\isnil(\nil) = \btrue$.
@@ -55,7 +57,10 @@ Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have the following
 1. We have
 $$\begin{eqnarray*}
  &   & \isnil(\nil) \\
- & = & \either(\const(\btrue),\const(\bfalse))(\uncons(\nil)) \\
+ &     \href{@head-tail@#def-isnil}
+   = & \compose{\either(\const(\btrue),\const(\bfalse))}{\uncons}(\nil) \\
+ &     \href{@functions@#def-compose}
+   = & \either(\const(\btrue),\const(\bfalse))(\uncons(\nil)) \\
  &     \href{@lists@#thm-uncons-nil}
    = & \either(\const(\btrue),\const(\bfalse))(\lft(\ast)) \\
  &     \href{@disjoint-unions@#def-either-lft}
@@ -67,10 +72,16 @@ as claimed.
 2. We have
 $$\begin{eqnarray*}
  &   & \isnil(\cons(a,x)) \\
- & = & \either(\const(\btrue),\const(\bfalse))(\uncons(\cons(a,x))) \\
- & = & \either(\const(\btrue),\const(\bfalse))(\rgt((a,x))) \\
- & = & \const(\bfalse)((a,x)) \\
- & = & \bfalse
+ &     \href{@head-tail@#def-isnil}
+   = & \compose{\either(\const(\btrue),\const(\bfalse))}{\uncons}(\cons(a,x)) \\
+ &     \href{@functions@#def-compose}
+   = & \either(\const(\btrue),\const(\bfalse))(\uncons(\cons(a,x))) \\
+ &     \href{@lists@#thm-uncons-cons}
+   = & \either(\const(\btrue),\const(\bfalse))(\rgt(\tup(a)(x))) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \const(\bfalse)(\tup(a)(x)) \\
+ &     \href{@functions@#def-const}
+   = & \bfalse
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -97,6 +108,7 @@ as claimed.
 $\head$ extracts the "first" entry of a list:
 
 :::::: theorem :::::
+[]{#thm-head-nil}[]{#thm-head-cons}
 Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have the following.
 
 1. $\head(\nil) = \lft(\ast)$.
@@ -106,7 +118,10 @@ Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have the following
 1. We have
 $$\begin{eqnarray*}
  &   & \head(\nil) \\
- & = & \uPair(\id,\fst)(\uncons(\nil)) \\
+ &     \href{@head-tail@#def-head}
+   = & \compose{\uPair(\id,\fst)}{\uncons}(\nil) \\
+ &     \href{@functions@#def-compose}
+   = & \uPair(\id,\fst)(\uncons(\nil)) \\
  &     \href{@lists@#thm-uncons-nil}
    = & \uPair(\id,\fst)(\lft(\ast)) \\
  &     \href{@disjoint-unions@#thm-uPair-lft}
@@ -118,10 +133,16 @@ as claimed.
 2. We have
 $$\begin{eqnarray*}
  &   & \head(\cons(a,x)) \\
- & = & \uPair(\id,\fst)(\uncons(\cons(a,x))) \\
- & = & \uPair(\id,\fst)(\rgt((a,x))) \\
- & = & \rgt(\fst((a,x))) \\
- & = & \rgt(a)
+ &     \href{@head-tail@#def-head}
+   = & \compose{\uPair(\id,\fst)}{\uncons}(\cons(a,x)) \\
+ &     \href{@functions@#def-compose}
+   = & \uPair(\id,\fst)(\uncons(\cons(a,x))) \\
+ &     \href{@lists@#thm-uncons-cons}
+   = & \uPair(\id,\fst)(\rgt(\tup(a)(x))) \\
+ &     \href{@disjoint-unions@#thm-uPair-rgt}
+   = & \rgt(\fst(\tup(a)(x))) \\
+ &     \href{@tuples@#thm-fst-tup}
+   = & \rgt(a)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -148,6 +169,7 @@ as claimed.
 And $\tail$ peels off the "first" entry of a list.
 
 :::::: theorem :::::
+[]{#thm-tail-nil}[]{#thm-tail-cons}
 Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have the following.
 
 1. $\tail(\nil) = \nil$.
@@ -157,7 +179,10 @@ Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have the following
 1. We have
 $$\begin{eqnarray*}
  &   & \tail(\nil) \\
- & = & \either(\const(\nil),\snd)(\uncons(\nil)) \\
+ &     \href{@head-tail@#def-tail}
+   = & \compose{\either(\const(\nil),\snd)}{\uncons}(\nil) \\
+ &     \href{@functions@#def-compose}
+   = & \either(\const(\nil),\snd)(\uncons(\nil)) \\
  &     \href{@lists@#thm-uncons-nil}
    = & \either(\const(\nil),\snd)(\lft(\ast)) \\
  &     \href{@disjoint-unions@#def-either-lft}
@@ -169,10 +194,16 @@ as claimed.
 2. We have
 $$\begin{eqnarray*}
  &   & \tail(\cons(a,x)) \\
- & = & \either(\const(\nil),\snd)(\uncons(\cons(a,x))) \\
- & = & \either(\const(\nil),\snd)(\rgt((a,x))) \\
- & = & \snd((a,x)) \\
- & = & x
+ &     \href{@head-tail@#def-tail}
+   = & \compose{\either(\const(\nil),\snd)}{\uncons}(\cons(a,x)) \\
+ &     \href{@functions@#def-compose}
+   = & \either(\const(\nil),\snd)(\uncons(\cons(a,x))) \\
+ &     \href{@lists@#thm-uncons-cons}
+   = & \either(\const(\nil),\snd)(\rgt(\tup(a)(x))) \\
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \snd(\tup(a)(x)) \\
+ &     \href{@tuples@#thm-snd-tup}
+   = & x
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

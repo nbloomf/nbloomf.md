@@ -293,3 +293,15 @@
 @lists@#thm-uncons-cons	\\uncons(\\cons(a,x)) = \\rgt(\\tup(a)(x))
 @lists@#def-foldr-nil	\\foldr{e}{f}(\\nil) = e
 @lists@#def-foldr-cons	\\foldr{e}{f}(\\cons(a,x)) = f(a,\\foldr{e}{f}(x))
+#=======================#
+#--- head-tail ---------#
+#=======================#
+@head-tail@#def-isnil	\\isnil = \\compose{\\either(\\const(\\btrue),\\const(\\bfalse))}{\\uncons}
+@head-tail@#def-head	\\head = \\compose{\\uPair(\\id,\\fst)}{\\uncons}
+@head-tail@#def-tail	\\tail = \\compose{\\either(\\const(\\nil),\\snd)}{\\uncons}
+@head-tail@#thm-isnil-nil	\\isnil(\\nil) = \\btrue
+@head-tail@#thm-isnil-cons	\\isnil(\\cons(a,x)) = \\bfalse
+@head-tail@#thm-head-nil	\\head(\\nil) = \\lft(\\ast)
+@head-tail@#thm-head-cons	\\head(\\cons(a,x)) = \\rgt(a)
+@head-tail@#thm-tail-nil	\\tail(\\nil) = \\nil
+@head-tail@#thm-tail-cons	\\tail(\\cons(a,x)) = x
