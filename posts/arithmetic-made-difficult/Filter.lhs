@@ -142,31 +142,37 @@ Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $a \in A$ an
 We proceed by list induction on $x$. For the base case $x = \nil$, if $p(a) = \btrue$ we have
 $$\begin{eqnarray*}
  &   & \filter(p)(\snoc(a,\nil)) \\
- & = & \filter(p)(\cons(a,\nil)) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \filter(p)(\cons(a,\nil)) \\
  & = & \cons(a,\filter(p)(\nil)) \\
  & = & \cons(a,\nil) \\
- & = & \snoc(a,\nil)
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \snoc(a,\nil)
 \end{eqnarray*}$$
 as claimed, while if $p(a) = \bfalse$ we have
 $$\begin{eqnarray*}
  &   & \filter(p)(\snoc(a,\nil)) \\
- & = & \filter(p)(\cons(a,\nil)) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \filter(p)(\cons(a,\nil)) \\
  & = & \filter(p)(\nil) \\
  & = & \nil
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for some $x$ and let $b \in A$. If $p(a) = p(b) = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \filter(p)(\snoc(a,\cons(b,x))) \\
- & = & \filter(p)(\cons(b,\snoc(a,x))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \filter(p)(\cons(b,\snoc(a,x))) \\
  & = & \cons(b,\filter(p)(\snoc(a,x))) \\
  & = & \cons(b,\snoc(a,\filter(p)(x))) \\
- & = & \snoc(a,\cons(b,\filter(p)(x))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \snoc(a,\cons(b,\filter(p)(x))) \\
  & = & \snoc(a,\filter(p)(\cons(b,x)))
 \end{eqnarray*}$$
 as needed. If $p(a) = \btrue$ and $p(b) = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \filter(p)(\snoc(a,\cons(b,x))) \\
- & = & \filter(p)(\cons(b,\snoc(a,x))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \filter(p)(\cons(b,\snoc(a,x))) \\
  & = & \filter(p)(\snoc(a,x)) \\
  & = & \snoc(a,\filter(p)(x)) \\
  & = & \snoc(a,\filter(p)(\cons(b,x)))
@@ -174,7 +180,8 @@ $$\begin{eqnarray*}
 as needed. If $p(a) = \bfalse$ and $p(b) = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \filter(p)(\snoc(a,\cons(b,x))) \\
- & = & \filter(p)(\cons(b,\snoc(a,x))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \filter(p)(\cons(b,\snoc(a,x))) \\
  & = & \cons(b,\filter(p)(\snoc(a,x))) \\
  & = & \cons(b,\filter(p)(x)) \\
  & = & \filter(p)(\cons(b,x))
@@ -182,7 +189,8 @@ $$\begin{eqnarray*}
 as needed. Finally, if $p(a) = p(b) = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \filter(p)(\snoc(a,\cons(b,x))) \\
- & = & \filter(p)(\cons(b,\snoc(a,x))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \filter(p)(\cons(b,\snoc(a,x))) \\
  & = & \filter(p)(\snoc(a,x)) \\
  & = & \filter(p)(x) \\
  & = & \filter(p)(\cons(b,x))

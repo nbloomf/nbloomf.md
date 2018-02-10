@@ -234,19 +234,23 @@ Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. For all $a \in A$ and 
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \map(f)(\snoc(a,\nil)) \\
- & = & \map(f)(\cons(a,\nil)) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \map(f)(\cons(a,\nil)) \\
  & = & \cons(f(a),\map(f)(\nil)) \\
  & = & \cons(f(a),\nil) \\
- & = & \snoc(f(a),\nil) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \snoc(f(a),\nil) \\
  & = & \snoc(f(a),\map(f)(\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $f$ and $a$ for some $x$, and let $b \in A$. Now
 $$\begin{eqnarray*}
  &   & \map(f)(\snoc(a,\cons(b,x))) \\
- & = & \map(f)(\cons(b,\snoc(a,x))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \map(f)(\cons(b,\snoc(a,x))) \\
  & = & \cons(f(b),\map(f)(\snoc(a,x))) \\
  & = & \cons(f(b),\snoc(f(a),\map(f)(x))) \\
- & = & \snoc(f(a),\cons(f(b),\map(f)(x))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \snoc(f(a),\cons(f(b),\map(f)(x))) \\
  & = & \snoc(f(a),\map(f)(\cons(b,x)))
 \end{eqnarray*}$$
 as needed.

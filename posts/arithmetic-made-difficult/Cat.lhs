@@ -111,7 +111,8 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \snoc(a,\cat(x,\nil)) \\
  & = & \snoc(a,x) \\
- & = & \foldr{\cons(a,\nil)}{\cons}(x) \\
+ &     \href{@snoc@#def-snoc}
+   = & \foldr{\cons(a,\nil)}{\cons}(x) \\
  & = & \cat(x,\cons(a,\nil))
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for some $y \in \lists{A}$, and let $b \in A$. Now
@@ -120,7 +121,8 @@ $$\begin{eqnarray*}
  & = & \snoc(a,\cat(\snoc(b,x),y)) \\
  & = & \cat(\snoc(b,x),\snoc(a,y)) \\
  & = & \cat(x,\cons(b,\snoc(a,y))) \\
- & = & \cat(x,\snoc(a,\cons(b,y)))
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \cat(x,\snoc(a,\cons(b,y)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

@@ -78,14 +78,16 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \all(p,\snoc(a,x)) \\
  & = & \all(p,\snoc(a,\nil)) \\
- & = & \all(p,\cons(a,\nil)) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \all(p,\cons(a,\nil)) \\
  & = & \band(p(a),\all(p,\nil)) \\
  & = & \band(p(a),\all(p,x))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $p$ and $a$ for some $x$ and let $b \in A$. Using the inductive step, we have
 $$\begin{eqnarray*}
  &   & \all(p,\snoc(a,\cons(b,x))) \\
- & = & \all(p,\cons(b,\snoc(a,x))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \all(p,\cons(b,\snoc(a,x))) \\
  & = & \band(p(b),\all(p,\snoc(a,x))) \\
  & = & \band(p(b),\band(p(a),\all(p,x))) \\
  & = & \band(p(a),\band(p(b),\all(p,x))) \\

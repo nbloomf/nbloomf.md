@@ -302,7 +302,8 @@ Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have $$\dedupeL(\s
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \dedupeL(\snoc(a,\nil)) \\
- & = & \dedupeL(\cons(a,\nil)) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \dedupeL(\cons(a,\nil)) \\
  & = & \cons(a,\nil) \\
  &     \href{@booleans@#cor-if-false}
    = & \bif{\bfalse}{\nil}{\cons(a,\nil)} \\
@@ -312,7 +313,8 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$, and let $b \in A$. Now
 $$\begin{eqnarray*}
  &   & \dedupeL(\snoc(a,\cons(b,x))) \\
- & = & \dedupeL(\cons(b,\snoc(a,x))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \dedupeL(\cons(b,\snoc(a,x))) \\
  & = & \cons(b,\delete(b)(\dedupeL(\snoc(a,x)))) \\
  & = & \cons(b,\delete(b)(\bif{\elt(a,x)}{\dedupeL(x)}{\snoc(a,\dedupeL(x))})) \\
  & = & \bif{\elt(a,x)}{\cons(b,\delete(b)(\dedupeL(x)))}{\cons(b,\delete(b)(\snoc(a,\dedupeL(x))))} \\
@@ -323,7 +325,8 @@ $$\begin{eqnarray*}
  & = & \bif{\elt(a,x)}{\dedupeL(\cons(b,x))}{\bif{\beq(a,b)}{\dedupeL(\cons(b,x))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x))))}} \\
  & = & \bif{\bor(\beq(a,b),\elt(a,x))}{\dedupeL(\cons(b,x))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x))))} \\
  & = & \bif{\elt(a,\cons(b,x))}{\dedupeL(\cons(b,x))}{\cons(b,\snoc(a,\delete(b)(\dedupeL(x))))} \\
- & = & \bif{\elt(a,\cons(b,x))}{\dedupeL(\cons(b,x))}{\snoc(a,\cons(b,\delete(b)(\dedupeL(x))))} \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \bif{\elt(a,\cons(b,x))}{\dedupeL(\cons(b,x))}{\snoc(a,\cons(b,\delete(b)(\dedupeL(x))))} \\
  & = & \bif{\elt(a,\cons(b,x))}{\dedupeL(\cons(b,x))}{\snoc(a,\dedupeL(\cons(b,x)))}
 \end{eqnarray*}$$
 as needed.

@@ -79,7 +79,8 @@ Let $A$ and $B$ be sets with $e \in B$ and $\varphi : A \times B \rightarrow B$.
 We proceed by list induction. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \foldr{e}{\varphi}(\snoc(a,\nil)) \\
- & = & \foldr{e}{\varphi}(\cons(a,\nil)) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \foldr{e}{\varphi}(\cons(a,\nil)) \\
  &     \href{@lists@#def-foldr-cons}
    = & \varphi(a,\foldr{e}{\varphi}(\nil)) \\
  &     \href{@lists@#def-foldr-nil}
@@ -90,7 +91,8 @@ $$\begin{eqnarray*}
 as claimed. Suppose now that the equality holds for some $x \in \lists{A}$. Now
 $$\begin{eqnarray*}
  &   & \foldr{e}{\varphi}(\snoc(a,\cons(b,x))) \\
- & = & \foldr{e}{\varphi}(\cons(b,\snoc(a,x))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \foldr{e}{\varphi}(\cons(b,\snoc(a,x))) \\
  &     \href{@lists@#def-foldr-cons}
    = & \varphi(b,\foldr{e}{\varphi}(\snoc(a,x))) \\
  & = & \varphi(b,\foldr{\varphi(a,e)}{\varphi}(x)) \\
@@ -111,7 +113,8 @@ We proceed by list induction on $x$. For the base case $x = \nil$, the conclusio
 $$\begin{eqnarray*}
  &   & \cons(a,x) \\
  & = & \cons(a,\snoc(b,w)) \\
- & = & \snoc(b,\cons(a,w))
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \snoc(b,\cons(a,w))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -195,18 +198,25 @@ We have $$\foldl{\varphi}(e,\snoc(a,x)) = \varphi(\foldl{\varphi}(e,x),a).$$
 We proceed by list induction on $x$. For the base case we have
 $$\begin{eqnarray*}
  &   & \foldl{\varphi}(e,\snoc(a,\nil)) \\
- & = & \foldl{\varphi}(e,\cons(a,\nil)) \\
- & = & \foldl{\varphi}(\varphi(e,a),\nil) \\
- & = & \varphi(e,a) \\
- & = & \varphi(\foldl{\varphi}(e,\nil),a)
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \foldl{\varphi}(e,\cons(a,\nil)) \\
+ &     \href{@foldl@#def-foldl-cons}
+   = & \foldl{\varphi}(\varphi(e,a),\nil) \\
+ &     \href{@foldl@#def-foldl-nil}
+   = & \varphi(e,a) \\
+ &     \href{@foldl@#def-foldl-nil}
+   = & \varphi(\foldl{\varphi}(e,\nil),a)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $e$ and $a$ for some $x$, and let $b \in A$. Then we have
 $$\begin{eqnarray*}
  &   & \foldl{\varphi}(e,\snoc(a,\cons(b,x))) \\
- & = & \foldl{\varphi}(e,\cons(b,\snoc(a,x))) \\
- & = & \foldl{\varphi}(\varphi(e,b),\snoc(a,x)) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \foldl{\varphi}(e,\cons(b,\snoc(a,x))) \\
+ &     \href{@foldl@#def-foldl-cons}
+   = & \foldl{\varphi}(\varphi(e,b),\snoc(a,x)) \\
  & = & \varphi(\foldl{\varphi}(\varphi(e,b),x),a) \\
- & = & \varphi(\foldl{\varphi}(e,\cons(b,x)),a)
+ &     \href{@foldl@#def-foldl-cons}
+   = & \varphi(\foldl{\varphi}(e,\cons(b,x)),a)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -233,14 +243,16 @@ We have $$\isnil(\snoc(a,x)) = \bfalse.$$
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \isnil(\snoc(a,\nil)) \\
- & = & \isnil(\cons(a,\nil)) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \isnil(\cons(a,\nil)) \\
  &     \href{@head-tail@#thm-isnil-cons}
    = & \bfalse
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$, and let $b \in A$; we have
 $$\begin{eqnarray*}
  &   & \isnil(\snoc(a,\cons(b,x))) \\
- & = & \isnil(\cons(b,\snoc(a,x))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \isnil(\cons(b,\snoc(a,x))) \\
  &     \href{@head-tail@#thm-isnil-cons}
    = & \bfalse
 \end{eqnarray*}$$
@@ -270,23 +282,31 @@ Let $A$ and $B$ be sets, and suppose $\varphi : A \times B \rightarrow B$ has th
 1. We proceed by list induction on $x$. For the base case $x = \nil$ we have
 $$\begin{eqnarray*}
  &   & \foldl{\psi}(e,\cons(a,\nil)) \\
- & = & \foldl{\psi}(\psi(e,a),\nil) \\
- & = & \psi(e,a) \\
- & = & \psi(\foldl{\psi}(e,\nil),a) \\
+ &     \href{@foldl@#def-foldl-cons}
+   = & \foldl{\psi}(\psi(e,a),\nil) \\
+ &     \href{@foldl@#def-foldl-nil}
+   = & \psi(e,a) \\
+ &     \href{@foldl@#def-foldl-nil}
+   = & \psi(\foldl{\psi}(e,\nil),a) \\
  & = & \foldl{\psi}(e,\snoc(a,\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $e$ and $a$ for some $x$ and let $b \in A$. Now
 $$\begin{eqnarray*}
  &   & \foldl{\psi}(e,\snoc(a,\cons(b,x))) \\
- & = & \foldl{\psi}(e,\cons(b,\snoc(a,x))) \\
- & = & \foldl{\psi}(\psi(e,b),\snoc(a,x)) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \foldl{\psi}(e,\cons(b,\snoc(a,x))) \\
+ &     \href{@foldl@#def-foldl-cons}
+   = & \foldl{\psi}(\psi(e,b),\snoc(a,x)) \\
  & = & \foldl{\psi}(\psi(e,b),\cons(a,x)) \\
- & = & \foldl{\psi}(\psi(\psi(e,b),a),x) \\
+ &     \href{@foldl@#def-foldl-cons}
+   = & \foldl{\psi}(\psi(\psi(e,b),a),x) \\
  & = & \foldl{\psi}(\varphi(a,\varphi(b,e)),x) \\
  & = & \foldl{\psi}(\varphi(b,\varphi(a,e)),x) \\
  & = & \foldl{\psi}(\psi(\psi(e,a),b),x) \\
- & = & \foldl{\psi}(\psi(e,a),\cons(b,x)) \\
- & = & \foldl{\psi}(e,\cons(a,\cons(b,x)))
+ &     \href{@foldl@#def-foldl-cons}
+   = & \foldl{\psi}(\psi(e,a),\cons(b,x)) \\
+ &     \href{@foldl@#def-foldl-cons}
+   = & \foldl{\psi}(e,\cons(a,\cons(b,x)))
 \end{eqnarray*}$$
 as needed.
 2. We proceed by list induction on $x$. For the base case $x = \nil$, we have

@@ -204,7 +204,8 @@ We proceed by induction on $n$. For the base case $n = \zero$, we have
 $$\begin{eqnarray*}
  &   & \snoc(a,\repeat(\zero)(a)) \\
  & = & \snoc(a,\nil) \\
- & = & \cons(a,\nil) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \cons(a,\nil) \\
  & = & \cons(a,\repeat(\zero)(a)) \\
  & = & \repeat(\next(n))(a)
 \end{eqnarray*}$$
@@ -212,7 +213,8 @@ as needed. For the inductive step, suppose the equality holds for some $n$. Now 
 $$\begin{eqnarray*}
  &   & \snoc(a,\repeat(\next(n))(a)) \\
  & = & \snoc(a,\cons(a,\repeat(n)(a))) \\
- & = & \cons(a,\snoc(a,\repeat(n)(a))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \cons(a,\snoc(a,\repeat(n)(a))) \\
  & = & \cons(a,\repeat(\next(n))(a)) \\
  & = & \repeat(\next(\next(n)))(a)
 \end{eqnarray*}$$

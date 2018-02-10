@@ -87,7 +87,8 @@ as needed. For the inductive step, suppose the equality holds for all $a$ and $x
 $$\begin{eqnarray*}
  &   & \revcat(\snoc(a,x),\cons(b,y)) \\
  & = & \revcat(\cons(b,\snoc(a,x)),y) \\
- & = & \revcat(\snoc(a,\cons(b,x)),y) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \revcat(\snoc(a,\cons(b,x)),y) \\
  & = & \snoc(a,\revcat(\cons(b,x)),y) \\
  & = & \snoc(a,\revcat(x,\const(b,y)))
 \end{eqnarray*}$$
@@ -95,7 +96,8 @@ as needed.
 2. We proceed by list induction on $y$. For the base case $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \revcat(x,\snoc(a,\nil)) \\
- & = & \revcat(x,\cons(a,\nil)) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \revcat(x,\cons(a,\nil)) \\
  & = & \revcat(\cons(a,x),\nil) \\
  & = & \cons(a,x) \\
  & = & \cons(a,\revcat(x,\nil))
@@ -103,7 +105,8 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equality holds for all $a$ and $x$ for some $y$, and let $b \in A$. Now we have
 $$\begin{eqnarray*}
  &   & \revcat(x,\snoc(a,\cons(b,y))) \\
- & = & \revcat(x,\cons(b,\snoc(a,y))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \revcat(x,\cons(b,\snoc(a,y))) \\
  & = & \revcat(\cons(b,x),\snoc(a,y)) \\
  & = & \cons(a,\revcat(\cons(b,x),y)) \\
  & = & \cons(a,\revcat(x,\cons(b,y)))
@@ -163,7 +166,8 @@ $$\begin{eqnarray*}
  & = & \snoc(a,\rev(x)) \\
  & = & \snoc(a,\revcat(\nil,x)) \\
  & = & \revcat(\snoc(a,\nil),x) \\
- & = & \revcat(\cons(a,\nil),x) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \revcat(\cons(a,\nil),x) \\
  & = & \revcat(\nil,\cons(a,x)) \\
  & = & \rev(\cons(a,x))
 \end{eqnarray*}$$
@@ -404,7 +408,8 @@ Let $\varphi : B \times A \rightarrow B$, and define $\psi : A \times B \rightar
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \foldl{\varphi}(e,\nil) \\
- & = & e \\
+ &     \href{@foldl@#def-foldl-nil}
+   = & e \\
  &     \href{@lists@#def-foldr-nil}
    = & \foldr{e,\psi}(\nil) \\
  & = & \foldr{e,\psi}(\rev(\nil))
@@ -412,7 +417,8 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equality holds for all $e$ for some $x$, and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \foldl{\varphi}(e,\cons(a,x)) \\
- & = & \foldl{\varphi}(\varphi(e,a),x) \\
+ &     \href{@foldl@#def-foldl-cons}
+   = & \foldl{\varphi}(\varphi(e,a),x) \\
  & = & \foldr{\varphi(e,a)}{\psi}(\rev(x)) \\
  & = & \foldr{\psi(a,e)}{\psi}(\rev(x)) \\
  & = & \foldr{e}{\psi}(\snoc(a,\rev(x))) \\

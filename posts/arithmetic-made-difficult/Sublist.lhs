@@ -135,13 +135,15 @@ Let $A$ be a set. For all $a \in A$ and $x,y \in \lists{A}$, we have the followi
 1. There are two possibilities for $y$. If $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \sublist(\nil,\snoc(b,\nil)) \\
- & = & \sublist(\nil,\cons(b,\nil)) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \sublist(\nil,\cons(b,\nil)) \\
  & = & \btrue,
 \end{eqnarray*}$$
 and if $y = \cons(c,u)$ we have
 $$\begin{eqnarray*}
  &   & \sublist(\nil,\snoc(b,\cons(c,u))) \\
- & = & \sublist(\nil,\cons(c,\snoc(b,u))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \sublist(\nil,\cons(c,\snoc(b,u))) \\
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.
@@ -600,7 +602,8 @@ $$\begin{eqnarray*}
  & = & \bif{\beq(a,d)}{\btrue}{\sublist(\snoc(a,\nil),y)} \\
  & = & \bif{\beq(a,d)}{\sublist(\nil,y)}{\sublist(\cons(a,\nil),y)} \\
  & = & \sublist(\cons(a,\nil),\cons(d,y)) \\
- & = & \sublist(\snoc(a,\nil),\cons(d,y))
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \sublist(\snoc(a,\nil),\cons(d,y))
 \end{eqnarray*}$$
 as needed. Suppose instead that $x = \cons(c,u)$. Now we have
 $$\begin{eqnarray*}
@@ -610,9 +613,11 @@ $$\begin{eqnarray*}
  & = & \bif{\beq(c,d)}{\sublist(\snoc(a,u),\snoc(b,y))}{\sublist(\cons(c,\snoc(a,u)),\snoc(b,y))} \\
  & = & \bif{\beq(c,d)}{\sublist(\snoc(a,u),y)}{\sublist(\snoc(a,\cons(c,u)),\snoc(b,y))} \\
  & = & \bif{\beq(c,d)}{\sublist(\snoc(a,u),y)}{\sublist(\snoc(a,\cons(c,u)),y)} \\
- & = & \bif{\beq(c,d)}{\sublist(\snoc(a,u),y)}{\sublist(\cons(c,\snoc(a,u)),y)} \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \bif{\beq(c,d)}{\sublist(\snoc(a,u),y)}{\sublist(\cons(c,\snoc(a,u)),y)} \\
  & = & \sublist(\cons(c,\snoc(a,u)),\cons(d,y)) \\
- & = & \sublist(\snoc(a,\cons(c,u)),\cons(d,y)) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \sublist(\snoc(a,\cons(c,u)),\cons(d,y)) \\
  & = & \sublist(\snoc(a,x),\cons(d,y))
 \end{eqnarray*}$$
 as needed.

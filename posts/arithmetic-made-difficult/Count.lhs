@@ -120,13 +120,15 @@ Let $A$ be a set with $a \in A$. For all $b \in A$ and $x \in \lists{A}$, we hav
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \addcount(a)(k,\snoc(b,\nil)) \\
- & = & \addcount(a)(k,\cons(b,\nil)) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \addcount(a)(k,\cons(b,\nil)) \\
  & = & \addcount(a)(\bif{\beq(a,b)}{\next(k)}{k},\nil)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $b$ and $k$ for some $x$, and let $c \in A$. Now
 $$\begin{eqnarray*}
  &   & \addcount(a)(k,\snoc(b,\cons(c,x))) \\
- & = & \addcount(a)(k,\cons(c,\snoc(b,x))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \addcount(a)(k,\cons(c,\snoc(b,x))) \\
  & = & \addcount(a)(\bif{\beq(a,c)}{\next(k)}{k},\snoc(b,x)) \\
  & = & \addcount(a)(\bif{\beq(a,b)}{\next(\bif{\beq(a,c)}{\next(k)}{k})}{\bif{\beq(a,c)}{\next(k)}{k}},x) \\
  &     \href{@booleans@#thm-iffunc}

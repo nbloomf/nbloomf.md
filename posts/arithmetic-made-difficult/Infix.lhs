@@ -284,7 +284,8 @@ We have two possibilities. First suppose $\prefix(x,\cons(b,y)) = \btrue$. Then 
 $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \infix(x,\cons(b,\snoc(a,y))) \\
- & = & \infix(x,\snoc(a,\cons(b,y)))
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \infix(x,\snoc(a,\cons(b,y)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

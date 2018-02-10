@@ -183,7 +183,8 @@ as needed, while if $f(a) = \rgt((c,d))$ we have
 $$\begin{eqnarray*}
  &   & \tacunfoldN{f}(\cons(b,x),\next(n),a) \\
  & = & \tacunfoldN{f}(\snoc(d,\cons(b,x)),n,c) \\
- & = & \tacunfoldN{f}(\cons(b,\snoc(d,x)),n,c) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \tacunfoldN{f}(\cons(b,\snoc(d,x)),n,c) \\
  & = & \cons(b,\tacunfoldN{f}(\snoc(d,x),n,c)) \\
  & = & \cons(b,\tacunfoldN{f}(x,\next(n),a))
 \end{eqnarray*}$$
@@ -286,7 +287,8 @@ $$\begin{eqnarray*}
  & = & \tacunfoldN{f}(\nil,\next(\zero),a) \\
  & = & \tacunfoldN{f}(\snoc(b,\nil),\zero,c) \\
  & = & \snoc(b,\nil) \\
- & = & \cons(b,\nil) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \cons(b,\nil) \\
  & = & \cons(b,\tacunfoldN{f}(\nil,\zero,a)) \\
  & = & \cons(b,\unfoldN{f}(\zero,a))
 \end{eqnarray*}$$
@@ -301,7 +303,8 @@ $$\begin{eqnarray*}
  &   & \unfoldN{f}(\next(n),a) \\
  & = & \tacunfoldN{f}(\nil,\next(n),a) \\
  & = & \tacunfoldN{f}(\snoc(b,\nil),n,c) \\
- & = & \tacunfoldN{f}(\cons(b,\nil),n,c) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \tacunfoldN{f}(\cons(b,\nil),n,c) \\
  & = & \cons(b,\tacunfoldN{f}(\nil,n,c)) \\
  & = & \cons(b,\unfoldN{f}(n,c))
 \end{eqnarray*}$$

@@ -482,17 +482,20 @@ We proceed by list induction on $x$. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \delete(a,\snoc(b,x)) \\
  & = & \delete(a,\snoc(b,\nil)) \\
- & = & \delete(a,\cons(b,\nil)) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \delete(a,\cons(b,\nil)) \\
  & = & \bif{\beq(a,b)}{\delete(a,\nil)}{\cons(b,\delete(a,\nil))} \\
  & = & \bif{\beq(a,b)}{\delete(a,\nil)}{\cons(b,\nil)} \\
- & = & \bif{\beq(a,b)}{\delete(a,\nil)}{\snoc(b,\nil)} \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \bif{\beq(a,b)}{\delete(a,\nil)}{\snoc(b,\nil)} \\
  & = & \bif{\beq(a,b)}{\delete(a,\nil)}{\snoc(b,\delete(a,\nil))} \\
  & = & \bif{\beq(a,b)}{\delete(a,x)}{\snoc(b,\delete(a,x))}
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ and $b$ for some $x$ and let $c \in A$. Using the inductive hypothesis, we have
 $$\begin{eqnarray*}
  &   & \delete(a,\snoc(b,\cons(c,x))) \\
- & = & \delete(a,\cons(c,\snoc(b,x))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \delete(a,\cons(c,\snoc(b,x))) \\
  & = & \bif{\beq(a,c)}{\delete(a,\snoc(b,x))}{\cons(c,\delete(a,\snoc(b,x)))} \\
  & = & \bif{\beq(a,c)}{\bif{\beq(a,b)}{\delete(a,x)}{\snoc(b,\delete(a,x))}}{\cons(c,\bif{\beq(a,b)}{\delete(a,x)}{\snoc(b,\delete(a,x))})} \\
  &     \href{@booleans@#thm-iffunc}

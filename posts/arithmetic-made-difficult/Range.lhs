@@ -144,7 +144,8 @@ $$\begin{eqnarray*}
  &   & \range(a,\next(b)) \\
  & = & \range(a,\next(\zero)) \\
  & = & \cons(a,\nil) \\
- & = & \snoc(a,\nil) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \snoc(a,\nil) \\
  & = & \snoc(\nplus(a,\zero),\range(a,\zero)) \\
  & = & \snoc(\nplus(a,b),\range(a,b)) \\
 \end{eqnarray*}$$
@@ -153,7 +154,8 @@ $$\begin{eqnarray*}
  &   & \range(a,\next(\next(b))) \\
  & = & \cons(a,\range(\next(a),\next(b))) \\
  & = & \cons(a,\snoc(\nplus(\next(a),b),\range(\next(a),b))) \\
- & = & \snoc(\nplus(\next(a),b),\cons(a,\range(\next(a),b))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \snoc(\nplus(\next(a),b),\cons(a,\range(\next(a),b))) \\
  & = & \snoc(\nplus(a,\next(b)),\range(a,\next(b)))
 \end{eqnarray*}$$
 as needed.

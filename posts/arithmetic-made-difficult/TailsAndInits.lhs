@@ -208,16 +208,19 @@ $$\begin{eqnarray*}
  & = & \snoc(\nil,\map(\snoc(a,-))(\cons(\nil,\nil))) \\
  & = & \snoc(\nil,\cons(\snoc(a,\nil),\map(\snoc(a,-))(\nil))) \\
  & = & \snoc(\nil,\cons(\snoc(a,\nil),\nil)) \\
- & = & \cons(\snoc(a,\nil),\snoc(\nil,\nil)) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \cons(\snoc(a,\nil),\snoc(\nil,\nil)) \\
  & = & \cons(\cons(a,\nil),\cons(\nil,\nil)) \\
  & = & \tails(\cons(a,\nil)) \\
- & = & \tails(\snoc(a,\nil)) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \tails(\snoc(a,\nil)) \\
  & = & \tails(\snoc(a,x))
 \end{eqnarray*}$$
 as claimed. Suppose now that the equality holds for some $x$ and let $b \in A$. Now
 $$\begin{eqnarray*}
  &   & \tails(\snoc(a,\cons(b,x))) \\
- & = & \tails(\cons(b,\snoc(a,x))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \tails(\cons(b,\snoc(a,x))) \\
  & = & \cons(\cons(b,\snoc(a,x)),\tails(\snoc(a,x))) \\
  & = & \cons(\cons(b,\snoc(a,x)),\snoc(\nil,\map(\snoc(a,-))(\tails(x)))) \\
  & = & \snoc(\nil,\cons(\cons(b,\snoc(a,x)),\map(\snoc(a,-))(\tails(x)))) \\

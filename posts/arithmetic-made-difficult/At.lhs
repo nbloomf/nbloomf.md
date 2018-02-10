@@ -261,14 +261,16 @@ Let $A$ be a set. Let $a,b \in A$ and $x \in \lists{A}$.
 1. We proceed by induction on $k$. For the base case $k = \zero$, note that $\nleq(k,\length(x))$, and we have
 $$\begin{eqnarray*}
  &   & \at(\snoc(a,\cons(b,x)),\zero) \\
- & = & \at(\cons(b,\snoc(a,x)),\zero) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \at(\cons(b,\snoc(a,x)),\zero) \\
  & = & \rgt(b) \\
  & = & \at(\cons(b,x),\zero)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the implication holds for all $x$, $a$, and $b$ for some $k$, and suppose further that $\nleq(\next(k),\length(x))$. In particular, we must have $x = \cons(c,u)$ for some $c \in A$ and $u \in \lists{A}$, and $\nleq(k,\length(u))$. Now we have
 $$\begin{eqnarray*}
  &   & \at(\snoc(a,\cons(b,x)),\next(k)) \\
- & = & \at(\cons(b,\snoc(a,x)),\next(k)) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \at(\cons(b,\snoc(a,x)),\next(k)) \\
  & = & \at(\snoc(a,x),k) \\
  & = & \at(\snoc(a,\cons(c,u)),k) \\
  & = & \at(\cons(c,u),k) \\
@@ -390,7 +392,8 @@ as needed. For the inductive step, suppose the equality holds for all $a$, $y$, 
 $$\begin{eqnarray*}
  &   & \at(\cat(\cons(a,x),\cons(b,y)),\nplus(\next(\length(x)),k)) \\
  & = & \at(\cat(\snoc(b,\cons(a,x)),y),\next(\nplus(\length(x),k))) \\
- & = & \at(\cat(\cons(a,\snoc(b,x)),y),\next(\nplus(\length(x),k))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \at(\cat(\cons(a,\snoc(b,x)),y),\next(\nplus(\length(x),k))) \\
  & = & \at(\cons(a,\cat(\snoc(b,x)),y),\next(\nplus(\length(x),k))) \\
  & = & \at(\cat(\snoc(b,x),y),\nplus(\length(u),k)) \\
  & = & \at(\cat(\snoc(b,x),y),\nplus(\next(\length(u)),k)) \\

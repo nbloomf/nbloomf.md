@@ -190,13 +190,15 @@ Let $A$ be a set, with $a \in A$. For all $b \in A$ and $x \in \lists{A}$ we hav
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \elt(a)(\snoc(b,\nil)) \\
- & = & \elt(a)(\cons(b,\nil)) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \elt(a)(\cons(b,\nil)) \\
  & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(\nil)}
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $b$ for some $x$, and let $c \in A$. Now
 $$\begin{eqnarray*}
  &   & \elt(a)(\snoc(b,\cons(c,x))) \\
- & = & \elt(a)(\cons(c,\snoc(b,x))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \elt(a)(\cons(c,\snoc(b,x))) \\
  & = & \bif{\beq(a,c)}{\btrue}{\elt(a)(\snoc(b,x))} \\
  & = & \bif{\beq(a,c)}{\btrue}{\bif{\beq(a,b)}{\btrue}{\elt(a)(x)}} \\
  &     \href{@booleans@#thm-if-commute-false}

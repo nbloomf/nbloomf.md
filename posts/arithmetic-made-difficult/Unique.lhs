@@ -240,13 +240,15 @@ Let $A$ be a set with $a \in A$ and $x \in \lists{A}$. Then $$\unique(\snoc(a,x)
 We proceed by list induction on $x$. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \unique(\snoc(a,\nil)) \\
- & = & \unique(\cons(a,\nil)) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \unique(\cons(a,\nil)) \\
  & = & \band(\bnot(\elt(a,\nil)),\unique(\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$ and let $b \in A$. Using the inductive hypothesis, we have
 $$\begin{eqnarray*}
  &   & \unique(\snoc(a,\cons(b,x))) \\
- & = & \unique(\cons(b,\snoc(a,x))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \unique(\cons(b,\snoc(a,x))) \\
  & = & \band(\bnot(\elt(b,\snoc(a,x))),\unique(\snoc(a,x))) \\
  & = & \band(\bnot(\bif{\beq(b,a)}{\btrue}{\elt(b,x)}),\unique(\snoc(a,x))) \\
  & = & \band(\bnot(\elt(b,\cons(a,x))),\band(\bnot(\elt(a,x))),\unique(x)) \\
