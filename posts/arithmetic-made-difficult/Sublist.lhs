@@ -160,7 +160,8 @@ $$\begin{eqnarray*}
  &   & \sublist(\cons(c,x),y) \\
  & = & \sublist(\cons(c,x),\nil) \\
  & = & \isnil(\cons(c,x)) \\
- & = & \bfalse,
+ &     \href{@head-tail@#thm-isnil-cons}
+   = & \bfalse
 \end{eqnarray*}$$
 and likewise
 $$\begin{eqnarray*}
@@ -433,7 +434,8 @@ $$\begin{eqnarray*}
  &   & \sublist(\cons(a,x),y) \\
  & = & \sublist(\cons(a,x),\nil) \\
  & = & \isnil(\cons(a,x)) \\
- & = & \bfalse.
+ &     \href{@head-tail@#thm-isnil-cons}
+   = & \bfalse
 \end{eqnarray*}$$
 Thus the implication holds vacuously. Suppose instead that $y = \cons(b,v)$, and suppose further that $\sublist(\cons(a,x),\cons(b,v))$ and $\sublist(\cons(b,v),\cons(a,x))$ are both $\btrue$. If $a \neq b$, we have
 $$\begin{eqnarray*}
@@ -573,7 +575,8 @@ $$\begin{eqnarray*}
  & = & \sublist(\cons(a,\nil),\cons(b,\nil)) \\
  & = & \sublist(\cons(a,\nil),\nil) \\
  & = & \isnil(\cons(a,\nil)) \\
- & = & \bfalse
+ &     \href{@head-tail@#thm-isnil-cons}
+   = & \bfalse
 \end{eqnarray*}$$
 as needed. If $x = \cons(c,u)$ and $\sublist(\snoc(a,x),\snoc(b,\nil)) = \btrue$, we have
 $$\begin{eqnarray*}
@@ -1010,7 +1013,8 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \sublist(\cons(a,\nil),\nil) \\
  & = & \isnil(\cons(a,\nil)) \\
- & = & \bfalse \\
+ &     \href{@head-tail@#thm-isnil-cons}
+   = & \bfalse \\
  & = & \elt(a,\nil)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$, and let $b \in A$. Now

@@ -45,7 +45,8 @@ $$\begin{eqnarray*}
  &   & \disjoint(\nil,x) \\
  & = & \isnil(\common(\nil,x)) \\
  & = & \isnil(\nil) \\
- & = & \btrue
+ &     \href{@head-tail@#thm-isnil-nil}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

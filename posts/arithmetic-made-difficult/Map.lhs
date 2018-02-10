@@ -157,16 +157,20 @@ Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. For all $x \in \lists{
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \map(f)(\tail(\nil)) \\
- & = & \map(f)(\nil) \\
+ &     \href{@head-tail@#thm-tail-nil}
+   = & \map(f)(\nil) \\
  & = & \nil \\
- & = & \tail(\nil) \\
+ &     \href{@head-tail@#thm-tail-nil}
+   = & \tail(\nil) \\
  & = & \tail(\map(f)(\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Then
 $$\begin{eqnarray*}
  &   & \map(f)(\tail(\cons(a,x))) \\
- & = & \map(f)(x) \\
- & = & \tail(\cons(f(a),\map(f)(x))) \\
+ &     \href{@head-tail@#thm-tail-cons}
+   = & \map(f)(x) \\
+ &     \href{@head-tail@#thm-tail-cons}
+   = & \tail(\cons(f(a),\map(f)(x))) \\
  & = & \tail(\map(f)(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
@@ -395,8 +399,10 @@ and if $x = \cons(a,u)$ we have
 $$\begin{eqnarray*}
  &   & \isnil(\map(f)(\cons(a,u))) \\
  & = & \isnil(\cons(f(a),\map(f)(u))) \\
- & = & \bfalse \\
- & = & \isnil(\cons(a,u))
+ &     \href{@head-tail@#thm-isnil-cons}
+   = & \bfalse \\
+ &     \href{@head-tail@#thm-isnil-cons}
+   = & \isnil(\cons(a,u))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

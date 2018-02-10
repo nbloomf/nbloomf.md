@@ -334,8 +334,10 @@ Let $A$ be a set with $x,y \in \lists{A}$. Then we have the following.
 $$\begin{eqnarray*}
  &   & \isnil(x) \\
  & = & \isnil(\cons(a,u)) \\
- & = & \bfalse \\
- & = & \isnil(\cons(b,\rev(v))) \\
+ &     \href{@head-tail@#thm-isnil-cons}
+   = & \bfalse \\
+ &     \href{@head-tail@#thm-isnil-cons}
+   = & \isnil(\cons(b,\rev(v))) \\
  & = & \isnil(\rev(\snoc(b,v))) \\
  & = & \isnil(\rev(x))
 \end{eqnarray*}$$

@@ -89,7 +89,8 @@ Note that
 $$\begin{eqnarray*}
  &   & \at(\cons(a,x),\next(k)) \\
  & = & \bif{\isnil(\cons(a,x))}{\lft(\ast)}{\at(\tail(\cons(a,x)),k)} \\
- & = & \bif{\bfalse}{\lft(\ast)}{\at(\tail(\cons(a,x)),k)} \\
+ &     \href{@head-tail@#thm-isnil-cons}
+   = & \bif{\bfalse}{\lft(\ast)}{\at(\tail(\cons(a,x)),k)} \\
  &     \href{@booleans@#cor-if-false}
    = & \at(\tail(\cons(a,x)),k) \\
  & = & \at(x,k)
@@ -127,7 +128,8 @@ as claimed. If $k = \next(m)$, we have
 $$\begin{eqnarray*}
  &   & \at(\nil,\next(m)) \\
  & = & \bif{\isnil(\nil)}{\lft(\ast)}{\at(\tail(\nil),m)} \\
- & = & \bif{\btrue}{\lft(\ast)}{\at(\tail(\nil),m)} \\
+ &     \href{@head-tail@#thm-isnil-nil}
+   = & \bif{\btrue}{\lft(\ast)}{\at(\tail(\nil),m)} \\
  &     \href{@booleans@#cor-if-true}
    = & \lft(\ast)
 \end{eqnarray*}$$
@@ -136,7 +138,8 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \at(\cons(a,x),\zero) \\
  & = & \head(\cons(a,x)) \\
- & = & \rgt(a)
+ &     \href{@head-tail@#thm-head-cons}
+   = & \rgt(a)
 \end{eqnarray*}$$
 as claimed.
 3. We have
@@ -193,7 +196,8 @@ $$\begin{eqnarray*}
  &   & \at(\cons(a,\nil),\length(\nil)) \\
  & = & \at(\cons(a,\nil),\zero) \\
  & = & \rgt(a) \\
- & = & \head(\cons(a,\nil)) \\
+ &     \href{@head-tail@#thm-head-cons}
+   = & \head(\cons(a,\nil)) \\
  & = & \head(\rev(\cons(a,\nil)))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the implication holds for all $a$ for some $x$, and let $b \in A$. Now

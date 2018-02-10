@@ -97,7 +97,8 @@ $$\begin{eqnarray*}
  &     \href{@or@#thm-or-idempotent}
    = & \bor(\isnil(x),\isnil(x)) \\
  & = & \bor(\prefix(x,\nil),\infix(x,\nil)) \\
- & = & \bor(\prefix(x,\nil),\infix(x,\tail(\nil)))
+ &     \href{@head-tail@#thm-tail-nil}
+   = & \bor(\prefix(x,\nil),\infix(x,\tail(\nil)))
 \end{eqnarray*}$$
 as needed. If $y = \cons(b,u)$, we have
 $$\begin{eqnarray*}

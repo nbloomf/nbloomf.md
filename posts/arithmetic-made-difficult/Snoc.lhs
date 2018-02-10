@@ -232,13 +232,15 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \isnil(\snoc(a,\nil)) \\
  & = & \isnil(\cons(a,\nil)) \\
- & = & \bfalse
+ &     \href{@head-tail@#thm-isnil-cons}
+   = & \bfalse
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$, and let $b \in A$; we have
 $$\begin{eqnarray*}
  &   & \isnil(\snoc(a,\cons(b,x))) \\
  & = & \isnil(\cons(b,\snoc(a,x))) \\
- & = & \bfalse
+ &     \href{@head-tail@#thm-isnil-cons}
+   = & \bfalse
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

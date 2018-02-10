@@ -152,11 +152,13 @@ We have $\nil = \cat(x,y)$ if and only if $x = y = \nil$.
 The "only if" direction is clear. To see the "if" direction, suppose we have $x,y \in \lists{A}$ such that $\cat(x,y) = \nil$. If $x = \cons(a,u)$, then
 $$\begin{eqnarray*}
  &   & \btrue \\
- & = & \isnil(\nil) \\
+ &     \href{@head-tail@#thm-isnil-nil}
+   = & \isnil(\nil) \\
  & = & \isnil(\cat(x,y)) \\
  & = & \isnil(\cat(\cons(a,u),y)) \\
  & = & \isnil(\cons(a,\cat(u,y))) \\
- & = & \bfalse,
+ &     \href{@head-tail@#thm-isnil-cons}
+   = & \bfalse
 \end{eqnarray*}$$
 which is absurd. Thus $x = \nil$, and we have
 $$\begin{eqnarray*}
