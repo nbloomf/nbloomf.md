@@ -576,18 +576,22 @@ Let $A$ be a set. For all $a \in A$ and $x,y \in \lists{A}$, we have $$\delete(a
 We proceed by list induction on $y$. For the base case $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \delete(a)(\cat(x,\nil)) \\
- & = & \delete(a)(x) \\
- & = & \cat(\delete(a)(x),\nil) \\
+ &     \href{@cat@#thm-cat-nil-right}
+   = & \delete(a)(x) \\
+ &     \href{@cat@#thm-cat-nil-right}
+   = & \cat(\delete(a)(x),\nil) \\
  & = & \cat(\delete(a)(x),\delete(a)(\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ and $x$ for some  $y$, and let $b \in A$. Now
 $$\begin{eqnarray*}
  &   & \delete(a)(\cat(x,\cons(b,y))) \\
- & = & \delete(a)(\cat(\snoc(b,x),y)) \\
+ &     \href{@cat@#thm-cat-snoc-left}
+   = & \delete(a)(\cat(\snoc(b,x),y)) \\
  & = & \cat(\delete(a)(\snoc(b,x)),\delete(a)(y)) \\
  & = & \cat(\bif{\beq(a,b)}{\delete(a)(x)}{\snoc(b,\delete(a)(x))},\delete(a)(y)) \\
  & = & \bif{\beq(a,b)}{\cat(\delete(a)(x),\delete(a)(y))}{\cat(\snoc(b,\delete(a)(x)),\delete(a)(y))} \\
- & = & \bif{\beq(a,b)}{\cat(\delete(a)(x),\delete(a)(y))}{\cat(\delete(a)(x),\cons(b,\delete(a)(y)))} \\
+ &     \href{@cat@#thm-cat-snoc-left}
+   = & \bif{\beq(a,b)}{\cat(\delete(a)(x),\delete(a)(y))}{\cat(\delete(a)(x),\cons(b,\delete(a)(y)))} \\
  &     \href{@booleans@#thm-iffunc}
    = & \cat(\delete(a)(x),\bif{\beq(a,b)}{\delete(a)(y)}{\cons(b,\delete(a)(y))}) \\
  & = & \cat(\delete(a)(x),\delete(a)(\cons(b,y)))

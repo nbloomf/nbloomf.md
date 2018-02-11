@@ -374,12 +374,14 @@ Let $A$ be a set. For all $a \in A$, $x,y \in \lists{A}$ and $k \in \nats$, we h
 1. We proceed by list induction on $y$. For the base case $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \at(\cat(\cons(a,x),\nil),k) \\
- & = & \at(\cons(a,x),k)
+ &     \href{@cat@#thm-cat-nil-right}
+   = & \at(\cons(a,x),k)
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the implication holds for all $k$, $a$, and $x$ for some $y$, and let $b \in A$, and suppose further that $\nleq(k,\length(x))$. Using the inductive hypothesis we have
 $$\begin{eqnarray*}
  &   & \at(\cat(\cons(a,x),\cons(b,y)),k) \\
- & = & \at(\cat(\snoc(b,\cons(a,x)),y),k) \\
+ &     \href{@cat@#thm-cat-snoc-left}
+   = & \at(\cat(\snoc(b,\cons(a,x)),y),k) \\
  & = & \at(\snoc(b,\cons(a,x)),k) \\
  & = & \at(\cons(a,x),k)
 \end{eqnarray*}$$

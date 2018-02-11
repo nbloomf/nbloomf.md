@@ -224,7 +224,8 @@ as needed. Suppose instead that $f(a) = \rgt((c,d))$. Now
 $$\begin{eqnarray*}
  &   & \tacunfoldN{f}(\cat(x,y),\next(n),a) \\
  & = & \tacunfoldN{f}(\snoc(d,\cat(x,y)),n,c) \\
- & = & \tacunfoldN{f}(\cat(x,\snoc(d,y)),n,c) \\
+ &     \href{@cat@#thm-cat-snoc-right}
+   = & \tacunfoldN{f}(\cat(x,\snoc(d,y)),n,c) \\
  & = & \cat(x,\tacunfoldN{f}(\snoc(d,y),n,c)) \\
  & = & \cat(x,\tacunfoldN{f}(y,\next(n),a))
 \end{eqnarray*}$$

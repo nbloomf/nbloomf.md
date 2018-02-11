@@ -320,7 +320,8 @@ $$\begin{eqnarray*}
  & = & \infix(x,y) \\
  & = & \infix(x,\snoc(a,y)) \\
  & = & \infix(x,\cat(\snoc(a,y),z)) \\
- & = & \infix(x,\cat(y,\cons(a,z)))
+ &     \href{@cat@#thm-cat-snoc-left}
+   = & \infix(x,\cat(y,\cons(a,z)))
 \end{eqnarray*}$$
 as needed.
 2. We proceed by list induction on $z$. For the base case $z = \nil$ we have $$\infix(x,\cat(z,y)) = \infix(x,\cat(\nil,y)) = \infix(x,y) = \btrue$$ as needed. For the inductive step, suppose the implication holds for some $z$ and let $a \in A$. Now
@@ -406,9 +407,12 @@ Let $A$ be a set. If $x \in \lists{A}$, we have $\infix(\rev(x),\rev(y)) = \infi
 Note that, for all $x,u,v \in \lists{A}$, we have
 $$\begin{eqnarray*}
  &   & \rev(\cat(u,\cat(x,v))) \\
- & = & \cat(\rev(\cat(x,v)),\rev(u)) \\
- & = & \cat(\cat(\rev(v),\rev(x)),\rev(u)) \\
- & = & \cat(\rev(v),\cat(\rev(x),\rev(u))).
+ &     \href{@cat@#thm-rev-cat-antidistribute}
+   = & \cat(\rev(\cat(x,v)),\rev(u)) \\
+ &     \href{@cat@#thm-rev-cat-antidistribute}
+   = & \cat(\cat(\rev(v),\rev(x)),\rev(u)) \\
+ &     \href{@cat@#thm-cat-associative}
+   = & \cat(\rev(v),\cat(\rev(x),\rev(u)))
 \end{eqnarray*}$$
 In particular, $$y = \cat(u,\cat(x,v))$$ for some $u$ and $v$ if and only if $$\rev(y) = \cat(h,\cat(\rev(x),k))$$ for some $h$ and $k$. So $\infix(x,y) = \btrue$ if and only if $\infix(\rev(x),\rev(y)) = \btrue$.
 ::::::::::::::::::::
@@ -493,14 +497,16 @@ $$\begin{eqnarray*}
  & = & \cat(h,\cat(y,k)) \\
  & = & \cat(h,\cat(\cat(u,\cat(x,v)),k)) \\
  & = & \cat(\cat(h,u),\cat(\cat(x,v),k)) \\
- & = & \cat(\cat(h,u),\cat(x,\cat(v,k))),
+ &     \href{@cat@#thm-cat-associative}
+   = & \cat(\cat(h,u),\cat(x,\cat(v,k)))
 \end{eqnarray*}$$
 so that $\cat(h,u) = \nil$ and $\cat(v,k) = \nil$. Thus $h = k = \nil$, and we have
 $$\begin{eqnarray*}
  &   & x \\
  & = & \cat(h,\cat(y,k)) \\
  & = & \cat(\nil,\cat(y,\nil)) \\
- & = & \cat(\nil,y) \\
+ &     \href{@cat@#thm-cat-nil-right}
+   = & \cat(\nil,y) \\
  &     \href{@cat@#cor-cat-nil}
    = & y
 \end{eqnarray*}$$
@@ -532,7 +538,8 @@ $$\begin{eqnarray*}
  & = & \cat(h,\cat(y,k)) \\
  & = & \cat(h,\cat(\cat(u,\cat(x,v)),k)) \\
  & = & \cat(\cat(h,u),\cat(\cat(x,v),k)) \\
- & = & \cat(\cat(h,u),\cat(x,\cat(v,k)))
+ &     \href{@cat@#thm-cat-associative}
+   = & \cat(\cat(h,u),\cat(x,\cat(v,k)))
 \end{eqnarray*}$$
 so that $\infix(x,z) = \btrue$ as claimed.
 ::::::::::::::::::::

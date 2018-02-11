@@ -419,8 +419,10 @@ as needed. For the inductive step, suppose the equality holds for all $y$ for so
 $$\begin{eqnarray*}
  &   & \common(\cons(a,x),\cat(y,\cons(a,x))) \\
  & = & \bif{\elt(a)(\cat(y,\cons(a,x)))}{\cons(a,\common(x,\cat(y,\cons(a,x))))}{\common(x,\cat(y,\cons(a,x)))} \\
- & = & \bif{\elt(a)(\cat(y,\cons(a,x)))}{\cons(a,\common(x,\cat(\snoc(a,y),x)))}{\common(x,\cat(y,\cons(a,x)))} \\
- & = & \bif{\elt(a)(\cat(y,\cons(a,x)))}{\cons(a,\common(x,\cat(\snoc(a,y),x)))}{\common(x,\cat(\snoc(a,y),x))} \\
+ &     \href{@cat@#thm-cat-snoc-left}
+   = & \bif{\elt(a)(\cat(y,\cons(a,x)))}{\cons(a,\common(x,\cat(\snoc(a,y),x)))}{\common(x,\cat(y,\cons(a,x)))} \\
+ &     \href{@cat@#thm-cat-snoc-left}
+   = & \bif{\elt(a)(\cat(y,\cons(a,x)))}{\cons(a,\common(x,\cat(\snoc(a,y),x)))}{\common(x,\cat(\snoc(a,y),x))} \\
  & = & \bif{\elt(a)(\cat(y,\cons(a,x)))}{\cons(a,x)}{\common(x,\cat(\snoc(a,y),x))} \\
  & = & \bif{\elt(a)(\cat(y,\cons(a,x)))}{\cons(a,x)}{x} \\
  & = & \bif{\btrue}{\cons(a,x)}{x} \\

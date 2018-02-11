@@ -167,16 +167,19 @@ Let $A$ be a set. Then we have the following for all $x,y,z \in \lists{A}$.
 $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \prefix(x,\cat(x,\nil)) \\
- & = & \prefix(x,x)
+ &     \href{@cat@#thm-cat-nil-right}
+   = & \prefix(x,x)
 \end{eqnarray*}$$
 as claimed.
 2. If $\prefix(x,y)$, we have $y = \cat(x,u)$ for some $u$. Similarly, if $\prefix(y,x)$ then $x = \cat(y,v)$ for some $v. Now
 $$\begin{eqnarray*}
  &   & \cat(x,\nil) \\
- & = & x \\
+ &     \href{@cat@#thm-cat-nil-right}
+   = & x \\
  & = & \cat(y,v) \\
  & = & \cat(\cat(x,u),v) \\
- & = & \cat(x,\cat(u,v)).
+ &     \href{@cat@#thm-cat-associative}
+   = & \cat(x,\cat(u,v))
 \end{eqnarray*}$$
 Since $\cat$ is cancellative, we have $\nil = \cat(u,v)$, so that $u = \nil$, and thus $x = y$ as claimed.
 3. If $\prefix(x,y)$, we have $y = \cat(x,u)$. Similarly, if $\prefix(y,z)$, we have $z = \cat(y,v)$. Now $$z = \cat(\cat(x,u),v) = \cat(x,\cat(u,v))$$ so that $\prefix(x,z)$ as claimed.
@@ -458,7 +461,8 @@ Let $A$ be a set. The following hold for all $x,y \in \lists{A}$.
 $$\begin{eqnarray*}
  &   & \suffix(x,\cat(y,x)) \\
  & = & \prefix(\rev(x),\rev(\cat(y,x))) \\
- & = & \prefix(\rev(x),\cat(\rev(x),\rev(y))) \\
+ &     \href{@cat@#thm-rev-cat-antidistribute}
+   = & \prefix(\rev(x),\cat(\rev(x),\rev(y))) \\
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.
@@ -467,7 +471,8 @@ $$\begin{eqnarray*}
  &   & y \\
  & = & \rev(\rev(y)) \\
  & = & \rev(\cat(\rev(x),w)) \\
- & = & \cat(\rev(w),\rev(\rev(x))) \\
+ &     \href{@cat@#thm-rev-cat-antidistribute}
+   = & \cat(\rev(w),\rev(\rev(x))) \\
  & = & \cat(\rev(w),x)
 \end{eqnarray*}$$
 as claimed.
@@ -540,7 +545,8 @@ $$\begin{eqnarray*}
    = & x \\
  & = & \cat(v,y) \\
  & = & \cat(v,\cat(u,x)) \\
- & = & \cat(\cat(v,u),x).
+ &     \href{@cat@#thm-cat-associative}
+   = & \cat(\cat(v,u),x)
 \end{eqnarray*}$$
 Since $\cat$ is cancellative, we have $\nil = \cat(v,u)$, so that $u = \nil$, and thus $x = y$ as claimed.
 3. If $\suffix(x,y)$ and $\suffix(y,z)$, then $\prefix(\rev(x),\rev(y))$ and $\prefix(\rev(y),\rev(z))$. So $\prefix(\rev(x),\rev(z))$, and thus $\suffix(x,z)$.

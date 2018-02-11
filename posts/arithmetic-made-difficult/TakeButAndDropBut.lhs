@@ -310,7 +310,8 @@ We have
 $$\begin{eqnarray*}
  &   & \cat(\takeBut(k,x),\dropBut(k,x)) \\
  & = & \cat(\rev(\drop(k,\rev(x))),\rev(\take(k,\rev(x)))) \\
- & = & \rev(\cat(\take(k,\rev(x)),\drop(k,\rev(x)))) \\
+ &     \href{@cat@#thm-rev-cat-antidistribute}
+   = & \rev(\cat(\take(k,\rev(x)),\drop(k,\rev(x)))) \\
  & = & \rev(\rev(x)) \\
  & = & x
 \end{eqnarray*}$$

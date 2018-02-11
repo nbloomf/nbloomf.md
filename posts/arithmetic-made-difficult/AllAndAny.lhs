@@ -266,7 +266,8 @@ as claimed. For the inductive step, suppose the equality holds for some $x$ and 
 $$\begin{eqnarray*}
  &   & \all(p,\rev(\cons(a,x))) \\
  & = & \all(p,\rev(\cat(\cons(a,\nil),x))) \\
- & = & \all(p,\cat(\rev(x),\rev(\cons(a,\nil)))) \\
+ &     \href{@cat@#thm-rev-cat-antidistribute}
+   = & \all(p,\cat(\rev(x),\rev(\cons(a,\nil)))) \\
  & = & \band(\all(p,\rev(x)),\all(p,\rev(\cons(a,\nil)))) \\
  & = & \band(\all(p,x),\all(p,\cons(a,\nil))) \\
  &     \href{@and@#thm-and-commutative}

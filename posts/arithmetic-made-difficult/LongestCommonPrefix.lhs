@@ -330,7 +330,8 @@ $$\begin{eqnarray*}
  & = & \lcp(\cat(x,\nil),\cat(x,z)) \\
  & = & \cat(x,\lcp(\nil,z)) \\
  & = & \cat(x,\nil) \\
- & = & x
+ &     \href{@cat@#thm-cat-nil-right}
+   = & x
 \end{eqnarray*}$$
 as claimed. To see the "only if" part, suppose we have $\lcp(x,y) = x$; using the universal property of $\lcp$, we have
 $$\begin{eqnarray*}
@@ -755,7 +756,8 @@ $$\begin{eqnarray*}
  & = & \rev(\lcp(\rev(\cat(x,z)),\rev(\cat(y,z)))) \\
  & = & \rev(\lcp(\cat(\rev(z),\rev(x)),\cat(\rev(z),\rev(y)))) \\
  & = & \rev(\cat(\rev(z),\lcp(\rev(x),\rev(y)))) \\
- & = & \cat(\rev(\lcp(\rev(x),\rev(y))),\rev(\rev(z))) \\
+ &     \href{@cat@#thm-rev-cat-antidistribute}
+   = & \cat(\rev(\lcp(\rev(x),\rev(y))),\rev(\rev(z))) \\
  & = & \cat(\lcs(x,y),z)
 \end{eqnarray*}$$
 as claimed.

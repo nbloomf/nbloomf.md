@@ -777,7 +777,8 @@ $$\begin{eqnarray*}
  & = & \sublist(x,y) \\
  & = & \sublist(\rev(x),\rev(y)) \\
  & = & \sublist(\rev(x),\cat(\rev(z),\rev(y))) \\
- & = & \sublist(\rev(x),\rev(\cat(y,z))) \\
+ &     \href{@cat@#thm-rev-cat-antidistribute}
+   = & \sublist(\rev(x),\rev(\cat(y,z))) \\
  & = & \sublist(x,\cat(y,z))
 \end{eqnarray*}$$
 as claimed.
@@ -804,7 +805,8 @@ $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \sublist(\cat(x,z),y) \\
  & = & \sublist(\rev(\cat(x,z)),\rev(y)) \\
- & = & \sublist(\cat(\rev(z),\rev(x)),\rev(y)) \\
+ &     \href{@cat@#thm-rev-cat-antidistribute}
+   = & \sublist(\cat(\rev(z),\rev(x)),\rev(y)) \\
  & = & \sublist(\rev(x),\rev(y)) \\
  & = & \sublist(x,y)
 \end{eqnarray*}$$

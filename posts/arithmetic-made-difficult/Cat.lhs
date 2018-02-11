@@ -116,7 +116,8 @@ as claimed.
 2. We proceed by list induction on $y$. For the base case $y = \nil$ we have
 $$\begin{eqnarray*}
  &   & \snoc(a,\cat(x,\nil)) \\
- & = & \snoc(a,x) \\
+ &     \href{@cat@#thm-cat-nil-right}
+   = & \snoc(a,x) \\
  &     \href{@snoc@#def-snoc}
    = & \foldr{\cons(a,\nil)}{\cons}(x) \\
  & = & \cat(x,\cons(a,\nil))
@@ -124,9 +125,12 @@ $$\begin{eqnarray*}
 as claimed. For the inductive step, suppose the equality holds for some $y \in \lists{A}$, and let $b \in A$. Now
 $$\begin{eqnarray*}
  &   & \snoc(a,\cat(x,\cons(b,y))) \\
- & = & \snoc(a,\cat(\snoc(b,x),y)) \\
- & = & \cat(\snoc(b,x),\snoc(a,y)) \\
- & = & \cat(x,\cons(b,\snoc(a,y))) \\
+ &     \href{@cat@#thm-cat-snoc-left}
+   = & \snoc(a,\cat(\snoc(b,x),y)) \\
+ &     \href{@cat@#thm-cat-snoc-right}
+   = & \cat(\snoc(b,x),\snoc(a,y)) \\
+ &     \href{@cat@#thm-cat-snoc-left}
+   = & \cat(x,\cons(b,\snoc(a,y))) \\
  &     \href{@snoc@#cor-snoc-cons}
    = & \cat(x,\snoc(a,\cons(b,y)))
 \end{eqnarray*}$$
@@ -200,16 +204,22 @@ Let $A$ be a set and $x,y,z \in \lists{A}$. Then $$\cat(\cat(x,y),z) = \cat(x,\c
 We proceed by list induction on $z$. For the base case $z = \nil$, we have
 $$\begin{eqnarray*}
  &   & \cat(\cat(x,y),\nil) \\
- & = & \cat(x,y) \\
- & = & \cat(x,\cat(y,\nil))
+ &     \href{@cat@#thm-cat-nil-right}
+   = & \cat(x,y) \\
+ &     \href{@cat@#thm-cat-nil-right}
+   = & \cat(x,\cat(y,\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $z \in \lists{A}$, and let $a \in A$. Then we have
 $$\begin{eqnarray*}
  &   & \cat(\cat(x,y),\cons(a,z)) \\
- & = & \cat(\snoc(a,\cat(x,y)),z) \\
- & = & \cat(\cat(x,\snoc(a,y)),z) \\
- & = & \cat(x,\cat(\snoc(a,y),z)) \\
- & = & \cat(x,\cat(y,\cons(a,z)))
+ &     \href{@cat@#thm-cat-snoc-left}
+   = & \cat(\snoc(a,\cat(x,y)),z) \\
+ &     \href{@cat@#thm-cat-snoc-right}
+   = & \cat(\cat(x,\snoc(a,y)),z) \\
+ &     \href{@cat@#thm-cat-associative}
+   = & \cat(x,\cat(\snoc(a,y),z)) \\
+ &     \href{@cat@#thm-cat-snoc-left}
+   = & \cat(x,\cat(y,\cons(a,z)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -235,7 +245,8 @@ Let $A$ be a set. For all $x,y \in \lists{A}$ we have $$\rev(\cat(x,y)) = \cat(\
 We proceed by list induction on $y$. For the base case $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \rev(\cat(x,\nil)) \\
- & = & \rev(x) \\
+ &     \href{@cat@#thm-cat-nil-right}
+   = & \rev(x) \\
  &     \href{@cat@#cor-cat-nil}
    = & \cat(\nil,\rev(x)) \\
  &     \href{@rev@#cor-rev-nil}
@@ -244,10 +255,13 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equality holds for some $y \in \lists{A}$ and let $a \in A$. Then we have
 $$\begin{eqnarray*}
  &   & \rev(\cat(x,\cons(a,y))) \\
- & = & \rev(\cat(\snoc(a,x),y)) \\
- & = & \cat(\rev(y),\rev(\snoc(a,x))) \\
+ &     \href{@cat@#thm-cat-snoc-left}
+   = & \rev(\cat(\snoc(a,x),y)) \\
+ &     \href{@cat@#thm-rev-cat-antidistribute}
+   = & \cat(\rev(y),\rev(\snoc(a,x))) \\
  & = & \cat(\rev(y),\cons(a,\rev(x))) \\
- & = & \cat(\snoc(a,\rev(y)),\rev(x)) \\
+ &     \href{@cat@#thm-cat-snoc-left}
+   = & \cat(\snoc(a,\rev(y)),\rev(x)) \\
  &     \href{@rev@#cor-rev-cons}
    = & \cat(\rev(\cons(a,y)),\rev(x))
 \end{eqnarray*}$$
@@ -289,9 +303,11 @@ as needed. For the inductive step, suppose the implication holds for some $z$, a
 2. The "only if" direction is clear. For the "if" direction, note that
 $$\begin{eqnarray*}
  &   & \cat(\rev(z),\rev(x)) \\
- & = & \rev(\cat(x,z)) \\
+ &     \href{@cat@#thm-rev-cat-antidistribute}
+   = & \rev(\cat(x,z)) \\
  & = & \rev(\cat(y,z)) \\
- & = & \cat(\rev(z),\rev(y)).
+ &     \href{@cat@#thm-rev-cat-antidistribute}
+   = & \cat(\rev(z),\rev(y))
 \end{eqnarray*}$$
 By (1), we have $\rev(x) = \rev(y)$, and thus $x = y$ as claimed.
 ::::::::::::::::::::
@@ -331,7 +347,8 @@ Let $A$ be a set. The following hold for all $x,u,v \in \lists{A}$.
 1. Note that
 $$\begin{eqnarray*}
  &   & \cat(x,\nil) \\
- & = & x \\
+ &     \href{@cat@#thm-cat-nil-right}
+   = & x \\
  & = & \cat(x,v),
 \end{eqnarray*}$$
 so that $v = \nil$ by cancellation.
@@ -364,9 +381,12 @@ So in fact we have $a = b$, and
 $$\begin{eqnarray*}
  &   & x \\
  & = & \cat(w,\cat(\cons(a,x),v)) \\
- & = & \cat(\cat(w,\cons(a,x)),v) \\
- & = & \cat(\cat(\snoc(a,w),x),v) \\
- & = & \cat(\snoc(a,w),\cat(x,v)).
+ &     \href{@cat@#thm-cat-associative}
+   = & \cat(\cat(w,\cons(a,x)),v) \\
+ &     \href{@cat@#thm-cat-snoc-left}
+   = & \cat(\cat(\snoc(a,w),x),v) \\
+ &     \href{@cat@#thm-cat-associative}
+   = & \cat(\snoc(a,w),\cat(x,v))
 \end{eqnarray*}$$
 By the inductive hypothesis, we have $\snoc(a,w) = \nil$, a contradiction. So we must have $u = \nil$. Now
 $$\begin{eqnarray*}

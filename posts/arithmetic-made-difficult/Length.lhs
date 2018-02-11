@@ -370,7 +370,8 @@ Let $A$ be a set. For all $x,y \in \lists{A}$ we have $$\length(\cat(x,y)) = \np
 We proceed by list induction on $y$. For the base case $y = \nil$, note that
 $$\begin{eqnarray*}
  &   & \length(\cat(x,\nil)) \\
- & = & \length(x) \\
+ &     \href{@cat@#thm-cat-nil-right}
+   = & \length(x) \\
  &     \href{@plus@#thm-plus-zero-right}
    = & \nplus(\length(x),\zero) \\
  & = & \nplus(\length(x),\length(\nil))
@@ -378,7 +379,8 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equality holds for some $y \in \lists{A}$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \length(\cat(x,\cons(a,y))) \\
- & = & \length(\cat(\snoc(a,x),y)) \\
+ &     \href{@cat@#thm-cat-snoc-left}
+   = & \length(\cat(\snoc(a,x),y)) \\
  & = & \nplus(\length(\snoc(a,x)),\length(y)) \\
  & = & \nplus(\next(\length(x)),\length(y)) \\
  & = & \nplus(\length(x),\next(\length(y))) \\
