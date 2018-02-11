@@ -67,6 +67,7 @@ $$\left\{\begin{array}{l}
 Note that $\cat$ works a lot like $\snoc$; it marches down the list $x$ until it reaches the end, and then sticks $y$ there. In some ways, $\cat$ is like $\nplus$ for lists, and $\nil$ is the $\zero$.
 
 :::::: theorem :::::
+[]{#thm-cat-nil-right}
 Let $A$ be a set. For all $x \in \lists{A}$, we have $\cat(x,\nil) = x$.
 
 ::: proof ::::::::::
@@ -96,6 +97,7 @@ as claimed.
 $\cat$ interacts with $\snoc$:
 
 :::::: theorem :::::
+[]{#thm-cat-snoc-left}[]{#thm-cat-snoc-right}
 Let $A$ be a set. The following hold for all $a \in A$ and $x,y \in \lists{A}$.
 
 1. $\cat(\snoc(a,x),y) = \cat(x,\cons(a,y))$.
@@ -191,6 +193,7 @@ as claimed.
 And $\cat$ is associative.
 
 :::::: theorem :::::
+[]{#thm-cat-associative}
 Let $A$ be a set and $x,y,z \in \lists{A}$. Then $$\cat(\cat(x,y),z) = \cat(x,\cat(y,z)).$$
 
 ::: proof ::::::::::
@@ -225,6 +228,7 @@ as needed.
 And $\rev$ is antidistributive over $\cat$.
 
 :::::: theorem :::::
+[]{#thm-rev-cat-antidistribute}
 Let $A$ be a set. For all $x,y \in \lists{A}$ we have $$\rev(\cat(x,y)) = \cat(\rev(y),\rev(x)).$$
 
 ::: proof ::::::::::
