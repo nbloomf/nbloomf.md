@@ -8,7 +8,7 @@ slug: functions
 
 > {-# LANGUAGE NoImplicitPrelude #-}
 > module Functions (
->   id, compose, const, flip, _test_functions, main_functions
+>   id, compose, const, flip, apply, _test_functions, main_functions
 > ) where
 > 
 > import Testing
@@ -210,6 +210,54 @@ as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
+$\apply$ is operatorized function application.
+
+:::::: definition ::
+[]{#def-apply}
+Given $f : A \rightarrow B$ and $x \in A$, we define $$\apply(f)(x) = f(x).$$
+
+In Haskell:
+
+> apply :: (a -> b) -> a -> b
+> apply f x = f x
+
+::::::::::::::::::::
+
+$\apply$ distributes over compose.
+
+:::::: theorem :::::
+[]{#thm-apply-compose-distribute}
+If $f : A \rightarrow B$ and $g : B \rightarrow C$ we have $$\apply(\compose{g}{f}) = \compose{\apply(g)}{\apply(f)}.$$
+
+::: proof ::::::::::
+Let $x \in A$. Now we have
+$$\begin{eqnarray*}
+ &   & \apply(\compose{g}{f})(x) \\
+ &     \href{@functions@#def-apply}
+   = & \compose{g}{f}(x) \\
+ &     \href{@functions@#def-compose}
+   = & g(f(x)) \\
+ &     \href{@functions@#def-apply}
+   = & \apply(g)(f(x)) \\
+ &     \href{@functions@#def-apply}
+   = & \apply(g)(\apply(f)(x)) \\
+ &     \href{@functions@#def-compose}
+   = & \compose{\apply(g)}{\apply(f)}(x)
+\end{eqnarray*}$$
+as needed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_apply_compose_distribute :: (Equal c)
+>   => a -> b -> c -> Test ((b -> c) -> (a -> b) -> a -> Bool)
+> _test_apply_compose_distribute _ _ _ =
+>   testName "apply(compose(g)(f)) == compose(apply(g))(apply(f))" $
+>   \g f x -> eq (apply (compose g f) x) (compose (apply g) (apply f) x)
+
+::::::::::::::::::::
+::::::::::::::::::::
+
 
 Testing
 -------
@@ -236,6 +284,7 @@ Suite:
 >   runTest args (_test_compose_associative a b c d)
 >   runTest args (_test_compose_const_left a b c)
 >   runTest args (_test_flip_involution a b c)
+>   runTest args (_test_apply_compose_distribute a b c)
 
 Main:
 

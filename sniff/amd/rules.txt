@@ -87,6 +87,8 @@
 @functions@#thm-compose-const-left	\\compose{\\const(c)}{f} = \\const(c)
 @functions@#def-flip	\\flip(f)(b)(a) = f(a)(b)
 @functions@#thm-flip-involution	\\flip(\\flip(f)) = f
+@functions@#def-apply	\\apply(f)(x) = f(x)
+@functions@#thm-apply-compose-distribute	\\apply(\\compose{g}{f}) = \\compose{\\apply(g)}{\\apply(f)}
 #=======================#
 #--- predicates --------#
 #=======================#
@@ -342,3 +344,21 @@
 @cat@#thm-cat-snoc-right	\\cat(x,\\snoc(a,y)) = \\snoc(a,\\cat(x,y))
 @cat@#thm-cat-associative	\\cat(\\cat(x,y),z) = \\cat(x,\\cat(y,z))
 @cat@#thm-rev-cat-antidistribute	\\rev(\\cat(x,y)) = \\cat(\\rev(y),\\rev(x))
+#=======================#
+#--- length ------------#
+#=======================#
+@length@#def-addlength	\\addlength = \\foldl{\\compose{\\const}{\\next}}
+@length@#cor-addlength-nil	\\addlength(k,\\nil) = k
+@length@#cor-addlength-cons	\\addlength(k,\\cons(a,x)) = \\addlength(\\next(k),x)
+@length@#thm-addlength-snoc-next	\\addlength(k,\\snoc(a,x)) = \\next(\\addlength(k,x))
+@length@#thm-addlength-cons-next	\\addlength(k,\\cons(a,x)) = \\next(\\addlength(k,x))
+@length@#thm-addlength-rev	\\addlength(n,\\rev(x)) = \\addlength(n,x)
+@length@#def-length	\\length(x) = \\addlength(\\zero,x)
+@length@#thm-length-foldr	\\length = \\foldr{\\zero}{\\flip(\\compose{\\const}{\\next})}
+@length@#cor-length-nil	\\length(\\nil) = \\zero
+@length@#cor-length-cons	\\length(\\cons(a,x)) = \\next(\\length(x))
+@length@#thm-length-singleton	\\length(\\cons(a,\\nil)) = \\next(\\zero)
+@length@#thm-length-doubleton	\\length(\\cons(a,\\cons(b,\\nil))) = \\next(\\next(\\zero))
+@length@#thm-length-snoc	\\length(\\snoc(a,x)) = \\next(\\length(x))
+@length@#thm-length-rev	\\length(\\rev(x)) = \\length(x)
+@length@#thm-length-cat	\\length(\\cat(x,y)) = \\nplus(\\length(x),\\length(y))

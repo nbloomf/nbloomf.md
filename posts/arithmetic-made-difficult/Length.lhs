@@ -17,6 +17,7 @@ slug: length
 > import And
 > import Or
 > import Implies
+> import Functions
 > import NaturalNumbers
 > import Plus
 > import Lists
@@ -29,19 +30,20 @@ slug: length
 Today we'll measure the sizes of lists with $\length$. Intuitively this function should "count" the "number" of "items" in a list. Thinking recursively, it is reasonable to want the length of $\nil$ to be zero, and the length of $\cons(a,x)$ to be one more than the length of $x$. $\foldr{\ast}{\ast}$ was made for situations like this. But wait! Remember that $\foldr{\ast}{\ast}$ is not tail recursive, so on large lists it may have problems. But $\foldl{\ast}$ is tail recursive, and is interchangeable with $\foldr{\ast}{\ast}$ as long as whatever we're doing to the list doesn't care what *order* the items come in. And it seems reasonable to say that the length of a list is not dependent on the order of its items. So we'll use $\foldl{\ast}$. Recall from $\rev$ that $\foldl{\ast}$ is easier to reason about if it remains parameterized on the "base case". With that in mind, we start with a helper function $\addlength$.
 
 :::::: definition ::
-Let $A$ be a set. Define $\varphi : \nats \times A \rightarrow \nats$ by $\varphi(k,a) = \next(k)$, and define $\addlength : \nats \rightarrow \lists{A} \rightarrow \nats$ by $\addlength = \foldl{\varphi}$.
+[]{#def-addlength}
+Let $A$ be a set. We define $\addlength : \nats \rightarrow \lists{A} \rightarrow \nats$ by $\addlength = \foldl{\compose{\const}{\next}}$.
 
 In Haskell:
 
 > addlength :: (List t, Natural n) => n -> t a -> n
-> addlength = foldl phi
->   where phi k _ = next k
+> addlength = foldl (compose const next)
 
 ::::::::::::::::::::
 
 Since $\addlength$ is defined as a $\foldl{\ast}$, it is the unique solution to a system of functional equations.
 
 :::::: corollary :::
+[]{#cor-addlength-nil}[]{#cor-addlength-cons}
 Let $A$ be a set. Then $\addlength$ is the unique map $f : \nats \times \lists{A} \rightarrow \nats$ such that for all $n \in \nats$, $a \in A$, and $x \in \lists{A}$, we have
 $$\left\{\begin{array}{l}
  f(n,\nil) = n \\
@@ -74,35 +76,47 @@ $$\left\{\begin{array}{l}
 $\addlength$ interacts with $\cons$ and $\snoc$.
 
 :::::: theorem :::::
+[]{#thm-addlength-snoc-next}[]{#thm-addlength-cons-next}
 Let $A$ be a set. For all $n \in \nats$, $a \in A$, and $x \in \lists{A}$, we have the following.
 
 1. $\addlength(n,\snoc(a,x)) = \next(\addlength(n,x))$.
 2. $\addlength(n,\cons(a,x)) = \next(\addlength(n,x))$.
 
 ::: proof ::::::::::
-1. Letting $\varphi$ be as defined in the definition of $\addlength$, we have
+1. We have
 $$\begin{eqnarray*}
  &   & \addlength(n,\snoc(a,x)) \\
- & = & \foldl{\varphi}(n,\snoc(a,x)) \\
+ &     \href{@length@#def-addlength}
+   = & \foldl{\compose{\const}{\next}}(n,\snoc(a,x)) \\
  &     \href{@snoc@#thm-snoc-foldl}
-   = & \varphi(\foldl{\varphi}(n,x),a) \\
- & = & \next(\foldl{\varphi}(n,x)) \\
- & = & \next(\addlength(n,x))
+   = & \compose{\const}{\next}(\foldl{\compose{\const}{\next}}(n,x),a) \\
+ &     \href{@functions@#def-compose}
+   = & \const(\next(\foldl{\compose{\const}{\next}}(n,x)))(a) \\
+ &     \href{@functions@#def-const}
+   = & \next(\foldl{\compose{\const}{\next}}(n,x)) \\
+ &     \href{@length@#def-addlength}
+   = & \next(\addlength(n,x))
 \end{eqnarray*}$$
 as claimed.
 2. We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \addlength(n,\cons(a,\nil)) \\
- & = & \addlength(\next(n),\nil) \\
- & = & \next(n) \\
- & = & \next(\addlength(n,\nil))
+ &     \href{@length@#cor-addlength-cons}
+   = & \addlength(\next(n),\nil) \\
+ &     \href{@length@#cor-addlength-nil}
+   = & \next(n) \\
+ &     \href{@length@#cor-addlength-nil}
+   = & \next(\addlength(n,\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ and $n$ for some $x$, and let $b \in A$. Now
 $$\begin{eqnarray*}
  &   & \addlength(n,\cons(a,\cons(b,x))) \\
- & = & \addlength(\next(n),\cons(b,x)) \\
- & = & \next(\addlength(\next(n),x)) \\
- & = & \next(\addlength(n,\cons(b,x)))
+ &     \href{@length@#cor-addlength-cons}
+   = & \addlength(\next(n),\cons(b,x)) \\
+ &     \hyp{\addlength(k,\cons(b,x)) = \next(\addlength(k,x))}
+   = & \next(\addlength(\next(n),x)) \\
+ &     \href{@length@#cor-addlength-cons}
+   = & \next(\addlength(n,\cons(b,x)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -132,6 +146,7 @@ as needed.
 $\addlength$ interacts with $\rev$.
 
 :::::: theorem :::::
+[]{#thm-addlength-rev}
 Let $A$ be a set. For all $n \in \nats$ and $x \in \lists{A}$, we have $$\addlength(n,\rev(x)) = \addlength(n,x).$$
 
 ::: proof ::::::::::
@@ -169,6 +184,7 @@ as needed.
 Now we define $\length$ as follows.
 
 :::::: definition ::
+[]{#def-length}
 Let $A$ be a set. Define $\length : \lists{A} \rightarrow \nats$ by $$\length(x) = \addlength(\zero,x).$$
 
 In Haskell:
@@ -181,26 +197,37 @@ In Haskell:
 Although $\length$ is essentially defined as a left fold, it can be characterized as a right fold.
 
 :::::: theorem :::::
-Let $A$ be a set, and define $\psi : A \times \nats \rightarrow \nats$ by $\psi(a,k) = \next(k)$. If $x \in \lists{A}$, then $$\length(x) = \foldr{\zero}{\psi}(x).$$
+[]{#thm-length-foldr}
+Let $A$ be a set. Then we have $$\length(x) = \foldr{\zero}{\flip(\compose{\const}{\next})}(x).$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \foldr{\zero}{\psi}(\nil) \\
+ &   & \foldr{\zero}{\flip(\compose{\const}{\next})}(\nil) \\
  &     \href{@lists@#def-foldr-nil}
    = & \zero \\
- & = & \addlength(\zero,\nil) \\
- & = & \length(\nil)
+ &     \href{@length@#cor-addlength-nil}
+   = & \addlength(\zero,\nil) \\
+ &     \href{@length@#def-length}
+   = & \length(\nil)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
- &   & \foldr{\zero}{\psi}(\cons(a,x)) \\
+ &   & \foldr{\zero}{\flip(\compose{\const}{\next})}(\cons(a,x)) \\
  &     \href{@lists@#def-foldr-cons}
-   = & \psi(a,\foldr{\zero}{\psi}(x)) \\
- & = & \psi(a,\length(x)) \\
- & = & \next(\length(x)) \\
- & = & \next(\addlength(\zero,x)) \\
- & = & \addlength(\zero,\cons(a,x))
+   = & \flip(\compose{\const}{\next})(a,\foldr{\zero}{\flip(\compose{\const}{\next})}(x)) \\
+ &     \hyp{\length = \foldr{\zero}{\flip(\compose{\const}{\next})}}
+   = & \flip(\compose{\const}{\next})(a,\length(x)) \\
+ &     \href{@functions@#def-flip}
+   = & \compose{\const}{\next}(\length(x),a)
+ &     \href{@functions@#def-compose}
+   = & \const(\next(\length(x)))(a) \\
+ &     \href{@functions@#def-const}
+   = & \next(\length(x)) \\
+ &     \href{@length@#def-length}
+   = & \next(\addlength(\zero,x)) \\
+ &     \href{@length@#thm-addlength-cons-next}
+   = & \addlength(\zero,\cons(a,x))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -217,7 +244,7 @@ as needed.
 >       zero' = zero `withTypeOf` k
 >       psi _ m = next m
 >     in
->       eq (length x) (foldr zero' psi x)
+>       eq (length x) (foldr zero' (flip (compose const next)) x)
 
 ::::::::::::::::::::
 ::::::::::::::::::::
@@ -225,6 +252,7 @@ as needed.
 Since $\length$ is equivalent to a right fold, it is the unique solution to a system of functional equations.
 
 :::::: corollary :::
+[]{#cor-length-nil}[]{#cor-length-cons}
 Let $A$ be a set. $\length$ is the unique solution $f : \lists{A} \rightarrow \nats$ to the following system of equations for all $a \in A$ and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(\nil) = \zero \\
@@ -256,6 +284,7 @@ $$\left\{\begin{array}{l}
 Special cases.
 
 :::::: theorem :::::
+[]{#thm-length-singleton}[]{#thm-length-doubleton}
 For all $a,b \in A$, we have:
 
 1. $\length(\cons(a,\nil)) = \next(\zero)$.
@@ -265,15 +294,19 @@ For all $a,b \in A$, we have:
 1. We have
 $$\begin{eqnarray*}
  &   & \length(\cons(a,\nil)) \\
- & = & \next(\length(\nil)) \\
- & = & \next(\zero)
+ &     \href{@length@#cor-length-cons}
+   = & \next(\length(\nil)) \\
+ &     \href{@length@#cor-length-nil}
+   = & \next(\zero)
 \end{eqnarray*}$$
 as claimed.
 2. Note that
 $$\begin{eqnarray*}
  &   & \length(\cons(a,\cons(b,\nil))) \\
- & = & \next(\length(\cons(b,\nil))) \\
- & = & \next(\next(\zero))
+ &     \href{@length@#cor-length-cons}
+   = & \next(\length(\cons(b,\nil))) \\
+ &     \href{@length@#thm-length-singleton}
+   = & \next(\next(\zero))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -305,15 +338,19 @@ as claimed.
 $\length$ interacts with $\snoc$.
 
 :::::: theorem :::::
+[]{#thm-length-snoc}
 For all $a \in A$ and $x \in \lists{A}$, we have $$\length(\snoc(a,x)) = \next(\length(x)).$$
 
 ::: proof ::::::::::
 We have
 $$\begin{eqnarray*}
  &   & \length(\snoc(a,x)) \\
- & = & \addlength(\zero,\snoc(a,x)) \\
- & = & \next(\addlength(\zero,x)) \\
- & = & \next(\length(x))
+ &     \href{@length@#def-length}
+   = & \addlength(\zero,\snoc(a,x)) \\
+ &     \href{@length@#thm-addlength-snoc-next}
+   = & \next(\addlength(\zero,x)) \\
+ &     \href{@length@#def-length}
+   = & \next(\length(x))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -334,6 +371,7 @@ as claimed.
 $\length$ is invariant over $\rev$.
 
 :::::: theorem :::::
+[]{#thm-length-rev}
 Let $A$ be a set. For all $x \in \lists{A}$ we have $$\length(\rev(x)) = \length(x).$$
 
 ::: proof ::::::::::
@@ -364,6 +402,7 @@ as claimed.
 $\length$ turns $\cat$ into $\nplus$.
 
 :::::: theorem :::::
+[]{#thm-length-cat}
 Let $A$ be a set. For all $x,y \in \lists{A}$ we have $$\length(\cat(x,y)) = \nplus(\length(x),\length(y)).$$
 
 ::: proof ::::::::::
@@ -374,7 +413,8 @@ $$\begin{eqnarray*}
    = & \length(x) \\
  &     \href{@plus@#thm-plus-zero-right}
    = & \nplus(\length(x),\zero) \\
- & = & \nplus(\length(x),\length(\nil))
+ &     \href{@length@#cor-length-nil}
+   = & \nplus(\length(x),\length(\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $y \in \lists{A}$ and let $a \in A$. Now
 $$\begin{eqnarray*}
