@@ -441,48 +441,6 @@ as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-$\common$ is idempotent.
-
-:::::: theorem :::::
-Let $A$ be a set. For all $x \in \lists{A}$, we have $\common(x,x) = x$.
-
-::: proof ::::::::::
-We proceed by list induction on $x$. For the base case $x = \nil$, we have
-$$\begin{eqnarray*}
- &   & \common(x,x) \\
- & = & \common(\nil,\nil) \\
- & = & \nil \\
- & = & x
-\end{eqnarray*}$$
-as needed. For the inductive step, suppose the equality holds for some $x$, and let $a \in A$. Now
-$$\begin{eqnarray*}
- &   & \common(\cons(a,x),\cons(a,x)) \\
- & = & \bif{\elt(a,\cons(a,x))}{\cons(a,\common(x,\cons(a,x)))}{\common(x,\cons(a,x))} \\
- & = & \bif{\bif{\beq(a,a)}{\btrue}{\elt(a)(x)}}{\cons(a,\common(x,\cons(a,x)))}{\common(x,\cons(a,x))} \\
- &     \href{@booleans@#thm-eq-reflexive}
-   = & \bif{\bif{\btrue}{\btrue}{\elt(a)(x)}}{\cons(a,\common(x,\cons(a,x)))}{\common(x,\cons(a,x))} \\
- &     \href{@booleans@#cor-if-true}
-   = & \bif{\btrue}{\cons(a,\common(x,\cons(a,x)))}{\common(x,\cons(a,x))} \\
- &     \href{@booleans@#cor-if-true}
-   = & \cons(a,\common(x,\cons(a,x))) \\
- & = & (@@@)
- & = & \cons(a,\common(x,x)) \\
- & = & \cons(a,x)
-\end{eqnarray*}$$
-as needed.
-::::::::::::::::::::
-
-::: test :::::::::::
-
-> _test_common_idempotent :: (List t, Equal a, Equal (t a))
->   => t a -> Test (t a -> Bool)
-> _test_common_idempotent _ =
->   testName "common(x,x) == x" $
->   \x -> eq (common x x) x
-
-::::::::::::::::::::
-::::::::::::::::::::
-
 
 Testing
 -------
@@ -517,7 +475,6 @@ Suite:
 >   runTest args (_test_common_associative t)
 >   runTest args (_test_common_sublist t)
 >   runTest args (_test_common_cat_right t)
->   runTest args (_test_common_idempotent t)
 
 Main:
 

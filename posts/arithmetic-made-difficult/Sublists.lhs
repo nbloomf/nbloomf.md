@@ -338,88 +338,6 @@ as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-$\sublists$ interacts with $\filter$.
-
-:::::: theorem :::::
-Let $A$ be a set with $p : A \rightarrow \bool$ a predicate. For all $x \in \lists{A}$ we have $$\sublists(\filter(p)(x)) = \filter(\all(p))(\sublists(x)).$$
-
-::: proof ::::::::::
-We proceed by list induction on $x$. For the base case $x = \nil$ we have
-$$\begin{eqnarray*}
- &   & \sublists(\filter(p)(\nil)) \\
- & = & \sublists(\nil) \\
- & = & \cons(\nil,\nil) \\
- &     \href{@booleans@#cor-if-true}
-   = & \bif{\btrue}{\cons(\nil,\nil)}{\filter(\all(p))(\nil)} \\
- & = & \bif{\all(p)(\nil)}{\cons(\nil,\filter(\all(p))(\nil))}{\filter(\all(p))(\nil)} \\
- & = & \filter(\all(p))(\cons(\nil,\nil)) \\
- & = & \filter(\all(p))(\sublists(\nil))
-\end{eqnarray*}$$
-as needed. For the inductive step, suppose the equation holds for some $x$ and let $a \in A$. Now we have
-$$\begin{eqnarray*}
- &   & \sublists(\filter(p)(\cons(a,x))) \\
- & = & \sublists(\bif{p(a)}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
- &     \href{@booleans@#thm-iffunc}
-   = & \bif{p(a)}{\sublists(\cons(a,\filter(p)(x)))}{\sublists(\filter(p)(x))} \\
- & = & \bif{p(a)}{\cat(\map(\cons(a,-))(\sublists(\filter(p)(x))),\sublists(\filter(p)(x)))}{\sublists(\filter(p)(x))} \\
- & = & (@@@)
- & = & \cat(\filter(\all(p))(\map(\cons(a,-))(\sublists(x))),\filter(\all(p))(\sublists(x))) \\
- & = & \filter(\all(p))(\cat(\map(\cons(a,-))(\sublists(x)),\sublists(x))) \\
- & = & \filter(\all(p))(\sublists(\cons(a,x)))
-\end{eqnarray*}$$
-as needed.
-::::::::::::::::::::
-
-::: test :::::::::::
-
-> _test_sublists_filter :: (List t, Boolean bool, Equal a, Equal (t a), Equal (t (t a)))
->   => t a -> bool -> Test ((a -> Bool) -> t a -> Bool)
-> _test_sublists_filter _ _ =
->   testName "sublists(filter(p)(x)) == snoc(nil,filter(any(p))(sublists(x)))" $
->   \p x -> eq
->     (sublists (filter p x))
->     (filter (all p) (sublists x))
-
-::::::::::::::::::::
-::::::::::::::::::::
-
-$\sublists$ interacts with $\unique$.
-
-:::::: theorem :::::
-Let $A$ be a set. For all $x \in \lists{A}$, we have $$\unique(x) = \unique(\sublists(x)).$$
-
-::: proof ::::::::::
-We proceed by list induction on $x$. For the base case $x = \nil$, we have
-$$\begin{eqnarray*}
- &   & \unique(\sublists(\nil)) \\
- & = & \unique(\cons(\nil,\nil)) \\
- & = & \btrue \\
- & = & \unique(\nil)
-\end{eqnarray*}$$
-as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
-$$\begin{eqnarray*}
- &   & \unique(\sublists(\cons(a,x))) \\
- & = & \unique(\cat(\map(\cons(a,-))(\sublists(x)),\sublists(x))) \\
- & = & (@@@) \\
- & = & \band(\bnot(\elt(a,x)),\unique(x)) \\
- & = & \unique(\cons(a,x))
-\end{eqnarray*}$$
-as needed.
-::::::::::::::::::::
-
-::: test :::::::::::
-
-> _test_sublists_unique :: (List t, Boolean bool, Equal a, Equal (t a), Equal (t (t a)))
->   => t a -> bool -> Test (t a -> Bool)
-> _test_sublists_unique _ _ =
->   testName "unique(sublists(x)) == unique(x)" $
->   \x -> eq
->     (unique (sublists x))
->     (unique x)
-
-::::::::::::::::::::
-::::::::::::::::::::
-
 
 Testing
 -------
@@ -451,8 +369,6 @@ Suite:
 >   runTest args (_test_sublists_map t u)
 >   runTest args (_test_sublists_length t k)
 >   runTest args (_test_sublists_select t k)
->   runTest args (_test_sublists_filter t p)
->   runTest args (_test_sublists_unique t p)
 
 Main:
 
