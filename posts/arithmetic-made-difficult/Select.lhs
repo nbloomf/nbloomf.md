@@ -179,7 +179,8 @@ $$\begin{eqnarray*}
    = & \bif{\iszero(k)}{\length(\cons(\nil,\nil))}{\length(\nil)} \\
  & = & \bif{\iszero(k)}{\next(\zero)}{\zero} \\
  & = & \nchoose(\zero,k) \\
- & = & \nchoose(\length(\nil),k) \\
+ &     \href{@length@#cor-length-nil}
+   = & \nchoose(\length(\nil),k) \\
  & = & \nchoose(\length(x),k)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. We consider two possibilities for $k$. If $k = \zero$, we have
@@ -187,7 +188,8 @@ $$\begin{eqnarray*}
  &   & \length(\select(k,\cons(a,x))) \\
  & = & \length(\select(\zero,\cons(a,x))) \\
  & = & \length(\cons(\nil,\nil)) \\
- & = & \next(\zero) \\
+ &     \href{@length@#thm-length-singleton}
+   = & \next(\zero) \\
  & = & \nchoose(\next(\length(x)),\zero) \\
  & = & \nchoose(\length(\cons(a,x)),k)
 \end{eqnarray*}$$

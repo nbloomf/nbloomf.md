@@ -369,7 +369,8 @@ and furthermore
 $$\begin{eqnarray*}
  &   & \nleq(\length(x),\length(\cons(b,y))) \\
  & = & \nleq(\length(\nil),\length(\cons(b,y))) \\
- & = & \nleq(\zero,\length(\cons(b,y)))
+ &     \href{@length@#cor-length-nil}
+   = & \nleq(\zero,\length(\cons(b,y)))
 \end{eqnarray*}$$
 as needed. Suppose then that $x = \cons(a,u)$, and suppose further that $\sublist(x,\cons(b,y)) = \btrue$. We have two possibilities. If $a = b$, we have
 $$\begin{eqnarray*}
@@ -400,7 +401,8 @@ $$\begin{eqnarray*}
  & = & \nleq(\length(\cons(a,u)),\length(y)) \\
  & = & \nleq(\length(x),\length(y)) \\
  & = & \nleq(\length(x),\next(\length(y))) \\
- & = & \nleq(\length(x),\length(\cons(b,y)))
+ &     \href{@length@#cor-length-cons}
+   = & \nleq(\length(x),\length(\cons(b,y)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -450,7 +452,8 @@ But now we have
 $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \nleq(\length(\cons(a,x)),\length(y)) \\
- & = & \nleq(\next(\length(x)),\length(y))
+ &     \href{@length@#cor-length-cons}
+   = & \nleq(\next(\length(x)),\length(y))
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
@@ -587,7 +590,8 @@ $$\begin{eqnarray*}
  & = & \nleq(\length(\snoc(a,x)),\length(\snoc(b,\nil))) \\
  & = & \nleq(\next(\length(x)),\next(\length(\nil))) \\
  & = & \nleq(\next(\length(\cons(c,u))),\next(\zero)) \\
- & = & \nleq(\next(\next(\length(u))),\next(\zero)) \\
+ &     \href{@length@#cor-length-cons}
+   = & \nleq(\next(\next(\length(u))),\next(\zero)) \\
  &     \href{@leq@#thm-leq-next-next-one}
    = & \bfalse
 \end{eqnarray*}$$

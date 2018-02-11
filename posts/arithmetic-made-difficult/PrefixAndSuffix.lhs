@@ -318,7 +318,8 @@ Suppose $\prefix(x,y)$. Then we have $y = \cat(x,z)$ for some $z$, and so
 $$\begin{eqnarray*}
  &   & \nleq(\length(x),\length(y)) \\
  & = & \nleq(\length(x),\length(\cat(x,z))) \\
- & = & \nleq(\length(x),\nplus(\length(x),\length(z))) \\
+ &     \href{@length@#thm-length-cat}
+   = & \nleq(\length(x),\nplus(\length(x),\length(z))) \\
  & = & \nleq(\zero,\length(z)) \\
  & = & \btrue
 \end{eqnarray*}$$

@@ -162,8 +162,10 @@ $$\begin{eqnarray*}
  &     \href{@rev@#cor-rev-cons}
    = & \addlength(n,\snoc(a,\rev(x))) \\
  & = & \next(\addlength(n,\rev(x))) \\
- & = & \next(\addlength(n,x)) \\
- & = & \addlength(n,\cons(a,x))
+ &     \href{@length@#thm-addlength-rev}
+   = & \next(\addlength(n,x)) \\
+ &     \href{@length@#thm-addlength-cons-next}
+   = & \addlength(n,\cons(a,x))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -378,9 +380,12 @@ Let $A$ be a set. For all $x \in \lists{A}$ we have $$\length(\rev(x)) = \length
 Note that
 $$\begin{eqnarray*}
  &   & \length(\rev(x)) \\
- & = & \addlength(\zero,\rev(x)) \\
- & = & \addlength(\zero,x) \\
- & = & \length(x)
+ &     \href{@length@#def-length}
+   = & \addlength(\zero,\rev(x)) \\
+ &     \href{@length@#thm-addlength-rev}
+   = & \addlength(\zero,x) \\
+ &     \href{@length@#def-length}
+   = & \length(x)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -422,9 +427,11 @@ $$\begin{eqnarray*}
  &     \href{@cat@#thm-cat-snoc-left}
    = & \length(\cat(\snoc(a,x),y)) \\
  & = & \nplus(\length(\snoc(a,x)),\length(y)) \\
- & = & \nplus(\next(\length(x)),\length(y)) \\
+ &     \href{@length@#thm-length-snoc}
+   = & \nplus(\next(\length(x)),\length(y)) \\
  & = & \nplus(\length(x),\next(\length(y))) \\
- & = & \nplus(\length(x),\length(\cons(a,y)))
+ &     \href{@length@#cor-length-cons}
+   = & \nplus(\length(x),\length(\cons(a,y)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

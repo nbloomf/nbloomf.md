@@ -378,9 +378,11 @@ as needed. For the inductive step, suppose the equality holds for some $x$ and l
 $$\begin{eqnarray*}
  &   & \length(\map(f)(\cons(a,x))) \\
  & = & \length(\cons(f(a),\map(f)(x))) \\
- & = & \next(\length(\map(f)(x))) \\
+ &     \href{@length@#cor-length-cons}
+   = & \next(\length(\map(f)(x))) \\
  & = & \next(\length(x)) \\
- & = & \length(\cons(a,x))
+ &     \href{@length@#cor-length-cons}
+   = & \length(\cons(a,x))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

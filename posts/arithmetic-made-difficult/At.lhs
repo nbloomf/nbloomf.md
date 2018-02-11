@@ -194,7 +194,8 @@ Let $A$ be a set and let $z \in \lists{A}$.
 1. We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \at(\cons(a,\nil),\length(\nil)) \\
- & = & \at(\cons(a,\nil),\zero) \\
+ &     \href{@length@#cor-length-nil}
+   = & \at(\cons(a,\nil),\zero) \\
  & = & \rgt(a) \\
  &     \href{@head-tail@#thm-head-cons}
    = & \head(\cons(a,\nil)) \\
@@ -203,7 +204,8 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the implication holds for all $a$ for some $x$, and let $b \in A$. Now
 $$\begin{eqnarray*}
  &   & \at(\cons(a,\cons(b,x)),\length(\cons(b,x))) \\
- & = & \at(\cons(a,\cons(b,x)),\next(\length(x))) \\
+ &     \href{@length@#cor-length-cons}
+   = & \at(\cons(a,\cons(b,x)),\next(\length(x))) \\
  & = & \at(\cons(b,x),length(x)) \\
  & = & \head(\rev(\cons(b,x))) \\
  & = & \head(\snoc(a,\rev(\cons(b,x)))) \\
@@ -219,7 +221,8 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equality holds for some $x$, and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \at(\cons(a,x),\length(\cons(a,x))) \\
- & = & \at(\cons(a,x),\next(\length(x))) \\
+ &     \href{@length@#cor-length-cons}
+   = & \at(\cons(a,x),\next(\length(x))) \\
  & = & \at(x,\length(x)) \\
  & = & \lft(\ast)
 \end{eqnarray*}$$
@@ -329,7 +332,8 @@ $$\begin{eqnarray*}
  & = & \at(\cons(a,x),\zero) \\
  & = & \rgt(a) \\
  & = & \at(\snoc(a,\rev(x)),\length(\rev(x))) \\
- & = & \at(\snoc(a,\rev(x)),\length(x)) \\
+ &     \href{@length@#thm-length-rev}
+   = & \at(\snoc(a,\rev(x)),\length(x)) \\
  &     \href{@rev@#cor-rev-cons}
    = & \at(\rev(\cons(a,x)),\length(x)) \\
  & = & \at(\rev(\cons(a,x)),v)

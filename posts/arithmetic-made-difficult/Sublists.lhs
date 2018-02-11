@@ -249,9 +249,11 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \length(\sublists(\nil)) \\
  & = & \length(\cons(\nil,\nil)) \\
- & = & \next(\zero) \\
+ &     \href{@length@#thm-length-singleton}
+   = & \next(\zero) \\
  & = & \npower(\next(\next(\zero)),\zero) \\
- & = & \npower(\next(\next(\zero)),\length(\nil))
+ &     \href{@length@#cor-length-nil}
+   = & \npower(\next(\next(\zero)),\length(\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
@@ -265,7 +267,8 @@ $$\begin{eqnarray*}
  &     \href{@times@#thm-times-commutative}
    = & \ntimes(\npower(\next(\next(\zero)),\length(x)),\next(\next(\zero))) \\
  & = & \npower(\next(\next(\zero)),\next(\length(x))) \\
- & = & \npower(\next(\next(\zero)),\length(\cons(a,x)))
+ &     \href{@length@#cor-length-cons}
+   = & \npower(\next(\next(\zero)),\length(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

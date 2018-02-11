@@ -177,7 +177,8 @@ $$\begin{eqnarray*}
  &   & \length(\take(k,x)) \\
  & = & \length(\take(\zero,x)) \\
  & = & \length(\nil) \\
- & = & \zero \\
+ &     \href{@length@#cor-length-nil}
+   = & \zero \\
  &     \href{@max-min@#thm-min-zero-left}
    = & \nmin(\zero,\length(x)) \\
  & = & \nmin(k,\length(x))
@@ -187,16 +188,19 @@ $$\begin{eqnarray*}
  &   & \length(\take(\next(k),x)) \\
  & = & \length(\take(\next(k),\nil)) \\
  & = & \length(\nil) \\
- & = & \zero \\
+ &     \href{@length@#cor-length-nil}
+   = & \zero \\
  & = & \nmin(\next(k),\zero) \\
- & = & \nmin(\next(k),\length(\nil)) \\
+ &     \href{@length@#cor-length-nil}
+   = & \nmin(\next(k),\length(\nil)) \\
  & = & \nmin(\next(k),\length(x))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now we have
 $$\begin{eqnarray*}
  &   & \length(\take(\next(k),\cons(a,x))) \\
  & = & \length(\cons(a,\take(k,x))) \\
- & = & \next(\length(\take(k,x))) \\
+ &     \href{@length@#cor-length-cons}
+   = & \next(\length(\take(k,x))) \\
  & = & \next(\nmin(k,\length(x))) \\
  &     \href{@max-min@#thm-next-min-distribute}
    = & \nmin(\next(k),\next(\length(x))) \\

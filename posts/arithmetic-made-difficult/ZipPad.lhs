@@ -254,7 +254,8 @@ $$\begin{eqnarray*}
  & = & \length(\map(\flip(\tup)(v))(\cons(a,x))) \\
  & = & \length(\cons(a,x)) \\
  & = & \nmax(\length(\cons(a,x)),\zero) \\
- & = & \nmax(\length(\cons(a,x)),\length(\nil)) \\
+ &     \href{@length@#cor-length-nil}
+   = & \nmax(\length(\cons(a,x)),\length(\nil)) \\
  & = & \nmax(\length(\cons(a,x)),\length(y)) \\
 \end{eqnarray*}$$
 as claimed. Suppose then that $y = \cons(b,w)$. Now

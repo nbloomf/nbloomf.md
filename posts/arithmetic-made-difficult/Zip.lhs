@@ -198,9 +198,11 @@ $$\begin{eqnarray*}
  &   & \length(\zip(x,y)) \\
  & = & \length(\zip(x,\nil)) \\
  & = & \length(\nil) \\
- & = & \zero \\
+ &     \href{@length@#cor-length-nil}
+   = & \zero \\
  & = & \nmin(\length(x),\zero) \\
- & = & \nmin(\length(x),\length(\nil)) \\
+ &     \href{@length@#cor-length-nil}
+   = & \nmin(\length(x),\length(\nil)) \\
  & = & \nmin(\length(x),\length(y)) \\
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $x$ for some $y$ and let $b \in B$. We consider two cases: either $x = \nil$ or $x = \cons(a,z)$. If $x = \nil$, we have
@@ -208,7 +210,8 @@ $$\begin{eqnarray*}
  &   & \length(\zip(x,\cons(b,y))) \\
  & = & \length(\zip(\nil,\cons(b,y))) \\
  & = & \length(\nil) \\
- & = & \zero \\
+ &     \href{@length@#cor-length-nil}
+   = & \zero \\
  &     \href{@max-min@#thm-min-zero-left}
    = & \nmin(\zero,\length(\cons(b,y))) \\
  & = & \nmin(\length(\nil),\length(\cons(b,y))) \\

@@ -109,14 +109,16 @@ $$\begin{eqnarray*}
  &   & \length(\range(a,b)) \\
  & = & \length(\range(a,\zero)) \\
  & = & \length(\nil) \\
- & = & \zero \\
+ &     \href{@length@#cor-length-nil}
+   = & \zero \\
  & = & b
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for some $b$. Now
 $$\begin{eqnarray*}
  &   & \length(\range(a,\next(b))) \\
  & = & \length(\cons(a,\range(\next(a),b))) \\
- & = & \next(\length(\range(\next(a),b))) \\
+ &     \href{@length@#cor-length-cons}
+   = & \next(\length(\range(\next(a),b))) \\
  & = & \next(b)
 \end{eqnarray*}$$
 as claimed.

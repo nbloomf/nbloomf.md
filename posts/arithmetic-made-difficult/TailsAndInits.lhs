@@ -169,16 +169,20 @@ We proceed by list induction. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \length(\tails(\nil)) \\
  & = & \length(\cons(\nil,\nil)) \\
- & = & \next(\zero) \\
- & = & \next(\length(\nil))
+ &     \href{@length@#thm-length-singleton}
+   = & \next(\zero) \\
+ &     \href{@length@#cor-length-nil}
+   = & \next(\length(\nil))
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Then we have
 $$\begin{eqnarray*}
  &   & \length(\tails(\cons(a,x))) \\
  & = & \length(\cons(\cons(a,x),\tails(x))) \\
- & = & \next(\length(\tails(x))) \\
+ &     \href{@length@#cor-length-cons}
+   = & \next(\length(\tails(x))) \\
  & = & \next(\next(\length(x))) \\
- & = & \next(\length(\cons(a,x)))
+ &     \href{@length@#cor-length-cons}
+   = & \next(\length(\cons(a,x)))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -400,10 +404,12 @@ Note that
 $$\begin{eqnarray*}
  &   & \length(\inits(x)) \\
  & = & \length(\rev(\map(\rev)(\tails(\rev(x))))) \\
- & = & \length(\map(\rev)(\tails(\rev(x)))) \\
+ &     \href{@length@#thm-length-rev}
+   = & \length(\map(\rev)(\tails(\rev(x)))) \\
  & = & \length(\tails(\rev(x))) \\
  & = & \next(\length(\rev(x))) \\
- & = & \next(\length(x))
+ &     \href{@length@#thm-length-rev}
+   = & \next(\length(x))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

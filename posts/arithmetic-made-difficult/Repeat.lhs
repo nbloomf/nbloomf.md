@@ -94,13 +94,15 @@ We proceed by induction on $n$. For the base case $n = \zero$ we have
 $$\begin{eqnarray*}
  &   & \length(\repeat(\zero,a)) \\
  & = & \length(\nil) \\
- & = & \zero
+ &     \href{@length@#cor-length-nil}
+   = & \zero
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for some $n$. Then we have
 $$\begin{eqnarray*}
  &   & \length(\repeat(\next(n),a)) \\
  & = & \length(\cons(a,\repeat(n,a))) \\
- & = & \next(\length(\repeat(n,a))) \\
+ &     \href{@length@#cor-length-cons}
+   = & \next(\length(\repeat(n,a))) \\
  & = & \next(n)
 \end{eqnarray*}$$
 as claimed.
