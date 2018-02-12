@@ -2,7 +2,7 @@
 title: Indent
 author: nbloomf
 date: 2015-07-25
-tags: literate-haskell
+tags: literate-haskell, munge
 ---
 
 Indent lines by one space.

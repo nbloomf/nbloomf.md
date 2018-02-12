@@ -2,7 +2,7 @@
 title: Dedent
 author: nbloomf
 date: 2015-07-25
-tags: literate-haskell
+tags: literate-haskell, munge
 ---
 
 Dedent lines by one space or tab.

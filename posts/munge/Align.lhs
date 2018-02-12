@@ -2,7 +2,7 @@
 title: Align
 author: nbloomf
 date: 2015-07-27
-tags: literate-haskell
+tags: literate-haskell, munge
 ---
 
 > module Align where

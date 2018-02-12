@@ -2,7 +2,7 @@
 title: Crunch
 author: nbloomf
 date: 2015-07-26
-tags: literate-haskell
+tags: literate-haskell, munge
 ---
 
 Remove repeated spaces or tabs.

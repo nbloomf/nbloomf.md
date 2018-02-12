@@ -2,7 +2,7 @@
 title: Ordered By
 author: nbloomf
 date: 2018-02-07
-tags: literate-haskell
+tags: literate-haskell, munge
 ---
 
 Here's a task I haven't found a good pipeline for: showing that some lines in a file are in a prescribed order -- but not necessarily alphabetical/numerical/asciibetical order. The main motivating case is checking the order of imports in a Haskell module, but another example is finding the first word in an alphabetized list that doesn't appear in an alphabetized dictionary. Essentially, thinking of two files as lists of lines, find the longest suffix of one list that is not a sublist of the other.

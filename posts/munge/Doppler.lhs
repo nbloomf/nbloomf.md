@@ -2,7 +2,7 @@
 title: Doppler
 author: nbloomf
 date: 2016-01-22
-tags: literate-haskell
+tags: literate-haskell, munge
 ---
 
 I am feeling bored today. Let's make a thing so I don't have to keep looking up ANSI color codes.
