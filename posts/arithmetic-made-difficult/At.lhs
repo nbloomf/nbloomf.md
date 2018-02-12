@@ -90,7 +90,8 @@ Let $A$ be a set. For all $a \in A$, $x \in \lists{A}$, and $k \in \nats$, we ha
 Note that
 $$\begin{eqnarray*}
  &   & \at(\cons(a,x),\next(k)) \\
- & = & \bif{\isnil(\cons(a,x))}{\lft(\ast)}{\at(\tail(\cons(a,x)),k)} \\
+ &     \href{@at@#cor-at-next}
+   = & \bif{\isnil(\cons(a,x))}{\lft(\ast)}{\at(\tail(\cons(a,x)),k)} \\
  &     \href{@head-tail@#thm-isnil-cons}
    = & \bif{\bfalse}{\lft(\ast)}{\at(\tail(\cons(a,x)),k)} \\
  &     \href{@booleans@#cor-if-false}
@@ -126,12 +127,14 @@ Let $A$ be a set. The following hold for all $a,b \in A$, $x \in \lists{A}$, and
 1. We consider two cases: $k = \zero$ and $k \neq \zero$. If $k = \zero$, we of course have
 $$\begin{eqnarray*}
  &   & \at(\nil,\zero) \\
- & = & \lft(\ast)
+ &     \href{@at@#thm-at-nil}
+   = & \lft(\ast)
 \end{eqnarray*}$$
 as claimed. If $k = \next(m)$, we have
 $$\begin{eqnarray*}
  &   & \at(\nil,\next(m)) \\
- & = & \bif{\isnil(\nil)}{\lft(\ast)}{\at(\tail(\nil),m)} \\
+ &     \href{@at@#cor-at-next}
+   = & \bif{\isnil(\nil)}{\lft(\ast)}{\at(\tail(\nil),m)} \\
  &     \href{@head-tail@#thm-isnil-nil}
    = & \bif{\btrue}{\lft(\ast)}{\at(\tail(\nil),m)} \\
  &     \href{@booleans@#cor-if-true}
@@ -141,7 +144,8 @@ as claimed.
 2. We have
 $$\begin{eqnarray*}
  &   & \at(\cons(a,x),\zero) \\
- & = & \head(\cons(a,x)) \\
+ &     \href{@at@#cor-at-zero}
+   = & \head(\cons(a,x)) \\
  &     \href{@head-tail@#thm-head-cons}
    = & \rgt(a)
 \end{eqnarray*}$$
@@ -149,8 +153,10 @@ as claimed.
 3. We have
 $$\begin{eqnarray*}
  &   & \at(\cons(a,\cons(b,x)),\next(\zero)) \\
- & = & \at(\cons(b,x),\zero) \\
- & = & \rgt(b)
+ &     \href{@at@#thm-at-cons-next}
+   = & \at(\cons(b,x),\zero) \\
+ &     \href{@at@#thm-at-cons-zero}
+   = & \rgt(b)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -221,7 +227,8 @@ as needed.
 2. We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \at(\nil,\length(\nil)) \\
- & = & \lft(\ast)
+ &     \href{@at@#thm-at-nil}
+   = & \lft(\ast)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$, and let $a \in A$. Now
 $$\begin{eqnarray*}
@@ -229,7 +236,8 @@ $$\begin{eqnarray*}
  &     \href{@length@#cor-length-cons}
    = & \at(\cons(a,x),\next(\length(x))) \\
  & = & \at(x,\length(x)) \\
- & = & \lft(\ast)
+ &     \href{@at@#thm-at-length}
+   = & \lft(\ast)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -273,7 +281,8 @@ $$\begin{eqnarray*}
  &     \href{@snoc@#cor-snoc-cons}
    = & \at(\cons(b,\snoc(a,x)),\zero) \\
  & = & \rgt(b) \\
- & = & \at(\cons(b,x),\zero)
+ &     \href{@at@#thm-at-cons-zero}
+   = & \at(\cons(b,x),\zero)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the implication holds for all $x$, $a$, and $b$ for some $k$, and suppose further that $\nleq(\next(k),\length(x))$. In particular, we must have $x = \cons(c,u)$ for some $c \in A$ and $u \in \lists{A}$, and $\nleq(k,\length(u))$. Now we have
 $$\begin{eqnarray*}
@@ -284,20 +293,23 @@ $$\begin{eqnarray*}
  & = & \at(\snoc(a,\cons(c,u)),k) \\
  & = & \at(\cons(c,u),k) \\
  & = & \at(x,k) \\
- & = & \at(\cons(b,x),\next(k))
+ &     \href{@at@#thm-at-cons-next}
+   = & \at(\cons(b,x),\next(k))
 \end{eqnarray*}$$
 as needed.
 2. We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \at(\snoc(a,\nil),\length(\nil)) \\
  & = & \at(\cons(a,\nil),\zero) \\
- & = & \rgt(a)
+ &     \href{@at@#thm-at-cons-zero}
+   = & \rgt(a)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$, and let $b \in A$. Now
 $$\begin{eqnarray*}
  &   & \at(\snoc(a,\cons(b,x)),\length(\cons(b,x))) \\
  & = & \at(\cons(b,\snoc(a,x)),\next(\length(x))) \\
- & = & \at(\snoc(a,x),\length(x)) \\
+ &     \href{@at@#thm-at-cons-next}
+   = & \at(\snoc(a,x),\length(x)) \\
  & = & \rgt(a)
 \end{eqnarray*}$$
 as needed.
@@ -335,7 +347,8 @@ We proceed by list induction on $x$. For the base case $x = \nil$, note that $\l
 $$\begin{eqnarray*}
  &   & \at(\cons(a,x),u) \\
  & = & \at(\cons(a,x),\zero) \\
- & = & \rgt(a) \\
+ &     \href{@at@#thm-at-cons-zero}
+   = & \rgt(a) \\
  & = & \at(\snoc(a,\rev(x)),\length(\rev(x))) \\
  &     \href{@length@#thm-length-rev}
    = & \at(\snoc(a,\rev(x)),\length(x)) \\
@@ -347,7 +360,8 @@ as needed. If $u = \next(w)$, then we have $\next(\nplus(w,v)) = \length(x)$. In
 $$\begin{eqnarray*}
  &   & \at(\cons(a,x),u) \\
  & = & \at(\cons(a,x),\next(w)) \\
- & = & \at(x,w) \\
+ &     \href{@at@#thm-at-cons-next}
+   = & \at(x,w) \\
  & = & \at(\rev(x),v) \\
  & = & \at(\cons(c,y),v) \\
  & = & \at(\snoc(a,\cons(c,y)),v) \\
@@ -400,7 +414,8 @@ $$\begin{eqnarray*}
  &   & \at(\cat(\cons(a,\nil),y),\nplus(\next(\length(\nil)),k)) \\
  & = & \at(\cons(a,\cat(\nil,y)),\next(\nplus(\zero,k))) \\
  & = & \at(\cons(a,y),\next(k)) \\
- & = & \at(y,k)
+ &     \href{@at@#thm-at-cons-next}
+   = & \at(y,k)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$, $y$, and $k$ for some $x$, and let $b \in A$. Note that $\snoc(b,x) = \cons(c,u)$ for some $c$ and u$, where $\length(x) = \next(\length(u))$. Now
 $$\begin{eqnarray*}
@@ -451,31 +466,36 @@ Let $A$ be a set. For all $x \in \lists{A}$ and $k \in \nats$ we have the follow
 1. We proceed by list induction on $x$. For the base case $x = \nil$, note that for any $k$ we have $\nleq(\zero,k)$ and
 $$\begin{eqnarray*}
  &   & \at(\nil,k) \\
- & = & \lft(\ast)
+ &     \href{@at@#thm-at-nil}
+   = & \lft(\ast)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the implication holds for all $k$ for some $x$ and let $a \in A$. Suppose further that $\nleq(\length(\cons(a,x),k))$; we then have $k = \next(m)$ for some $m$, where $\nleq(\length(x),m)$. Now
 $$\begin{eqnarray*}
  &   & \at(\cons(a,x),k) \\
  & = & \at(\cons(a,x),\next(m)) \\
- & = & \at(x,m) \\
+ &     \href{@at@#thm-at-cons-next}
+   = & \at(x,m) \\
  & = & \lft(\ast)
 \end{eqnarray*}$$
 as needed.
 2. We proceed by list induction on $x$. For the base case $x = \nil$, note that if $\nleq(k,\length(\nil))$ then $k = \zero$. Now
 $$\begin{eqnarray*}
  &   & \at(\cons(a,\nil),\zero) \\
- & = & \rgt(a)
+ &     \href{@at@#thm-at-cons-zero}
+   = & \rgt(a)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the implication holds for all $k$ and $a$ for some $x$ and let $b \in A$. Suppose further that $\nleq(k,\length(\cons(b,x)))$. We have two possibilities for $k$. If $k = \zero$, we have
 $$\begin{eqnarray*}
  &   & \at(\cons(a,\cons(b,x)),\zero) \\
- & = & \rgt(a)
+ &     \href{@at@#thm-at-cons-zero}
+   = & \rgt(a)
 \end{eqnarray*}$$
 as needed. Suppose instead that $k = \next(m)$. Now $\nleq(m,\length(x))$, and we have
 $$\begin{eqnarray*}
  &   & \at(\cons(a,\cons(b,x)),k) \\
  & = & \at(\cons(a,\cons(b,x)),\next(m)) \\
- & = & \at(\cons(b,x),m) \\
+ &     \href{@at@#thm-at-cons-next}
+   = & \at(\cons(b,x),m) \\
  & = & \rgt(c)
 \end{eqnarray*}$$
 for some $c$ by the inductive hypothesis, as needed.
@@ -525,15 +545,18 @@ $$\begin{eqnarray*}
  & = & \at(\cons(a,x),\next(\zero)) \\
  & = & \at(y,\next(\zero)) \\
  & = & \at(\nil,\next(\zero)) \\
- & = & \lft(\ast),
+ &     \href{@at@#thm-at-nil}
+   = & \lft(\ast)
 \end{eqnarray*}$$
 a contradiction. Say $y = \cons(b,z)$. Now
 $$\begin{eqnarray*}
  &   & \at(z,k) \\
- & = & \at(\cons(b,z),\next(k)) \\
+ &     \href{@at@#thm-at-cons-next}
+   = & \at(\cons(b,z),\next(k)) \\
  & = & \at(y,\next(k)) \\
  & = & \at(\cons(a,x),\next(k)) \\
- & = & \at(x,k).
+ &     \href{@at@#thm-at-cons-next}
+   = & \at(x,k)
 \end{eqnarray*}$$
 By the inductive hypothesis, $x = z$, so that $\cons(a,x) = y$ as needed.
 ::::::::::::::::::::

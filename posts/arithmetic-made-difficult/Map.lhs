@@ -324,17 +324,20 @@ There are two possibilities for $x$. If $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \at(\map(f)(\nil),k) \\
  & = & \at(\nil,k) \\
- & = & \lft(\ast) \\
+ &     \href{@at@#thm-at-nil}
+   = & \lft(\ast) \\
  &     \href{@functions@#def-id}
    = & \lft(\id(\ast)) \\
  & = & \uPair(\id,f)(\lft(\ast)) \\
- & = & \uPair(\id,f)(\at(\nil,k))
+ &     \href{@at@#thm-at-nil}
+   = & \uPair(\id,f)(\at(\nil,k))
 \end{eqnarray*}$$
 as claimed. Suppose instead that $x = \cons(a,y)$. We now proceed by induction on $k$. For the base case $k = \zero$, we have
 $$\begin{eqnarray*}
  &   & \at(\map(f)(\cons(a,y)),\zero) \\
  & = & \at(\cons(f(a),\map(f)(y)),\zero) \\
- & = & \rgt(f(a)) \\
+ &     \href{@at@#thm-at-cons-zero}
+   = & \rgt(f(a)) \\
  &     \href{@disjoint-unions@#thm-uPair-rgt}
    = & \uPair(\id,f)(\rgt(a)) \\
  & = & \uPair(\id,f)(\at(\cons(a,y),\zero))
@@ -343,9 +346,11 @@ as needed. For the inductive step, suppose the equality holds for all $a$ and $y
 $$\begin{eqnarray*}
  &   & \at(\map(f)(\cons(a,y)),\next(k)) \\
  & = & \at(\cons(f(a),\map(f)(y)),\next(k)) \\
- & = & \at(\map(f)(y),k) \\
+ &     \href{@at@#thm-at-cons-next}
+   = & \at(\map(f)(y),k) \\
  & = & \uPair(\id,f)(\at(y,k)) \\
- & = & \uPair(\id,f)(\at(\cons(a,y),\next(k)))
+ &     \href{@at@#thm-at-cons-next}
+   = & \uPair(\id,f)(\at(\cons(a,y),\next(k)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
