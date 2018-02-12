@@ -49,6 +49,7 @@ In Haskell:
 Since $\at$ is defined in terms of $\bailrec{\ast}{\ast}{\ast}{\ast}$, it is the unique solution to a system of functional equations.
 
 :::::: corollary :::
+[]{#cor-at-zero}[]{#cor-at-next}
 $\at$ is the unique map $f : \nats \times \lists{A} \rightarrow 1 + A$ such that the following hold for all $n \in \nats$, $a \in A$, and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(x,\zero) = \head(x) \\
@@ -82,6 +83,7 @@ $$\left\{\begin{array}{l}
 $\at$ interacts with $\cons$ and $\next$.
 
 :::::: theorem :::::
+[]{#thm-at-cons-next}
 Let $A$ be a set. For all $a \in A$, $x \in \lists{A}$, and $k \in \nats$, we have $$\at(\cons(a,x),\next(k)) = \at(x,k).$$
 
 ::: proof ::::::::::
@@ -93,7 +95,8 @@ $$\begin{eqnarray*}
    = & \bif{\bfalse}{\lft(\ast)}{\at(\tail(\cons(a,x)),k)} \\
  &     \href{@booleans@#cor-if-false}
    = & \at(\tail(\cons(a,x)),k) \\
- & = & \at(x,k)
+ &     \href{@head-tail@#thm-tail-cons}
+   = & \at(x,k)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -112,6 +115,7 @@ as claimed.
 Let's trace some special cases.
 
 :::::: theorem :::::
+[]{#thm-at-nil}[]{#thm-at-cons-zero}[]{#thm-at-doubleton-one}
 Let $A$ be a set. The following hold for all $a,b \in A$, $x \in \lists{A}$, and $k \in \nats$.
 
 1. $\at(\nil,k) = \lft(\ast)$.
@@ -185,6 +189,7 @@ as claimed.
 $\at$ interacts with $\length$.
 
 :::::: theorem :::::
+[]{#thm-at-cons-length}[]{#thm-at-length}
 Let $A$ be a set and let $z \in \lists{A}$.
 
 1. $\at(\cons(a,x),\length(x)) = \head(\rev(\cons(a,x)))$.

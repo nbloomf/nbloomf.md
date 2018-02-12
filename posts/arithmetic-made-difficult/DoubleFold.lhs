@@ -24,6 +24,7 @@ slug: dfoldr
 Every $A$-inductive homomorphism $\lists{A} \rightarrow B$ can be defined in terms of $\foldr{\ast}{\ast}$. But, as with $\nats$, some specializations of $\foldr{\ast}{\ast}$ show up often enough to warrant their own name. Today we'll define one of these, analogous to $\dnatrec{\ast}{\ast}{\ast}$.
 
 :::::: theorem :::::
+[]{#thm-dfoldr-nil}[]{#thm-dfoldr-cons-nil}[]{#thm-dfoldr-cons-cons}
 Let $A$, $B$, and $C$ be sets, and suppose we have mappings $$\begin{array}{l} \delta : \lists{B} \rightarrow C \\ \psi : A \times C \rightarrow C \\ \chi : A \times B \times \lists{B} \times C \times C \rightarrow C. \end{array}$$ There is a unique solution $\Omega : \lists{A} \times \lists{B} \rightarrow C$ to the following system of functional equations for all $a \in A$, $b \in B$, $x \in \lists{A}$, and $y \in \lists{B}$.
 $$\left\{\begin{array}{l}
  \Omega(\nil,y) = \delta(y) \\
