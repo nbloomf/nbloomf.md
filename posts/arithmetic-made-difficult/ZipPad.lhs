@@ -197,9 +197,9 @@ $$\begin{eqnarray*}
  &   & \map(\tPair(f,g))(\zipPad(u,v)(\cons(a,x),y)) \\
  & = & \map(\tPair(f,g))(\zipPad(u,v)(\cons(a,x),\nil)) \\
  & = & \map(\tPair(f,g))(\map(\flip(\tup)(v))(\cons(a,x))) \\
- & = & (\map(\tPair(f,g)) \circ \map(\flip(\tup)(v)))(\cons(a,x)) \\
- & = & \map(\tPair(f,g) \circ \flip(\tup)(v))(\cons(a,x)) \\
- & = & \map(\flip(\tup)(g(v)) \circ f)(\cons(a,x)) \\
+ & = & \compose{\map(\tPair(f,g))}{\map(\flip(\tup)(v))}(\cons(a,x)) \\
+ & = & \map(\compose{\tPair(f,g)}{\flip(\tup)(v)})(\cons(a,x)) \\
+ & = & \map(\compose{\flip(\tup)(g(v))}{f})(\cons(a,x)) \\
  & = & \map(\flip(\tup)(g(v)))(\map(f)(\cons(a,x))) \\
  & = & \zipPad(f(u),g(v))(\map(f)(\cons(a,x)),\nil) \\
  & = & \zipPad(f(u),g(v))(\map(f)(\cons(a,x)),y)
