@@ -261,7 +261,7 @@ $$\begin{eqnarray*}
  &     \hyp{a = \next(d)}
    = & \nminus(\next(b),\next(d)) \\
  &     \href{@minus@#thm-minus-next-cancel}
-   = & \nminus(b,d) \\
+   = & \nminus(b,d)
 \end{eqnarray*}$$
 and thus $\nplus(d,c) = b$. But then
 $$\begin{eqnarray*}

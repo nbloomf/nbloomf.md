@@ -188,7 +188,7 @@ $$\begin{eqnarray*}
  &     \href{@disjoint-unions@#def-either-rgt}
    = & \unnext(\next(\zero)) \\
  &     \href{@unary@#thm-unnext-next}
-   = & \rgt(\zero) \\
+   = & \rgt(\zero)
 \end{eqnarray*}$$
 as needed. For the inductive step, if the equality holds for some $n$, we have
 $$\begin{eqnarray*}

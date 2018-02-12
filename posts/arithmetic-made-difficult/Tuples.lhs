@@ -392,7 +392,7 @@ $$\begin{eqnarray*}
  &     \href{@tuples@#thm-fst-tup}
    = & \tup(\tup(\fst(\tup(a)(\tup(b)(c))))(b))(c) \\
  &     \href{@tuples@#thm-fst-tup}
-   = & \tup(\tup(a)(b))(c) \\
+   = & \tup(\tup(a)(b))(c)
 \end{eqnarray*}$$
 as claimed.
 2. Note that
@@ -417,7 +417,7 @@ $$\begin{eqnarray*}
  &     \href{@tuples@#thm-fst-tup}
    = & \tup(a)(\tup(\snd(\tup(a)(b)))(c)) \\
  &     \href{@tuples@#thm-snd-tup}
-   = & \tup(a)(\tup(b)(c)) \\
+   = & \tup(a)(\tup(b)(c))
 \end{eqnarray*}$$
 as claimed.
 3. Note that

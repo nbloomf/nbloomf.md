@@ -346,7 +346,7 @@ $$\begin{eqnarray*}
  & = & \rev(\snoc(\nil,\map(\cons(a,-))(\map(\rev)(\tails(\rev(a)))))) \\
  & = & \cons(\nil,\rev(\map(\cons(a,-))(\map(\rev)(\tails(\rev(a)))))) \\
  & = & \cons(\nil,\map(\cons(a,-))(\rev(\map(\rev)(\tails(\rev(a)))))) \\
- & = & \cons(\nil,\map(\cons(a,-))(\inits(x))) \\
+ & = & \cons(\nil,\map(\cons(a,-))(\inits(x)))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

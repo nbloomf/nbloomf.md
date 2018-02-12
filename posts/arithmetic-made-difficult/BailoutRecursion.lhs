@@ -31,7 +31,7 @@ $$\begin{eqnarray*}
 \varphi & : & A \rightarrow B \\
 \beta & : & \nats \times A \rightarrow \bool \\
 \psi & : & \nats \times A \rightarrow B \\
-\omega & : & \nats \times A \rightarrow A. \\
+\omega & : & \nats \times A \rightarrow A.
 \end{eqnarray*}$$
 
 Then there is a unique function $\Theta : \nats \times A \rightarrow B$ such that, for all $n \in \nats$ and $a \in A$, $$\Theta(\zero, a) = \varphi(a)$$ and $$\Theta(\next(m), a) = \left\{ \begin{array}{ll} \psi(m,a) & \mathrm{if}\ \beta(m,a) \\ \Theta(m, \omega(m,a)) & \mathrm{otherwise}. \end{array}\right.$$
@@ -172,7 +172,7 @@ $$\begin{eqnarray*}
 \varphi & : & A \rightarrow B \\
 \beta & : & \nats \times A \rightarrow \bool \\
 \psi & : & \nats \times A \rightarrow B \\
-\omega & : & \nats \times A \rightarrow A. \\
+\omega & : & \nats \times A \rightarrow A.
 \end{eqnarray*}$$
 Then $\bailrec{\varphi}{\beta}{\psi}{\omega}$ is the unique solution $f : \nats \times A \rightarrow B$ to the following system of functional equations for all $k \in \nats$, $a \in A$:
 $$\left\{\begin{array}{l}

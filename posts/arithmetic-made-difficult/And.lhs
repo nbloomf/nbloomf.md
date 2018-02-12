@@ -343,7 +343,7 @@ If $p = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \band(\btrue,\bif{\btrue}{q}{r}) \\
  &     \href{@booleans@#cor-if-true}
-   = & \band(\btrue,q) \\
+   = & \band(\btrue,q)
 \end{eqnarray*}$$
 as claimed. If $p = \bfalse$, we have
 $$\begin{eqnarray*}

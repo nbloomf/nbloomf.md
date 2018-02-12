@@ -287,7 +287,7 @@ $$\begin{eqnarray*}
  &     \href{@rev@#cor-rev-nil}
    = & \rev(\nil) \\
  & = & \rev(\map(f)(\nil)) \\
- & = & \rev(\map(f)(x)) \\
+ & = & \rev(\map(f)(x))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equation holds for some $x \in \lists{A}$ and let $a \in A$. Now
 $$\begin{eqnarray*}

@@ -100,7 +100,7 @@ $$\begin{eqnarray*}
  & = & \chi(a,b,y,\foldr{\delta}{\varphi}(x)(y),\foldr{\delta}{\varphi}(x)(\cons(b,y))) \\
  & = & \varphi(a,\foldr{\delta}{\varphi}(x))(\cons(b,y)) \\
  &     \href{@lists@#def-foldr-cons}
-   = & \foldr{\delta}{\varphi}(\cons(a,x))(\cons(b,y)) \\
+   = & \foldr{\delta}{\varphi}(\cons(a,x))(\cons(b,y))
 \end{eqnarray*}$$
 as claimed. By induction, we thus have $$f(x,y) = \foldr{\delta}{\varphi}(x)(y) = \Omega(x,y).$$
 ::::::::::::::::::::

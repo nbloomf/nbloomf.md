@@ -387,7 +387,7 @@ $$\begin{eqnarray*}
  & = & \nil \\
  & = & \zip(\lcp(\cons(a,x),y),\nil) \\
  & = & \zip(\lcp(\cons(a,x),y),\lcp(\nil,v)) \\
- & = & \zip(\lcp(\cons(a,x),y),\lcp(u,v)) \\
+ & = & \zip(\lcp(\cons(a,x),y),\lcp(u,v))
 \end{eqnarray*}$$
 as claimed. If $v = \nil$, we have
 $$\begin{eqnarray*}
@@ -397,7 +397,7 @@ $$\begin{eqnarray*}
  & = & \nil \\
  & = & \zip(\lcp(\cons(a,x),y),\nil) \\
  & = & \zip(\lcp(\cons(a,x),y),\lcp(u,\nil)) \\
- & = & \zip(\lcp(\cons(a,x),y),\lcp(u,v)) \\
+ & = & \zip(\lcp(\cons(a,x),y),\lcp(u,v))
 \end{eqnarray*}$$
 as claimed. Thus we can say $y = \cons(c,w)$, $u = \cons(b,h)$, and $v = \cons(d,k)$. If $a \neq c$, we have
 $$\begin{eqnarray*}
@@ -407,7 +407,7 @@ $$\begin{eqnarray*}
  & = & \nil \\
  & = & \lcp(\cons((a,b),\zip(x,h)),\cons((c,d),\zip(w,k))) \\
  & = & \lcp(\zip(\cons(a,x),\cons(b,h)),\zip(\cons(c,w),\cons(d,k))) \\
- & = & \lcp(\zip(\cons(a,x),u),\zip(y,v)) \\
+ & = & \lcp(\zip(\cons(a,x),u),\zip(y,v))
 \end{eqnarray*}$$
 as claimed. If $b \neq d$, we have
 $$\begin{eqnarray*}
@@ -417,7 +417,7 @@ $$\begin{eqnarray*}
  & = & \nil \\
  & = & \lcp(\cons((a,b),\zip(x,h)),\cons((c,d),\zip(w,k))) \\
  & = & \lcp(\zip(\cons(a,x),\cons(b,h)),\zip(\cons(c,w),\cons(d,k))) \\
- & = & \lcp(\zip(\cons(a,x),u),\zip(y,v)) \\
+ & = & \lcp(\zip(\cons(a,x),u),\zip(y,v))
 \end{eqnarray*}$$
 as claimed. Finally, suppose $a = c$ and $b = d$. Using the inductive hypothesis, we have
 $$\begin{eqnarray*}
@@ -430,7 +430,7 @@ $$\begin{eqnarray*}
  & = & \zip(\cons(a,\lcp(x,w)),\cons(b,\lcp(h,k))) \\
  & = & \zip(\lcp(\cons(a,x),\cons(a,w)),\lcp(\cons(b,h),\cons(b,k))) \\
  & = & \zip(\lcp(\cons(a,x),\cons(c,w)),\lcp(\cons(b,h),\cons(d,k))) \\
- & = & \zip(\lcp(\cons(a,x),y),\lcp(u,v)) \\
+ & = & \zip(\lcp(\cons(a,x),y),\lcp(u,v))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

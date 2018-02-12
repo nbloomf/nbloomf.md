@@ -157,7 +157,7 @@ $$\begin{eqnarray*}
  & = & \cons(\tSwap((a,b)),\map(\tSwap)(\zipPad(u,v)(x,w))) \\
  & = & \cons((b,a),\zipPad(v,u)(w,x)) \\
  & = & \zipPad(v,u)(\cons(b,w),\cons(a,x)) \\
- & = & \zipPad(v,u)(y,\cons(a,x)) \\
+ & = & \zipPad(v,u)(y,\cons(a,x))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -202,7 +202,7 @@ $$\begin{eqnarray*}
  & = & \map(\flip(\tup)(g(v)) \circ f)(\cons(a,x)) \\
  & = & \map(\flip(\tup)(g(v)))(\map(f)(\cons(a,x))) \\
  & = & \zipPad(f(u),g(v))(\map(f)(\cons(a,x)),\nil) \\
- & = & \zipPad(f(u),g(v))(\map(f)(\cons(a,x)),y) \\
+ & = & \zipPad(f(u),g(v))(\map(f)(\cons(a,x)),y)
 \end{eqnarray*}$$
 as needed. If $y = \cons(b,w)$, we have
 $$\begin{eqnarray*}
@@ -212,7 +212,7 @@ $$\begin{eqnarray*}
  & = & \cons((f(a),g(b)),\zipPad(f(u),g(v))(\map(f)(x),\map(g)(w))) \\
  & = & \zipPad(f(u),g(v))(\cons(f(a),\map(f)(x)),\cons(g(b),\map(g)(w))) \\
  & = & \zipPad(f(u),g(v))(\map(f)(\cons(a,x)),\map(g)(\cons(b,w))) \\
- & = & \zipPad(f(u),g(v))(\map(f)(\cons(a,x)),\map(g)(y)) \\
+ & = & \zipPad(f(u),g(v))(\map(f)(\cons(a,x)),\map(g)(y))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -245,7 +245,7 @@ $$\begin{eqnarray*}
  &     \href{@max-min@#thm-max-zero-left}
    = & \nmax(\zero,\length(y)) \\
  & = & \nmax(\length(\nil),\length(y)) \\
- & = & \nmax(\length(x),\length(y)) \\
+ & = & \nmax(\length(x),\length(y))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. We consider two possibilities for $y$: either $y = \nil$ or $y = \cons(b,w)$. If $y = \nil$, we have
 $$\begin{eqnarray*}
@@ -256,7 +256,7 @@ $$\begin{eqnarray*}
  & = & \nmax(\length(\cons(a,x)),\zero) \\
  &     \href{@length@#cor-length-nil}
    = & \nmax(\length(\cons(a,x)),\length(\nil)) \\
- & = & \nmax(\length(\cons(a,x)),\length(y)) \\
+ & = & \nmax(\length(\cons(a,x)),\length(y))
 \end{eqnarray*}$$
 as claimed. Suppose then that $y = \cons(b,w)$. Now
 $$\begin{eqnarray*}
@@ -268,7 +268,7 @@ $$\begin{eqnarray*}
  &     \href{@max-min@#thm-next-max-distribute}
    = & \nmax(\next(\length(x)),\next(\length(w))) \\
  & = & \nmax(\length(\cons(a,x)),\length(\cons(b,w))) \\
- & = & \nmax(\length(\cons(a,x)),\length(y)) \\
+ & = & \nmax(\length(\cons(a,x)),\length(y))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -332,7 +332,7 @@ $$\begin{eqnarray*}
  & = & \map(\tAssocL)(\nil) \\
  & = & \map(\tAssocL)(\zipPad(u,(v,w))(\cons(a,x),\nil)) \\
  & = & \map(\tAssocL)(\zipPad(u,(v,w))(\cons(a,x),\zipPad(v,w)(y,\nil))) \\
- & = & \map(\tAssocL)(\zipPad(u,(v,w))(\cons(a,x),\zipPad(v,w)(y,z))) \\
+ & = & \map(\tAssocL)(\zipPad(u,(v,w))(\cons(a,x),\zipPad(v,w)(y,z)))
 \end{eqnarray*}$$
 as claimed. Suppose then that $y = \cons(b,u)$ and $z = \cons(c,v)$. Using the inductive hypothesis, we have
 $$\begin{eqnarray*}
@@ -344,7 +344,7 @@ $$\begin{eqnarray*}
  & = & \map(\tAssocL)(\cons((a,(b,c)),\zipPad(u,(v,w))(x,\zipPad(v,w)(u,v)))) \\
  & = & \map(\tAssocL)(\zipPad(u,(v,w))(\cons(a,x),\cons((b,c),\zipPad(v,w)(u,v)))) \\
  & = & \map(\tAssocL)(\zipPad(u,(v,w))(\cons(a,x),\zipPad(v,w)(\cons(b,u),\cons(c,v)))) \\
- & = & \map(\tAssocL)(\zipPad(u,(v,w))(\cons(a,x),\zip(y,z))) \\
+ & = & \map(\tAssocL)(\zipPad(u,(v,w))(\cons(a,x),\zip(y,z)))
 \end{eqnarray*}$$
 as claimed.
 2. We have

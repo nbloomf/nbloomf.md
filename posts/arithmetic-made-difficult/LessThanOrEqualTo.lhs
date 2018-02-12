@@ -358,7 +358,7 @@ $$\begin{eqnarray*}
  &   & \nleq(\ntimes(a,c),\ntimes(b,d)) \\
  & = & \nleq(\zero,\ntimes(b,d)) \\
  & = & \btrue
-\end{eqnarray*}.$$
+\end{eqnarray*}$$
 Suppose instead that $c = \next(u)$. Now there are two possibilities for $b$. If $b = \zero$, then in fact $a = \zero$, and we have
 $$\begin{eqnarray*}
  &   & \nleq(\ntimes(a,c),\ntimes(b,d)) \\

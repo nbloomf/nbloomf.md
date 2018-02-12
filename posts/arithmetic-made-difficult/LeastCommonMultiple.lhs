@@ -167,7 +167,7 @@ c & = & c \\
 \ntimes(a,u) & = & \ntimes(b,v) \\
 \ntimes(\ntimes(d,s),u) & = & \ntimes(\ntimes(d,t),v) \\
 \ntimes(d,\ntimes(s,u)) & = & \ntimes(d,\ntimes(d,t)) \\
-\ntimes(s,u) & = & \ntimes(t,v). \\
+\ntimes(s,u) & = & \ntimes(t,v).
 \end{eqnarray*}$$
 That is, $\ndiv(t,\ntimes(s,u))$. By Euclid's lemma, we have $\ndiv(t,u)$. Next, note that
 $$\begin{eqnarray*}
@@ -321,7 +321,7 @@ We have
 $$\begin{eqnarray*}
  &   & \nlcm(\nlcm(a,c),\nlcm(b,c)) \\
  & = & \nlcm(\nlcm(a,b),\nlcm(c,c)) \\
- & = & \nlcm(b,c) \\
+ & = & \nlcm(b,c)
 \end{eqnarray*}$$
 so that $\ndiv(\nlcm(a,c),\nlcm(b,c))$ as claimed.
 ::::::::::::::::::::

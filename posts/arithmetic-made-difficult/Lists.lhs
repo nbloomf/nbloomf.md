@@ -109,7 +109,7 @@ $$\begin{eqnarray*}
  &     \href{@disjoint-unions@#def-either-rgt}
    = & \uncurry(\cons)(\tup(a)(x)) \\
  &     \href{@tuples@#def-uncurry}
-   = & \cons(a,x) \\
+   = & \cons(a,x)
 \end{eqnarray*}$$
 as claimed.
 2. If $\nil = \cons(a,x)$, we have

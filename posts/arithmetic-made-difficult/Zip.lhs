@@ -203,7 +203,7 @@ $$\begin{eqnarray*}
  & = & \nmin(\length(x),\zero) \\
  &     \href{@length@#cor-length-nil}
    = & \nmin(\length(x),\length(\nil)) \\
- & = & \nmin(\length(x),\length(y)) \\
+ & = & \nmin(\length(x),\length(y))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $x$ for some $y$ and let $b \in B$. We consider two cases: either $x = \nil$ or $x = \cons(a,z)$. If $x = \nil$, we have
 $$\begin{eqnarray*}
@@ -227,7 +227,7 @@ $$\begin{eqnarray*}
  &     \href{@max-min@#thm-next-min-distribute}
    = & \nmin(\next(\length(z)),\next(\length(y))) \\
  & = & \nmin(\length(\cons(a,z)),\length(\cons(b,y))) \\
- & = & \nmin(x,\length(\cons(b,y))) \\
+ & = & \nmin(x,\length(\cons(b,y)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -293,7 +293,7 @@ $$\begin{eqnarray*}
  & = & \map(\tAssocL)(\cons((a,(b,c)),\zip(x,\zip(u,v)))) \\
  & = & \map(\tAssocL)(\zip(\cons(a,x),\cons((b,c),\zip(u,v)))) \\
  & = & \map(\tAssocL)(\zip(\cons(a,x),\zip(\cons(b,u),\cons(c,v)))) \\
- & = & \map(\tAssocL)(\zip(\cons(a,x),\zip(y,z))) \\
+ & = & \map(\tAssocL)(\zip(\cons(a,x),\zip(y,z)))
 \end{eqnarray*}$$
 as claimed.
 2. We have

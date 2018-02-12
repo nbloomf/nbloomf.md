@@ -50,7 +50,7 @@ $$\begin{eqnarray*}
  & = & \eta(b,\nrem(a,b)) \\
  & = & \bif{\iszero(\nrem(a,b))}{\zero}{\bif{\nleq(b,\nrem(a,b))}{\next(\nplus(b,\nrem(a,b)))}{\nplus(b,\nrem(a,b))}} \\
  & = & \bif{\iszero(\nrem(a,b))}{\zero}{\bif{\bfalse}{\next(\nplus(b,\nrem(a,b)))}{\nplus(b,\nrem(a,b))}} \\
- & = & \bif{\iszero(\nrem(a,b))}{\zero}{\nplus(b,\nrem(a,b))}; \\
+ & = & \bif{\iszero(\nrem(a,b))}{\zero}{\nplus(b,\nrem(a,b))};
 \end{eqnarray*}$$
 in particular, $$\nleq(\eta(\varphi(a,b)),\nplus(b,\nrem(a,b))).$$ Now if $\nleq(a,b) = \btrue$, we have $\eta(a,b) = \next(\nplus(a,b))$ and $\nleq(a,\nrem(a,b))$, so that $$\nleq(\nplus(b,\nrem(a,b)),\next(\nplus(a,b)))$$ as needed. If $\nleq(a,b) = \bfalse$, then $\nleq(b,a) = \btrue$, so that $\nleq(\nrem(a,b),a)$ and $\nrem(a,b) \neq a$, and we have $$\nleq(\nplus(b,\nrem(a,b)),\nplus(a,b))$$ as needed.
 ::::::::::::::::::::

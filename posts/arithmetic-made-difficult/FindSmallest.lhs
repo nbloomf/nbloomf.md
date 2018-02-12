@@ -146,7 +146,7 @@ Thus $\sigma(k) = \bfalse$. Now if $\nleq(k,t)$ and $\nleq(t,\nplus(\zero,k))$, 
 $$\begin{eqnarray*}
  &   & \lft(\ast) \\
  & = & \findsmallest{\sigma}(\next(\next(n)),k) \\
- & = & \bif{\sigma(k)}{\rgt(k)}{\findsmallest{\sigma}(\next(n),\next(k))}. \\
+ & = & \bif{\sigma(k)}{\rgt(k)}{\findsmallest{\sigma}(\next(n),\next(k))}.
 \end{eqnarray*}$$
 Now we must have $\sigma(k) = \bfalse$, and moreover $\findsmallest{\sigma}(\next(n),\next(k)) = \lft(\ast)$. By the inductive hypothesis, we have $\sigma(t) = \bfalse$ whenever $\nleq(\next(k),t)$ and $\nleq(t,\nplus(\next(n),\next(k)))$; thus $\sigma(t) = \bfalse$ whenever $\nleq(k,t)$ and $\nleq(t,\nplus(\next(\next(n)),k))$ as needed.
 
@@ -197,7 +197,7 @@ $$\begin{eqnarray*}
  &   & \rgt(\nplus(\next(k),\next(t))) \\
  & = & \rgt(\nplus(k,\next(\next(t)))) \\
  & = & \findsmallest{\sigma}(\next(m),k) \\
- & = & \bif{\sigma(k)}{\rgt(k)}{\findsmallest{\sigma}(m,\next(k))} \\
+ & = & \bif{\sigma(k)}{\rgt(k)}{\findsmallest{\sigma}(m,\next(k))}
 \end{eqnarray*}$$
 Note that $\sigma(k)$ cannot be $\btrue$, as in this case we have $k = \nplus(k,\next(\next(t)))$. So we have $\sigma(k) = \bfalse$ and
 $$\begin{eqnarray*}
@@ -237,7 +237,7 @@ We proceed by induction on $n$. For the base case $n = \zero$, suppose
 $$\begin{eqnarray*}
  &   & \rgt(t) \\
  & = & \findsmallest{\sigma}(\next(\zero),k) \\
- & = & \bif{\sigma(k)}{\rgt(k)}{\lft(\ast)}. \\
+ & = & \bif{\sigma(k)}{\rgt(k)}{\lft(\ast)}.
 \end{eqnarray*}$$
 We must have $\sigma(k) = \btrue$ and thus $k = t$. Then we have $\nleq(t,u)$ whenever $\nleq(k,u)$ as needed.
 

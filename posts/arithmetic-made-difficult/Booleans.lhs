@@ -195,7 +195,7 @@ $$\begin{eqnarray*}
  &     \let{p = \btrue}
    = & \bif{\btrue}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
  &     \let{q = \btrue}
-   = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
+   = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}}
 \end{eqnarray*}$$
 as claimed. If $p = \btrue$ and $q = \bfalse$,
 $$\begin{eqnarray*}
@@ -215,7 +215,7 @@ $$\begin{eqnarray*}
  &     \let{q = \bfalse}
    = & \bif{q}{\bif{\btrue}{a}{c}}{\bif{\btrue}{b}{d}} \\
  &     \let{p = \btrue}
-   = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
+   = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}}
 \end{eqnarray*}$$
 as claimed. If $p = \bfalse$ and $q = \btrue$,
 $$\begin{eqnarray*}
@@ -235,7 +235,7 @@ $$\begin{eqnarray*}
  &     \href{@booleans@#cor-if-true}
    = & \bif{\btrue}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
  &     \let{q = \btrue}
-   = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
+   = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}}
 \end{eqnarray*}$$
 as claimed. If $p = \bfalse$ and $q = \bfalse$,
 $$\begin{eqnarray*}
@@ -255,7 +255,7 @@ $$\begin{eqnarray*}
  &     \href{@booleans@#cor-if-false}
    = & \bif{\bfalse}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
  &     \let{q = \bfalse}
-   = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}} \\
+   = & \bif{q}{\bif{p}{a}{c}}{\bif{p}{b}{d}}
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

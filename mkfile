@@ -149,7 +149,8 @@ sniff-amd:VQ: \
   sniff-amd-let \
   sniff-amd-latex \
   sniff-amd-import \
-  sniff-amd-labels
+  sniff-amd-labels \
+  sniff-amd-eqnarray-ends
 
 #-- use consistent syntax for fenced divs --#
 sniff-amd-fencediv:VQ:
@@ -496,5 +497,24 @@ sniff-amd-labels:VQ:
     echo 'Unique labels' | doppler lightred
     echo $( echo "$LABELS" | wc -l ) 'problems found' | doppler lightred
     echo "$LABELS"
+    exit 1
+  fi
+
+#-- eqnarray line ends --#
+sniff-amd-eqnarray-ends:VQ:
+  echo 'Checking Eqnarray line ends' | doppler lightblue
+  ENDS=$( awk '/^\$\$\\begin{eqnarray\*}$/{flag=1;print FILENAME ":" FNR}/^\\end{eqnarray\*}\$\$$/{flag=0;print} {if(flag) printf}' \
+      posts/arithmetic-made-difficult/* \
+    | sed '/^\$\$/s/\\\\/~/g' \
+    | sed '/^\$\$/s/[^&~]//g' \
+    | sed 'N;s/\n/ /' \
+    | grep -v '[&&~]*&&$' \
+    || true )
+  if [ -z "$ENDS" ]; then
+    echo 'Eqnarray line ends OK' | doppler lightgreen
+  else
+    echo 'Eqnarray line ends' | doppler lightred
+    echo $( echo "$ENDS" | wc -l ) 'problems found' | doppler lightred
+    echo "$ENDS"
     exit 1
   fi

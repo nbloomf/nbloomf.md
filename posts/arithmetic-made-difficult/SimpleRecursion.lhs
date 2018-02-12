@@ -79,7 +79,7 @@ $$\begin{eqnarray*}
  &     \hyp{Ω(\next(n),a) = \tup(\next(n))(\mu(n,a,Θ(n,a)))}
    = & \tup(\next(\next(n)))(\mu(\next(n),a,\snd(Ω(\next(n),a)))) \\
  &     \hyp{Θ(n,a) = \snd(Ω(n,a))}
-   = & \tup(\next(\next(n)))(\mu(\next(n),a,Θ(\next(n),a))) \\
+   = & \tup(\next(\next(n)))(\mu(\next(n),a,Θ(\next(n),a)))
 \end{eqnarray*}$$
 as needed. Thus for all $a$ and $n$ we have
 $$\begin{eqnarray*}

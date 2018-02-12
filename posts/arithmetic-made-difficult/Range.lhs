@@ -149,7 +149,7 @@ $$\begin{eqnarray*}
  &     \href{@snoc@#cor-snoc-nil}
    = & \snoc(a,\nil) \\
  & = & \snoc(\nplus(a,\zero),\range(a,\zero)) \\
- & = & \snoc(\nplus(a,b),\range(a,b)) \\
+ & = & \snoc(\nplus(a,b),\range(a,b))
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for some $b$. Then we have
 $$\begin{eqnarray*}
