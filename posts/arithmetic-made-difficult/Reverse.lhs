@@ -394,7 +394,8 @@ $$\begin{eqnarray*}
  &     \let{x = \nil}
    = & \beq(\nil,y) \\
  & = & \isnil(y) \\
- & = & \isnil(\rev(y)) \\
+ &     \href{@rev@#thm-isnil-rev}
+   = & \isnil(\rev(y)) \\
  & = & \beq(\nil,\rev(y)) \\
  &     \href{@rev@#cor-rev-nil}
    = & \beq(\rev(\nil),\rev(y)) \\
@@ -405,7 +406,8 @@ $$\begin{eqnarray*}
  &   & \beq(\cons(a,x),y) \\
  & = & \beq(\cons(a,x),\nil) \\
  & = & \isnil(\cons(a,x)) \\
- & = & \isnil(\rev(\cons(a,x))) \\
+ &     \href{@rev@#thm-isnil-rev}
+   = & \isnil(\rev(\cons(a,x))) \\
  & = & \beq(\rev(\cons(a,x)),\nil) \\
  &     \href{@rev@#cor-rev-nil}
    = & \beq(\rev(\cons(a,x)),\rev(\nil)) \\
@@ -416,7 +418,8 @@ $$\begin{eqnarray*}
  &   & \beq(\cons(a,x),y) \\
  & = & \beq(\cons(a,x),\cons(b,u)) \\
  & = & \band(\beq(a,b),\beq(x,u)) \\
- & = & \band(\beq(a,b),\beq(\rev(x),\rev(u))) \\
+ &     \href{@rev@#thm-beq-rev}
+   = & \band(\beq(a,b),\beq(\rev(x),\rev(u))) \\
  &     \href{@snoc@#thm-snoc-eq}
    = & \beq(\snoc(a,\rev(x)),\snoc(b,\rev(u))) \\
  & = & \beq(\rev(\cons(a,x)),\rev(\cons(b,u))) \\

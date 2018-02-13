@@ -73,7 +73,8 @@ $$\begin{eqnarray*}
  &   & \takeBut(\zero)(x) \\
  & = & \rev(\drop(\zero)(\rev(x))) \\
  & = & \rev(\rev(x)) \\
- & = & x
+ &     \href{@rev@#thm-rev-involution}
+   = & x
 \end{eqnarray*}$$
 as claimed.
 2. We have
@@ -91,7 +92,8 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \takeBut(\next(k))(\snoc(a,x)) \\
  & = & \rev(\drop(\next(k))(\rev(\snoc(a,x)))) \\
- & = & \rev(\drop(\next(k))(\cons(a,\rev(x)))) \\
+ &     \href{@rev@#thm-rev-snoc}
+   = & \rev(\drop(\next(k))(\cons(a,\rev(x)))) \\
  & = & \rev(\drop(k)(\rev(x))) \\
  & = & \takeBut(k,x)
 \end{eqnarray*}$$
@@ -135,7 +137,8 @@ We have
 $$\begin{eqnarray*}
  &   & \prefix(\takeBut(k,x),x) \\
  & = & \prefix(\rev(\drop(k,\rev(x))),x) \\
- & = & \prefix(\rev(\drop(k,\rev(x))),\rev(\rev(x))) \\
+ &     \href{@rev@#thm-rev-involution}
+   = & \prefix(\rev(\drop(k,\rev(x))),\rev(\rev(x))) \\
  & = & \suffix(\drop(k,\rev(x)),\rev(x)) \\
  & = & \btrue
 \end{eqnarray*}$$
@@ -207,7 +210,8 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \dropBut(\next(k),\snoc(a,x)) \\
  & = & \rev(\take(\next(k),\rev(\snoc(a,x)))) \\
- & = & \rev(\take(\next(k),\cons(a,\rev(x)))) \\
+ &     \href{@rev@#thm-rev-snoc}
+   = & \rev(\take(\next(k),\cons(a,\rev(x)))) \\
  & = & \rev(\cons(a,\take(k,\rev(x)))) \\
  &     \href{@rev@#cor-rev-cons}
    = & \snoc(a,\rev(\take(k,\rev(x)))) \\
@@ -253,7 +257,8 @@ We have
 $$\begin{eqnarray*}
  &   & \suffix(\dropBut(k,x),x) \\
  & = & \suffix(\rev(\take(k,\rev(x))),x) \\
- & = & \suffix(\rev(\take(k,\rev(x))),\rev(\rev(x))) \\
+ &     \href{@rev@#thm-rev-involution}
+   = & \suffix(\rev(\take(k,\rev(x))),\rev(\rev(x))) \\
  & = & \prefix(\take(k,\rev(x)),\rev(x)) \\
  & = & \btrue
 \end{eqnarray*}$$
@@ -282,7 +287,8 @@ $$\begin{eqnarray*}
  &   & \dropBut(k,\dropBut(k,x)) \\
  & = & \dropBut(k,\rev(\take(k,\rev(x)))) \\
  & = & \rev(\take(k,\rev(\rev(\take(k,\rev(x)))))) \\
- & = & \rev(\take(k,\take(k,\rev(x)))) \\
+ &     \href{@rev@#thm-rev-involution}
+   = & \rev(\take(k,\take(k,\rev(x)))) \\
  & = & \rev(\take(k,\rev(x))) \\
  & = & \dropBut(k,x)
 \end{eqnarray*}$$
@@ -313,7 +319,8 @@ $$\begin{eqnarray*}
  &     \href{@cat@#thm-rev-cat-antidistribute}
    = & \rev(\cat(\take(k,\rev(x)),\drop(k,\rev(x)))) \\
  & = & \rev(\rev(x)) \\
- & = & x
+ &     \href{@rev@#thm-rev-involution}
+   = & x
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

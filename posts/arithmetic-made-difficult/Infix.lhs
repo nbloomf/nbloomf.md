@@ -464,7 +464,8 @@ Note that
 $$\begin{eqnarray*}
  &   & \infix(x,\snoc(b,y)) \\
  & = & \infix(\rev(x),\rev(\snoc(b,y))) \\
- & = & \infix(\rev(x),\cons(b,\rev(y))) \\
+ &     \href{@rev@#thm-rev-snoc}
+   = & \infix(\rev(x),\cons(b,\rev(y))) \\
  & = & \bor(\prefix(\rev(x),\cons(b,\rev(y))),\infix(\rev(x),\rev(y))) \\
  & = & \bor(\prefix(\rev(x),\rev(\snoc(b,y))),\infix(x,y)) \\
  & = & \bor(\suffix(x,\snoc(b,y)),\infix(x,y))

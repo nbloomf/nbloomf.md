@@ -470,7 +470,8 @@ as claimed.
 2. Suppose $\suffix(x,y) = \btrue$. Then $\prefix(\rev(x),\rev(y)) = \btrue$, so we have $\rev(y) = \cat(\rev(x),w)$ for some $w$. Now
 $$\begin{eqnarray*}
  &   & y \\
- & = & \rev(\rev(y)) \\
+ &     \href{@rev@#thm-rev-involution}
+   = & \rev(\rev(y)) \\
  & = & \rev(\cat(\rev(x),w)) \\
  &     \href{@cat@#thm-rev-cat-antidistribute}
    = & \cat(\rev(w),\rev(\rev(x))) \\

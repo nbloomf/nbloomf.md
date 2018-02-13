@@ -476,7 +476,8 @@ as needed.
 $$\begin{eqnarray*}
  &   & \dedupeR(\snoc(a,x)) \\
  & = & \rev(\dedupeL(\rev(\snoc(a,x)))) \\
- & = & \rev(\dedupeL(\cons(a,\rev(x)))) \\
+ &     \href{@rev@#thm-rev-snoc}
+   = & \rev(\dedupeL(\cons(a,\rev(x)))) \\
  & = & \rev(\cons(a,\delete(a,\dedupeL(\rev(x))))) \\
  &     \href{@rev@#cor-rev-cons}
    = & \snoc(a,\rev(\delete(a,\dedupeL(\rev(x))))) \\

@@ -652,7 +652,8 @@ $$\begin{eqnarray*}
  &   & \sublist(x,y) \\
  & = & \sublist(x,\nil) \\
  & = & \isnil(x) \\
- & = & \isnil(\rev(x)) \\
+ &     \href{@rev@#thm-isnil-rev}
+   = & \isnil(\rev(x)) \\
  & = & \sublist(\rev(x),\nil) \\
  &     \href{@rev@#cor-rev-nil}
    = & \sublist(\rev(x),\rev(\nil)) \\
@@ -708,7 +709,8 @@ $$\begin{eqnarray*}
  & = & \sublist(x,y) \\
  & = & \sublist(\rev(x),\rev(y)) \\
  & = & \sublist(\rev(x),\cons(a,\rev(y))) \\
- & = & \sublist(\rev(x),\rev(\snoc(a,y))) \\
+ &     \href{@rev@#thm-rev-snoc}
+   = & \sublist(\rev(x),\rev(\snoc(a,y))) \\
  & = & \sublist(x,\snoc(a,y))
 \end{eqnarray*}$$
 as claimed.
@@ -717,7 +719,8 @@ $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \sublist(\snoc(a,x),y) \\
  & = & \sublist(\rev(\snoc(a,x)),\rev(y)) \\
- & = & \sublist(\cons(a,\rev(x)),\rev(y)) \\
+ &     \href{@rev@#thm-rev-snoc}
+   = & \sublist(\cons(a,\rev(x)),\rev(y)) \\
  & = & \sublist(\rev(x),\rev(y)) \\
  & = & \sublist(x,y)
 \end{eqnarray*}$$

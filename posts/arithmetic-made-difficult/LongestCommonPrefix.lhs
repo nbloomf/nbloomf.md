@@ -605,7 +605,8 @@ $$\begin{eqnarray*}
  &   & \suffix(\lcs(x,y),x) \\
  & = & \prefix(\rev(\lcs(x,y)),\rev(x)) \\
  & = & \prefix(\rev(\rev(\lcp(\rev(x),\rev(y)))),\rev(x)) \\
- & = & \prefix(\lcp(\rev(x),\rev(y)),\rev(x)) \\
+ &     \href{@rev@#thm-rev-involution}
+   = & \prefix(\lcp(\rev(x),\rev(y)),\rev(x)) \\
  & = & \btrue,
 \end{eqnarray*}$$
 and likewise
@@ -613,7 +614,8 @@ $$\begin{eqnarray*}
  &   & \suffix(\lcs(x,y),y) \\
  & = & \prefix(\rev(\lcs(x,y)),\rev(y)) \\
  & = & \prefix(\rev(\rev(\lcp(\rev(x),\rev(y)))),\rev(y)) \\
- & = & \prefix(\lcp(\rev(x),\rev(y)),\rev(y)) \\
+ &     \href{@rev@#thm-rev-involution}
+   = & \prefix(\lcp(\rev(x),\rev(y)),\rev(y)) \\
  & = & \btrue,
 \end{eqnarray*}$$
 2. Suppose $\suffix(z,x)$ and $\suffix(z,y)$. Then we have
@@ -632,7 +634,8 @@ So we have
 $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \prefix(\rev(z),\lcp(\rev(x),\rev(y))) \\
- & = & \prefix(\rev(z),\rev(\rev(\lcp(\rev(x),\rev(y))))) \\
+ &     \href{@rev@#thm-rev-involution}
+   = & \prefix(\rev(z),\rev(\rev(\lcp(\rev(x),\rev(y))))) \\
  & = & \prefix(\rev(z),\rev(\lcs(x,y))) \\
  & = & \suffix(z,\lcs(x,y))
 \end{eqnarray*}$$
@@ -670,7 +673,8 @@ $$\begin{eqnarray*}
  &   & \lcs(x,x) \\
  & = & \rev(\lcp(\rev(x),\rev(x))) \\
  & = & \rev(\rev(x)) \\
- & = & x
+ &     \href{@rev@#thm-rev-involution}
+   = & x
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -724,9 +728,11 @@ $$\begin{eqnarray*}
  &   & \lcs(\lcs(x,y),z) \\
  & = & \lcs(\rev(\lcp(\rev(x),\rev(y))),z) \\
  & = & \rev(\lcp(\rev(\rev(\lcp(\rev(x),\rev(y)))),\rev(z))) \\
- & = & \rev(\lcp(\lcp(\rev(x),\rev(y)),\rev(z))) \\
+ &     \href{@rev@#thm-rev-involution}
+   = & \rev(\lcp(\lcp(\rev(x),\rev(y)),\rev(z))) \\
  & = & \rev(\lcp(\rev(x),\lcp(\rev(y),\rev(z)))) \\
- & = & \rev(\lcp(\rev(x),\rev(\rev(\lcp(\rev(y),\rev(z)))))) \\
+ &     \href{@rev@#thm-rev-involution}
+   = & \rev(\lcp(\rev(x),\rev(\rev(\lcp(\rev(y),\rev(z)))))) \\
  & = & \rev(\lcp(\rev(x),\rev(\lcs(y,z)))) \\
  & = & \lcs(x,\lcs(y,z))
 \end{eqnarray*}$$
