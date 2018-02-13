@@ -295,6 +295,7 @@
 @lists@#thm-uncons-cons	\\uncons(\\cons(a,x)) = \\rgt(\\tup(a)(x))
 @lists@#def-foldr-nil	\\foldr{e}{f}(\\nil) = e
 @lists@#def-foldr-cons	\\foldr{e}{f}(\\cons(a,x)) = f(a,\\foldr{e}{f}(x))
+@lists@#thm-foldr-nil-cons	\\foldr{\\nil}{\\cons} = \\id
 #=======================#
 #--- head-tail ---------#
 #=======================#
@@ -339,6 +340,10 @@
 @rev@#thm-rev-foldr	\\rev = \\foldr{\\nil}{\\snoc}
 @rev@#cor-rev-nil	\\rev(\\nil) = \\nil
 @rev@#cor-rev-cons	\\rev(\\cons(a,x)) = \\snoc(a,\\rev(x))
+@rev@#thm-rev-snoc	\\rev(\\snoc(a,x)) = \\cons(a,\\rev(x))
+@rev@#thm-rev-involution	\\rev(\\rev(x)) = x
+@rev@#thm-isnil-rev	\\isnil(\\rev(x)) = \\isnil(x)
+@rev@#thm-beq-rev	\\beq(x,y) = \\beq(\\rev(x),\\rev(y))
 #=======================#
 #--- cat ---------------#
 #=======================#

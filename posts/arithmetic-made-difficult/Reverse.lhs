@@ -92,10 +92,10 @@ $$\begin{eqnarray*}
  &   & \revcat(\snoc(a,x),\cons(b,y)) \\
  &     \href{@rev@#cor-revcat-cons}
    = & \revcat(\cons(b,\snoc(a,x)),y) \\
- &     \href{@snoc@#cor-snoc-cons}
-   = & \revcat(\snoc(a,\cons(b,x)),y) \\
- & = & \snoc(a,\revcat(\cons(b,x)),y) \\
- & = & \snoc(a,\revcat(x,\const(b,y)))
+ &     \href{@rev@#cor-revcat-cons}
+   = & \revcat(\snoc(a,x),\cons(b,y)) \\
+ &     \hyp{\revcat(\snoc(a,x),y) = \snoc(a,\revcat(x,y))}
+   = & \snoc(a,\revcat(x,\cons(b,y)))
 \end{eqnarray*}$$
 as needed.
 2. We proceed by list induction on $y$. For the base case $y = \nil$, we have
@@ -103,7 +103,8 @@ $$\begin{eqnarray*}
  &   & \revcat(x,\snoc(a,\nil)) \\
  &     \href{@snoc@#cor-snoc-nil}
    = & \revcat(x,\cons(a,\nil)) \\
- & = & \revcat(\cons(a,x),\nil) \\
+ &     \href{@rev@#cor-revcat-cons}
+   = & \revcat(\cons(a,x),\nil) \\
  &     \href{@rev@#cor-revcat-nil}
    = & \cons(a,x) \\
  &     \href{@rev@#cor-revcat-nil}
@@ -114,7 +115,8 @@ $$\begin{eqnarray*}
  &   & \revcat(x,\snoc(a,\cons(b,y))) \\
  &     \href{@snoc@#cor-snoc-cons}
    = & \revcat(x,\cons(b,\snoc(a,y))) \\
- & = & \revcat(\cons(b,x),\snoc(a,y)) \\
+ &     \href{@rev@#cor-revcat-cons}
+   = & \revcat(\cons(b,x),\snoc(a,y)) \\
  &     \href{@rev@#thm-revcat-snoc-right}
    = & \cons(a,\revcat(\cons(b,x),y)) \\
  &     \href{@rev@#cor-revcat-cons}
@@ -166,7 +168,8 @@ $$\begin{eqnarray*}
  &   & \foldr{\nil}{\snoc}(\nil) \\
  &     \href{@lists@#def-foldr-nil}
    = & \nil \\
- & = & \revcat(\nil,\nil) \\
+ &     \href{@rev@#cor-revcat-nil}
+   = & \revcat(\nil,\nil) \\
  &     \href{@rev@#def-rev}
    = & \rev(\nil)
 \end{eqnarray*}$$
@@ -175,14 +178,16 @@ $$\begin{eqnarray*}
  &   & \foldr{\nil}{\snoc}(\cons(a,x)) \\
  &     \href{@lists@#def-foldr-cons}
    = & \snoc(a,\foldr{\nil}{\snoc}(x)) \\
- & = & \snoc(a,\rev(x)) \\
+ &     \href{@rev@#thm-rev-foldr}
+   = & \snoc(a,\rev(x)) \\
  &     \href{@rev@#def-rev}
    = & \snoc(a,\revcat(\nil,x)) \\
  &     \href{@rev@#thm-revcat-snoc-left}
    = & \revcat(\snoc(a,\nil),x) \\
  &     \href{@snoc@#cor-snoc-nil}
    = & \revcat(\cons(a,\nil),x) \\
- & = & \revcat(\nil,\cons(a,x)) \\
+ &     \href{@rev@#cor-revcat-cons}
+   = & \revcat(\nil,\cons(a,x)) \\
  &     \href{@rev@#def-rev}
    = & \rev(\cons(a,x))
 \end{eqnarray*}$$
@@ -291,13 +296,15 @@ as claimed.
 Now $\rev$ and $\snoc$ interact:
 
 :::::: theorem :::::
+[]{#thm-rev-snoc}
 Let $A$ be a set. Then for all $a \in A$ and $x \in \lists{A}$, we have $$\rev(\snoc(a,x)) = \cons(a,\rev(x)).$$
 
 ::: proof ::::::::::
 We have
 $$\begin{eqnarray*}
- &   & \rev(\snoc(a,\nil)) \\
- & = & \revcat(\nil,\snoc(a,x)) \\
+ &   & \rev(\snoc(a,x)) \\
+ &     \href{@rev@#def-rev}
+   = & \revcat(\nil,\snoc(a,x)) \\
  &     \href{@rev@#thm-revcat-snoc-right}
    = & \cons(a,\revcat(\nil,x)) \\
  &     \href{@rev@#def-rev}
@@ -320,6 +327,7 @@ as claimed.
 And $\rev$ is an involution.
 
 :::::: theorem :::::
+[]{#thm-rev-involution}
 Let $A$ be a set. For all $x \in \lists{A}$, we have $\rev(\rev(x)) = x$.
 
 ::: proof ::::::::::
@@ -336,8 +344,10 @@ $$\begin{eqnarray*}
  &   & \rev(\rev(\cons(a,x))) \\
  &     \href{@rev@#cor-rev-cons}
    = & \rev(\snoc(a,\rev(x))) \\
- & = & \cons(a,\rev(\rev(x))) \\
- & = & \cons(a,x)
+ &     \href{@rev@#thm-rev-snoc}
+   = & \cons(a,\rev(\rev(x))) \\
+ &     \hyp{\rev(\rev(x)) = x}
+   = & \cons(a,x)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -356,6 +366,7 @@ as needed.
 $\rev$ preserves $\isnil$ and $\beq$.
 
 :::::: theorem :::::
+[]{#thm-isnil-rev}[]{#thm-beq-rev}
 Let $A$ be a set with $x,y \in \lists{A}$. Then we have the following.
 
 1. $\isnil(x) = \isnil(\rev(x))$.
@@ -365,19 +376,23 @@ Let $A$ be a set with $x,y \in \lists{A}$. Then we have the following.
 1. We consider two possibilities. If $x = \nil$, we have $$x = \nil = \rev(\nil) = \rev(x),$$ so that $\isnil(x) = \isnil(\rev(x))$ as claimed. Suppose instead that $x = \cons(a,u)$ for some $u$; then $x = \snoc(b,v)$ for some $v$. Now we have
 $$\begin{eqnarray*}
  &   & \isnil(x) \\
- & = & \isnil(\cons(a,u)) \\
+ &     \let{x = \cons(a,u)}
+   = & \isnil(\cons(a,u)) \\
  &     \href{@head-tail@#thm-isnil-cons}
    = & \bfalse \\
  &     \href{@head-tail@#thm-isnil-cons}
    = & \isnil(\cons(b,\rev(v))) \\
- & = & \isnil(\rev(\snoc(b,v))) \\
- & = & \isnil(\rev(x))
+ &     \href{@rev@#thm-rev-snoc}
+   = & \isnil(\rev(\snoc(b,v))) \\
+ &     \let{x = \snoc(b,v)}
+   = & \isnil(\rev(x))
 \end{eqnarray*}$$
 as claimed.
 2. We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \beq(x,y) \\
- & = & \beq(\nil,y) \\
+ &     \let{x = \nil}
+   = & \beq(\nil,y) \\
  & = & \isnil(y) \\
  & = & \isnil(\rev(y)) \\
  & = & \beq(\nil,\rev(y)) \\
@@ -433,28 +448,30 @@ as needed.
 And left fold is a reversed right fold.
 
 :::::: theorem :::::
-Let $\varphi : B \times A \rightarrow B$, and define $\psi : A \times B \rightarrow B$ by $$\psi(a,b) = \varphi(b,a).$$ Now $$\foldl{\varphi}(e,x) = \foldr{e,\psi}(\rev(x)).$$
+Let $f : B \times A \rightarrow B$. Now $$\foldl{f}(e,x) = \foldr{e,\flip(f)}(\rev(x)).$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \foldl{\varphi}(e,\nil) \\
+ &   & \foldl{f}(e,\nil) \\
  &     \href{@foldl@#def-foldl-nil}
    = & e \\
  &     \href{@lists@#def-foldr-nil}
-   = & \foldr{e,\psi}(\nil) \\
- & = & \foldr{e,\psi}(\rev(\nil))
+   = & \foldr{e,\flip(f)}(\nil) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \foldr{e,\flip(f)}(\rev(\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $e$ for some $x$, and let $a \in A$. Now
 $$\begin{eqnarray*}
- &   & \foldl{\varphi}(e,\cons(a,x)) \\
+ &   & \foldl{f}(e,\cons(a,x)) \\
  &     \href{@foldl@#def-foldl-cons}
-   = & \foldl{\varphi}(\varphi(e,a),x) \\
- & = & \foldr{\varphi(e,a)}{\psi}(\rev(x)) \\
- & = & \foldr{\psi(a,e)}{\psi}(\rev(x)) \\
- & = & \foldr{e}{\psi}(\snoc(a,\rev(x))) \\
+   = & \foldl{f}(f(e,a),x) \\
+ &     \hyp{\foldl{f}(w,x) = \foldr{w}{\flip(f)}(\rev(x))}
+   = & \foldr{f(e,a)}{\flip(f)}(\rev(x)) \\
+ & = & \foldr{\flip(f)(a,e)}{\flip(f)}(\rev(x)) \\
+ & = & \foldr{e}{\flip(f)}(\snoc(a,\rev(x))) \\
  &     \href{@rev@#cor-rev-cons}
-   = & \foldr{e}{\psi}(\rev(\cons(a,x)))
+   = & \foldr{e}{\flip(f)}(\rev(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

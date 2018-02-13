@@ -249,6 +249,7 @@ This proof is analogous to the proof of the induction principle for $\nats$. We 
 Here's an example using list induction.
 
 :::::: theorem :::::
+[]{#thm-foldr-nil-cons}
 Let $A$ be a set. Then we have $$\foldr{\nil}{\cons}(x) = x$$ for all $x \in \lists{A}$.
 
 ::: proof ::::::::::

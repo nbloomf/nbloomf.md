@@ -76,7 +76,8 @@ $$\begin{eqnarray*}
  &   & \cat(x,\nil) \\
  &     \href{@cat@#def-cat}
    = & \foldr{\nil}{\cons}(x) \\
- & = & \id(x) \\
+ &     \href{@lists@#thm-foldr-nil-cons}
+   = & \id(x) \\
  &     \href{@functions@#def-id}
    = & x
 \end{eqnarray*}$$
