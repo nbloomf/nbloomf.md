@@ -131,8 +131,8 @@ $$\begin{eqnarray*}
  & = & \map(\tSwap)(\zipPad(u,v)(\nil,y)) \\
  & = & \map(\tSwap)(\map(\tup(u))(y)) \\
  &     \href{@functions@#def-compose}
-   = & \compose{\map(\tSwap)}{\map(\tup(u))}(y) \\
- & = & \map(\compose{\tSwap}{\tup(u)})(y) \\
+   = & \compose(\map(\tSwap))(\map(\tup(u)))(y) \\
+ & = & \map(\compose(\tSwap)(\tup(u)))(y) \\
  & = & \map(\flip(\tup)(u))(y) \\
  & = & \zipPad(v,u)(y,\nil) \\
  & = & \zipPad(v,u)(y,x)
@@ -143,8 +143,8 @@ $$\begin{eqnarray*}
  & = & \map(\tSwap)(\zipPad(u,v)(\cons(a,x),\nil)) \\
  & = & \map(\tSwap)(\map(\flip(\tup)(v))(\cons(a,x))) \\
  &     \href{@functions@#def-compose}
-   = & \compose{\map(\tSwap)}{\map(\flip(\tup)(v))}(\cons(a,x)) \\
- & = & \map(\compose{\tSwap}{\flip(\tup)(v)})(\cons(a,x)) \\
+   = & \compose(\map(\tSwap))(\map(\flip(\tup)(v)))(\cons(a,x)) \\
+ & = & \map(\compose(\tSwap)(\flip(\tup)(v)))(\cons(a,x)) \\
  & = & \map(\tup(v))(\cons(a,x)) \\
  & = & \zipPad(u,v)(\nil,\cons(a,x)) \\
  & = & \zipPad(u,v)(y,\cons(a,x))
@@ -185,9 +185,9 @@ $$\begin{eqnarray*}
  & = & \map(\tPair(f,g))(\zipPad(u,v)(\nil,y)) \\
  & = & \map(\tPair(f,g))(\map(\tup(u))(y)) \\
  &     \href{@functions@#def-compose}
-   = & \compose{\map(\tPair(f,g))}{\map(\tup(u))}(y) \\
- & = & \map(\compose{\tPair(f,g)}{\tup(u)})(y) \\
- & = & \map(\compose{\tup(f(u))}{g})(y) \\
+   = & \compose(\map(\tPair(f,g)))(\map(\tup(u)))(y) \\
+ & = & \map(\compose(\tPair(f,g))(\tup(u)))(y) \\
+ & = & \map(\compose(\tup(f(u)))(g))(y) \\
  & = & \map(\tup(f(u)))(\map(g)(y)) \\
  & = & \zipPad(f(u),g(v))(\nil,\map(g)(y)) \\
  & = & \zipPad(f(u),g(v))(x,\map(g)(y))
@@ -198,9 +198,9 @@ $$\begin{eqnarray*}
  & = & \map(\tPair(f,g))(\zipPad(u,v)(\cons(a,x),\nil)) \\
  & = & \map(\tPair(f,g))(\map(\flip(\tup)(v))(\cons(a,x))) \\
  &     \href{@functions@#def-compose}
-   = & \compose{\map(\tPair(f,g))}{\map(\flip(\tup)(v))}(\cons(a,x)) \\
- & = & \map(\compose{\tPair(f,g)}{\flip(\tup)(v)})(\cons(a,x)) \\
- & = & \map(\compose{\flip(\tup)(g(v))}{f})(\cons(a,x)) \\
+   = & \compose(\map(\tPair(f,g)))(\map(\flip(\tup)(v)))(\cons(a,x)) \\
+ & = & \map(\compose(\tPair(f,g))(\flip(\tup)(v)))(\cons(a,x)) \\
+ & = & \map(\compose(\flip(\tup)(g(v)))(f))(\cons(a,x)) \\
  & = & \map(\flip(\tup)(g(v)))(\map(f)(\cons(a,x))) \\
  & = & \zipPad(f(u),g(v))(\map(f)(\cons(a,x)),\nil) \\
  & = & \zipPad(f(u),g(v))(\map(f)(\cons(a,x)),y)
