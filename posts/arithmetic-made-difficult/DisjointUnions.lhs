@@ -50,7 +50,7 @@ Let $A$ and $B$ be sets.
 ::: proof ::::::::::
 1. Suppose to the contrary that there exists some $z \in A+B$ which is not of the form $\lft(a)$ or $\rgt(b)$ for any $a$ or $b$. Now consider $$f = \const(\btrue)$$ and $$g(x) = \\bif{\beq(x,z)}{\bfalse}{\btrue}$$ as functions $A+B \rightarrow \bool$. Note in particular that if $a \in A$ we have
 $$\begin{eqnarray*}
- &   & \compose{f}{\lft}(a) \\
+ &   & \compose(f)(\lft)(a) \\
  &     \href{@functions@#def-compose}
    = & f(\lft(a)) \\
  &     \let{f = \const(\btrue)}
@@ -60,11 +60,11 @@ $$\begin{eqnarray*}
  &     \hyp{g(\lft(a)) = \btrue}
    = & g(\lft(a)) \\
  &     \href{@functions@#def-compose}
-   = & \compose{g}{\lft}(a)
+   = & \compose(g)(\lft)(a)
 \end{eqnarray*}$$
 since $z \neq \lft(a)$, and if $b \in B$ we have
 $$\begin{eqnarray*}
- &   & \compose{f}{\rgt}(b) \\
+ &   & \compose(f)(\rgt)(b) \\
  &     \href{@functions@#def-compose}
    = & f(\rgt(b)) \\
  &     \let{f = \const(\btrue)}
@@ -74,7 +74,7 @@ $$\begin{eqnarray*}
  &     \hyp{g(\rgt(b)) = \btrue}
    = & g(\rgt(b)) \\
  &     \href{@functions@#def-compose}
-   = & \compose{g}{\rgt}(b)
+   = & \compose(g)(\rgt)(b)
 \end{eqnarray*}$$
 similarly. By the universal property of $A + B$, we thus have $$f = \either(\const(\btrue),\const(\btrue)) = g.$$ But now we have $$\btrue = f(z) = g(z) = \bfalse,$$ which is absurd.
 2. Suppose to the contrary that we have $z \in A + B$ with $\lft(a) = z = \rgt(b)$ for some $a \in A$ and $b \in B$, and consider now $f : A+B \rightarrow \bool$ given by $$f = \either(\const(\btrue),\const(\bfalse)).$$ We then have
@@ -144,7 +144,7 @@ Provided the types match up, we have $$\either(\lft,\rgt) = \id_{A + B}.$$
 ::: proof ::::::::::
 If $a \in A$, we have
 $$\begin{eqnarray*}
- &   & \compose{\id}{\lft}(a) \\
+ &   & \compose(\id)(\lft)(a) \\
  &     \href{@functions@#def-compose}
    = & \id(\lft(a)) \\
  &     \href{@functions@#def-id}
@@ -152,7 +152,7 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 and likewise if $b \in B$ we have
 $$\begin{eqnarray*}
- &   & \compose{\id}{\rgt}(b) \\
+ &   & \compose(\id)(\rgt)(b) \\
  &     \href{@functions@#def-compose}
    = & \id(\rgt(b)) \\
  &     \href{@functions@#def-id}
@@ -193,7 +193,7 @@ Let $A$ and $B$ be sets. Then we have the following for all $a \in A$ and $b \in
 
 1. $\uSwap(\lft(a)) = \rgt(a)$.
 2. $\uSwap(\rgt(b)) = \lft(b)$.
-3. $\compose{\uSwap}{\uSwap} = \id$.
+3. $\compose(\uSwap)(\uSwap) = \id$.
 
 ::: proof ::::::::::
 1. Note that
@@ -216,7 +216,7 @@ $$\begin{eqnarray*}
 as claimed.
 3. Let $x \in A+B$; we have two possibilities. If $x = \lft(a)$, we have
 $$\begin{eqnarray*}
- &   & \compose{\uSwap}{\uSwap}(\lft(a)) \\
+ &   & \compose(\uSwap)(\uSwap)(\lft(a)) \\
  &     \href{@functions@#def-compose}
    = & \uSwap(\uSwap(\lft(a))) \\
  &     \href{@disjoint-unions@#thm-uSwap-lft}
@@ -226,7 +226,7 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 and if $x = \rgt(b)$ we have
 $$\begin{eqnarray*}
- &   & \compose{\uSwap}{\uSwap}(\rgt(b)) \\
+ &   & \compose(\uSwap)(\uSwap)(\rgt(b)) \\
  &     \href{@functions@#def-compose}
    = & \uSwap(\uSwap(\rgt(b))) \\
  &     \href{@disjoint-unions@#thm-uSwap-rgt}
@@ -270,7 +270,7 @@ Next, the utility $\uPair$ facilitates defining functions from one disjoint unio
 
 :::::: definition ::
 []{#def-uPair}
-Let $A$, $B$, $U$, and $V$ be sets. We define $\uPair : U^A \times V^B \rightarrow (U + V)^{A + B}$ by $$\uPair(f,g) = \either(\compose{\lft}{f},\compose{\rgt}{g}).$$
+Let $A$, $B$, $U$, and $V$ be sets. We define $\uPair : U^A \times V^B \rightarrow (U + V)^{A + B}$ by $$\uPair(f,g) = \either(\compose(\lft)(f),\compose(\rgt)(g)).$$
 
 In Haskell:
 
@@ -287,16 +287,16 @@ For all $f$, $g$, $h$, $k$, $a$, and $b$ we have the following.
 
 1. $\uPair(f,g)(\lft(a)) = \lft(f(a))$.
 2. $\uPair(f,g)(\rgt(b)) = \rgt(g(b))$.
-2. $\compose{\uPair(f,g)}{\uPair(h,k)} = \uPair(\compose{f}{h},\compose{g}{k})$.
+2. $\compose(\uPair(f,g))(\uPair(h,k)) = \uPair(\compose(f)(h),\compose(g)(k))$.
 
 ::: proof ::::::::::
 1. Note that
 $$\begin{eqnarray*}
  &   & \uPair(f,g)(\lft(a)) \\
  &     \href{@disjoint-unions@#def-uPair}
-   = & \either(\compose{\lft}{f},\compose{\rgt}{g})(\lft(a)) \\
+   = & \either(\compose(\lft)(f),\compose(\rgt)(g))(\lft(a)) \\
  &     \href{@disjoint-unions@#def-either-lft}
-   = & \compose{\lft}{f}(a) \\
+   = & \compose(\lft)(f)(a) \\
  &     \href{@functions@#def-compose}
    = & \lft(f(a))
 \end{eqnarray*}$$
@@ -305,16 +305,16 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \uPair(f,g)(\rgt(b)) \\
  &     \href{@disjoint-unions@#def-uPair}
-   = & \either(\compose{\lft}{f},\compose{\rgt}{g})(\rgt(b)) \\
+   = & \either(\compose(\lft)(f),\compose(\rgt)(g))(\rgt(b)) \\
  &     \href{@disjoint-unions@#def-either-rgt}
-   = & \compose{\rgt}{g}(b) \\
+   = & \compose(\rgt)(g)(b) \\
  &     \href{@functions@#def-compose}
    = & \rgt(g(b))
 \end{eqnarray*}$$
 as claimed.
 3. We consider two possibilities: note that
 $$\begin{eqnarray*}
- &   & \compose{\uPair(f,g)}{\uPair(h,k)}(\lft(a)) \\
+ &   & \compose(\uPair(f,g))(\uPair(h,k))(\lft(a)) \\
  &     \href{@functions@#def-compose}
    = & \uPair(f,g)(\uPair(h,k)(\lft(a))) \\
  &     \href{@disjoint-unions@#thm-uPair-lft}
@@ -322,13 +322,13 @@ $$\begin{eqnarray*}
  &     \href{@disjoint-unions@#thm-uPair-lft}
    = & \lft(f(h(a))) \\
  &     \href{@functions@#def-compose}
-   = & \lft(\compose{f}{h}(a)) \\
+   = & \lft(\compose(f)(h)(a)) \\
  &     \href{@disjoint-unions@#thm-uPair-lft}
-   = & \uPair(\compose{f}{h},\compose{g}{k})(\lft(a))
+   = & \uPair(\compose(f)(h),\compose(g)(k))(\lft(a))
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
- &   & \compose{\uPair(f,g)}{\uPair(h,k)}(\rgt(b)) \\
+ &   & \compose(\uPair(f,g))(\uPair(h,k))(\rgt(b)) \\
  &     \href{@functions@#def-compose}
    = & \uPair(f,g)(\uPair(h,k)(\rgt(b))) \\
  &     \href{@disjoint-unions@#thm-uPair-rgt}
@@ -336,9 +336,9 @@ $$\begin{eqnarray*}
  &     \href{@disjoint-unions@#thm-uPair-rgt}
    = & \rgt(g(k(b))) \\
  &     \href{@functions@#def-compose}
-   = & \rgt(\compose{g}{k}(b)) \\
+   = & \rgt(\compose(g)(k)(b)) \\
  &     \href{@disjoint-unions@#thm-uPair-rgt}
-   = & \uPair(\compose{f}{h},\compose{g}{k})(\rgt(b))
+   = & \uPair(\compose(f)(h),\compose(g)(k))(\rgt(b))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -381,7 +381,7 @@ Finally, note that although as sets $A + (B + C)$ and $(A + B) + C$ cannot possi
 
 :::::: definition ::
 []{#def-uAssocL}[]{#def-uAssocR}
-Let $A$, $B$, and $C$ be sets. We define $\uAssocL : A + (B + C) \rightarrow (A + B) + C$ by $$\uAssocL = \either(\compose{\lft}{\lft},\either(\compose{\lft}{\rgt},\rgt))$$ and define $\uAssocR : (A + B) + C \rightarrow A + (B + C)$ by $$\uAssocR = \either(\either(\lft,\compose{\rgt}{\lft}),\compose{\rgt}{\rgt}).$$
+Let $A$, $B$, and $C$ be sets. We define $\uAssocL : A + (B + C) \rightarrow (A + B) + C$ by $$\uAssocL = \either(\compose(\lft)(\lft),\either(\compose(\lft)(\rgt),\rgt))$$ and define $\uAssocR : (A + B) + C \rightarrow A + (B + C)$ by $$\uAssocR = \either(\either(\lft,\compose(\rgt)(\lft)),\compose(\rgt)(\rgt)).$$
 
 In Haskell:
 
@@ -405,17 +405,17 @@ The following hold whenever everything has the appropriate type.
 4. $\uAssocR(\lft(\lft(a))) = \lft(a)$.
 5. $\uAssocR(\lft(\rgt(b))) = \rgt(\lft(b))$.
 6. $\uAssocR(\rgt(c)) = \rgt(\rgt(c))$.
-7. $\compose{\uAssocR}{\uAssocL} = \id_{A + (B + C)}$.
-8. $\compose{\uAssocL}{\uAssocR} = \id_{(A + B) + C}$.
+7. $\compose(\uAssocR)(\uAssocL) = \id_{A + (B + C)}$.
+8. $\compose(\uAssocL)(\uAssocR) = \id_{(A + B) + C}$.
 
 ::: proof ::::::::::
 1. We have
 $$\begin{eqnarray*}
  &   & \uAssocL(\lft(a)) \\
  &     \href{@disjoint-unions@#def-uAssocL}
-   = & \either(\compose{\lft}{\lft},\either(\compose{\lft}{\rgt},\rgt))(\lft(a)) \\
+   = & \either(\compose(\lft)(\lft),\either(\compose(\lft)(\rgt),\rgt))(\lft(a)) \\
  &     \href{@disjoint-unions@#def-either-lft}
-   = & \compose{\lft}{\lft}(a) \\
+   = & \compose(\lft)(\lft)(a) \\
  &     \href{@functions@#def-compose}
    = & \lft(\lft(a))
 \end{eqnarray*}$$
@@ -424,11 +424,11 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \uAssocL(\rgt(\lft(b))) \\
  &     \href{@disjoint-unions@#def-uAssocL}
-   = & \either(\compose{\lft}{\lft},\either(\compose{\lft}{\rgt},\rgt))(\rgt(\lft(b))) \\
+   = & \either(\compose(\lft)(\lft),\either(\compose(\lft)(\rgt),\rgt))(\rgt(\lft(b))) \\
  &     \href{@disjoint-unions@#def-either-rgt}
-   = & \either(\compose{\lft}{\rgt},\rgt)(\lft(b)) \\
+   = & \either(\compose(\lft)(\rgt),\rgt)(\lft(b)) \\
  &     \href{@disjoint-unions@#def-either-lft}
-   = & \compose{\lft}{\rgt}(b) \\
+   = & \compose(\lft)(\rgt)(b) \\
  &     \href{@functions@#def-compose}
    = & \lft(\rgt(b))
 \end{eqnarray*}$$
@@ -437,9 +437,9 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \uAssocL(\rgt(\rgt(c))) \\
  &     \href{@disjoint-unions@#def-uAssocL}
-   = & \either(\compose{\lft}{\lft},\either(\compose{\lft}{\rgt},\rgt))(\rgt(\rgt(c))) \\
+   = & \either(\compose(\lft)(\lft),\either(\compose(\lft)(\rgt),\rgt))(\rgt(\rgt(c))) \\
  &     \href{@disjoint-unions@#def-either-rgt}
-   = & \either(\compose{\lft}{\rgt},\rgt)(\rgt(c)) \\
+   = & \either(\compose(\lft)(\rgt),\rgt)(\rgt(c)) \\
  &     \href{@disjoint-unions@#def-either-rgt}
    = & \rgt(c)
 \end{eqnarray*}$$
@@ -448,9 +448,9 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \uAssocR(\lft(\lft(a))) \\
  &     \href{@disjoint-unions@#def-uAssocR}
-   = & \either(\either(\lft,\compose{\rgt}{\lft}),\compose{\rgt}{\rgt})(\lft(\lft(a))) \\
+   = & \either(\either(\lft,\compose(\rgt)(\lft)),\compose(\rgt)(\rgt))(\lft(\lft(a))) \\
  &     \href{@disjoint-unions@#def-either-lft}
-   = & \either(\lft,\compose{\rgt}{\lft})(\lft(a)) \\
+   = & \either(\lft,\compose(\rgt)(\lft))(\lft(a)) \\
  &     \href{@disjoint-unions@#def-either-lft}
    = & \lft(a)
 \end{eqnarray*}$$
@@ -459,11 +459,11 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \uAssocR(\lft(\rgt(b))) \\
  &     \href{@disjoint-unions@#def-uAssocR}
-   = & \either(\either(\lft,\compose{\rgt}{\lft}),\compose{\rgt}{\rgt})(\lft(\rgt(b))) \\
+   = & \either(\either(\lft,\compose(\rgt)(\lft)),\compose(\rgt)(\rgt))(\lft(\rgt(b))) \\
  &     \href{@disjoint-unions@#def-either-lft}
-   = & \either(\lft,\compose{\rgt}{\lft})(\rgt(b)) \\
+   = & \either(\lft,\compose(\rgt)(\lft))(\rgt(b)) \\
  &     \href{@disjoint-unions@#def-either-rgt}
-   = & \compose{\rgt}{\lft}(b) \\
+   = & \compose(\rgt)(\lft)(b) \\
  &     \href{@functions@#def-compose}
    = & \rgt(\lft(b))
 \end{eqnarray*}$$
@@ -472,18 +472,18 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \uAssocR(\rgt(c)) \\
  &     \href{@disjoint-unions@#def-uAssocR}
-   = & \either(\either(\lft,\compose{\rgt}{\lft}),\compose{\rgt}{\rgt})(\rgt(c)) \\
+   = & \either(\either(\lft,\compose(\rgt)(\lft)),\compose(\rgt)(\rgt))(\rgt(c)) \\
  &     \href{@disjoint-unions@#def-either-rgt}
-   = & \compose{\rgt}{\rgt}(c) \\
+   = & \compose(\rgt)(\rgt)(c) \\
  &     \href{@functions@#def-compose}
    = & \rgt(\rgt(c))
 \end{eqnarray*}$$
 as claimed.
 7. If $x \in A + (B + C)$, we have three possibilities. If $x = \lft(a)$, note that
 $$\begin{eqnarray*}
- &   & \compose{\uAssocR}{\uAssocL}(x) \\
+ &   & \compose(\uAssocR)(\uAssocL)(x) \\
  &     \let{x = \lft(a)}
-   = & \compose{\uAssocR}{\uAssocL}(\lft(a)) \\
+   = & \compose(\uAssocR)(\uAssocL)(\lft(a)) \\
  &     \href{@functions@#def-compose}
    = & \uAssocR(\uAssocL(\lft(a))) \\
  &     \href{@disjoint-unions@#thm-uAssocL-lft}
@@ -495,9 +495,9 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 if $x = \rgt(\lft(b))$, note that
 $$\begin{eqnarray*}
- &   & \compose{\uAssocR}{\uAssocL}(x) \\
+ &   & \compose(\uAssocR)(\uAssocL)(x) \\
  &     \let{x = \rgt(\lft(b))}
-   = & \compose{\uAssocR}{\uAssocL}(\rgt(\lft(b))) \\
+   = & \compose(\uAssocR)(\uAssocL)(\rgt(\lft(b))) \\
  &     \href{@functions@#def-compose}
    = & \uAssocR(\uAssocL(\rgt(\lft(b)))) \\
  &     \href{@disjoint-unions@#thm-uAssocL-rgt-lft}
@@ -509,9 +509,9 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 and if $x = \rgt(\rgt(c))$, note that
 $$\begin{eqnarray*}
- &   & \compose{\uAssocR}{\uAssocL}(x) \\
+ &   & \compose(\uAssocR)(\uAssocL)(x) \\
  &     \let{x = \rgt(\rgt(c))}
-   = & \compose{\uAssocR}{\uAssocL}(\rgt(\rgt(c))) \\
+   = & \compose(\uAssocR)(\uAssocL)(\rgt(\rgt(c))) \\
  &     \href{@functions@#def-compose}
    = & \uAssocR(\uAssocL(\rgt(\rgt(c)))) \\
  &     \href{@disjoint-unions@#thm-uAssocL-rgt-rgt}
@@ -524,9 +524,9 @@ $$\begin{eqnarray*}
 as needed.
 8. If $x \in (A + B) + C$, we have three possibilities. If $x = \lft(\lft(a))$, note that
 $$\begin{eqnarray*}
- &   & \compose{\uAssocL}{\uAssocR}(x) \\
+ &   & \compose(\uAssocL)(\uAssocR)(x) \\
  &     \let{x = \lft(\lft(a))}
-   = & \compose{\uAssocL}{\uAssocR}(\lft(\lft(a))) \\
+   = & \compose(\uAssocL)(\uAssocR)(\lft(\lft(a))) \\
  &     \href{@functions@#def-compose}
    = & \uAssocL(\uAssocR(\lft(\lft(a)))) \\
  &     \href{@disjoint-unions@#thm-uAssocR-lft-lft}
@@ -538,9 +538,9 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 if $x = \lft(\rgt(b))$, note that
 $$\begin{eqnarray*}
- &   & \compose{\uAssocL}{\uAssocR}(x) \\
+ &   & \compose(\uAssocL)(\uAssocR)(x) \\
  &     \let{x = \lft(\rgt(b))}
-   = & \compose{\uAssocL}{\uAssocR}(\lft(\rgt(b))) \\
+   = & \compose(\uAssocL)(\uAssocR)(\lft(\rgt(b))) \\
  &     \href{@functions@#def-compose}
    = & \uAssocL(\uAssocR(\lft(\rgt(b)))) \\
  &     \href{@disjoint-unions@#thm-uAssocR-lft-rgt}
@@ -552,9 +552,9 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 and if $x = \rgt(c)$, note that
 $$\begin{eqnarray*}
- &   & \compose{\uAssocL}{\uAssocR}(x) \\
+ &   & \compose(\uAssocL)(\uAssocR)(x) \\
  &     \let{x = \rgt(c)}
-   = & \compose{\uAssocL}{\uAssocR}(\rgt(c)) \\
+   = & \compose(\uAssocL)(\uAssocR)(\rgt(c)) \\
  &     \href{@functions@#def-compose}
    = & \uAssocL(\uAssocR(\rgt(c))) \\
  &     \href{@disjoint-unions@#thm-uAssocR-rgt}
