@@ -93,8 +93,10 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \zipPad(u,v)(\nil,\nil) \\
  & = & \map(\tup(u))(\nil) \\
- & = & \nil \\
- & = & \map(\flip(\tup)(v))(\nil) \\
+ &     \href{@map@#cor-map-nil}
+   = & \nil \\
+ &     \href{@map@#cor-map-nil}
+   = & \map(\flip(\tup)(v))(\nil) \\
  & = & \map(\flip(\tup)(v))(x)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
@@ -103,7 +105,8 @@ $$\begin{eqnarray*}
  & = & \cons((a,v),\zipPad(u,v)(x,\nil)) \\
  & = & \cons(\flip(\tup)(v)(a),\zipPad(u,v)(x,\nil)) \\
  & = & \cons(\flip(\tup)(v)(a),\map(\flip(\tup)(v))(x)) \\
- & = & \map(\flip(\tup)(v))(\cons(a,x))
+ &     \href{@map@#cor-map-cons}
+   = & \map(\flip(\tup)(v))(\cons(a,x))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -310,7 +313,8 @@ $$\begin{eqnarray*}
  & = & \zipPad((u,v),w)(\zipPad(u,v)(\nil,y),z) \\
  & = & \zipPad((u,v),w)(\nil,z) \\
  & = & \nil \\
- & = & \map(\tAssocL)(\nil) \\
+ &     \href{@map@#cor-map-nil}
+   = & \map(\tAssocL)(\nil) \\
  & = & \map(\tAssocL)(\zipPad(u,(v,w))(\nil,\zipPad(v,w)(y,z))) \\
  & = & \map(\tAssocL)(\zipPad(u,(v,w))(x,\zipPad(v,w)(y,z)))
 \end{eqnarray*}$$
@@ -320,7 +324,8 @@ $$\begin{eqnarray*}
  & = & \zipPad((u,v),w)(\zipPad(u,v)(\cons(a,x),\nil),z) \\
  & = & \zipPad((u,v),w)(\nil,z) \\
  & = & \nil \\
- & = & \map(\tAssocL)(\nil) \\
+ &     \href{@map@#cor-map-nil}
+   = & \map(\tAssocL)(\nil) \\
  & = & \map(\tAssocL)(\zipPad(u,(v,w))(\cons(a,x),\nil)) \\
  & = & \map(\tAssocL)(\zipPad(u,(v,w))(\cons(a,x),\zipPad(v,w)(\nil,z))) \\
  & = & \map(\tAssocL)(\zipPad(u,(v,w))(\cons(a,x),\zipPad(v,w)(y,z)))
@@ -330,7 +335,8 @@ $$\begin{eqnarray*}
  &   & \zipPad((u,v),w)(\zipPad(u,v)(\cons(a,x),y),z) \\
  & = & \zipPad((u,v),w)(\zipPad(u,v)(\cons(a,x),y),\nil) \\
  & = & \nil \\
- & = & \map(\tAssocL)(\nil) \\
+ &     \href{@map@#cor-map-nil}
+   = & \map(\tAssocL)(\nil) \\
  & = & \map(\tAssocL)(\zipPad(u,(v,w))(\cons(a,x),\nil)) \\
  & = & \map(\tAssocL)(\zipPad(u,(v,w))(\cons(a,x),\zipPad(v,w)(y,\nil))) \\
  & = & \map(\tAssocL)(\zipPad(u,(v,w))(\cons(a,x),\zipPad(v,w)(y,z)))

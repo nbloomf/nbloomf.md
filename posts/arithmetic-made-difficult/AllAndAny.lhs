@@ -322,7 +322,8 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \all(p)(\map(f)(x)) \\
  & = & \all(p)(\map(f)(\nil)) \\
- & = & \all(p)(\nil) \\
+ &     \href{@map@#cor-map-nil}
+   = & \all(p)(\nil) \\
  & = & \btrue \\
  & = & \all(p \circ f)(\nil) \\
  & = & \all(p \circ f)(x)
@@ -330,7 +331,8 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \all(p)(\map(f)(\cons(a,x))) \\
- & = & \all(p)(\cons(f(a),\map(f)(x))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \all(p)(\cons(f(a),\map(f)(x))) \\
  & = & \band(p(f(a)),\all(p)(\map(f)(x))) \\
  & = & \band((p \circ f)(a),\all(p \circ f)(x)) \\
  & = & \all(p \circ f)(\cons(a,x))

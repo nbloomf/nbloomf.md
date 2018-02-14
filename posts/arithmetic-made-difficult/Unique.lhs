@@ -193,13 +193,15 @@ We proceed by list induction on $x$. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \unique(\map(f)(x)) \\
  & = & \unique(\map(f)(\nil)) \\
- & = & \unique(\nil) \\
+ &     \href{@map@#cor-map-nil}
+   = & \unique(\nil) \\
  & = & \unique(x)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the implication holds for all $f$ for some $x$ and let $a \in A$. Suppose further that $\unique(\cons(a,x)) = \btrue$. Now if $f$ is injective, we have $\elt(f(a),\map(f)(x)) = \elt(a,x)$. Using the inductive hypothesis, we have
 $$\begin{eqnarray*}
  &   & \unique(\map(f)(\cons(a,x))) \\
- & = & \unique(\cons(f(a),\map(f)(x))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \unique(\cons(f(a),\map(f)(x))) \\
  & = & \band(\bnot(\elt(f(a),\map(f)(x))),\unique(\map(f)(x))) \\
  & = & \band(\bnot(\elt(a,x)),\unique(x)) \\
  & = & \unique(\cons(a,x))

@@ -207,16 +207,19 @@ Let $A$ and $B$ be sets, with $f : A \rightarrow B$. For all $x \in \lists{A}$, 
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \sublists(\map(f)(\nil)) \\
- & = & \sublists(\nil) \\
+ &     \href{@map@#cor-map-nil}
+   = & \sublists(\nil) \\
  & = & \cons(\nil,\nil) \\
  & = & \cons(\map(f)(\nil),\map(\map(f))(\nil)) \\
- & = & \map(\map(f))(\cons(\nil,\nil)) \\
+ &     \href{@map@#cor-map-cons}
+   = & \map(\map(f))(\cons(\nil,\nil)) \\
  & = & \map(\map(f))(\sublists(\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$, and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \sublists(\map(f)(\cons(a,x))) \\
- & = & \sublists(\cons(f(a),\map(f)(x))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \sublists(\cons(f(a),\map(f)(x))) \\
  & = & \cat(\map(\cons(f(a),-))(\sublists(\map(f)(x))),\sublists(\map(f)(x))) \\
  & = & \cat(\map(\cons(f(a),-))(\map(\map(f))(\sublists(x))),\map(\map(f))(\sublists(x))) \\
  & = & \cat(\map(\cons(f(a),-) \circ \map(f))(\sublists(x)),\map(\map(f))(\sublists(x))) \\

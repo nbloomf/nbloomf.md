@@ -231,7 +231,8 @@ $$\begin{eqnarray*}
  &   & \range(\next(a),b) \\
  & = & \range(\next(a),\zero) \\
  & = & \nil \\
- & = & \map(\next)(\nil) \\
+ &     \href{@map@#cor-map-nil}
+   = & \map(\next)(\nil) \\
  & = & \map(\next)(\range(a,\zero)) \\
  & = & \map(\next)(\range(a,b))
 \end{eqnarray*}$$
@@ -240,7 +241,8 @@ $$\begin{eqnarray*}
  &   & \range(\next(a),\next(b)) \\
  & = & \cons(\next(a),\range(\next(\next(a)),b)) \\
  & = & \cons(\next(a),\map(\next)(\range(\next(a),b))) \\
- & = & \map(\next)(\cons(a,\range(\next(a),b))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \map(\next)(\cons(a,\range(\next(a),b))) \\
  & = & \map(\next)(\range(a,\next(b)))
 \end{eqnarray*}$$
 as needed.

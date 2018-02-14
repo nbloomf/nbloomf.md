@@ -129,14 +129,16 @@ We proceed by induction on $n$. For the base case $n = \zero$ we have
 $$\begin{eqnarray*}
  &   & \map(f)(\repeat(\zero,a)) \\
  & = & \map(f)(\nil) \\
- & = & \nil \\
+ &     \href{@map@#cor-map-nil}
+   = & \nil \\
  & = & \repeat(\zero,f(a))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $n$. Now we have
 $$\begin{eqnarray*}
  &   & \map(f)(\repeat(\next(n),a)) \\
  & = & \map(f)(\cons(a,\repeat(n,a))) \\
- & = & \cons(f(a),\map(f)(\repeat(n,a))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \cons(f(a),\map(f)(\repeat(n,a))) \\
  & = & \cons(f(a),\repeat(n,f(a))) \\
  & = & \repeat(\next(n),f(a))
 \end{eqnarray*}$$

@@ -98,7 +98,8 @@ $$\begin{eqnarray*}
  &   & \map(\tSwap)(\zip(x,y)) \\
  & = & \map(\tSwap)(\zip(\nil,y)) \\
  & = & \map(\tSwap)(\nil) \\
- & = & \nil \\
+ &     \href{@map@#cor-map-nil}
+   = & \nil \\
  & = & \zip(y,\nil) \\
  & = & \zip(y,x)
 \end{eqnarray*}$$
@@ -107,7 +108,8 @@ $$\begin{eqnarray*}
  &   & \map(\tSwap)(\zip(\cons(a,x),y)) \\
  & = & \map(\tSwap)(\zip(\cons(a,x),\nil)) \\
  & = & \map(\tSwap)(\nil) \\
- & = & \nil \\
+ &     \href{@map@#cor-map-nil}
+   = & \nil \\
  & = & \zip(\nil,\cons(a,x)) \\
  & = & \zip(y,\cons(a,x))
 \end{eqnarray*}$$
@@ -146,9 +148,11 @@ $$\begin{eqnarray*}
  &   & \map(\tPair(f,g))(\zip(x,y)) \\
  & = & \map(\tPair(f,g))(\zip(\nil,y)) \\
  & = & \map(\tPair(f,g))(\nil) \\
- & = & \nil \\
+ &     \href{@map@#cor-map-nil}
+   = & \nil \\
  & = & \zip(\nil,\map(g)(y)) \\
- & = & \zip(\map(f)(\nil),\map(g)(y)) \\
+ &     \href{@map@#cor-map-nil}
+   = & \zip(\map(f)(\nil),\map(g)(y)) \\
  & = & \zip(\map(f)(x),\map(g)(y))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the result holds for all $y$ for some $x \in \lists{A}$, and let $a \in A$. We now consider two possibilities for $y$. If $y = \nil$, we have
@@ -156,9 +160,11 @@ $$\begin{eqnarray*}
  &   & \map(\tPair(f,g))(\zip(\cons(a,x),y)) \\
  & = & \map(\tPair(f,g))(\zip(\cons(a,x),\nil)) \\
  & = & \map(\tPair(f,g))(\nil) \\
- & = & \nil \\
+ &     \href{@map@#cor-map-nil}
+   = & \nil \\
  & = & \zip(\map(f)(\cons(a,x)),\nil) \\
- & = & \zip(\map(f)(\cons(a,x)),\map(g)(\nil)) \\
+ &     \href{@map@#cor-map-nil}
+   = & \zip(\map(f)(\cons(a,x)),\map(g)(\nil)) \\
  & = & \zip(\map(f)(\cons(a,x)),\map(g)(y))
 \end{eqnarray*}$$
 as needed. If $y = \cons(b,z)$, using the inductive hypothesis we have
@@ -260,7 +266,8 @@ $$\begin{eqnarray*}
  & = & \zip(\zip(\nil,y),z) \\
  & = & \zip(\nil,z) \\
  & = & \nil \\
- & = & \map(\tAssocL)(\nil) \\
+ &     \href{@map@#cor-map-nil}
+   = & \map(\tAssocL)(\nil) \\
  & = & \map(\tAssocL)(\zip(\nil,\zip(y,z)))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$, and let $a \in A$. If $y = \nil$, we have
@@ -269,7 +276,8 @@ $$\begin{eqnarray*}
  & = & \zip(\zip(\cons(a,x),\nil),z) \\
  & = & \zip(\nil,z) \\
  & = & \nil \\
- & = & \map(\tAssocL)(\nil) \\
+ &     \href{@map@#cor-map-nil}
+   = & \map(\tAssocL)(\nil) \\
  & = & \map(\tAssocL)(\zip(\cons(a,x),\nil)) \\
  & = & \map(\tAssocL)(\zip(\cons(a,x),\zip(\nil,z))) \\
  & = & \map(\tAssocL)(\zip(\cons(a,x),\zip(y,z)))
@@ -279,7 +287,8 @@ $$\begin{eqnarray*}
  &   & \zip(\zip(\cons(a,x),y),z) \\
  & = & \zip(\zip(\cons(a,x),y),\nil) \\
  & = & \nil \\
- & = & \map(\tAssocL)(\nil) \\
+ &     \href{@map@#cor-map-nil}
+   = & \map(\tAssocL)(\nil) \\
  & = & \map(\tAssocL)(\zip(\cons(a,x),\nil)) \\
  & = & \map(\tAssocL)(\zip(\cons(a,x),\zip(y,z)))
 \end{eqnarray*}$$

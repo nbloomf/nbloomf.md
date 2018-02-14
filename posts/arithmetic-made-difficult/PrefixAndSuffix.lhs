@@ -230,7 +230,8 @@ and
 $$\begin{eqnarray*}
  &   & \prefix(\map(f)(x),\map(f)(y)) \\
  & = & \prefix(\map(f)(\nil),\map(f)(y)) \\
- & = & \prefix(\nil,\map(f)(y)) \\
+ &     \href{@map@#cor-map-nil}
+   = & \prefix(\nil,\map(f)(y)) \\
  & = & \btrue
 \end{eqnarray*}$$
 as claimed. Suppose now the implication holds for some $x$, and let $a \in A$. Suppose further that $\prefix(\cons(a,x),y)$. Now $y = \cons(a,w)$ for some $w$, and we have

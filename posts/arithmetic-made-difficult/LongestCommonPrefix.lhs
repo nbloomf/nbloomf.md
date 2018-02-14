@@ -457,9 +457,11 @@ $$\begin{eqnarray*}
  &   & \map(f)(\lcp(x,y)) \\
  & = & \map(f)(\lcp(\nil,y)) \\
  & = & \map(f)(\nil) \\
- & = & \nil \\
+ &     \href{@map@#cor-map-nil}
+   = & \nil \\
  & = & \lcp(\nil,\map(f)(y)) \\
- & = & \lcp(\map(f)(\nil),\map(f)(y)) \\
+ &     \href{@map@#cor-map-nil}
+   = & \lcp(\map(f)(\nil),\map(f)(y)) \\
  & = & \lcp(\map(f)(x),\map(f)(y))
 \end{eqnarray*}$$
 as needed. Suppose now the equality holds for some $x$ and let $a \in A$. We consider two possitiblities for $y$. If $y = \nil$, we have
@@ -467,9 +469,11 @@ $$\begin{eqnarray*}
  &   & \map(f)(\lcp(\cons(a,x),y)) \\
  & = & \map(f)(\lcp(\cons(a,x),\nil)) \\
  & = & \map(f)(\nil) \\
- & = & \nil \\
+ &     \href{@map@#cor-map-nil}
+   = & \nil \\
  & = & \lcp(\map(f)(\cons(a,x)),\nil) \\
- & = & \lcp(\map(f)(\cons(a,x)),\map(f)(\nil)) \\
+ &     \href{@map@#cor-map-nil}
+   = & \lcp(\map(f)(\cons(a,x)),\map(f)(\nil)) \\
  & = & \lcp(\map(f)(\cons(a,x)),\map(f)(y))
 \end{eqnarray*}$$
 as needed. Suppose then that $y = \cons(b,u)$. If $a = b$, we have $f(a) = f(b)$. Now
@@ -478,7 +482,8 @@ $$\begin{eqnarray*}
  & = & \map(f)(\lcp(\cons(a,x),\cons(b,u))) \\
  & = & \map(f)(\lcp(\cons(a,x),\cons(a,u))) \\
  & = & \map(f)(\cons(a,\lcp(x,u))) \\
- & = & \cons(f(a),\map(f)(\lcp(x,u))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \cons(f(a),\map(f)(\lcp(x,u))) \\
  & = & \cons(f(a),\lcp(\map(f)(x),\map(f)(u))) \\
  & = & \lcp(\cons(f(a),\map(f)(x)),\cons(f(a),\map(f)(u))) \\
  & = & \lcp(\map(f)(\cons(a,x)),\map(f)(\cons(a,u))) \\
@@ -511,13 +516,15 @@ Let $A$ and $B$ be sets
 1. We proceed by list induction on $x$. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
  &   & \lcp(\map(f)(\nil),\map(g)(y)) \\
- & = & \lcp(\nil,\map(g)(y)) \\
+ &     \href{@map@#cor-map-nil}
+   = & \lcp(\nil,\map(g)(y)) \\
  & = & \nil
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $y$ for some $x$, and let $a \in A$. We have two possibilities for $y$. If $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \lcp(\map(f)(\cons(a,x)),\map(g)(\nil)) \\
- & = & \lcp(\map(f)(\cons(a,x)),\nil) \\
+ &     \href{@map@#cor-map-nil}
+   = & \lcp(\map(f)(\cons(a,x)),\nil) \\
  & = & \nil
 \end{eqnarray*}$$
 as needed, and if $y = \cons(b,u)$, since $f(a) \neq g(b)$, we have

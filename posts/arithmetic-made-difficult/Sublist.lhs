@@ -869,7 +869,8 @@ Let $A$ and $B$ be sets with $f : A \rightarrow B$ injective. For all $x,y \in \
 We proceed by list induction on $y$. For the base case $y = \nil$, note that
 $$\begin{eqnarray*}
  &   & \sublist(\map(f)(x),\map(f)(\nil)) \\
- & = & \sublist(\map(f)(x),\nil) \\
+ &     \href{@map@#cor-map-nil}
+   = & \sublist(\map(f)(x),\nil) \\
  & = & \isnil(\map(f)(x)) \\
  & = & \isnil(x) \\
  & = & \sublist(x,\nil)
@@ -877,7 +878,8 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equation holds for all $x$ for some $y$, and let $b \in A$. We have two possibilities for $x$. If $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \sublist(\map(f)(\nil),\map(f)(\cons(b,y))) \\
- & = & \sublist(\nil,\map(f)(\cons(b,y))) \\
+ &     \href{@map@#cor-map-nil}
+   = & \sublist(\nil,\map(f)(\cons(b,y))) \\
  & = & \btrue \\
  & = & \sublist(\nil,\cons(b,y))
 \end{eqnarray*}$$

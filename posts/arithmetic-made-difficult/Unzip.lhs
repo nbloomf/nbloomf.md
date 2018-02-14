@@ -139,7 +139,8 @@ $$\begin{eqnarray*}
  & = & \tSwap(\nil,\nil) \\
  & = & (\nil,\nil) \\
  & = & \unzip(\nil) \\
- & = & \unzip(\map(\tSwap)(\nil)) \\
+ &     \href{@map@#cor-map-nil}
+   = & \unzip(\map(\tSwap)(\nil)) \\
  & = & \unzip(\map(\tSwap)(x))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$, and let $(a,b) \in A \times B$. Suppose $(u,v) = \unzip(x)$; by the inductive hypothesis we have $(v,u) = \unzip(\map(\tSwap)(x))$. Now
@@ -174,7 +175,8 @@ Let $A$, $B$, $U$, and $V$ be sets, with $f : A \rightarrow U$ and $g : B \right
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \unzip(\map(\tPair(f,g))(\nil)) \\
- & = & \unzip(\nil) \\
+ &     \href{@map@#cor-map-nil}
+   = & \unzip(\nil) \\
  & = & (\nil,\nil) \\
  & = & (\map(f)(\nil),\map(g)(\nil)) \\
  & = & \tPair(\map(f),\map(g))(\nil,\nil) \\

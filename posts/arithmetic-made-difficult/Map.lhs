@@ -88,12 +88,14 @@ Let $A$ be a set. Then we have $$\map(\id_A)(x) = x.$$
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \map(\id)(\nil) \\
- & = & \nil
+ &     \href{@map@#cor-map-nil}
+   = & \nil
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $f$ for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \map(\id)(\cons(a,x)) \\
- & = & \cons(\id(a),\map(\id)(x)) \\
+ &     \href{@map@#cor-map-cons}
+   = & \cons(\id(a),\map(\id)(x)) \\
  & = & \cons(a,x)
 \end{eqnarray*}$$
 as needed.
@@ -120,20 +122,29 @@ Let $A$, $B$, and $C$ be sets, with maps $f : A \rightarrow B$ and $g : B \right
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \compose(\map(g))(\map(f))(\nil) \\
- & = & \map(g)(\map(f)(\nil)) \\
- & = & \map(g)(\nil) \\
- & = & \nil \\
- & = & \map(\compose(g)(f))(\nil)
+ &     \href{@functions@#def-compose}
+   = & \map(g)(\map(f)(\nil)) \\
+ &     \href{@map@#cor-map-nil}
+   = & \map(g)(\nil) \\
+ &     \href{@map@#cor-map-nil}
+   = & \nil \\
+ &     \href{@map@#cor-map-nil}
+   = & \map(\compose(g)(f))(\nil)
 \end{eqnarray*}$$
 as claimed. Suppose now that the equality holds for some $x \in \lists{A}$ and let $a \in A$. Then we have
 $$\begin{eqnarray*}
  &   & \compose(\map(g))(\map(f))(\cons(a,x)) \\
- & = & \map(g)(\map(f)(\cons(a,x))) \\
- & = & \map(g)(\cons(f(a),\map(f)(x))) \\
- & = & \cons(g(f(a)),\map(g)(\map(f)(x))) \\
+ &     \href{@functions@#def-compose}
+   = & \map(g)(\map(f)(\cons(a,x))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \map(g)(\cons(f(a),\map(f)(x))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \cons(g(f(a)),\map(g)(\map(f)(x))) \\
  & = & \cons(\compose(g)(f)(a),\compose(\map(g))(\map(f))(x)) \\
- & = & \cons(\compose(g)(f)(a),\map(\compose(g)(f))(x)) \\
- & = & \map(\compose(g)(f))(\cons(a,x))
+ &     \href{@map@#thm-map-compose}
+   = & \cons(\compose(g)(f)(a),\map(\compose(g)(f))(x)) \\
+ &     \href{@map@#cor-map-cons}
+   = & \map(\compose(g)(f))(\cons(a,x))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -213,7 +224,8 @@ $$\begin{eqnarray*}
  &     \href{@cat@#cor-cat-cons}
    = & \map(f)(\cons(a,\cat(x,y))) \\
  & = & \cons(f(a),\map(f)(\cat(x,y))) \\
- & = & \cons(f(a),\cat(\map(f)(x),\map(f)(y))) \\
+ &     \href{@map@#thm-map-cat}
+   = & \cons(f(a),\cat(\map(f)(x),\map(f)(y))) \\
  &     \href{@cat@#cor-cat-cons}
    = & \cat(\cons(f(a),\map(f)(x)),\map(f)(y)) \\
  & = & \cat(\map(f)(\cons(a,x)),\map(f)(y))
@@ -244,7 +256,8 @@ $$\begin{eqnarray*}
  &     \href{@snoc@#cor-snoc-nil}
    = & \map(f)(\cons(a,\nil)) \\
  & = & \cons(f(a),\map(f)(\nil)) \\
- & = & \cons(f(a),\nil) \\
+ &     \href{@map@#cor-map-nil}
+   = & \cons(f(a),\nil) \\
  &     \href{@snoc@#cor-snoc-nil}
    = & \snoc(f(a),\nil) \\
  & = & \snoc(f(a),\map(f)(\nil))
@@ -326,7 +339,8 @@ Let $A$ and $B$ be sets with a map $f : A \rightarrow B$ and $x \in \lists{A}$. 
 There are two possibilities for $x$. If $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \at(\map(f)(\nil),k) \\
- & = & \at(\nil,k) \\
+ &     \href{@map@#cor-map-nil}
+   = & \at(\nil,k) \\
  &     \href{@at@#thm-at-nil}
    = & \lft(\ast) \\
  &     \href{@functions@#def-id}
@@ -338,7 +352,8 @@ $$\begin{eqnarray*}
 as claimed. Suppose instead that $x = \cons(a,y)$. We now proceed by induction on $k$. For the base case $k = \zero$, we have
 $$\begin{eqnarray*}
  &   & \at(\map(f)(\cons(a,y)),\zero) \\
- & = & \at(\cons(f(a),\map(f)(y)),\zero) \\
+ &     \href{@map@#cor-map-cons}
+   = & \at(\cons(f(a),\map(f)(y)),\zero) \\
  &     \href{@at@#thm-at-cons-zero}
    = & \rgt(f(a)) \\
  &     \href{@disjoint-unions@#thm-uPair-rgt}
@@ -348,7 +363,8 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equality holds for all $a$ and $y$ for some $k$. Now
 $$\begin{eqnarray*}
  &   & \at(\map(f)(\cons(a,y)),\next(k)) \\
- & = & \at(\cons(f(a),\map(f)(y)),\next(k)) \\
+ &     \href{@map@#cor-map-cons}
+   = & \at(\cons(f(a),\map(f)(y)),\next(k)) \\
  &     \href{@at@#thm-at-cons-next}
    = & \at(\map(f)(y),k) \\
  & = & \uPair(\id,f)(\at(y,k)) \\
@@ -379,13 +395,15 @@ We proceed by list induction on $x$. For the base case $x = \nil$ we have
 $$\begin{eqnarray*}
  &   & \length(\map(f)(x)) \\
  & = & \length(\map(f)(\nil)) \\
- & = & \length(\nil) \\
+ &     \href{@map@#cor-map-nil}
+   = & \length(\nil) \\
  & = & \length(x)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \length(\map(f)(\cons(a,x))) \\
- & = & \length(\cons(f(a),\map(f)(x))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \length(\cons(f(a),\map(f)(x))) \\
  &     \href{@length@#cor-length-cons}
    = & \next(\length(\map(f)(x))) \\
  & = & \next(\length(x)) \\
@@ -415,12 +433,14 @@ Let $A$ and $B$ be sets with $f : A \rightarrow B$. For all $x \in \lists{A}$, w
 We have two possibilities for $x$. If $x = \nil$ we have
 $$\begin{eqnarray*}
  &   & \isnil(\map(f)(\nil)) \\
- & = & \isnil(\nil)
+ &     \href{@map@#cor-map-nil}
+   = & \isnil(\nil)
 \end{eqnarray*}$$
 and if $x = \cons(a,u)$ we have
 $$\begin{eqnarray*}
  &   & \isnil(\map(f)(\cons(a,u))) \\
- & = & \isnil(\cons(f(a),\map(f)(u))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \isnil(\cons(f(a),\map(f)(u))) \\
  &     \href{@head-tail@#thm-isnil-cons}
    = & \bfalse \\
  &     \href{@head-tail@#thm-isnil-cons}

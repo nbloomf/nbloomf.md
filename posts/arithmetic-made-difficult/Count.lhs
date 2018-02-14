@@ -491,7 +491,8 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \count(a,x) \\
  & = & \count(a,\nil) \\
- & = & \count(a,\map(f)(\nil)) \\
+ &     \href{@map@#cor-map-nil}
+   = & \count(a,\map(f)(\nil)) \\
  & = & \count(a,\map(f)(x))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$, and let $b \in A$. We consider two possibilities. If $a = b$, then $f(a) = f(b)$, and we have
@@ -501,7 +502,8 @@ $$\begin{eqnarray*}
  & = & \next(\count(a,x)) \\
  & = & \next(\count(f(a),\map(f)(x))) \\
  & = & \count(f(a),\cons(f(a),\map(f)(x))) \\
- & = & \count(f(a),\map(f)(\cons(a,x))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \count(f(a),\map(f)(\cons(a,x))) \\
  & = & \count(f(a),\map(f)(\cons(b,x)))
 \end{eqnarray*}$$
 as needed. If $a \neq b$, then we have $f(a) \neq f(b)$ (since $f$ is injective), so that
@@ -510,7 +512,8 @@ $$\begin{eqnarray*}
  & = & \count(a,x) \\
  & = & \count(f(a),\map(f)(x)) \\
  & = & \count(f(a),\cons(f(b),\map(f)(x))) \\
- & = & \count(f(a),\map(f)(\cons(b,x)))
+ &     \href{@map@#cor-map-cons}
+   = & \count(f(a),\map(f)(\cons(b,x)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

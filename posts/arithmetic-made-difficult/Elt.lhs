@@ -270,7 +270,8 @@ $$\begin{eqnarray*}
  &   & \elt(a)(\nil) \\
  & = & \bfalse \\
  & = & \elt(f(a),\nil) \\
- & = & \elt(f(a),\map(f)(\nil))
+ &     \href{@map@#cor-map-nil}
+   = & \elt(f(a),\map(f)(\nil))
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for all $x$ and let $b \in A$. Note that $\beq(a,b) = \beq(f(a),f(b))$. Then we have
 $$\begin{eqnarray*}
@@ -278,7 +279,8 @@ $$\begin{eqnarray*}
  & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(x)} \\
  & = & \bif{\beq(f(a),f(b))}{\btrue}{\elt(f(a),\map(f)(x))} \\
  & = & \elt(f(a),\cons(f(b),\map(f)(x))) \\
- & = & \elt(f(a),\map(f)(\cons(b,x)))
+ &     \href{@map@#cor-map-cons}
+   = & \elt(f(a),\map(f)(\cons(b,x)))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -541,7 +543,8 @@ $$\begin{eqnarray*}
  &   & \elt(a,\nil) \\
  & = & \bfalse \\
  & = & \elt(f(a),\nil) \\
- & = & \elt(f(a),\map(f)(\nil))
+ &     \href{@map@#cor-map-nil}
+   = & \elt(f(a),\map(f)(\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$, and let $b \in A$. Note that $\beq(a,b) = \beq(f(a),f(b))$, so we have
 $$\begin{eqnarray*}
@@ -549,7 +552,8 @@ $$\begin{eqnarray*}
  & = & \bif{\beq(a,b)}{\btrue}{\elt(a,x)} \\
  & = & \bif{\beq(f(a),f(b))}{\btrue}{\elt(f(a),\map(f)(x))} \\
  & = & \elt(f(a),\cons(f(b),\map(f)(x))) \\
- & = & \elt(f(a),\map(f)(\cons(b,x)))
+ &     \href{@map@#cor-map-cons}
+   = & \elt(f(a),\map(f)(\cons(b,x)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

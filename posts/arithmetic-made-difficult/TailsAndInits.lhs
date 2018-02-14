@@ -130,19 +130,24 @@ Let $A$ and $B$ be sets with $f : A \rightarrow B$. For all $x \in \lists{A}$ we
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \tails(\map(f)(\nil)) \\
- & = & \tails(\nil) \\
+ &     \href{@map@#cor-map-nil}
+   = & \tails(\nil) \\
  & = & \nil \\
- & = & \map(\map(f))(\nil) \\
+ &     \href{@map@#cor-map-nil}
+   = & \map(\map(f))(\nil) \\
  & = & \map(\map(f))(\tails(\nil))
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Using the inductive hypothesis, we have
 $$\begin{eqnarray*}
  &   & \tails(\map(f)(\cons(a,x))) \\
- & = & \tails(\cons(f(a),\map(f)(x))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \tails(\cons(f(a),\map(f)(x))) \\
  & = & \cons(\cons(f(a),\map(f)(x)),\tails(\map(f)(x))) \\
  & = & \cons(\cons(f(a),\map(f)(x)),\map(\map(f))(\tails(x))) \\
- & = & \cons(\map(f)(\cons(a,x)),\map(\map(f))(\tails(x))) \\
- & = & \map(\map(f))(\cons(\cons(a,x),\tails(x))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \cons(\map(f)(\cons(a,x)),\map(\map(f))(\tails(x))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \map(\map(f))(\cons(\cons(a,x),\tails(x))) \\
  & = & \map(\map(f))(\tails(\cons(a,x)))
 \end{eqnarray*}$$
 as claimed.
