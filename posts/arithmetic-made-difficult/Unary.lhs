@@ -25,7 +25,7 @@ A nice consequence of wrapping up recursion in the $\natrec{\ast}{\ast}$ functio
 
 :::::: definition ::
 []{#def-unnext}
-Let $1 = \{\ast\}$, and define $\varphi : 1 + \nats \rightarrow 1 + \nats$ by $$\varphi = \compose{\rgt}{\either(\const(\zero),\id)}.$$ In this post we consider $$(1 + \nats, \lft(\ast), \varphi)$$ as an inductive set, and denote the natural recursion map $\nats \rightarrow 1 + \nats$ by $\unnext$.
+Let $1 = \{\ast\}$, and define $\varphi : 1 + \nats \rightarrow 1 + \nats$ by $$\varphi = \compose(\rgt)(\either(\const(\zero),\id)).$$ In this post we consider $$(1 + \nats, \lft(\ast), \varphi)$$ as an inductive set, and denote the natural recursion map $\nats \rightarrow 1 + \nats$ by $\unnext$.
 ::::::::::::::::::::
 
 We can evaluate $\unnext$ directly.
@@ -42,7 +42,7 @@ If $n \in \nats$, we have the following.
 $$\begin{eqnarray*}
  &   & \unnext(\zero) \\
  &     \href{@unary@#def-unnext}
-   = & \natrec{\lft(\ast)}{\compose{\rgt}{\either(\const(\zero),\next)}}(\zero) \\
+   = & \natrec{\lft(\ast)}{\compose(\rgt)(\either(\const(\zero),\next))}(\zero) \\
  &     \href{@peano@#cor-natrec-zero}
    = & \lft(\ast)
 \end{eqnarray*}$$
@@ -51,11 +51,11 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \unnext(\next(\zero)) \\
  &     \href{@unary@#def-unnext}
-   = & \natrec{\lft(\ast)}{\compose{\rgt}{\either(\const(\zero),\next)}}(\next(\zero)) \\
+   = & \natrec{\lft(\ast)}{\compose(\rgt)(\either(\const(\zero),\next))}(\next(\zero)) \\
  &     \href{@peano@#cor-natrec-next}
-   = & \compose{\rgt}{\either(\const(\zero),\next)}(\natrec{\lft(\ast)}{\compose{\rgt}{\either(\const(\zero),\next)}}(\zero)) \\
+   = & \compose(\rgt)(\either(\const(\zero),\next))(\natrec{\lft(\ast)}{\compose(\rgt)(\either(\const(\zero),\next))}(\zero)) \\
  &     \href{@peano@#cor-natrec-zero}
-   = & \compose{\rgt}{\either(\const(\zero),\next)}(\lft(\ast)) \\
+   = & \compose(\rgt)(\either(\const(\zero),\next))(\lft(\ast)) \\
  &     \href{@functions@#def-compose}
    = & \rgt(\either(\const(\zero),\next)(\lft(\ast))) \\
  &     \href{@disjoint-unions@#def-either-lft}
@@ -67,13 +67,13 @@ as needed. For the inductive step, suppose the equality holds for some $n$. Now 
 $$\begin{eqnarray*}
  &   & \unnext(\next(\next(n))) \\
  &     \href{@unary@#def-unnext}
-   = & \natrec{\lft(\ast)}{\compose{\rgt}{\either(\const(\zero),\next)}}(\next(\next(n))) \\
+   = & \natrec{\lft(\ast)}{\compose(\rgt)(\either(\const(\zero),\next))}(\next(\next(n))) \\
  &     \href{@peano@#cor-natrec-next}
-   = & \compose{\rgt}{\either(\const(\zero),\next)}(\natrec{\lft(\ast)}{\compose{\rgt}{\either(\const(\zero),\next)}}(\next(n))) \\
+   = & \compose(\rgt)(\either(\const(\zero),\next))(\natrec{\lft(\ast)}{\compose(\rgt)(\either(\const(\zero),\next))}(\next(n))) \\
  &     \href{@unary@#def-unnext}
-   = & \compose{\rgt}{\either(\const(\zero),\next)}(\unnext(\next(n))) \\
+   = & \compose(\rgt)(\either(\const(\zero),\next))(\unnext(\next(n))) \\
  &     \hyp{\unnext(\next(n)) = \rgt(n)}
-   = & \compose{\rgt}{\either(\const(\zero),\next)}(\rgt(n)) \\
+   = & \compose(\rgt)(\either(\const(\zero),\next))(\rgt(n)) \\
  &     \href{@functions@#def-compose}
    = & \rgt(\either(\const(\zero),\next)(\rgt(n))) \\
  &     \href{@disjoint-unions@#def-either-rgt}
@@ -102,7 +102,7 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 and if $x \in 1 + \nats$, we have two possibilities. If $x = \lft(\ast)$, we have
 $$\begin{eqnarray*}
- &   & Ω(\compose{\rgt}{\either(\const(\zero),\next)}(\lft(\ast))) \\
+ &   & Ω(\compose(\rgt)(\either(\const(\zero),\next))(\lft(\ast))) \\
  &     \href{@functions@#def-compose}
    = & Ω(\rgt(\either(\const(\zero),\next)(\lft(\ast)))) \\
  &     \href{@disjoint-unions@#def-either-lft}
@@ -122,7 +122,7 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 and if $x = \rgt(n)$, with $n \in \nats$, we have
 $$\begin{eqnarray*}
- &   & Ω(\compose{\rgt}{\either(\const(\zero),\next)}(\rgt(n))) \\
+ &   & Ω(\compose(\rgt)(\either(\const(\zero),\next))(\rgt(n))) \\
  &     \href{@functions@#def-compose}
    = & Ω(\rgt(\either(\const(\zero),\next)(\rgt(n)))) \\
  &     \href{@disjoint-unions@#def-either-rgt}
@@ -138,9 +138,9 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed.
 
-Next to see that $Ω$ and $\Theta$ are mutual inverses. First we show that $\compose{Ω}{\unnext}(n) = \id(n)$ for all $n \in \nats$, proceeding by induction. For the base case $n = \zero$ we have
+Next to see that $Ω$ and $\Theta$ are mutual inverses. First we show that $\compose(Ω)(\unnext)(n) = \id(n)$ for all $n \in \nats$, proceeding by induction. For the base case $n = \zero$ we have
 $$\begin{eqnarray*}
- &   & \compose{Ω}{\unnext}(\zero) \\
+ &   & \compose(Ω)(\unnext)(\zero) \\
  &     \href{@functions@#def-compose}
    = & Ω(\unnext(\zero)) \\
  &     \let{Ω = \either(\const(\zero),\next)}
@@ -154,7 +154,7 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 and if the equality holds for $n$, we have
 $$\begin{eqnarray*}
- &   & \compose{Ω}{\unnext}(\next(n)) \\
+ &   & \compose(Ω)(\unnext)(\next(n)) \\
  &     \href{@functions@#def-compose}
    = & Ω(\unnext(\next(n))) \\
  &     \href{@unary@#thm-unnext-next}
@@ -166,7 +166,7 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed. Now to see that $\Theta \circ Ω = \id$, we consider two possibilities. First note that
 $$\begin{eqnarray*}
- &   & \compose{\unnext}{Ω}(\lft(\ast)) \\
+ &   & \compose(\unnext)(Ω)(\lft(\ast)) \\
  &     \href{@functions@#def-compose}
    = & \unnext(Ω(\lft(\ast))) \\
  &     \let{Ω = \either(\const(\zero),\next)}
@@ -180,7 +180,7 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 To see that $(\Theta \circ Ω)(\rgt(n)) = \rgt(n)$ for all $n \in \nats$, we proceed by induction. For the base case $n = \zero$ we have
 $$\begin{eqnarray*}
- &   & \compose{\unnext}{Ω}(\rgt(\zero)) \\
+ &   & \compose(\unnext)(Ω)(\rgt(\zero)) \\
  &     \href{@functions@#def-compose}
    = & \unnext(Ω(\rgt(\zero))) \\
  &     \let{Ω = \either(\const(\zero),\next)}
@@ -192,7 +192,7 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed. For the inductive step, if the equality holds for some $n$, we have
 $$\begin{eqnarray*}
- &   & \compose{\unnext}{Ω}(\rgt(\next(n))) \\
+ &   & \compose(\unnext)(Ω)(\rgt(\next(n))) \\
  &     \href{@functions@#def-compose}
    = & \unnext(Ω(\rgt(\next(n)))) \\
  &     \let{Ω = \either(\const(\zero),\next)}
@@ -210,7 +210,7 @@ From $\unnext$ we define two helper functions.
 
 :::::: definition ::
 []{#def-prev}[]{#def-iszero}
-We define $\prev : \nats \rightarrow \nats$ by $$\prev = \compose{\either(\const(\zero),\id)}{\unnext}$$ and $\iszero : \nats \rightarrow \bool$ by $$\iszero = \compose{\either(\const(\btrue),\const(\bfalse))}{\unnext}.$$
+We define $\prev : \nats \rightarrow \nats$ by $$\prev = \compose(\either(\const(\zero),\id))(\unnext)$$ and $\iszero : \nats \rightarrow \bool$ by $$\iszero = \compose(\either(\const(\btrue),\const(\bfalse)))(\unnext).$$
 ::::::::::::::::::::
 
 Now $\prev$, and $\iszero$ have some useful properties.
@@ -227,7 +227,7 @@ Now $\prev$, and $\iszero$ have some useful properties.
 $$\begin{eqnarray*}
  &   & \prev(\zero) \\
  &     \href{@unary@#def-prev}
-   = & \compose{\either(\const(\zero),\id)}{\unnext}(\zero) \\
+   = & \compose(\either(\const(\zero),\id))(\unnext)(\zero) \\
  &     \href{@functions@#def-compose}
    = & \either(\const(\zero),\id)(\unnext(\zero)) \\
  &     \href{@unary@#thm-unnext-zero}
@@ -242,7 +242,7 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \prev(\next(n)) \\
  &     \href{@unary@#def-prev}
-   = & \compose{\either(\const(\zero),\id)}{\unnext}(\next(n)) \\
+   = & \compose(\either(\const(\zero),\id))(\unnext)(\next(n)) \\
  &     \href{@functions@#def-compose}
    = & \either(\const(\zero),\id)(\unnext(\next(n))) \\
  &     \href{@unary@#thm-unnext-next}
@@ -257,7 +257,7 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \iszero(\zero) \\
  &     \href{@unary@#def-iszero}
-   = & \compose{\either(\const(\btrue),\const(\bfalse))}{\unnext}(\zero) \\
+   = & \compose(\either(\const(\btrue),\const(\bfalse)))(\unnext)(\zero) \\
  &     \href{@functions@#def-compose}
    = & \either(\const(\btrue),\const(\bfalse))(\unnext(\zero)) \\
  &     \href{@unary@#thm-unnext-zero}
@@ -272,7 +272,7 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \iszero(\next(n)) \\
  &     \href{@unary@#def-iszero}
-   = & \compose{\either(\const(\btrue),\const(\bfalse))}{\unnext}(\next(n)) \\
+   = & \compose(\either(\const(\btrue),\const(\bfalse)))(\unnext)(\next(n)) \\
  &     \href{@functions@#def-compose}
    = & \either(\const(\btrue),\const(\bfalse))(\unnext(\next(n))) \\
  &     \href{@unary@#thm-unnext-next}
@@ -300,7 +300,7 @@ $$\begin{eqnarray*}
  &     \href{@functions@#def-id}
    = & \id(n) \\
  &     \href{@unary@#thm-unnext-inverse-left}
-   = & \compose{\either(\const(\zero),\next)}{\unnext}(n) \\
+   = & \compose(\either(\const(\zero),\next))(\unnext)(n) \\
  &     \href{@functions@#def-compose}
    = & \either(\const(\zero),\next)(\unnext(n)) \\
  &     \hyp{\unnext(n) = \lft(\ast)}
@@ -315,7 +315,7 @@ $$\begin{eqnarray*}
  &   & n \\
  &     \href{@functions@#def-id}
    = & \id(n) \\
- &     \compose{\either(\const(\zero),\next)}{\unnext}(n) \\
+ &     \compose(\either(\const(\zero),\next))(\unnext)(n) \\
    = & \either(\const(\zero),\next)(\unnext(n)) \\
  &     \hyp{\unnext(n) = \rgt(m)}
    = & \either(\const(\zero),\next)(\rgt(m)) \\
