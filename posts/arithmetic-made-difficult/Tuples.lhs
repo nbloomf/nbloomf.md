@@ -265,7 +265,7 @@ Next, the utility $\tPair$ facilitates defining functions from one tuple to anot
 
 :::::: definition ::
 []{#def-tPair}
-Let $A$, $B$, $U$, and $V$ be sets. We define $\tPair : U^A \times V^B \rightarrow (U \times V)^{A \times B}$ by $$\tPair(f,g) = \dup(\compose{f}{\fst},\compose{g}{\snd}).$$
+Let $A$, $B$, $U$, and $V$ be sets. We define $\tPair : U^A \times V^B \rightarrow (U \times V)^{A \times B}$ by $$\tPair(f,g) = \dup(\compose(f)(\fst),\compose(g)(\snd)).$$
 
 In Haskell:
 
@@ -281,18 +281,18 @@ $\tPair$ has some nice properties.
 For all $f$, $g$, $h$, $k$, $a$, and $b$ we have the following.
 
 1. $\tPair(f,g)(\tup(a)(b)) = \tup(f(a))(g(b))$.
-2. $\compose{\tPair(f,g)}{\tPair(h,k)} = \tPair(\compose{f}{h},\compose{g}{k})$.
+2. $\compose(\tPair(f,g))(\tPair(h,k)) = \tPair(\compose(f)(h),\compose(g)(k))$.
 
 ::: proof ::::::::::
 1. Note that
 $$\begin{eqnarray*}
  &   & \tPair(f,g)(\tup(a)(b)) \\
  &     \href{@tuples@#def-tPair}
-   = & \dup(\compose{f}{\fst})(\compose{g}{\snd})(\tup(a)(b)) \\
+   = & \dup(\compose(f)(\fst))(\compose(g)(\snd))(\tup(a)(b)) \\
  &     \href{@tuples@#thm-dup-tup}
-   = & \tup(\compose{f}{\fst}(\tup(a)(b)))(\compose{g}{\snd}(\tup(a)(b))) \\
+   = & \tup(\compose(f)(\fst)(\tup(a)(b)))(\compose(g)(\snd)(\tup(a)(b))) \\
  &     \href{@functions@#def-compose}
-   = & \tup(f(\fst(\tup(a)(b))))(\compose{g}{\snd}(\tup(a)(b))) \\
+   = & \tup(f(\fst(\tup(a)(b))))(\compose(g)(\snd)(\tup(a)(b))) \\
  &     \href{@functions@#def-compose}
    = & \tup(f(\fst(\tup(a)(b))))(g(\snd(\tup(a)(b)))) \\
  &     \href{@tuples@#thm-fst-tup}
@@ -303,7 +303,7 @@ $$\begin{eqnarray*}
 as claimed.
 2. Note that
 $$\begin{eqnarray*}
- &   & \compose{\tPair(f,g)}{\tPair(h,k)}(\tup(a)(b)) \\
+ &   & \compose(\tPair(f,g))(\tPair(h,k))(\tup(a)(b)) \\
  &     \href{@functions@#def-compose}
    = & \tPair(f,g)(\tPair(h,k)(\tup(a)(b))) \\
  &     \href{@tuples@#thm-tPair-tup}
@@ -311,11 +311,11 @@ $$\begin{eqnarray*}
  &     \href{@tuples@#thm-tPair-tup}
    = & \tup(f(h(a)))(g(k(b))) \\
  &     \href{@functions@#def-compose}
-   = & \tup(f(h(a)))(\compose{g}{k}(b)) \\
+   = & \tup(f(h(a)))(\compose(g)(k)(b)) \\
  &     \href{@functions@#def-compose}
-   = & \tup(\compose{f}{h}(a))(\compose{g}{k}(b)) \\
+   = & \tup(\compose(f)(h)(a))(\compose(g)(k)(b)) \\
  &     \href{@tuples@#thm-tPair-tup}
-   = & \tPair(\compose{f}{h},\compose{g}{k})(\tup(a)(b))
+   = & \tPair(\compose(f)(h),\compose(g)(k))(\tup(a)(b))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -346,7 +346,7 @@ Finally, note that although as sets $A \times (B \times C)$ and $(A \times B) \t
 
 :::::: definition ::
 []{#def-tAssocL}[]{#def-tAssocR}
-Let $A$, $B$, and $C$ be sets. We define $\tAssocL : A \times (B \times C) \rightarrow (A \times B) \times C$ by $$\tAssocL = \dup(\dup(\fst,\compose{\fst}{\snd}),\compose{\snd}{\snd})$$ and define $\tAssocR : (A \times B) \times C \rightarrow A \times (B \times C)$ by $$\tAssocR = \dup(\compose{\fst}{\fst},\dup(\compose{\snd}{\fst},\snd)).$$
+Let $A$, $B$, and $C$ be sets. We define $\tAssocL : A \times (B \times C) \rightarrow (A \times B) \times C$ by $$\tAssocL = \dup(\dup(\fst,\compose(\fst)(\snd)),\compose(\snd)(\snd))$$ and define $\tAssocR : (A \times B) \times C \rightarrow A \times (B \times C)$ by $$\tAssocR = \dup(\compose(\fst)(\fst),\dup(\compose(\snd)(\fst),\snd)).$$
 
 In Haskell:
 
@@ -366,25 +366,25 @@ The following hold whenever everything has the appropriate type.
 
 1. $\tAssocL(\tup(a)(\tup(b)(c))) = \tup(\tup(a)(b))(c)$.
 2. $\tAssocR(\tup(\tup(a)(b))(c)) = \tup(a)(\tup(b)(c))$.
-3. $\compose{\tAssocR}{\tAssocL} = \id$.
-4. $\compose{\tAssocL}{\tAssocR} = \id$.
+3. $\compose(\tAssocR)(\tAssocL) = \id$.
+4. $\compose(\tAssocL)(\tAssocR) = \id$.
 
 ::: proof ::::::::::
 1. Note that
 $$\begin{eqnarray*}
  &   & \tAssocL(\tup(a)(\tup(b)(c))) \\
  &     \href{@tuples@#def-tAssocL}
-   = & \dup(\dup(\fst,\compose{\fst}{\snd}),\compose{\snd}{\snd})(\tup(a)(\tup(b)(c))) \\
+   = & \dup(\dup(\fst,\compose(\fst)(\snd)),\compose(\snd)(\snd))(\tup(a)(\tup(b)(c))) \\
  &     \href{@tuples@#thm-dup-tup}
-   = & \tup(\dup(\fst,\compose{\fst}{\snd})(\tup(a)(\tup(b)(c))))(\compose{\snd}{\snd}(\tup(a)(\tup(b)(c)))) \\
+   = & \tup(\dup(\fst,\compose(\fst)(\snd))(\tup(a)(\tup(b)(c))))(\compose(\snd)(\snd)(\tup(a)(\tup(b)(c)))) \\
  &     \href{@functions@#def-compose}
-   = & \tup(\dup(\fst,\compose{\fst}{\snd})(\tup(a)(\tup(b)(c))))(\snd(\snd(\tup(a)(\tup(b)(c))))) \\
+   = & \tup(\dup(\fst,\compose(\fst)(\snd))(\tup(a)(\tup(b)(c))))(\snd(\snd(\tup(a)(\tup(b)(c))))) \\
  &     \href{@tuples@#thm-snd-tup}
-   = & \tup(\dup(\fst,\compose{\fst}{\snd})(\tup(a)(\tup(b)(c))))(\snd(\tup(b)(c))) \\
+   = & \tup(\dup(\fst,\compose(\fst)(\snd))(\tup(a)(\tup(b)(c))))(\snd(\tup(b)(c))) \\
  &     \href{@tuples@#thm-snd-tup}
-   = & \tup(\dup(\fst,\compose{\fst}{\snd})(\tup(a)(\tup(b)(c))))(c) \\
+   = & \tup(\dup(\fst,\compose(\fst)(\snd))(\tup(a)(\tup(b)(c))))(c) \\
  &     \href{@tuples@#thm-dup-tup}
-   = & \tup(\tup(\fst(\tup(a)(\tup(b)(c))))(\compose{\fst}{\snd}(\tup(a)(\tup(b)(c)))))(c) \\
+   = & \tup(\tup(\fst(\tup(a)(\tup(b)(c))))(\compose(\fst)(\snd)(\tup(a)(\tup(b)(c)))))(c) \\
  &     \href{@functions@#def-compose}
    = & \tup(\tup(\fst(\tup(a)(\tup(b)(c))))(\fst(\snd(\tup(a)(\tup(b)(c))))))(c) \\
  &     \href{@tuples@#thm-snd-tup}
@@ -399,19 +399,19 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \tAssocR(\tup(\tup(a)(b))(c)) \\
  &     \href{@tuples@#def-tAssocR}
-   = & \dup(\compose{\fst}{\fst},\dup(\compose{\snd}{\fst},\snd))(\tup(\tup(a)(b))(c)) \\
+   = & \dup(\compose(\fst)(\fst),\dup(\compose(\snd)(\fst),\snd))(\tup(\tup(a)(b))(c)) \\
  &     \href{@tuples@#thm-dup-tup}
-   = & \tup(\compose{\fst}{\fst}(\tup(\tup(a)(b))(c)))(\dup(\compose{\snd}{\fst},\snd)(\tup(\tup(a)(b))(c))) \\
+   = & \tup(\compose(\fst)(\fst)(\tup(\tup(a)(b))(c)))(\dup(\compose(\snd)(\fst),\snd)(\tup(\tup(a)(b))(c))) \\
  &     \href{@functions@#def-compose}
-   = & \tup(\fst(\fst(\tup(\tup(a)(b))(c))))(\dup(\compose{\snd}{\fst},\snd)(\tup(\tup(a)(b))(c))) \\
+   = & \tup(\fst(\fst(\tup(\tup(a)(b))(c))))(\dup(\compose(\snd)(\fst),\snd)(\tup(\tup(a)(b))(c))) \\
  &     \href{@tuples@#thm-fst-tup}
-   = & \tup(\fst(\tup(a)(b)))(\dup(\compose{\snd}{\fst},\snd)(\tup(\tup(a)(b))(c))) \\
+   = & \tup(\fst(\tup(a)(b)))(\dup(\compose(\snd)(\fst),\snd)(\tup(\tup(a)(b))(c))) \\
  &     \href{@tuples@#thm-fst-tup}
-   = & \tup(a)(\dup(\compose{\snd}{\fst},\snd)(\tup(\tup(a)(b))(c))) \\
+   = & \tup(a)(\dup(\compose(\snd)(\fst),\snd)(\tup(\tup(a)(b))(c))) \\
  &     \href{@tuples@#thm-dup-tup}
-   = & \tup(a)(\tup(\compose{\snd}{\fst}(\tup(\tup(a)(b))(c)))(\snd(\tup(\tup(a)(b))(c)))) \\
+   = & \tup(a)(\tup(\compose(\snd)(\fst)(\tup(\tup(a)(b))(c)))(\snd(\tup(\tup(a)(b))(c)))) \\
  &     \href{@tuples@#thm-snd-tup}
-   = & \tup(a)(\tup(\compose{\snd}{\fst}(\tup(\tup(a)(b))(c)))(c)) \\
+   = & \tup(a)(\tup(\compose(\snd)(\fst)(\tup(\tup(a)(b))(c)))(c)) \\
  &     \href{@functions@#def-compose}
    = & \tup(a)(\tup(\snd(\fst(\tup(\tup(a)(b))(c))))(c)) \\
  &     \href{@tuples@#thm-fst-tup}
@@ -422,7 +422,7 @@ $$\begin{eqnarray*}
 as claimed.
 3. Note that
 $$\begin{eqnarray*}
- &   & \compose{\tAssocR}{\tAssocL}(\tup(a)(\tup(b)(c))) \\
+ &   & \compose(\tAssocR)(\tAssocL)(\tup(a)(\tup(b)(c))) \\
  &     \href{@functions@#def-compose}
    = & \tAssocR(\tAssocL(\tup(a)(\tup(b)(c)))) \\
  &     \href{@tuples@#thm-tAssocL-tup}
@@ -433,7 +433,7 @@ $$\begin{eqnarray*}
 as claimed.
 4. Note that
 $$\begin{eqnarray*}
- &   & \compose{\tAssocL}{\tAssocR}(\tup(\tup(a)(b))(c)) \\
+ &   & \compose(\tAssocL)(\tAssocR)(\tup(\tup(a)(b))(c)) \\
  &     \href{@functions@#def-compose}
    = & \tAssocL(\tAssocR(\tup(\tup(a)(b))(c))) \\
  &     \href{@tuples@#thm-tAssocR-tup}
