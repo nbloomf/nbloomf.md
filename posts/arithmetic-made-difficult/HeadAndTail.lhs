@@ -27,7 +27,7 @@ We define some helper functions in terms of $\uncons$, analogous to $\prev$ and 
 
 :::::: definition ::
 []{#def-isnil}[]{#def-head}[]{#def-tail}
-Let $A$ be a set. We define $\isnil : \lists{A} \rightarrow \bool$ by $$\isnil = \compose{\either(\const(\btrue),\const(\bfalse))}{\uncons}$$ and $\head : \lists{A} \rightarrow 1 + A$ by $$\head = \compose{\uPair(\id,\fst)}{\uncons}$$ and $\tail : \lists{A} \rightarrow \lists{A}$ by $$\tail = \compose{\either(\const(\nil),\snd)}{\uncons}.$$
+Let $A$ be a set. We define $\isnil : \lists{A} \rightarrow \bool$ by $$\isnil = \compose(\either(\const(\btrue),\const(\bfalse)))(\uncons)$$ and $\head : \lists{A} \rightarrow 1 + A$ by $$\head = \compose(\uPair(\id,\fst))(\uncons)$$ and $\tail : \lists{A} \rightarrow \lists{A}$ by $$\tail = \compose(\either(\const(\nil),\snd))(\uncons).$$
 
 In Haskell:
 
@@ -58,7 +58,7 @@ Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have the following
 $$\begin{eqnarray*}
  &   & \isnil(\nil) \\
  &     \href{@head-tail@#def-isnil}
-   = & \compose{\either(\const(\btrue),\const(\bfalse))}{\uncons}(\nil) \\
+   = & \compose(\either(\const(\btrue),\const(\bfalse)))(\uncons)(\nil) \\
  &     \href{@functions@#def-compose}
    = & \either(\const(\btrue),\const(\bfalse))(\uncons(\nil)) \\
  &     \href{@lists@#thm-uncons-nil}
@@ -73,7 +73,7 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \isnil(\cons(a,x)) \\
  &     \href{@head-tail@#def-isnil}
-   = & \compose{\either(\const(\btrue),\const(\bfalse))}{\uncons}(\cons(a,x)) \\
+   = & \compose(\either(\const(\btrue),\const(\bfalse)))(\uncons)(\cons(a,x)) \\
  &     \href{@functions@#def-compose}
    = & \either(\const(\btrue),\const(\bfalse))(\uncons(\cons(a,x))) \\
  &     \href{@lists@#thm-uncons-cons}
@@ -119,7 +119,7 @@ Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have the following
 $$\begin{eqnarray*}
  &   & \head(\nil) \\
  &     \href{@head-tail@#def-head}
-   = & \compose{\uPair(\id,\fst)}{\uncons}(\nil) \\
+   = & \compose(\uPair(\id,\fst))(\uncons)(\nil) \\
  &     \href{@functions@#def-compose}
    = & \uPair(\id,\fst)(\uncons(\nil)) \\
  &     \href{@lists@#thm-uncons-nil}
@@ -134,7 +134,7 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \head(\cons(a,x)) \\
  &     \href{@head-tail@#def-head}
-   = & \compose{\uPair(\id,\fst)}{\uncons}(\cons(a,x)) \\
+   = & \compose(\uPair(\id,\fst))(\uncons)(\cons(a,x)) \\
  &     \href{@functions@#def-compose}
    = & \uPair(\id,\fst)(\uncons(\cons(a,x))) \\
  &     \href{@lists@#thm-uncons-cons}
@@ -180,7 +180,7 @@ Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have the following
 $$\begin{eqnarray*}
  &   & \tail(\nil) \\
  &     \href{@head-tail@#def-tail}
-   = & \compose{\either(\const(\nil),\snd)}{\uncons}(\nil) \\
+   = & \compose(\either(\const(\nil),\snd))(\uncons)(\nil) \\
  &     \href{@functions@#def-compose}
    = & \either(\const(\nil),\snd)(\uncons(\nil)) \\
  &     \href{@lists@#thm-uncons-nil}
@@ -195,7 +195,7 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \tail(\cons(a,x)) \\
  &     \href{@head-tail@#def-tail}
-   = & \compose{\either(\const(\nil),\snd)}{\uncons}(\cons(a,x)) \\
+   = & \compose(\either(\const(\nil),\snd))(\uncons)(\cons(a,x)) \\
  &     \href{@functions@#def-compose}
    = & \either(\const(\nil),\snd)(\uncons(\cons(a,x))) \\
  &     \href{@lists@#thm-uncons-cons}
