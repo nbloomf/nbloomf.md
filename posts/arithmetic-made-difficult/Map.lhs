@@ -31,20 +31,20 @@ slug: map
 Today we'll explore one of the most useful functions on $\lists{A}$: $\map$. What $\map$ does is take a function $A \rightarrow B$ and a $\lists{A}$, and apply the function "itemwise" to get a $\lists{B}$.
 
 :::::: definition ::
-Let $A$ and $B$ be sets. Define $\varphi : B^A \rightarrow A \times \lists{B} \rightarrow \lists{B}$ by $$\varphi(f)(a,x) = \cons(f(a),x).$$ We then define $\map : B^A \rightarrow \lists{A} \rightarrow \lists{B}$ by $$\map(f) = \foldr{\nil}{\varphi(f)}.$$
+[]{#def-map}
+Let $A$ and $B$ be sets. We then define $\map : B^A \rightarrow \lists{A} \rightarrow \lists{B}$ by $$\map(f) = \foldr{\nil}{\compose(\cons)(f)}.$$
 
 In Haskell:
 
 > map :: (List t) => (a -> b) -> t a -> t b
-> map f = foldr nil (phi f)
->   where
->     phi g a x = cons (g a) x
+> map f = foldr nil (compose cons f)
 
 ::::::::::::::::::::
 
 Since $\map$ is defined as a $\foldr{\ast}{\ast}$, it is the unique solution to a system of functional equations.
 
 :::::: corollary :::
+[]{#cor-map-nil}[]{#cor-map-cons}
 $\map(\alpha)$ is the unique solution $f : \lists{A} \rightarrow \lists{B}$ of the following equations for all $a \in A$ and $x \in \lists{A}$:
 $$\left\{\begin{array}{l}
  f(\nil) = \nil \\
@@ -81,6 +81,7 @@ This looks an awful lot like a functor diagram. Recall that given two categories
 $\map$ takes $\id_A$ to $\id_{\lists{A}}$.
 
 :::::: theorem :::::
+[]{#thm-map-id}
 Let $A$ be a set. Then we have $$\map(\id_A)(x) = x.$$
 
 ::: proof ::::::::::
@@ -112,27 +113,27 @@ as needed.
 $\map$ preserves composition.
 
 :::::: theorem :::::
-Let $A$, $B$, and $C$ be sets, with maps $f : A \rightarrow B$ and $g : B \rightarrow C$. For all $x \in \lists{A}$ we have $$\map(g \circ f)(x) = (\map(g) \circ \map(f))(x).$$
+[]{#thm-map-compose}
+Let $A$, $B$, and $C$ be sets, with maps $f : A \rightarrow B$ and $g : B \rightarrow C$. For all $x \in \lists{A}$ we have $$\map(\compose(g)(f))(x) = \compose(\map(g))(\map(f))(x).$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & (\map(g) \circ \map(f))(x) \\
- & = & (\map(g) \circ \map(f))(\nil) \\
+ &   & \compose(\map(g))(\map(f))(\nil) \\
  & = & \map(g)(\map(f)(\nil)) \\
  & = & \map(g)(\nil) \\
  & = & \nil \\
- & = & \map(g \circ f)(\nil)
+ & = & \map(\compose(g)(f))(\nil)
 \end{eqnarray*}$$
 as claimed. Suppose now that the equality holds for some $x \in \lists{A}$ and let $a \in A$. Then we have
 $$\begin{eqnarray*}
- &   & (\map(g) \circ \map(f))(\cons(a,x)) \\
+ &   & \compose(\map(g))(\map(f))(\cons(a,x)) \\
  & = & \map(g)(\map(f)(\cons(a,x))) \\
  & = & \map(g)(\cons(f(a),\map(f)(x))) \\
  & = & \cons(g(f(a)),\map(g)(\map(f)(x))) \\
- & = & \cons((g \circ f)(a),(\map(g) \circ \map(f))(x)) \\
- & = & \cons((g \circ f)(a),\map(g \circ f)(x)) \\
- & = & \map(g \circ f)(\cons(a,x))
+ & = & \cons(\compose(g)(f)(a),\compose(\map(g))(\map(f))(x)) \\
+ & = & \cons(\compose(g)(f)(a),\map(\compose(g)(f))(x)) \\
+ & = & \map(\compose(g)(f))(\cons(a,x))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -151,6 +152,7 @@ as needed.
 $\map(f)$ respects $\tail$.
 
 :::::: theorem :::::
+[]{#thm-map-tail}
 Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. For all $x \in \lists{A}$, we have $$\map(f)(\tail(x)) = \tail(\map(f)(x)).$$
 
 ::: proof ::::::::::
@@ -190,6 +192,7 @@ as needed.
 $\map(f)$ respects $\cat$.
 
 :::::: theorem :::::
+[]{#thm-map-cat}
 Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. For all $x,y \in \lists{A}$, we have $$\map(f)(\cat(x,y)) = \cat(\map(f)(x),\map(f)(y)).$$
 
 ::: proof ::::::::::
