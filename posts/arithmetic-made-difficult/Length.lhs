@@ -31,7 +31,7 @@ Today we'll measure the sizes of lists with $\length$. Intuitively this function
 
 :::::: definition ::
 []{#def-addlength}
-Let $A$ be a set. We define $\addlength : \nats \rightarrow \lists{A} \rightarrow \nats$ by $\addlength = \foldl{\compose{\const}{\next}}$.
+Let $A$ be a set. We define $\addlength : \nats \rightarrow \lists{A} \rightarrow \nats$ by $\addlength = \foldl{\compose(\const)(\next)}$.
 
 In Haskell:
 
@@ -87,13 +87,13 @@ Let $A$ be a set. For all $n \in \nats$, $a \in A$, and $x \in \lists{A}$, we ha
 $$\begin{eqnarray*}
  &   & \addlength(n,\snoc(a,x)) \\
  &     \href{@length@#def-addlength}
-   = & \foldl{\compose{\const}{\next}}(n,\snoc(a,x)) \\
+   = & \foldl{\compose(\const)(\next)}(n,\snoc(a,x)) \\
  &     \href{@snoc@#thm-snoc-foldl}
-   = & \compose{\const}{\next}(\foldl{\compose{\const}{\next}}(n,x),a) \\
+   = & \compose(\const)(\next)(\foldl{\compose(\const)(\next)}(n,x),a) \\
  &     \href{@functions@#def-compose}
-   = & \const(\next(\foldl{\compose{\const}{\next}}(n,x)))(a) \\
+   = & \const(\next(\foldl{\compose(\const)(\next)}(n,x)))(a) \\
  &     \href{@functions@#def-const}
-   = & \next(\foldl{\compose{\const}{\next}}(n,x)) \\
+   = & \next(\foldl{\compose(\const)(\next)}(n,x)) \\
  &     \href{@length@#def-addlength}
    = & \next(\addlength(n,x))
 \end{eqnarray*}$$
@@ -200,12 +200,12 @@ Although $\length$ is essentially defined as a left fold, it can be characterize
 
 :::::: theorem :::::
 []{#thm-length-foldr}
-Let $A$ be a set. Then we have $$\length(x) = \foldr{\zero}{\flip(\compose{\const}{\next})}(x).$$
+Let $A$ be a set. Then we have $$\length(x) = \foldr{\zero}{\flip(\compose(\const)(\next))}(x).$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \foldr{\zero}{\flip(\compose{\const}{\next})}(\nil) \\
+ &   & \foldr{\zero}{\flip(\compose(\const)(\next))}(\nil) \\
  &     \href{@lists@#def-foldr-nil}
    = & \zero \\
  &     \href{@length@#cor-addlength-nil}
@@ -215,13 +215,13 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
- &   & \foldr{\zero}{\flip(\compose{\const}{\next})}(\cons(a,x)) \\
+ &   & \foldr{\zero}{\flip(\compose(\const)(\next))}(\cons(a,x)) \\
  &     \href{@lists@#def-foldr-cons}
-   = & \flip(\compose{\const}{\next})(a,\foldr{\zero}{\flip(\compose{\const}{\next})}(x)) \\
- &     \hyp{\length = \foldr{\zero}{\flip(\compose{\const}{\next})}}
-   = & \flip(\compose{\const}{\next})(a,\length(x)) \\
+   = & \flip(\compose(\const)(\next))(a,\foldr{\zero}{\flip(\compose(\const)(\next))}(x)) \\
+ &     \hyp{\length = \foldr{\zero}{\flip(\compose(\const)(\next))}}
+   = & \flip(\compose(\const)(\next))(a,\length(x)) \\
  &     \href{@functions@#def-flip}
-   = & \compose{\const}{\next}(\length(x),a)
+   = & \compose(\const)(\next)(\length(x),a)
  &     \href{@functions@#def-compose}
    = & \const(\next(\length(x)))(a) \\
  &     \href{@functions@#def-const}

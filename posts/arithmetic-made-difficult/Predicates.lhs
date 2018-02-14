@@ -86,8 +86,8 @@ Let $A$ be a set. Then we have the following.
 
 1. $\pnot(\ptrue) = \pfalse$.
 2. $\pnot(\pfalse) = \ptrue$.
-3. $\compose{\bnot}{\ptrue} = \pfalse$.
-4. $\compose{\bnot}{\pfalse} = \ptrue$.
+3. $\compose(\bnot)(\ptrue) = \pfalse$.
+4. $\compose(\bnot)(\pfalse) = \ptrue$.
 
 ::: proof ::::::::::
 1. If $a \in A$, we have
@@ -126,7 +126,7 @@ $$\begin{eqnarray*}
 as needed.
 3. If $a \in A$, we have
 $$\begin{eqnarray*}
- &   & \compose{\bnot}{\ptrue}(a) \\
+ &   & \compose(\bnot)(\ptrue)(a) \\
  &     \href{@functions@#def-compose}
    = & \bnot(\ptrue(a)) \\
  &     \href{@predicates@#def-ptrue}
@@ -143,7 +143,7 @@ $$\begin{eqnarray*}
 as needed.
 4. If $a \in A$, we have
 $$\begin{eqnarray*}
- &   & \compose{\bnot}{\pfalse}(a) \\
+ &   & \compose(\bnot)(\pfalse)(a) \\
  &     \href{@functions@#def-compose}
    = & \bnot(\pfalse(a)) \\
  &     \href{@predicates@#def-pfalse}

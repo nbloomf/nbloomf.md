@@ -42,7 +42,7 @@ $$\begin{eqnarray*}
  &     \href{@functions@#def-id}
    = & \id(\lft(\ast)) \\
  &     \href{@lists@#def-uncons-inverse-left}
-   = & \compose{\uncons}{\either(\const(\nil),\uncurry(\cons))}(\lft(\ast)) \\
+   = & \compose(\uncons)(\either(\const(\nil),\uncurry(\cons)))(\lft(\ast)) \\
  &     \href{@functions@#def-compose}
    = & \uncons(\either(\const(\nil),\uncurry(\cons))(\lft(\ast))) \\
  &     \href{@disjoint-unions@#def-either-lft}
@@ -57,7 +57,7 @@ $$\begin{eqnarray*}
  &     \href{@functions@#def-id}
    = & \id(\rgt(\tup(a)(x))) \\
  &     \href{@lists@#def-uncons-inverse-left}
-   = & \compose{\uncons}{\either(\const(\nil),\uncurry(\cons))}(\rgt(\tup(a)(x))) \\
+   = & \compose(\uncons)(\either(\const(\nil),\uncurry(\cons)))(\rgt(\tup(a)(x))) \\
  &     \href{@functions@#def-compose}
    = & \uncons(\either(\const(\nil),\uncurry(\cons))(\rgt(\tup(a)(x)))) \\
  &     \href{@disjoint-unions@#def-either-rgt}
@@ -85,7 +85,7 @@ $$\begin{eqnarray*}
  &     \href{@functions@#def-id}
    = & \id(z) \\
  &     \href{@lists@#def-uncons-inverse-right}
-   = & \compose{\either(\const(\nil),\uncurry(\cons))}{\uncons}(z) \\
+   = & \compose(\either(\const(\nil),\uncurry(\cons)))(\uncons)(z) \\
  &     \href{@functions@#def-compose}
    = & \either(\const(\nil),\uncurry(\cons))(\uncons(z)) \\
  &     \hyp{\uncons(z) = \lft(\ast)}
@@ -101,7 +101,7 @@ $$\begin{eqnarray*}
  &     \href{@functions@#def-id}
    = & \id(z) \\
  &     \href{@lists@#def-uncons-inverse-right}
-   = & \compose{\either(\const(\nil),\uncurry(\cons))}{\uncons}(z) \\
+   = & \compose(\either(\const(\nil),\uncurry(\cons)))(\uncons)(z) \\
  &     \href{@functions@#def-compose}
    = & \either(\const(\nil),\uncurry(\cons))(\uncons(z)) \\
  &     \hyp{\uncons(z) = \rgt(\tup(a)(x))}
