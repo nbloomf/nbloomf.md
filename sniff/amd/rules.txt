@@ -384,3 +384,7 @@
 @at@#thm-at-doubleton-one	\\at(\\cons(a,\\cons(b,\\nil)),\\next(\\zero)) = \\rgt(b)
 @at@#thm-at-cons-length	\\at(\\cons(a,x),\\length(x)) = \\head(\\rev(\\cons(a,x)))
 @at@#thm-at-length	\\at(x,\\length(x)) = \\lft(\\ast)
+#=======================#
+#--- map ---------------#
+#=======================#
+

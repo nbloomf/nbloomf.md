@@ -353,12 +353,23 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 while $$\ntimes(\next(a),b) = \ntimes(\next(a),\zero) = \zero;$$ in particular, the statement $$\ntimes(\next(a),\next(c)) = \ntimes(\next(a),b)$$ is false, so that $\next(c) \in C(\zero)$ *vacuously*. So we have $C(\zero) = \nats$, and thus $\zero \in B$. For the inductive step, suppose we have $b \in B$; we wish to show that $\next(b) \in B$, or equivalently that $C(\next(b)) = \nats$. We proceed by induction on $c$ again. The base case $c = \zero$ holds vacuously. For the inductive step, suppose we have $c \in C(\next(b))$. Now suppose further that $$\ntimes(\next(a),\next(b)) = \ntimes(\next(a),\next(c)).$$ Note that
 $$\begin{eqnarray*}
- &   & \ntimes(\next(a),\next(b)) \\
- & = & \nplus(\ntimes(a,\next(c),\next(c))) \\
- & = & \next(\nplus(\ntimes(\next(c),a),c)) \\
+ &   & \ntimes(\next(a),\next(c)) \\
+ &     \href{@times@#cor-times-up-next}
+   = & \nplus(\ntimes(a,\next(c)),\next(c)) \\
+ &     \href{@plus@#thm-plus-next-right}
+   = & \next(\nplus(\ntimes(a,\next(c)),c)) \\
+ &     \href{@times@#thm-times-commutative}
+   = & \next(\nplus(\ntimes(\next(c),a),c)) \\
  &     \href{@times@#cor-times-up-next}
    = & \next(\nplus(\nplus(\ntimes(c,a),a),c)) \\
- & = & \next(\nplus(\nplus(\ntimes(a,c),c),a)).
+ &     \href{@times@#thm-times-commutative}
+   = & \next(\nplus(\nplus(\ntimes(a,c),a),c)) \\
+ &     \href{@plus@#thm-plus-associative}
+   = & \next(\nplus(\ntimes(a,c),\nplus(a,c))) \\
+ &     \href{@plus@#thm-plus-commutative}
+   = & \next(\nplus(\ntimes(a,c),\nplus(c,a))) \\
+ &     \href{@plus@#thm-plus-associative}
+   = & \next(\nplus(\nplus(\ntimes(a,c),c),a))
 \end{eqnarray*}$$
 The analogous statement holds for $b$. So we have
 $$\begin{eqnarray*}
