@@ -96,7 +96,10 @@ $$\begin{eqnarray*}
  &   & \map(\id)(\cons(a,x)) \\
  &     \href{@map@#cor-map-cons}
    = & \cons(\id(a),\map(\id)(x)) \\
- & = & \cons(a,x)
+ &     \hyp{\map(\id)(x) = x}
+   = & \cons(\id(a),x) \\
+ &     \href{@functions@#def-id}
+   = & \cons(a,x)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -140,7 +143,10 @@ $$\begin{eqnarray*}
    = & \map(g)(\cons(f(a),\map(f)(x))) \\
  &     \href{@map@#cor-map-cons}
    = & \cons(g(f(a)),\map(g)(\map(f)(x))) \\
- & = & \cons(\compose(g)(f)(a),\compose(\map(g))(\map(f))(x)) \\
+ &     \href{@functions@#def-compose}
+   = & \cons(\compose(g)(f)(a),\map(g)(\map(f)(x))) \\
+ &     \href{@functions@#def-compose}
+   = & \cons(\compose(g)(f)(a),\compose(\map(g))(\map(f))(x)) \\
  &     \href{@map@#thm-map-compose}
    = & \cons(\compose(g)(f)(a),\map(\compose(g)(f))(x)) \\
  &     \href{@map@#cor-map-cons}
@@ -172,10 +178,12 @@ $$\begin{eqnarray*}
  &   & \map(f)(\tail(\nil)) \\
  &     \href{@head-tail@#thm-tail-nil}
    = & \map(f)(\nil) \\
- & = & \nil \\
+ &     \href{@map@#cor-map-nil}
+   = & \nil \\
  &     \href{@head-tail@#thm-tail-nil}
    = & \tail(\nil) \\
- & = & \tail(\map(f)(\nil))
+ &     \href{@map@#cor-map-nil}
+   = & \tail(\map(f)(\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Then
 $$\begin{eqnarray*}
@@ -184,7 +192,8 @@ $$\begin{eqnarray*}
    = & \map(f)(x) \\
  &     \href{@head-tail@#thm-tail-cons}
    = & \tail(\cons(f(a),\map(f)(x))) \\
- & = & \tail(\map(f)(\cons(a,x)))
+ &     \href{@map@#cor-map-cons}
+   = & \tail(\map(f)(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -209,26 +218,27 @@ Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. For all $x,y \in \list
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \map(f)(\cat(x,y)) \\
- & = & \map(f)(\cat(\nil,y)) \\
+ &   & \map(f)(\cat(\nil,y)) \\
  &     \href{@cat@#cor-cat-nil}
    = & \map(f)(y) \\
  &     \href{@cat@#cor-cat-nil}
    = & \cat(\nil,\map(f)(y)) \\
- & = & \cat(\map(f)(\nil),\map(f)(y)) \\
- & = & \cat(\map(f)(x),\map(f)(y))
+ &     \href{@map@#cor-map-nil}
+   = & \cat(\map(f)(\nil),\map(f)(y))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x \in \lists{A}$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \map(f)(\cat(\cons(a,x),y)) \\
  &     \href{@cat@#cor-cat-cons}
    = & \map(f)(\cons(a,\cat(x,y))) \\
- & = & \cons(f(a),\map(f)(\cat(x,y))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \cons(f(a),\map(f)(\cat(x,y))) \\
  &     \href{@map@#thm-map-cat}
    = & \cons(f(a),\cat(\map(f)(x),\map(f)(y))) \\
  &     \href{@cat@#cor-cat-cons}
    = & \cat(\cons(f(a),\map(f)(x)),\map(f)(y)) \\
- & = & \cat(\map(f)(\cons(a,x)),\map(f)(y))
+ &     \href{@map@#cor-map-cons}
+   = & \cat(\map(f)(\cons(a,x)),\map(f)(y))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -247,6 +257,7 @@ as needed.
 $\map(f)$ respects $\snoc$.
 
 :::::: theorem :::::
+[]{#thm-map-snoc}
 Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. For all $a \in A$ and $x \in \lists{A}$, we have $$\map(f)(\snoc(a,x)) = \snoc(f(a),\map(f)(x)).$$
 
 ::: proof ::::::::::
@@ -255,23 +266,28 @@ $$\begin{eqnarray*}
  &   & \map(f)(\snoc(a,\nil)) \\
  &     \href{@snoc@#cor-snoc-nil}
    = & \map(f)(\cons(a,\nil)) \\
- & = & \cons(f(a),\map(f)(\nil)) \\
+ &     \href{@map@#cor-map-cons}
+   = & \cons(f(a),\map(f)(\nil)) \\
  &     \href{@map@#cor-map-nil}
    = & \cons(f(a),\nil) \\
  &     \href{@snoc@#cor-snoc-nil}
    = & \snoc(f(a),\nil) \\
- & = & \snoc(f(a),\map(f)(\nil))
+ &     \href{@map@#cor-map-nil}
+   = & \snoc(f(a),\map(f)(\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $f$ and $a$ for some $x$, and let $b \in A$. Now
 $$\begin{eqnarray*}
  &   & \map(f)(\snoc(a,\cons(b,x))) \\
  &     \href{@snoc@#cor-snoc-cons}
    = & \map(f)(\cons(b,\snoc(a,x))) \\
- & = & \cons(f(b),\map(f)(\snoc(a,x))) \\
- & = & \cons(f(b),\snoc(f(a),\map(f)(x))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \cons(f(b),\map(f)(\snoc(a,x))) \\
+ &     \hyp{\map(f)(\snoc(a,x)) = \snoc(f(a),\map(f)(x))}
+   = & \cons(f(b),\snoc(f(a),\map(f)(x))) \\
  &     \href{@snoc@#cor-snoc-cons}
    = & \snoc(f(a),\cons(f(b),\map(f)(x))) \\
- & = & \snoc(f(a),\map(f)(\cons(b,x)))
+ &     \href{@map@#cor-map-cons}
+   = & \snoc(f(a),\map(f)(\cons(b,x)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -290,31 +306,35 @@ as needed.
 $\map(f)$ respects $\rev$.
 
 :::::: theorem :::::
+[]{#thm-map-rev}
 Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. For all $x \in \lists{A}$, we have $$\map(f)(\rev(x)) = \rev(\map(f)(x)).$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \map(f)(\rev(x)) \\
- & = & \map(f)(\rev(\nil)) \\
+ &   & \map(f)(\rev(\nil)) \\
  &     \href{@rev@#cor-rev-nil}
    = & \map(f)(\nil) \\
- & = & \nil \\
+ &     \href{@map@#cor-map-nil}
+   = & \nil \\
  &     \href{@rev@#cor-rev-nil}
    = & \rev(\nil) \\
- & = & \rev(\map(f)(\nil)) \\
- & = & \rev(\map(f)(x))
+ &     \href{@map@#cor-map-nil}
+   = & \rev(\map(f)(\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equation holds for some $x \in \lists{A}$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \map(f)(\rev(\cons(a,x))) \\
  &     \href{@rev@#cor-rev-cons}
    = & \map(f)(\snoc(a,\rev(x))) \\
- & = & \snoc(f(a),\map(f)(\rev(x))) \\
- & = & \snoc(f(a),\rev(\map(f)(x))) \\
+ &     \href{@map@#thm-map-snoc}
+   = & \snoc(f(a),\map(f)(\rev(x))) \\
+ &     \hyp{\map(f)(\rev(x)) = \rev(\map(f)(x))}
+   = & \snoc(f(a),\rev(\map(f)(x))) \\
  &     \href{@rev@#cor-rev-cons}
    = & \rev(\cons(f(a),\map(f)(x))) \\
- & = & \rev(\map(f)(\cons(a,x)))
+ &     \href{@map@#cor-map-cons}
+   = & \rev(\map(f)(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -333,6 +353,7 @@ as needed.
 $\map(f)$ interacts with $\at$:
 
 :::::: theorem :::::
+[]{#thm-at-map}
 Let $A$ and $B$ be sets with a map $f : A \rightarrow B$ and $x \in \lists{A}$. Then we have $$\at(\map(f)(x),k) = \uPair(\id,f)(\at(x,k)).$$
 
 ::: proof ::::::::::
@@ -345,7 +366,8 @@ $$\begin{eqnarray*}
    = & \lft(\ast) \\
  &     \href{@functions@#def-id}
    = & \lft(\id(\ast)) \\
- & = & \uPair(\id,f)(\lft(\ast)) \\
+ &     \href{@disjoint-unions@#thm-uPair-lft}
+   = & \uPair(\id,f)(\lft(\ast)) \\
  &     \href{@at@#thm-at-nil}
    = & \uPair(\id,f)(\at(\nil,k))
 \end{eqnarray*}$$
@@ -358,7 +380,8 @@ $$\begin{eqnarray*}
    = & \rgt(f(a)) \\
  &     \href{@disjoint-unions@#thm-uPair-rgt}
    = & \uPair(\id,f)(\rgt(a)) \\
- & = & \uPair(\id,f)(\at(\cons(a,y),\zero))
+ &     \href{@at@#thm-at-cons-zero}
+   = & \uPair(\id,f)(\at(\cons(a,y),\zero))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ and $y$ for some $k$. Now
 $$\begin{eqnarray*}
@@ -367,7 +390,8 @@ $$\begin{eqnarray*}
    = & \at(\cons(f(a),\map(f)(y)),\next(k)) \\
  &     \href{@at@#thm-at-cons-next}
    = & \at(\map(f)(y),k) \\
- & = & \uPair(\id,f)(\at(y,k)) \\
+ &     \hyp{\at(\map(f)(x),k) = \uPair(\id,f)(\at(y,k))}
+   = & \uPair(\id,f)(\at(y,k)) \\
  &     \href{@at@#thm-at-cons-next}
    = & \uPair(\id,f)(\at(\cons(a,y),\next(k)))
 \end{eqnarray*}$$
@@ -388,16 +412,15 @@ as needed.
 And $\map$ preserves $\length$.
 
 :::::: theorem :::::
+[]{#thm-length-map}
 Let $A$ and $B$ be sets with a map $f : A \rightarrow B$. Then for all $x \in \lists{A}$ we have $$\length(\map(f)(x)) = \length(x).$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$ we have
 $$\begin{eqnarray*}
- &   & \length(\map(f)(x)) \\
- & = & \length(\map(f)(\nil)) \\
+ &   & \length(\map(f)(\nil)) \\
  &     \href{@map@#cor-map-nil}
-   = & \length(\nil) \\
- & = & \length(x)
+   = & \length(\nil)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
@@ -406,7 +429,8 @@ $$\begin{eqnarray*}
    = & \length(\cons(f(a),\map(f)(x))) \\
  &     \href{@length@#cor-length-cons}
    = & \next(\length(\map(f)(x))) \\
- & = & \next(\length(x)) \\
+ &     \hyp{\length(\map(f)(x)) = \length(x)}
+   = & \next(\length(x)) \\
  &     \href{@length@#cor-length-cons}
    = & \length(\cons(a,x))
 \end{eqnarray*}$$
@@ -427,6 +451,7 @@ as claimed.
 $\map$ preserves $\isnil$.
 
 :::::: theorem :::::
+[]{#thm-isnil-map}
 Let $A$ and $B$ be sets with $f : A \rightarrow B$. For all $x \in \lists{A}$, we have $$\isnil(\map(f)(x)) = \isnil(x).$$
 
 ::: proof ::::::::::
