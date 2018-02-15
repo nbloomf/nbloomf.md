@@ -20,7 +20,7 @@ Finally, $\bor$.
 
 :::::: definition ::
 []{#def-or}
-We define $\bor : \bool \times \bool \rightarrow \bool$ by $$\bor(p,q) = \bif{p}{\btrue}{\bif{q}{\btrue}{\bfalse}}.$$
+We define $\bor : \bool \rightarrow \bool \rightarrow \bool$ by $$\bor(p,q) = \bif{p}{\btrue}{\bif{q}{\btrue}{\bfalse}}.$$
 
 In Haskell:
 

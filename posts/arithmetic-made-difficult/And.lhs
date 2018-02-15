@@ -19,7 +19,7 @@ Next, $\band$.
 
 :::::: definition ::
 []{#def-and}
-We define a map $\band : \bool \times \bool \rightarrow \bool$ by $$\band(p,q) = \bif{p}{\bif{q}{\btrue}{\bfalse}}{\bfalse}.$$
+We define a map $\band : \bool \rightarrow \bool \rightarrow \bool$ by $$\band(p,q) = \bif{p}{\bif{q}{\btrue}{\bfalse}}{\bfalse}.$$
 
 In Haskell: 
 

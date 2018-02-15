@@ -21,7 +21,7 @@ Next we define implication on booleans.
 
 :::::: definition ::
 []{#def-implies}
-We define $\bimpl : \bool \times \bool \rightarrow \bool$ by $$\bimpl(p,q) = \bif{p}{q}{\btrue}.$$
+We define $\bimpl : \bool \rightarrow \bool \rightarrow \bool$ by $$\bimpl(p,q) = \bif{p}{q}{\btrue}.$$
 
 In Haskell:
 

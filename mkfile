@@ -167,9 +167,9 @@ sniff-amd-fencediv:VQ:
   if [ -z "$FENCEDIV" ]; then
     echo 'Fenced Divs OK' | doppler lightgreen
   else
+    echo "$FENCEDIV"
     echo 'Fenced Divs' | doppler lightred
     echo $(echo "$FENCEDIV" | wc -l) 'problems found' | doppler lightred
-    echo "$FENCEDIV"
     exit 1
   fi
 
@@ -181,9 +181,9 @@ sniff-amd-plaindiv:VQ:
   if [ -z "$PLAINDIV" ]; then
     echo 'Plain Divs OK' | doppler lightgreen
   else
+    echo "$PLAINDIV"
     echo 'Plain Divs' | doppler lightred
     echo $(echo "$PLAINDIV" | wc -l) 'problems found' | doppler lightred
-    echo "$PLAINDIV"
     exit 1
   fi
 
@@ -212,9 +212,9 @@ sniff-amd-nestdiv:VQ:
   if [ -z "$NESTDIV" ]; then
     echo 'Nested Divs OK' | doppler lightgreen
   else
+    echo "$NESTDIV"
     echo 'Nested Divs' | doppler lightred
     echo $( echo "$NESTDIV" | wc -l ) 'problems found' | doppler lightred
-    echo "$NESTDIV"
     exit 1
   fi
 
@@ -225,9 +225,9 @@ sniff-amd-balance:VQ:
   if [ -z "$BALANCE" ]; then
     echo 'Delimiters OK' | doppler lightgreen
   else
+    echo "$BALANCE"
     echo 'Delimiters' | doppler lightred
     echo $( echo "$BALANCE" | wc -l ) 'problems found' | doppler lightred
-    echo "$BALANCE"
     exit 1
   fi
   
@@ -236,9 +236,9 @@ sniff-amd-balance:VQ:
   if [ -z "$BALANCE" ]; then
     echo "Eqnarray Delimiters OK" | doppler lightgreen
   else
+    echo "$BALANCE"
     echo "Eqnarray Delimiters" | doppler lightred
     echo $( echo "$BALANCE" | wc -l ) 'problems found' | doppler lightred
-    echo "$BALANCE"
     exit 1
   fi
 
@@ -246,16 +246,16 @@ sniff-amd-balance:VQ:
 sniff-amd-refname:VQ:
   echo 'Checking Reference Names' | doppler lightblue
   REFNAME=$( grep '^\[\](#' posts/arithmetic-made-difficult/* \
-    | sed 's/\[\](\(#[^)]*\)).*/ \1/' \
+    | sed 's/\[\]{\(#[^}]*\)}.*/ \1/' \
     | grep -v '#def-[a-z-]*$' \
     | grep -v '#thm-[a-z-]*' \
     || true )
   if [ -z "$REFNAME" ]; then
     echo 'Reference Names OK' | doppler lightgreen
   else
+    echo "$REFNAME"
     echo 'Reference Names' | doppler lightred
     echo $( echo "$REFNAME" | wc -l ) 'problems found' | doppler lightred
-    echo "$REFNAME"
     exit 1
   fi
 
@@ -272,9 +272,9 @@ sniff-amd-eqnarray:VQ:
   if [ -z "$EQNARRAY" ]; then
     echo 'Eqnarray OK' | doppler lightgreen
   else
+    echo "$EQNARRAY"
     echo 'Eqnarray' | doppler lightred
     echo $( echo "$EQNARRAY" | wc -l ) 'problems found' | doppler lightred
-    echo "$EQNARRAY"
     exit 1
   fi
 
@@ -287,9 +287,9 @@ sniff-amd-slugs:VQ:
   if [ -z "$SLUGS" ]; then
     echo 'Slug form OK' | doppler lightgreen
   else
+    echo "$SLUGS"
     echo 'Slug form' | doppler lightred
     echo $( echo "$SLUGS" | wc -l ) 'problems found' | doppler lightred
-    echo "$SLUGS"
     exit 1
   fi
   
@@ -317,9 +317,9 @@ sniff-amd-slugs:VQ:
   if [ -z "$SLUGS" ]; then
     echo 'Slug existence OK' | doppler lightgreen
   else
+    echo "$SLUGS"
     echo 'Slug existence' | doppler lightred
     echo $( echo "$SLUGS" | wc -l ) 'problems found' | doppler lightred
-    echo "$SLUGS"
     exit 1
   fi
 
@@ -334,9 +334,9 @@ sniff-amd-testtext:VQ:
   if [ -z "$TESTTEXT" ]; then
     echo 'Test text OK' | doppler lightgreen
   else
+    echo "$TESTTEXT"
     echo 'Test text' | doppler lightred
     echo $( echo "$TESTTEXT" | wc -l ) 'problems found' | doppler lightred
-    echo "$TESTTEXT"
     exit 1
   fi
 
@@ -367,9 +367,9 @@ sniff-amd-rewrite:VQ:
   if [ -z "$REWRITE" ]; then
     echo 'Term rewrites OK' | doppler lightgreen
   else
+    echo "$REWRITE"
     echo 'Term rewrites' | doppler lightred
     echo $( echo "$REWRITE" | wc -l ) 'problems found' | doppler lightred
-    echo "$REWRITE"
     exit 1
   fi
 
@@ -399,9 +399,9 @@ sniff-amd-let:VQ:
   if [ -z "$REWRITE" ]; then
     echo 'Let rewrites OK' | doppler lightgreen
   else
+    echo "$REWRITE"
     echo 'Let rewrites' | doppler lightred
     echo $( echo "$REWRITE" | wc -l ) 'problems found' | doppler lightred
-    echo "$REWRITE"
     exit 1
   fi
 
@@ -434,9 +434,10 @@ sniff-amd-crossref:VQ:
   if [ -z "$CROSS" ]; then
     echo 'Cross references OK' | doppler lightgreen
   else
-    echo 'Cross references' | doppler lightred
     echo "$CROSS"
+    echo 'Cross references' | doppler lightred
     echo $( echo "$CROSS" | wc -l ) 'problems found' | doppler lightred
+    exit 1
   fi
 
 #-- check latex commands against whitelist --#
@@ -452,9 +453,9 @@ sniff-amd-latex:VQ:
   if [ -z "$LATEX" ]; then
     echo 'Latex commands OK' | doppler lightgreen
   else
+    echo "$LATEX"
     echo 'Latex commands' | doppler lightred
     echo $( echo "$LATEX" | wc -l ) 'problems found' | doppler lightred
-    echo "$LATEX"
     exit 1
   fi
 
@@ -472,9 +473,9 @@ sniff-amd-import:VQ:
       || true )
     if [ "$IMPORT" ]; then
       echo "$file"
+      echo "$IMPORT"
       echo 'Import order' | doppler lightred
       echo $( echo "$IMPORT" | wc -l ) 'problems found' | doppler lightred
-      echo "$IMPORT"
       FAILED='oh no'
     fi
   done
@@ -494,9 +495,9 @@ sniff-amd-labels:VQ:
   if [ -z "$LABELS" ]; then
     echo 'Unique labels OK' | doppler lightgreen
   else
+    echo "$LABELS"
     echo 'Unique labels' | doppler lightred
     echo $( echo "$LABELS" | wc -l ) 'problems found' | doppler lightred
-    echo "$LABELS"
     exit 1
   fi
 
@@ -513,8 +514,38 @@ sniff-amd-eqnarray-ends:VQ:
   if [ -z "$ENDS" ]; then
     echo 'Eqnarray line ends OK' | doppler lightgreen
   else
+    echo "$ENDS"
     echo 'Eqnarray line ends' | doppler lightred
     echo $( echo "$ENDS" | wc -l ) 'problems found' | doppler lightred
-    echo "$ENDS"
+    exit 1
+  fi
+
+#-- label format --#
+sniff-amd-label-format:VQ:
+  echo 'Checking Theorem labels' | doppler lightblue
+  LABELS=$( awk '/: theorem :/{printf FILENAME ":" FNR " " $0; getline; print;}' \
+      posts/arithmetic-made-difficult/* \
+    | grep -v ':::::: theorem :::::\[\]{#[a-z][a-zA-Z-]*}\(\[\]{#[a-z][a-zA-Z-]*}\)*$' \
+    || true )
+  if [ -z "$LABELS" ]; then
+    echo 'Theorem labels OK' | doppler lightgreen
+  else
+    echo "$LABELS"
+    echo 'Theorem labels' | doppler lightred
+    echo $( echo "$LABELS" | wc -l ) 'problems found' | doppler lightred
+    exit 1
+  fi
+  
+  echo 'Checking Definition labels' | doppler lightblue
+  LABELS=$( awk '/: definition :/{printf FILENAME ":" FNR " " $0; getline; print;}' \
+      posts/arithmetic-made-difficult/* \
+    | grep -v ':::::: definition ::\[\]{#[a-z][a-zA-Z-]*}\(\[\]{#[a-z][a-zA-Z-]*}\)*$' \
+    || true )
+  if [ -z "$LABELS" ]; then
+    echo 'Definition labels OK' | doppler lightgreen
+  else
+    echo "$LABELS"
+    echo 'Definition labels' | doppler lightred
+    echo $( echo "$LABELS" | wc -l ) 'problems found' | doppler lightred
     exit 1
   fi
