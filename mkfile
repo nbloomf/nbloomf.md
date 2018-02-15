@@ -428,6 +428,7 @@ sniff-amd-suggest-apply:VQ:
   ./suggestions.txt
   sed -i '' $'s/~/\\\n/' posts/arithmetic-made-difficult/*
 
+#-- ADD ME TO THE LIST WHEN I'M LESS NOISY --#
 #-- check existence of crossrefs --#
 sniff-amd-crossref:VQ:
   CROSS=$( grep '^ & = & ' posts/arithmetic-made-difficult/* || true )
@@ -459,6 +460,7 @@ sniff-amd-latex:VQ:
     exit 1
   fi
 
+#-- consistent order of module imports --#
 sniff-amd-import:VQ:
   echo 'Checking Import order' | doppler lightblue
   for file in posts/arithmetic-made-difficult/*
@@ -520,6 +522,7 @@ sniff-amd-eqnarray-ends:VQ:
     exit 1
   fi
 
+#-- ADD ME TO THE LIST WHEN I'M LESS NOISY --#
 #-- label format --#
 sniff-amd-label-format:VQ:
   echo 'Checking Theorem labels' | doppler lightblue

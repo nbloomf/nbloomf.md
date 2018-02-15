@@ -216,7 +216,7 @@ We define $\prev : \nats \rightarrow \nats$ by $$\prev = \compose(\either(\const
 Now $\prev$, and $\iszero$ have some useful properties.
 
 :::::: theorem :::::
-[]{@unary@#thm-prev-zero}[]{@unary@#thm-prev-next}[]{@unary@#thm-iszero-zero}[]{@unary@#thm-iszero-next}
+[]{#thm-prev-zero}[]{#thm-prev-next}[]{#thm-iszero-zero}[]{#thm-iszero-next}
 1. $\prev(\zero) = \zero$.
 2. $\prev(\next(n)) = n$.
 3. $\iszero(\zero) = \btrue$.

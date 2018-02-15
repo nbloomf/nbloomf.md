@@ -487,7 +487,7 @@ We'll prove both of these at once. Suppose $\nleq(a,b)$. Now $\nmin(a,b) = a$ an
 And $\nmax$ and $\nmin$ distribute over each other.
 
 :::::: theorem :::::
-[]{}[#thm-min-max-distribute]{#thm-max-min-distribute}
+[]{#thm-min-max-distribute}[]{#thm-max-min-distribute}
 Let $a,b,c \in \nats$. Then we have the following.
 
 1. $\nmin(a,\nmax(b,c)) = \nmax(\nmin(a,b),\nmin(a,c))$.

@@ -290,7 +290,7 @@ as claimed.
 $\band$ is associative.
 
 :::::: theorem :::::
-[]{@#thm-and-associative}
+[]{#thm-and-associative}
 For all $a,b,c \in \bool$, we have $$\band(\band(a,b),c) = \band(a,\band(b,c)).$$
 
 ::: proof ::::::::::
