@@ -872,7 +872,8 @@ $$\begin{eqnarray*}
  &     \href{@map@#cor-map-nil}
    = & \sublist(\map(f)(x),\nil) \\
  & = & \isnil(\map(f)(x)) \\
- & = & \isnil(x) \\
+ &     \href{@map@#thm-isnil-map}
+   = & \isnil(x) \\
  & = & \sublist(x,\nil)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equation holds for all $x$ for some $y$, and let $b \in A$. We have two possibilities for $x$. If $x = \nil$, we have

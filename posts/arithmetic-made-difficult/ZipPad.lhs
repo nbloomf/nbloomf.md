@@ -245,7 +245,8 @@ $$\begin{eqnarray*}
  &   & \length(\zipPad(u,v)(x,y)) \\
  & = & \length(\zipPad(u,v)(\nil,y)) \\
  & = & \length(\map(\tup(u))(y)) \\
- & = & \length(y) \\
+ &     \href{@map@#thm-length-map}
+   = & \length(y) \\
  &     \href{@max-min@#thm-max-zero-left}
    = & \nmax(\zero,\length(y)) \\
  & = & \nmax(\length(\nil),\length(y)) \\
@@ -256,7 +257,8 @@ $$\begin{eqnarray*}
  &   & \length(\zipPad(u,v)(\cons(a,x),y)) \\
  & = & \length(\zipPad(u,v)(\cons(a,x),\nil)) \\
  & = & \length(\map(\flip(\tup)(v))(\cons(a,x))) \\
- & = & \length(\cons(a,x)) \\
+ &     \href{@map@#thm-length-map}
+   = & \length(\cons(a,x)) \\
  & = & \nmax(\length(\cons(a,x)),\zero) \\
  &     \href{@length@#cor-length-nil}
    = & \nmax(\length(\cons(a,x)),\length(\nil)) \\

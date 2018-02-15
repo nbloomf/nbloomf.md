@@ -817,7 +817,8 @@ Note that
 $$\begin{eqnarray*}
  &   & \map(f)(\lcs(x,y)) \\
  & = & \map(f)(\rev(\lcp(\rev(x),\rev(y)))) \\
- & = & \rev(\map(f)(\lcp(\rev(x),\rev(y)))) \\
+ &     \href{@map@#thm-map-rev}
+   = & \rev(\map(f)(\lcp(\rev(x),\rev(y)))) \\
  & = & \rev(\lcp(\map(f)(\rev(x)),\map(f)(\rev(y)))) \\
  & = & \rev(\lcp(\rev(\map(f)(x)),\rev(\map(f)(y)))) \\
  & = & \lcs(\map(f)(x),\map(f)(y))

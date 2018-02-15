@@ -377,12 +377,14 @@ Note that
 $$\begin{eqnarray*}
  &   & \inits(\map(f)(x)) \\
  & = & \rev(\map(\rev)(\tails(\rev(\map(f)(x))))) \\
- & = & \rev(\map(\rev)(\tails(\map(f)(\rev(x))))) \\
+ &     \href{@map@#thm-map-rev}
+   = & \rev(\map(\rev)(\tails(\map(f)(\rev(x))))) \\
  & = & \rev(\map(\rev)(\map(\map(f))(\tails(\rev(x))))) \\
  & = & \rev(\map(\rev \circ \map(f))(\tails(\rev(x)))) \\
  & = & \rev(\map(\map(f) \circ \rev)(\tails(\rev(x)))) \\
  & = & \rev(\map(\map(f))(\map(\rev)(\tails(\rev(x))))) \\
- & = & \map(\map(f))(\rev(\map(\rev)(\tails(\rev(x))))) \\
+ &     \href{@map@#thm-map-rev}
+   = & \map(\map(f))(\rev(\map(\rev)(\tails(\rev(x))))) \\
  & = & \map(\map(f))(\inits(x))
 \end{eqnarray*}$$
 as claimed.
@@ -509,7 +511,8 @@ $$\begin{eqnarray*}
  & = & \map(\rev)(\rev(\inits(\rev(\lcs(x,y))))) \\
  & = & \map(\rev)(\rev(\inits(\lcp(\rev(x),\rev(y))))) \\
  & = & \map(\rev)(\rev(\lcp(\inits(\rev(x)),\inits(\rev(y))))) \\
- & = & \rev(\map(\rev)(\lcp(\inits(\rev(x)),\inits(\rev(y))))) \\
+ &     \href{@map@#thm-map-rev}
+   = & \rev(\map(\rev)(\lcp(\inits(\rev(x)),\inits(\rev(y))))) \\
  & = & \rev(\lcp(\map(\rev)(\inits(\rev(x))),\map(\rev)(\inits(\rev(y))))) \\
  & = & \lcs(\rev(\map(\rev)(\inits(\rev(x)))),\rev(\map(\rev)(\inits(\rev(y))))) \\
  & = & \lcs(\tails(x),\tails(y))
