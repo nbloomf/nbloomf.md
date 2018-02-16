@@ -15,10 +15,7 @@ slug: lists
 > import Tuples
 > import DisjointUnions
 > import Booleans
-> import Not
 > import And
-> import Or
-> import Implies
 
 In the previous post, we saw how the process of describing $\nats$ in terms of its universal map $\natrec$ can be generalized: take an endofunctor $F$, assume it has an initial algebra, and see how it behaves. Here's an example.
 
@@ -193,12 +190,12 @@ And the concrete type:
 >     return (list xs)
 > 
 >   shrink  N      = []
->   shrink (C a x) = [x]
+>   shrink (C _ x) = [x]
 > 
 > 
 > instance (Arbitrary a) => CoArbitrary (ConsList a) where
->   coarbitrary N = variant 0
->   coarbitrary (C a x) = variant 1 . coarbitrary x
+>   coarbitrary N = variant (0 :: Integer)
+>   coarbitrary (C _ x) = variant (1 :: Integer) . coarbitrary x
 
 This business about initial algebras is nice, but it will be convenient to unpack this definition a little bit. First, we give the following more concrete description of $F_A$-algebras:
 

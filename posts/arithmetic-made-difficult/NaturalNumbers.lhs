@@ -6,8 +6,7 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: nats
 ---
 
-> {-# LANGUAGE BangPatterns #-}
-> {-# LANGUAGE NoImplicitPrelude #-}
+> {-# LANGUAGE NoImplicitPrelude, BangPatterns #-}
 > module NaturalNumbers
 >   ( Natural(..), Unary()
 >   , isZero, prev, naturalRec
@@ -19,10 +18,6 @@ slug: nats
 > import Functions
 > import DisjointUnions
 > import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
 > import Unary
 
 We have assumed the existence of a set $\nats$ such that there is a unique inductive set homomorphism from $\nats$ to any other inductive set. But it turns out that this set is not *unique* with this property; any other inductive set which is *isomorphic* to $\nats$ enjoys it as well. In fact we've already seen one such set, namely $1 + \nats$.
@@ -134,13 +129,13 @@ Suite.
 
 > _test_nats :: (TypeName n, Natural n, Show n, Arbitrary n, Equal n)
 >   => n -> Int -> Int -> IO ()
-> _test_nats n maxSize numCases = do
+> _test_nats n size cases = do
 >   testLabel1 "nats" n
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_unnext_zero n)

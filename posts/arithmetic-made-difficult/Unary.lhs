@@ -6,8 +6,7 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: unary
 ---
 
-> {-# LANGUAGE BangPatterns #-}
-> {-# LANGUAGE NoImplicitPrelude #-}
+> {-# LANGUAGE NoImplicitPrelude, BangPatterns #-}
 > module Unary
 >   ( Unary(Z,N), mkUnary, natRec
 >   ) where
@@ -16,10 +15,6 @@ slug: unary
 > import Test.QuickCheck.Modifiers (NonNegative(..))
 > import Testing
 > import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
 
 A nice consequence of wrapping up recursion in the $\natrec$ function is that it allows us to write programs, independent of any implementation, and prove things about them. We'll see lots of examples of this, but first we need to establish some structural results.
 
@@ -487,8 +482,8 @@ Along the way we'll be writing some proofs involving ``Nat``s, but it is also us
 >   shrink (N k) = [k]
 > 
 > instance CoArbitrary Unary where
->   coarbitrary Z = variant 0
->   coarbitrary (N x) = variant 1 . coarbitrary x
+>   coarbitrary Z = variant (0 :: Integer)
+>   coarbitrary (N x) = variant (1 :: Integer) . coarbitrary x
 
 We can try out this instance with the following command.
 

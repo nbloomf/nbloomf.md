@@ -12,30 +12,14 @@ slug: dedupe
 >   ) where
 > 
 > import Testing
-> import Tuples
 > import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
 > import NaturalNumbers
-> import Plus
 > import Lists
 > import Snoc
 > import Reverse
-> import Cat
-> import Length
-> import Map
-> import UnfoldN
-> import Zip
 > import PrefixAndSuffix
-> import AllAndAny
-> import TailsAndInits
 > import Filter
 > import Elt
-> import Count
-> import Repeat
-> import Select
 > import Unique
 > import Delete
 
@@ -571,13 +555,13 @@ Suite:
 >   , TypeName (t a), List t
 >   , Equal (t a), Show (t a), Arbitrary (t a), Equal (t (t a))
 >   ) => t a -> Int -> Int -> IO ()
-> _test_dedupe t maxSize numCases = do
+> _test_dedupe t size cases = do
 >   testLabel1 "dedupeL & dedupeR" t
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_dedupeL_nil t)

@@ -15,10 +15,6 @@ slug: disjoint-unions
 > import Testing
 > import Functions
 > import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
 
 Dual to sets of tuples are disjoint sums.
 
@@ -131,8 +127,8 @@ The previous results suggest that we can model $A + B$ with the Haskell type ``E
 > 
 > instance (Equal a, Equal b) => Equal (Either a b) where
 >   eq (Left a1)  (Left a2)  = eq a1 a2
->   eq (Left a1)  (Right b2) = false
->   eq (Right b1) (Left a2)  = false
+>   eq (Left _)   (Right _)  = false
+>   eq (Right _)  (Left _)   = false
 >   eq (Right b1) (Right b2) = eq b1 b2
 
 For example, $\id_{A + B}$ is an $\either$.

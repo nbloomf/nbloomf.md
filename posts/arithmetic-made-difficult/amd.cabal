@@ -967,7 +967,7 @@ test-suite amd-zip
   type: exitcode-stdio-1.0
   main-is: Zip.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -fforce-recomp -Wall -main-is Zip.main_zip
+  ghc-options: -Wall -main-is Zip.main_zip
   other-modules:
     Testing,
     Booleans,
@@ -1686,7 +1686,7 @@ test-suite amd-dedupe
   type: exitcode-stdio-1.0
   main-is: Dedupe.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -main-is Dedupe.main_dedupe
+  ghc-options: -fforce-recomp -Wall -main-is Dedupe.main_dedupe
   other-modules:
     Testing,
     Booleans,

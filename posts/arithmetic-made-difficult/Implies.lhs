@@ -471,9 +471,10 @@ as claimed.
 
 ::: test :::::::::::
 
-> _test_impl_and_compatible :: (Boolean b, Equal b)
+> _test_impl_and_compatible
+>   :: (Boolean b, Equal b)
 >   => b -> Test (b -> b -> b -> b -> Bool)
-> _test_impl_and_compatible b =
+> _test_impl_and_compatible _ =
 >   testName "if and(impl(p,r),impl(q,s)) then impl(and(p,q),and(r,s))" $
 >   \p q r s -> isTrue $ ifThenElse (and (impl p r) (impl q s))
 >     (impl (and p q) (and r s))

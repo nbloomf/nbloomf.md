@@ -14,10 +14,6 @@ slug: bfoldr
 > import Testing
 > import Tuples
 > import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
 > import NaturalNumbers
 > import Lists
 > import HeadAndTail
@@ -115,13 +111,13 @@ Suite:
 >   , CoArbitrary b, CoArbitrary c, Arbitrary b, Arbitrary c, Show b, Equal c
 >   , TypeName b, TypeName c
 >   ) => t a -> b -> c -> Int -> Int -> IO ()
-> _test_bfoldr t b c maxSize numCases = do
+> _test_bfoldr t b c size cases = do
 >   testLabel3 "bfoldr" t b c
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_bfoldr_equiv t b c)

@@ -17,9 +17,6 @@ slug: head-tail
 > import DisjointUnions
 > import Booleans
 > import Not
-> import And
-> import Or
-> import Implies
 > import NaturalNumbers
 > import Lists
 
@@ -98,7 +95,7 @@ as claimed.
 > 
 > _test_isNil_cons :: (List t, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
-> _test_isNil_cons z =
+> _test_isNil_cons _ =
 >   testName "isNil(cons(a,x)) == false" $
 >   \a x -> eq (isNil (cons a x)) false
 
@@ -159,7 +156,7 @@ as claimed.
 > 
 > _test_head_cons :: (List t, Equal (t a), Equal a)
 >   => t a -> Test (a -> t a -> Bool)
-> _test_head_cons z =
+> _test_head_cons _ =
 >   testName "head(cons(a,x)) == rgt(a)" $
 >   \a x -> eq (head (cons a x)) (rgt a)
 
@@ -220,7 +217,7 @@ as claimed.
 > 
 > _test_tail_cons :: (List t, Equal (t a))
 >   => t a -> Test (a -> t a -> Bool)
-> _test_tail_cons z =
+> _test_tail_cons _ =
 >   testName "tail(cons(a,x)) == x" $
 >   \a x -> eq (tail (cons a x)) x
 
@@ -257,13 +254,13 @@ Suite:
 >   ( TypeName a, Equal a, Show a, Arbitrary a
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a)
 >   ) => t a -> Int -> Int -> IO ()
-> _test_head_tail t maxSize numCases = do
+> _test_head_tail t size cases = do
 >   testLabel1 "head and tail" t
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_isNil_nil t)

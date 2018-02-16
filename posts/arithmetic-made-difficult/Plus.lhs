@@ -14,10 +14,6 @@ slug: plus
 > import Testing
 > import Functions
 > import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
 > import NaturalNumbers
 > import SimpleRecursion
 
@@ -225,13 +221,13 @@ Suite:
 > _test_plus
 >   :: (TypeName n, Natural n, Equal n, Show n, Arbitrary n)
 >   => n -> (n -> n -> n) -> Int -> Int -> IO ()
-> _test_plus n f maxSize numCases = do
+> _test_plus n f size cases = do
 >   testLabel1 "plus" n
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_plus_zero_left n f)

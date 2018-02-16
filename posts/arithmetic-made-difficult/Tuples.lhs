@@ -8,17 +8,14 @@ slug: tuples
 
 > {-# LANGUAGE NoImplicitPrelude, FlexibleContexts #-}
 > module Tuples
->   ( Pair(Pair,fst,snd), dup, tup, tswap, tpair, tassocL, tassocR, uncurry
+>   ( Pair(Pair,fst,snd), dup, tup, tswap, tpair, tassocL, tassocR, uncurry, curry
 >   , _test_tuple, main_tuple
 >   ) where
 > 
 > import Testing
 > import Functions
 > import Booleans
-> import Not
 > import And
-> import Or
-> import Implies
 
 Today we'll establish a few basic utility functions on *tuples*. First, recall some definitions.
 

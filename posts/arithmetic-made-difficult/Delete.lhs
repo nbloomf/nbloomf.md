@@ -12,31 +12,18 @@ slug: delete
 >   ) where
 > 
 > import Testing
-> import Tuples
 > import Booleans
 > import Not
-> import And
-> import Or
-> import Implies
 > import NaturalNumbers
-> import Plus
 > import Lists
 > import Snoc
 > import Reverse
 > import Cat
-> import Length
-> import Map
-> import UnfoldN
-> import Zip
 > import PrefixAndSuffix
 > import AllAndAny
-> import TailsAndInits
 > import Filter
 > import Elt
-> import Count
-> import Repeat
 > import Sublist
-> import Select
 > import Unique
 
 Today we'll establish a function $\delete$ that removes all copies of a given item from a list. $\delete$ is a special case of $\filter$.
@@ -623,13 +610,13 @@ Suite:
 >   , TypeName (t a), List t
 >   , Equal (t a), Show (t a), Arbitrary (t a), Equal (t (t a))
 >   ) => t a -> Int -> Int -> IO ()
-> _test_delete t maxSize numCases = do
+> _test_delete t size cases = do
 >   testLabel1 "delete" t
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_delete_nil t)

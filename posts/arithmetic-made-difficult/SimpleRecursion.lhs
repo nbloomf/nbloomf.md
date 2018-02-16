@@ -14,9 +14,6 @@ slug: simprec
 > import Testing
 > import Tuples
 > import Booleans
-> import Not
-> import And
-> import Or
 > import NaturalNumbers
 
 So far we've defined the natural numbers as an iterative set with a special *universal property*, which was encapsulated in the existence of a simple recursion operator $\natrec$. Anything we will wish to do with the natural numbers can be done using this operator alone. However, in practice, it will be handy to define synonyms for some more complicated recursive functions; the first of these is *simple recursion with a parameter*.
@@ -139,8 +136,8 @@ There's the definition from the proof:
 
 > simpleRec' phi mu n a = snd (naturalRec (epsilon a) (chi a) n)
 >   where
->     epsilon a = tup zero (phi a)
->     chi a (Pair n b) = tup (next n) (mu n a b)
+>     epsilon b = tup zero (phi b)
+>     chi c (Pair m b) = tup (next m) (mu m c b)
 
 And the tail recursive strategy:
 
@@ -270,13 +267,13 @@ Suite:
 >   , Equal b, Arbitrary a, CoArbitrary a, Arbitrary b, CoArbitrary b
 >   , Show a, Show b, TypeName a, TypeName b, CoArbitrary n)
 >   => n -> a -> b -> Int -> Int -> IO ()
-> _test_simplerec n a b maxSize numCases = do
+> _test_simplerec n a b size cases = do
 >   testLabel3 "simpleRec" n a b
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_simplerec_equiv_def n a b)

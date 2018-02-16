@@ -13,10 +13,6 @@ slug: times
 > 
 > import Testing
 > import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
 > import NaturalNumbers
 > import SimpleRecursion
 > import Plus
@@ -440,13 +436,13 @@ Testing
 
 > _test_times :: (TypeName n, Natural n, Equal n, Arbitrary n, Show n)
 >   => n -> (n -> n -> n) -> Int -> Int -> IO ()
-> _test_times n f maxSize numCases = do
+> _test_times n f size cases = do
 >   testLabel1 "times" n
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_times_zero_left n f)

@@ -133,7 +133,7 @@ Let $A$ and $B$ be sets. We define $\const : B \rightarrow B^A$ by $$\const(b)(a
 In Haskell:
 
 > const :: b -> a -> b
-> const b a = b
+> const b _ = b
 
 ::::::::::::::::::::
 
