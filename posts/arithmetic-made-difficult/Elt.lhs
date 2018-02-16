@@ -17,7 +17,6 @@ slug: elt
 > import Not
 > import And
 > import Or
-> import Implies
 > import NaturalNumbers
 > import LessThanOrEqualTo
 > import Lists

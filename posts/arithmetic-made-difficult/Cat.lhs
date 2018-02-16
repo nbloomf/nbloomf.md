@@ -13,10 +13,7 @@ slug: cat
 > 
 > import Testing
 > import Booleans
-> import Not
 > import And
-> import Or
-> import Implies
 > import NaturalNumbers
 > import Lists
 > import HeadAndTail
@@ -438,13 +435,13 @@ Suite:
 >   , TypeName (t a), List t, Equal (t a), Show (t a), Arbitrary (t a)
 >   , TypeName b, Boolean b, Equal b
 >   ) => t a -> b -> Int -> Int -> IO ()
-> _test_cat t p maxSize numCases = do
+> _test_cat t p size cases = do
 >   testLabel2 "cat" t p
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_cat_nil_left t)

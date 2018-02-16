@@ -15,10 +15,6 @@ slug: map
 > import Functions
 > import DisjointUnions
 > import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
 > import NaturalNumbers
 > import Lists
 > import HeadAndTail
@@ -496,13 +492,13 @@ Suite:
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a)
 >   , TypeName n, Show n, Equal n, Natural n, Arbitrary n
 >   ) => t a -> n -> Int -> Int -> IO ()
-> _test_map t n maxSize numCases = do
+> _test_map t n size cases = do
 >   testLabel1 "map" t
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_map_nil t)

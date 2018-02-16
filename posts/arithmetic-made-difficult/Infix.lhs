@@ -17,7 +17,6 @@ slug: infix
 > import Not
 > import And
 > import Or
-> import Implies
 > import NaturalNumbers
 > import Plus
 > import Lists

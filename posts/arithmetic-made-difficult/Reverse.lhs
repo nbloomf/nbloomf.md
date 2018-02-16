@@ -14,10 +14,7 @@ slug: rev
 > import Testing
 > import Functions
 > import Booleans
-> import Not
-> import And
-> import Or
-> import NaturalNumbers
+> import Unary
 > import Lists
 > import HeadAndTail
 > import LeftFold
@@ -315,10 +312,10 @@ as claimed.
 ::: test :::::::::::
 
 > _test_rev_snoc :: (List t, Equal (t a))
->   => t a -> Test (a -> a -> t a -> Bool)
+>   => t a -> Test (a -> t a -> Bool)
 > _test_rev_snoc _ =
 >   testName "rev(snoc(a,x)) == cons(a,rev(x))" $
->   \a b x -> eq (rev (snoc a x)) (cons a (rev x))
+>   \a x -> eq (rev (snoc a x)) (cons a (rev x))
 
 ::::::::::::::::::::
 ::::::::::::::::::::
@@ -517,13 +514,13 @@ Suite:
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a)
 >   , TypeName b, Boolean b, Equal b
 >   ) => t a -> b -> Int -> Int -> IO ()
-> _test_rev t p maxSize numCases = do
+> _test_rev t p size cases = do
 >   testLabel1 "rev" t
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_revcat_nil t)

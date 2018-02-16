@@ -12,14 +12,9 @@ slug: bailrec
 >   ) where
 > 
 > import Testing
-> import Functions
 > import Tuples
 > import DisjointUnions
 > import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
 > import NaturalNumbers
 
 So far we have defined two special *recursion operators*, $\natrec(\ast)(\ast)$ and $\simprec$. These act like program skeletons: fill in the slots with functions of the right signatures and get a computable function out. In this post we'll define another operator, which we will call *bailout recursion*.
@@ -133,10 +128,10 @@ And there's the definition from the proof:
 > bailoutRec' phi beta psi omega n a =
 >   either phi (uncurry psi) (naturalRec epsilon chi n (tup n a))
 >   where
->     epsilon (Pair _ a) = lft a
->     chi h (Pair n a) = if beta (prev n) a
->       then rgt (tup (prev n) a)
->       else h (tup (prev n) (omega (prev n) a))
+>     epsilon (Pair _ b) = lft b
+>     chi h (Pair m b) = if beta (prev m) b
+>       then rgt (tup (prev m) b)
+>       else h (tup (prev m) (omega (prev m) b))
 
 Unlike simple recursion, the naive implementation of bailout recursion is already tail recursive.
 
@@ -192,13 +187,13 @@ Suite:
 >   , Equal b, Arbitrary a, CoArbitrary a, Arbitrary b, CoArbitrary b
 >   , Show a, Show b, TypeName a, TypeName b, CoArbitrary n)
 >   => n -> a -> b -> Int -> Int -> IO ()
-> _test_bailoutrec n a b maxSize numCases = do
+> _test_bailoutrec n a b size cases = do
 >   testLabel3 "bailoutRec" n a b
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_bailoutrec_equiv n a b)

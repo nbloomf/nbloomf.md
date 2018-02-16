@@ -13,12 +13,8 @@ slug: snoc
 > 
 > import Testing
 > import Booleans
-> import Not
 > import And
-> import Or
-> import Implies
 > import Unary
-> import NaturalNumbers
 > import Lists
 > import HeadAndTail
 > import LeftFold
@@ -348,13 +344,13 @@ Suite:
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a)
 >   , TypeName b, Equal b, Boolean b
 >   ) => t a -> b -> Int -> Int -> IO ()
-> _test_snoc t p maxSize numCases = do
+> _test_snoc t p size cases = do
 >   testLabel1 "snoc" t
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_snoc_nil t)

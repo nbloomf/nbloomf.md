@@ -14,9 +14,7 @@ slug: minus
 > import Testing
 > import DisjointUnions
 > import Booleans
-> import Not
 > import And
-> import Or
 > import NaturalNumbers
 > import BailoutRecursion
 > import Plus
@@ -506,13 +504,13 @@ Testing
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   , TypeName b, Boolean b, Equal b
 >   ) => n -> b -> Int -> Int -> IO ()
-> _test_minus n p maxSize numCases = do
+> _test_minus n p size cases = do
 >   testLabel2 "minus" n p
 > 
 >   let
 >     args = stdArgs
->      { maxSuccess = numCases
->      , maxSize    = maxSize
+>      { maxSuccess = cases
+>      , maxSize    = size
 >      }
 > 
 >   runTest args (_test_minus_zero_left n)

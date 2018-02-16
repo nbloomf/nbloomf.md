@@ -13,14 +13,10 @@ slug: max-min
 > 
 > import Testing
 > import Booleans
-> import Not
 > import And
-> import Or
-> import Implies
 > import NaturalNumbers
 > import Plus
 > import Times
-> import Minus
 > import LessThanOrEqualTo
 
 With $\nleq$ in hand we can also define max and min functions. These are less interesting since they do not have to be defined recursively.
@@ -574,13 +570,13 @@ Suite:
 > _test_max_min ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
-> _test_max_min n maxSize numCases = do
+> _test_max_min n size cases = do
 >   testLabel1 "min & max" n
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_max_zero n)

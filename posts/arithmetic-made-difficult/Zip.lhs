@@ -13,17 +13,10 @@ slug: zip
 > 
 > import Testing
 > import Tuples
-> import DisjointUnions
 > import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
 > import NaturalNumbers
-> import Plus
 > import MaxAndMin
 > import Lists
-> import HeadAndTail
 > import DoubleFold
 > import Length
 > import Map
@@ -350,13 +343,13 @@ Suite:
 >   , Equal (t b), Show (t b), Arbitrary (t b), Equal (t (Pair a b)), Equal (t (Pair b a))
 >   , Equal (t (Pair a (Pair a a))), Equal (t (Pair (Pair a a) a))
 >   ) => t a -> t b -> n -> Int -> Int -> IO ()
-> _test_zip t u n maxSize numCases = do
+> _test_zip t u n size cases = do
 >   testLabel3 "zip" t u n
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_zip_nil_list t u)

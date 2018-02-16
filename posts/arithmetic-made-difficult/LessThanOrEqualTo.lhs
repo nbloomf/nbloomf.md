@@ -17,7 +17,6 @@ slug: leq
 > import Not
 > import And
 > import Or
-> import Implies
 > import NaturalNumbers
 > import Plus
 > import Times
@@ -402,13 +401,13 @@ Suite:
 
 > _test_leq :: (TypeName n, Natural n, Equal n, Arbitrary n, Show n)
 >   => n -> Int -> Int -> IO ()
-> _test_leq n maxSize numCases = do
+> _test_leq n size cases = do
 >   testLabel1 "leq" n
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_leq_next_nat_zero n)

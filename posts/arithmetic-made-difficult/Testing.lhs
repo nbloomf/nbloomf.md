@@ -48,7 +48,7 @@ We'll use the ``QuickCheck`` library to make our theorems testable. This is not 
 >   , quickCheckWithResult, stdArgs, variant
 >   )
 > import Test.QuickCheck.Test (isSuccess)
-> import Text.Show.Functions
+> import Text.Show.Functions ()
 > import System.Exit
 
 The ``Test`` type, with ``testName``, is a shorthand for writing named tests.

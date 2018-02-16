@@ -14,14 +14,9 @@ slug: length
 > import Testing
 > import Functions
 > import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
 > import NaturalNumbers
 > import Plus
 > import Lists
-> import HeadAndTail
 > import LeftFold
 > import Snoc
 > import Reverse
@@ -65,7 +60,7 @@ $$\left\{\begin{array}{l}
 > _test_addlength_cons_right
 >   :: (List t, Equal (t a), Natural n, Equal n)
 >   => t a -> n -> Test (n -> a -> t a -> Bool)
-> _test_addlength_cons_right t _ =
+> _test_addlength_cons_right _ _ =
 >   testName "addlength(n,cons(a,x)) == addlength(next(n),x)" $
 >   \n a x ->
 >     eq (addlength n (cons a x)) (addlength (next n) x)
@@ -126,7 +121,7 @@ as needed.
 > _test_addlength_snoc_next
 >   :: (List t, Equal (t a), Natural n, Equal n)
 >   => t a -> n -> Test (n -> a -> t a -> Bool)
-> _test_addlength_snoc_next t _ =
+> _test_addlength_snoc_next _ _ =
 >   testName "addlength(n,snoc(a,x)) == next(addlength(n,x))" $
 >   \n a x ->
 >     eq (addlength n (snoc a x)) (next (addlength n x))
@@ -135,7 +130,7 @@ as needed.
 > _test_addlength_cons_next
 >   :: (List t, Equal (t a), Natural n, Equal n)
 >   => t a -> n -> Test (n -> a -> t a -> Bool)
-> _test_addlength_cons_next t _ =
+> _test_addlength_cons_next _ _ =
 >   testName "addlength(n,cons(a,x)) == next(addlength(n,x))" $
 >   \n a x ->
 >     eq (addlength n (cons a x)) (next (addlength n x))
@@ -240,13 +235,12 @@ as needed.
 >   :: (List t, Equal (t a), Natural n, Equal n)
 >   => t a -> n -> Test (t a -> Bool)
 > _test_length_foldr _ k =
->   testName "length(x) == foldr(zero,psi)(x)" $
->   \x ->
->     let
->       zero' = zero `withTypeOf` k
->       psi _ m = next m
->     in
->       eq (length x) (foldr zero' (flip (compose const next)) x)
+>   testName "length(x) == foldr(zero,flip(compose(const)(next)))(x)" $
+>   \x -> eq
+>     (length x)
+>     (foldr
+>       (zero `withTypeOf` k)
+>       (flip (compose const next)) x)
 
 ::::::::::::::::::::
 ::::::::::::::::::::
@@ -491,13 +485,13 @@ Suite:
 >   , TypeName (t a), List t, Equal (t a), Show (t a), Arbitrary (t a)
 >   , TypeName b, Boolean b, Equal b
 >   ) => t a -> n -> b -> Int -> Int -> IO ()
-> _test_length t n p maxSize numCases = do
+> _test_length t n p size cases = do
 >   testLabel2 "length" t n
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_addlength_nil_right t n)

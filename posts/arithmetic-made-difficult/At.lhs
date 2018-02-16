@@ -14,13 +14,9 @@ slug: at
 > import Testing
 > import DisjointUnions
 > import Booleans
-> import And
-> import Or
-> import Implies
 > import NaturalNumbers
 > import BailoutRecursion
 > import Plus
-> import Minus
 > import LessThanOrEqualTo
 > import Lists
 > import HeadAndTail
@@ -39,9 +35,9 @@ In Haskell:
 > at :: (Natural n, Equal n, List t) => t a -> n -> Either () a
 > at x k = bailoutRec head beta psi omega k x
 >   where
->     beta _ x = isNil x
+>     beta _ z = isNil z
 >     psi _ _ = lft ()
->     omega _ x = tail x
+>     omega _ z = tail z
 
 ::::::::::::::::::::
 
@@ -103,9 +99,10 @@ as claimed.
 
 ::: test :::::::::::
 
-> _test_at_next_next_cons :: (List t, Equal a, Equal (t a), Natural n, Equal n)
+> _test_at_next_next_cons
+>   :: (List t, Equal a, Equal (t a), Natural n, Equal n)
 >   => t a -> n -> Test (t a -> a -> n -> Bool)
-> _test_at_next_next_cons z _ =
+> _test_at_next_next_cons _ _ =
 >   testName "at(cons(a,x),next(next(k))) == at(x,next(k))" $
 >   \x a k -> eq (at (cons a x) (next k)) (at x k)
 
@@ -584,13 +581,13 @@ Suite:
 >   , TypeName n, Natural n, Equal n, Show n, Arbitrary n
 >   , TypeName (t a), List t, Equal (t a), Show (t a), Arbitrary (t a)
 >   ) => t a -> n -> Int -> Int -> IO ()
-> _test_at t n maxSize numCases = do
+> _test_at t n size cases = do
 >   testLabel2 "at" t n
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_at_zero t n)

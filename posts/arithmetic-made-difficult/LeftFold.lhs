@@ -14,12 +14,7 @@ slug: foldl
 > import Testing
 > import Functions
 > import Tuples
-> import DisjointUnions
 > import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
 > import Unary
 > import Lists
 
@@ -106,13 +101,13 @@ Suite:
 >   ( TypeName a, Show a, Equal a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a)
 >   ) => t a -> Int -> Int -> IO ()
-> _test_foldl t maxSize numCases = do
+> _test_foldl t size cases = do
 >   testLabel1 "foldl" t
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_foldl_equiv t)
