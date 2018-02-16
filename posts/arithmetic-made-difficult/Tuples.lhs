@@ -13,12 +13,12 @@ slug: tuples
 >   ) where
 > 
 > import Testing
+> import Functions
 > import Booleans
 > import Not
 > import And
 > import Or
 > import Implies
-> import Functions
 
 Today we'll establish a few basic utility functions on *tuples*. First, recall some definitions.
 

@@ -8,9 +8,9 @@ slug: initial-algebra
 
 Warning: this post is super handwavy!
 
-To recap what we've done so far: we assumed the existence of a set, $\nats$, with a special element $\zero$ and a map $\next : \nats \rightarrow \nats$, and a recursion operator $\natrec{e}{\varphi}$ that allowed us to construct recursive maps from $\nats$. On this basis we were able to show that $\nats$ satisfies the Peano axioms. We were also able to define the "usual" arithmetic on $\nats$ and show that it behaves as expected, and moreover these definitions were made *executable* by implementing $\natrec{\ast}{\ast}$ and some other, auxilliary recursion operators in software. I'm using Haskell here out of convenience, but any language with first-class functions could also work.
+To recap what we've done so far: we assumed the existence of a set, $\nats$, with a special element $\zero$ and a map $\next : \nats \rightarrow \nats$, and a recursion operator $\natrec(e)(\varphi)$ that allowed us to construct recursive maps from $\nats$. On this basis we were able to show that $\nats$ satisfies the Peano axioms. We were also able to define the "usual" arithmetic on $\nats$ and show that it behaves as expected, and moreover these definitions were made *executable* by implementing $\natrec(\ast)(\ast)$ and some other, auxilliary recursion operators in software. I'm using Haskell here out of convenience, but any language with first-class functions could also work.
 
-This is a nice combination; by working with $\natrec{\ast}{\ast}$ and its friends we can build programs and prove things about them simultaneously. If such things interest you, two questions arise:
+This is a nice combination; by working with $\natrec(\ast)(\ast)$ and its friends we can build programs and prove things about them simultaneously. If such things interest you, two questions arise:
 
 1. We assumed the existence of $\nats$. Is there a more fundamental basis or principle we can use to argue that it exists?
 2. $\nats$, while useful, is a very special thing. Are there other interesting mathematical or computational objects that can be similarly characterized and reasoned about?
@@ -127,7 +127,7 @@ Now it can be shown that the collection of $F$-algebras and $F$-algebra homomorp
 $\nats$ is the initial $F$-algebra of the functor $F(X) = 1+X$.
 ::::::::::::::::::::
 
-Recall that an object in a category is called *initial* if there is exactly one morphism from it to any other given object. In the case of $\nats$, the unique morphism is precisely $\natrec{\ast}{\ast}$.
+Recall that an object in a category is called *initial* if there is exactly one morphism from it to any other given object. In the case of $\nats$, the unique morphism is precisely $\natrec(\ast)(\ast)$.
 
 Now I am not too interested at the moment in digging into the conditions under which a given functor *has* an initial algebra; I am happy enough using the existence of an initial algebra as the basis for reasoning about recursively defined programs. So this is as far as I will take this business about categories. We will only be interested in a small handful of concrete polynomial endofunctors, and each time we see one, we will just add an axiom assuming that it has an initial algebra -- as we did with $\nats$.
 
@@ -140,6 +140,6 @@ omega = next omega
 
 What's going on here is that the ``Nat`` type doesn't quite model $\nats$. By definition it is a fixed point of the functor $F(X) = 1+X$, but it is not the *least* fixed point. (I want to say it is the greatest fixed point, but I'm not sure about that.)
 
-What should we do about this? Certainly this problem will pop up again. There are more powerful type systems that can enforce the minimalness of fixed points, but we'd prefer not to require too much type-fanciness. I think it is enough to simply require that recursion be defined using initial algebra maps like $\natrec{\ast}{\ast}$; this requirement would make a definition like ``omega`` illegal.
+What should we do about this? Certainly this problem will pop up again. There are more powerful type systems that can enforce the minimalness of fixed points, but we'd prefer not to require too much type-fanciness. I think it is enough to simply require that recursion be defined using initial algebra maps like $\natrec(\ast)(\ast)$; this requirement would make a definition like ``omega`` illegal.
 
 So, in summary, given a functor $F$ the $F$-algebras are a family of structures, and the process of constructing an initial algebra for $F$ is a kind of uniform "recursivization". From now on we will define recursive sets simply by assuming that such an initial algebra exists.

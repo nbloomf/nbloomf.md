@@ -178,12 +178,12 @@
 #=======================#
 #--- peano -------------#
 #=======================#
-@peano@#cor-natrec-zero	\\natrec{e}{f}(\\zero) = e
-@peano@#cor-natrec-next	\\natrec{e}{f}(\\next(n)) = f(\\natrec{e}{f}(n))
+@peano@#cor-natrec-zero	\\natrec(e)(f)(\\zero) = e
+@peano@#cor-natrec-next	\\natrec(e)(f)(\\next(n)) = f(\\natrec(e)(f)(n))
 #=======================#
 #--- unary -------------#
 #=======================#
-@unary@#def-unnext	\\unnext = \\natrec{\\lft(\\ast)}{\\compose(\\rgt)(\\either(\\const(\\zero),\\next))}
+@unary@#def-unnext	\\unnext = \\natrec(\\lft(\\ast))(\\compose(\\rgt)(\\either(\\const(\\zero),\\next)))
 @unary@#thm-unnext-zero	\\unnext(\\zero) = \\lft(\\ast)
 @unary@#thm-unnext-next	\\unnext(\\next(n)) = \\rgt(n)
 @unary@#thm-unnext-inverse-left	\\compose(\\either(\\const(\\zero),\\next))(\\unnext) = \\id

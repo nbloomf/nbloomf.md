@@ -12,15 +12,15 @@ slug: lists
 >   ) where
 > 
 > import Testing
+> import Tuples
+> import DisjointUnions
 > import Booleans
 > import Not
 > import And
 > import Or
 > import Implies
-> import Tuples
-> import DisjointUnions
 
-In the previous post, we saw how the process of describing $\nats$ in terms of its universal map $\natrec{\ast}{\ast}$ can be generalized: take an endofunctor $F$, assume it has an initial algebra, and see how it behaves. Here's an example.
+In the previous post, we saw how the process of describing $\nats$ in terms of its universal map $\natrec$ can be generalized: take an endofunctor $F$, assume it has an initial algebra, and see how it behaves. Here's an example.
 
 :::::: definition ::
 Let $A$ be a set, and define a functor $F_A$ by $F_A(X) = 1 + A \times X$. We assume that $F_A$ has an initial algebra, which we will denote $\lists{A}$. We denote the component maps of the isomorphism $$\theta : 1 + A \times \lists{A} \rightarrow \lists{A}$$ by $\const(\nil) : 1 \rightarrow \lists{A}$ and $\cons : A \times \lists{A} \rightarrow \lists{A}$. That is, $$\Theta = \either(\const(\nil),\cons).$$

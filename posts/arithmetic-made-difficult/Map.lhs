@@ -12,13 +12,13 @@ slug: map
 >   ) where
 > 
 > import Testing
+> import Functions
+> import DisjointUnions
 > import Booleans
 > import Not
 > import And
 > import Or
 > import Implies
-> import Functions
-> import DisjointUnions
 > import NaturalNumbers
 > import Lists
 > import HeadAndTail

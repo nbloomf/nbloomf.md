@@ -13,13 +13,13 @@ slug: takewhile-dropwhile
 >   ) where
 > 
 > import Testing
+> import Tuples
+> import DisjointUnions
 > import Booleans
 > import Not
 > import And
 > import Or
 > import Implies
-> import Tuples
-> import DisjointUnions
 > import NaturalNumbers
 > import Plus
 > import MaxAndMin

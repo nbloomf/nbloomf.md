@@ -12,13 +12,13 @@ slug: unfoldn
 >   ) where
 > 
 > import Testing
+> import Tuples
+> import DisjointUnions
 > import Booleans
 > import Not
 > import And
 > import Or
 > import Implies
-> import Tuples
-> import DisjointUnions
 > import NaturalNumbers
 > import BailoutRecursion
 > import Lists
@@ -55,7 +55,7 @@ $$\Theta(x,\next(n),a) = \left\{\begin{array}{ll}
 We denote this unique map $\tacunfoldN{f}$.
 
 ::: proof ::::::::::
-We define $\varphi : A \times \lists{B} \rightarrow \lists{B}$ by $$\varphi(a,x) = x,$$ $\beta : \nats \times (A \times \lists{B}) \rightarrow \bool$ by $$\beta(n,(a,x)) = \isLft(f(a)),$$ $\psi : \nats \times (A \times \lists{B}) \rightarrow \lists{B}$ by $$\psi(n,(a,x)) = x,$$ and $\omega : \nats \times (A \times \lists{B}) \rightarrow A \times \lists{B}$ by
+We define $\varphi : A \times \lists{B} \rightarrow \lists{B}$ by $$\varphi(a,x) = x,$$ $\beta : \nats \rightarrow (A \times \lists{B}) \rightarrow \bool$ by $$\beta = \compose(\const)(\compose(\compose(\isLft)))(\flip(\compose)(\fst)),$$ $\psi : \nats \times (A \times \lists{B}) \rightarrow \lists{B}$ by $$\psi(n,(a,x)) = x,$$ and $\omega : \nats \times (A \times \lists{B}) \rightarrow A \times \lists{B}$ by
 $$\omega(n,(a,x)) = \left\{\begin{array}{ll}
  (a,x) & \mathrm{if}\ f(a) = \lft(\ast) \\
  (c,\snoc(b,x)) & \mathrm{if}\ f(a) = \rgt((c,b)).

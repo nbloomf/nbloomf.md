@@ -12,12 +12,11 @@ slug: mutrec
 >   ) where
 > 
 > import Testing
+> import DisjointUnions
 > import Booleans
 > import Not
 > import And
 > import Or
-> import Implies
-> import DisjointUnions
 > import NaturalNumbers
 
 Note that both simple recursion and bailout recursion produce functions with type $$\nats \times A \rightarrow B;$$ we can call that $A$ argument the *parameter*. Now simple and bailout recursion use the parameter in different ways. Simple recursion is only allowed to change $A$ "outside" the recursive call, while bailout recursion can only change $A$ "inside" the recursive call. These restrictions were necessary so that simple and bailout recursion would have tail-recursive implementations. But there are times when we will want a recursive function with signature $\nats \times A \rightarrow B$ that can change its $A$ parameter both inside and outside the recursion.
@@ -29,13 +28,13 @@ For this situation we introduce yet another recursion operator on $\nats$, which
 Let $A$ and $B$ be sets. Suppose we have mappings $\varepsilon : A \rightarrow B$, $\beta : \nats \times A \rightarrow B$, $\psi : \nats \times A \rightarrow B$, $\chi : \nats \times A \times B \rightarrow B$, and $\omega : \nats \times A \rightarrow A$. Then there is a unique map $Θ : \nats \times A \rightarrow B$ such that $$Θ(\zero,a) = \varepsilon(a)$$ and $$Θ(\next(n),a) = \bif{\beta(n,a)}{\psi(n,a)}{\chi(n,a,Θ(n,\omega(n,a)))}.$$ We denote this $Θ$ by $\mutrec{\varepsilon}{\beta}{\psi}{\chi}{\omega}$.
 
 ::: proof ::::::::::
-Define $δ \in B^{A \times \nats}$ by $$δ(a,n) = \varepsilon(a)$$ and $σ : B^{A \times \nats} \rightarrow B^{A \times \nats}$ by $$σ(g)(a,n) = \bif{\beta(\prev(n),a)}{\psi(\prev(n),a)}{\chi(\prev(n),a,g(\omega(\prev(n),a)),\prev(n))}.$$ Now $(B^{A \times \nats},δ,σ)$ is an iterative set. We now define $$Θ(n,a) = \natrec{δ}{σ}(n)(\tup(a)(n)).$$
+Define $δ \in B^{A \times \nats}$ by $$δ(a,n) = \varepsilon(a)$$ and $σ : B^{A \times \nats} \rightarrow B^{A \times \nats}$ by $$σ(g)(a,n) = \bif{\beta(\prev(n),a)}{\psi(\prev(n),a)}{\chi(\prev(n),a,g(\omega(\prev(n),a)),\prev(n))}.$$ Now $(B^{A \times \nats},δ,σ)$ is an iterative set. We now define $$Θ(n,a) = \natrec(δ)(σ)(n)(\tup(a)(n)).$$
 
 To see that $Θ$ has the claimed properties, note that
 $$\begin{eqnarray*}
  &   & Θ(\zero,a) \\
- &     \let{Θ(n,a) = \natrec{δ}{σ}(n)(\tup(a)(n))}
-   = & \natrec{δ}{σ}(\zero)(\tup(a)(\zero)) \\
+ &     \let{Θ(n,a) = \natrec(δ)(σ)(n)(\tup(a)(n))}
+   = & \natrec(δ)(σ)(\zero)(\tup(a)(\zero)) \\
  &     \href{@peano@#cor-natrec-zero}
    = & δ(\tup(a)(\zero)) \\
  &     \let{δ(\tup(a)(n)) = \varepsilon(a)}
@@ -44,22 +43,22 @@ $$\begin{eqnarray*}
 and
 $$\begin{eqnarray*}
  &   & Θ(\next(n),a) \\
- &     \let{Θ(n,a) = \natrec{δ}{σ}(n)(\tup(a)(n))}
-   = & \natrec{δ}{σ}(\next(n))(\tup(a)(\next(n))) \\
+ &     \let{Θ(n,a) = \natrec(δ)(σ)(n)(\tup(a)(n))}
+   = & \natrec(δ)(σ)(\next(n))(\tup(a)(\next(n))) \\
  &     \href{@peano@#cor-natrec-next}
-   = & σ(\natrec{δ}{σ}(n))(\tup(a)(\next(n))) \\
+   = & σ(\natrec(δ)(σ)(n))(\tup(a)(\next(n))) \\
  &     \let{σ(g)(\tup(a)(n)) = \bif{\beta(\prev(n),a)}{\psi(\prev(n),a)}{\chi(\prev(n),a,g(\omega(\prev(n),a),\prev(n)))}}
-   = & \bif{\beta(\prev(\next(n)),a)}{\psi(\prev(\next(n)),a)}{\chi(\prev(\next(n)),a,\natrec{δ}{σ}(n)(\omega(\prev(\next(n)),a),\prev(\next(n))))} \\
+   = & \bif{\beta(\prev(\next(n)),a)}{\psi(\prev(\next(n)),a)}{\chi(\prev(\next(n)),a,\natrec(δ)(σ)(n)(\omega(\prev(\next(n)),a),\prev(\next(n))))} \\
  &     \href{@unary@#thm-prev-next}
-   = & \bif{\beta(n,a)}{\psi(\prev(\next(n)),a)}{\chi(\prev(\next(n)),a,\natrec{δ}{σ}(n)(\omega(\prev(\next(n)),a),\prev(\next(n))))} \\
+   = & \bif{\beta(n,a)}{\psi(\prev(\next(n)),a)}{\chi(\prev(\next(n)),a,\natrec(δ)(σ)(n)(\omega(\prev(\next(n)),a),\prev(\next(n))))} \\
  &     \href{@unary@#thm-prev-next}
-   = & \bif{\beta(n,a)}{\psi(\prev(\next(n)),a)}{\chi(n,a,\natrec{δ}{σ}(n)(\omega(\prev(\next(n)),a),\prev(\next(n))))} \\
+   = & \bif{\beta(n,a)}{\psi(\prev(\next(n)),a)}{\chi(n,a,\natrec(δ)(σ)(n)(\omega(\prev(\next(n)),a),\prev(\next(n))))} \\
  &     \href{@unary@#thm-prev-next}
-   = & \bif{\beta(n,a)}{\psi(\prev(\next(n)),a)}{\chi(n,a,\natrec{δ}{σ}(n)(\omega(n,a),\prev(\next(n))))} \\
+   = & \bif{\beta(n,a)}{\psi(\prev(\next(n)),a)}{\chi(n,a,\natrec(δ)(σ)(n)(\omega(n,a),\prev(\next(n))))} \\
  &     \href{@unary@#thm-prev-next}
-   = & \bif{\beta(n,a)}{\psi(\prev(\next(n)),a)}{\chi(n,a,\natrec{δ}{σ}(n)(\omega(n,a),n))} \\
+   = & \bif{\beta(n,a)}{\psi(\prev(\next(n)),a)}{\chi(n,a,\natrec(δ)(σ)(n)(\omega(n,a),n))} \\
  &     \href{@unary@#thm-prev-next}
-   = & \bif{\beta(n,a)}{\psi(n,a)}{\chi(n,a,\natrec{δ}{σ}(n)(\omega(n,a),n))}
+   = & \bif{\beta(n,a)}{\psi(n,a)}{\chi(n,a,\natrec(δ)(σ)(n)(\omega(n,a),n))}
 \end{eqnarray*}$$
 as claimed.
 

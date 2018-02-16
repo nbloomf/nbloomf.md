@@ -12,12 +12,12 @@ slug: leq
 >  ) where
 > 
 > import Testing
+> import DisjointUnions
 > import Booleans
 > import Not
 > import And
 > import Or
 > import Implies
-> import DisjointUnions
 > import NaturalNumbers
 > import Plus
 > import Times

@@ -12,12 +12,12 @@ slug: divalg
 >   ) where
 >
 > import Testing
+> import Tuples
 > import Booleans
 > import Not
 > import And
 > import Or
 > import Implies
-> import Tuples
 > import NaturalNumbers
 > import SimpleRecursion
 > import Plus
@@ -28,7 +28,7 @@ Finally we come to the first power tool for natural numbers: the division algori
 
 I like this result for several reasons. It ties together the three basic operations on $\nats$ -- $\next$, $\nplus$, and $\ntimes$ -- in a satisfying way, and it has two conclusions, one an equality and the other an inequality. It also has some really powerful applications. Notably, we'll use the division algorithm to compute greatest common divisors and to compute fixed-radix representations of numbers.
 
-The task at hand is to find a constructive, or more precisely, simple recursive, definition for the division algorithm. This function takes a pair of natural numbers $(a,b)$ and returns a pair of natural numbers $(q,r)$, so its signature should be something like $$\nats \times \nats \rightarrow \nats \times \nats.$$ Remember that the signature of $\simprec{\varphi}{\mu}$ is $$\nats \times A \rightarrow B,$$ where $\varphi : A \rightarrow B$ and $\mu : \nats \times A \times B \rightarrow B$. Letting $A = \nats$ and $B = \nats \times \nats$, we're looking for $$\varphi : \nats \rightarrow \nats \times \nats$$ and $$\mu : \nats \times \nats \times (\nats \times \nats) \rightarrow \nats \times \nats$$ so that $\Theta = \simprec{\varphi}{\mu}$ acts like the division algorithm. But how does the division algorithm act?
+The task at hand is to find a constructive, or more precisely, simple recursive, definition for the division algorithm. This function takes a pair of natural numbers $(a,b)$ and returns a pair of natural numbers $(q,r)$, so its signature should be something like $$\nats \times \nats \rightarrow \nats \times \nats.$$ Remember that the signature of $\simprec(\varphi)(\mu)$ is $$\nats \times A \rightarrow B,$$ where $\varphi : A \rightarrow B$ and $\mu : \nats \times A \times B \rightarrow B$. Letting $A = \nats$ and $B = \nats \times \nats$, we're looking for $$\varphi : \nats \rightarrow \nats \times \nats$$ and $$\mu : \nats \times \nats \times (\nats \times \nats) \rightarrow \nats \times \nats$$ so that $\Theta = \simprec(\varphi)(\mu)$ acts like the division algorithm. But how does the division algorithm act?
 
 For starters, we have $$\Theta(\zero,b) = \varphi(b) = (q,r)$$ where $$\zero = \nplus(\ntimes(q,b),r).$$ So $r = q = \zero$; evidently then $\varphi(x) = (\zero,\zero)$ for all $x$.
 
@@ -42,7 +42,7 @@ $$\mu(a,b,(q,r)) = \left\{\begin{array}{ll}
  (\next(q),\zero) & \mathrm{if}\ b = \next(r) \\
  (q,\next(r)) & \mathrm{otherwise}.
 \end{array}\right.$$
-Then define $\ndivalg : \nats \times \nats \rightarrow \nats \times \nats$ by $$\ndivalg = \simprec{\varphi}{\mu}.$$ We also define helpers $\nquo, \nrem : \nats \times \nats \rightarrow \nats$ by $$\nquo(a,b) = \fst(\ndivalg(a,b))$$ and $$\nrem(a,b) = \snd(\ndivalg(a,b)).$$
+Then define $\ndivalg : \nats \times \nats \rightarrow \nats \times \nats$ by $$\ndivalg = \simprec(\varphi)(\mu).$$ We also define helpers $\nquo, \nrem : \nats \times \nats \rightarrow \nats$ by $$\nquo(a,b) = \fst(\ndivalg(a,b))$$ and $$\nrem(a,b) = \snd(\ndivalg(a,b)).$$
 
 In Haskell:
 

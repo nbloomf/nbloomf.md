@@ -12,17 +12,17 @@ slug: bailrec
 >   ) where
 > 
 > import Testing
+> import Functions
+> import Tuples
+> import DisjointUnions
 > import Booleans
 > import Not
 > import And
 > import Or
 > import Implies
-> import Functions
-> import Tuples
-> import DisjointUnions
 > import NaturalNumbers
 
-So far we have defined two special *recursion operators*, $\natrec{\ast}{\ast}$ and $\simprec{\ast}{\ast}$. These act like program skeletons: fill in the slots with functions of the right signatures and get a computable function out. In this post we'll define another operator, which we will call *bailout recursion*.
+So far we have defined two special *recursion operators*, $\natrec(\ast)(\ast)$ and $\simprec$. These act like program skeletons: fill in the slots with functions of the right signatures and get a computable function out. In this post we'll define another operator, which we will call *bailout recursion*.
 
 :::::: theorem :::::
 []{#thm-bailrec-zero}[]{#thm-bailrec-next}
@@ -34,18 +34,18 @@ $$\begin{eqnarray*}
 \omega & : & \nats \times A \rightarrow A.
 \end{eqnarray*}$$
 
-Then there is a unique function $\Theta : \nats \times A \rightarrow B$ such that, for all $n \in \nats$ and $a \in A$, $$\Theta(\zero, a) = \varphi(a)$$ and $$\Theta(\next(m), a) = \left\{ \begin{array}{ll} \psi(m,a) & \mathrm{if}\ \beta(m,a) \\ \Theta(m, \omega(m,a)) & \mathrm{otherwise}. \end{array}\right.$$
+Then there is a unique function $\Theta : \nats \rightarrow A \rightarrow B$ such that, for all $n \in \nats$ and $a \in A$, $$\Theta(\zero,a) = \varphi(a)$$ and $$\Theta(\next(m),a) = \left\{ \begin{array}{ll} \psi(m,a) & \mathrm{if}\ \beta(m,a) \\ \Theta(m, \omega(m,a)) & \mathrm{otherwise}. \end{array}\right.$$
 
 This function $\Theta$ will be denoted $\bailrec{\varphi}{\beta}{\psi}{\omega}$.
 
 ::: proof ::::::::::
-We define $ε : \nats \times A \rightarrow A + (\nats \times A)$ by $ε(\tup(n)(a)) = \lft(a)$ and $\chi : (A+(\nats \times A))^{\nats \times A} \rightarrow (A + (\nats \times A))^{\nats \times A}$ by $$\chi(h)(\tup(n)(a)) = \bif{\beta(\prev(n),a)}{\rgt(\tup(\prev(n))(a))}{h(\prev(n),\omega(\prev(n),a))}.$$ Now thinking of $((A+(\nats \times A))^{\nats \times A},ε,\chi)$ as an inductive set, we define $Θ : \nats \times A \rightarrow B$ by $$Θ(n,a) = \either(\varphi,\psi)(\natrec{ε}{\chi}(n)(\tup(n)(a))).$$
+We define $ε : \nats \times A \rightarrow A + (\nats \times A)$ by $ε(\tup(n)(a)) = \lft(a)$ and $\chi : (A + (\nats \times A))^{\nats \times A} \rightarrow (A + (\nats \times A))^{\nats \times A}$ by $$\chi(h)(\tup(n)(a)) = \bif{\beta(\prev(n),a)}{\rgt(\tup(\prev(n))(a))}{h(\prev(n),\omega(\prev(n),a))}.$$ Now thinking of $((A+(\nats \times A))^{\nats \times A},ε,\chi)$ as an inductive set, we define $Θ : \nats \times A \rightarrow B$ by $$Θ(n,a) = \either(\varphi,\psi)(\natrec(ε)(\chi)(n)(\tup(n)(a))).$$
 
 To see that $Θ$ has the claimed properties, note that
 $$\begin{eqnarray*}
  &   & Θ(\zero,a) \\
- &     \let{Θ(n,a) = \either(\varphi,\psi)(\natrec{ε}{\chi}(n)(\tup(n)(a)))}
-   = & \either(\varphi,\psi)(\natrec{ε}{\chi}(\zero)(\tup(\zero)(a))) \\
+ &     \let{Θ(n,a) = \either(\varphi,\psi)(\natrec(ε)(\chi)(n)(\tup(n)(a)))}
+   = & \either(\varphi,\psi)(\natrec(ε)(\chi)(\zero)(\tup(\zero)(a))) \\
  &     \href{@peano@#cor-natrec-zero}
    = & \either(\varphi,\psi)(ε(\tup(\zero)(a))) \\
  &     \hyp{ε(\tup(n)(a)) = \lft(a)}
@@ -56,23 +56,23 @@ $$\begin{eqnarray*}
 and
 $$\begin{eqnarray*}
  &   & Θ(\next(n),a) \\
- &     \let{Θ(n,a) = \either(\varphi,\psi)(\natrec{ε}{\chi}(n)(\tup(n)(a)))}
-   = & \either(\varphi,\psi)(\natrec{ε}{\chi}(\next(n))(\tup(\next(n))(a))) \\
+ &     \let{Θ(n,a) = \either(\varphi,\psi)(\natrec(ε)(\chi)(n)(\tup(n)(a)))}
+   = & \either(\varphi,\psi)(\natrec(ε)(\chi)(\next(n))(\tup(\next(n))(a))) \\
  &     \href{@peano@#cor-natrec-next}
-   = & \either(\varphi,\psi)(\chi(\natrec{ε}{\chi}(n))(\tup(\next(n))(a))) \\
+   = & \either(\varphi,\psi)(\chi(\natrec(ε)(\chi)(n))(\tup(\next(n))(a))) \\
  &     \hyp{\chi(h)(\tup(n)(a)) = \bif{\beta(\prev(n),a)}{\rgt(\tup(\prev(n))(a))}{h(\tup(\prev(n))(a))}}
-   = & \either(\varphi,\psi)(\bif{\beta(\prev(\next(n)),a)}{\rgt(\tup(\prev(\next(n)))(a))}{\natrec{ε}{\chi}(n)(\tup(\prev(\next(n)))(a))}) \\
+   = & \either(\varphi,\psi)(\bif{\beta(\prev(\next(n)),a)}{\rgt(\tup(\prev(\next(n)))(a))}{\natrec(ε)(\chi)(n)(\tup(\prev(\next(n)))(a))}) \\
  &     \href{@unary@#thm-prev-next}
-   = & \either(\varphi,\psi)(\bif{\beta(n,a)}{\rgt(\tup(\prev(\next(n)))(a))}{\natrec{ε}{\chi}(n)(\tup(\prev(\next(n)))(a))}) \\
+   = & \either(\varphi,\psi)(\bif{\beta(n,a)}{\rgt(\tup(\prev(\next(n)))(a))}{\natrec(ε)(\chi)(n)(\tup(\prev(\next(n)))(a))}) \\
  &     \href{@unary@#thm-prev-next}
-   = & \either(\varphi,\psi)(\bif{\beta(n,a)}{\rgt(\tup(n)(a))}{\natrec{ε}{\chi}(n)(\tup(\prev(\next(n)))(a))}) \\
+   = & \either(\varphi,\psi)(\bif{\beta(n,a)}{\rgt(\tup(n)(a))}{\natrec(ε)(\chi)(n)(\tup(\prev(\next(n)))(a))}) \\
  &     \href{@unary@#thm-prev-next}
-   = & \either(\varphi,\psi)(\bif{\beta(n,a)}{\rgt(\tup(n)(a))}{\natrec{ε}{\chi}(n)(\tup(n)(a))}) \\
+   = & \either(\varphi,\psi)(\bif{\beta(n,a)}{\rgt(\tup(n)(a))}{\natrec(ε)(\chi)(n)(\tup(n)(a))}) \\
  &     \href{@booleans@#thm-iffunc}
-   = & \bif{\beta(n,a)}{\either(\varphi,\psi)(\rgt(\tup(n)(a)))}{\either(\varphi,\psi)(\natrec{ε}{\chi}(n)(\tup(n)(a)))} \\
+   = & \bif{\beta(n,a)}{\either(\varphi,\psi)(\rgt(\tup(n)(a)))}{\either(\varphi,\psi)(\natrec(ε)(\chi)(n)(\tup(n)(a)))} \\
  &     \href{@disjoint-unions@#def-either-rgt}
-   = & \bif{\beta(n,a)}{\psi(\tup(n)(a))}{\either(\varphi,\psi)(\natrec{ε}{\chi}(n)(\tup(n)(a)))} \\
- &     \let{Θ(n,a) = \either(\varphi,\psi)(\natrec{ε}{\chi}(n)(\tup(n)(a)))}
+   = & \bif{\beta(n,a)}{\psi(\tup(n)(a))}{\either(\varphi,\psi)(\natrec(ε)(\chi)(n)(\tup(n)(a)))} \\
+ &     \let{Θ(n,a) = \either(\varphi,\psi)(\natrec(ε)(\chi)(n)(\tup(n)(a)))}
    = & \bif{\beta(n,a)}{\psi(\tup(n)(a))}{Θ(n,a)}
 \end{eqnarray*}$$
 
@@ -104,7 +104,7 @@ You might notice that in this proof, we didn't really use $\beta$ or $\psi$. Whe
 Implementation
 --------------
 
-As we did with $\natrec{\ast}{\ast}$ and $\simprec{\ast}{\ast}$, we'd like to implement $\bailrec{\ast}{\ast}{\ast}{\ast}$ in software. There are a couple of ways to go about this. First, the signature.
+As we did with $\natrec(\ast)(\ast)$ and $\simprec$, we'd like to implement $\bailrec{\ast}{\ast}{\ast}{\ast}$ in software. There are a couple of ways to go about this. First, the signature.
 
 > bailoutRec, bailoutRec' :: (Natural n)
 >   => (a -> b)
@@ -160,7 +160,7 @@ Also note that simple recursion and bailout recursion were carefully chosen to h
 
 Arbitrary recursion is dangerous because in general, every time one function uses another we have to keep track of what remains to be done afterward -- if we aren't careful, it is very easy to write recursive functions which eat up lots of memory. Even simple recursion can blow up exponentially; the classic example is the Fibonacci numbers (which we'll see later).
 
-In contrast, a *tail recursive* function by definition doesn't have to keep track of what remains to be done after the recursion. Our recursion operators, $\natrec{\ast}{\ast}$, $\simprec{\ast}{\ast}$, and $\bailrec{\ast}{\ast}{\ast}{\ast}$, are carefully chosen so that they have tail recursive implementations.
+In contrast, a *tail recursive* function by definition doesn't have to keep track of what remains to be done after the recursion. Our recursion operators, $\natrec(\ast)(\ast)$, $\simprec$, and $\bailrec{\ast}{\ast}{\ast}{\ast}$, are carefully chosen so that they have tail recursive implementations.
 
 By the way, I think it's helpful to compare the difference between arbitrary recursion and recursion operators to the difference between arbitrary ``GOTO``s and structured loops. In both cases we have a simple but dangerous primitive operation that is hidden behind a safer and more meaningful interface. A ``for`` loop means "repeat this some number of times"; while the meaning of simple recursion is given by its universal property.
 

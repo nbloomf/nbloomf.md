@@ -12,12 +12,12 @@ slug: choose
 >   ) where
 >
 > import Testing
+> import Functions
 > import Booleans
 > import Not
 > import And
 > import Or
 > import Implies
-> import Functions
 > import NaturalNumbers
 > import DoubleNaturalRecursion
 > import Plus

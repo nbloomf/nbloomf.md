@@ -12,14 +12,14 @@ slug: zippad
 >   ) where
 > 
 > import Testing
+> import Functions
+> import Tuples
+> import DisjointUnions
 > import Booleans
 > import Not
 > import And
 > import Or
 > import Implies
-> import Functions
-> import Tuples
-> import DisjointUnions
 > import NaturalNumbers
 > import Plus
 > import MaxAndMin

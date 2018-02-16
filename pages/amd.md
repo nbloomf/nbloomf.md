@@ -6,17 +6,19 @@ author: nbloomf
 Under construction. I don't know exactly what this is yet. Links that don't exist are my to-do list.
 
 0. [Arithmetic Made Difficult](/posts/arithmetic-made-difficult/Testing.html)
-1. First Steps
-    * [Booleans](/posts/arithmetic-made-difficult/Booleans.html)
-        * [Not](/posts/arithmetic-made-difficult/Not.html)
-        * [And](/posts/arithmetic-made-difficult/And.html)
-        * [Or](/posts/arithmetic-made-difficult/Or.html)
-        * [Implies](/posts/arithmetic-made-difficult/Implies.html)
-    * [Functions](/posts/arithmetic-made-difficult/Functions.html)
-    * [Predicates](/posts/arithmetic-made-difficult/Predicates.html)
+1. [Functions](/posts/arithmetic-made-difficult/Functions.html)
+    * Flip
+    * Dub
+2. Set Combinators
     * [Tuples](/posts/arithmetic-made-difficult/Tuples.html)
     * [Disjoint Unions](/posts/arithmetic-made-difficult/DisjointUnions.html)
-2. $\mathbb{N}$
+3. [Booleans](/posts/arithmetic-made-difficult/Booleans.html)
+    * [Not](/posts/arithmetic-made-difficult/Not.html)
+    * [And](/posts/arithmetic-made-difficult/And.html)
+    * [Or](/posts/arithmetic-made-difficult/Or.html)
+    * [Implies](/posts/arithmetic-made-difficult/Implies.html)
+    * [Predicates](/posts/arithmetic-made-difficult/Predicates.html)
+4. $\mathbb{N}$
     * Type
         * [Natural Numbers](/posts/arithmetic-made-difficult/natural-numbers.html)
         * [From Arrows to Programs](/posts/arithmetic-made-difficult/Unary.html)
@@ -45,7 +47,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * [Exponentiation](/posts/arithmetic-made-difficult/Exponentiation.html)
         * [Choose](/posts/arithmetic-made-difficult/Choose.html)
         * [Mutating Norm Recursion](/posts/arithmetic-made-difficult/MutatingNormRecursion.html)
-3. $\mathsf{Lists}(A)$
+5. $\mathsf{Lists}(A)$
     * Type
         * [Iterative Sets Redux](/posts/arithmetic-made-difficult/iterative-sets-redux.html)
         * [Lists](/posts/arithmetic-made-difficult/Lists.html)
@@ -108,17 +110,17 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * Sums and Products
         * Fundamental Theorem of Arithmetic
         * Number Partitions
-4. Binary Trees
+6. Binary Trees
     * Type
         * Trees
         * Leaf and Fork
     * Recursion Operators
     * Arithmetic
-5. Fixed Radix Numeral Systems
+7. Fixed Radix Numeral Systems
     * CarryBase
     * PlusBase
     * TimesBase
-6. List of Arithmetics
+8. List of Arithmetics
     * [On Boring and Repetitive Proofs](/posts/arithmetic-made-difficult/on-boring-proofs.html)
     * Partial and Total Orders
         * Sorted
@@ -131,7 +133,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * Mproduct
     * Lattices
     * Semirings
-7. Streams
+9. Streams
 
 > The old idea that there was no reasoning in Arithmetic is dead; the idea that the *general axioms* have no place in Arithmetic is no longer held by a progressive teacher... <cite>J.B.F. Showalter in "Arithmetic Made Easy", 1897</cite>
 

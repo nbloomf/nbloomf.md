@@ -12,13 +12,13 @@ slug: take-drop
 >   ) where
 > 
 > import Testing
+> import Functions
+> import Tuples
 > import Booleans
 > import Not
 > import And
 > import Or
 > import Implies
-> import Functions
-> import Tuples
 > import NaturalNumbers
 > import BailoutRecursion
 > import Plus

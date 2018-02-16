@@ -12,12 +12,11 @@ slug: takebut-dropbut
 >   ) where
 > 
 > import Testing
+> import Tuples
 > import Booleans
 > import Not
 > import And
 > import Or
-> import Implies
-> import Tuples
 > import NaturalNumbers
 > import Plus
 > import MaxAndMin

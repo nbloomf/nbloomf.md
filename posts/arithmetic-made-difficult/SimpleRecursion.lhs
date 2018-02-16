@@ -12,30 +12,29 @@ slug: simprec
 >   ) where
 > 
 > import Testing
+> import Tuples
 > import Booleans
 > import Not
 > import And
 > import Or
-> import Implies
-> import Tuples
 > import NaturalNumbers
 
-So far we've defined the natural numbers as an iterative set with a special *universal property*, which was encapsulated in the existence of a simple recursion operator $\natrec{\ast}{\ast}$. Anything we will wish to do with the natural numbers can be done using this operator alone. However, in practice, it will be handy to define synonyms for some more complicated recursive functions; the first of these is *simple recursion with a parameter*.
+So far we've defined the natural numbers as an iterative set with a special *universal property*, which was encapsulated in the existence of a simple recursion operator $\natrec$. Anything we will wish to do with the natural numbers can be done using this operator alone. However, in practice, it will be handy to define synonyms for some more complicated recursive functions; the first of these is *simple recursion with a parameter*.
 
 :::::: theorem :::::
 []{#def-simprec-zero}[]{#def-simprec-next}
 Suppose we have sets $A$ and $B$ and functions $\varphi : A \rightarrow B$ and $\mu : \nats \times A \times B \rightarrow B$. Then there is a unique function $Θ : \nats \times A \rightarrow B$ such that, for all $n \in \nats$ and $a \in A$, $$Θ(\zero,a) = \varphi(a)$$ and $$Θ(\next(n),a) = \mu(n,a,Θ(n,a)).$$
 
-This function $Θ$ will be denoted $\simprec{\varphi}{\mu}$.
+This function $Θ$ will be denoted $\simprec(\varphi)(\mu)$.
 
 ::: proof ::::::::::
-First we establish existence. Define $\varepsilon : A \rightarrow \nats \times B$ by $\varepsilon(a) = \tup(\zero)(\varphi(a))$, and define $\chi : A \rightarrow \nats \times B \rightarrow \nats \times B$ by $$\chi(a)(\tup(n)(b)) = \tup(\next(n))(\mu(n,a,b)).$$ Thinking of $(\nats \times B, \varepsilon(a), \chi(a))$ as an inductive set, we define $Ω : \nats \times A \rightarrow \nats \times B$ by $$Ω(n,a) = \natrec{\varepsilon(a)}{\chi(a)}(n)$$ and $Θ : \nats \times A \rightarrow B$ by $Θ(n,a) = \snd(Ω(n,a))$.
+First we establish existence. Define $\varepsilon : A \rightarrow \nats \times B$ by $$\varepsilon = \compose(\tup(\zero))(\varphi)$$ and define $\chi : A \rightarrow \nats \times B \rightarrow \nats \times B$ by $$\chi(a)(\tup(n)(b)) = \tup(\next(n))(\mu(n,a,b)).$$ Thinking of $(\nats \times B, \varepsilon(a), \chi(a))$ as an inductive set, we define $Ω : \nats \rightarrow A \rightarrow \nats \times B$ by $$Ω(n,a) = \natrec(\varepsilon(a))(\chi(a))(n)$$ and $Θ : \nats \times A \rightarrow B$ by $Θ(n,a) = \snd(Ω(n,a))$.
 
 Now note that
 $$\begin{eqnarray*}
  &   & Θ(\zero,a) \\
- &     \let{Θ(n,a) = \snd(\natrec{\varepsilon(a)}{\chi(a)}(n))}
-   = & \snd(\natrec{\varepsilon(a)}{\chi(a)}(\zero)) \\
+ &     \let{Θ(n,a) = \snd(\natrec(\varepsilon(a))(\chi(a))(n))}
+   = & \snd(\natrec(\varepsilon(a))(\chi(a))(\zero)) \\
  &     \href{@peano@#cor-natrec-zero}
    = & \snd(\varepsilon(a)) \\
  &     \hyp{\varepsilon(a) = \tup(\zero)(\varphi(a))}
@@ -48,10 +47,10 @@ as claimed.
 Next we show that $$Ω(\next(n),a) = \tup(\next(n))(\mu(n,a,Θ(n,a)))$$ for all $a \in A$ and $n \in \nats$ by induction on $n$. For the base case $n = \zero$, we have
 $$\begin{eqnarray*}
  &   & Ω(\next(\zero),a) \\
- &     \let{Ω(n,a) = \natrec{\varepsilon(a)}{\chi(a)}(n)}
-   = & \natrec{\varepsilon(a)}{\chi(a)}(\next(\zero)) \\
+ &     \let{Ω(n,a) = \natrec(\varepsilon(a))(\chi(a))(n)}
+   = & \natrec(\varepsilon(a))(\chi(a))(\next(\zero)) \\
  &     \href{@peano@#cor-natrec-next}
-   = & \chi(a)(\natrec{\varepsilon(a)}{\chi(a)}(\zero)) \\
+   = & \chi(a)(\natrec(\varepsilon(a))(\chi(a))(\zero)) \\
  &     \href{@peano@#cor-natrec-zero}
    = & \chi(a)(\varepsilon(a)) \\
  &     \hyp{\varepsilon(a) = \tup(\zero)(\varphi(a))}
@@ -64,11 +63,11 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equality holds for some $n$. Now
 $$\begin{eqnarray*}
  &   & Ω(\next(\next(n)),a) \\
- &     \let{Ω(n,a) = \natrec{\varepsilon(a)}{\chi(a)}(n)}
-   = & \natrec{\varepsilon(a)}{\chi(a)}(\next(\next(n))) \\
+ &     \let{Ω(n,a) = \natrec(\varepsilon(a))(\chi(a))(n)}
+   = & \natrec(\varepsilon(a))(\chi(a))(\next(\next(n))) \\
  &     \href{@peano@#cor-natrec-next}
-   = & \chi(a)(\natrec{\varepsilon(a)}{\chi(a)}(\next(n))) \\
- &     \let{Ω(n,a) = \natrec{\varepsilon(a)}{\chi(a)}(n)}
+   = & \chi(a)(\natrec(\varepsilon(a))(\chi(a))(\next(n))) \\
+ &     \let{Ω(n,a) = \natrec(\varepsilon(a))(\chi(a))(n)}
    = & \chi(a)(Ω(\next(n),a)) \\
  &     \hyp{Ω(\next(n),a) = \tup(\next(n))(\mu(n,a,Θ(n,a)))}
    = & \chi(a)(\tup(\next(n))(\mu(n,a,Θ(n,a)))) \\
@@ -121,7 +120,7 @@ That proof may look complicated, but structurally it's very simple. We defined $
 Implementation
 --------------
 
-As we did with $\natrec{\ast}{\ast}$, we'd like to implement $\simprec{\ast}{\ast}$ in software. There are a couple of ways to go about this.
+As we did with $\natrec(\ast)(\ast)$, we'd like to implement $\simprec(\ast)(\ast)$ in software. There are a couple of ways to go about this.
 
 > simpleRec'', simpleRec', simpleRec :: (Natural n)
 >   => (a -> b)
@@ -248,12 +247,12 @@ So our efficient ``simpRec`` is equivalent to ``simpRec''``. (We will leave the 
 What it does
 ------------
 
-This page is already long enough, so I'll save examples of simple recursion for another day. Just note what $\simprec{\ast}{\ast}$ does: given some data $\varphi$ and $\mu$, it produces a recursive function with signature $\nats \times A \rightarrow B$. So whenever we encounter (or want to construct) a function with this signature, it may be worthwhile to look for a definition in terms of $\simprec{\ast}{\ast}$. The uniqueness of simple recursion makes such functions very nice to reason about.
+This page is already long enough, so I'll save examples of simple recursion for another day. Just note what $\simprec(\ast)(\ast)$ does: given some data $\varphi$ and $\mu$, it produces a recursive function with signature $\nats \times A \rightarrow B$. So whenever we encounter (or want to construct) a function with this signature, it may be worthwhile to look for a definition in terms of $\simprec(\ast)(\ast)$. The uniqueness of simple recursion makes such functions very nice to reason about.
 
 As with natural recursion, the "uniqueness" part of simple recursion is also handy. To be a little more explicit, it says the following.
 
 :::::: corollary :::
-Let $A$ and $B$ be sets, with $\varphi : \nats \times A \rightarrow B$ and $\mu : \nats \times A \times B \rightarrow B$. Then $\simprec{\varphi}{\mu}$ is the unique solution $f : \nats \times A \rightarrow B$ to the following system of functional equations for all $k \in \nats$, $a \in A$, and $b \in B$:
+Let $A$ and $B$ be sets, with $\varphi : \nats \times A \rightarrow B$ and $\mu : \nats \times A \times B \rightarrow B$. Then $\simprec(\varphi)(\mu)$ is the unique solution $f : \nats \times A \rightarrow B$ to the following system of functional equations for all $k \in \nats$, $a \in A$, and $b \in B$:
 $$\left\{\begin{array}{l}
  f(\zero,a) = \varphi(a) \\
  f(\next(k),a) = \mu(k,a,f(k,a))

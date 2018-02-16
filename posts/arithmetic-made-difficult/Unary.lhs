@@ -21,7 +21,7 @@ slug: unary
 > import Or
 > import Implies
 
-A nice consequence of wrapping up recursion in the $\natrec{\ast}{\ast}$ function is that it allows us to write programs, independent of any implementation, and prove things about them. We'll see lots of examples of this, but first we need to establish some structural results.
+A nice consequence of wrapping up recursion in the $\natrec$ function is that it allows us to write programs, independent of any implementation, and prove things about them. We'll see lots of examples of this, but first we need to establish some structural results.
 
 :::::: definition ::
 []{#def-unnext}
@@ -42,7 +42,7 @@ If $n \in \nats$, we have the following.
 $$\begin{eqnarray*}
  &   & \unnext(\zero) \\
  &     \href{@unary@#def-unnext}
-   = & \natrec{\lft(\ast)}{\compose(\rgt)(\either(\const(\zero),\next))}(\zero) \\
+   = & \natrec(\lft(\ast))(\compose(\rgt)(\either(\const(\zero),\next)))(\zero) \\
  &     \href{@peano@#cor-natrec-zero}
    = & \lft(\ast)
 \end{eqnarray*}$$
@@ -51,9 +51,9 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \unnext(\next(\zero)) \\
  &     \href{@unary@#def-unnext}
-   = & \natrec{\lft(\ast)}{\compose(\rgt)(\either(\const(\zero),\next))}(\next(\zero)) \\
+   = & \natrec(\lft(\ast))(\compose(\rgt)(\either(\const(\zero),\next)))(\next(\zero)) \\
  &     \href{@peano@#cor-natrec-next}
-   = & \compose(\rgt)(\either(\const(\zero),\next))(\natrec{\lft(\ast)}{\compose(\rgt)(\either(\const(\zero),\next))}(\zero)) \\
+   = & \compose(\rgt)(\either(\const(\zero),\next))(\natrec(\lft(\ast))(\compose(\rgt)(\either(\const(\zero),\next)))(\zero)) \\
  &     \href{@peano@#cor-natrec-zero}
    = & \compose(\rgt)(\either(\const(\zero),\next))(\lft(\ast)) \\
  &     \href{@functions@#def-compose}
@@ -67,9 +67,9 @@ as needed. For the inductive step, suppose the equality holds for some $n$. Now 
 $$\begin{eqnarray*}
  &   & \unnext(\next(\next(n))) \\
  &     \href{@unary@#def-unnext}
-   = & \natrec{\lft(\ast)}{\compose(\rgt)(\either(\const(\zero),\next))}(\next(\next(n))) \\
+   = & \natrec(\lft(\ast))(\compose(\rgt)(\either(\const(\zero),\next)))(\next(\next(n))) \\
  &     \href{@peano@#cor-natrec-next}
-   = & \compose(\rgt)(\either(\const(\zero),\next))(\natrec{\lft(\ast)}{\compose(\rgt)(\either(\const(\zero),\next))}(\next(n))) \\
+   = & \compose(\rgt)(\either(\const(\zero),\next))(\natrec(\lft(\ast))(\compose(\rgt)(\either(\const(\zero),\next)))(\next(n))) \\
  &     \href{@unary@#def-unnext}
    = & \compose(\rgt)(\either(\const(\zero),\next))(\unnext(\next(n))) \\
  &     \hyp{\unnext(\next(n)) = \rgt(n)}
@@ -377,7 +377,7 @@ So calling ``mkUnary 7`` in ``ghci``, for instance, prints
 
     NNNNNNNZ
 
-And we can also give a straightforward implementation of $\natrec{\ast}{\ast}$.
+And we can also give a straightforward implementation of $\natrec(\ast)(\ast)$.
 
 > natRec' :: a -> (a -> a) -> Unary -> a
 > natRec' e _    Z    = e
@@ -432,7 +432,7 @@ Now ``natRec`` does not leave a bunch of unevaluated functions in memory. It is 
 
 It deconstructs its natural number argument and evaluates ``phi`` strictly at each step. (That is what the bang pattern and ``$!`` are for.) At least I think that's what it does; my simple testing shows that ``natRec'`` easily falls down while ``natRec`` does not. But profiling Haskell seems like a bit of dark art to me still. I am open to being wrong here.
 
-We can see that ``natRec`` has better performance than ``natRec'``, but there is a hitch. ``natRec'`` is obviously an implementation of $\natrec{\ast}{\ast}$. But it is **not** obvious that ``natRec`` and ``natRec'`` are the same function! This is where the universal property of natural recursion comes in: if we can show that both functions satisfy the universal property, then *they must be the same*. And we can do this using induction.
+We can see that ``natRec`` has better performance than ``natRec'``, but there is a hitch. ``natRec'`` is obviously an implementation of $\natrec(\ast)(\ast)$. But it is **not** obvious that ``natRec`` and ``natRec'`` are the same function! This is where the universal property of natural recursion comes in: if we can show that both functions satisfy the universal property, then *they must be the same*. And we can do this using induction.
 
 First, we claim that for all ``n :: Nat``,
 

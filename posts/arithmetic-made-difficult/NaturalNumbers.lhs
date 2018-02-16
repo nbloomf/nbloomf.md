@@ -16,13 +16,13 @@ slug: nats
 >   ) where
 > 
 > import Testing
+> import Functions
+> import DisjointUnions
 > import Booleans
 > import Not
 > import And
 > import Or
 > import Implies
-> import Functions
-> import DisjointUnions
 > import Unary
 
 We have assumed the existence of a set $\nats$ such that there is a unique inductive set homomorphism from $\nats$ to any other inductive set. But it turns out that this set is not *unique* with this property; any other inductive set which is *isomorphic* to $\nats$ enjoys it as well. In fact we've already seen one such set, namely $1 + \nats$.
@@ -50,7 +50,7 @@ Our helpers $\iszero$ and $\prev$ can be written against this interface:
 > prev :: (Natural n) => n -> n
 > prev = (either (const zero) id) . unnext
 
-As can the natural recursion operator $\natrec{\ast}{\ast}$.
+As can the natural recursion operator $\natrec$.
 
 > naturalRec :: (Natural n)
 >   => a -> (a -> a) -> n -> a

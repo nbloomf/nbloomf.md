@@ -31,40 +31,40 @@ $$\begin{eqnarray*}
  φ(g)(\zero) & = & \psi(g(\zero)) \\
  φ(g)(\next(k)) & = & \chi(k,g(k),g(\next(k))).
 \end{eqnarray*}$$
-We then define $Θ : \nats \times \nats \rightarrow A$ by $$Θ(n,k) = \natrec{\delta}{φ}(n)(k).$$
+We then define $Θ : \nats \times \nats \rightarrow A$ by $$Θ(n,k) = \natrec(\delta)(φ)(n)(k).$$
 
 First we show that $Θ$ satisfies the claimed equations. To this end, note that
 $$\begin{eqnarray*}
  &   & Θ(\zero,k) \\
- &     \let{Θ(n,k) = \natrec{\delta}{φ}(n)(k)}
-   = & \natrec{\delta}{φ}(\zero)(k) \\
+ &     \let{Θ(n,k) = \natrec(\delta)(φ)(n)(k)}
+   = & \natrec(\delta)(φ)(\zero)(k) \\
  &     \href{@peano@#cor-natrec-zero}
    = & \delta(k)
 \end{eqnarray*}$$
 that
 $$\begin{eqnarray*}
  &   & Θ(\next(n),\zero) \\
- &     \let{Θ(n,k) = \natrec{\delta}{φ}(n)(k)}
-   = & \natrec{\delta}{φ}(\next(n))(\zero) \\
+ &     \let{Θ(n,k) = \natrec(\delta)(φ)(n)(k)}
+   = & \natrec(\delta)(φ)(\next(n))(\zero) \\
  &     \href{@peano@#cor-natrec-next}
-   = & φ(\natrec{\delta}{φ}(n))(\zero) \\
+   = & φ(\natrec(\delta)(φ)(n))(\zero) \\
  &     \hyp{φ(g)(\zero) = \psi(g(\zero))}
-   = & \psi(\natrec{\delta}{φ}(n)(\zero)) \\
- &     \let{Θ(n,k) = \natrec{\delta}{φ}(n)(k)}
+   = & \psi(\natrec(\delta)(φ)(n)(\zero)) \\
+ &     \let{Θ(n,k) = \natrec(\delta)(φ)(n)(k)}
    = & \psi(Θ(n,\zero))
 \end{eqnarray*}$$
 and that
 $$\begin{eqnarray*}
  &   & Θ(\next(n),\next(k)) \\
- &     \let{Θ(n,k) = \natrec{\delta}{φ}(n)(k)}
-   = & \natrec{\delta}{φ}(\next(n))(\next(k)) \\
+ &     \let{Θ(n,k) = \natrec(\delta)(φ)(n)(k)}
+   = & \natrec(\delta)(φ)(\next(n))(\next(k)) \\
  &     \href{@peano@#cor-natrec-next}
-   = & φ(\natrec{\delta}{φ}(n))(\next(k)) \\
+   = & φ(\natrec(\delta)(φ)(n))(\next(k)) \\
  &     \hyp{φ(g)(\next(k)) = \chi(k,g(k),g(\next(k)))}
-   = & \chi(k,\natrec{\delta}{φ}(n)(k),\natrec{\delta}{φ}(n)(\next(k))) \\
- &     \hyp{Θ(n,k) = \natrec{\delta}{φ}(n)(k)}
-   = & \chi(k,Θ(n,k),\natrec{\delta}{φ}(n)(\next(k))) \\
- &     \hyp{Θ(n,k) = \natrec{\delta}{φ}(n)(k)}
+   = & \chi(k,\natrec(\delta)(φ)(n)(k),\natrec(\delta)(φ)(n)(\next(k))) \\
+ &     \hyp{Θ(n,k) = \natrec(\delta)(φ)(n)(k)}
+   = & \chi(k,Θ(n,k),\natrec(\delta)(φ)(n)(\next(k))) \\
+ &     \hyp{Θ(n,k) = \natrec(\delta)(φ)(n)(k)}
    = & \chi(k,Θ(n,k),Θ(n,\next(k)))
 \end{eqnarray*}$$
 as claimed.

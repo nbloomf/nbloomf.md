@@ -12,32 +12,32 @@ slug: plus
 >   ) where
 > 
 > import Testing
+> import Functions
 > import Booleans
 > import Not
 > import And
 > import Or
 > import Implies
-> import Functions
 > import NaturalNumbers
 > import SimpleRecursion
 
-So far we've characterized the natural numbers via a unique mapping $$\natrec{\ast}{\ast} : \nats \rightarrow A,$$ and we defined another parameterized mapping $$\simprec{\ast}{\ast} : \nats \times A \rightarrow B.$$ From now on, when we want to define a mapping with one of these signatures, these prepackaged recursive maps may come in handy. What's more, we can use the universal properties of these maps to define them in terms of *desired behavior*.
+So far we've characterized the natural numbers via a unique mapping $$\natrec(\ast)(\ast) : \nats \rightarrow A,$$ and we defined another parameterized mapping $$\simprec(\ast)(\ast) : \nats \times A \rightarrow B.$$ From now on, when we want to define a mapping with one of these signatures, these prepackaged recursive maps may come in handy. What's more, we can use the universal properties of these maps to define them in terms of *desired behavior*.
 
-Natural number addition has signature $\nats \times \nats \rightarrow \nats$, so we might hope to define addition in terms of $\simprec{\ast}{\ast}$. To do this, we need to find mappings $\varphi : \nats \rightarrow \nats$ and $\mu : \nats \times \nats \times \nats \rightarrow \nats$ that make $\simprec{\varphi}{\mu}$ act like addition. For example, we want $\next$ to act like $+1$, and $$n = \zero + n = \simprec{\varphi}{\mu}(\zero,n) = \varphi(n),$$ and
+Natural number addition has signature $\nats \times \nats \rightarrow \nats$, so we might hope to define addition in terms of $\simprec(\ast)(\ast)$. To do this, we need to find mappings $\varphi : \nats \rightarrow \nats$ and $\mu : \nats \times \nats \times \nats \rightarrow \nats$ that make $\simprec(\varphi)(\mu)$ act like addition. For example, we want $\next$ to act like $+1$, and $$n = \zero + n = \simprec(\varphi)(\mu)(\zero,n) = \varphi(n),$$ and
 
 $$\begin{eqnarray*}
 (m+n)+1
   & = & (m+1)+n \\
-  & = & \simprec{\varphi}{\mu}(\next(m),n) \\
+  & = & \simprec(\varphi)(\mu)(\next(m),n) \\
   &     \href{@simprec@#def-simprec-next}
-    = & \mu(m,n,\simprec{\varphi}{\mu}(m,n)) \\
+    = & \mu(m,n,\simprec(\varphi)(\mu)(m,n)) \\
   & = & \mu(m,n,m+n).
 \end{eqnarray*}$$
 
 With this in mind, we define a binary operation $\nplus$ on $\nats$ as follows.
 
 :::::: definition ::
-Let $\mu : \nats \times \nats \times \nats \rightarrow \nats$ be given by $\mu(k,a,b) = \next(b)$. We then define $\nplus : \nats \times \nats \rightarrow \nats$ by $$\nplus = \simprec{\id}{\mu}.$$
+Let $\mu : \nats \times \nats \times \nats \rightarrow \nats$ be given by $\mu(k,a,b) = \next(b)$. We then define $\nplus : \nats \times \nats \rightarrow \nats$ by $$\nplus = \simprec(\id)(\mu).$$
 
 In Haskell:
 

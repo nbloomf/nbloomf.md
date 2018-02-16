@@ -68,14 +68,14 @@ As an axiom, we define the natural numbers to be a special iterative set.
 
 :::::: axiom :::::::
 []{#cor-natrec-zero}[]{#cor-natrec-next}
-There is a special inductive set $(\nats,\zero,\next)$ which has the following *universal property*: if $(A,e,\varphi)$ is an iterative set, then there is a unique iterative homomorphism $\Theta : \nats \rightarrow A$. This unique function $\Theta$ will be denoted $\natrec{e}{\varphi}$.
+There is a special inductive set $(\nats,\zero,\next)$ which has the following *universal property*: if $(A,e,\varphi)$ is an iterative set, then there is a unique iterative homomorphism $\Theta : \nats \rightarrow A$. This unique function $\Theta$ will be denoted $\natrec(e)(\varphi)$.
 ::::::::::::::::::::
 
-At first this may seem like a strange definition. By repeatedly applying the $\next$ function to $\zero$, we get the successive values $$\zero, \quad \next(\zero), \quad \next(\next(\zero)), \quad \next(\next(\next(\zero))), \quad \ldots$$ which (assuming they are all distinct!) resemble the Peano numbers. But what sets $\nats$ apart from the other iterative sets is the special function $\natrec{\ast}{\ast}$: given any other iterative set $A$, there is **exactly one** iterative homomorphism from $\nats$ to $A$.
+At first this may seem like a strange definition. By repeatedly applying the $\next$ function to $\zero$, we get the successive values $$\zero, \quad \next(\zero), \quad \next(\next(\zero)), \quad \next(\next(\next(\zero))), \quad \ldots$$ which (assuming they are all distinct!) resemble the Peano numbers. But what sets $\nats$ apart from the other iterative sets is the special function $\natrec$: given any other iterative set $A$, there is **exactly one** iterative homomorphism from $\nats$ to $A$.
 
-Applying this function to the sequence of elements above, we see that $\natrec{e}{\varphi}(\zero) = e$ (of course), and then $$\natrec{e}{\varphi}(\next(\zero)) = \varphi(\natrec{e}{\varphi}(\zero)) = \varphi(e),$$ $$\natrec{e}{\varphi}(\next(\next(\zero))) = \varphi(\natrec{e}{\varphi}(\next(\zero))) = \varphi(\varphi(e)),$$ $$\natrec{e}{\varphi}(\next(\next(\next(\zero)))) = \varphi(\natrec{e}{\varphi}(\next(\next(\zero)))) = \varphi(\varphi(\varphi(e))),$$ and so on.
+Applying this function to the sequence of elements above, we see that $\natrec(e)(\varphi)(\zero) = e$ (of course), and then $$\natrec(e)(\varphi)(\next(\zero)) = \varphi(\natrec(e)(\varphi)(\zero)) = \varphi(e),$$ $$\natrec(e)(\varphi)(\next(\next(\zero))) = \varphi(\natrec(e)(\varphi)(\next(\zero))) = \varphi(\varphi(e)),$$ $$\natrec(e)(\varphi)(\next(\next(\next(\zero)))) = \varphi(\natrec(e)(\varphi)(\next(\next(\zero)))) = \varphi(\varphi(\varphi(e))),$$ and so on.
 
-The $\natrec{\ast}{\ast}$ function captures the basic pattern of *recursion* on the natural numbers, as we will see. Importantly, it does so in a well-behaved way; reasoning about recursive functions defined using $\natrec{\ast}{\ast}$ can be very easy.
+The $\natrec$ function captures the basic pattern of *recursion* on the natural numbers, as we will see. Importantly, it does so in a well-behaved way; reasoning about recursive functions defined using $\natrec$ can be very easy.
 
 We will eventually show that these natural numbers satisfy the more traditional Peano axioms, but we need a little more machinery first. In the meantime the following version of induction will come in handy.
 
@@ -88,7 +88,7 @@ We will eventually show that these natural numbers satisfy the more traditional 
 Then we have $f(n) \in B$ for all natural numbers $n$.
 
 ::: proof ::::::::::
-Define a subset $T \subseteq \nats$ by $$T = \{n \in \nats \mid f(n) \in B \}.$$ By hypothesis, we have $\zero \in T$. Also, if $n \in T$, then $\next(n) \in T$; in particular, the restriction of $\next$ to $T$ is in fact a function $T \rightarrow T$. That is, $(T,\zero,\next)$ is an iterative set. Let $\Theta = \natrec{\zero}{\next}$ be the unique homomorphism $\nats \rightarrow T$.
+Define a subset $T \subseteq \nats$ by $$T = \{n \in \nats \mid f(n) \in B \}.$$ By hypothesis, we have $\zero \in T$. Also, if $n \in T$, then $\next(n) \in T$; in particular, the restriction of $\next$ to $T$ is in fact a function $T \rightarrow T$. That is, $(T,\zero,\next)$ is an iterative set. Let $\Theta = \natrec(\zero)(\next)$ be the unique homomorphism $\nats \rightarrow T$.
 
 Now let $\iota : T \rightarrow \nats$ denote the inclusion map; in fact $\iota$ is an iterative homomorphism, since we have $\iota(\zero) = \zero$ and $$\iota(\next(n)) = \next(n) = \next(\iota(n))$$ for all $n \in T$.
 
@@ -123,12 +123,12 @@ This result says that if we can map a set $A$ to the natural numbers, we can rec
 But Why?
 --------
 
-As we'll see, the function $\natrec{\ast}{\ast}$ essentially characterizes the natural numbers just like the Peano axioms do, albeit in a slightly goofy and hard-to-get-used-to way. So if $\natrec{\ast}{\ast}$ and Peano are equivalent, why bother with the added abstraction? Well, if we define our arithmetic purely in terms of $\natrec{\ast}{\ast}$, and then find a concrete representation of $\natrec{\ast}{\ast}$ in software, then suddenly all of our proofs become executable. And by wrapping up recursion behind a small number of "recursion patterns", those proofs can be easier to find and reason about.
+As we'll see, the function $\natrec$ essentially characterizes the natural numbers just like the Peano axioms do, albeit in a slightly goofy and hard-to-get-used-to way. So if $\natrec$ and Peano are equivalent, why bother with the added abstraction? Well, if we define our arithmetic purely in terms of $\natrec$, and then find a concrete representation of $\natrec$ in software, then suddenly all of our proofs become executable. And by wrapping up recursion behind a small number of "recursion patterns", those proofs can be easier to find and reason about.
 
 But wait, there's more! The "uniqueness" part of natural recursion is also handy. To be a little more explicit, it says the following.
 
 :::::: corollary :::
-Let $(A,e,\varphi)$ be an inductive set. Then $\natrec{e}{\varphi}$ is the unique solution $f : \nats \rightarrow A$ to the following system of functional equations for all $k \in \nats$:
+Let $(A,e,\varphi)$ be an inductive set. Then $\natrec(e)(\varphi)$ is the unique solution $f : \nats \rightarrow A$ to the following system of functional equations for all $k \in \nats$:
 $$\left\{\begin{array}{l}
  f(\zero) = e \\
  f(\next(k)) = \varphi(f(k))

@@ -12,12 +12,12 @@ slug: tails-inits
 >   ) where
 > 
 > import Testing
+> import Tuples
 > import Booleans
 > import Not
 > import And
 > import Or
 > import Implies
-> import Tuples
 > import NaturalNumbers
 > import Lists
 > import HeadAndTail
