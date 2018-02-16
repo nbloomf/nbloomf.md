@@ -15,21 +15,11 @@ slug: isprime
 > import Functions
 > import DisjointUnions
 > import Booleans
-> import Not
 > import And
-> import Or
-> import Implies
 > import NaturalNumbers
-> import BailoutRecursion
-> import Plus
-> import Times
-> import Minus
 > import LessThanOrEqualTo
-> import DivisionAlgorithm
 > import Divides
 > import GreatestCommonDivisor
-> import CoprimeTo
-> import LeastCommonMultiple
 > import FindSmallest
 
 Today we'll nail down what it means for a natural number to be *prime*. Typically this is done by saying something like "a natural number other than 0 or 1 is prime if it is not divisible by any natural number besides itself and 1" and from there, arguing that this property can be checked using trial division. As is typical in this series, we will turn this around -- *defining* primes to be those numbers which are detected by trial division (i.e. an algorithm) and then proving that such numbers have the divisibility properties we expect.
@@ -50,13 +40,13 @@ In Haskell:
 > mindiv :: (Natural n, Equal n) => n -> n
 > mindiv n = either (const n) id (phi n)
 >   where
->     phi n = case unnext n of
+>     phi t = case unnext t of
 >       Left () -> rgt zero
 >       Right k -> case unnext k of
 >         Left () -> rgt (next zero)
 >         Right m -> findSmallest (sigma n) m (next (next zero))
 > 
->     sigma n a = div a n
+>     sigma = flip div
 
 ::::::::::::::::::::
 
@@ -208,13 +198,13 @@ Suite:
 > _test_prime ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
-> _test_prime n maxSize numCases = do
+> _test_prime n size cases = do
 >   testLabel1 "mindiv & prime" n
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_mindiv_div n)

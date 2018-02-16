@@ -1686,7 +1686,7 @@ test-suite amd-dedupe
   type: exitcode-stdio-1.0
   main-is: Dedupe.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -fforce-recomp -Wall -main-is Dedupe.main_dedupe
+  ghc-options: -Wall -main-is Dedupe.main_dedupe
   other-modules:
     Testing,
     Booleans,

@@ -15,36 +15,18 @@ slug: take-drop
 > import Functions
 > import Tuples
 > import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
 > import NaturalNumbers
 > import BailoutRecursion
-> import Plus
 > import MaxAndMin
 > import Lists
 > import HeadAndTail
-> import Snoc
-> import Reverse
 > import Cat
 > import Length
-> import Map
 > import UnfoldN
 > import Range
 > import Zip
 > import PrefixAndSuffix
-> import AllAndAny
-> import TailsAndInits
-> import Filter
-> import Elt
-> import Count
-> import Repeat
 > import Sublist
-> import Select
-> import Unique
-> import Delete
-> import Dedupe
 
 Today we'll define two functions, $\take$ and $\drop$, that split a list at a given index. For example, $\take(3)(x)$ should return a list consisting of the first 3 items of $x$. The biggest question to think about is what $\take$ should do if $x$ doesn't have 3 items to take -- should $\take(3)(-)$ mean take *exactly* 3 or take *at most* 3? The simplest interpretation is *at most*, since with *exactly* we'd need the return type to encode a failure case. That said, under the *at most* interpretation, the signature of $\take$ will be $$\take : \nats \rightarrow {\lists{A}}^{\lists{A}}.$$ Usually we'd try to define such a function with a fold, but in this case $\unfoldN{\ast}$ does exactly what we want.
 
@@ -532,13 +514,13 @@ Suite:
 >   , Equal (t b), Show (t b), Arbitrary (t b), Equal (t (Pair a b))
 >   , Arbitrary (t n), Show (t n), Equal (t n)
 >   ) => t a -> t b -> n -> Int -> Int -> IO ()
-> _test_take_drop t u k maxSize numCases = do
+> _test_take_drop t u k size cases = do
 >   testLabel1 "take & drop" t
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_take_zero t k)

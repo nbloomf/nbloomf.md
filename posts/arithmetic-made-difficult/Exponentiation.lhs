@@ -13,20 +13,10 @@ slug: power
 >
 > import Testing
 > import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
 > import NaturalNumbers
 > import SimpleRecursion
 > import Plus
 > import Times
-> import Minus
-> import LessThanOrEqualTo
-> import DivisionAlgorithm
-> import Divides
-> import GreatestCommonDivisor
-> import CoprimeTo
 
 We defined $\ntimes$ as iterated addition; similarly, exponentiation is iterated multiplication. We'll call this function $\npower$.
 
@@ -39,7 +29,7 @@ In Haskell:
 > power a b = simpleRec phi mu b a
 >   where
 >     phi _     = next zero
->     mu  _ a b = times b a
+>     mu  _ c d = times d c
 
 ::::::::::::::::::::
 
@@ -239,13 +229,13 @@ Suite:
 > _test_power ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
-> _test_power n maxSize numCases = do
+> _test_power n size cases = do
 >   testLabel1 "power" n
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_power_zero_right n)

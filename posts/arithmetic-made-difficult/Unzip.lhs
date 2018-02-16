@@ -14,17 +14,8 @@ slug: unzip
 > import Testing
 > import Tuples
 > import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
 > import NaturalNumbers
-> import Plus
-> import MaxAndMin
 > import Lists
-> import Reverse
-> import Cat
-> import Length
 > import Map
 > import Zip
 
@@ -225,13 +216,13 @@ Suite:
 >   , Equal (t (Pair a b)), Arbitrary (t a), Show (t a), Arbitrary (t b), Show (t b)
 >   , Show (t (Pair a b)), Arbitrary (t (Pair a b)), Equal (t b), Equal (t a)
 >   ) => t a -> t b -> Int -> Int -> IO ()
-> _test_unzip t u maxSize numCases = do
+> _test_unzip t u size cases = do
 >   testLabel2 "unzip" t u
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_unzip_nil t u)

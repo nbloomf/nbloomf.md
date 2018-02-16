@@ -284,13 +284,13 @@ Suite:
 > _test_findSmallest ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, CoArbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
-> _test_findSmallest n maxSize numCases = do
+> _test_findSmallest n size cases = do
 >   testLabel1 "findSmallest" n
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_findSmallest_zero_left n)
