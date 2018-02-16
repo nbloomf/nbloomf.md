@@ -14,10 +14,6 @@ slug: choose
 > import Testing
 > import Functions
 > import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
 > import NaturalNumbers
 > import DoubleNaturalRecursion
 > import Plus
@@ -254,13 +250,13 @@ Suite:
 > _test_choose ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
-> _test_choose n maxSize numCases = do
+> _test_choose n size cases = do
 >   testLabel1 "choose" n
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_choose_zero_nat n)

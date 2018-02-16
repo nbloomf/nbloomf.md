@@ -12,28 +12,19 @@ slug: infix
 >   ) where
 > 
 > import Testing
-> import Tuples
 > import Booleans
-> import Not
 > import And
 > import Or
 > import NaturalNumbers
-> import Plus
 > import Lists
 > import HeadAndTail
 > import BailoutFold
 > import Snoc
 > import Reverse
 > import Cat
-> import Length
-> import Map
 > import PrefixAndSuffix
 > import AllAndAny
 > import TailsAndInits
-> import Filter
-> import Elt
-> import Count
-> import Repeat
 > import Sublist
 
 Today we'll nail down $\infix$, a variant on $\sublist$.
@@ -46,9 +37,9 @@ In Haskell:
 > isInfix :: (List t, Equal a) => t a -> t a -> Bool
 > isInfix x y = bfoldr isNil beta psi omega y x
 >   where
->     beta a x y = prefix y (cons a x)
+>     beta a z w = prefix w (cons a z)
 >     psi _ _ _ = true
->     omega _ _ y = y
+>     omega _ _ w = w
 
 ::::::::::::::::::::
 
@@ -660,13 +651,13 @@ Suite:
 >   , TypeName (t a), List t
 >   , Equal (t a), Show (t a), Arbitrary (t a)
 >   ) => t a -> Int -> Int -> IO ()
-> _test_isInfix t maxSize numCases = do
+> _test_isInfix t size cases = do
 >   testLabel1 "infix" t
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_infix_list_nil t)

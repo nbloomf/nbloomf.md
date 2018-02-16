@@ -14,20 +14,13 @@ slug: tails-inits
 > import Testing
 > import Tuples
 > import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
 > import NaturalNumbers
 > import Lists
-> import HeadAndTail
 > import ConsumingFold
 > import Snoc
 > import Reverse
-> import Cat
 > import Length
 > import Map
-> import Zip
 > import PrefixAndSuffix
 > import LongestCommonPrefix
 > import AllAndAny
@@ -543,13 +536,13 @@ Suite:
 >   , TypeName (t a), List t
 >   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (Pair a a)), Equal (t (t a))
 >   ) => t a -> n -> Int -> Int -> IO ()
-> _test_tails_inits t n maxSize numCases = do
+> _test_tails_inits t n size cases = do
 >   testLabel2 "tails & inits" t n
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_tails_nil t)

@@ -14,26 +14,15 @@ slug: count
 > import Testing
 > import Tuples
 > import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
 > import NaturalNumbers
 > import Plus
 > import Lists
-> import HeadAndTail
 > import LeftFold
 > import Snoc
 > import Reverse
 > import Cat
 > import Length
-> import Map
-> import Zip
-> import PrefixAndSuffix
-> import AllAndAny
-> import TailsAndInits
 > import Filter
-> import Elt
 
 Today we'll define $\count$, which takes an $A$ and a $\lists{A}$ and returns the number of items in the $\lists{A}$ that are identical to the $A$. As usual we'll define this as a fold. Note that -- unlike some of the other list functions  we've seen -- in principle, $\count$ shouldn't care so much what *order* the items in its input come in. Moreover, note that $\count$ necessarily must examine every item in its input if it's going to return the correct answer. When this happens -- we don't care about order but have to look at every item -- the *left fold* operator can be used instead of the right fold, with the advantage that left fold is more space efficient.
 
@@ -218,7 +207,7 @@ By the universal property of right fold, the equality holds for all $x$.
 > _test_addcount_foldr _ _ =
 >   testName "addcount(a)(k,x) == foldr(k,psi)(x)" $
 >   \a k x ->
->     let psi b k = if eq a b then next k else k in
+>     let psi b m = if eq a b then next m else m in
 >     eq (addcount a k x) (foldr k psi x)
 
 ::::::::::::::::::::
@@ -472,7 +461,7 @@ as needed.
 
 > _test_count_length :: (List t, Equal a, Natural n, Equal n)
 >   => t a -> n -> Test (a -> t a -> Bool)
-> _test_count_length t k =
+> _test_count_length _ k =
 >   testName "count(a,x) == length(filter(eq(a,-),x))" $
 >   \a x -> eq
 >     (count a x `withTypeOf` k)
@@ -531,13 +520,13 @@ Suite:
 >   , TypeName n, Natural n, Equal n, Show n, Arbitrary n
 >   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (Pair a a))
 >   ) => t a -> n -> Int -> Int -> IO ()
-> _test_count t n maxSize numCases = do
+> _test_count t n size cases = do
 >   testLabel2 "count" t n
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_addcount_nil t n)

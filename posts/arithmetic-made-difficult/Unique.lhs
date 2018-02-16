@@ -12,32 +12,19 @@ slug: unique
 >   ) where
 > 
 > import Testing
-> import Tuples
 > import Booleans
 > import Not
 > import And
-> import Or
-> import Implies
 > import NaturalNumbers
-> import Plus
-> import LessThanOrEqualTo
 > import Lists
 > import ConsumingFold
 > import Snoc
 > import Reverse
-> import Cat
-> import Length
 > import Map
-> import UnfoldN
 > import Range
-> import Zip
-> import PrefixAndSuffix
 > import AllAndAny
-> import TailsAndInits
 > import Filter
 > import Elt
-> import Count
-> import Repeat
 > import Sublist
 > import Select
 
@@ -350,7 +337,7 @@ $$\begin{eqnarray*}
 
 > _test_unique_range :: (List t, Natural n, Equal n)
 >   => t a -> n -> Test (t n -> n -> n -> Bool)
-> _test_unique_range _ n =
+> _test_unique_range _ _ =
 >   testName "unique(range(a,b)) == true" $
 >   \t a b -> unique ((range a b) `withTypeOf` t)
 
@@ -453,13 +440,13 @@ Suite:
 >   , TypeName n, Natural n, Show n, Arbitrary n, Equal n
 >   , Equal (t a), Show (t a), Arbitrary (t a), Equal (t (t a))
 >   ) => t a -> n -> Int -> Int -> IO ()
-> _test_unique t n maxSize numCases = do
+> _test_unique t n size cases = do
 >   testLabel1 "unique" t
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_unique_nil t)

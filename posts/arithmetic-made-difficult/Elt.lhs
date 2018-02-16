@@ -23,10 +23,8 @@ slug: elt
 > import Snoc
 > import Reverse
 > import Cat
-> import Length
 > import Map
 > import Range
-> import Zip
 > import PrefixAndSuffix
 > import AllAndAny
 > import TailsAndInits
@@ -653,13 +651,13 @@ Suite:
 >   , TypeName n, Equal n, Show n, Arbitrary n, Natural n
 >   , Arbitrary (t (t a)), Show (t (t a)), Equal (t (t a))
 >   ) => t a -> n -> Int -> Int -> IO ()
-> _test_elt t n maxSize numCases = do
+> _test_elt t n size cases = do
 >   testLabel1 "elt" t
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_elt_nil t)

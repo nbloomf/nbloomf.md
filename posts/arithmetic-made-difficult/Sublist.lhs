@@ -14,11 +14,8 @@ slug: sublist
 > import Testing
 > import Tuples
 > import Booleans
-> import Not
 > import And
-> import Or
 > import NaturalNumbers
-> import Plus
 > import LessThanOrEqualTo
 > import Lists
 > import HeadAndTail
@@ -27,16 +24,9 @@ slug: sublist
 > import Reverse
 > import Cat
 > import Length
-> import Map
-> import UnfoldN
-> import Zip
-> import PrefixAndSuffix
 > import AllAndAny
-> import TailsAndInits
 > import Filter
 > import Elt
-> import Count
-> import Repeat
 
 Today we'll nail down what it means for one list to be a *sublist* of another. Intuitively, a sublist is "part of" some larger list; but there is some ambiguity here: does the sublist have to be contiguous in the larger list? For example, it seems clear that $$\langle b, c \rangle$$ should be considered a sublist of $$\langle a, b, c, d, e \rangle$$ while $$\langle e, g \rangle$$ should not. But what about $$\langle a, c \rangle,$$ or even $$\langle c, a \rangle$$ for that matter? First, lists are inherently ordered, so the "sublist" idea should reflect this -- sublists have to respect the order of their superlists. On the other hand, it is less crucial that sublists be contiguous in their superlists. Contiguous sublists are still interesting though (for reasons we'll see later), so we will single them out as infixes (analogous to prefixes and suffixes).
 
@@ -50,9 +40,8 @@ Let $A$ be a set. Define $\psi : A \times \bool \rightarrow \bool$ by $$\psi(a,p
 In Haskell:
 
 > sublist :: (List t, Equal a) => t a -> t a -> Bool
-> sublist x y = dfoldr delta psi chi y x
+> sublist x y = dfoldr isNil psi chi y x
 >   where
->     delta y = isNil y
 >     psi _ _ = true
 >     chi a b _ p q = if eq a b then p else q
 
@@ -1016,10 +1005,10 @@ Suppose to the contrary that $\sublist(\cons(a,y),x) = \btrue$. By transitivity 
 ::: test :::::::::::
 
 > _test_sublist_cons_not :: (List t, Equal a, Equal (t a))
->   => t a -> Test ((a -> Bool) -> a -> t a -> t a -> Bool)
+>   => t a -> Test (a -> t a -> t a -> Bool)
 > _test_sublist_cons_not _ =
 >   testName "if sublist(x,y) then eq(sublist(cons(a,y),x),false)" $
->   \p a x y -> if sublist x y
+>   \a x y -> if sublist x y
 >     then eq (sublist (cons a y) x) false
 >     else true
 
@@ -1075,13 +1064,13 @@ Suite:
 >   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (Pair a a))
 >   , Natural n
 >   ) => t a -> n -> Int -> Int -> IO ()
-> _test_sublist t n maxSize numCases = do
+> _test_sublist t n size cases = do
 >   testLabel1 "sublist" t
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_sublist_list_nil t)

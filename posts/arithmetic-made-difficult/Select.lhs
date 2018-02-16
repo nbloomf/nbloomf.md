@@ -12,29 +12,15 @@ slug: select
 >   ) where
 > 
 > import Testing
-> import Tuples
 > import Booleans
-> import Not
-> import And
-> import Or
 > import NaturalNumbers
-> import Plus
 > import Choose
 > import Lists
 > import DoubleBailoutFold
-> import Reverse
 > import Cat
 > import Length
 > import Map
-> import UnfoldN
-> import Zip
-> import PrefixAndSuffix
 > import AllAndAny
-> import TailsAndInits
-> import Filter
-> import Elt
-> import Count
-> import Repeat
 > import Sublist
 
 Today we'll define a function, $\select$, which takes a natural number $n$ and a list $x$ and constructs the list of all length $n$ sublists of $x$. The signature of $\select$ should be $$\nats \times \lists{A} \rightarrow \lists{\lists{A}},$$ which matches several of our recursion operators. After trying a few, we'll use double bailout fold.
@@ -47,8 +33,8 @@ In Haskell:
 > select :: (List t, Natural n) => n -> t a -> t (t a)
 > select n x = dbfoldr delta beta prev psi chi x n
 >   where
->     delta n = if isZero n then cons nil nil else nil
->     beta _ _ n = isZero n
+>     delta m = if isZero m then cons nil nil else nil
+>     beta _ _ m = isZero m
 >     psi _ _ _ = cons nil nil
 >     chi a _ _ u v = cat (map (cons a) v) u
 
@@ -425,13 +411,13 @@ Suite:
 >   , TypeName (t a), List t
 >   , Equal (t a), Show (t a), Arbitrary (t a), Equal (t (t a))
 >   ) => t a -> n -> Int -> Int -> IO ()
-> _test_select t n maxSize numCases = do
+> _test_select t n size cases = do
 >   testLabel1 "select" t
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_select_nil t n)

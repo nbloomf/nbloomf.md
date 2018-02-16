@@ -14,22 +14,12 @@ slug: filter
 > import Testing
 > import Tuples
 > import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
 > import NaturalNumbers
 > import Lists
-> import HeadAndTail
 > import Snoc
 > import Reverse
 > import Cat
-> import Length
-> import Map
-> import Zip
-> import PrefixAndSuffix
 > import AllAndAny
-> import TailsAndInits
 
 Today we'll nail down $\filter$, which takes a list and a predicate on the items and "filters out" the items which satisfy the predicate. $\filter$ should have a signature like $$\bool^A \times \lists{A} \rightarrow \lists{A}.$$ As usual, we want to define $\filter$ as a fold; say $$\filter(p)(x) = \foldr{\varepsilon}{\varphi}(x).$$ Where on the right hand side of that equation should the $p$ parameter go? Lets think out loud for a moment. On the one hand, we want
 $$\begin{eqnarray*}
@@ -464,13 +454,13 @@ Suite:
 >   , TypeName (t a), List t
 >   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (Pair a a))
 >   ) => t a -> Int -> Int -> IO ()
-> _test_filter t maxSize numCases = do
+> _test_filter t size cases = do
 >   testLabel1 "filter" t
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_filter_nil t)

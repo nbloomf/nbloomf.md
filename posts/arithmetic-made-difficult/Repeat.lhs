@@ -15,26 +15,15 @@ slug: repeat
 > import Tuples
 > import DisjointUnions
 > import Booleans
-> import Not
-> import And
-> import Or
 > import NaturalNumbers
 > import Plus
 > import Lists
-> import HeadAndTail
 > import Snoc
 > import Reverse
 > import Cat
 > import Length
 > import Map
 > import UnfoldN
-> import Zip
-> import PrefixAndSuffix
-> import AllAndAny
-> import TailsAndInits
-> import Filter
-> import Elt
-> import Count
 
 So far we've defined a bunch of functions that operate on lists, but still only one that can create one out of nothing, namely $\range$. ($\tails$ and $\inits$ create lists, but only if we have one to start with.) Today we'll nail down another list-creating utility, $\repeat$.
 
@@ -290,13 +279,13 @@ Suite:
 >   , TypeName n, Natural n, Arbitrary n, Show n, Equal n
 >   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (Pair a a)), Equal (t b)
 >   ) => t a -> t b -> n -> Int -> Int -> IO ()
-> _test_repeat t u n maxSize numCases = do
+> _test_repeat t u n size cases = do
 >   testLabel2 "repeat" t n
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_repeat_zero t n)
