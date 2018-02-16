@@ -15,18 +15,11 @@ slug: unfoldn
 > import Tuples
 > import DisjointUnions
 > import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
 > import NaturalNumbers
 > import BailoutRecursion
 > import Lists
-> import HeadAndTail
 > import Snoc
-> import Reverse
 > import Cat
-> import Map
 
 So far we've developed a few functions that operate on lists. But we don't have a convenient programmatic way to *construct* lists out of nothing -- we'll remedy this today with a function called $\unfoldN{\ast}$. From the name, it sounds like unfold should be the "opposite" (or *dual*) of a fold. But the full story is a little more complicated than this; the true opposite to fold doesn't operate on lists at all, but on *streams* (which we'll get to later). Roughly speaking, $\lists{A}$ is an initial algebra, elements of $\lists{A}$ are required to be "finite", and $\foldr{\ast}{\ast}$ condenses a $\lists{A}$ element to a single item. Streams, in contrast, are required to be "infinite" and collectively form a *terminal algebra* and their universal map expands a single item to an infinite structure. All that is to say that the $\unfoldN{\ast}$ function we define here is *not* the real dual of $\foldr{\ast}{\ast}$ -- which partly explains why it is so complicated looking.
 
@@ -122,12 +115,12 @@ We can implement $\tacunfoldN{f}$ using the definition from the proof, or by pat
 > 
 > tacunfoldN' f x n a = bailoutRec phi beta psi omega n (tup a x)
 >   where
->     phi (Pair a x) = x
->     beta n (Pair a x) = isLft (f a)
->     psi n (Pair a x) = x
->     omega n (Pair a x) = case f a of
->       Left () -> tup a x
->       Right (Pair c b) -> tup c (snoc b x)
+>     phi (Pair _ w) = w
+>     beta _ (Pair b _) = isLft (f b)
+>     psi _ (Pair _ w) = w
+>     omega _ (Pair b w) = case f b of
+>       Left () -> tup b w
+>       Right (Pair c e) -> tup c (snoc e w)
 > 
 > 
 > tacunfoldN f x n a = case unnext n of
@@ -364,13 +357,13 @@ Suite:
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a)
 >   , TypeName n, Equal n, Show n, Arbitrary n, Natural n
 >   ) => t a -> n -> Int -> Int -> IO ()
-> _test_unfoldN t n maxSize numCases = do
+> _test_unfoldN t n size cases = do
 >   testLabel1 "unfoldN" t
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_tacunfoldN_equiv t n)

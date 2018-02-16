@@ -15,10 +15,6 @@ slug: cfoldr
 > import Functions
 > import Tuples
 > import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
 > import Unary
 > import Lists
 
@@ -82,7 +78,7 @@ There's the definition from the theorem:
 
 > cfoldr' gamma sigma x = foldr (const gamma) phi x x
 >   where
->     phi a g x = case uncons x of
+>     phi a g w = case uncons w of
 >       Left ()          -> sigma a nil (g nil)
 >       Right (Pair b u) -> sigma b u (g u)
 
@@ -90,7 +86,7 @@ And there's the definition using the universal property.
 
 > cfoldr gamma sigma x = case uncons x of
 >   Left ()          -> gamma
->   Right (Pair a x) -> sigma a x (cfoldr gamma sigma x)
+>   Right (Pair a w) -> sigma a w (cfoldr gamma sigma w)
 
 We should test that the two implementations are not *not* equivalent.
 
@@ -110,13 +106,13 @@ Suite:
 >   ( TypeName a, Show a, Equal a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a), CoArbitrary (t a)
 >   ) => t a -> Int -> Int -> IO ()
-> _test_cfoldr t maxSize numCases = do
+> _test_cfoldr t size cases = do
 >   testLabel1 "cfoldr" t
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_cfoldr_equiv t)

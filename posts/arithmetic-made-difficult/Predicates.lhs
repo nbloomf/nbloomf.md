@@ -16,7 +16,6 @@ slug: predicates
 > import Not
 > import And
 > import Or
-> import Implies
 
 In the last post we defined the algebra of boolean values, true and false. Today we'll look at *predicates* -- functions from some set $A$ to $\bool$. It turns out the algebra on $\bool$ can be lifted to predicates, and is useful enough to collect some definitions and properties in one place.
 
@@ -420,21 +419,21 @@ as needed.
 
 > _test_por_ptrue :: (Boolean b, Equal b)
 >   => a -> b -> Test ((a -> Bool) -> a -> Bool)
-> _test_por_ptrue _ b =
+> _test_por_ptrue _ _ =
 >   testName "por(ptrue,p) == ptrue" $
 >   \p a -> eq ((por ptrue p) a) (ptrue a)
 > 
 > 
 > _test_por_pfalse :: (Boolean b, Equal b)
 >   => a -> b -> Test ((a -> Bool) -> a -> Bool)
-> _test_por_pfalse _ b =
+> _test_por_pfalse _ _ =
 >   testName "por(pfalse,p) == p" $
 >   \p a -> eq ((por pfalse p) a) (p a)
 > 
 > 
 > _test_por_idempotent :: (Boolean b, Equal b)
 >   => a -> b -> Test ((a -> Bool) -> a -> Bool)
-> _test_por_idempotent _ b =
+> _test_por_idempotent _ _ =
 >   testName "por(p,p) == p" $
 >   \p a -> eq ((por p p) a) (p a)
 > 

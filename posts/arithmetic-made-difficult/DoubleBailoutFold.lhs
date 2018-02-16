@@ -14,10 +14,6 @@ slug: dbfoldr
 > import Testing
 > import Tuples
 > import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
 > import NaturalNumbers
 > import Lists
 > import HeadAndTail
@@ -91,11 +87,11 @@ We can implement $\dbfoldr{\ast}{\ast}{\ast}{\ast}{\ast}$ using the definition o
 > 
 > dbfoldr' delta beta mu psi chi x b = foldr epsilon phi x (b,x)
 >   where
->     epsilon (b,x) = delta b
+>     epsilon (a,_) = delta a
 > 
->     phi a g (b,x) = if beta a (tail x) b
->       then psi a (tail x) b
->       else chi a (tail x) b (g (b, tail x)) (g (mu b, tail x))
+>     phi a g (c,w) = if beta a (tail w) c
+>       then psi a (tail w) c
+>       else chi a (tail w) c (g (c, tail w)) (g (mu c, tail w))
 > 
 > 
 > -- terrible notation, or the worst notation?
@@ -130,13 +126,13 @@ Suite:
 >   , CoArbitrary b, Arbitrary b, Show b, CoArbitrary c, Arbitrary c
 >   , TypeName b, TypeName c, Equal b, Equal c
 >   ) => t a -> b -> c -> Int -> Int -> IO ()
-> _test_dbfoldr t b c maxSize numCases = do
+> _test_dbfoldr t b c size cases = do
 >   testLabel3 "dbfoldr" t b c
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_dbfoldr_equiv t b c)

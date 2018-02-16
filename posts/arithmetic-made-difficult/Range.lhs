@@ -15,17 +15,12 @@ slug: range
 > import Tuples
 > import DisjointUnions
 > import Booleans
-> import Not
-> import And
-> import Or
 > import NaturalNumbers
 > import Plus
 > import Lists
 > import Snoc
-> import Reverse
 > import Cat
 > import Length
-> import At
 > import Map
 > import UnfoldN
 
@@ -313,13 +308,13 @@ Suite:
 >   ( TypeName n, Natural n, Equal n, Show n, Arbitrary n
 >   , TypeName (t n), List t, Equal (t n), Show (t n), Arbitrary (t n)
 >   ) => t n -> Int -> Int -> IO ()
-> _test_range t maxSize numCases = do
+> _test_range t size cases = do
 >   testLabel1 "range" t
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_range_zero t)

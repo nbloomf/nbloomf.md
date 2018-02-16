@@ -16,7 +16,6 @@ slug: all-any
 > import Not
 > import And
 > import Or
-> import Implies
 > import Predicates
 > import NaturalNumbers
 > import Lists
@@ -24,8 +23,6 @@ slug: all-any
 > import Reverse
 > import Cat
 > import Map
-> import Zip
-> import PrefixAndSuffix
 
 Today we'll define two boolean functions for lists called $\all$ and $\any$. Each one takes as an argument a predicate $A \rightarrow \bool$, and then tests whether all or any of the items in a list of type $\lists{A}$ satisfy the predicate.
 
@@ -281,10 +278,10 @@ as claimed.
 ::: test :::::::::::
 
 > _test_all_rev :: (List t, Equal a)
->   => t a -> Test ((a -> Bool) -> t a -> t a -> Bool)
+>   => t a -> Test ((a -> Bool) -> t a -> Bool)
 > _test_all_rev _ =
 >   testName "all(p,rev(x)) == all(p,x)" $
->   \p x y -> eq (all p (rev x)) (all p x)
+>   \p x -> eq (all p (rev x)) (all p x)
 
 ::::::::::::::::::::
 ::::::::::::::::::::
@@ -589,10 +586,10 @@ as claimed.
 ::: test :::::::::::
 
 > _test_any_rev :: (List t, Equal a)
->   => t a -> Test ((a -> Bool) -> t a -> t a -> Bool)
+>   => t a -> Test ((a -> Bool) -> t a -> Bool)
 > _test_any_rev _ =
 >   testName "any(p,rev(x)) == any(p,x)" $
->   \p x y -> eq (any p (rev x)) (any p x)
+>   \p x -> eq (any p (rev x)) (any p x)
 
 ::::::::::::::::::::
 ::::::::::::::::::::
@@ -637,13 +634,13 @@ Suite:
 >   , Show (t a), Equal (t a), Arbitrary (t a)
 >   , TypeName b, Boolean b, Equal b
 >   ) => t a -> b -> Int -> Int -> IO ()
-> _test_all_any t p maxSize numCases = do
+> _test_all_any t p size cases = do
 >   testLabel1 "all & any" t
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_all_nil t)

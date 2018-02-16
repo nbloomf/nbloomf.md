@@ -16,8 +16,6 @@ slug: lcp-lcs
 > import Booleans
 > import Not
 > import And
-> import Or
-> import Implies
 > import NaturalNumbers
 > import Lists
 > import DoubleFold
@@ -839,13 +837,13 @@ Suite:
 >   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (Pair a a))
 >   , Arbitrary (t (t a)), Show (t (t a)), Equal (t (t a))
 >   ) => t a -> Int -> Int -> IO ()
-> _test_lcp t maxSize numCases = do
+> _test_lcp t size cases = do
 >   testLabel1 "lcp & lcs" t
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_lcp_nil_list t)

@@ -13,10 +13,7 @@ slug: prefix-suffix
 > 
 > import Testing
 > import Booleans
-> import Not
 > import And
-> import Or
-> import Implies
 > import NaturalNumbers
 > import LessThanOrEqualTo
 > import Lists
@@ -700,13 +697,13 @@ Suite:
 >   , TypeName n, Equal n, Natural n, Show n, Arbitrary n
 >   , Show (t a), Equal (t a), Arbitrary (t a)
 >   ) => t a -> n -> Int -> Int -> IO ()
-> _test_prefix_suffix t n maxSize numCases = do
+> _test_prefix_suffix t n size cases = do
 >   testLabel2 "prefix & suffix" t n
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_prefix_nil_list t)
