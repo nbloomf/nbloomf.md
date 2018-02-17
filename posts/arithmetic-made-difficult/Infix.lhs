@@ -30,7 +30,7 @@ slug: infix
 Today we'll nail down $\infix$, a variant on $\sublist$.
 
 :::::: definition ::
-Let $A$ be a set. Define $\beta : A \times \lists{A} \times \lists{A} \rightarrow \bool$ by $$\beta(a,x,y) = \prefix(y,\cons(a,x)),$$ $\psi : A \times \lists{A} \times \lists{A} \rightarrow \bool$ by $$\beta(a,x,y) = \btrue,$$ and $\omega : A \times \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\omega(a,x,y) = y.$$ Then define $\infix : \lists{A} \times \lists{A} \rightarrow \bool$ by $$\infix(x,y) = \bfoldr{\isnil}{\beta}{\psi}{\omega}(y,x).$$
+Let $A$ be a set. Define $\beta : A \times \lists{A} \times \lists{A} \rightarrow \bool$ by $$\beta(a,x,y) = \prefix(y,\cons(a,x)),$$ $\psi : A \times \lists{A} \times \lists{A} \rightarrow \bool$ by $$\beta(a,x,y) = \btrue,$$ and $\omega : A \times \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\omega(a,x,y) = y.$$ Then define $\infix : \lists{A} \times \lists{A} \rightarrow \bool$ by $$\infix(x,y) = \bfoldr(\isnil)(\beta)(\psi)(\omega)(y,x).$$
 
 In Haskell:
 

@@ -188,36 +188,36 @@ as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-Now $\foldl{\ast}$ interacts with $\snoc$.
+Now $\foldl(\ast)$ interacts with $\snoc$.
 
 :::::: theorem :::::
 []{#thm-snoc-foldl}
-We have $$\foldl{\varphi}(e,\snoc(a,x)) = \varphi(\foldl{\varphi}(e,x),a).$$
+We have $$\foldl(\varphi)(e,\snoc(a,x)) = \varphi(\foldl(\varphi)(e,x),a).$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case we have
 $$\begin{eqnarray*}
- &   & \foldl{\varphi}(e,\snoc(a,\nil)) \\
+ &   & \foldl(\varphi)(e,\snoc(a,\nil)) \\
  &     \href{@snoc@#cor-snoc-nil}
-   = & \foldl{\varphi}(e,\cons(a,\nil)) \\
+   = & \foldl(\varphi)(e,\cons(a,\nil)) \\
  &     \href{@foldl@#def-foldl-cons}
-   = & \foldl{\varphi}(\varphi(e,a),\nil) \\
+   = & \foldl(\varphi)(\varphi(e,a),\nil) \\
  &     \href{@foldl@#def-foldl-nil}
    = & \varphi(e,a) \\
  &     \href{@foldl@#def-foldl-nil}
-   = & \varphi(\foldl{\varphi}(e,\nil),a)
+   = & \varphi(\foldl(\varphi)(e,\nil),a)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $e$ and $a$ for some $x$, and let $b \in A$. Then we have
 $$\begin{eqnarray*}
- &   & \foldl{\varphi}(e,\snoc(a,\cons(b,x))) \\
+ &   & \foldl(\varphi)(e,\snoc(a,\cons(b,x))) \\
  &     \href{@snoc@#cor-snoc-cons}
-   = & \foldl{\varphi}(e,\cons(b,\snoc(a,x))) \\
+   = & \foldl(\varphi)(e,\cons(b,\snoc(a,x))) \\
  &     \href{@foldl@#def-foldl-cons}
-   = & \foldl{\varphi}(\varphi(e,b),\snoc(a,x)) \\
- &     \hyp{\foldl{\varphi}(c,\snoc(a,x)) = \varphi(\foldl{\varphi}(c,x),a)}
-   = & \varphi(\foldl{\varphi}(\varphi(e,b),x),a) \\
+   = & \foldl(\varphi)(\varphi(e,b),\snoc(a,x)) \\
+ &     \hyp{\foldl(\varphi)(c,\snoc(a,x)) = \varphi(\foldl(\varphi)(c,x),a)}
+   = & \varphi(\foldl(\varphi)(\varphi(e,b),x),a) \\
  &     \href{@foldl@#def-foldl-cons}
-   = & \varphi(\foldl{\varphi}(e,\cons(b,x)),a)
+   = & \varphi(\foldl(\varphi)(e,\cons(b,x)),a)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -272,43 +272,43 @@ as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-Many interesting list functions can be implemented in terms of either $\foldr{\ast}{\ast}$ or $\foldl{\ast}$, and depending on the function, one may be preferable over the other. A useful question to ask is this: under what circumstances is a given right fold equivalent to a left fold? The next result provides a sufficient condition.
+Many interesting list functions can be implemented in terms of either $\foldr{\ast}{\ast}$ or $\foldl(\ast)$, and depending on the function, one may be preferable over the other. A useful question to ask is this: under what circumstances is a given right fold equivalent to a left fold? The next result provides a sufficient condition.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets, and suppose $\varphi : A \times B \rightarrow B$ has the property that $$\varphi(a,\varphi(b,e)) = \varphi(b,\varphi(a,e))$$ for all $a,b \in A$ and $e \in B$. Letting $\psi : B \times A \rightarrow B$ be given by $\psi(b,a) = \varphi(a,b)$, we have the following.
 
-1. $\foldl{\psi}(e,\snoc(a,x)) = \foldl{\psi}(e,\cons(a,x))$.
-2. $\foldr{e}{\varphi}(x) = \foldl{\psi}(e,x)$.
+1. $\foldl(\psi)(e,\snoc(a,x)) = \foldl(\psi)(e,\cons(a,x))$.
+2. $\foldr{e}{\varphi}(x) = \foldl(\psi)(e,x)$.
 
 ::: proof ::::::::::
 1. We proceed by list induction on $x$. For the base case $x = \nil$ we have
 $$\begin{eqnarray*}
- &   & \foldl{\psi}(e,\cons(a,\nil)) \\
+ &   & \foldl(\psi)(e,\cons(a,\nil)) \\
  &     \href{@foldl@#def-foldl-cons}
-   = & \foldl{\psi}(\psi(e,a),\nil) \\
+   = & \foldl(\psi)(\psi(e,a),\nil) \\
  &     \href{@foldl@#def-foldl-nil}
    = & \psi(e,a) \\
  &     \href{@foldl@#def-foldl-nil}
-   = & \psi(\foldl{\psi}(e,\nil),a) \\
- & = & \foldl{\psi}(e,\snoc(a,\nil))
+   = & \psi(\foldl(\psi)(e,\nil),a) \\
+ & = & \foldl(\psi)(e,\snoc(a,\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $e$ and $a$ for some $x$ and let $b \in A$. Now
 $$\begin{eqnarray*}
- &   & \foldl{\psi}(e,\snoc(a,\cons(b,x))) \\
+ &   & \foldl(\psi)(e,\snoc(a,\cons(b,x))) \\
  &     \href{@snoc@#cor-snoc-cons}
-   = & \foldl{\psi}(e,\cons(b,\snoc(a,x))) \\
+   = & \foldl(\psi)(e,\cons(b,\snoc(a,x))) \\
  &     \href{@foldl@#def-foldl-cons}
-   = & \foldl{\psi}(\psi(e,b),\snoc(a,x)) \\
- & = & \foldl{\psi}(\psi(e,b),\cons(a,x)) \\
+   = & \foldl(\psi)(\psi(e,b),\snoc(a,x)) \\
+ & = & \foldl(\psi)(\psi(e,b),\cons(a,x)) \\
  &     \href{@foldl@#def-foldl-cons}
-   = & \foldl{\psi}(\psi(\psi(e,b),a),x) \\
- & = & \foldl{\psi}(\varphi(a,\varphi(b,e)),x) \\
- & = & \foldl{\psi}(\varphi(b,\varphi(a,e)),x) \\
- & = & \foldl{\psi}(\psi(\psi(e,a),b),x) \\
+   = & \foldl(\psi)(\psi(\psi(e,b),a),x) \\
+ & = & \foldl(\psi)(\varphi(a,\varphi(b,e)),x) \\
+ & = & \foldl(\psi)(\varphi(b,\varphi(a,e)),x) \\
+ & = & \foldl(\psi)(\psi(\psi(e,a),b),x) \\
  &     \href{@foldl@#def-foldl-cons}
-   = & \foldl{\psi}(\psi(e,a),\cons(b,x)) \\
+   = & \foldl(\psi)(\psi(e,a),\cons(b,x)) \\
  &     \href{@foldl@#def-foldl-cons}
-   = & \foldl{\psi}(e,\cons(a,\cons(b,x)))
+   = & \foldl(\psi)(e,\cons(a,\cons(b,x)))
 \end{eqnarray*}$$
 as needed.
 2. We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -316,18 +316,18 @@ $$\begin{eqnarray*}
  &   & \foldr{e}{\varphi}(\nil) \\
  &     \href{@lists@#def-foldr-nil}
    = & e \\
- & = & \foldl{\psi}(e,\nil)
+ & = & \foldl(\psi)(e,\nil)
 \end{eqnarray*}$$
 as needed. If $x = \cons(a,\nil)$, we have
 $$\begin{eqnarray*}
  &   & \foldr{e}{\varphi}(\cons(a,x)) \\
  &     \href{@lists@#def-foldr-cons}
    = & \varphi(a,\foldr{e}{\varphi}(x)) \\
- & = & \varphi(a,\foldl{\psi}(e,x)) \\
- & = & \psi(\foldl{\psi}(e,x),a) \\
+ & = & \varphi(a,\foldl(\psi)(e,x)) \\
+ & = & \psi(\foldl(\psi)(e,x),a) \\
  &     \href{@snoc@#thm-snoc-foldl}
-   = & \foldl{\psi}(e,\snoc(a,x)) \\
- & = & \foldl{\psi}(e,\cons(a,x))
+   = & \foldl(\psi)(e,\snoc(a,x)) \\
+ & = & \foldl(\psi)(e,\cons(a,x))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

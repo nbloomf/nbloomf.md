@@ -25,7 +25,7 @@ First we define a utility as follows.
 
 :::::: definition ::
 []{#def-revcat}
-Let $A$ be a set. We define a map $\revcat : \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\revcat = \foldl{\flip(\cons)}.$$
+Let $A$ be a set. We define a map $\revcat : \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\revcat = \foldl(\flip(\cons)).$$
 
 In Haskell:
 
@@ -34,7 +34,7 @@ In Haskell:
 
 ::::::::::::::::::::
 
-Since $\revcat$ is defined as a $\foldl{\ast}$, it can be characterized as the unique solution to a system of functional equations.
+Since $\revcat$ is defined as a $\foldl(\ast)$, it can be characterized as the unique solution to a system of functional equations.
 
 :::::: corollary :::
 []{#cor-revcat-nil}[]{#cor-revcat-cons}
@@ -446,12 +446,12 @@ as needed.
 And left fold is a reversed right fold.
 
 :::::: theorem :::::
-Let $f : B \times A \rightarrow B$. Now $$\foldl{f}(e,x) = \foldr{e,\flip(f)}(\rev(x)).$$
+Let $f : B \times A \rightarrow B$. Now $$\foldl(f)(e,x) = \foldr{e,\flip(f)}(\rev(x)).$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \foldl{f}(e,\nil) \\
+ &   & \foldl(f)(e,\nil) \\
  &     \href{@foldl@#def-foldl-nil}
    = & e \\
  &     \href{@lists@#def-foldr-nil}
@@ -461,10 +461,10 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $e$ for some $x$, and let $a \in A$. Now
 $$\begin{eqnarray*}
- &   & \foldl{f}(e,\cons(a,x)) \\
+ &   & \foldl(f)(e,\cons(a,x)) \\
  &     \href{@foldl@#def-foldl-cons}
-   = & \foldl{f}(f(e,a),x) \\
- &     \hyp{\foldl{f}(w,x) = \foldr{w}{\flip(f)}(\rev(x))}
+   = & \foldl(f)(f(e,a),x) \\
+ &     \hyp{\foldl(f)(w,x) = \foldr{w}{\flip(f)}(\rev(x))}
    = & \foldr{f(e,a)}{\flip(f)}(\rev(x)) \\
  & = & \foldr{\flip(f)(a,e)}{\flip(f)}(\rev(x)) \\
  & = & \foldr{e}{\flip(f)}(\snoc(a,\rev(x))) \\

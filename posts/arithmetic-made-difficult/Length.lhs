@@ -21,11 +21,11 @@ slug: length
 > import Reverse
 > import Cat
 
-Today we'll measure the sizes of lists with $\length$. Intuitively this function should "count" the "number" of "items" in a list. Thinking recursively, it is reasonable to want the length of $\nil$ to be zero, and the length of $\cons(a,x)$ to be one more than the length of $x$. $\foldr{\ast}{\ast}$ was made for situations like this. But wait! Remember that $\foldr{\ast}{\ast}$ is not tail recursive, so on large lists it may have problems. But $\foldl{\ast}$ is tail recursive, and is interchangeable with $\foldr{\ast}{\ast}$ as long as whatever we're doing to the list doesn't care what *order* the items come in. And it seems reasonable to say that the length of a list is not dependent on the order of its items. So we'll use $\foldl{\ast}$. Recall from $\rev$ that $\foldl{\ast}$ is easier to reason about if it remains parameterized on the "base case". With that in mind, we start with a helper function $\addlength$.
+Today we'll measure the sizes of lists with $\length$. Intuitively this function should "count" the "number" of "items" in a list. Thinking recursively, it is reasonable to want the length of $\nil$ to be zero, and the length of $\cons(a,x)$ to be one more than the length of $x$. $\foldr{\ast}{\ast}$ was made for situations like this. But wait! Remember that $\foldr{\ast}{\ast}$ is not tail recursive, so on large lists it may have problems. But $\foldl(\ast)$ is tail recursive, and is interchangeable with $\foldr{\ast}{\ast}$ as long as whatever we're doing to the list doesn't care what *order* the items come in. And it seems reasonable to say that the length of a list is not dependent on the order of its items. So we'll use $\foldl(\ast)$. Recall from $\rev$ that $\foldl(\ast)$ is easier to reason about if it remains parameterized on the "base case". With that in mind, we start with a helper function $\addlength$.
 
 :::::: definition ::
 []{#def-addlength}
-Let $A$ be a set. We define $\addlength : \nats \rightarrow \lists{A} \rightarrow \nats$ by $\addlength = \foldl{\compose(\const)(\next)}$.
+Let $A$ be a set. We define $\addlength : \nats \rightarrow \lists{A} \rightarrow \nats$ by $\addlength = \foldl(\compose(\const)(\next))$.
 
 In Haskell:
 
@@ -34,7 +34,7 @@ In Haskell:
 
 ::::::::::::::::::::
 
-Since $\addlength$ is defined as a $\foldl{\ast}$, it is the unique solution to a system of functional equations.
+Since $\addlength$ is defined as a $\foldl(\ast)$, it is the unique solution to a system of functional equations.
 
 :::::: corollary :::
 []{#cor-addlength-nil}[]{#cor-addlength-cons}
@@ -81,13 +81,13 @@ Let $A$ be a set. For all $n \in \nats$, $a \in A$, and $x \in \lists{A}$, we ha
 $$\begin{eqnarray*}
  &   & \addlength(n,\snoc(a,x)) \\
  &     \href{@length@#def-addlength}
-   = & \foldl{\compose(\const)(\next)}(n,\snoc(a,x)) \\
+   = & \foldl(\compose(\const)(\next))(n,\snoc(a,x)) \\
  &     \href{@snoc@#thm-snoc-foldl}
-   = & \compose(\const)(\next)(\foldl{\compose(\const)(\next)}(n,x),a) \\
+   = & \compose(\const)(\next)(\foldl(\compose(\const)(\next))(n,x),a) \\
  &     \href{@functions@#def-compose}
-   = & \const(\next(\foldl{\compose(\const)(\next)}(n,x)))(a) \\
+   = & \const(\next(\foldl(\compose(\const)(\next))(n,x)))(a) \\
  &     \href{@functions@#def-const}
-   = & \next(\foldl{\compose(\const)(\next)}(n,x)) \\
+   = & \next(\foldl(\compose(\const)(\next))(n,x)) \\
  &     \href{@length@#def-addlength}
    = & \next(\addlength(n,x))
 \end{eqnarray*}$$

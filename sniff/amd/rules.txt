@@ -314,8 +314,8 @@
 #=======================#
 #--- foldl -------------#
 #=======================#
-@foldl@#def-foldl-nil	\\foldl{f}(e,\\nil) = e
-@foldl@#def-foldl-cons	\\foldl{f}(e,\\cons(a,x)) = \\foldl{f}(f(e,a),x)
+@foldl@#def-foldl-nil	\\foldl(f)(e,\\nil) = e
+@foldl@#def-foldl-cons	\\foldl(f)(e,\\cons(a,x)) = \\foldl(f)(f(e,a),x)
 #=======================#
 #--- dfoldr ------------#
 #=======================#
@@ -329,12 +329,12 @@
 @snoc@#cor-snoc-nil	\\snoc(a,\\nil) = \\cons(a,\\nil)
 @snoc@#cor-snoc-cons	\\snoc(a,\\cons(b,x)) = \\cons(b,\\snoc(a,x))
 @snoc@#thm-snoc-eq	\\beq(\\snoc(a,x),\\snoc(b,y)) = \\band(\\beq(a,b),\\beq(x,y))
-@snoc@#thm-snoc-foldl	\\foldl{f}(e,\\snoc(a,x)) = f(\\foldl{f}(e,x),a)
+@snoc@#thm-snoc-foldl	\\foldl(f)(e,\\snoc(a,x)) = f(\\foldl(f)(e,x),a)
 @snoc@#thm-isnil-snoc	\\isnil(\\snoc(a,x)) = \\bfalse
 #=======================#
 #--- rev ---------------#
 #=======================#
-@rev@#def-revcat	\\revcat = \\foldl{\\flip(\\cons)}
+@rev@#def-revcat	\\revcat = \\foldl(\\flip(\\cons))
 @rev@#cor-revcat-nil	\\revcat(x,\\nil) = x
 @rev@#cor-revcat-cons	\\revcat(x,\\cons(a,y)) = \\revcat(\\cons(a,x),y)
 @rev@#thm-revcat-snoc-left	\\revcat(\\snoc(a,x),y) = \\snoc(a,\\revcat(x,y))
@@ -361,7 +361,7 @@
 #=======================#
 #--- length ------------#
 #=======================#
-@length@#def-addlength	\\addlength = \\foldl{\\compose(\\const)(\\next)}
+@length@#def-addlength	\\addlength = \\foldl(\\compose(\\const)(\\next))
 @length@#cor-addlength-nil	\\addlength(k,\\nil) = k
 @length@#cor-addlength-cons	\\addlength(k,\\cons(a,x)) = \\addlength(\\next(k),x)
 @length@#thm-addlength-snoc-next	\\addlength(k,\\snoc(a,x)) = \\next(\\addlength(k,x))

@@ -28,7 +28,7 @@ Today we'll define $\count$, which takes an $A$ and a $\lists{A}$ and returns th
 When dealing with left folds, it is often handier to parameterize on the base case, so that's what we'll do.
 
 :::::: definition ::
-Let $A$ be a set with $a \in A$, and define $\varphi : \nats \times A \rightarrow \nats$ by $$\varphi(k,b) = \bif{\beq(a,b)}{\next(k)}{k}.$$ Now we define $\addcount(a) : \nats \times \lists{A} \rightarrow \nats$ by $$\addcount(a)(n,x) = \foldl{\varphi}(n)(x).$$
+Let $A$ be a set with $a \in A$, and define $\varphi : \nats \times A \rightarrow \nats$ by $$\varphi(k,b) = \bif{\beq(a,b)}{\next(k)}{k}.$$ Now we define $\addcount(a) : \nats \times \lists{A} \rightarrow \nats$ by $$\addcount(a)(n,x) = \foldl(\varphi)(n)(x).$$
 
 In Haskell:
 
@@ -284,8 +284,8 @@ Let $A$ be a set, with $a,b \in A$. Then $$\count(a,\cons(b,\nil)) = \bif{\beq(a
 Note that
 $$\begin{eqnarray*}
  &   & \count(a,\cons(b,\nil)) \\
- & = & \foldl{\zero}{\varphi(a)}(\cons(b,\nil)) \\
- & = & \foldl{\varphi(a)(b,\zero)}{\varphi(a)}(\nil) \\
+ & = & \foldl(\zero){\varphi(a)}(\cons(b,\nil)) \\
+ & = & \foldl(\varphi(a)(b,\zero)){\varphi(a)}(\nil) \\
  & = & \varphi(a)(b,\zero) \\
  & = & \bif{\beq(a,b)}{\next(\zero)}{\zero}
 \end{eqnarray*}$$
