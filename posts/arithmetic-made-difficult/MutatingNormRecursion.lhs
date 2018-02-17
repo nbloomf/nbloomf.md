@@ -26,7 +26,7 @@ $$\Theta(a) = \left\{\begin{array}{l}
  \delta(a) & \mathrm{if}\ \iszero(\eta(a)) \\
  \sigma(a,\Theta(\varphi(a))) & \mathrm{otherwise}
 \end{array}\right.$$
-We denote this unique map by $\mnormrec{\varphi}{\eta}{\delta}{\sigma}$.
+We denote this unique map by $\mnormrec(\varphi)(\eta)(\delta)(\sigma)$.
 
 ::: proof ::::::::::
 We define maps $\beta : \nats \times A \rightarrow \bool$ by $$\beta(n,a) = \iszero(\eta(a)),$$ $\psi : \nats \times A \rightarrow B$ by $$\psi(n,a) = \delta(a),$$ $\chi : \nats \times A \times B \rightarrow B$ by $$\chi(n,a,b) = \sigma(a,b),$$ and $\omega : \nats \times A \rightarrow A$ by $$\omega(n,a) = \varphi(a).$$ Now we define $\Omega : \nats \times A \rightarrow B$ by $$\Omega = \mutrec(\delta)(\beta)(\psi)(\chi)(\omega).$$
@@ -139,7 +139,7 @@ as needed.
 Implementation
 --------------
 
-We have a couple of ways to implement $\mnormrec{\ast}{\ast}{\ast}{\ast}$.
+We have a couple of ways to implement $\mnormrec$.
 
 > mnormrec, mnormrec' :: (Natural n)
 >   => (a -> a)

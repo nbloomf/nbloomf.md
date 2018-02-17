@@ -27,7 +27,7 @@ $$\Theta(\cons(a,x),b) = \left\{\begin{array}{ll}
  \psi(a,x,b) & \mathrm{if}\ \beta(a,x,b) \\
  \chi(a,x,b,\Theta(x,b),\Theta(x,\mu(b))) & \mathrm{otherwise}.
 \end{array}\right.$$
-We denote this $\Theta$ by $\dbfoldr{\delta}{\beta}{\mu}{\psi}{\chi}$.
+We denote this $\Theta$ by $\dbfoldr(\delta)(\beta)(\mu)(\psi)(\chi)$.
 
 ::: proof ::::::::::
 Define $\varepsilon : B \times \lists{A} \rightarrow C$ by $$\varepsilon(b,x) = \delta(b)$$ and $\varphi : A \times C^{B \times \lists{A}} \rightarrow C^{B \times \lists{A}}$ casewise by
@@ -74,7 +74,7 @@ as needed.
 Implementation
 --------------
 
-We can implement $\dbfoldr{\ast}{\ast}{\ast}{\ast}{\ast}$ using the definition or the universal property.
+We can implement $\dbfoldr$ using the definition or the universal property.
 
 > dbfoldr, dbfoldr'
 >   :: (List t)

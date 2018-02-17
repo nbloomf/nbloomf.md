@@ -26,7 +26,7 @@ slug: select
 Today we'll define a function, $\select$, which takes a natural number $n$ and a list $x$ and constructs the list of all length $n$ sublists of $x$. The signature of $\select$ should be $$\nats \times \lists{A} \rightarrow \lists{\lists{A}},$$ which matches several of our recursion operators. After trying a few, we'll use double bailout fold.
 
 :::::: definition ::
-Let $A$ be a set. Define $\delta : \nats \rightarrow \lists{\lists{A}}$ by $$\delta(n) = \bif{\iszero(n)}{\cons(\nil,\nil)}{\nil},$$ $\beta : A \times \lists{A} \times \nats \rightarrow \bool$ by $$\beta(a,x,n) = \iszero(n),$$ $\psi : A \times \lists{A} \times \nats \rightarrow \lists{\lists{A}}$ by $$\psi(a,x,n) = \cons(\nil,\nil),$$ and $\chi : A \times \lists{A} \times \nats \times \lists{\lists{A}} \times \lists{\lists{A}} \rightarrow \lists{\lists{A}}$ by $$\chi(a,x,n,u,v) = \cat(\map(\cons(a,-))(v),u).$$ Now define $\select : \nats \times \lists{A} \rightarrow \lists{\lists{A}}$ by $$\select(n,x) = \dbfoldr{\delta}{\beta}{\prev}{\psi}{\chi}(x,n).$$
+Let $A$ be a set. Define $\delta : \nats \rightarrow \lists{\lists{A}}$ by $$\delta(n) = \bif{\iszero(n)}{\cons(\nil,\nil)}{\nil},$$ $\beta : A \times \lists{A} \times \nats \rightarrow \bool$ by $$\beta(a,x,n) = \iszero(n),$$ $\psi : A \times \lists{A} \times \nats \rightarrow \lists{\lists{A}}$ by $$\psi(a,x,n) = \cons(\nil,\nil),$$ and $\chi : A \times \lists{A} \times \nats \times \lists{\lists{A}} \times \lists{\lists{A}} \rightarrow \lists{\lists{A}}$ by $$\chi(a,x,n,u,v) = \cat(\map(\cons(a,-))(v),u).$$ Now define $\select : \nats \times \lists{A} \rightarrow \lists{\lists{A}}$ by $$\select(n,x) = \dbfoldr(\delta)(\beta)(\prev)(\psi)(\chi)(x,n).$$
 
 In Haskell:
 
