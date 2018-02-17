@@ -21,7 +21,7 @@ slug: length
 > import Reverse
 > import Cat
 
-Today we'll measure the sizes of lists with $\length$. Intuitively this function should "count" the "number" of "items" in a list. Thinking recursively, it is reasonable to want the length of $\nil$ to be zero, and the length of $\cons(a,x)$ to be one more than the length of $x$. $\foldr{\ast}{\ast}$ was made for situations like this. But wait! Remember that $\foldr{\ast}{\ast}$ is not tail recursive, so on large lists it may have problems. But $\foldl(\ast)$ is tail recursive, and is interchangeable with $\foldr{\ast}{\ast}$ as long as whatever we're doing to the list doesn't care what *order* the items come in. And it seems reasonable to say that the length of a list is not dependent on the order of its items. So we'll use $\foldl(\ast)$. Recall from $\rev$ that $\foldl(\ast)$ is easier to reason about if it remains parameterized on the "base case". With that in mind, we start with a helper function $\addlength$.
+Today we'll measure the sizes of lists with $\length$. Intuitively this function should "count" the "number" of "items" in a list. Thinking recursively, it is reasonable to want the length of $\nil$ to be zero, and the length of $\cons(a,x)$ to be one more than the length of $x$. $\foldr(\ast)(\ast)$ was made for situations like this. But wait! Remember that $\foldr(\ast)(\ast)$ is not tail recursive, so on large lists it may have problems. But $\foldl(\ast)$ is tail recursive, and is interchangeable with $\foldr(\ast)(\ast)$ as long as whatever we're doing to the list doesn't care what *order* the items come in. And it seems reasonable to say that the length of a list is not dependent on the order of its items. So we'll use $\foldl(\ast)$. Recall from $\rev$ that $\foldl(\ast)$ is easier to reason about if it remains parameterized on the "base case". With that in mind, we start with a helper function $\addlength$.
 
 :::::: definition ::
 []{#def-addlength}
@@ -194,12 +194,12 @@ Although $\length$ is essentially defined as a left fold, it can be characterize
 
 :::::: theorem :::::
 []{#thm-length-foldr}
-Let $A$ be a set. Then we have $$\length(x) = \foldr{\zero}{\flip(\compose(\const)(\next))}(x).$$
+Let $A$ be a set. Then we have $$\length(x) = \foldr(\zero)(\flip(\compose(\const)(\next)))(x).$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \foldr{\zero}{\flip(\compose(\const)(\next))}(\nil) \\
+ &   & \foldr(\zero)(\flip(\compose(\const)(\next)))(\nil) \\
  &     \href{@lists@#def-foldr-nil}
    = & \zero \\
  &     \href{@length@#cor-addlength-nil}
@@ -209,10 +209,10 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
- &   & \foldr{\zero}{\flip(\compose(\const)(\next))}(\cons(a,x)) \\
+ &   & \foldr(\zero)(\flip(\compose(\const)(\next)))(\cons(a,x)) \\
  &     \href{@lists@#def-foldr-cons}
-   = & \flip(\compose(\const)(\next))(a,\foldr{\zero}{\flip(\compose(\const)(\next))}(x)) \\
- &     \hyp{\length = \foldr{\zero}{\flip(\compose(\const)(\next))}}
+   = & \flip(\compose(\const)(\next))(a,\foldr(\zero)(\flip(\compose(\const)(\next)))(x)) \\
+ &     \hyp{\length = \foldr(\zero)(\flip(\compose(\const)(\next)))}
    = & \flip(\compose(\const)(\next))(a,\length(x)) \\
  &     \href{@functions@#def-flip}
    = & \compose(\const)(\next)(\length(x),a)

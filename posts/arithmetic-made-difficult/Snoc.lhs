@@ -19,15 +19,15 @@ slug: snoc
 > import HeadAndTail
 > import LeftFold
 
-We've defined a set $\lists{A}$ with a special element $\nil$, a map $\cons : A \times \lists{A} \rightarrow \lists{A}$, and a universal map $\foldr{\ast}{\ast}$. As you might guess we'll be thinking of the elements of $\lists{A}$ as finite lists, and they will form a simple kind of data structure.
+We've defined a set $\lists{A}$ with a special element $\nil$, a map $\cons : A \times \lists{A} \rightarrow \lists{A}$, and a universal map $\foldr(\ast)(\ast)$. As you might guess we'll be thinking of the elements of $\lists{A}$ as finite lists, and they will form a simple kind of data structure.
 
 The $\cons$ function attaches a new item to the "beginning" of a list; we want an analogous function that attaches items to the "end".
 
-First let's tackle adding items to the end of a list; traditionally this operator is called $\snoc$ as a bad pun on "reverse $\cons$". Now the signature of $\snoc$ should be something like $$\snoc : A \times \lists{A} \rightarrow \lists{A},$$ and $\foldr{e}{\varphi}$ can be used to build a map $\lists{A} \rightarrow \lists{A}$, provided $e$ is in $\lists{A}$ and $\varphi : A \times \lists{A} \rightarrow \lists{A}$. Considering the behavior we want $\snoc$ to have, we define the following.
+First let's tackle adding items to the end of a list; traditionally this operator is called $\snoc$ as a bad pun on "reverse $\cons$". Now the signature of $\snoc$ should be something like $$\snoc : A \times \lists{A} \rightarrow \lists{A},$$ and $\foldr(e)(\varphi)$ can be used to build a map $\lists{A} \rightarrow \lists{A}$, provided $e$ is in $\lists{A}$ and $\varphi : A \times \lists{A} \rightarrow \lists{A}$. Considering the behavior we want $\snoc$ to have, we define the following.
 
 :::::: definition ::
 []{#def-snoc}
-Let $A$ be a set. We now define a map $\snoc : A \times \lists{A} \rightarrow \lists{A}$ by $$\snoc(a,x) = \foldr{\cons(a,\nil)}{\cons}(x).$$
+Let $A$ be a set. We now define a map $\snoc : A \times \lists{A} \rightarrow \lists{A}$ by $$\snoc(a,x) = \foldr(\cons(a,\nil))(\cons)(x).$$
 
 In Haskell:
 
@@ -66,34 +66,34 @@ $$\left\{ \begin{array}{ll}
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-Now $\snoc$ interacts with $\foldr{\ast}{\ast}$.
+Now $\snoc$ interacts with $\foldr(\ast)(\ast)$.
 
 :::::: theorem :::::
-Let $A$ and $B$ be sets with $e \in B$ and $\varphi : A \times B \rightarrow B$. Then for all $a \in A$ and $x \in \lists{A}$ we have $$\foldr{e}{\varphi}(\snoc(a,x)) = \foldr{\varphi(a,e)}{\varphi}(x).$$
+Let $A$ and $B$ be sets with $e \in B$ and $\varphi : A \times B \rightarrow B$. Then for all $a \in A$ and $x \in \lists{A}$ we have $$\foldr(e)(\varphi)(\snoc(a,x)) = \foldr(\varphi(a,e))(\varphi)(x).$$
 
 ::: proof ::::::::::
 We proceed by list induction. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
- &   & \foldr{e}{\varphi}(\snoc(a,\nil)) \\
+ &   & \foldr(e)(\varphi)(\snoc(a,\nil)) \\
  &     \href{@snoc@#cor-snoc-nil}
-   = & \foldr{e}{\varphi}(\cons(a,\nil)) \\
+   = & \foldr(e)(\varphi)(\cons(a,\nil)) \\
  &     \href{@lists@#def-foldr-cons}
-   = & \varphi(a,\foldr{e}{\varphi}(\nil)) \\
+   = & \varphi(a,\foldr(e)(\varphi)(\nil)) \\
  &     \href{@lists@#def-foldr-nil}
    = & \varphi(a,e) \\
  &     \href{@lists@#def-foldr-nil}
-   = & \foldr{\varphi(a,e)}{\varphi}(\nil)
+   = & \foldr(\varphi(a,e))(\varphi)(\nil)
 \end{eqnarray*}$$
 as claimed. Suppose now that the equality holds for some $x \in \lists{A}$. Now
 $$\begin{eqnarray*}
- &   & \foldr{e}{\varphi}(\snoc(a,\cons(b,x))) \\
+ &   & \foldr(e)(\varphi)(\snoc(a,\cons(b,x))) \\
  &     \href{@snoc@#cor-snoc-cons}
-   = & \foldr{e}{\varphi}(\cons(b,\snoc(a,x))) \\
+   = & \foldr(e)(\varphi)(\cons(b,\snoc(a,x))) \\
  &     \href{@lists@#def-foldr-cons}
-   = & \varphi(b,\foldr{e}{\varphi}(\snoc(a,x))) \\
- & = & \varphi(b,\foldr{\varphi(a,e)}{\varphi}(x)) \\
+   = & \varphi(b,\foldr(e)(\varphi)(\snoc(a,x))) \\
+ & = & \varphi(b,\foldr(\varphi(a,e))(\varphi)(x)) \\
  &     \href{@lists@#def-foldr-cons}
-   = & \foldr{\varphi(a,e)}{\varphi}(\cons(b,x))
+   = & \foldr(\varphi(a,e))(\varphi)(\cons(b,x))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -272,13 +272,13 @@ as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-Many interesting list functions can be implemented in terms of either $\foldr{\ast}{\ast}$ or $\foldl(\ast)$, and depending on the function, one may be preferable over the other. A useful question to ask is this: under what circumstances is a given right fold equivalent to a left fold? The next result provides a sufficient condition.
+Many interesting list functions can be implemented in terms of either $\foldr(\ast)(\ast)$ or $\foldl(\ast)$, and depending on the function, one may be preferable over the other. A useful question to ask is this: under what circumstances is a given right fold equivalent to a left fold? The next result provides a sufficient condition.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets, and suppose $\varphi : A \times B \rightarrow B$ has the property that $$\varphi(a,\varphi(b,e)) = \varphi(b,\varphi(a,e))$$ for all $a,b \in A$ and $e \in B$. Letting $\psi : B \times A \rightarrow B$ be given by $\psi(b,a) = \varphi(a,b)$, we have the following.
 
 1. $\foldl(\psi)(e,\snoc(a,x)) = \foldl(\psi)(e,\cons(a,x))$.
-2. $\foldr{e}{\varphi}(x) = \foldl(\psi)(e,x)$.
+2. $\foldr(e)(\varphi)(x) = \foldl(\psi)(e,x)$.
 
 ::: proof ::::::::::
 1. We proceed by list induction on $x$. For the base case $x = \nil$ we have
@@ -313,16 +313,16 @@ $$\begin{eqnarray*}
 as needed.
 2. We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \foldr{e}{\varphi}(\nil) \\
+ &   & \foldr(e)(\varphi)(\nil) \\
  &     \href{@lists@#def-foldr-nil}
    = & e \\
  & = & \foldl(\psi)(e,\nil)
 \end{eqnarray*}$$
 as needed. If $x = \cons(a,\nil)$, we have
 $$\begin{eqnarray*}
- &   & \foldr{e}{\varphi}(\cons(a,x)) \\
+ &   & \foldr(e)(\varphi)(\cons(a,x)) \\
  &     \href{@lists@#def-foldr-cons}
-   = & \varphi(a,\foldr{e}{\varphi}(x)) \\
+   = & \varphi(a,\foldr(e)(\varphi)(x)) \\
  & = & \varphi(a,\foldl(\psi)(e,x)) \\
  & = & \psi(\foldl(\psi)(e,x),a) \\
  &     \href{@snoc@#thm-snoc-foldl}

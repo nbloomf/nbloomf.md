@@ -178,7 +178,7 @@ as needed.
 We can also characterize $\addcount$ as a right fold.
 
 :::::: theorem :::::
-Let $A$ be a set with $a \in A$, and define $\psi : A \times \nats \rightarrow \nats$ by $$\psi(b,k) = \bif{\beq(a,b)}{\next(k)}{k}.$$ Then we have $$\addcount(a)(k,x) = \foldr{k}{\psi}(x).$$
+Let $A$ be a set with $a \in A$, and define $\psi : A \times \nats \rightarrow \nats$ by $$\psi(b,k) = \bif{\beq(a,b)}{\next(k)}{k}.$$ Then we have $$\addcount(a)(k,x) = \foldr(k)(\psi)(x).$$
 
 ::: proof ::::::::::
 Note that
@@ -186,7 +186,7 @@ $$\begin{eqnarray*}
  &   & \addcount(a)(k,\nil) \\
  & = & k \\
  &     \href{@lists@#def-foldr-nil}
-   = & \foldr{k}{\psi}(\nil)
+   = & \foldr(k)(\psi)(\nil)
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
@@ -428,7 +428,7 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \count(a,x) \\
  & = & \count(a,\nil) \\
- & = & \foldr{\zero}{\varphi(a)}(\nil) \\
+ & = & \foldr(\zero)(\varphi(a))(\nil) \\
  &     \href{@lists@#def-foldr-nil}
    = & \zero \\
  & = & \length(\nil) \\

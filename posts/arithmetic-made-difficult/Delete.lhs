@@ -29,7 +29,7 @@ slug: delete
 Today we'll establish a function $\delete$ that removes all copies of a given item from a list. $\delete$ is a special case of $\filter$.
 
 :::::: definition ::
-Let $A$ be a set, with $a \in A$. Define $\varphi : A \times \lists{A} \rightarrow \lists{A}$ by $$\varphi(b,x) = \bif{\beq(a,b)}{x}{\cons(b,x)},$$ and define $\delete : A \rightarrow \lists{A}^{\lists{A}}$ by $$\delete(a) = \foldr{\nil}{\varphi}.$$
+Let $A$ be a set, with $a \in A$. Define $\varphi : A \times \lists{A} \rightarrow \lists{A}$ by $$\varphi(b,x) = \bif{\beq(a,b)}{x}{\cons(b,x)},$$ and define $\delete : A \rightarrow \lists{A}^{\lists{A}}$ by $$\delete(a) = \foldr(\nil)(\varphi).$$
 
 In Haskell:
 

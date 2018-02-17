@@ -27,7 +27,7 @@ Today we'll explore one of the most useful functions on $\lists{A}$: $\map$. Wha
 
 :::::: definition ::
 []{#def-map}
-Let $A$ and $B$ be sets. We then define $\map : B^A \rightarrow \lists{A} \rightarrow \lists{B}$ by $$\map(f) = \foldr{\nil}{\compose(\cons)(f)}.$$
+Let $A$ and $B$ be sets. We then define $\map : B^A \rightarrow \lists{A} \rightarrow \lists{B}$ by $$\map(f) = \foldr(\nil)(\compose(\cons)(f)).$$
 
 In Haskell:
 
@@ -36,7 +36,7 @@ In Haskell:
 
 ::::::::::::::::::::
 
-Since $\map$ is defined as a $\foldr{\ast}{\ast}$, it is the unique solution to a system of functional equations.
+Since $\map$ is defined as a $\foldr(\ast)(\ast)$, it is the unique solution to a system of functional equations.
 
 :::::: corollary :::
 []{#cor-map-nil}[]{#cor-map-cons}

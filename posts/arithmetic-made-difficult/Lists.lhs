@@ -213,7 +213,7 @@ And finally, a more concrete description of the universal algebra from $\lists{A
 
 :::::: axiom :::::::
 []{#def-foldr-nil}[]{#def-foldr-cons}
-(Fold.) Let $A$ be a set, and let $(B,e,\varphi)$ be an $A$-inductive set. Then there is a unique map $\Theta : \lists{A} \rightarrow B$ which solves the system of functional equations $$\left\{ \begin{array}{l} \Theta(\nil) = e \\ \Theta(\cons(a,x)) = \varphi(a,\Theta(x)). \end{array} \right.$$ We denote this unique $\Theta$ by $\foldr{e}{\varphi}$.
+(Fold.) Let $A$ be a set, and let $(B,e,\varphi)$ be an $A$-inductive set. Then there is a unique map $\Theta : \lists{A} \rightarrow B$ which solves the system of functional equations $$\left\{ \begin{array}{l} \Theta(\nil) = e \\ \Theta(\cons(a,x)) = \varphi(a,\Theta(x)). \end{array} \right.$$ We denote this unique $\Theta$ by $\foldr(e)(\varphi)$.
 
 In Haskell:
 
@@ -226,7 +226,7 @@ In Haskell:
 
 Note that this definition is *not* tail recursive. This turns out not to be a huge problem in practice.
 
-It's handy to remember that this theorem says not only that $\foldr{\ast}{\ast}$ exists, but that it is unique -- in some sense foldr gives the unique solution to a system of functional equations. This gives us a strategy for showing that two programs are equivalent. If one is defined as a fold, and both programs satisfy the universal property, then they have to be equal. This is nice for showing, for instance, that a *slow but obviously correct* program is equivalent to a *fast but not obviously correct* one.
+It's handy to remember that this theorem says not only that $\foldr(\ast)(\ast)$ exists, but that it is unique -- in some sense foldr gives the unique solution to a system of functional equations. This gives us a strategy for showing that two programs are equivalent. If one is defined as a fold, and both programs satisfy the universal property, then they have to be equal. This is nice for showing, for instance, that a *slow but obviously correct* program is equivalent to a *fast but not obviously correct* one.
 
 Now $\lists{A}$ has an inductive proof strategy.
 
@@ -239,7 +239,7 @@ Now $\lists{A}$ has an inductive proof strategy.
 Then we have $f(x) \in C$ for all $x \in \lists{A}$.
 
 ::: proof ::::::::::
-This proof is analogous to the proof of the induction principle for $\nats$. We first define $T \subseteq \lists{A}$ by $$T = \{x \in \lists{A} \mid f(x) \in C \}.$$ Note that $\nil \in T$ and if $x \in T$ and $a \in A$ then $\cons(a,x) \in T$; in particular, $(T,\nil,\cons)$ is an $A$-iterative set. We let $\Theta = \foldr{\nil}{\cons}$. Now the inclusion map $\iota : T \rightarrow \lists{A}$ is an $A$-inducive set homomorphism, since $\iota(\nil) = \nil$ and $$\iota(\cons(a,x)) = \cons(a,x) = \cons(a,\iota(x)).$$ Thus $\iota \circ \Theta : \lists{A} \rightarrow \lists{A}$ is an $A$-inductive set homomorphism, so it must be $\id_A$. Thus if $x \in \lists{A}$ we have $$x = \id(x) = \iota(\Theta(x)) = \Theta(x) \in T$$ so that $f(x) \in C$ as claimed.
+This proof is analogous to the proof of the induction principle for $\nats$. We first define $T \subseteq \lists{A}$ by $$T = \{x \in \lists{A} \mid f(x) \in C \}.$$ Note that $\nil \in T$ and if $x \in T$ and $a \in A$ then $\cons(a,x) \in T$; in particular, $(T,\nil,\cons)$ is an $A$-iterative set. We let $\Theta = \foldr(\nil)(\cons)$. Now the inclusion map $\iota : T \rightarrow \lists{A}$ is an $A$-inducive set homomorphism, since $\iota(\nil) = \nil$ and $$\iota(\cons(a,x)) = \cons(a,x) = \cons(a,\iota(x)).$$ Thus $\iota \circ \Theta : \lists{A} \rightarrow \lists{A}$ is an $A$-inductive set homomorphism, so it must be $\id_A$. Thus if $x \in \lists{A}$ we have $$x = \id(x) = \iota(\Theta(x)) = \Theta(x) \in T$$ so that $f(x) \in C$ as claimed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
@@ -247,15 +247,15 @@ Here's an example using list induction.
 
 :::::: theorem :::::
 []{#thm-foldr-nil-cons}
-Let $A$ be a set. Then we have $$\foldr{\nil}{\cons}(x) = x$$ for all $x \in \lists{A}$.
+Let $A$ be a set. Then we have $$\foldr(\nil)(\cons)(x) = x$$ for all $x \in \lists{A}$.
 
 ::: proof ::::::::::
-We proceed by list induction on $x$. For the base case $x = \nil$, we have $$\foldr{\nil}{\cons}(\nil) = \nil$$ as claimed. For the inductive step, suppose the equality holds for some $x \in \lists{A}$, and let $a \in A$. Now
+We proceed by list induction on $x$. For the base case $x = \nil$, we have $$\foldr(\nil)(\cons)(\nil) = \nil$$ as claimed. For the inductive step, suppose the equality holds for some $x \in \lists{A}$, and let $a \in A$. Now
 $$\begin{eqnarray*}
- &   & \foldr{\nil}{\cons}(\cons(a,x)) \\
+ &   & \foldr(\nil)(\cons)(\cons(a,x)) \\
  &     \href{@lists@#def-foldr-cons}
-   = & \cons(a,\foldr{\nil}{\cons}(x)) \\
- &     \hyp{\foldr{\nil}{\cons}(x) = x}
+   = & \cons(a,\foldr(\nil)(\cons)(x)) \\
+ &     \hyp{\foldr(\nil)(\cons)(x) = x}
    = & \cons(a,x)
 \end{eqnarray*}$$
 as claimed.

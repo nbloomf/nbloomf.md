@@ -35,10 +35,10 @@ $$\varphi(a,g)(b,x) = \left\{\begin{array}{ll}
  \psi(a,\tail(x),b) & \mathrm{if}\ \beta(a,\tail(x),b) \\
  \chi(a,\tail(x),b,g(b,\tail(x)),g(\mu(b),\tail(x))) & \mathrm{otherwise},
 \end{array}\right.$$
-and let $\Theta(x,b) = \foldr{\varepsilon}{\varphi}(x)(b,x)$. To see that $\Theta$ solves the given equations, note that
+and let $\Theta(x,b) = \foldr(\varepsilon)(\varphi)(x)(b,x)$. To see that $\Theta$ solves the given equations, note that
 $$\begin{eqnarray*}
  &   & \Theta(\nil,b) \\
- & = & \foldr{\varepsilon}{\varphi}(\nil)(b,\nil) \\
+ & = & \foldr(\varepsilon)(\varphi)(\nil)(b,\nil) \\
  &     \href{@lists@#def-foldr-nil}
    = & \varepsilon(b,\nil) \\
  & = & \delta(b),
@@ -46,11 +46,11 @@ $$\begin{eqnarray*}
 that
 $$\begin{eqnarray*}
  &   & \Theta(\cons(a,x),b) \\
- & = & \foldr{\delta}{\varphi}(\cons(a,x))(b,\cons(a,x)) \\
+ & = & \foldr(\delta)(\varphi)(\cons(a,x))(b,\cons(a,x)) \\
  &     \href{@lists@#def-foldr-cons}
-   = & \varphi(a,\foldr{\delta}{\varphi}(x))(b,\cons(a,x)) \\
- & = & \bif{\beta(a,\tail(\cons(a,x)),b)}{\psi(a,\tail(\cons(a,x)),b)}{\chi(a,\tail(\cons(a,x)),b,\foldr{\varepsilon}{\varphi}(x)(b,\tail(\cons(a,x))),\foldr{\varepsilon}{\varphi}(x)(\mu(b),\tail(\cons(a,x))))} \\
- & = & \bif{\beta(a,x,b)}{\psi(a,x,b)}{\chi(a,x,b,\foldr{\varepsilon}{\varphi}(x)(b,x),\foldr{\varepsilon}{\varphi}(x)(\mu(b),x))} \\
+   = & \varphi(a,\foldr(\delta)(\varphi)(x))(b,\cons(a,x)) \\
+ & = & \bif{\beta(a,\tail(\cons(a,x)),b)}{\psi(a,\tail(\cons(a,x)),b)}{\chi(a,\tail(\cons(a,x)),b,\foldr(\varepsilon)(\varphi)(x)(b,\tail(\cons(a,x))),\foldr(\varepsilon)(\varphi)(x)(\mu(b),\tail(\cons(a,x))))} \\
+ & = & \bif{\beta(a,x,b)}{\psi(a,x,b)}{\chi(a,x,b,\foldr(\varepsilon)(\varphi)(x)(b,x),\foldr(\varepsilon)(\varphi)(x)(\mu(b),x))} \\
  & = & \bif{\beta(a,x,b)}{\psi(a,x,b)}{\chi(a,x,b,\Theta(x,b),\Theta(x,\mu(b)))}
 \end{eqnarray*}$$
 as needed. Now suppose $\Psi : \lists{A} \times B \rightarrow C$ also satisfies the equations; we show that $\Psi = \Theta$ by list induction. For the base case $x = \nil$, we have

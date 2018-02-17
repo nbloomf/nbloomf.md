@@ -296,9 +296,9 @@
 @lists@#def-uncons-inverse-right	\\compose(\\either(\\const(\\nil),\\uncurry(\\cons)))(\\uncons) = \\id
 @lists@#thm-uncons-nil	\\uncons(\\nil) = \\lft(\\ast)
 @lists@#thm-uncons-cons	\\uncons(\\cons(a,x)) = \\rgt(\\tup(a)(x))
-@lists@#def-foldr-nil	\\foldr{e}{f}(\\nil) = e
-@lists@#def-foldr-cons	\\foldr{e}{f}(\\cons(a,x)) = f(a,\\foldr{e}{f}(x))
-@lists@#thm-foldr-nil-cons	\\foldr{\\nil}{\\cons} = \\id
+@lists@#def-foldr-nil	\\foldr(e)(f)(\\nil) = e
+@lists@#def-foldr-cons	\\foldr(e)(f)(\\cons(a,x)) = f(a,\\foldr(e)(f)(x))
+@lists@#thm-foldr-nil-cons	\\foldr(\\nil)(\\cons) = \\id
 #=======================#
 #--- head-tail ---------#
 #=======================#
@@ -325,7 +325,7 @@
 #=======================#
 #--- snoc --------------#
 #=======================#
-@snoc@#def-snoc	\\snoc(a,x) = \\foldr{\\cons(a,\\nil)}{\\cons}(x)
+@snoc@#def-snoc	\\snoc(a,x) = \\foldr(\\cons(a,\\nil))(\\cons)(x)
 @snoc@#cor-snoc-nil	\\snoc(a,\\nil) = \\cons(a,\\nil)
 @snoc@#cor-snoc-cons	\\snoc(a,\\cons(b,x)) = \\cons(b,\\snoc(a,x))
 @snoc@#thm-snoc-eq	\\beq(\\snoc(a,x),\\snoc(b,y)) = \\band(\\beq(a,b),\\beq(x,y))
@@ -340,7 +340,7 @@
 @rev@#thm-revcat-snoc-left	\\revcat(\\snoc(a,x),y) = \\snoc(a,\\revcat(x,y))
 @rev@#thm-revcat-snoc-right	\\revcat(x,\\snoc(a,y)) = \\cons(a,\\revcat(x,y))
 @rev@#def-rev	\\rev(x) = \\revcat(\\nil,x)
-@rev@#thm-rev-foldr	\\rev = \\foldr{\\nil}{\\snoc}
+@rev@#thm-rev-foldr	\\rev = \\foldr(\\nil)(\\snoc)
 @rev@#cor-rev-nil	\\rev(\\nil) = \\nil
 @rev@#cor-rev-cons	\\rev(\\cons(a,x)) = \\snoc(a,\\rev(x))
 @rev@#thm-rev-snoc	\\rev(\\snoc(a,x)) = \\cons(a,\\rev(x))
@@ -350,7 +350,7 @@
 #=======================#
 #--- cat ---------------#
 #=======================#
-@cat@#def-cat	\\cat(x,y) = \\foldr{y}{\\cons}(x)
+@cat@#def-cat	\\cat(x,y) = \\foldr(y)(\\cons)(x)
 @cat@#cor-cat-nil	\\cat(\\nil,y) = y
 @cat@#cor-cat-cons	\\cat(\\cons(a,x),y) = \\cons(a,\\cat(x,y))
 @cat@#thm-cat-nil-right	\\cat(x,\\nil) = x
@@ -368,7 +368,7 @@
 @length@#thm-addlength-cons-next	\\addlength(k,\\cons(a,x)) = \\next(\\addlength(k,x))
 @length@#thm-addlength-rev	\\addlength(n,\\rev(x)) = \\addlength(n,x)
 @length@#def-length	\\length(x) = \\addlength(\\zero,x)
-@length@#thm-length-foldr	\\length = \\foldr{\\zero}{\\flip(\\compose(\\const)(\\next))}
+@length@#thm-length-foldr	\\length = \\foldr(\\zero)(\\flip(\\compose(\\const)(\\next)))
 @length@#cor-length-nil	\\length(\\nil) = \\zero
 @length@#cor-length-cons	\\length(\\cons(a,x)) = \\next(\\length(x))
 @length@#thm-length-singleton	\\length(\\cons(a,\\nil)) = \\next(\\zero)
@@ -390,7 +390,7 @@
 #=======================#
 #--- map ---------------#
 #=======================#
-@map@#def-map	\\map(f) = \\foldr{\\nil}{\\compose(\\cons)(f)}
+@map@#def-map	\\map(f) = \\foldr(\\nil)(\\compose(\\cons)(f))
 @map@#cor-map-nil	\\map(f)(\\nil) = \\nil
 @map@#cor-map-cons	\\map(f)(\\cons(a,x)) = \\cons(f(a),\\map(f)(x))
 @map@#thm-map-id	\\map(\\id) = \\id

@@ -155,12 +155,12 @@ Now $\rev$ is essentially defined here as a left fold, but it can also be charac
 
 :::::: theorem :::::
 []{#thm-rev-foldr}
-We have $$\rev(x) = \foldr{\nil}{\snoc}(x).$$
+We have $$\rev(x) = \foldr(\nil)(\snoc)(x).$$
 
 ::: proof ::::::::::
 Let $\varphi$ be as defined in the definition of $\rev$. We proceed by list induction on $x$. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
- &   & \foldr{\nil}{\snoc}(\nil) \\
+ &   & \foldr(\nil)(\snoc)(\nil) \\
  &     \href{@lists@#def-foldr-nil}
    = & \nil \\
  &     \href{@rev@#cor-revcat-nil}
@@ -170,9 +170,9 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 For the inductive step, suppose the equality holds for some $x \in \lists{A}$, and let $a \in A$. Now
 $$\begin{eqnarray*}
- &   & \foldr{\nil}{\snoc}(\cons(a,x)) \\
+ &   & \foldr(\nil)(\snoc)(\cons(a,x)) \\
  &     \href{@lists@#def-foldr-cons}
-   = & \snoc(a,\foldr{\nil}{\snoc}(x)) \\
+   = & \snoc(a,\foldr(\nil)(\snoc)(x)) \\
  &     \href{@rev@#thm-rev-foldr}
    = & \snoc(a,\rev(x)) \\
  &     \href{@rev@#def-rev}
@@ -200,7 +200,7 @@ as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-Because $\rev$ is equivalent to a $\foldr{\ast}{\ast}$, it can be characterized as the unique solution to a system of functional equations.
+Because $\rev$ is equivalent to a $\foldr(\ast)(\ast)$, it can be characterized as the unique solution to a system of functional equations.
 
 :::::: corollary :::
 []{#cor-rev-nil}[]{#cor-rev-cons}
@@ -446,7 +446,7 @@ as needed.
 And left fold is a reversed right fold.
 
 :::::: theorem :::::
-Let $f : B \times A \rightarrow B$. Now $$\foldl(f)(e,x) = \foldr{e,\flip(f)}(\rev(x)).$$
+Let $f : B \times A \rightarrow B$. Now $$\foldl(f)(e,x) = \foldr(e)(\flip(f))(\rev(x)).$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -455,21 +455,21 @@ $$\begin{eqnarray*}
  &     \href{@foldl@#def-foldl-nil}
    = & e \\
  &     \href{@lists@#def-foldr-nil}
-   = & \foldr{e,\flip(f)}(\nil) \\
+   = & \foldr(e)(\flip(f))(\nil) \\
  &     \href{@rev@#cor-rev-nil}
-   = & \foldr{e,\flip(f)}(\rev(\nil))
+   = & \foldr(e)(\flip(f))(\rev(\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $e$ for some $x$, and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \foldl(f)(e,\cons(a,x)) \\
  &     \href{@foldl@#def-foldl-cons}
    = & \foldl(f)(f(e,a),x) \\
- &     \hyp{\foldl(f)(w,x) = \foldr{w}{\flip(f)}(\rev(x))}
-   = & \foldr{f(e,a)}{\flip(f)}(\rev(x)) \\
- & = & \foldr{\flip(f)(a,e)}{\flip(f)}(\rev(x)) \\
- & = & \foldr{e}{\flip(f)}(\snoc(a,\rev(x))) \\
+ &     \hyp{\foldl(f)(w,x) = \foldr(w)(\flip(f))(\rev(x))}
+   = & \foldr(f(e,a))(\flip(f))(\rev(x)) \\
+ & = & \foldr(\flip(f)(a,e))(\flip(f))(\rev(x)) \\
+ & = & \foldr(e)(\flip(f))(\snoc(a,\rev(x))) \\
  &     \href{@rev@#cor-rev-cons}
-   = & \foldr{e}{\flip(f)}(\rev(\cons(a,x)))
+   = & \foldr(e)(\flip(f))(\rev(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -498,7 +498,7 @@ Note that $\rev$ is a nontrivial involution on $\lists{A}$ -- in particular, tha
 Then we have $f(x) \in C$ for all $x \in \lists{A}$.
 
 ::: proof ::::::::::
-This proof is analogous to that of the ordinary list induction principle. Define $T \subseteq \lists{A}$ by $$T = \{ x \in \lists{A} \mid f(x) \in C \}.$$ Note that $\nil \in T$ and if $x \in T$ and $a \in A$ then $\snoc(a,x) \in T$; that is, $(T,\nil,\snoc)$ is an $A$-iterative set. We define $\Theta : \lists{A} \rightarrow T$ to be the fold $$\Theta = \foldr{\nil}{\snoc}.$$ Now $\rev : T \rightarrow \lists{A}$ is an $A$-iterative homomorphism since $$\rev(\cons(a,x)) = \snoc(a,\rev(x)).$$ Thus $\rev \circ \Theta$ is an $A$-inductive homomorphism, which by uniqueness must be the identity on $\lists{A}$. If $x \in \lists{A}$, we have $$x = \rev(\rev(x)) = \rev(\id(\rev(x))) = \rev(\rev(\Theta(\rev(x)))) = \Theta(\rev(x)) \in T,$$ so that $T = \lists{A}$ as claimed.
+This proof is analogous to that of the ordinary list induction principle. Define $T \subseteq \lists{A}$ by $$T = \{ x \in \lists{A} \mid f(x) \in C \}.$$ Note that $\nil \in T$ and if $x \in T$ and $a \in A$ then $\snoc(a,x) \in T$; that is, $(T,\nil,\snoc)$ is an $A$-iterative set. We define $\Theta : \lists{A} \rightarrow T$ to be the fold $$\Theta = \foldr(\nil)(\snoc).$$ Now $\rev : T \rightarrow \lists{A}$ is an $A$-iterative homomorphism since $$\rev(\cons(a,x)) = \snoc(a,\rev(x)).$$ Thus $\rev \circ \Theta$ is an $A$-inductive homomorphism, which by uniqueness must be the identity on $\lists{A}$. If $x \in \lists{A}$, we have $$x = \rev(\rev(x)) = \rev(\id(\rev(x))) = \rev(\rev(\Theta(\rev(x)))) = \Theta(\rev(x)) \in T,$$ so that $T = \lists{A}$ as claimed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 

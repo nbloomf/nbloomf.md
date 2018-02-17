@@ -21,26 +21,26 @@ slug: filter
 > import Cat
 > import AllAndAny
 
-Today we'll nail down $\filter$, which takes a list and a predicate on the items and "filters out" the items which satisfy the predicate. $\filter$ should have a signature like $$\bool^A \times \lists{A} \rightarrow \lists{A}.$$ As usual, we want to define $\filter$ as a fold; say $$\filter(p)(x) = \foldr{\varepsilon}{\varphi}(x).$$ Where on the right hand side of that equation should the $p$ parameter go? Lets think out loud for a moment. On the one hand, we want
+Today we'll nail down $\filter$, which takes a list and a predicate on the items and "filters out" the items which satisfy the predicate. $\filter$ should have a signature like $$\bool^A \times \lists{A} \rightarrow \lists{A}.$$ As usual, we want to define $\filter$ as a fold; say $$\filter(p)(x) = \foldr(\varepsilon)(\varphi)(x).$$ Where on the right hand side of that equation should the $p$ parameter go? Lets think out loud for a moment. On the one hand, we want
 $$\begin{eqnarray*}
  &   & \nil \\
  & = & \filter(p)(\nil) \\
- & = & \foldr{\varepsilon}{\varphi}(\nil) \\
+ & = & \foldr(\varepsilon)(\varphi)(\nil) \\
  &     \href{@lists@#def-foldr-nil}
    = & \varepsilon
 \end{eqnarray*}$$
 On the other hand, we want
 $$\begin{eqnarray*}
  &   & \filter(p)(\cons(a,x)) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(a,x)) \\
+ & = & \foldr(\varepsilon)(\varphi)(\cons(a,x)) \\
  &     \href{@lists@#def-foldr-cons}
-   = & \varphi(a,\foldr{\varepsilon}{\varphi}(x)) \\
+   = & \varphi(a,\foldr(\varepsilon)(\varphi)(x)) \\
  & = & \varphi(a,\filter(p)(x)).
 \end{eqnarray*}$$
 Intuitively, if $p(a)$ is $\btrue$ we want $$\filter(p)(\cons(a,x)) = \cons(a,\filter(p)(x)),$$ while if $p(a)$ is $\bfalse$ we want $$\filter(p)(\cons(a,x)) = \filter(p)(x).$$ With this in mind we define $\filter$ like so.
 
 :::::: definition ::
-Let $A$ be a set. Define $\varphi : A \times \lists{A} \rightarrow \lists{A}$ by $$\varphi(a,w) = \left\{ \begin{array}{ll} \cons(a,w) & \mathrm{if}\ p(a) = \btrue \\ w & \mathrm{if}\ p(a) = \bfalse. \end{array}\right.$$ Now define $$\filter : \bool^A \rightarrow {\lists{A}}^{\lists{A}}$$ by $$\filter(p)(x) = \foldr{\nil}{\varphi}(x).$$
+Let $A$ be a set. Define $\varphi : A \times \lists{A} \rightarrow \lists{A}$ by $$\varphi(a,w) = \left\{ \begin{array}{ll} \cons(a,w) & \mathrm{if}\ p(a) = \btrue \\ w & \mathrm{if}\ p(a) = \bfalse. \end{array}\right.$$ Now define $$\filter : \bool^A \rightarrow {\lists{A}}^{\lists{A}}$$ by $$\filter(p)(x) = \foldr(\nil)(\varphi)(x).$$
 
 In Haskell:
 
@@ -53,7 +53,7 @@ In Haskell:
 
 ::::::::::::::::::::
 
-Since $\filter(p)$ is defined as a $\foldr{\ast}{\ast}$, it can be characterized as the unique solution to a system of functional equations.
+Since $\filter(p)$ is defined as a $\foldr(\ast)(\ast)$, it can be characterized as the unique solution to a system of functional equations.
 
 :::::: corollary :::
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. $\filter(p)$ is the unique map $f : \lists{A} \rightarrow \lists{A}$ satisfying the following for all $a \in A$ and $x \in \lists{A}$.

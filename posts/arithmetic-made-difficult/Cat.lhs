@@ -24,7 +24,7 @@ In this post we'll consider the function that takes two lists and appends one to
 
 :::::: definition ::
 []{#def-cat}
-We define a map $\cat : \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\cat(x,y) = \foldr{y}{\cons}(x).$$
+We define a map $\cat : \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\cat(x,y) = \foldr(y)(\cons)(x).$$
 
 In Haskell:
 
@@ -72,7 +72,7 @@ Note that
 $$\begin{eqnarray*}
  &   & \cat(x,\nil) \\
  &     \href{@cat@#def-cat}
-   = & \foldr{\nil}{\cons}(x) \\
+   = & \foldr(\nil)(\cons)(x) \\
  &     \href{@lists@#thm-foldr-nil-cons}
    = & \id(x) \\
  &     \href{@functions@#def-id}
@@ -106,8 +106,8 @@ Let $A$ be a set. The following hold for all $a \in A$ and $x,y \in \lists{A}$.
 $$\begin{eqnarray*}
  &   & \cat(x,\cons(a,y)) \\
  &     \href{@cat@#def-cat}
-   = & \foldr{\cons(a,y)}{\cons}(x) \\
- & = & \foldr{y}{\cons}(\snoc(a,y)) \\
+   = & \foldr(\cons(a,y))(\cons)(x) \\
+ & = & \foldr(y)(\cons)(\snoc(a,y)) \\
  & = & \cat(x,\snoc(a,y))
 \end{eqnarray*}$$
 as claimed.
@@ -117,7 +117,7 @@ $$\begin{eqnarray*}
  &     \href{@cat@#thm-cat-nil-right}
    = & \snoc(a,x) \\
  &     \href{@snoc@#def-snoc}
-   = & \foldr{\cons(a,\nil)}{\cons}(x) \\
+   = & \foldr(\cons(a,\nil))(\cons)(x) \\
  & = & \cat(x,\cons(a,\nil))
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for some $y \in \lists{A}$, and let $b \in A$. Now

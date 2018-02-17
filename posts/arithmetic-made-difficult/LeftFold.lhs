@@ -18,17 +18,17 @@ slug: foldl
 > import Unary
 > import Lists
 
-Our goal today is to get as close as possible to a tail-recursive implementation of $\foldr{\ast}{\ast}$.
+Our goal today is to get as close as possible to a tail-recursive implementation of $\foldr(\ast)(\ast)$.
 
 :::::: theorem :::::
 []{#def-foldl-nil}[]{#def-foldl-cons}
 Let $A$ and $B$ be sets, with $f : B \times A \rightarrow B$. There is a unique map $\Theta : B \times \lists{A} \rightarrow B$ such that $$\Theta(e,\nil) = e$$ and $$\Theta(e,\cons(a,x)) = \Theta(f(e,a),x).$$ We denote this map by $\foldl(f)$.
 
 ::: proof ::::::::::
-First we show existence. Define $\psi : A \times \lists{A}^B \rightarrow \lists{A}^B$ by $$\psi(a,g)(b) = g(f(b,a)),$$ and define $\Theta : B \times \lists{A} \rightarrow B$ by $$\Theta(b,x) = \foldr{\id}{\psi}(x)(b).$$ Now
+First we show existence. Define $\psi : A \times \lists{A}^B \rightarrow \lists{A}^B$ by $$\psi(a,g)(b) = g(f(b,a)),$$ and define $\Theta : B \times \lists{A} \rightarrow B$ by $$\Theta(b,x) = \foldr(\id)(\psi)(x)(b).$$ Now
 $$\begin{eqnarray*}
  &   & \Theta(e,\nil) \\
- & = & \foldr{\id}{\psi}(\nil)(e) \\
+ & = & \foldr(\id)(\psi)(\nil)(e) \\
  &     \href{@lists@#def-foldr-nil}
    = & \id(e) \\
  &     \href{@functions@#def-id}
@@ -37,9 +37,9 @@ $$\begin{eqnarray*}
 and
 $$\begin{eqnarray*}
  &   & \Theta(e,\cons(a,x)) \\
- & = & \foldr{\id}{\psi}(\cons(a,x))(e) \\
- & = & \psi(a,\foldr{\id}{\psi})(x)(e) \\
- & = & \foldr{\id}{\psi}(x)(f(e,a)) \\
+ & = & \foldr(\id)(\psi)(\cons(a,x))(e) \\
+ & = & \psi(a,\foldr(\id)(\psi))(x)(e) \\
+ & = & \foldr(\id)(\psi)(x)(f(e,a)) \\
  & = & \Theta(f(e,a),x)
 \end{eqnarray*}$$
 as claimed.
@@ -75,7 +75,7 @@ There's the definition from the proof:
 >   where
 >     psi a g b = g (f b a)
 
-$\psi : A \times \lists{A}^B \rightarrow \lists{A}^B$ by $$\psi(a,g)(b) = g(f(a,b)),$$ and define $\Theta : B \times \lists{A} \rightarrow B$ by $$\Theta(b,x) = \foldr{\id}{\psi}(x)(b).$$
+$\psi : A \times \lists{A}^B \rightarrow \lists{A}^B$ by $$\psi(a,g)(b) = g(f(a,b)),$$ and define $\Theta : B \times \lists{A} \rightarrow B$ by $$\Theta(b,x) = \foldr(\id)(\psi)(x)(b).$$
 
 And there's the definition from the universal property:
 

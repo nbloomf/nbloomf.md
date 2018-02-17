@@ -30,35 +30,35 @@ slug: elt
 > import TailsAndInits
 > import Filter
 
-Today we'll define a boolean function, $\elt$, which detects whether or not a given $a$ is an item in a list. As usual we want to define $\elt$ as a fold: should we use a right fold or a left fold? Recall that the tradeoff between the two is that foldl is tail recursive, but foldr does not necessarily have to process the entire list. In this case, $\elt(a)(x)$ should be able to return early once it sees an $a$. So lets say $$\elt(a)(x) = \foldr{\varepsilon}{\varphi}(x).$$ Now what should $\varepsilon$ and $\varphi$ be? Well, we want
+Today we'll define a boolean function, $\elt$, which detects whether or not a given $a$ is an item in a list. As usual we want to define $\elt$ as a fold: should we use a right fold or a left fold? Recall that the tradeoff between the two is that foldl is tail recursive, but foldr does not necessarily have to process the entire list. In this case, $\elt(a)(x)$ should be able to return early once it sees an $a$. So lets say $$\elt(a)(x) = \foldr(\varepsilon)(\varphi)(x).$$ Now what should $\varepsilon$ and $\varphi$ be? Well, we want
 $$\begin{eqnarray*}
  &   & \bfalse \\
  & = & \elt(a)(\nil) \\
- & = & \foldr{\varepsilon}{\varphi}(x) \\
+ & = & \foldr(\varepsilon)(\varphi)(x) \\
  & = & \varepsilon,
 \end{eqnarray*}$$
 and if $a = b$ we want
 $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \elt(a)(\cons(b,x)) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(b,x)) \\
+ & = & \foldr(\varepsilon)(\varphi)(\cons(b,x)) \\
  &     \href{@lists@#def-foldr-cons}
-   = & \varphi(b,\foldr{\varepsilon}{\varphi}(x)) \\
+   = & \varphi(b,\foldr(\varepsilon)(\varphi)(x)) \\
  & = & \varphi(b,\elt(a)(x))
 \end{eqnarray*}$$
 while if $a \neq b$ we want
 $$\begin{eqnarray*}
  &   & \elt(a)(x) \\
  & = & \elt(a)(\cons(b,x)) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons(b,x)) \\
+ & = & \foldr(\varepsilon)(\varphi)(\cons(b,x)) \\
  &     \href{@lists@#def-foldr-cons}
-   = & \varphi(b,\foldr{\varepsilon}{\varphi}(x)) \\
+   = & \varphi(b,\foldr(\varepsilon)(\varphi)(x)) \\
  & = & \varphi(b,\elt(a)(x)).
 \end{eqnarray*}$$
 With this in mind we define $\elt$ like so.
 
 :::::: definition ::
-Let $A$ be a set and let $a \in A$. Define $\varphi : A \rightarrow \bool \rightarrow \bool$ by $$\varphi(b,p) = \bif{\beq(a,b)}{\btrue}{p}.$$ Now define $\elt : A \rightarrow \bool^{\lists{A}}$ by $$\elt(a)(x) = \foldr{\bfalse}{\varphi}(x).$$
+Let $A$ be a set and let $a \in A$. Define $\varphi : A \rightarrow \bool \rightarrow \bool$ by $$\varphi(b,p) = \bif{\beq(a,b)}{\btrue}{p}.$$ Now define $\elt : A \rightarrow \bool^{\lists{A}}$ by $$\elt(a)(x) = \foldr(\bfalse)(\varphi)(x).$$
 
 In Haskell:
 
@@ -69,7 +69,7 @@ In Haskell:
 
 ::::::::::::::::::::
 
-Since $\elt$ is defined as a $\foldr{\ast}{\ast}$, it can be characterized as the unique solution to a system of functional equations.
+Since $\elt$ is defined as a $\foldr(\ast)(\ast)$, it can be characterized as the unique solution to a system of functional equations.
 
 :::::: corollary :::
 Let $A$ be a set with $a \in A$. $\elt$ is the unique map $f : \lists{A} \rightarrow \bool$ satisfying the following equations for all $b \in A$ and $x \in \lists{A}$.

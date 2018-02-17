@@ -18,7 +18,7 @@ slug: cfoldr
 > import Unary
 > import Lists
 
-Today we'll implement another recursion operator on lists. This one is similar to $\foldr{\ast}{\ast}$ but allows us to "have our cake and eat it too" in a straightforward way.
+Today we'll implement another recursion operator on lists. This one is similar to $\foldr(\ast)(\ast)$ but allows us to "have our cake and eat it too" in a straightforward way.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets, with $\gamma \in B$ and $\sigma : A \times \lists{A} \times B \rightarrow B$. Then there is a unique map $\Omega : \lists{A} \rightarrow B$ such that $$\Omega(\nil) = \gamma$$ and $$\Omega(\cons(a,x)) = \sigma(a,x,\Omega(x)).$$ We denote this map by $\cfoldr(\gamma)(\sigma)$.
@@ -29,10 +29,10 @@ $$\varphi(a,g)(x) = \left\{\begin{array}{ll}
  \sigma(a,\nil,g(\nil)) & \mathrm{if}\ x = \nil \\
  \sigma(a,u,g(u)) & \mathrm{if}\ x = \cons(a,u),
 \end{array}\right.$$
-and define $\Omega(x) = \foldr{\const(\gamma)}{\varphi}(x)(x)$. Note that
+and define $\Omega(x) = \foldr(\const(\gamma))(\varphi)(x)(x)$. Note that
 $$\begin{eqnarray*}
  &   & \Omega(\nil) \\
- & = & \foldr{\const(\gamma)}{\varphi}(\nil)(\nil) \\
+ & = & \foldr(\const(\gamma))(\varphi)(\nil)(\nil) \\
  &     \href{@lists@#def-foldr-nil}
    = & \const(\gamma)(\nil) \\
  &     \href{@functions@#def-const}
@@ -41,10 +41,10 @@ $$\begin{eqnarray*}
 and
 $$\begin{eqnarray*}
  &   & \Omega(\cons(a,x)) \\
- & = & \foldr{\const(\gamma)}{\varphi}(\cons(a,x))(\cons(a,x)) \\
+ & = & \foldr(\const(\gamma))(\varphi)(\cons(a,x))(\cons(a,x)) \\
  &     \href{@lists@#def-foldr-cons}
-   = & \varphi(a,\foldr{\const(\gamma)}{\varphi}(x))(\cons(a,x)) \\
- & = & \sigma(a,x,\foldr{\const(\gamma)}{\varphi}(x)(x)) \\
+   = & \varphi(a,\foldr(\const(\gamma))(\varphi)(x))(\cons(a,x)) \\
+ & = & \sigma(a,x,\foldr(\const(\gamma))(\varphi)(x)(x)) \\
  & = & \sigma(a,x,\Omega(x))
 \end{eqnarray*}$$
 as needed. Suppose now that $\Psi$ also has this property; we see that $\Psi = \Omega$ by list induction on $x$. For the base case $x = \nil$ we have

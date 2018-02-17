@@ -23,7 +23,7 @@ Today we will define a kind of one-sided inverse of $\zip$, called $\unzip$. Rec
 $$\begin{eqnarray*}
  &   & (\nil,\nil) \\
  & = & \unzip(\nil) \\
- & = & \foldr{\varepsilon}{\varphi}(\nil) \\
+ & = & \foldr(\varepsilon)(\varphi)(\nil) \\
  &     \href{@lists@#def-foldr-nil}
    = & \varepsilon
 \end{eqnarray*}$$
@@ -31,15 +31,15 @@ and if $\unzip(x) = (u,v)$, then
 $$\begin{eqnarray*}
  &   & (\cons(a,u),\cons(b,v)) \\
  & = & \unzip(\cons((a,b),x)) \\
- & = & \foldr{\varepsilon}{\varphi}(\cons((a,b),x)) \\
- & = & \varphi((a,b),\foldr{\varepsilon}{\varphi}(x)) \\
+ & = & \foldr(\varepsilon)(\varphi)(\cons((a,b),x)) \\
+ & = & \varphi((a,b),\foldr(\varepsilon)(\varphi)(x)) \\
  & = & \varphi((a,b),\unzip(x)) \\
  & = & \varphi((a,b),(u,v)).
 \end{eqnarray*}$$
 With this in mind, we define $\unzip$ like so.
 
 :::::: definition ::
-Let $A$ and $B$ be sets. Define $\varphi : (A \times B) \times (\lists{A} \times \lists{B}) \rightarrow \lists{A} \times \lists{B}$ by $$\varphi((a,b),(u,v)) = (\cons(a,u),\cons(b,v)).$$ We then define $\unzip : \lists{A \times B} \rightarrow \lists{A} \times \lists{B}$ by $$\unzip(x) = \foldr{(\nil,\nil)}{\varphi}(x).$$
+Let $A$ and $B$ be sets. Define $\varphi : (A \times B) \times (\lists{A} \times \lists{B}) \rightarrow \lists{A} \times \lists{B}$ by $$\varphi((a,b),(u,v)) = (\cons(a,u),\cons(b,v)).$$ We then define $\unzip : \lists{A \times B} \rightarrow \lists{A} \times \lists{B}$ by $$\unzip(x) = \foldr((\nil,\nil))(\varphi)(x).$$
 
 In Haskell:
 
@@ -50,7 +50,7 @@ In Haskell:
 
 ::::::::::::::::::::
 
-Because $\unzip$ is defined as a $\foldr{\ast}{\ast}$, it is the unique solution to a system of functional equations.
+Because $\unzip$ is defined as a $\foldr(\ast)(\ast)$, it is the unique solution to a system of functional equations.
 
 :::::: corollary :::
 Let $A$ and $B$ be sets. Then $\unzip$ is the unique map $f : \lists{A \times B} \rightarrow \lists{A} \times \lists{B}$ such that the following hold for all $a \in A$, $b \in B$, $x \in \lists{A}$, and $y \in \lists{B}$.
@@ -184,9 +184,9 @@ $$\begin{eqnarray*}
  & = & \varphi((f(a),g(b)),\tPair(\map(f),\map(g))(\unzip(x))) \\
  & = & \varphi((f(a),g(b)),\unzip(\map(\tPair(f,g))(x))) \\
  & = & \varphi(\tPair(f,g)(a,b),\unzip(\map(\tPair(f,g))(x))) \\
- & = & \varphi(\tPair(f,g)(a,b),\foldr{(\nil,\nil)}{\varphi}(\map(\tPair(f,g))(x))) \\
- & = & \foldr{(\nil,\nil)}{\varphi}(\cons(\tPair(f,g)(a,b),\map(\tPair(f,g))(x))) \\
- & = & \foldr{(\nil,\nil)}{\varphi}(\map(\tPair(f,g))(\cons((a,b),x))) \\
+ & = & \varphi(\tPair(f,g)(a,b),\foldr((\nil,\nil))(\varphi)(\map(\tPair(f,g))(x))) \\
+ & = & \foldr((\nil,\nil))(\varphi)(\cons(\tPair(f,g)(a,b),\map(\tPair(f,g))(x))) \\
+ & = & \foldr((\nil,\nil))(\varphi)(\map(\tPair(f,g))(\cons((a,b),x))) \\
  & = & \unzip(\map(\tPair(f,g))(\cons((a,b),x)))
 \end{eqnarray*}$$
 as needed.

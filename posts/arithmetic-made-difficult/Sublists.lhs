@@ -31,7 +31,7 @@ slug: sublists
 We've already defined a predicate that detects when one list is a sublist of another. Today we'll define a function that constructs a list of all sublists of a given list.
 
 :::::: definition ::
-Let $A$ be a set. Define $\varphi : A \times \lists{\lists{A}} \rightarrow \lists{\lists{A}}$ by $$\varphi(a,z) = \cat(\map(\cons(a,-)(z)),z).$$ Now define $\sublists : \lists{A} \rightarrow \lists{\lists{A}}$ by $$\sublists = \foldr{\cons(\nil,\nil)}{\varphi}.$$
+Let $A$ be a set. Define $\varphi : A \times \lists{\lists{A}} \rightarrow \lists{\lists{A}}$ by $$\varphi(a,z) = \cat(\map(\cons(a,-)(z)),z).$$ Now define $\sublists : \lists{A} \rightarrow \lists{\lists{A}}$ by $$\sublists = \foldr(\cons(\nil,\nil))(\varphi).$$
 
 In Haskell:
 
@@ -42,7 +42,7 @@ In Haskell:
 
 ::::::::::::::::::::
 
-Since $\sublists$ is defined as a $\foldr{\ast}{\ast}$, it can be characterized as the unique solution to a system of functional equations.
+Since $\sublists$ is defined as a $\foldr(\ast)(\ast)$, it can be characterized as the unique solution to a system of functional equations.
 
 :::::: corollary :::
 Let $A$ be a set. $\sublists$ is the unique map $f : \lists{A} \rightarrow \lists{\lists{A}}$ satisfying the following equations for all $a \in A$ and $x \in \lists{A}$.

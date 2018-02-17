@@ -27,7 +27,7 @@ slug: all-any
 Today we'll define two boolean functions for lists called $\all$ and $\any$. Each one takes as an argument a predicate $A \rightarrow \bool$, and then tests whether all or any of the items in a list of type $\lists{A}$ satisfy the predicate.
 
 :::::: definition ::
-Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. Define $\varphi : A \times \bool \rightarrow \bool$ by $$\varphi(a,q) = \band(p(a),q).$$ Now define $\all : \bool^A \rightarrow \bool^{\lists{A}}$ by $$\all(p)(x) = \foldr{\btrue}{\varphi}(x).$$
+Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. Define $\varphi : A \times \bool \rightarrow \bool$ by $$\varphi(a,q) = \band(p(a),q).$$ Now define $\all : \bool^A \rightarrow \bool^{\lists{A}}$ by $$\all(p)(x) = \foldr(\btrue)(\varphi)(x).$$
 
 In Haskell:
 
@@ -38,7 +38,7 @@ In Haskell:
 
 ::::::::::::::::::::
 
-Since $\all(p)$ is defined as a $\foldr{\ast}{\ast}$, it is the unique solution to a system of functional equations.
+Since $\all(p)$ is defined as a $\foldr(\ast)(\ast)$, it is the unique solution to a system of functional equations.
 
 :::::: corollary :::
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. Then $\all(p)$ is the unique solution $f : \lists{A} \rightarrow \bool$ to the following equations for all $a \in A$ and $x \in \lists{A}$.
@@ -107,7 +107,7 @@ as needed.
 $\all$ can also be characterized as a folded map.
 
 :::::: theorem :::::
-$$\all(p,x) = \foldr{\btrue}{\band}(\map(p)(x)).$$
+$$\all(p,x) = \foldr(\btrue)(\band)(\map(p)(x)).$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -116,18 +116,18 @@ $$\begin{eqnarray*}
  & = & \all(p,\nil) \\
  & = & \btrue \\
  &     \href{@lists@#def-foldr-nil}
-   = & \foldr{\btrue}{\band}(\nil) \\
- & = & \foldr{\btrue}{\band}(\map(p)(\nil)) \\
- & = & \foldr{\btrue}{\band}(\map(p)(x))
+   = & \foldr(\btrue)(\band)(\nil) \\
+ & = & \foldr(\btrue)(\band)(\map(p)(\nil)) \\
+ & = & \foldr(\btrue)(\band)(\map(p)(x))
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \all(p,\cons(a,x)) \\
  & = & \band(p(a),\all(p,x)) \\
- & = & \band(p(a),\foldr{\btrue}{\band}(\map(p)(x))) \\
+ & = & \band(p(a),\foldr(\btrue)(\band)(\map(p)(x))) \\
  &     \href{@lists@#def-foldr-cons}
-   = & \foldr{\btrue}{\band}(\cons(p(a),\map(p)(x))) \\
- & = & \foldr{\btrue}{\band}(\map(p)(\cons(a,x)))
+   = & \foldr(\btrue)(\band)(\cons(p(a),\map(p)(x))) \\
+ & = & \foldr(\btrue)(\band)(\map(p)(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -351,7 +351,7 @@ as needed.
 $\any$ is defined similarly.
 
 :::::: definition ::
-Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. Define $\varphi : A \times \bool \rightarrow \bool$ by $$\varphi(a,q) = \bor(p(a),q).$$ Now define $\any : \bool^A \rightarrow \bool^{\lists{A}}$ by $$\all(p)(x) = \foldr{\bfalse}{\varphi}(x).$$
+Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. Define $\varphi : A \times \bool \rightarrow \bool$ by $$\varphi(a,q) = \bor(p(a),q).$$ Now define $\any : \bool^A \rightarrow \bool^{\lists{A}}$ by $$\all(p)(x) = \foldr(\bfalse)(\varphi)(x).$$
 
 In Haskell:
 
@@ -392,7 +392,7 @@ $$\left\{\begin{array}{l}
 $\any$ can also be characterized as a folded map.
 
 :::::: theorem :::::
-Let $A$ be a set with $p$ a predicate on $A$. Then $$\any(p,x) = \foldr{\bfalse}{\bor}(\map(p)(x)).$$
+Let $A$ be a set with $p$ a predicate on $A$. Then $$\any(p,x) = \foldr(\bfalse)(\bor)(\map(p)(x)).$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -401,18 +401,18 @@ $$\begin{eqnarray*}
  & = & \any(p,\nil) \\
  & = & \bfalse \\
  &     \href{@lists@#def-foldr-nil}
-   = & \foldr{\bfalse}{\bor}(\nil) \\
- & = & \foldr{\bfalse}{\bor}(\map(p)(\nil)) \\
- & = & \foldr{\bfalse}{\bor}(\map(p)(x))
+   = & \foldr(\bfalse)(\bor)(\nil) \\
+ & = & \foldr(\bfalse)(\bor)(\map(p)(\nil)) \\
+ & = & \foldr(\bfalse)(\bor)(\map(p)(x))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Then we have
 $$\begin{eqnarray*}
  &   & \any(p,\cons(a,x)) \\
  & = & \bor(p(a),\any(x)) \\
- & = & \bor(p(a),\foldr{\bfalse}{\bor}(\map(p)(x))) \\
+ & = & \bor(p(a),\foldr(\bfalse)(\bor)(\map(p)(x))) \\
  &     \href{@lists@#def-foldr-cons}
-   = & \foldr{\bfalse}{\bor}(\cons(p(a),\map(p)(x))) \\
- & = & \foldr{\bfalse}{\bor}(\map(p)(\cons(a,x)))
+   = & \foldr(\bfalse)(\bor)(\cons(p(a),\map(p)(x))) \\
+ & = & \foldr(\bfalse)(\bor)(\map(p)(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -444,8 +444,8 @@ $$\begin{eqnarray*}
  & = & \bnot(\btrue) \\
  &     \href{@not@#thm-not-true}
    = & \bfalse \\
- & = & \foldr{\bfalse}{\varphi(p)}(\nil) \\
- & = & \foldr{\bfalse}{\varphi(p)}(x)
+ & = & \foldr(\bfalse)(\varphi(p))(\nil) \\
+ & = & \foldr(\bfalse)(\varphi(p))(x)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Then we have
 $$\begin{eqnarray*}

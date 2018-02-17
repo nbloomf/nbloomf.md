@@ -44,12 +44,12 @@ slug: takewhile-dropwhile
 
 Today we'll define two functions, $\takeWhile$ and $\dropWhile$, similar to $\take$ and $\drop$, but instead of taking or dropping a prefix of some length, we will take or drop the longest prefix satisfying some predicate. We'd like $\takeBut$ to have a signature like $$\takeWhile : \bool^A \rightarrow {\lists{A}}^{\lists{A}}.$$
 
-As usual, suppose $\takeWhile$ can be defined in terms of fold; say $$\takeWhile(p)(x) = \foldr{e}{\varphi}(x)$$ for some $e$ and $\varphi$. To make the types work out we need $e \in \lists{A}$ and $\varphi : A \times \lists{A} \rightarrow \lists{A}$. Thinking about the desired behavior for $\takeWhile$, we need
+As usual, suppose $\takeWhile$ can be defined in terms of fold; say $$\takeWhile(p)(x) = \foldr(e)(\varphi)(x)$$ for some $e$ and $\varphi$. To make the types work out we need $e \in \lists{A}$ and $\varphi : A \times \lists{A} \rightarrow \lists{A}$. Thinking about the desired behavior for $\takeWhile$, we need
 
 $$\begin{eqnarray*}
  &   & \nil \\
  & = & \takeWhile(p)(\nil) \\
- & = & \foldr{e}{\varphi}(\nil) \\
+ & = & \foldr(e)(\varphi)(\nil) \\
  &     \href{@lists@#def-foldr-nil}
    = & e
 \end{eqnarray*}$$
@@ -59,9 +59,9 @@ and
 $$\begin{eqnarray*}
  &   & \bif{p(a)}{\cons(a,\takeWhile(p,x))}{\nil} \\
  & = & \takeWhile(p)(\cons(a,x)) \\
- & = & \foldr{e}{\varphi}(\cons(a,x)) \\
+ & = & \foldr(e)(\varphi)(\cons(a,x)) \\
  &     \href{@lists@#def-foldr-cons}
-   = & \varphi(a,\foldr{e}{\varphi}(x)) \\
+   = & \varphi(a,\foldr(e)(\varphi)(x)) \\
  & = & \varphi(a,\takeWhile(p,x))
 \end{eqnarray*}$$
 
@@ -70,7 +70,7 @@ With this in mind, we define $\takeWhile$ like so.
 :::::: definition ::
 Let $A$ be a set, with $p : A \rightarrow \bool$. Define $\varphi(p) : A \times \lists{A} \rightarrow \lists{A}$ by $$\varphi(p)(a,x) = \left\{ \begin{array}{ll} \cons(a,x) & \mathrm{if}\ p(a) = \btrue \\ \nil & \mathrm{otherwise}. \end{array} \right.$$
 
-We define $\takeWhile : \bool^A \times \lists{A} \rightarrow \lists{A}$ by $$\takeWhile(p,x) = \foldr{\nil}{\varphi(p)}(x).$$
+We define $\takeWhile : \bool^A \times \lists{A} \rightarrow \lists{A}$ by $$\takeWhile(p,x) = \foldr(\nil)(\varphi(p))(x).$$
 
 In Haskell:
 
@@ -259,19 +259,19 @@ as needed.
 
 Now for $\dropWhile$. This function should drop the longest prefix satisfying some predicate, again with signature $\bool^A \times \lists{A} \rightarrow \lists{A}$. If we try defining this using foldr in the "obvious" way, we run into trouble, where the $\varphi$ parameter needs to have its argument and eat it too. (try it!) One way around this is the trick we used to define $\zip$.
 
-Suppose $$\dropWhile(p,x) = \foldr{e}{\varphi}(x)(x)$$ for some $e$ and $\varphi$. To make the types work out, we need $$e \in \lists{A}^{\lists{A}}$$ and $$\varphi : A \times \lists{A}^{\lists{A}} \rightarrow \lists{A}^{\lists{A}};$$ now
+Suppose $$\dropWhile(p,x) = \foldr(e)(\varphi)(x)(x)$$ for some $e$ and $\varphi$. To make the types work out, we need $$e \in \lists{A}^{\lists{A}}$$ and $$\varphi : A \times \lists{A}^{\lists{A}} \rightarrow \lists{A}^{\lists{A}};$$ now
 $$\begin{eqnarray*}
  &   & \nil \\
  & = & \dropWhile(p,\nil) \\
- & = & \foldr{e}{\varphi}(\nil)(\nil) \\
+ & = & \foldr(e)(\varphi)(\nil)(\nil) \\
  &     \href{@lists@#def-foldr-nil}
    = & e(\nil)
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
- &   & \varphi(a,\foldr{e}{\varphi}(x))(\cons(a,x)) \\
+ &   & \varphi(a,\foldr(e)(\varphi)(x))(\cons(a,x)) \\
  &     \href{@lists@#def-foldr-cons}
-   = & \foldr{e}{\varphi}(\cons(a,x))(\cons(a,x)) \\
+   = & \foldr(e)(\varphi)(\cons(a,x))(\cons(a,x)) \\
  & = & \dropWhile(p,\cons(a,x)) \\
  & = & \bif{p(a)}{\dropWhile(p,x)}{\cons(a,x)}
 \end{eqnarray*}$$
