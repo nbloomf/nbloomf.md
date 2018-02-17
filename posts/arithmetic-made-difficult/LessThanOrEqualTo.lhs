@@ -403,7 +403,6 @@ Suite:
 >   => n -> Int -> Int -> IO ()
 > _test_leq n size cases = do
 >   testLabel1 "leq" n
-> 
 >   let args = testArgs size cases
 > 
 >   runTest args (_test_leq_next_nat_zero n)

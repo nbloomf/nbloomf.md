@@ -28,7 +28,7 @@ slug: at
 The $\head$ function attempts to extract the "first" item in a list; in this post we'll generalize to $\at$, which extracts the element at an arbitrary position in a list.
 
 :::::: definition ::
-Define $\beta : \nats \times \lists{A} \rightarrow \bool$ by $$\beta(k,x) = \isnil(x),$$ $\psi : \nats \times \lists{A} \rightarrow 1 + A$ by $$\psi(k,x) = \lft(\ast),$$ and $\omega : \nats \times \lists{A} \rightarrow \lists{A}$ by $$\omega(k,x) = \tail(x).$$ We then define $\at : \lists{A} \times \nats \rightarrow \ast + A$ by $$\at(x,k) = \bailrec{\head}{\beta}{\psi}{\omega}(k,x).$$
+Define $\beta : \nats \times \lists{A} \rightarrow \bool$ by $$\beta(k,x) = \isnil(x),$$ $\psi : \nats \times \lists{A} \rightarrow 1 + A$ by $$\psi(k,x) = \lft(\ast),$$ and $\omega : \nats \times \lists{A} \rightarrow \lists{A}$ by $$\omega(k,x) = \tail(x).$$ We then define $\at : \lists{A} \times \nats \rightarrow \ast + A$ by $$\at(x,k) = \bailrec(\head)(\beta)(\psi)(\omega)(k,x).$$
 
 In Haskell:
 
@@ -41,7 +41,7 @@ In Haskell:
 
 ::::::::::::::::::::
 
-Since $\at$ is defined in terms of $\bailrec{\ast}{\ast}{\ast}{\ast}$, it is the unique solution to a system of functional equations.
+Since $\at$ is defined in terms of $\bailrec$, it is the unique solution to a system of functional equations.
 
 :::::: corollary :::
 []{#cor-at-zero}[]{#cor-at-next}

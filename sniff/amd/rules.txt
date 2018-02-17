@@ -202,8 +202,8 @@
 #=======================#
 #--- bailrec -----------#
 #=======================#
-@bailrec@#thm-bailrec-zero	\\bailrec{f}{b}{p}{w}(\zero,a) = f(a)
-@bailrec@#thm-bailrec-next	\\bailrec{f}{b}{p}{w}(\next(n),a) = \\bif{b(n,a)}{p(n,a)}{\\bailrec{f}{b}{p}{w}(n,w(n,a))}
+@bailrec@#thm-bailrec-zero	\\bailrec(f)(b)(p)(w)(\zero,a) = f(a)
+@bailrec@#thm-bailrec-next	\\bailrec(f)(b)(p)(w)(\next(n),a) = \\bif{b(n,a)}{p(n,a)}{\\bailrec(f)(b)(p)(w)(n,w(n,a))}
 #=======================#
 #--- mutrec ------------#
 #=======================#

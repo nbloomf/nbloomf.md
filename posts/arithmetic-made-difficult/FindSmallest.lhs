@@ -25,7 +25,7 @@ The Well-Ordering Principle on $\nats$ gives a sufficient condition under which 
 More precisely, given a predicate $\sigma : \nats \rightarrow \bool$ and two natural numbers $k$ and $n$, we'll define an operator $\Theta$ such that $\Theta(\next(n),k)$ is the *smallest* number $t$ between $k$ and $\nplus(k,n)$ such that $\sigma(t) = \btrue$, if any such number exists, and $\ast$ otherwise.
 
 :::::: definition ::
-Let $\sigma : \nats \rightarrow \bool$. Define $\varphi : \nats \rightarrow 1 + \nats$ by $$\varphi(k) = \lft(\ast),$$ $\beta : \nats \times \nats \rightarrow \bool$ by $$\beta(n,k) = \sigma(k),$$ $\psi : \nats \times \nats \rightarrow 1 + \nats$ by $$\psi(n,k) = \rgt(k),$$ and $\omega : \nats \times \nats \rightarrow \nats$ by $$\omega(n,k) = \next(k).$$ We then define $$\findsmallest{} : \bool^\nats \rightarrow \nats \times \nats \rightarrow 1 + \nats$$ by $$\findsmallest{\sigma}(n,k) = \bailrec{\varphi}{\beta}{\psi}{\omega}(n,k).$$
+Let $\sigma : \nats \rightarrow \bool$. Define $\varphi : \nats \rightarrow 1 + \nats$ by $$\varphi(k) = \lft(\ast),$$ $\beta : \nats \times \nats \rightarrow \bool$ by $$\beta(n,k) = \sigma(k),$$ $\psi : \nats \times \nats \rightarrow 1 + \nats$ by $$\psi(n,k) = \rgt(k),$$ and $\omega : \nats \times \nats \rightarrow \nats$ by $$\omega(n,k) = \next(k).$$ We then define $$\findsmallest{} : \bool^\nats \rightarrow \nats \times \nats \rightarrow 1 + \nats$$ by $$\findsmallest{\sigma}(n,k) = \bailrec(\varphi)(\beta)(\psi)(\omega)(n,k).$$
 
 In Haskell:
 

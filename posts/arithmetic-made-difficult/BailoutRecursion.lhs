@@ -31,7 +31,7 @@ $$\begin{eqnarray*}
 
 Then there is a unique function $\Theta : \nats \rightarrow A \rightarrow B$ such that, for all $n \in \nats$ and $a \in A$, $$\Theta(\zero,a) = \varphi(a)$$ and $$\Theta(\next(m),a) = \left\{ \begin{array}{ll} \psi(m,a) & \mathrm{if}\ \beta(m,a) \\ \Theta(m, \omega(m,a)) & \mathrm{otherwise}. \end{array}\right.$$
 
-This function $\Theta$ will be denoted $\bailrec{\varphi}{\beta}{\psi}{\omega}$.
+This function $\Theta$ will be denoted $\bailrec(\varphi)(\beta)(\psi)(\omega)$.
 
 ::: proof ::::::::::
 We define $ε : \nats \times A \rightarrow A + (\nats \times A)$ by $ε(\tup(n)(a)) = \lft(a)$ and $\chi : (A + (\nats \times A))^{\nats \times A} \rightarrow (A + (\nats \times A))^{\nats \times A}$ by $$\chi(h)(\tup(n)(a)) = \bif{\beta(\prev(n),a)}{\rgt(\tup(\prev(n))(a))}{h(\prev(n),\omega(\prev(n),a))}.$$ Now thinking of $((A+(\nats \times A))^{\nats \times A},ε,\chi)$ as an inductive set, we define $Θ : \nats \times A \rightarrow B$ by $$Θ(n,a) = \either(\varphi,\psi)(\natrec(ε)(\chi)(n)(\tup(n)(a))).$$
@@ -99,7 +99,7 @@ You might notice that in this proof, we didn't really use $\beta$ or $\psi$. Whe
 Implementation
 --------------
 
-As we did with $\natrec(\ast)(\ast)$ and $\simprec$, we'd like to implement $\bailrec{\ast}{\ast}{\ast}{\ast}$ in software. There are a couple of ways to go about this. First, the signature.
+As we did with $\natrec$ and $\simprec$, we'd like to implement $\bailrec$ in software. There are a couple of ways to go about this. First, the signature.
 
 > bailoutRec, bailoutRec' :: (Natural n)
 >   => (a -> b)
@@ -155,7 +155,7 @@ Also note that simple recursion and bailout recursion were carefully chosen to h
 
 Arbitrary recursion is dangerous because in general, every time one function uses another we have to keep track of what remains to be done afterward -- if we aren't careful, it is very easy to write recursive functions which eat up lots of memory. Even simple recursion can blow up exponentially; the classic example is the Fibonacci numbers (which we'll see later).
 
-In contrast, a *tail recursive* function by definition doesn't have to keep track of what remains to be done after the recursion. Our recursion operators, $\natrec(\ast)(\ast)$, $\simprec$, and $\bailrec{\ast}{\ast}{\ast}{\ast}$, are carefully chosen so that they have tail recursive implementations.
+In contrast, a *tail recursive* function by definition doesn't have to keep track of what remains to be done after the recursion. Our recursion operators, $\natrec(\ast)(\ast)$, $\simprec$, and $\bailrec$, are carefully chosen so that they have tail recursive implementations.
 
 By the way, I think it's helpful to compare the difference between arbitrary recursion and recursion operators to the difference between arbitrary ``GOTO``s and structured loops. In both cases we have a simple but dangerous primitive operation that is hidden behind a safer and more meaningful interface. A ``for`` loop means "repeat this some number of times"; while the meaning of simple recursion is given by its universal property.
 
@@ -169,7 +169,7 @@ $$\begin{eqnarray*}
 \psi & : & \nats \times A \rightarrow B \\
 \omega & : & \nats \times A \rightarrow A.
 \end{eqnarray*}$$
-Then $\bailrec{\varphi}{\beta}{\psi}{\omega}$ is the unique solution $f : \nats \times A \rightarrow B$ to the following system of functional equations for all $k \in \nats$, $a \in A$:
+Then $\bailrec(\varphi)(\beta)(\psi)(\omega)$ is the unique solution $f : \nats \times A \rightarrow B$ to the following system of functional equations for all $k \in \nats$, $a \in A$:
 $$\left\{\begin{array}{l}
  f(\zero,a) = \varphi(a) \\
  f(\next(k),a) = \bif{\beta(k,a)}{\psi(m,a)}{f(k,\omega(k,a))}

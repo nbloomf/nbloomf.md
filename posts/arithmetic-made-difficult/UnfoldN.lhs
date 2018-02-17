@@ -52,7 +52,7 @@ $$\omega(n,(a,x)) = \left\{\begin{array}{ll}
  (a,x) & \mathrm{if}\ f(a) = \lft(\ast) \\
  (c,\snoc(b,x)) & \mathrm{if}\ f(a) = \rgt((c,b)).
 \end{array}\right.$$
-Finally, define $$\tacunfoldN{f}(x,n,a) = \bailrec{\varphi}{\beta}{\psi}{\omega}(n,(a,x)).$$ For brevity, in this proof we let $\Omega = \bailrec{\varphi}{\beta}{\psi}{\omega}$.
+Finally, define $$\tacunfoldN{f}(x,n,a) = \bailrec(\varphi)(\beta)(\psi)(\omega)(n,(a,x)).$$ For brevity, in this proof we let $\Omega = \bailrec(\varphi)(\beta)(\psi)(\omega)$.
 
 First we show that $\tacunfoldN{f}$ has the desired properties. To this end, note that
 $$\begin{eqnarray*}

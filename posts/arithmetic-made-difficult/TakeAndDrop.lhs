@@ -366,7 +366,7 @@ as needed.
 Now for $\drop$. For this function, $\unfoldN$ doesn't have quite the right shape; fundamentally $\unfoldN$ "builds up" a list from the iterated images of a function, but $\drop$ needs to "tear down" a list, with it's natural number argument acting as a countdown. One of our other $\nats$ recursion operators will work for this -- we'll use bailout recursion for efficiency.
 
 :::::: definition ::
-Let $A$ be a set. Define $\beta : \nats \times A \rightarrow \bool$ by $$\beta(m,x) = \isnil(x),$$ $\psi : \nats \times \lists{A} \rightarrow \lists{A}$ by $$\psi(m,x) = x,$$ and $\omega : \nats \times \lists{A} \rightarrow \lists{A}$ by $$\omega(k,x) = \tail(x).$$ We then define $\drop : \nats \rightarrow {\lists{A}}^{\lists{A}}$ by $$\drop(k)(x) = \bailrec{\id}{\beta}{\psi}{\omega}(k,x).$$
+Let $A$ be a set. Define $\beta : \nats \times A \rightarrow \bool$ by $$\beta(m,x) = \isnil(x),$$ $\psi : \nats \times \lists{A} \rightarrow \lists{A}$ by $$\psi(m,x) = x,$$ and $\omega : \nats \times \lists{A} \rightarrow \lists{A}$ by $$\omega(k,x) = \tail(x).$$ We then define $\drop : \nats \rightarrow {\lists{A}}^{\lists{A}}$ by $$\drop(k)(x) = \bailrec(\id)(\beta)(\psi)(\omega)(k,x).$$
 
 In Haskell:
 

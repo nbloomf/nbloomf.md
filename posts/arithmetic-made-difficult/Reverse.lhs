@@ -514,7 +514,6 @@ Suite:
 >   ) => t a -> Int -> Int -> IO ()
 > _test_rev t size cases = do
 >   testLabel1 "rev" t
-> 
 >   let args = testArgs size cases
 > 
 >   runTest args (_test_revcat_nil t)

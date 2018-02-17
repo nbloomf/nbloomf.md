@@ -839,7 +839,6 @@ Suite:
 >   ) => t a -> Int -> Int -> IO ()
 > _test_lcp t size cases = do
 >   testLabel1 "lcp & lcs" t
-> 
 >   let args = testArgs size cases
 > 
 >   runTest args (_test_lcp_nil_list t)

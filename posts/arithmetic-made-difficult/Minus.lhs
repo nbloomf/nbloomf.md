@@ -43,7 +43,7 @@ $$\beta(a,b) = \left\{\begin{array}{ll}
 \end{array}\right.$$
 $\psi : \nats \times \nats \rightarrow 1 + \nats$ by $$\psi(a,b) = \rgt(\next(a));$$ and $\omega : \nats \times \nats \rightarrow \nats$ by $$\omega(a,b) = \prev(b).$$
 
-Now define $\nminus : \nats \times \nats \rightarrow 1 + \nats$ by $$\nminus = \bailrec{\varphi}{\beta}{\psi}{\omega}.$$
+Now define $\nminus : \nats \times \nats \rightarrow 1 + \nats$ by $$\nminus = \bailrec(\varphi)(\beta)(\psi)(\omega).$$
 
 In Haskell:
 
