@@ -112,8 +112,10 @@ as needed.
 
 ::: test :::::::::::
 
-> _test_compose_associative :: (Equal d)
->   => a -> b -> c -> d -> Test ((c -> d) -> (b -> c) -> (a -> b) -> a -> Bool)
+> _test_compose_associative
+>   :: (Equal d)
+>   => a -> b -> c -> d
+>   -> Test ((c -> d) -> (b -> c) -> (a -> b) -> a -> Bool)
 > _test_compose_associative _ _ _ _ =
 >   testName "compose(h)(compose(g)(f)) == compose(compose(h)(g))(f)" $
 >   \h g f a -> eq
@@ -158,8 +160,10 @@ as needed.
 
 ::: test :::::::::::
 
-> _test_compose_const_left :: (Equal c)
->   => a -> b -> c -> Test (c -> (a -> b) -> a -> Bool)
+> _test_compose_const_left
+>   :: (Equal c)
+>   => a -> b -> c
+>   -> Test (c -> (a -> b) -> a -> Bool)
 > _test_compose_const_left _ _ _ =
 >   testName "compose(const(c))(f) == const(c)" $
 >   \c f a -> eq (compose (const c) f a) (const c a)

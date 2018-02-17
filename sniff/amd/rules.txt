@@ -212,9 +212,9 @@
 #=======================#
 #--- dnatrec -----------#
 #=======================#
-@dnatrec@#thm-dnatrec-zero-nat	\\dnatrec{d}{p}{c}(\\zero,k) = d(k)
-@dnatrec@#thm-dnatrec-next-zero	\\dnatrec{d}{p}{c}(\\next(n),\\zero) = p(\\dnatrec{d}{p}{c}(n,\\zero))
-@dnatrec@#thm-dnatrec-next-next	\\dnatrec{d}{p}{c}(\\next(n),\\next(k)) = c(k,\\dnatrec{d}{p}{c}(n,k),\\dnatrec{d}{p}{c}(n,\\next(k)))
+@dnatrec@#thm-dnatrec-zero-nat	\\dnatrec(d)(p)(c)(\\zero,k) = d(k)
+@dnatrec@#thm-dnatrec-next-zero	\\dnatrec(d)(p)(c)(\\next(n),\\zero) = p(\\dnatrec(d)(p)(c)(n,\\zero))
+@dnatrec@#thm-dnatrec-next-next	\\dnatrec(d)(p)(c)(\\next(n),\\next(k)) = c(k,\\dnatrec(d)(p)(c)(n,k),\\dnatrec(d)(p)(c)(n,\\next(k)))
 #=======================#
 #--- plus --------------#
 #=======================#
