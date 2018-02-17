@@ -23,7 +23,7 @@ slug: range
 > import Map
 > import UnfoldN
 
-For our first application of $\unfoldN{\ast}$ we'll define a function, $\range$, that constructs lists of natural numbers. There are a few ways to do this. We could take an argument $n$ and construct the list of natural numbers from $\zero$ to $n$, but this is too specialized. We could instead take *two* arguments $a$ and $b$ and construct the list of natural numbers from $a$ to $b$, but we'll have to check whether or not the arguments are in order. A third option -- and the one we'll take -- is to take two arguments $a$ and $b$, and construct the list of the first $b$ natural numbers starting from $a$.
+For our first application of $\unfoldN(\ast)$ we'll define a function, $\range$, that constructs lists of natural numbers. There are a few ways to do this. We could take an argument $n$ and construct the list of natural numbers from $\zero$ to $n$, but this is too specialized. We could instead take *two* arguments $a$ and $b$ and construct the list of natural numbers from $a$ to $b$, but we'll have to check whether or not the arguments are in order. A third option -- and the one we'll take -- is to take two arguments $a$ and $b$, and construct the list of the first $b$ natural numbers starting from $a$.
 
 :::::: definition ::
 Define $f : \nats \rightarrow \ast + \nats \times \nats$ by $$f(k) = (\next(k),k).$$ We then define $\range : \nats \times \nats \rightarrow \lists{\nats}$ by $$\range(a,b) = \unfoldN(f,b,a).$$
@@ -36,7 +36,7 @@ In Haskell:
 
 ::::::::::::::::::::
 
-Since $\range$ is an $\unfoldN{\ast}$, it is the unique solution to a system of functional equations.
+Since $\range$ is an $\unfoldN(\ast)$, it is the unique solution to a system of functional equations.
 
 :::::: corollary :::
 $\range$ is the unique $f : \nats \times \nats \rightarrow \lists{\nats}$ satisfying the following system of equations for all $a,b \in \nats$.

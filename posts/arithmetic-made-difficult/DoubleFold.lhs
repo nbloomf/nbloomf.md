@@ -25,7 +25,7 @@ $$\left\{\begin{array}{l}
  \Omega(\cons(a,x),\nil) = \psi(a,\Omega(x,\nil)) \\
  \Omega(\cons(a,x),\cons(b,y)) = \chi(a,b,y,\Omega(x,y),\Omega(x,\cons(b,y)))
 \end{array}\right.$$
-We denote this $\Omega$ by $\dfoldr{\delta}{\psi}{\chi}$.
+We denote this $\Omega$ by $\dfoldr(\delta)(\psi)(\chi)$.
 
 In Haskell:
 

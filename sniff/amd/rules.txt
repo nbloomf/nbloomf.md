@@ -1,3 +1,6 @@
+#=======================#
+#--- testing -----------#
+#=======================#
 @testing@#thm-eq-reflexive	\\beq(a,a) = \\btrue
 @testing@#thm-eq-symmetric	\\beq(a,b) = \\beq(b,a)
 #=======================#
@@ -316,9 +319,9 @@
 #=======================#
 #--- dfoldr ------------#
 #=======================#
-@dfoldr@#thm-dfoldr-nil	\\dfoldr{d}{s}{k}(\\nil,y) = d(y)
-@dfoldr@#thm-dfoldr-cons-nil	\\dfoldr{d}{s}{k}(\\cons(a,x),\\nil) = s(a,\\dfoldr{d}{s}{k}(x,\\nil))
-@dfoldr@#thm-dfoldr-cons-cons	\\dfoldr{d}{s}{k}(\\cons(a,x),\\cons(b,y)) = k(a,b,y,\\dfoldr{d}{s}{k}(x,y),\\dfoldr{d}{s}{k}(x,\\cons(b,y)))
+@dfoldr@#thm-dfoldr-nil	\\dfoldr(d)(s)(k)(\\nil,y) = d(y)
+@dfoldr@#thm-dfoldr-cons-nil	\\dfoldr(d)(s)(k)(\\cons(a,x),\\nil) = s(a,\\dfoldr(d)(s)(k)(x,\\nil))
+@dfoldr@#thm-dfoldr-cons-cons	\\dfoldr(d)(s)(k)(\\cons(a,x),\\cons(b,y)) = k(a,b,y,\\dfoldr(d)(s)(k)(x,y),\\dfoldr(d)(s)(k)(x,\\cons(b,y)))
 #=======================#
 #--- snoc --------------#
 #=======================#

@@ -20,9 +20,9 @@ slug: unfoldn
 > import Snoc
 > import Cat
 
-So far we've developed a few functions that operate on lists. But we don't have a convenient programmatic way to *construct* lists out of nothing -- we'll remedy this today with a function called $\unfoldN{\ast}$. From the name, it sounds like unfold should be the "opposite" (or *dual*) of a fold. But the full story is a little more complicated than this; the true opposite to fold doesn't operate on lists at all, but on *streams* (which we'll get to later). Roughly speaking, $\lists{A}$ is an initial algebra, elements of $\lists{A}$ are required to be "finite", and $\foldr{\ast}{\ast}$ condenses a $\lists{A}$ element to a single item. Streams, in contrast, are required to be "infinite" and collectively form a *terminal algebra* and their universal map expands a single item to an infinite structure. All that is to say that the $\unfoldN{\ast}$ function we define here is *not* the real dual of $\foldr{\ast}{\ast}$ -- which partly explains why it is so complicated looking.
+So far we've developed a few functions that operate on lists. But we don't have a convenient programmatic way to *construct* lists out of nothing -- we'll remedy this today with a function called $\unfoldN(\ast)$. From the name, it sounds like unfold should be the "opposite" (or *dual*) of a fold. But the full story is a little more complicated than this; the true opposite to fold doesn't operate on lists at all, but on *streams* (which we'll get to later). Roughly speaking, $\lists{A}$ is an initial algebra, elements of $\lists{A}$ are required to be "finite", and $\foldr{\ast}{\ast}$ condenses a $\lists{A}$ element to a single item. Streams, in contrast, are required to be "infinite" and collectively form a *terminal algebra* and their universal map expands a single item to an infinite structure. All that is to say that the $\unfoldN(\ast)$ function we define here is *not* the real dual of $\foldr{\ast}{\ast}$ -- which partly explains why it is so complicated looking.
 
-So what will $\unfoldN{\ast}$ do? Roughly speaking, we'd like to be able to build up interesting lists of arbitrary size using a small amount of initial data. For example, here is a version of the signature for Haskell's standard ``unfoldr`` function.
+So what will $\unfoldN(\ast)$ do? Roughly speaking, we'd like to be able to build up interesting lists of arbitrary size using a small amount of initial data. For example, here is a version of the signature for Haskell's standard ``unfoldr`` function.
 
 ```haskell
 unfoldr :: (a -> Maybe (a,b)) -> a -> [b]
@@ -34,9 +34,9 @@ There is a problem with translating this type to $\lists{A}$, though. It has to 
 
 How can we fix this? One strategy would be to impose some kind of constraint on the map so that it must eventually return a ``Nothing``. That may well be possible, but my hunch is that it would make reasoning about unfolds complicated -- we'd have to prove that a given map satisfies the constraint before using it.
 
-Another strategy -- and the one we will take -- is to give unfold a natural number argument that acts as a countdown timer. If it reaches $\zero$, we're done. (This also explains the ``N`` in $\unfoldN{\ast}$.) This strategy also makes it possible to define $\unfoldN{\ast}$ using bailout recursion on $\nats$.
+Another strategy -- and the one we will take -- is to give unfold a natural number argument that acts as a countdown timer. If it reaches $\zero$, we're done. (This also explains the ``N`` in $\unfoldN(\ast)$.) This strategy also makes it possible to define $\unfoldN(\ast)$ using bailout recursion on $\nats$.
 
-Before defining $\unfoldN{\ast}$, we need a helper operator, $\tacunfoldN(\ast)$, analogous to $\revcat$. "tac" is a bad pun on "reverse cat" -- since that's kind of what this operator does.
+Before defining $\unfoldN(\ast)$, we need a helper operator, $\tacunfoldN(\ast)$, analogous to $\revcat$. "tac" is a bad pun on "reverse cat" -- since that's kind of what this operator does.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets, and let $f : A \rightarrow 1 + (A \times B)$. There is a unique function $$\Theta : \lists{B} \times \nats \times A \rightarrow \lists{B}$$ such that for all $a \in A$, $x \in \lists{A}$, and $n \in \nats$, we have $$\Theta(x,\zero,a) = x$$ and
@@ -235,10 +235,10 @@ as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-Now we can define $\unfoldN{\ast}$ in terms of $\tacunfoldN(\ast)$.
+Now we can define $\unfoldN(\ast)$ in terms of $\tacunfoldN(\ast)$.
 
 :::::: definition ::
-Let $A$ and $B$ be sets, with $f : A \rightarrow 1 + (A \times B)$. we define $\unfoldN{f} : \nats \times A \rightarrow \lists{B}$ by $$\unfoldN{f}(n,a) = \tacunfoldN(f)(\nil,n,a).$$
+Let $A$ and $B$ be sets, with $f : A \rightarrow 1 + (A \times B)$. we define $\unfoldN(f) : \nats \times A \rightarrow \lists{B}$ by $$\unfoldN(f)(n,a) = \tacunfoldN(f)(\nil,n,a).$$
 
 In Haskell:
 
@@ -249,10 +249,10 @@ In Haskell:
 
 ::::::::::::::::::::
 
-And $\unfoldN{\ast}$ can be characterized as the unique solution of a system of functional equations.
+And $\unfoldN(\ast)$ can be characterized as the unique solution of a system of functional equations.
 
 :::::: theorem :::::
-Let $A$ and $B$ be sets with $f : A \rightarrow 1 + (A \times B)$. Then $\unfoldN{f}$ is the unique map $g : \nats \times A \rightarrow B$ such that the following hold for all $a \in A$ and $n \in \nats$.
+Let $A$ and $B$ be sets with $f : A \rightarrow 1 + (A \times B)$. Then $\unfoldN(f)$ is the unique map $g : \nats \times A \rightarrow B$ such that the following hold for all $a \in A$ and $n \in \nats$.
 $$\left\{\begin{array}{l}
  g(\zero,a) = \nil \\
  g(\next(n),a) = \left\{\begin{array}{ll}
@@ -262,65 +262,65 @@ $$\left\{\begin{array}{l}
 \end{array}\right.$$
 
 ::: proof ::::::::::
-To see that $\unfoldN{\ast}$ satisfies the first equation, note that
+To see that $\unfoldN(\ast)$ satisfies the first equation, note that
 $$\begin{eqnarray*}
- &   & \unfoldN{f}(\zero,a) \\
+ &   & \unfoldN(f)(\zero,a) \\
  & = & \tacunfoldN(f)(\nil,\zero,a) \\
  & = & \nil
 \end{eqnarray*}$$
 as needed. We show the second by induction on $n$. For the base case $n = \zero$, if $a \in A$ and $f(a) = \lft(\ast)$ we have
 $$\begin{eqnarray*}
- &   & \unfoldN{f}(\next(\zero),a) \\
+ &   & \unfoldN(f)(\next(\zero),a) \\
  & = & \tacunfoldN(f)(\nil,\next(\zero),a) \\
  & = & \nil
 \end{eqnarray*}$$
 as needed, and if $f(a) = \rgt((c,b))$ we have
 $$\begin{eqnarray*}
- &   & \unfoldN{f}(\next(\zero),a) \\
+ &   & \unfoldN(f)(\next(\zero),a) \\
  & = & \tacunfoldN(f)(\nil,\next(\zero),a) \\
  & = & \tacunfoldN(f)(\snoc(b,\nil),\zero,c) \\
  & = & \snoc(b,\nil) \\
  &     \href{@snoc@#cor-snoc-nil}
    = & \cons(b,\nil) \\
  & = & \cons(b,\tacunfoldN(f)(\nil,\zero,a)) \\
- & = & \cons(b,\unfoldN{f}(\zero,a))
+ & = & \cons(b,\unfoldN(f)(\zero,a))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ for some $n$. Let $a \in A$. If $f(a) = \lft(\ast)$, we have
 $$\begin{eqnarray*}
- &   & \unfoldN{f}(\next(n),a) \\
+ &   & \unfoldN(f)(\next(n),a) \\
  & = & \tacunfoldN(\nil,\next(n),a) \\
  & = & \nil
 \end{eqnarray*}$$
 as needed, while if $f(a) = \rgt((c,b))$ we have
 $$\begin{eqnarray*}
- &   & \unfoldN{f}(\next(n),a) \\
+ &   & \unfoldN(f)(\next(n),a) \\
  & = & \tacunfoldN(f)(\nil,\next(n),a) \\
  & = & \tacunfoldN(f)(\snoc(b,\nil),n,c) \\
  &     \href{@snoc@#cor-snoc-nil}
    = & \tacunfoldN(f)(\cons(b,\nil),n,c) \\
  & = & \cons(b,\tacunfoldN(f)(\nil,n,c)) \\
- & = & \cons(b,\unfoldN{f}(n,c))
+ & = & \cons(b,\unfoldN(f)(n,c))
 \end{eqnarray*}$$
 as needed.
 
-To see that $\unfoldN{f}$ is unique we again induct on $n$. Suppose $\Psi$ is another solution. For the base case $n = \zero$ note that
+To see that $\unfoldN(f)$ is unique we again induct on $n$. Suppose $\Psi$ is another solution. For the base case $n = \zero$ note that
 $$\begin{eqnarray*}
  &   & \Psi(\zero,a) \\
  & = & \nil \\
- & = & \unfoldN{f}(\zero,a)
+ & = & \unfoldN(f)(\zero,a)
 \end{eqnarray*}$$
-as needed. For the inductive step, suppose we have $\Psi(n,a) = \unfoldN{f}(n,a)$ for all $a$ for some $n$, and let $a \in A$. If $f(a) = \lft(\ast)$, then
+as needed. For the inductive step, suppose we have $\Psi(n,a) = \unfoldN(f)(n,a)$ for all $a$ for some $n$, and let $a \in A$. If $f(a) = \lft(\ast)$, then
 $$\begin{eqnarray*}
  &   & \Psi(\next(n),a) \\
  & = & \nil \\
- & = & \unfoldN{f}(\next(n),a)
+ & = & \unfoldN(f)(\next(n),a)
 \end{eqnarray*}$$
 as needed, while if $f(a) = \rgt((c,b))$ we have
 $$\begin{eqnarray*}
  &   & \Psi(\next(n),a) \\
  & = & \cons(b,\Psi(n,c)) \\
- & = & \cons(b,\unfoldN{f}(n,c)) \\
- & = & \unfoldN{f}(\next(n),a)
+ & = & \cons(b,\unfoldN(f)(n,c)) \\
+ & = & \unfoldN(f)(\next(n),a)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

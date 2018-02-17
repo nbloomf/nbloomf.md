@@ -29,7 +29,7 @@ slug: lcp-lcs
 Today we'll compute the *longest common prefix* of two lists (and while we're at it, the *longest common suffix*). Given two lists $x$ and $y$, their longest common prefix is the longest list which is a prefix of both, just like it says on the tin. We'll denote this function $\lcp$, and we want it to have a signature like $$\lists{A} \times \lists{A} \rightarrow \lists{A}.$$ Double fold was made for situations like this.
 
 :::::: definition ::
-Let $A$ be a set. Define $\delta : \lists{A} \rightarrow \lists{A}$ by $\delta(y) = \nil$, $\psi : A \times \lists{A} \rightarrow \lists{A}$ by $$\psi(a,x) = \nil,$$ and $\chi : A \times A \times \lists{A} \times \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\chi(a,b,y,z,w) = \bif{\beq(a,b)}{cons(a,z)}{\nil}.$$ Now define $\lcp : \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\lcp = \dfoldr{\delta}{\psi}{\chi}.$$
+Let $A$ be a set. Define $\delta : \lists{A} \rightarrow \lists{A}$ by $\delta(y) = \nil$, $\psi : A \times \lists{A} \rightarrow \lists{A}$ by $$\psi(a,x) = \nil,$$ and $\chi : A \times A \times \lists{A} \times \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\chi(a,b,y,z,w) = \bif{\beq(a,b)}{cons(a,z)}{\nil}.$$ Now define $\lcp : \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\lcp = \dfoldr(\delta)(\psi)(\chi).$$
 
 In Haskell:
 

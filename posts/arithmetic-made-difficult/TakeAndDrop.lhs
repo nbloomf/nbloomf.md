@@ -29,7 +29,7 @@ slug: take-drop
 > import PrefixAndSuffix
 > import Sublist
 
-Today we'll define two functions, $\take$ and $\drop$, that split a list at a given index. For example, $\take(3)(x)$ should return a list consisting of the first 3 items of $x$. The biggest question to think about is what $\take$ should do if $x$ doesn't have 3 items to take -- should $\take(3)(-)$ mean take *exactly* 3 or take *at most* 3? The simplest interpretation is *at most*, since with *exactly* we'd need the return type to encode a failure case. That said, under the *at most* interpretation, the signature of $\take$ will be $$\take : \nats \rightarrow {\lists{A}}^{\lists{A}}.$$ Usually we'd try to define such a function with a fold, but in this case $\unfoldN{\ast}$ does exactly what we want.
+Today we'll define two functions, $\take$ and $\drop$, that split a list at a given index. For example, $\take(3)(x)$ should return a list consisting of the first 3 items of $x$. The biggest question to think about is what $\take$ should do if $x$ doesn't have 3 items to take -- should $\take(3)(-)$ mean take *exactly* 3 or take *at most* 3? The simplest interpretation is *at most*, since with *exactly* we'd need the return type to encode a failure case. That said, under the *at most* interpretation, the signature of $\take$ will be $$\take : \nats \rightarrow {\lists{A}}^{\lists{A}}.$$ Usually we'd try to define such a function with a fold, but in this case $\unfoldN(\ast)$ does exactly what we want.
 
 Essentially, $\take$ and $\drop$ compute a kind of "$\cat$-factorization" of a list based on index from the left. This is not the only useful such factorization; we will address two others in future posts.
 
@@ -39,7 +39,7 @@ $$f(x) = \left\{ \begin{array}{ll}
  \lft(\ast) & \mathrm{if}\ x = \nil \\
  \rgt((b,a)) & \mathrm{if}\ x = \cons(a,b).
 \end{array}\right.$$
-We then define $$\take : \nats \rightarrow {\lists{A}}^{\lists{A}}$$ by $$\take(k)(x) = \unfoldN{f}(k,x).$$
+We then define $$\take : \nats \rightarrow {\lists{A}}^{\lists{A}}$$ by $$\take(k)(x) = \unfoldN(f)(k,x).$$
 
 In Haskell:
 
@@ -52,7 +52,7 @@ In Haskell:
 
 ::::::::::::::::::::
 
-Since $\take$ is defined as an $\unfoldN{\ast}$, it can be characterized as the unique solution to a system of functional equations.
+Since $\take$ is defined as an $\unfoldN(\ast)$, it can be characterized as the unique solution to a system of functional equations.
 
 :::::: corollary :::
 Let $A$ be a set. $\take$ is the unique map $f : \nats \rightarrow {\lists{A}}^{\lists{A}}$ satisfying the following equations for all $n \in \nats$, $a \in A$, and $x \in \lists{A}$.

@@ -31,7 +31,7 @@ $$\begin{array}{ccccccccccc}
 Hence the name $\zip$ -- it looks like a zipper in action. A big question has to be resolved. It seems clear what $\zip$ should do if we give it two lists with the same length. But what if we try to zip two lists of different lengths? I can see two basic strategies. On one hand we can just truncate to the length of the shortest list. Another idea is to *pad* the shorter list to the length of the longer. These are both useful but essentially different behaviors, so we will define two different functions to handle them. The truncation strategy will be called $\zip$ and the padding strategy will be called $\zipPad$.
 
 :::::: definition ::
-Let $A$ and $B$ be sets. Define $\delta : \lists{B} \rightarrow \lists{A \times B}$ by $$\delta(y) = \nil,$$ $\psi : A \times \lists{A \times B} \rightarrow \lists{A \times B}$ by $$\psi(a,z) = \nil,$$ and $\chi : A \times B \times \lists{B} \times \lists{A \times B} \times \lists{A \times B} \rightarrow \lists{A \times B}$ by $$\chi(a,b,y,z,w) = \cons((a,b),z).$$ Now define $$\zip : \lists{A} \times \lists{B} \rightarrow \lists{A \times B}$$ by $$\zip = \dfoldr{\delta}{\psi}{\chi}.$$
+Let $A$ and $B$ be sets. Define $\delta : \lists{B} \rightarrow \lists{A \times B}$ by $$\delta(y) = \nil,$$ $\psi : A \times \lists{A \times B} \rightarrow \lists{A \times B}$ by $$\psi(a,z) = \nil,$$ and $\chi : A \times B \times \lists{B} \times \lists{A \times B} \times \lists{A \times B} \rightarrow \lists{A \times B}$ by $$\chi(a,b,y,z,w) = \cons((a,b),z).$$ Now define $$\zip : \lists{A} \times \lists{B} \rightarrow \lists{A \times B}$$ by $$\zip = \dfoldr(\delta)(\psi)(\chi).$$
 
 In Haskell:
 
@@ -44,7 +44,7 @@ In Haskell:
 
 ::::::::::::::::::::
 
-Since $\zip$ is defined in terms of $\dfoldr{\ast}{\ast}{\ast}$, it is the unique solution to a system of functional equations.
+Since $\zip$ is defined in terms of $\dfoldr$, it is the unique solution to a system of functional equations.
 
 :::::: corollary :::
 Let $A$ and $B$ be sets. Then $\zip$ is the unique solution $f : \lists{A} \times \lists{B} \rightarrow \lists{A \times B}$ to the following equations for all $a \in A$, $b \in B$, $x \in \lists{A}$, and $y \in \lists{B}$.

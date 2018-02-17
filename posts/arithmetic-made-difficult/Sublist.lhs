@@ -30,12 +30,12 @@ slug: sublist
 
 Today we'll nail down what it means for one list to be a *sublist* of another. Intuitively, a sublist is "part of" some larger list; but there is some ambiguity here: does the sublist have to be contiguous in the larger list? For example, it seems clear that $$\langle b, c \rangle$$ should be considered a sublist of $$\langle a, b, c, d, e \rangle$$ while $$\langle e, g \rangle$$ should not. But what about $$\langle a, c \rangle,$$ or even $$\langle c, a \rangle$$ for that matter? First, lists are inherently ordered, so the "sublist" idea should reflect this -- sublists have to respect the order of their superlists. On the other hand, it is less crucial that sublists be contiguous in their superlists. Contiguous sublists are still interesting though (for reasons we'll see later), so we will single them out as infixes (analogous to prefixes and suffixes).
 
-So we have two related but distinct concepts, sublists and infixes, that will need to be dealt with separately. We'll define two boolean functions, $\sublist$ and $\infix$, which detect when one list is a sublist or infix (respectively) of another. We'll start with $\sublist$. This function should have a signature like $$\lists{A} \times \lists{A} \rightarrow \bool.$$ Double fold was made for situations like this, so we could try to define $\sublist$ as a double fold like $$\sublist(x,y) = \dfoldr{\delta}{\psi}{\chi}(x,y)$$ But if we do this, assuming some reasonable behavior for $\sublist$, we get stuck! (Try it!) What happens is that the fold eats $x$, but when $x$ and $y$ are not nil but have different first items we need the recursion to un-eat the $x$ parameter. The fix is to instead fold on $y$ like $$\sublist(x,y) = \dfoldr{\delta}{\psi}{\chi}(y,x).$$
+So we have two related but distinct concepts, sublists and infixes, that will need to be dealt with separately. We'll define two boolean functions, $\sublist$ and $\infix$, which detect when one list is a sublist or infix (respectively) of another. We'll start with $\sublist$. This function should have a signature like $$\lists{A} \times \lists{A} \rightarrow \bool.$$ Double fold was made for situations like this, so we could try to define $\sublist$ as a double fold like $$\sublist(x,y) = \dfoldr(\delta)(\psi)(\chi)(x,y)$$ But if we do this, assuming some reasonable behavior for $\sublist$, we get stuck! (Try it!) What happens is that the fold eats $x$, but when $x$ and $y$ are not nil but have different first items we need the recursion to un-eat the $x$ parameter. The fix is to instead fold on $y$ like $$\sublist(x,y) = \dfoldr(\delta)(\psi)(\chi)(y,x).$$
 
 Blah blah, define $\sublist$ like this.
 
 :::::: definition ::
-Let $A$ be a set. Define $\psi : A \times \bool \rightarrow \bool$ by $$\psi(a,p) = \btrue,$$ and $\chi : A \times A \times \lists{A} \times \bool \times \bool \rightarrow \lists{A}$ by $$\chi(a,b,y,p,q) = \bif{\beq(a,b)}{p}{q}.$$ We now define $\sublist : \lists{A} \times \lists{A} \rightarrow \bool$ by $$\sublist(x,y) = \dfoldr{\isnil}{\psi}{\chi}(y,x).$$
+Let $A$ be a set. Define $\psi : A \times \bool \rightarrow \bool$ by $$\psi(a,p) = \btrue,$$ and $\chi : A \times A \times \lists{A} \times \bool \times \bool \rightarrow \lists{A}$ by $$\chi(a,b,y,p,q) = \bif{\beq(a,b)}{p}{q}.$$ We now define $\sublist : \lists{A} \times \lists{A} \rightarrow \bool$ by $$\sublist(x,y) = \dfoldr(\isnil)(\psi)(\chi)(y,x).$$
 
 In Haskell:
 
@@ -47,7 +47,7 @@ In Haskell:
 
 ::::::::::::::::::::
 
-Since $\sublist$ is defined as a $\dfoldr{\ast}{\ast}{\ast}$, it can be characterized as the unique solution to a system of functional equations.
+Since $\sublist$ is defined as a $\dfoldr$, it can be characterized as the unique solution to a system of functional equations.
 
 :::::: corollary :::
 Let $A$ be a set. $\sublist$ is the unique map $f : \lists{A} \times \lists{A} \rightarrow \bool$ satisfying the following system of functional equations for all $a,b \in A$ and $x,y \in \lists{A}$.

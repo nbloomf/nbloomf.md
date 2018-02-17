@@ -27,10 +27,10 @@ slug: prefix-suffix
 
 The $\cat$ function on $\lists{A}$ is analogous to $\nplus$ on $\nats$. Carrying this analogy further, $\zip$ and $\zipPad$ are analogous to $\nmin$ and $\nmax$, respectively. When analogies like this occur in mathematics it can be fruitful to see how far they go. With that in mind, today we will explore the list-analogue of $\nleq$. This role is played by two functions which we call $\prefix$ and $\suffix$.
 
-Intuitively, $\prefix$ will detect when one list is an initial segment of another, while $\suffix$ detects when one list is a terminal segment of another. We'll start with $\prefix$, which we can define as a $\dfoldr{\ast}{\ast}{\ast}$ as follows.
+Intuitively, $\prefix$ will detect when one list is an initial segment of another, while $\suffix$ detects when one list is a terminal segment of another. We'll start with $\prefix$, which we can define as a $\dfoldr$ as follows.
 
 :::::: definition ::
-Let $A$ be a set. Define $\delta : \lists{A} \rightarrow \bool$ by $\delta(y) = \btrue$, define $\psi : A \times \bool \rightarrow \bool$ by $\psi(a,p) = \bfalse$, and define $\chi : A \times A \times \lists{A} \times \bool \times \bool \rightarrow \lists{A}$ by $$\chi(a,b,y,p,q) = \bif{\beq(a,b)}{p}{\bfalse}.$$ Now define $$\prefix : \lists{A} \times \lists{A} \rightarrow \bool$$ by $$\prefix = \dfoldr{\delta}{\psi}{\chi}.$$
+Let $A$ be a set. Define $\delta : \lists{A} \rightarrow \bool$ by $\delta(y) = \btrue$, define $\psi : A \times \bool \rightarrow \bool$ by $\psi(a,p) = \bfalse$, and define $\chi : A \times A \times \lists{A} \times \bool \times \bool \rightarrow \lists{A}$ by $$\chi(a,b,y,p,q) = \bif{\beq(a,b)}{p}{\bfalse}.$$ Now define $$\prefix : \lists{A} \times \lists{A} \rightarrow \bool$$ by $$\prefix = \dfoldr(\delta)(\psi)(\chi).$$
 
 In Haskell:
 
