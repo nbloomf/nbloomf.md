@@ -8,11 +8,12 @@ slug: dnaturalrec
 
 > {-# LANGUAGE NoImplicitPrelude #-}
 > module DoubleNaturalRecursion (
->   dnaturalRec
+>   dnaturalRec, _test_dnaturalRec, main_dnaturalRec
 > ) where
 > 
 > import Testing
 > import DisjointUnions
+> import Booleans
 > import NaturalNumbers
 
 Today we'll implement a slight generalization of natural recursion that allows recursion on two arguments.
@@ -127,6 +128,18 @@ And there's the definition from the universal property:
 >       (dnaturalRec delta psi chi m t)
 >       (dnaturalRec delta psi chi m (next t))
 
+While we're here, we should test that these two implementations aren't not equivalent.
+
+> _test_dnaturalRec_equiv
+>   :: (Natural n, Equal a)
+>   => n -> a
+>   -> Test ((n -> a) -> (a -> a) -> (n -> a -> a -> a) -> n -> n -> Bool)
+> _test_dnaturalRec_equiv _ _ =
+>   testName "dnaturalRec == dnaturalRec'" $
+>   \delta psi chi n k -> eq
+>     (dnaturalRec delta psi chi n k)
+>     (dnaturalRec' delta psi chi n k)
+
 The "uniqueness" part of double natural recursion is also handy. To be a little more explicit, it says the following.
 
 :::::: corollary :::
@@ -137,3 +150,33 @@ $$\left\{\begin{array}{l}
  f(\next(n),\next(k)) = \chi(k,f(n,k),f(n,\next(k)))
 \end{array}\right.$$
 ::::::::::::::::::::
+
+
+Testing
+-------
+
+Suite:
+
+> _test_dnaturalRec ::
+>   ( TypeName n, Show n, Equal n, Arbitrary n, CoArbitrary n, Natural n
+>   , CoArbitrary a, Arbitrary a, Show a, Equal a, TypeName a
+>   ) => n -> a -> Int -> Int -> IO ()
+> _test_dnaturalRec n a size cases = do
+>   testLabel2 "dnaturalRec" n a
+> 
+>   let
+>     args = stdArgs
+>       { maxSuccess = cases
+>       , maxSize    = size
+>       }
+> 
+>   runTest args (_test_dnaturalRec_equiv n a)
+
+Main:
+
+> main_dnaturalRec :: IO ()
+> main_dnaturalRec = do
+>   _test_dnaturalRec (zero :: Unary) (zero :: Unary) 10 50
+>   _test_dnaturalRec (zero :: Unary) (zero :: Unary) 10 50
+>   _test_dnaturalRec (zero :: Unary) (true :: Bool)  10 50
+>   _test_dnaturalRec (zero :: Unary) (true :: Bool)  10 50

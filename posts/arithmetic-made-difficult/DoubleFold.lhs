@@ -11,7 +11,6 @@ slug: dfoldr
 >   dfoldr
 > ) where
 > 
-> import Testing
 > import Tuples
 > import DisjointUnions
 > import Lists

@@ -55,7 +55,7 @@ as claimed.
 
 > _test_disjoint_nil :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> Bool)
-> _test_disjoint_nil t =
+> _test_disjoint_nil _ =
 >   testName "disjoint(nil,x) == true" $
 >   \x -> eq (disjoint nil x) true
 
@@ -161,13 +161,13 @@ Suite:
 >   , TypeName (t a), List t
 >   , Equal (t a), Show (t a), Arbitrary (t a), Equal (t (t a))
 >   ) => t a -> Int -> Int -> IO ()
-> _test_disjoint t maxSize numCases = do
+> _test_disjoint t size cases = do
 >   testLabel1 "disjoint" t
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_disjoint_nil t)

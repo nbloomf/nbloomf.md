@@ -14,17 +14,10 @@ slug: zippad
 > import Testing
 > import Functions
 > import Tuples
-> import DisjointUnions
 > import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
 > import NaturalNumbers
-> import Plus
 > import MaxAndMin
 > import Lists
-> import HeadAndTail
 > import DoubleFold
 > import Length
 > import Map
@@ -115,7 +108,7 @@ as needed.
 
 > _test_zipPad_nil_right :: (List t, Equal (t (Pair a b)))
 >   => t a -> t b -> Test (a -> b -> t a -> Bool)
-> _test_zipPad_nil_right _ tb =
+> _test_zipPad_nil_right _ _ =
 >   testName "zipPad(u,v)(x,nil) == map(tupR(v))(x)" $
 >   \u v x -> eq (zipPad u v x nil) (map ((flip tup) v) x)
 
@@ -404,13 +397,13 @@ Suite:
 >   , Equal (t b), Show (t b), Arbitrary (t b), Equal (t (Pair a b)), Equal (t (Pair b a))
 >   , Equal (t (Pair a (Pair a a))), Equal (t (Pair (Pair a a) a))
 >   ) => t a -> t b -> n -> Int -> Int -> IO ()
-> _test_zipPad t u n maxSize numCases = do
+> _test_zipPad t u n size cases = do
 >   testLabel3 "zipPad" t u n
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_zipPad_nil_list t u)

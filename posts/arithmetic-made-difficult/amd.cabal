@@ -266,6 +266,25 @@ test-suite amd-mutatingrec
     Unary,
     NaturalNumbers
 
+test-suite amd-dnaturalrec
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: DoubleNaturalRecursion.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options: -Wall -fforce-recomp -main-is DoubleNaturalRecursion.main_dnaturalRec
+  other-modules:
+    Testing,
+    Booleans,
+    Not,
+    And,
+    Or,
+    Implies,
+    Functions,
+    Tuples,
+    DisjointUnions,
+    Unary,
+    NaturalNumbers
+
 test-suite amd-plus
   default-language: Haskell2010
   type: exitcode-stdio-1.0
