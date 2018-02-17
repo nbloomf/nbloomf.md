@@ -14,6 +14,7 @@ slug: booleans
 > 
 > import Testing
 > import Functions
+> import Flip
 
 Before we think about numbers or writing programs, let's start by nailing down some important ideas about truth values. In math there can be a kind of other-worldness about true and false, since they live in the "metalanguage" of mathematical logic rather than the "object language" of whatever we are studying. But it will turn out to be useful to algebraify the truth values themselves.
 
@@ -553,4 +554,8 @@ Main:
 > main_boolean = do
 >   _test_boolean (true :: Bool) (true :: Bool) 20 100
 > 
+>   -- old suites, new types
 >   _test_functions (true :: Bool) (true :: Bool) (true :: Bool) (true :: Bool) 20 100
+> 
+>   _test_flip (true :: Bool) (true :: Bool) (true :: Bool) (true :: Bool)
+>     (true :: Bool) (true :: Bool) (true :: Bool) 20 100

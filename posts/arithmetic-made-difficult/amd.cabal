@@ -111,7 +111,8 @@ test-suite amd-booleans
   ghc-options: -Wall -main-is Booleans.main_boolean
   other-modules:
     Testing,
-    Functions
+    Functions,
+    Flip
 
 test-suite amd-not
   default-language: Haskell2010
@@ -790,12 +791,13 @@ test-suite amd-rev
   ghc-options: -Wall -main-is Reverse.main_rev
   other-modules:
     Testing,
+    Functions,
+    Flip,
     Booleans,
     Not,
     And,
     Or,
     Implies,
-    Functions,
     Tuples,
     DisjointUnions,
     Unary,

@@ -59,6 +59,10 @@
 \filter
 \findsmallest
 \flip
+\flipB
+\flipC
+\flipD
+\flipE
 \foldl
 \foldr
 \forall
