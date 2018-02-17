@@ -1,5 +1,6 @@
 > import Testing
 > import Functions
+> import Flip
 > import Booleans
 > import Not
 > import And

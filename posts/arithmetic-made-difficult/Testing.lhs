@@ -6,9 +6,9 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: testing
 ---
 
-Proving that programs are correct is hard. For one thing, determining what it means for a program to _be_ correct is not trivial -- it always has a certain output? never has an error? doesn't do unnecessary work? what is the execution model? But programs can be very useful things, and assurance that they are "correct" (whatever that means) may be valuable.
+Proving that programs are correct is hard. For one thing, determining what it means for a program to _be_ correct is not trivial -- it always has a certain output? never has an error? doesn't do unnecessary work? what is the execution model? But programs can be very useful and expensive things, and any assurance that they do what we think they do is valuable.
 
-Comparatively, proving theorems in mathematics is easy. In algebra especially lots of proofs can be written in the so-called "equational" style, which is straightforward to the point of boringness. In this style of proof we can establish that $A$ is equal to $B$ by producing a sequence of statements, each equal to the next according to strict rules, starting at $A$ and ending at $B$. Verifying that such proofs are valid can be done by pattern matching, using identities as rewrite rules.
+Comparatively, proving theorems in mathematics is easy. In algebra especially lots of proofs can be written in the so-called "equational" style, which is straightforward to the point of boringness. In this style of proof we start with a list of *identities*; equalities between two expressions involving both *constants* and *variables* that we assume to be true for any values we might substitute for the variables. We then deduce more identities using a substitution rule. For example, we can think of the symbols $+$, $2$, and $3$ as constants, the symbols $a$ and $b$ as variables, and the expression $a + b = b + a$ as an identity. From this identity we can deduce the identity $2 + 3 = 3 + 2$, by making the substitution $a = 2$ and $b = 3$. This is a simple, one-step example, but the basic strategy is widely applicable -- the [Metamath](http://us.metamath.org/) project aims to formalize large chunks of mathematics using (more or less) this strategy. What's more, verifying that such proofs are valid can be done by pattern matching, using the identities as rewrite rules.
 
 So we have on the one hand some programs we'd like to prove things about, and on the other a simple proof technique. With some careful thought, we can apply one to the other -- we just have to get used to thinking of programs as *arithmetic* in an appropriate *algebra*.
 
@@ -20,13 +20,15 @@ We can build an *algebra of programs*, and doing so has some interesting benefit
 * Just as in ordinary arithmetic, many theorems come in the form of universally quantified equations. These are tailor made for _property-based_ or _generative_ testing.
 * Equational proofs come with a simple strategy for verification: term rewriting. If we're careful about how we write proofs, individual steps can be mechanically verified by a simple tool.
 
-In this series of posts I'll be exploring this idea in detail, including lots of proofs. We could do this using a language designed specifically for formal verification, but I'd like to stay as close to English as possible. At the same time, in any big list of proofs there's the danger that some of them are wrong. To help mitigate this I'll use two different kinds of checks. First, we'll include automated tests for as many theorems as possible. And second, as much as possible, we'll use a term rewriting tool to check that the steps in our equational proofs are correct. If you see a blue equals sign in an equational proof, that signifies a link to the previous theorem or definition which justifies the equality. But more than that, the blue equals signs are verified by an [automated tool](/posts/2018-01-22-a-simple-term-rewriting-tool.html).
+We could do this using a language designed specifically for formal verification, but I'd like to stay as close to English as possible. At the same time, in any big list of proofs there's the danger that some of them are wrong. To help mitigate this I'll use two different kinds of checks. First, we'll implement our definitions in an executable language and include automated tests for as many theorems as possible. And second, as much as possible, we'll use a term rewriting tool to check that the steps in our equational proofs are correct. If you see a blue equals sign in an equational proof, that signifies a link to the previous theorem or definition which justifies the equality. But more than that, the blue equals signs are verified by an [automated tool](/posts/2018-01-22-a-simple-term-rewriting-tool.html).
 
 
 Property Testing
 ----------------
 
-We'll use the ``QuickCheck`` library to make our theorems testable. This is not the same as making our proofs machine-checkable, but can still be a useful tool for finding bugs. This module reexports just enough of ``QuickCheck`` for our needs.
+I've chosen to write my executable definitions in Haskell, because that's what I'm most comfortable with, but that's just a choice -- many other languages would do. Many theorems will have a stackish flavor; something like Factor or J might also work well.
+
+We'll use the ``QuickCheck`` library to make our theorems testable. This is not the same as making our proofs machine-checkable, but can still be a useful tool for finding bugs and checking assumptions. This module reexports just enough of ``QuickCheck`` for our needs.
 
 > {-# LANGUAGE NoImplicitPrelude #-}
 > module Testing
@@ -113,12 +115,12 @@ The ``Test`` type, with ``testName``, is a shorthand for writing named tests.
 Equality
 --------
 
-Now that we've algebraified truth values, we will also algebraify equality. Typically I think of equality (as in the $=$ symbol) as a metalanguage expression. Sure, we can define a relation that captures equality on a given set, but really equality is a "logical" thing, not a "mathematical" one. We'll express this using a type class in Haskell like so.
+To write tests, we also need a notion of "equality" for values. This is a little out of order -- we'll define the boolean truth values in a later post -- but we need equality now, so I'll put the definition here. Typically I think of equality (as in the $=$ symbol) as a metalanguage expression anyway.
 
 > class Equal a where
 >   eq :: a -> a -> Bool
 
-(Why not use the built in `Eq` class? No good reason.) For example, here is the ``Equal`` instance for ``Bool``:
+(Why not use the built in `Eq` class? No good reason.) We'll implement ``Equal`` for new types as we encounter them. For now we need two: ``Bool`` and ``()``.
 
 > instance Equal Bool where
 >   eq True  True  = True

@@ -13,6 +13,7 @@ slug: length
 > 
 > import Testing
 > import Functions
+> import Flip
 > import NaturalNumbers
 > import Plus
 > import Lists

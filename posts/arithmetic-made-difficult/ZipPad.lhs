@@ -13,6 +13,7 @@ slug: zippad
 > 
 > import Testing
 > import Functions
+> import Flip
 > import Tuples
 > import NaturalNumbers
 > import MaxAndMin

@@ -13,6 +13,7 @@ slug: isprime
 > 
 > import Testing
 > import Functions
+> import Flip
 > import Booleans
 > import And
 > import DisjointUnions

@@ -9,14 +9,15 @@ library
   exposed-modules:
     Testing,
     Functions,
-    Tuples,
-    DisjointUnions,
+    Flip,
     Booleans,
     Not,
     And,
     Or,
     Implies,
     Predicates,
+    Tuples,
+    DisjointUnions,
     Unary,
     NaturalNumbers,
     SimpleRecursion,
@@ -91,6 +92,16 @@ test-suite amd-functions
   ghc-options: -Wall -main-is Functions.main_functions
   other-modules:
     Testing
+
+test-suite amd-flip
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Flip.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options: -Wall -main-is Flip.main_flip
+  other-modules:
+    Testing,
+    Functions
 
 test-suite amd-booleans
   default-language: Haskell2010

@@ -13,6 +13,7 @@ slug: rev
 > 
 > import Testing
 > import Functions
+> import Flip
 > import Unary
 > import Lists
 > import HeadAndTail

@@ -8,7 +8,7 @@ slug: functions
 
 > {-# LANGUAGE NoImplicitPrelude #-}
 > module Functions (
->   id, compose, const, flip, apply, _test_functions, main_functions
+>   id, compose, const, apply, _test_functions, main_functions
 > ) where
 > 
 > import Testing
@@ -171,48 +171,6 @@ as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-$\flip$ lets us, well, flip the arguments of a function.
-
-:::::: definition ::
-[]{#def-flip}
-Let $A$, $B$, and $C$ be sets. Given $f : A \rightarrow C^B$, we define $\flip(f) : B \rightarrow C^A$ by $$\flip(f)(b)(a) = f(a)(b).$$
-
-In Haskell:
-
-> flip :: (a -> b -> c) -> b -> a -> c
-> flip f b a = f a b
-
-::::::::::::::::::::
-
-$\flip$ is an involution.
-
-:::::: theorem :::::
-[]{#thm-flip-involution}
-Let $A$, $B$, and $C$ be sets. For all $f : A \rightarrow C^B$, we have $$\flip(\flip(f)) = f.$$
-
-::: proof ::::::::::
-Let $a \in A$ and $b \in B$. Then we have
-$$\begin{eqnarray*}
- &   & \flip(\flip(f))(a)(b) \\
- &     \href{@functions@#def-flip}
-   = & \flip(f)(b)(a) \\
- &     \href{@functions@#def-flip}
-   = & f(a)(b)
-\end{eqnarray*}$$
-as needed.
-::::::::::::::::::::
-
-::: test :::::::::::
-
-> _test_flip_involution :: (Equal c)
->   => a -> b -> c -> Test ((a -> b -> c) -> a -> b -> Bool)
-> _test_flip_involution _ _ _ =
->   testName "flip(flip(f)) == f" $
->   \f a b -> eq (flip (flip f) a b) (f a b)
-
-::::::::::::::::::::
-::::::::::::::::::::
-
 $\apply$ is operatorized function application.
 
 :::::: definition ::
@@ -281,7 +239,6 @@ Suite:
 >   runTest args (_test_compose_id_right a b)
 >   runTest args (_test_compose_associative a b c d)
 >   runTest args (_test_compose_const_left a b c)
->   runTest args (_test_flip_involution a b c)
 >   runTest args (_test_apply_compose_distribute a b c)
 
 Main:

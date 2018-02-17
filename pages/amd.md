@@ -7,7 +7,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
 
 0. [Arithmetic Made Difficult](/posts/arithmetic-made-difficult/Testing.html)
 1. [Functions](/posts/arithmetic-made-difficult/Functions.html)
-    * Flip
+    * [Flip](/posts/arithmetic-made-difficult/Flip.html)
     * Dub
 2. [Booleans](/posts/arithmetic-made-difficult/Booleans.html)
     * [Not](/posts/arithmetic-made-difficult/Not.html)
