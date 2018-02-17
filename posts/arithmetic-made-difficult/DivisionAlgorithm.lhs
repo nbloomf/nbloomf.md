@@ -14,10 +14,7 @@ slug: divalg
 > import Testing
 > import Tuples
 > import Booleans
-> import Not
 > import And
-> import Or
-> import Implies
 > import NaturalNumbers
 > import SimpleRecursion
 > import Plus
@@ -328,13 +325,13 @@ Suite.
 > _test_divalg ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
-> _test_divalg n maxSize numCases = do
+> _test_divalg n size cases = do
 >   testLabel1 "divalg" n
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_divalg_zero_left n)

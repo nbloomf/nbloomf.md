@@ -13,19 +13,12 @@ slug: lcm
 >
 > import Testing
 > import Booleans
-> import Not
 > import And
-> import Or
-> import Implies
 > import NaturalNumbers
-> import Plus
 > import Times
-> import Minus
-> import LessThanOrEqualTo
 > import DivisionAlgorithm
 > import Divides
 > import GreatestCommonDivisor
-> import CoprimeTo
 
 Recall the following property of $\nmax$: if $\nleq(c,a)$ and $\nleq(c,b)$, then $\nleq(c,\nmax(a,b))$. This statement fell out of the definition of $\nmax$ without much fuss, and may seem anticlimactic. But compare it to this analogous statement about $\ngcd$: if $\ndiv(c,a)$ and $\ndiv(c,b)$, then $\ndiv(c,\ngcd(a,b))$. Now $\nmax$ and $\ngcd$ seem to play very similar roles. Where $\nleq$ is a kind of "additive order" on $\nats$ and $\nmax$ gives an additive ceiling to $a$ and $b$, $\ndiv$ is a kind of "multiplicative order" and $\ngcd$ gives a multiplicative ceiling to $a$ and $b$. When an analogy this strong holds between two concepts in mathematics, it is frequently useful to see how far the analogy goes. To that end, today we will define the multiplicative counterpart to $\nmin$.
 
@@ -494,13 +487,13 @@ Suite:
 > _test_lcm ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
-> _test_lcm n maxSize numCases = do
+> _test_lcm n size cases = do
 >   testLabel1 "lcm" n
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_lcm_zero n)

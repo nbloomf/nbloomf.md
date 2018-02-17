@@ -14,6 +14,7 @@ slug: cfoldr
 > import Testing
 > import Functions
 > import Tuples
+> import DisjointUnions
 > import Booleans
 > import Unary
 > import Lists

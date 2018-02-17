@@ -11,12 +11,7 @@ slug: normrec
 >   normRec
 > ) where
 > 
-> import Testing
-> import Booleans
-> import Not
-> import And
-> import Or
-> import Implies
+> import DisjointUnions
 > import NaturalNumbers
 > import BailoutRecursion
 
@@ -131,9 +126,9 @@ We can implement $\normrec{\ast}{\ast}{\ast}$ using the definition from the theo
 > 
 > normRec' phi eta chi a = bailoutRec chi beta psi omega (eta a) a
 >   where
->     beta _ a = isZero (eta a)
->     psi _ a = chi a
->     omega _ a = phi a
+>     beta _ c = isZero (eta c)
+>     psi _ c = chi c
+>     omega _ c = phi c
 
 Or by pattern matching, using the universal property.
 

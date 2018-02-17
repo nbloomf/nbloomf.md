@@ -47,7 +47,7 @@ Now define $\nminus : \nats \times \nats \rightarrow 1 + \nats$ by $$\nminus = \
 
 In Haskell:
 
-> minus :: (Natural n) => n -> n -> Either () n
+> minus :: (Natural n) => n -> n -> Union () n
 > minus = bailoutRec phi beta psi omega
 >   where
 >     phi x = if isZero x

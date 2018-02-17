@@ -13,6 +13,7 @@ slug: bfoldr
 > 
 > import Testing
 > import Tuples
+> import DisjointUnions
 > import Booleans
 > import NaturalNumbers
 > import Lists

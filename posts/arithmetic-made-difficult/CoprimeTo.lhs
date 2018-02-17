@@ -13,15 +13,9 @@ slug: coprime
 > 
 > import Testing
 > import Booleans
-> import Not
 > import And
-> import Or
-> import Implies
 > import NaturalNumbers
-> import Plus
 > import Times
-> import Minus
-> import LessThanOrEqualTo
 > import DivisionAlgorithm
 > import Divides
 > import GreatestCommonDivisor
@@ -114,13 +108,13 @@ Suite:
 > _test_coprime ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
-> _test_coprime n maxSize numCases = do
+> _test_coprime n size cases = do
 >   testLabel1 "coprime" n
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_coprime_euclids_lemma n)

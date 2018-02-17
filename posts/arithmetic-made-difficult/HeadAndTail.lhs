@@ -32,7 +32,7 @@ In Haskell:
 > isNil = (either (const true) (const false)) . uncons
 > 
 > 
-> head :: (List t) => t a -> Either () a
+> head :: (List t) => t a -> Union () a
 > head = (upair id fst) . uncons
 > 
 > 

@@ -33,7 +33,7 @@ Now every inductive set isomorphic to $\nats$ is characterized by (1) its zero e
 > 
 >   next :: n -> n
 > 
->   unnext :: n -> Either () n
+>   unnext :: n -> Union () n
 >   
 >   natural :: Integer -> n
 

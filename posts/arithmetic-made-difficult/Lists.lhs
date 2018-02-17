@@ -149,7 +149,7 @@ We will wrap this definition up in code both as a concrete type and as a type cl
 > 
 >   cons :: a -> t a -> t a
 > 
->   uncons :: t a -> Either () (Pair a (t a))
+>   uncons :: t a -> Union () (Pair a (t a))
 > 
 >   list :: [a] -> t a
 

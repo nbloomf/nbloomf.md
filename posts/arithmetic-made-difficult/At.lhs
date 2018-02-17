@@ -32,7 +32,7 @@ Define $\beta : \nats \times \lists{A} \rightarrow \bool$ by $$\beta(k,x) = \isn
 
 In Haskell:
 
-> at :: (Natural n, Equal n, List t) => t a -> n -> Either () a
+> at :: (Natural n, Equal n, List t) => t a -> n -> Union () a
 > at x k = bailoutRec head beta psi omega k x
 >   where
 >     beta _ z = isNil z

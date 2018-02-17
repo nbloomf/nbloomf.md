@@ -8,7 +8,7 @@ slug: disjoint-unions
 
 > {-# LANGUAGE NoImplicitPrelude, ScopedTypeVariables #-}
 > module DisjointUnions
->   ( lft, rgt, either, uswap, upair , uassocL, uassocR, isLft, isRgt
+>   ( Union(..), lft, rgt, either, uswap, upair , uassocL, uassocR, isLft, isRgt
 >   , _test_disjoint_union, main_disjoint_union
 >   ) where
 > 
@@ -113,23 +113,38 @@ thus $v = u$ as needed. A similar argument holds for $\rgt$.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-The previous results suggest that we can model $A + B$ with the Haskell type ``Either a b``, and the maps in the universal property like so.
+The previous results suggest that we can model $A + B$ with the Haskell type ``Either a b``. For simplicity's sake we'll redefine this type, and the maps in the universal property, like so.
 
-> lft :: a -> Either a b
+> data Union a b
+>   = Left a | Right b
+>   deriving Show
+> 
+> lft :: a -> Union a b
 > lft a = Left a
 > 
-> rgt :: b -> Either a b
+> rgt :: b -> Union a b
 > rgt b = Right b
 > 
-> either :: (a -> x) -> (b -> x) -> Either a b -> x
+> either :: (a -> x) -> (b -> x) -> Union a b -> x
 > either f _ (Left  a) = f a
 > either _ g (Right b) = g b
 > 
-> instance (Equal a, Equal b) => Equal (Either a b) where
+> instance (Equal a, Equal b) => Equal (Union a b) where
 >   eq (Left a1)  (Left a2)  = eq a1 a2
 >   eq (Left _)   (Right _)  = false
 >   eq (Right _)  (Left _)   = false
 >   eq (Right b1) (Right b2) = eq b1 b2
+> 
+> instance (Arbitrary a, Arbitrary b) => Arbitrary (Union a b) where
+>   arbitrary = do
+>     s <- arbitrary
+>     if s
+>       then do
+>         a <- arbitrary
+>         return (Left a)
+>       else do
+>         b <- arbitrary
+>         return (Right b)
 
 For example, $\id_{A + B}$ is an $\either$.
 
@@ -160,7 +175,7 @@ Since $\either(\lft,\rgt)$ is unique with this property, we have $\either(\lft,\
 ::: test :::::::::::
 
 > _test_either_lft_rgt :: (Equal a, Equal b)
->   => a -> b -> Test (Either a b -> Bool)
+>   => a -> b -> Test (Union a b -> Bool)
 > _test_either_lft_rgt _ _ =
 >   testName "either(lft,rgt) == id" $
 >   \x -> eq (either lft rgt x) x
@@ -176,7 +191,7 @@ Let $A$ and $B$ be sets. We define $\uSwap : A + B \rightarrow B + A$ by $$\uSwa
 
 In Haskell:
 
-> uswap :: Either a b -> Either b a
+> uswap :: Union a b -> Union b a
 > uswap = either rgt lft
 
 ::::::::::::::::::::
@@ -254,7 +269,7 @@ as needed.
 > 
 > 
 > _test_uswap_uswap :: (Equal a, Equal b)
->   => a -> b -> Test (Either a b -> Bool)
+>   => a -> b -> Test (Union a b -> Bool)
 > _test_uswap_uswap _ _ =
 >   testName "swap(swap(x)) == x" $
 >   \x -> eq (uswap (uswap x)) x
@@ -270,7 +285,7 @@ Let $A$, $B$, $U$, and $V$ be sets. We define $\uPair : U^A \times V^B \rightarr
 
 In Haskell:
 
-> upair :: (a -> u) -> (b -> v) -> Either a b -> Either u v
+> upair :: (a -> u) -> (b -> v) -> Union a b -> Union u v
 > upair f g = either (lft . f) (rgt . g)
 
 ::::::::::::::::::::
@@ -362,7 +377,7 @@ as needed.
 > _test_upair_upair :: (Equal a, Equal b)
 >   => a -> b
 >   -> Test ((a -> a) -> (b -> b) -> (a -> a) -> (b -> b)
->       -> Either a b -> Bool)
+>       -> Union a b -> Bool)
 > _test_upair_upair _ _ =
 >   testName "upair(f,g) . upair(h,k) == upair(f . h, g . k)" $
 >   \f g h k x ->
@@ -381,10 +396,10 @@ Let $A$, $B$, and $C$ be sets. We define $\uAssocL : A + (B + C) \rightarrow (A 
 
 In Haskell:
 
-> uassocL :: Either a (Either b c) -> Either (Either a b) c
+> uassocL :: Union a (Union b c) -> Union (Union a b) c
 > uassocL = either (lft . lft) (either (lft . rgt) rgt)
 > 
-> uassocR :: Either (Either a b) c -> Either a (Either b c)
+> uassocR :: Union (Union a b) c -> Union a (Union b c)
 > uassocR = either (either lft (rgt . lft)) (rgt . rgt)
 
 ::::::::::::::::::::
@@ -628,14 +643,14 @@ as needed.
 > 
 > 
 > _test_uassocR_uassocL :: (Equal a, Equal b, Equal c)
->   => a -> b -> c -> Test (Either a (Either b c) -> Bool)
+>   => a -> b -> c -> Test (Union a (Union b c) -> Bool)
 > _test_uassocR_uassocL _ _ _ =
 >   testName "uassocR . uassocL == id" $
 >   \x -> eq (uassocR (uassocL x)) x
 > 
 > 
 > _test_uassocL_uassocR :: (Equal a, Equal b, Equal c)
->   => a -> b -> c -> Test (Either (Either a b) c -> Bool)
+>   => a -> b -> c -> Test (Union (Union a b) c -> Bool)
 > _test_uassocL_uassocR _ _ _ =
 >   testName "uassocL . uassocR == id" $
 >   \x -> eq (uassocL (uassocR x)) x
@@ -651,10 +666,10 @@ Let $A$ and $B$ be sets. We define $\isLft : A + B \rightarrow \bool$ by $$\isLf
 
 In Haskell:
 
-> isLft :: Either a b -> Bool
+> isLft :: Union a b -> Bool
 > isLft = either (const true) (const false)
 > 
-> isRgt :: Either a b -> Bool
+> isRgt :: Union a b -> Bool
 > isRgt = either (const false) (const true)
 
 ::::::::::::::::::::

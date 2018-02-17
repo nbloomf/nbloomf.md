@@ -6,11 +6,13 @@ tags: arithmetic-made-difficult, literate-haskell
 slug: mnormrec
 ---
 
+> {-# LANGUAGE NoImplicitPrelude #-}
 > module MutatingNormRecursion (
 >   mnormrec
 > ) where
 > 
 > import Testing
+> import DisjointUnions
 > import Booleans
 > import Unary
 > import NaturalNumbers

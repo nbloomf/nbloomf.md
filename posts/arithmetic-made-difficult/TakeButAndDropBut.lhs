@@ -14,9 +14,6 @@ slug: takebut-dropbut
 > import Testing
 > import Tuples
 > import Booleans
-> import Not
-> import And
-> import Or
 > import NaturalNumbers
 > import Plus
 > import MaxAndMin
@@ -347,13 +344,13 @@ Suite:
 >   , TypeName n, Natural n, Show n, Arbitrary n, Equal n
 >   , Equal (t a), Show (t a), Arbitrary (t a)
 >   ) => t a -> n -> Int -> Int -> IO ()
-> _test_takebut_dropbut t k maxSize numCases = do
+> _test_takebut_dropbut t k size cases = do
 >   testLabel1 "takeBut & dropBut" t
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_takeBut_zero t k)

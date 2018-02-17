@@ -15,8 +15,6 @@ slug: div
 > import Booleans
 > import Not
 > import And
-> import Or
-> import Implies
 > import NaturalNumbers
 > import Plus
 > import Times
@@ -333,13 +331,13 @@ Suite:
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   , TypeName b, Equal b, Boolean b
 >   ) => n -> b -> Int -> Int -> IO ()
-> _test_div n p maxSize numCases = do
+> _test_div n p size cases = do
 >   testLabel2 "div" n p
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_div_zero_right n)

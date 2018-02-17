@@ -15,7 +15,6 @@ slug: common
 > import Booleans
 > import And
 > import Unary
-> import NaturalNumbers
 > import Lists
 > import Snoc
 > import Reverse
@@ -50,7 +49,7 @@ $$\left\{\begin{array}{l}
 
 > _test_common_nil :: (List t, Equal a, Equal (t a))
 >   => t a -> Test (t a -> Bool)
-> _test_common_nil t =
+> _test_common_nil _ =
 >   testName "common(nil,y) == nil" $
 >   \y -> eq (common nil y) nil
 > 
@@ -454,13 +453,13 @@ Suite:
 >   , TypeName (t a), List t
 >   , Equal (t a), Show (t a), Arbitrary (t a), Equal (t (t a))
 >   ) => t a -> Int -> Int -> IO ()
-> _test_common t maxSize numCases = do
+> _test_common t size cases = do
 >   testLabel1 "common" t
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_common_nil t)

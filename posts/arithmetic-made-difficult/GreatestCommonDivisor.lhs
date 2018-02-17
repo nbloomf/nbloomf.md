@@ -13,15 +13,12 @@ slug: gcd
 >
 > import Testing
 > import Tuples
+> import DisjointUnions
 > import Booleans
-> import Not
 > import And
-> import Or
-> import Implies
 > import NaturalNumbers
 > import Plus
 > import Times
-> import Minus
 > import LessThanOrEqualTo
 > import DivisionAlgorithm
 > import Divides
@@ -396,13 +393,13 @@ Suite:
 > _test_gcd ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   ) => n -> Int -> Int -> IO ()
-> _test_gcd n maxSize numCases = do
+> _test_gcd n size cases = do
 >   testLabel1 "gcd" n
 > 
 >   let
 >     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
+>       { maxSuccess = cases
+>       , maxSize    = size
 >       }
 > 
 >   runTest args (_test_gcd_eta_norm n)

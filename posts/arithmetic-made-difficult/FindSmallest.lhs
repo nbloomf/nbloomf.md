@@ -14,10 +14,7 @@ slug: findsmallest
 > import Testing
 > import DisjointUnions
 > import Booleans
-> import Not
 > import And
-> import Or
-> import Implies
 > import NaturalNumbers
 > import BailoutRecursion
 > import Plus
@@ -32,10 +29,10 @@ Let $\sigma : \nats \rightarrow \bool$. Define $\varphi : \nats \rightarrow 1 + 
 
 In Haskell:
 
-> findSmallest :: (Natural n) => (n -> Bool) -> n -> n -> Either () n
+> findSmallest :: (Natural n) => (n -> Bool) -> n -> n -> Union () n
 > findSmallest sigma = bailoutRec phi beta psi omega
 >   where
->     phi k = lft ()
+>     phi _ = lft ()
 >     beta _ k = sigma k
 >     psi _ k = rgt k
 >     omega _ k = next k
@@ -257,7 +254,7 @@ If $\sigma(k) = \btrue$, then $t = k$, and we again have $\nleq(t,u)$ as needed.
 >   => n -> Test ((n -> Bool) -> n -> n -> n -> n -> Bool)
 > _test_findSmallest_minimal _ =
 >   testName "if findSmallest(sigma)(next(n),k) == rgt(t) and sigma(u) and leq(k,u) and leq(u,plus(n,k)) then leq(t,u)" $
->   \sigma n k t u -> case findSmallest sigma (next n) k of
+>   \sigma n k _ u -> case findSmallest sigma (next n) k of
 >     Right t -> if and (sigma u) (and (leq k u) (leq u (plus n k)))
 >       then leq t u
 >       else true

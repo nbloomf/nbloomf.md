@@ -12,6 +12,7 @@ slug: dnaturalrec
 > ) where
 > 
 > import Testing
+> import DisjointUnions
 > import NaturalNumbers
 
 Today we'll implement a slight generalization of natural recursion that allows recursion on two arguments.

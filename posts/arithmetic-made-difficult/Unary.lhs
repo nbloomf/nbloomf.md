@@ -8,7 +8,7 @@ slug: unary
 
 > {-# LANGUAGE NoImplicitPrelude, BangPatterns #-}
 > module Unary
->   ( Unary(Z,N), mkUnary, natRec
+>   ( Unary(Z,N), mkUnary, natRec, natRec'
 >   ) where
 > 
 > import Prelude (Integer, (-), (<=))

@@ -13,6 +13,7 @@ slug: simprec
 > 
 > import Testing
 > import Tuples
+> import DisjointUnions
 > import Booleans
 > import NaturalNumbers
 
