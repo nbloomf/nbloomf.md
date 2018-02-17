@@ -518,8 +518,7 @@ Suite:
 > _test_take_drop t u k size cases = do
 >   testLabel1 "take & drop" t
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_take_zero t k)
 >   runTest args (_test_take_next_nil t k)

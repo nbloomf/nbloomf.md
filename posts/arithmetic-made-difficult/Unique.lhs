@@ -443,8 +443,7 @@ Suite:
 > _test_unique t n size cases = do
 >   testLabel1 "unique" t
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_unique_nil t)
 >   runTest args (_test_unique_cons t)

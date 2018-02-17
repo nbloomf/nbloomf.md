@@ -232,8 +232,7 @@ Suite:
 > _test_power n size cases = do
 >   testLabel1 "power" n
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_power_zero_right n)
 >   runTest args (_test_power_next_right n)

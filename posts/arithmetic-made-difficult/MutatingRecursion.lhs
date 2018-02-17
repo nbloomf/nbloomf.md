@@ -164,11 +164,10 @@ Suite:
 >   , Boolean bool, Arbitrary bool
 >   , Show a, Show b, TypeName a, TypeName b, CoArbitrary n)
 >   => n -> a -> b -> bool -> Int -> Int -> IO ()
-> _test_mutatingrec n a b p maxSize numCases = do
+> _test_mutatingrec n a b p size cases = do
 >   testLabel3 "mutatingRec" n a b
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_mutatingrec_equiv n a b p)
 

@@ -419,11 +419,10 @@ Suite:
 >   , Boolean b, Arbitrary b, Show b, Equal b, TypeName b
 >   )
 >   => b -> a -> Int -> Int -> IO ()
-> _test_and p x size num = do
+> _test_and p x size cases = do
 >   testLabel2 "and" p x
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_and_true_true p)
 >   runTest args (_test_and_true_false p)

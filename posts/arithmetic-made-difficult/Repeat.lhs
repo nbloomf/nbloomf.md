@@ -281,8 +281,7 @@ Suite:
 > _test_repeat t u n size cases = do
 >   testLabel2 "repeat" t n
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_repeat_zero t n)
 >   runTest args (_test_repeat_next t n)

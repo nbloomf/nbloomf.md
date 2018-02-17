@@ -654,8 +654,7 @@ Suite:
 > _test_isInfix t size cases = do
 >   testLabel1 "infix" t
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_infix_list_nil t)
 >   runTest args (_test_infix_list_cons t)

@@ -404,8 +404,7 @@ Suite:
 > _test_leq n size cases = do
 >   testLabel1 "leq" n
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_leq_next_nat_zero n)
 >   runTest args (_test_leq_next_next_nat_one n)

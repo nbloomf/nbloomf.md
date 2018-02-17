@@ -455,8 +455,7 @@ Suite:
 > _test_common t size cases = do
 >   testLabel1 "common" t
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_common_nil t)
 >   runTest args (_test_common_cons t)

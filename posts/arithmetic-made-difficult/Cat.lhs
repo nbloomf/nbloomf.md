@@ -437,8 +437,7 @@ Suite:
 > _test_cat t size cases = do
 >   testLabel1 "cat" t
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_cat_nil_left t)
 >   runTest args (_test_cat_cons_left t)

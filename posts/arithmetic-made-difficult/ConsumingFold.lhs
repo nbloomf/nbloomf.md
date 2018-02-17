@@ -109,8 +109,7 @@ Suite:
 > _test_cfoldr t size cases = do
 >   testLabel1 "cfoldr" t
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_cfoldr_equiv t)
 

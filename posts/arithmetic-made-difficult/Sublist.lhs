@@ -1067,8 +1067,7 @@ Suite:
 > _test_sublist t n size cases = do
 >   testLabel1 "sublist" t
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_sublist_list_nil t)
 >   runTest args (_test_sublist_nil_cons t)

@@ -190,8 +190,7 @@ Suite:
 > _test_bailoutrec n a b size cases = do
 >   testLabel3 "bailoutRec" n a b
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_bailoutrec_equiv n a b)
 

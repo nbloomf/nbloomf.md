@@ -502,11 +502,10 @@ Suite:
 >      , TypeName a, TypeName b, TypeName c
 >      , CoArbitrary a, CoArbitrary b )
 >   => a -> b -> c -> Int -> Int -> IO ()
-> _test_tuple a b c size num = do
+> _test_tuple a b c size cases = do
 >   testLabel3 "Tuple" a b c
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_dup_fst_snd a b)
 >   runTest args (_test_dup_tup a b)

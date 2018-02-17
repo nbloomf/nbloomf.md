@@ -700,8 +700,7 @@ Suite:
 > _test_prefix_suffix t n size cases = do
 >   testLabel2 "prefix & suffix" t n
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_prefix_nil_list t)
 >   runTest args (_test_prefix_cons_nil t)

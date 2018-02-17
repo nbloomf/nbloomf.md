@@ -164,8 +164,7 @@ Suite:
 > _test_dnaturalRec n a size cases = do
 >   testLabel2 "dnaturalRec" n a
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_dnaturalRec_equiv n a)
 

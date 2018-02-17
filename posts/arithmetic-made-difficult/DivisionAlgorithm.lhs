@@ -328,8 +328,7 @@ Suite.
 > _test_divalg n size cases = do
 >   testLabel1 "divalg" n
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_divalg_zero_left n)
 >   runTest args (_test_divalg_next_left n)

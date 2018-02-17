@@ -558,8 +558,7 @@ Suite:
 > _test_dedupe t size cases = do
 >   testLabel1 "dedupeL & dedupeR" t
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_dedupeL_nil t)
 >   runTest args (_test_dedupeL_cons t)

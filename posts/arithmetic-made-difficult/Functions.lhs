@@ -269,11 +269,9 @@ Suite:
 >   , Equal c, Show c, Arbitrary c, CoArbitrary c
 >   , Equal d, Show d, Arbitrary d, CoArbitrary d
 >   ) => a -> b -> c -> d -> Int -> Int -> IO ()
-> _test_functions a b c d size num = do
+> _test_functions a b c d size cases = do
 >   testLabel0 "Functions"
-> 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_compose_id_left a b)
 >   runTest args (_test_compose_id_right a b)

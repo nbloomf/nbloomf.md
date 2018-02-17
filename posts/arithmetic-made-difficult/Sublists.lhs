@@ -358,11 +358,10 @@ Suite:
 >   , Boolean bool, Arbitrary bool, CoArbitrary bool
 >   , Arbitrary (t n), Show (t n), Equal (t n)
 >   ) => t a -> t (t a) -> n -> bool -> Int -> Int -> IO ()
-> _test_sublists t u k p maxSize numCases = do
+> _test_sublists t u k p size cases = do
 >   testLabel1 "sublists" t
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_sublists_nil t u)
 >   runTest args (_test_sublists_cons t u)

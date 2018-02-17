@@ -310,8 +310,7 @@ Suite:
 > _test_range t size cases = do
 >   testLabel1 "range" t
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_range_zero t)
 >   runTest args (_test_range_next t)

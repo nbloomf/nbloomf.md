@@ -585,11 +585,10 @@ Suite:
 >   ( Equal a, Arbitrary a, CoArbitrary a, Show a, TypeName a
 >   , TypeName b, Boolean b, Equal b, Arbitrary b
 >   ) => a -> b -> Int -> Int -> IO ()
-> _test_predicate x p size num = do
+> _test_predicate x p size cases = do
 >   testLabel1 "predicate" x
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_pnot_involutive x p)
 >   runTest args (_test_pnot_ptrue x p)

@@ -346,8 +346,7 @@ Suite:
 > _test_snoc t size cases = do
 >   testLabel1 "snoc" t
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_snoc_nil t)
 >   runTest args (_test_snoc_cons t)

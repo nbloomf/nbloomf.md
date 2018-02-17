@@ -164,8 +164,7 @@ Suite:
 > _test_disjoint t size cases = do
 >   testLabel1 "disjoint" t
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_disjoint_nil t)
 >   runTest args (_test_disjoint_dedupeL_right t)

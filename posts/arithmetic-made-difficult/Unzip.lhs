@@ -219,8 +219,7 @@ Suite:
 > _test_unzip t u size cases = do
 >   testLabel2 "unzip" t u
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_unzip_nil t u)
 >   runTest args (_test_unzip_cons t u)

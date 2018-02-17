@@ -439,8 +439,7 @@ Testing
 > _test_times n f size cases = do
 >   testLabel1 "times" n
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_times_zero_left n f)
 >   runTest args (_test_times_next_left n f)

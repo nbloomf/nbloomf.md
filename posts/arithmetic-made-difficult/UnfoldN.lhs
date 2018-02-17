@@ -359,8 +359,7 @@ Suite:
 > _test_unfoldN t n size cases = do
 >   testLabel1 "unfoldN" t
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_tacunfoldN_equiv t n)
 >   runTest args (_test_tacunfoldN_zero t n)

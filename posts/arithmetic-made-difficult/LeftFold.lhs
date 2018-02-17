@@ -104,8 +104,7 @@ Suite:
 > _test_foldl t size cases = do
 >   testLabel1 "foldl" t
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_foldl_equiv t)
 

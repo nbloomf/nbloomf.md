@@ -115,8 +115,7 @@ Suite:
 > _test_bfoldr t b c size cases = do
 >   testLabel3 "bfoldr" t b c
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_bfoldr_equiv t b c)
 

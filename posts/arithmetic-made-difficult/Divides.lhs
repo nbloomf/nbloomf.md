@@ -334,8 +334,7 @@ Suite:
 > _test_div n p size cases = do
 >   testLabel2 "div" n p
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_div_zero_right n)
 >   runTest args (_test_div_zero_left n)

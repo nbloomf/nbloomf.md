@@ -132,8 +132,7 @@ Suite.
 > _test_nats n size cases = do
 >   testLabel1 "nats" n
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_unnext_zero n)
 >   runTest args (_test_unnext_next n)

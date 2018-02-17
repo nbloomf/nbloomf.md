@@ -130,8 +130,7 @@ Suite:
 > _test_dbfoldr t b c size cases = do
 >   testLabel3 "dbfoldr" t b c
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_dbfoldr_equiv t b c)
 

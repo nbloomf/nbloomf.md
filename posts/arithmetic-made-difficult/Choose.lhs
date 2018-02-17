@@ -253,8 +253,7 @@ Suite:
 > _test_choose n size cases = do
 >   testLabel1 "choose" n
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_choose_zero_nat n)
 >   runTest args (_test_choose_next_zero n)

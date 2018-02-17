@@ -531,11 +531,10 @@ Suite:
 >   , Boolean b, Arbitrary b, Show b, Equal b, TypeName b
 >   )
 >   => b -> a -> Int -> Int -> IO ()
-> _test_boolean p x size num = do
+> _test_boolean p x size cases = do
 >   testLabel1 "Boolean" p
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_if_true p x)
 >   runTest args (_test_if_false p x)

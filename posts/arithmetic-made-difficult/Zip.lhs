@@ -345,8 +345,7 @@ Suite:
 > _test_zip t u n size cases = do
 >   testLabel3 "zip" t u n
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_zip_nil_list t u)
 >   runTest args (_test_zip_cons_nil t u)

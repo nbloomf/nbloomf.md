@@ -522,8 +522,7 @@ Suite:
 > _test_count t n size cases = do
 >   testLabel2 "count" t n
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_addcount_nil t n)
 >   runTest args (_test_addcount_cons t n)

@@ -515,8 +515,7 @@ Suite:
 > _test_rev t size cases = do
 >   testLabel1 "rev" t
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_revcat_nil t)
 >   runTest args (_test_revcat_cons t)

@@ -201,8 +201,7 @@ Suite:
 > _test_prime n size cases = do
 >   testLabel1 "mindiv & prime" n
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_mindiv_div n)
 >   runTest args (_test_mindiv_min n)

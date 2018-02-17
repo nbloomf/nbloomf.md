@@ -400,8 +400,7 @@ Suite:
 > _test_zipPad t u n size cases = do
 >   testLabel3 "zipPad" t u n
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_zipPad_nil_list t u)
 >   runTest args (_test_zipPad_cons_nil t u)

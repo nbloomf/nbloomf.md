@@ -486,8 +486,7 @@ Suite:
 > _test_length t n size cases = do
 >   testLabel2 "length" t n
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_addlength_nil_right t n)
 >   runTest args (_test_addlength_cons_right t n)

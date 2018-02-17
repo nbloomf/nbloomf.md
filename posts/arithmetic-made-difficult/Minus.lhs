@@ -505,12 +505,7 @@ Testing
 >   ) => n -> Int -> Int -> IO ()
 > _test_minus n size cases = do
 >   testLabel1 "minus" n
-> 
->   let
-~ args = testArgs size cases
->      { maxSuccess = cases
->      , maxSize    = size
->      }
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_minus_zero_left n)
 >   runTest args (_test_minus_next_left n)

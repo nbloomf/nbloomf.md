@@ -457,8 +457,7 @@ Suite:
 > _test_filter t size cases = do
 >   testLabel1 "filter" t
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_filter_nil t)
 >   runTest args (_test_filter_cons t)

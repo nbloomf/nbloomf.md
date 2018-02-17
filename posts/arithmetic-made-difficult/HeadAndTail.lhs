@@ -257,8 +257,7 @@ Suite:
 > _test_head_tail t size cases = do
 >   testLabel1 "head and tail" t
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_isNil_nil t)
 >   runTest args (_test_isNil_cons t)

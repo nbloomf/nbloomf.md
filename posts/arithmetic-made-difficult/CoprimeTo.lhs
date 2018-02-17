@@ -111,8 +111,7 @@ Suite:
 > _test_coprime n size cases = do
 >   testLabel1 "coprime" n
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_coprime_euclids_lemma n)
 >   runTest args (_test_coprime_gcd_quo n)

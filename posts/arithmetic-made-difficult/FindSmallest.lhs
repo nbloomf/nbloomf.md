@@ -284,8 +284,7 @@ Suite:
 > _test_findSmallest n size cases = do
 >   testLabel1 "findSmallest" n
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_findSmallest_zero_left n)
 >   runTest args (_test_findSmallest_next_left n)

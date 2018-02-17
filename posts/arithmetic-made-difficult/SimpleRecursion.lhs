@@ -271,8 +271,7 @@ Suite:
 > _test_simplerec n a b size cases = do
 >   testLabel3 "simpleRec" n a b
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_simplerec_equiv_def n a b)
 >   runTest args (_test_simplerec_equiv_naive n a b)

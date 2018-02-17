@@ -654,8 +654,7 @@ Suite:
 > _test_elt t n size cases = do
 >   testLabel1 "elt" t
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_elt_nil t)
 >   runTest args (_test_elt_cons t)

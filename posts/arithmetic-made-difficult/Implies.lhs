@@ -564,11 +564,10 @@ Suite:
 > _test_impl ::
 >   ( TypeName b, Boolean b, Arbitrary b, Show b, Equal b
 >   ) => b -> Int -> Int -> IO ()
-> _test_impl p size num = do
+> _test_impl p size cases = do
 >   testLabel1 "implies" p
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_impl_or p)
 >   runTest args (_test_impl_false_hyp p)

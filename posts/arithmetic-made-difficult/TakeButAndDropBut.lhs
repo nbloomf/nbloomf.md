@@ -330,8 +330,7 @@ Suite:
 > _test_takebut_dropbut t k size cases = do
 >   testLabel1 "takeBut & dropBut" t
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_takeBut_zero t k)
 >   runTest args (_test_takeBut_next_nil t k)

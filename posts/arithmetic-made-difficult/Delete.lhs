@@ -613,8 +613,7 @@ Suite:
 > _test_delete t size cases = do
 >   testLabel1 "delete" t
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_delete_nil t)
 >   runTest args (_test_delete_cons t)

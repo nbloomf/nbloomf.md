@@ -494,8 +494,7 @@ Suite:
 > _test_map t n size cases = do
 >   testLabel1 "map" t
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_map_nil t)
 >   runTest args (_test_map_cons t)

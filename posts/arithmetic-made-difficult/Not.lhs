@@ -167,11 +167,10 @@ Suite:
 >   , Boolean b, Arbitrary b, Show b, Equal b
 >   )
 >   => b -> a -> Int -> Int -> IO ()
-> _test_not p x size num = do
+> _test_not p x size cases = do
 >   testLabel0 "Bool"
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 >  
 >   runTest args (_test_not_true p)
 >   runTest args (_test_not_false p)

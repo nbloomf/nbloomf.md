@@ -490,8 +490,7 @@ Suite:
 > _test_lcm n size cases = do
 >   testLabel1 "lcm" n
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_lcm_zero n)
 >   runTest args (_test_lcm_one n)

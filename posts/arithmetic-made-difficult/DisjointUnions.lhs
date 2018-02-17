@@ -777,11 +777,10 @@ Suite:
 >      , TypeName a, TypeName b, TypeName c
 >      , CoArbitrary a, CoArbitrary b )
 >   => a -> b -> c -> Int -> Int -> IO ()
-> _test_disjoint_union a b c size num = do
+> _test_disjoint_union a b c size cases = do
 >   testLabel3 "Disjoint Union" a b c
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_either_lft_rgt a b)
 > 

@@ -538,8 +538,7 @@ Suite:
 > _test_tails_inits t n size cases = do
 >   testLabel2 "tails & inits" t n
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_tails_nil t)
 >   runTest args (_test_tails_cons t)

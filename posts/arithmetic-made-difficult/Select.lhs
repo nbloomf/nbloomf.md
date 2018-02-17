@@ -414,8 +414,7 @@ Suite:
 > _test_select t n size cases = do
 >   testLabel1 "select" t
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_select_nil t n)
 >   runTest args (_test_select_cons t n)

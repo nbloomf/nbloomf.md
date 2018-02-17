@@ -403,11 +403,10 @@ Suite:
 >   , TypeName n, Natural n, Show n, Arbitrary n
 >   , Equal (t a), Show (t a), Arbitrary (t a)
 >   ) => t a -> n -> Int -> Int -> IO ()
-> _test_takewhile_dropwhile t k maxSize numCases = do
+> _test_takewhile_dropwhile t k size cases = do
 >   testLabel1 "takeWhile & dropWhile" t
 > 
->   let
-~ args = testArgs size cases
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_takeWhile_nil t)
 >   runTest args (_test_takeWhile_cons t)
