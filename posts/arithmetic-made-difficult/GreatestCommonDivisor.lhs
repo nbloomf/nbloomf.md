@@ -397,10 +397,7 @@ Suite:
 >   testLabel1 "gcd" n
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_gcd_eta_norm n)
 >   runTest args (_test_gcd_equation n)

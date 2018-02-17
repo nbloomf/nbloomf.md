@@ -223,12 +223,7 @@ Suite:
 >   => n -> (n -> n -> n) -> Int -> Int -> IO ()
 > _test_plus n f size cases = do
 >   testLabel1 "plus" n
-> 
->   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_plus_zero_left n f)
 >   runTest args (_test_plus_next_left n f)

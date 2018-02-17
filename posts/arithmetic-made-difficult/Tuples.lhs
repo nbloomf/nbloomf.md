@@ -506,10 +506,7 @@ Suite:
 >   testLabel3 "Tuple" a b c
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = num
->       , maxSize = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_dup_fst_snd a b)
 >   runTest args (_test_dup_tup a b)

@@ -282,10 +282,7 @@ Suite:
 >   testLabel2 "repeat" t n
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_repeat_zero t n)
 >   runTest args (_test_repeat_next t n)

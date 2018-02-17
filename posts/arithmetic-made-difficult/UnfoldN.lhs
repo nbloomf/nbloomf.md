@@ -360,10 +360,7 @@ Suite:
 >   testLabel1 "unfoldN" t
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_tacunfoldN_equiv t n)
 >   runTest args (_test_tacunfoldN_zero t n)

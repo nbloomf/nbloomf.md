@@ -589,10 +589,7 @@ Suite:
 >   testLabel1 "predicate" x
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = num
->       , maxSize = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_pnot_involutive x p)
 >   runTest args (_test_pnot_ptrue x p)

@@ -273,10 +273,7 @@ Suite:
 >   testLabel0 "Functions"
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = num
->       , maxSize = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_compose_id_left a b)
 >   runTest args (_test_compose_id_right a b)

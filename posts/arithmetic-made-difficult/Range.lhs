@@ -311,10 +311,7 @@ Suite:
 >   testLabel1 "range" t
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_range_zero t)
 >   runTest args (_test_range_next t)

@@ -407,10 +407,7 @@ Suite:
 >   testLabel1 "takeWhile & dropWhile" t
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_takeWhile_nil t)
 >   runTest args (_test_takeWhile_cons t)

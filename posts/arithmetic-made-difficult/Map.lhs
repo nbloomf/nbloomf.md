@@ -495,10 +495,7 @@ Suite:
 >   testLabel1 "map" t
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_map_nil t)
 >   runTest args (_test_map_cons t)

@@ -519,10 +519,7 @@ Suite:
 >   testLabel1 "take & drop" t
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_take_zero t k)
 >   runTest args (_test_take_next_nil t k)

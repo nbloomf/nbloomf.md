@@ -105,10 +105,7 @@ Suite:
 >   testLabel1 "foldl" t
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_foldl_equiv t)
 

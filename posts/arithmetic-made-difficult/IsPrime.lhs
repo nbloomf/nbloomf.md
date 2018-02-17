@@ -202,10 +202,7 @@ Suite:
 >   testLabel1 "mindiv & prime" n
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_mindiv_div n)
 >   runTest args (_test_mindiv_min n)

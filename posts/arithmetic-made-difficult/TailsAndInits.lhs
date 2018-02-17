@@ -539,10 +539,7 @@ Suite:
 >   testLabel2 "tails & inits" t n
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_tails_nil t)
 >   runTest args (_test_tails_cons t)

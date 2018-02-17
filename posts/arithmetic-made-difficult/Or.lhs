@@ -594,10 +594,7 @@ Suite:
 >   testLabel2 "or" p x
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = num
->       , maxSize = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_or_true_true p)
 >   runTest args (_test_or_true_false p)

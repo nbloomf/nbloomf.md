@@ -440,10 +440,7 @@ Testing
 >   testLabel1 "times" n
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_times_zero_left n f)
 >   runTest args (_test_times_next_left n f)

@@ -516,10 +516,7 @@ Suite:
 >   testLabel1 "rev" t
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_revcat_nil t)
 >   runTest args (_test_revcat_cons t)

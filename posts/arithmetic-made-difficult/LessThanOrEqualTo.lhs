@@ -405,10 +405,7 @@ Suite:
 >   testLabel1 "leq" n
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_leq_next_nat_zero n)
 >   runTest args (_test_leq_next_next_nat_one n)

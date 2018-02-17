@@ -362,10 +362,7 @@ Suite:
 >   testLabel1 "sublists" t
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_sublists_nil t u)
 >   runTest args (_test_sublists_cons t u)

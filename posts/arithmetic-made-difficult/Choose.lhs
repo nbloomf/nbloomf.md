@@ -254,10 +254,7 @@ Suite:
 >   testLabel1 "choose" n
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_choose_zero_nat n)
 >   runTest args (_test_choose_next_zero n)

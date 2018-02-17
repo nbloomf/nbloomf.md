@@ -165,10 +165,7 @@ Suite:
 >   testLabel2 "dnaturalRec" n a
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_dnaturalRec_equiv n a)
 

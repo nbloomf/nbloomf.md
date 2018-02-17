@@ -841,10 +841,7 @@ Suite:
 >   testLabel1 "lcp & lcs" t
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_lcp_nil_list t)
 >   runTest args (_test_lcp_cons_nil t)

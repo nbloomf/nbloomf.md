@@ -346,10 +346,7 @@ Suite:
 >   testLabel3 "zip" t u n
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_zip_nil_list t u)
 >   runTest args (_test_zip_cons_nil t u)

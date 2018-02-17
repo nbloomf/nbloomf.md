@@ -220,10 +220,7 @@ Suite:
 >   testLabel2 "unzip" t u
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_unzip_nil t u)
 >   runTest args (_test_unzip_cons t u)

@@ -585,10 +585,7 @@ Suite:
 >   testLabel2 "at" t n
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_at_zero t n)
 >   runTest args (_test_at_next t n)

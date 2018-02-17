@@ -487,10 +487,7 @@ Suite:
 >   testLabel2 "length" t n
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_addlength_nil_right t n)
 >   runTest args (_test_addlength_cons_right t n)

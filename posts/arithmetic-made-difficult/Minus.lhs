@@ -507,7 +507,7 @@ Testing
 >   testLabel1 "minus" n
 > 
 >   let
->     args = stdArgs
+~ args = testArgs size cases
 >      { maxSuccess = cases
 >      , maxSize    = size
 >      }

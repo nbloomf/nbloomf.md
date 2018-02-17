@@ -335,10 +335,7 @@ Suite:
 >   testLabel2 "div" n p
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_div_zero_right n)
 >   runTest args (_test_div_zero_left n)

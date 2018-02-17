@@ -201,7 +201,7 @@ $$\begin{eqnarray*}
  &   & \beq(x,\dedupeL(x)) \\
  & = & \beq(\nil,\dedupeL(\nil)) \\
  & = & \beq(\nil,\nil) \\
- &     \href{@booleans@#thm-eq-reflexive}
+ &     \href{@testing@#thm-eq-reflexive}
    = & \btrue \\
  & = & \unique(\nil) \\
  & = & \unique(x)
@@ -211,7 +211,7 @@ $$\begin{eqnarray*}
  &   & \beq(\cons(a,x),\dedupeL(\cons(a,x))) \\
  & = & \beq(\cons(a,x),\cons(a,\delete(a,\dedupeL(x)))) \\
  & = & \band(\beq(a,a),\beq(x,\delete(a,\dedupeL(x)))) \\
- &     \href{@booleans@#thm-eq-reflexive}
+ &     \href{@testing@#thm-eq-reflexive}
    = & \band(\btrue,\beq(x,\delete(a,\dedupeL(x)))) \\
  &     \href{@and@#thm-and-true-left}
    = & \beq(x,\delete(a,\dedupeL(x))) \\
@@ -559,10 +559,7 @@ Suite:
 >   testLabel1 "dedupeL & dedupeR" t
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_dedupeL_nil t)
 >   runTest args (_test_dedupeL_cons t)

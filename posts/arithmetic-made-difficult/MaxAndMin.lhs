@@ -574,10 +574,7 @@ Suite:
 >   testLabel1 "min & max" n
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_max_zero n)
 >   runTest args (_test_max_idempotent n)

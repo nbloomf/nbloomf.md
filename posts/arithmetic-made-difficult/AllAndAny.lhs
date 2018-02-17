@@ -635,12 +635,7 @@ Suite:
 >   ) => t a -> Int -> Int -> IO ()
 > _test_all_any t size cases = do
 >   testLabel1 "all & any" t
-> 
->   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+>   let args = testArgs size cases
 > 
 >   runTest args (_test_all_nil t)
 >   runTest args (_test_all_cons t)

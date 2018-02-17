@@ -168,10 +168,7 @@ Suite:
 >   testLabel3 "mutatingRec" n a b
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = numCases
->       , maxSize    = maxSize
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_mutatingrec_equiv n a b p)
 

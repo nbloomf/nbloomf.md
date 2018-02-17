@@ -96,7 +96,7 @@ $$\begin{eqnarray*}
  &   & \bfalse \\
  &     \href{@booleans@#cor-if-true}
    = & \bif{\btrue}{\bfalse}{\btrue} \\
- &     \href{@booleans@#thm-eq-reflexive}
+ &     \href{@testing@#thm-eq-reflexive}
    = & \bif{\beq(u,u)}{\bfalse}{\btrue} \\
  &     \let{f(x) = \bif{\beq(x,u)}{\bfalse}{\btrue}}
    = & f(u) \\
@@ -781,10 +781,7 @@ Suite:
 >   testLabel3 "Disjoint Union" a b c
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = num
->       , maxSize = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_either_lft_rgt a b)
 > 

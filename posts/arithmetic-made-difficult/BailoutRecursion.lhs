@@ -191,10 +191,7 @@ Suite:
 >   testLabel3 "bailoutRec" n a b
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_bailoutrec_equiv n a b)
 

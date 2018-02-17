@@ -352,7 +352,7 @@ $$\begin{eqnarray*}
  &   & \beq(x,\filter(p)(x)) \\
  & = & \beq(\nil,\filter(p)(\nil)) \\
  & = & \beq(\nil,\nil) \\
- &     \href{@booleans@#thm-eq-reflexive}
+ &     \href{@testing@#thm-eq-reflexive}
    = & \btrue \\
  & = & \all(p,\nil) \\
  & = & \all(p,x)
@@ -365,7 +365,7 @@ $$\begin{eqnarray*}
  &     \href{@booleans@#cor-if-true}
    = & \beq(\cons(a,x),\cons(a,\filter(p)(x))) \\
  & = & \band(\beq(a,a),\beq(x,\filter(p)(x))) \\
- &     \href{@booleans@#thm-eq-reflexive}
+ &     \href{@testing@#thm-eq-reflexive}
    = & \band(\btrue,\beq(x,\filter(p)(x))) \\
  &     \href{@and@#thm-and-true-left}
    = & \beq(x,\filter(p)(x)) \\
@@ -458,10 +458,7 @@ Suite:
 >   testLabel1 "filter" t
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_filter_nil t)
 >   runTest args (_test_filter_cons t)

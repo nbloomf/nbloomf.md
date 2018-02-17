@@ -655,10 +655,7 @@ Suite:
 >   testLabel1 "infix" t
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_infix_list_nil t)
 >   runTest args (_test_infix_list_cons t)

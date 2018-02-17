@@ -329,10 +329,7 @@ Suite.
 >   testLabel1 "divalg" n
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_divalg_zero_left n)
 >   runTest args (_test_divalg_next_left n)

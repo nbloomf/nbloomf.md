@@ -423,10 +423,7 @@ Suite:
 >   testLabel2 "and" p x
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = num
->       , maxSize = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_and_true_true p)
 >   runTest args (_test_and_true_false p)

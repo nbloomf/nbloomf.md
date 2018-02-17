@@ -258,10 +258,7 @@ Suite:
 >   testLabel1 "head and tail" t
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_isNil_nil t)
 >   runTest args (_test_isNil_cons t)

@@ -133,10 +133,7 @@ Suite.
 >   testLabel1 "nats" n
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_unnext_zero n)
 >   runTest args (_test_unnext_next n)

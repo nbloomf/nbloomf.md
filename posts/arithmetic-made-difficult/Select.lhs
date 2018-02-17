@@ -357,7 +357,7 @@ $$\begin{eqnarray*}
  & = & \all(\beq(\zero,\length(-)),\cons(\nil,\nil)) \\
  & = & \band(\beq(\zero,\length(\nil)),\all(\beq(\zero,\length(-)),\nil)) \\
  & = & \band(\beq(\zero,\zero),\btrue) \\
- &     \href{@booleans@#thm-eq-reflexive}
+ &     \href{@testing@#thm-eq-reflexive}
    = & \band(\btrue,\btrue) \\
  &     \href{@and@#thm-and-eval-true-true}
    = & \btrue
@@ -415,10 +415,7 @@ Suite:
 >   testLabel1 "select" t
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_select_nil t n)
 >   runTest args (_test_select_cons t n)

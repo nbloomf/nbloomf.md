@@ -498,7 +498,7 @@ $$\begin{eqnarray*}
    = & \bimpl(\btrue,\beq(\bif{\band(p,\btrue)}{\btrue}{r},\bif{p}{\btrue}{r})) \\
  &     \href{@and@#thm-and-true-right}
    = & \bimpl(\btrue,\beq(\bif{p}{\btrue}{r},\bif{p}{\btrue}{r})) \\
- &     \href{@booleans@#thm-eq-reflexive}
+ &     \href{@testing@#thm-eq-reflexive}
    = & \bimpl(\btrue,\btrue) \\
  &     \href{@implies@#thm-implies-true-hyp}
    = & \btrue
@@ -520,7 +520,7 @@ $$\begin{eqnarray*}
    = & \bimpl(\btrue,\beq(\bfalse,\bif{p}{\bfalse}{\bfalse})) \\
  &     \href{@booleans@#thm-if-same}
    = & \bimpl(\btrue,\beq(\bfalse,\bfalse)) \\
- &     \href{@booleans@#thm-eq-reflexive}
+ &     \href{@testing@#thm-eq-reflexive}
    = & \bimpl(\btrue,\btrue) \\
  &     \href{@implies@#thm-implies-true-hyp}
    = & \btrue
@@ -568,10 +568,7 @@ Suite:
 >   testLabel1 "implies" p
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = num
->       , maxSize = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_impl_or p)
 >   runTest args (_test_impl_false_hyp p)

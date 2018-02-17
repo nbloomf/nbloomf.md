@@ -31,7 +31,7 @@ We'll use the ``QuickCheck`` library to make our theorems testable. This is not 
 > {-# LANGUAGE NoImplicitPrelude #-}
 > module Testing
 >   ( Test, runTest, testName, withTypeOf, TypeName(..)
->   , testLabel0, testLabel1, testLabel2, testLabel3
+>   , testLabel0, testLabel1, testLabel2, testLabel3, testArgs
 > 
 >   , Equal(..)
 > 
@@ -99,6 +99,10 @@ The ``Test`` type, with ``testName``, is a shorthand for writing named tests.
 >   => String -> a -> b -> c -> IO ()
 > testLabel3 str a b c = testLabel $ concat
 >   [ str, ": ", typeName a, ", ", typeName b, ", ", typeName c ]
+> 
+> testArgs :: Int -> Int -> Args
+> testArgs size cases = stdArgs
+>   { maxSuccess = cases, maxSize = size }
 
 ``withTypeOf`` is used to enforce type constraints in tests. It makes more sense when you see some examples.
 
@@ -134,4 +138,3 @@ Let $A$ be a set.
 1. For all $a \in A$, we have $\beq(a,a) = \btrue$.
 2. For all $a,b \in A$, we have $\beq(a,b) = \beq(b,a)$.
 ::::::::::::::::::::
-

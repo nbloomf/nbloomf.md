@@ -491,10 +491,7 @@ Suite:
 >   testLabel1 "lcm" n
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_lcm_zero n)
 >   runTest args (_test_lcm_one n)

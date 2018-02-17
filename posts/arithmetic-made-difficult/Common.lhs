@@ -456,10 +456,7 @@ Suite:
 >   testLabel1 "common" t
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_common_nil t)
 >   runTest args (_test_common_cons t)

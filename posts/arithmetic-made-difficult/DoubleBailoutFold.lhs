@@ -131,10 +131,7 @@ Suite:
 >   testLabel3 "dbfoldr" t b c
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_dbfoldr_equiv t b c)
 

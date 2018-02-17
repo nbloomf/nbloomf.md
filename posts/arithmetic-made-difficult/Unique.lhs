@@ -444,10 +444,7 @@ Suite:
 >   testLabel1 "unique" t
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_unique_nil t)
 >   runTest args (_test_unique_cons t)

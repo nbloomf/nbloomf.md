@@ -272,10 +272,7 @@ Suite:
 >   testLabel3 "simpleRec" n a b
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_simplerec_equiv_def n a b)
 >   runTest args (_test_simplerec_equiv_naive n a b)

@@ -233,10 +233,7 @@ Suite:
 >   testLabel1 "power" n
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_power_zero_right n)
 >   runTest args (_test_power_next_right n)

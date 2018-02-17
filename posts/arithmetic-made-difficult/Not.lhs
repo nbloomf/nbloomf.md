@@ -171,10 +171,7 @@ Suite:
 >   testLabel0 "Bool"
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = num
->       , maxSize = size
->       }
+~ args = testArgs size cases
 >  
 >   runTest args (_test_not_true p)
 >   runTest args (_test_not_false p)

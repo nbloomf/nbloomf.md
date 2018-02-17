@@ -523,10 +523,7 @@ Suite:
 >   testLabel2 "count" t n
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_addcount_nil t n)
 >   runTest args (_test_addcount_cons t n)

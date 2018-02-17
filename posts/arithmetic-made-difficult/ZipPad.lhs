@@ -401,10 +401,7 @@ Suite:
 >   testLabel3 "zipPad" t u n
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_zipPad_nil_list t u)
 >   runTest args (_test_zipPad_cons_nil t u)

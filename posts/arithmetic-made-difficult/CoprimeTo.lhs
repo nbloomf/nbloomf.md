@@ -112,10 +112,7 @@ Suite:
 >   testLabel1 "coprime" n
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = cases
->       , maxSize    = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_coprime_euclids_lemma n)
 >   runTest args (_test_coprime_gcd_quo n)

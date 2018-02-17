@@ -535,10 +535,7 @@ Suite:
 >   testLabel1 "Boolean" p
 > 
 >   let
->     args = stdArgs
->       { maxSuccess = num
->       , maxSize = size
->       }
+~ args = testArgs size cases
 > 
 >   runTest args (_test_if_true p x)
 >   runTest args (_test_if_false p x)
