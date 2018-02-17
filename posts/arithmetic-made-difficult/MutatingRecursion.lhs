@@ -22,7 +22,7 @@ For this situation we introduce yet another recursion operator on $\nats$, which
 
 :::::: theorem :::::
 []{#thm-mutrec-zero}[]{#thm-mutrec-next}
-Let $A$ and $B$ be sets. Suppose we have mappings $\varepsilon : A \rightarrow B$, $\beta : \nats \times A \rightarrow B$, $\psi : \nats \times A \rightarrow B$, $\chi : \nats \times A \times B \rightarrow B$, and $\omega : \nats \times A \rightarrow A$. Then there is a unique map $Θ : \nats \times A \rightarrow B$ such that $$Θ(\zero,a) = \varepsilon(a)$$ and $$Θ(\next(n),a) = \bif{\beta(n,a)}{\psi(n,a)}{\chi(n,a,Θ(n,\omega(n,a)))}.$$ We denote this $Θ$ by $\mutrec{\varepsilon}{\beta}{\psi}{\chi}{\omega}$.
+Let $A$ and $B$ be sets. Suppose we have mappings $\varepsilon : A \rightarrow B$, $\beta : \nats \times A \rightarrow B$, $\psi : \nats \times A \rightarrow B$, $\chi : \nats \times A \times B \rightarrow B$, and $\omega : \nats \times A \rightarrow A$. Then there is a unique map $Θ : \nats \times A \rightarrow B$ such that $$Θ(\zero,a) = \varepsilon(a)$$ and $$Θ(\next(n),a) = \bif{\beta(n,a)}{\psi(n,a)}{\chi(n,a,Θ(n,\omega(n,a)))}.$$ We denote this $Θ$ by $\mutrec(\varepsilon)(\beta)(\psi)(\chi)(\omega)$.
 
 ::: proof ::::::::::
 Define $δ \in B^{A \times \nats}$ by $$δ(a,n) = \varepsilon(a)$$ and $σ : B^{A \times \nats} \rightarrow B^{A \times \nats}$ by $$σ(g)(a,n) = \bif{\beta(\prev(n),a)}{\psi(\prev(n),a)}{\chi(\prev(n),a,g(\omega(\prev(n),a)),\prev(n))}.$$ Now $(B^{A \times \nats},δ,σ)$ is an iterative set. We now define $$Θ(n,a) = \natrec(δ)(σ)(n)(\tup(a)(n)).$$
@@ -85,7 +85,7 @@ as needed.
 Implementation
 --------------
 
-As usual we now want to implement $\mutrec{\ast}{\ast}{\ast}{\ast}{\ast}$ in software, and there are a couple of ways to go about this. First, the signature.
+As usual we now want to implement $\mutrec$ in software, and there are a couple of ways to go about this. First, the signature.
 
 > mutatingRec, mutatingRec' :: (Natural n, Boolean bool)
 >   => (a -> b)
@@ -145,7 +145,7 @@ $$\begin{eqnarray*}
  \chi & : & \nats \times A \times B \rightarrow B \\
  \omega & : & \nats \times A \rightarrow A.
 \end{eqnarray*}$$
-Then $\mutrec{\varepsilon}{\beta}{\psi}{\chi}{\omega}$ is the unique solution $f : \nats \times A \rightarrow B$ to the following system of functional equations for all $k \in \nats$, $a \in A$:
+Then $\mutrec(\varepsilon)(\beta)(\psi)(\chi)(\omega)$ is the unique solution $f : \nats \times A \rightarrow B$ to the following system of functional equations for all $k \in \nats$, $a \in A$:
 $$\left\{\begin{array}{l}
  f(\zero,a) = \varepsilon(a) \\
  f(\next(n),a) = \bif{\beta(n,a)}{\psi(n,a)}{\chi(n,a,f(n,\omega(n,a)))}

@@ -29,7 +29,7 @@ $$\Theta(a) = \left\{\begin{array}{l}
 We denote this unique map by $\mnormrec{\varphi}{\eta}{\delta}{\sigma}$.
 
 ::: proof ::::::::::
-We define maps $\beta : \nats \times A \rightarrow \bool$ by $$\beta(n,a) = \iszero(\eta(a)),$$ $\psi : \nats \times A \rightarrow B$ by $$\psi(n,a) = \delta(a),$$ $\chi : \nats \times A \times B \rightarrow B$ by $$\chi(n,a,b) = \sigma(a,b),$$ and $\omega : \nats \times A \rightarrow A$ by $$\omega(n,a) = \varphi(a).$$ Now we define $\Omega : \nats \times A \rightarrow B$ by $$\Omega = \mutrec{\delta}{\beta}{\psi}{\chi}{\omega}.$$
+We define maps $\beta : \nats \times A \rightarrow \bool$ by $$\beta(n,a) = \iszero(\eta(a)),$$ $\psi : \nats \times A \rightarrow B$ by $$\psi(n,a) = \delta(a),$$ $\chi : \nats \times A \times B \rightarrow B$ by $$\chi(n,a,b) = \sigma(a,b),$$ and $\omega : \nats \times A \rightarrow A$ by $$\omega(n,a) = \varphi(a).$$ Now we define $\Omega : \nats \times A \rightarrow B$ by $$\Omega = \mutrec(\delta)(\beta)(\psi)(\chi)(\omega).$$
 
 We first need the following intermediate result: for all $a \in A$ and $k \in \nats$, we claim that $$\Omega(\nplus(\eta(\varphi(a)),k),\varphi(a)) = \Omega(\eta(\varphi(a)),\varphi(a)).$$ To see this, we proceed by strong induction on $\eta(\varphi(a))$. For the base case, suppose $\eta(\varphi(a)) = \zero$; we show the equality holds by induction on $k$. For the base case $k = \zero$, we have
 $$\begin{eqnarray*}
