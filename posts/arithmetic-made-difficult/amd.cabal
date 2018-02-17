@@ -88,7 +88,7 @@ test-suite amd-booleans
   type: exitcode-stdio-1.0
   main-is: Booleans.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Booleans.main_boolean
+  ghc-options: -Wall -main-is Booleans.main_boolean
   other-modules:
     Testing
 
@@ -107,7 +107,7 @@ test-suite amd-and
   type: exitcode-stdio-1.0
   main-is: And.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is And.main_and
+  ghc-options: -Wall -main-is And.main_and
   other-modules:
     Testing,
     Booleans,
@@ -118,7 +118,7 @@ test-suite amd-or
   type: exitcode-stdio-1.0
   main-is: Or.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Or.main_or
+  ghc-options: -Wall -main-is Or.main_or
   other-modules:
     Testing,
     Booleans,
@@ -130,7 +130,7 @@ test-suite amd-impl
   type: exitcode-stdio-1.0
   main-is: Implies.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Implies.main_impl
+  ghc-options: -Wall -main-is Implies.main_impl
   other-modules:
     Testing,
     Booleans,
@@ -143,7 +143,7 @@ test-suite amd-functions
   type: exitcode-stdio-1.0
   main-is: Functions.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Functions.main_functions
+  ghc-options: -Wall -main-is Functions.main_functions
   other-modules:
     Testing,
     Booleans
@@ -153,7 +153,7 @@ test-suite amd-predicates
   type: exitcode-stdio-1.0
   main-is: Predicates.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Predicates.main_predicate
+  ghc-options: -Wall -main-is Predicates.main_predicate
   other-modules:
     Testing,
     Booleans,
@@ -167,7 +167,7 @@ test-suite amd-tuple
   type: exitcode-stdio-1.0
   main-is: Tuples.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Tuples.main_tuple
+  ghc-options: -Wall -main-is Tuples.main_tuple
   other-modules:
     Testing,
     Booleans,
@@ -182,7 +182,7 @@ test-suite amd-disjoint-union
   type: exitcode-stdio-1.0
   main-is: DisjointUnions.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is DisjointUnions.main_disjoint_union
+  ghc-options: -Wall -main-is DisjointUnions.main_disjoint_union
   other-modules:
     Testing,
     Booleans,
@@ -197,7 +197,7 @@ test-suite amd-nats
   type: exitcode-stdio-1.0
   main-is: NaturalNumbers.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is NaturalNumbers.main_nats
+  ghc-options: -Wall -main-is NaturalNumbers.main_nats
   other-modules:
     Testing,
     Booleans,
@@ -214,7 +214,7 @@ test-suite amd-simplerec
   type: exitcode-stdio-1.0
   main-is: SimpleRecursion.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is SimpleRecursion.main_simplerec
+  ghc-options: -Wall -main-is SimpleRecursion.main_simplerec
   other-modules:
     Testing,
     Booleans,
@@ -233,7 +233,7 @@ test-suite amd-bailoutrec
   type: exitcode-stdio-1.0
   main-is: BailoutRecursion.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is BailoutRecursion.main_bailoutrec
+  ghc-options: -Wall -main-is BailoutRecursion.main_bailoutrec
   other-modules:
     Testing,
     Booleans,
@@ -252,7 +252,7 @@ test-suite amd-mutatingrec
   type: exitcode-stdio-1.0
   main-is: MutatingRecursion.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is MutatingRecursion.main_mutatingrec
+  ghc-options: -Wall -main-is MutatingRecursion.main_mutatingrec
   other-modules:
     Testing,
     Booleans,
@@ -271,7 +271,7 @@ test-suite amd-dnaturalrec
   type: exitcode-stdio-1.0
   main-is: DoubleNaturalRecursion.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is DoubleNaturalRecursion.main_dnaturalRec
+  ghc-options: -Wall -main-is DoubleNaturalRecursion.main_dnaturalRec
   other-modules:
     Testing,
     Booleans,
@@ -290,7 +290,7 @@ test-suite amd-plus
   type: exitcode-stdio-1.0
   main-is: Plus.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Plus.main_plus
+  ghc-options: -Wall -main-is Plus.main_plus
   other-modules:
     Testing,
     Booleans,
@@ -310,7 +310,7 @@ test-suite amd-times
   type: exitcode-stdio-1.0
   main-is: Times.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Times.main_times
+  ghc-options: -Wall -main-is Times.main_times
   other-modules:
     Testing,
     Booleans,
@@ -331,7 +331,7 @@ test-suite amd-minus
   type: exitcode-stdio-1.0
   main-is: Minus.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Minus.main_minus
+  ghc-options: -Wall -main-is Minus.main_minus
   other-modules:
     Testing,
     Booleans,
@@ -354,7 +354,7 @@ test-suite amd-leq
   type: exitcode-stdio-1.0
   main-is: LessThanOrEqualTo.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is LessThanOrEqualTo.main_leq
+  ghc-options: -Wall -main-is LessThanOrEqualTo.main_leq
   other-modules:
     Testing,
     Booleans,
@@ -378,7 +378,7 @@ test-suite amd-max-min
   type: exitcode-stdio-1.0
   main-is: MaxAndMin.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is MaxAndMin.main_max_min
+  ghc-options: -Wall -main-is MaxAndMin.main_max_min
   other-modules:
     Testing,
     Booleans,
@@ -403,7 +403,7 @@ test-suite amd-divalg
   type: exitcode-stdio-1.0
   main-is: DivisionAlgorithm.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is DivisionAlgorithm.main_divalg
+  ghc-options: -Wall -main-is DivisionAlgorithm.main_divalg
   other-modules:
     Testing,
     Booleans,
@@ -428,7 +428,7 @@ test-suite amd-div
   type: exitcode-stdio-1.0
   main-is: Divides.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Divides.main_div
+  ghc-options: -Wall -main-is Divides.main_div
   other-modules:
     Testing,
     Booleans,
@@ -454,7 +454,7 @@ test-suite amd-gcd
   type: exitcode-stdio-1.0
   main-is: GreatestCommonDivisor.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is GreatestCommonDivisor.main_gcd
+  ghc-options: -Wall -main-is GreatestCommonDivisor.main_gcd
   other-modules:
     Testing,
     Booleans,
@@ -482,7 +482,7 @@ test-suite amd-coprime
   type: exitcode-stdio-1.0
   main-is: CoprimeTo.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is CoprimeTo.main_coprime
+  ghc-options: -Wall -main-is CoprimeTo.main_coprime
   other-modules:
     Testing,
     Booleans,
@@ -511,7 +511,7 @@ test-suite amd-lcm
   type: exitcode-stdio-1.0
   main-is: LeastCommonMultiple.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is LeastCommonMultiple.main_lcm
+  ghc-options: -Wall -main-is LeastCommonMultiple.main_lcm
   other-modules:
     Testing,
     Booleans,
@@ -541,7 +541,7 @@ test-suite amd-findsmallest
   type: exitcode-stdio-1.0
   main-is: FindSmallest.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is FindSmallest.main_findSmallest
+  ghc-options: -Wall -main-is FindSmallest.main_findSmallest
   other-modules:
     Testing,
     Booleans,
@@ -566,7 +566,7 @@ test-suite amd-prime
   type: exitcode-stdio-1.0
   main-is: IsPrime.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is IsPrime.main_prime
+  ghc-options: -Wall -main-is IsPrime.main_prime
   other-modules:
     Testing,
     Booleans,
@@ -598,7 +598,7 @@ test-suite amd-power
   type: exitcode-stdio-1.0
   main-is: Exponentiation.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Exponentiation.main_power
+  ghc-options: -Wall -main-is Exponentiation.main_power
   other-modules:
     Testing,
     Booleans,
@@ -629,7 +629,7 @@ test-suite amd-choose
   type: exitcode-stdio-1.0
   main-is: Choose.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Choose.main_choose
+  ghc-options: -Wall -main-is Choose.main_choose
   other-modules:
     Testing,
     Booleans,
@@ -655,7 +655,7 @@ test-suite amd-head-tail
   type: exitcode-stdio-1.0
   main-is: HeadAndTail.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is HeadAndTail.main_head_tail
+  ghc-options: -Wall -main-is HeadAndTail.main_head_tail
   other-modules:
     Testing,
     Booleans,
@@ -675,7 +675,7 @@ test-suite amd-foldl
   type: exitcode-stdio-1.0
   main-is: LeftFold.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is LeftFold.main_foldl
+  ghc-options: -Wall -main-is LeftFold.main_foldl
   other-modules:
     Testing,
     Booleans,
@@ -694,7 +694,7 @@ test-suite amd-cfoldr
   type: exitcode-stdio-1.0
   main-is: ConsumingFold.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is ConsumingFold.main_cfoldr
+  ghc-options: -Wall -main-is ConsumingFold.main_cfoldr
   other-modules:
     Testing,
     Booleans,
@@ -713,7 +713,7 @@ test-suite amd-bfoldr
   type: exitcode-stdio-1.0
   main-is: BailoutFold.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is BailoutFold.main_bfoldr
+  ghc-options: -Wall -main-is BailoutFold.main_bfoldr
   other-modules:
     Testing,
     Booleans,
@@ -734,7 +734,7 @@ test-suite amd-dbfoldr
   type: exitcode-stdio-1.0
   main-is: DoubleBailoutFold.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is DoubleBailoutFold.main_dbfoldr
+  ghc-options: -Wall -main-is DoubleBailoutFold.main_dbfoldr
   other-modules:
     Testing,
     Booleans,
@@ -755,7 +755,7 @@ test-suite amd-snoc
   type: exitcode-stdio-1.0
   main-is: Snoc.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Snoc.main_snoc
+  ghc-options: -Wall -main-is Snoc.main_snoc
   other-modules:
     Testing,
     Booleans,
@@ -777,7 +777,7 @@ test-suite amd-rev
   type: exitcode-stdio-1.0
   main-is: Reverse.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Reverse.main_rev
+  ghc-options: -Wall -main-is Reverse.main_rev
   other-modules:
     Testing,
     Booleans,
@@ -800,7 +800,7 @@ test-suite amd-cat
   type: exitcode-stdio-1.0
   main-is: Cat.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Cat.main_cat
+  ghc-options: -Wall -main-is Cat.main_cat
   other-modules:
     Testing,
     Booleans,
@@ -824,7 +824,7 @@ test-suite amd-length
   type: exitcode-stdio-1.0
   main-is: Length.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Length.main_length
+  ghc-options: -Wall -main-is Length.main_length
   other-modules:
     Testing,
     Booleans,
@@ -852,7 +852,7 @@ test-suite amd-at
   type: exitcode-stdio-1.0
   main-is: At.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is At.main_at
+  ghc-options: -Wall -main-is At.main_at
   other-modules:
     Testing,
     Booleans,
@@ -884,7 +884,7 @@ test-suite amd-map
   type: exitcode-stdio-1.0
   main-is: Map.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Map.main_map
+  ghc-options: -Wall -main-is Map.main_map
   other-modules:
     Testing,
     Booleans,
@@ -917,7 +917,7 @@ test-suite amd-unfoldN
   type: exitcode-stdio-1.0
   main-is: UnfoldN.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is UnfoldN.main_unfoldN
+  ghc-options: -Wall -main-is UnfoldN.main_unfoldN
   other-modules:
     Testing,
     Booleans,
@@ -951,7 +951,7 @@ test-suite amd-range
   type: exitcode-stdio-1.0
   main-is: Range.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Range.main_range
+  ghc-options: -Wall -main-is Range.main_range
   other-modules:
     Testing,
     Booleans,
@@ -986,7 +986,7 @@ test-suite amd-zip
   type: exitcode-stdio-1.0
   main-is: Zip.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Zip.main_zip
+  ghc-options: -Wall -main-is Zip.main_zip
   other-modules:
     Testing,
     Booleans,
@@ -1022,7 +1022,7 @@ test-suite amd-zippad
   type: exitcode-stdio-1.0
   main-is: ZipPad.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is ZipPad.main_zipPad
+  ghc-options: -Wall -main-is ZipPad.main_zipPad
   other-modules:
     Testing,
     Booleans,
@@ -1058,7 +1058,7 @@ test-suite amd-unzip
   type: exitcode-stdio-1.0
   main-is: Unzip.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Unzip.main_unzip
+  ghc-options: -Wall -main-is Unzip.main_unzip
   other-modules:
     Testing,
     Booleans,
@@ -1095,7 +1095,7 @@ test-suite amd-prefix-suffix
   type: exitcode-stdio-1.0
   main-is: PrefixAndSuffix.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is PrefixAndSuffix.main_prefix_suffix
+  ghc-options: -Wall -main-is PrefixAndSuffix.main_prefix_suffix
   other-modules:
     Testing,
     Booleans,
@@ -1134,7 +1134,7 @@ test-suite amd-lcp
   type: exitcode-stdio-1.0
   main-is: LongestCommonPrefix.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is LongestCommonPrefix.main_lcp
+  ghc-options: -Wall -main-is LongestCommonPrefix.main_lcp
   other-modules:
     Testing,
     Booleans,
@@ -1172,7 +1172,7 @@ test-suite amd-all-any
   type: exitcode-stdio-1.0
   main-is: AllAndAny.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is AllAndAny.main_all_any
+  ghc-options: -Wall -main-is AllAndAny.main_all_any
   other-modules:
     Testing,
     Booleans,
@@ -1211,7 +1211,7 @@ test-suite amd-tails-inits
   type: exitcode-stdio-1.0
   main-is: TailsAndInits.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is TailsAndInits.main_tails_inits
+  ghc-options: -Wall -main-is TailsAndInits.main_tails_inits
   other-modules:
     Testing,
     Booleans,
@@ -1253,7 +1253,7 @@ test-suite amd-filter
   type: exitcode-stdio-1.0
   main-is: Filter.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Filter.main_filter
+  ghc-options: -Wall -main-is Filter.main_filter
   other-modules:
     Testing,
     Booleans,
@@ -1296,7 +1296,7 @@ test-suite amd-elt
   type: exitcode-stdio-1.0
   main-is: Elt.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Elt.main_elt
+  ghc-options: -Wall -main-is Elt.main_elt
   other-modules:
     Testing,
     Booleans,
@@ -1342,7 +1342,7 @@ test-suite amd-count
   type: exitcode-stdio-1.0
   main-is: Count.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Count.main_count
+  ghc-options: -Wall -main-is Count.main_count
   other-modules:
     Testing,
     Booleans,
@@ -1389,7 +1389,7 @@ test-suite amd-repeat
   type: exitcode-stdio-1.0
   main-is: Repeat.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Repeat.main_repeat
+  ghc-options: -Wall -main-is Repeat.main_repeat
   other-modules:
     Testing,
     Booleans,
@@ -1437,7 +1437,7 @@ test-suite amd-sublist
   type: exitcode-stdio-1.0
   main-is: Sublist.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Sublist.main_sublist
+  ghc-options: -Wall -main-is Sublist.main_sublist
   other-modules:
     Testing,
     Booleans,
@@ -1486,7 +1486,7 @@ test-suite amd-infix
   type: exitcode-stdio-1.0
   main-is: Infix.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Infix.main_isInfix
+  ghc-options: -Wall -main-is Infix.main_isInfix
   other-modules:
     Testing,
     Booleans,
@@ -1537,7 +1537,7 @@ test-suite amd-select
   type: exitcode-stdio-1.0
   main-is: Select.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Select.main_select
+  ghc-options: -Wall -main-is Select.main_select
   other-modules:
     Testing,
     Booleans,
@@ -1592,7 +1592,7 @@ test-suite amd-unique
   type: exitcode-stdio-1.0
   main-is: Unique.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Unique.main_unique
+  ghc-options: -Wall -main-is Unique.main_unique
   other-modules:
     Testing,
     Booleans,
@@ -1648,7 +1648,7 @@ test-suite amd-delete
   type: exitcode-stdio-1.0
   main-is: Delete.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Delete.main_delete
+  ghc-options: -Wall -main-is Delete.main_delete
   other-modules:
     Testing,
     Booleans,
@@ -1705,7 +1705,7 @@ test-suite amd-dedupe
   type: exitcode-stdio-1.0
   main-is: Dedupe.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Dedupe.main_dedupe
+  ghc-options: -Wall -main-is Dedupe.main_dedupe
   other-modules:
     Testing,
     Booleans,
@@ -1763,7 +1763,7 @@ test-suite amd-common
   type: exitcode-stdio-1.0
   main-is: Common.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Common.main_common
+  ghc-options: -Wall -main-is Common.main_common
   other-modules:
     Testing,
     Booleans,
@@ -1822,7 +1822,7 @@ test-suite amd-disjoint
   type: exitcode-stdio-1.0
   main-is: Disjoint.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Disjoint.main_disjoint
+  ghc-options: -Wall -main-is Disjoint.main_disjoint
   other-modules:
     Testing,
     Booleans,
@@ -1882,7 +1882,7 @@ test-suite amd-sublists
   type: exitcode-stdio-1.0
   main-is: Sublists.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is Sublists.main_sublists
+  ghc-options: -Wall -main-is Sublists.main_sublists
   other-modules:
     Testing,
     Booleans,
@@ -1947,7 +1947,7 @@ test-suite amd-take-drop
   type: exitcode-stdio-1.0
   main-is: TakeAndDrop.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is TakeAndDrop.main_take_drop
+  ghc-options: -Wall -main-is TakeAndDrop.main_take_drop
   other-modules:
     Testing,
     Booleans,
@@ -2006,7 +2006,7 @@ test-suite amd-takebut-dropbut
   type: exitcode-stdio-1.0
   main-is: TakeButAndDropBut.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is TakeButAndDropBut.main_takebut_dropbut
+  ghc-options: -Wall -main-is TakeButAndDropBut.main_takebut_dropbut
   other-modules:
     Testing,
     Booleans,
@@ -2066,7 +2066,7 @@ test-suite amd-takewhile-dropwhile
   type: exitcode-stdio-1.0
   main-is: TakeWhileAndDropWhile.lhs
   build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -fforce-recomp -main-is TakeWhileAndDropWhile.main_takewhile_dropwhile
+  ghc-options: -Wall -main-is TakeWhileAndDropWhile.main_takewhile_dropwhile
   other-modules:
     Testing,
     Booleans,
