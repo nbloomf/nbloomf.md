@@ -20,7 +20,7 @@ In this post we'll define a family of operators that rearrange the arguments of 
 
 :::::: definition ::
 []{#def-flip}
-Let $A$, $B$, and $C$ be sets. Given $f : A \rightarrow C^B$, we define $\flip(f) : B \rightarrow C^A$ by $$\flip(f)(b)(a) = f(a)(b).$$
+Let $A$, $B$, and $C$ be sets. Given $f : A \rightarrow B \rightarrow C$, we define $\flip(f) : B \rightarrow C^A$ by $$\flip(f)(b)(a) = f(a)(b).$$
 
 In Haskell:
 
@@ -39,9 +39,9 @@ Let $A$, $B$, and $C$ be sets. For all $f : A \rightarrow C^B$, we have $$\flip(
 Let $a \in A$ and $b \in B$. Then we have
 $$\begin{eqnarray*}
  &   & \flip(\flip(f))(a)(b) \\
- &     \href{@functions@#def-flip}
+ &     \href{@flip@#def-flip}
    = & \flip(f)(b)(a) \\
- &     \href{@functions@#def-flip}
+ &     \href{@flip@#def-flip}
    = & f(a)(b)
 \end{eqnarray*}$$
 as needed.
@@ -54,6 +54,32 @@ as needed.
 > _test_flip_involution _ _ _ =
 >   testName "flip(flip(f)) == f" $
 >   \f a b -> eq (flip (flip f) a b) (f a b)
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+Ostensibly, $\flip$ acts on functions of two arguments. But since the return type of such a function can be another function, a better way to think of $\flip$ is that it flips the _first two_ arguments of a multi-argument function.
+
+:::::: theorem :::::
+[]{#thm-flip-three}
+Let $f : A \rightarrow B \rightarrow C \rightarrow D$. Then we have $$\flip(f)(b)(a)(c)(d) = f(a)(b)(c)(d).$$
+
+::: proof ::::::::::
+Note that
+$$\begin{eqnarray*}
+ &   & \flip(f)(b)(a)(c) \\
+ &     \href{@flip@#def-flip}
+   = & f(a)(b)(c)
+\end{eqnarray*}$$
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_flip_3 :: (Equal d)
+>   => a -> b -> c -> d -> Test ((a -> b -> c -> d) -> a -> b -> c -> Bool)
+> _test_flip_3 _ _ _ _ =
+>   testName "flip(f)(a)(b)(c) == f(b)(a)(c)" $
+>   \f a b c -> eq (flip f b a c) (f a b c)
 
 ::::::::::::::::::::
 ::::::::::::::::::::
@@ -75,6 +101,7 @@ Suite:
 >   let args = testArgs size cases
 > 
 >   runTest args (_test_flip_involution a b c)
+>   runTest args (_test_flip_3 a b c d)
 
 Main:
 
