@@ -279,7 +279,7 @@ $$\begin{eqnarray*}
 (that last line is why using a plain fold doesn't work.) In cases like this, the consuming fold is handy.
 
 :::::: definition ::
-Let $A$ be a set with $p : A \rightarrow \bool$. Define $\sigma : A \times \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\sigma(a,x,y) = \bif{p(a)}{y}{\cons(a,x)}.$$ Now define $\dropWhile : \bool^A \rightarrow {\lists{A}}^{\lists{A}}$ by $$\dropWhile(p) = \cfoldr{\nil}{\sigma}.$$
+Let $A$ be a set with $p : A \rightarrow \bool$. Define $\sigma : A \times \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\sigma(a,x,y) = \bif{p(a)}{y}{\cons(a,x)}.$$ Now define $\dropWhile : \bool^A \rightarrow {\lists{A}}^{\lists{A}}$ by $$\dropWhile(p) = \cfoldr(\nil)(\sigma).$$
 
 In Haskell:
 

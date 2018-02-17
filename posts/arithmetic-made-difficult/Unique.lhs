@@ -36,7 +36,7 @@ Today we'll introduce a boolean function $\unique$ to detect whether or not a li
 Note that $\unique$ will need to "have it's cake and eat it too"; that is, when testing $\cons(a,x)$ for uniqueness we have to check that $x$ is unique (eat the cake) *and* check that $a$ does not appear in $x$ (have the cake). We had a similar problem when we defined $\tails$; the solution there was to use consuming fold, so that's what we'll do here.
 
 :::::: definition ::
-Let $A$ be a set. Define $\sigma : A \times \lists{A} \times \bool \rightarrow \bool$ by $$\sigma(a,x,p) = \band(\bnot(\elt(a,x)),p).$$ We then define $\unique : \lists{A} \rightarrow \bool$ by $$\unique = \cfoldr{\btrue}{\sigma}.$$
+Let $A$ be a set. Define $\sigma : A \times \lists{A} \times \bool \rightarrow \bool$ by $$\sigma(a,x,p) = \band(\bnot(\elt(a,x)),p).$$ We then define $\unique : \lists{A} \rightarrow \bool$ by $$\unique = \cfoldr(\btrue)(\sigma).$$
 
 In Haskell:
 
@@ -47,7 +47,7 @@ In Haskell:
 
 ::::::::::::::::::::
 
-Since $\unique$ is defined as a $\cfoldr{\ast}{\ast}$, it can be characterized as the unique solution to a system of functional equations.
+Since $\unique$ is defined as a $\cfoldr(\ast)(\ast)$, it can be characterized as the unique solution to a system of functional equations.
 
 :::::: corollary :::
 Let $A$ be a set. $\unique$ is the unique map $f : \lists{A} \rightarrow \bool$ satisfying the following system of equations for all $a \in A$ and $x \in \lists{A}$.

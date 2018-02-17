@@ -27,7 +27,7 @@ slug: tails-inits
 Today we'll construct the lists of all suffixes ($\tails$) and prefixes ($\inits$) of a list. Starting with $\tails$: this function should have a signature like $$\lists{A} \rightarrow \lists{\lists{A}}.$$
 
 :::::: definition ::
-Let $A$ be a set. Let $\gamma = \cons(\nil,\nil)$, and define $\sigma : A \times \lists{A} \times \lists{\lists{A}} \rightarrow \lists{\lists{A}}$ by $$\sigma(a,x,z) = \cons(\cons(a,x),z).$$ Now define $\tails : \lists{A} \rightarrow \lists{\lists{A}}$ by $$\tails = \cfoldr{\gamma}{\sigma}.$$
+Let $A$ be a set. Let $\gamma = \cons(\nil,\nil)$, and define $\sigma : A \times \lists{A} \times \lists{\lists{A}} \rightarrow \lists{\lists{A}}$ by $$\sigma(a,x,z) = \cons(\cons(a,x),z).$$ Now define $\tails : \lists{A} \rightarrow \lists{\lists{A}}$ by $$\tails = \cfoldr(\gamma)(\sigma).$$
 
 In Haskell:
 
@@ -39,7 +39,7 @@ In Haskell:
 
 ::::::::::::::::::::
 
-Since $\tails$ is defined as a $\cfoldr{\ast}{\ast}$, it is the unique solution to a system of functional equations.
+Since $\tails$ is defined as a $\cfoldr(\ast)(\ast)$, it is the unique solution to a system of functional equations.
 
 :::::: corollary :::
 Let $A$ be a set. $\tails$ is the unique map $f : \lists{A} \rightarrow \lists{\lists{A}}$ which satisfies the following equations for all $a \in A$ and $x \in \lists{A}$.
