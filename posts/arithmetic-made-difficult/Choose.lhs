@@ -22,7 +22,7 @@ slug: choose
 Today we'll define the binomial coefficient operator, $\nchoose$.
 
 :::::: definition ::
-Define $\delta : \nats \rightarrow \nats$ by $$\delta(k) = \bif{\iszero(k)}{\next(\zero)}{\zero},$$ $\psi : \nats \rightarrow \nats$ by $$\psi(m) = \next(\zero),$$ and $\chi : \nats \times \nats \times \nats$ by $$\chi(t,a,b) = \nplus(a,b).$$ Now define $\nchoose : \nats \times \nats \rightarrow \nats$ by $$\nchoose = \dnatrec{\delta}{\psi}{\chi}.$$
+Define $\delta : \nats \rightarrow \nats$ by $$\delta(k) = \bif{\iszero(k)}{\next(\zero)}{\zero},$$ $\psi : \nats \rightarrow \nats$ by $$\psi(m) = \next(\zero),$$ and $\chi : \nats \times \nats \times \nats$ by $$\chi(t,a,b) = \nplus(a,b).$$ Now define $\nchoose : \nats \times \nats \rightarrow \nats$ by $$\nchoose = \dnatrec(\delta)(\psi)(\chi).$$
 
 In Haskell:
 

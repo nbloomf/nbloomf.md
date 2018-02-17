@@ -20,7 +20,7 @@ Today we'll implement a slight generalization of natural recursion that allows r
 
 :::::: theorem :::::
 []{@#thm-dnatrec-zero-nat}[]{#thm-dnatrec-next-zero}[]{#thm-dnatrec-next-next}
-Let $A$ be a set. Let $\delta : \nats \rightarrow A$, $\psi : A \rightarrow A$, and $\chi : \nats \times A \times A \rightarrow A$. Then there is a unique map $Θ : \nats \times \nats \rightarrow A$ such that $$Θ(\zero,k) = \delta(k),$$ $$Θ(\next(n),\zero) = \psi(Θ(n,\zero)),$$ and $$Θ(\next(n),\next(k)) = \chi(k,Θ(n,k),Θ(n,\next(k))).$$ We denote this map by $\dnatrec{\delta}{\psi}{\chi}.$$
+Let $A$ be a set. Let $\delta : \nats \rightarrow A$, $\psi : A \rightarrow A$, and $\chi : \nats \times A \times A \rightarrow A$. Then there is a unique map $Θ : \nats \times \nats \rightarrow A$ such that $$Θ(\zero,k) = \delta(k),$$ $$Θ(\next(n),\zero) = \psi(Θ(n,\zero)),$$ and $$Θ(\next(n),\next(k)) = \chi(k,Θ(n,k),Θ(n,\next(k))).$$ We denote this map by $\dnatrec(\delta)(\psi)(\chi).$$
 
 ::: proof ::::::::::
 Define $φ : A^\nats \rightarrow A^\nats$ casewise by
@@ -102,7 +102,7 @@ as needed.
 Implementation
 --------------
 
-There's a couple of ways to implement $\dnatrec{\ast}{\ast}{\ast}$.
+There's a couple of ways to implement $\dnatrec$.
 
 > dnaturalRec, dnaturalRec' :: (Natural n)
 >   => (n -> a)
@@ -143,7 +143,7 @@ While we're here, we should test that these two implementations aren't not equiv
 The "uniqueness" part of double natural recursion is also handy. To be a little more explicit, it says the following.
 
 :::::: corollary :::
-Let $A$ be a set, with $\delta : \nats \rightarrow A$, and $\psi : A \rightarrow A$, and $\chi : \nats \times A \times A \rightarrow A$. Then $\dnatrec{\delta}{\psi}{\chi}$ is the unique solution $f : \nats \times \nats \rightarrow A$ to the following system of functional equations for all $n,k \in \nats$:
+Let $A$ be a set, with $\delta : \nats \rightarrow A$, and $\psi : A \rightarrow A$, and $\chi : \nats \times A \times A \rightarrow A$. Then $\dnatrec(\delta)(\psi)(\chi)$ is the unique solution $f : \nats \times \nats \rightarrow A$ to the following system of functional equations for all $n,k \in \nats$:
 $$\left\{\begin{array}{l}
  f(\zero,k) = \delta(k) \\
  f(\next(n),\zero) = \psi(f(n,\zero)) \\

@@ -31,7 +31,7 @@ Define $\sigma : \nats \rightarrow \bool^{\nats}$ by $$\sigma(a)(b) = \div(b,a),
 $$\nmindiv(n) = \left\{\begin{array}{ll}
  \rgt(\zero) & \mathrm{if}\ n = \zero \\
  \rgt(\next(\zero)) & \mathrm{if}\ n = \next(\zero) \\
- \findsmallest{\sigma(n)}(m,\next(\next(\zero))) & \mathrm{if}\ n = \next(\next(m)).
+ \findsmallest(\sigma(n))(m,\next(\next(\zero))) & \mathrm{if}\ n = \next(\next(m)).
 \end{array}\right.$$
 Now define $\nmindiv : \nats \rightarrow \nats$ by $$\nmindiv(n) = \either(\const(n),\id)(\varphi(n)).$$
 
@@ -63,9 +63,9 @@ If $a = \next(\next(m))$ for some $m$, we have
 $$\begin{eqnarray*}
  &   & \nmindiv(a) \\
  & = & \nmindiv(\next(\next(m))) \\
- & = & \either(\const(a),\id)(\findsmallest{\sigma(a)}(m,\next(\next(\zero)))).
+ & = & \either(\const(a),\id)(\findsmallest(\sigma(a))(m,\next(\next(\zero)))).
 \end{eqnarray*}$$
-We have two possibilities for $\findsmallest{\sigma(a)}(m,\next(\next(\zero))) = Q$.
+We have two possibilities for $\findsmallest(\sigma(a))(m,\next(\next(\zero))) = Q$.
 
 Suppose $Q = \rgt(t)$; then we have
 $$\begin{eqnarray*}
@@ -76,7 +76,7 @@ $$\begin{eqnarray*}
  &     \href{@functions@#def-id}
    = & t
 \end{eqnarray*}$$
-By the properties of $\findsmallest{\sigma(a)}$ we have $\nleq(\next(\next(\zero)),t)$ and $\nleq(t,\next(m))$ (so $t \neq \zero$ and $t \neq \next(\zero)$) and $\ndiv(t,a)$, and moreover if $\nleq(\next(\next(\zero)),k)$ and $\nleq(k,\next(m))$ and $\ndiv(k,a)$ then $\nleq(t,k)$ as claimed.
+By the properties of $\findsmallest(\sigma(a))$ we have $\nleq(\next(\next(\zero)),t)$ and $\nleq(t,\next(m))$ (so $t \neq \zero$ and $t \neq \next(\zero)$) and $\ndiv(t,a)$, and moreover if $\nleq(\next(\next(\zero)),k)$ and $\nleq(k,\next(m))$ and $\ndiv(k,a)$ then $\nleq(t,k)$ as claimed.
 
 Suppose instead that $Q = \lft(\ast)$; then we have
 $$\begin{eqnarray*}
@@ -86,7 +86,7 @@ $$\begin{eqnarray*}
    = & \const(a)(\ast) \\
  & = & a. 
 \end{eqnarray*}$$
-Again by the properties of $\findsmallest{\sigma(a)}$, there does not exist $k$ such that $\nleq(\next(\next(\zero)),k)$ and $\nleq(k,\next(m))$ and $\ndiv(k,a)$ as claimed.
+Again by the properties of $\findsmallest(\sigma(a))$, there does not exist $k$ such that $\nleq(\next(\next(\zero)),k)$ and $\nleq(k,\next(m))$ and $\ndiv(k,a)$ as claimed.
 ::::::::::::::::::::
 
 ::: test :::::::::::

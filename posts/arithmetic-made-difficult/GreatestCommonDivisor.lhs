@@ -28,7 +28,7 @@ Today we'll define the greatest common divisor of two natural numbers. The usual
 
 Recall that the Euclidean algorithm says $\ngcd(a,b) = \ngcd(b,\nrem(a,b))$ and $\ngcd(a,\zero) = a$. So it is recursive, but not in quite the way that (say) plus and times are recursive, because the recursion argument does not decrease by "one" at each step, but rather by some larger amount. This is exactly what norm recursion is for.
 
-The signature of $\ngcd$ is $$\nats \times \nats \rightarrow \nats,$$ while norm recursion takes arguments with signature $$\varphi : A \rightarrow A, \eta : A \rightarrow \nats,\ \mathrm{and}\ \chi : A \rightarrow B,$$ and gives a function with signature $$A \rightarrow B.$$ So we have $A = \nats \times \nats$ and $B = \nats$, and thus we need $$\varphi : \nats \times \nats \rightarrow \nats \times \nats,$$ with $$\eta : \nats \times \nats \rightarrow \nats$$ an iterative norm against $\varphi$, and $$\chi : \nats \times \nats \rightarrow \nats.$$ Taking a cue from the Euclidean algorithm, if $$\ngcd(a,b) = \normrec{\varphi}{\eta}{\chi} = \bif{\iszero(\eta(a,b))}{\chi(a,b)}{\ngcd(\varphi(a,b))},$$ it seems reasonable to insist that $$\varphi(a,b) = (b,\nrem(a,b)).$$ But if $b = \zero$, the division algorithm gets weird -- to avoid this we'll instead make $$\varphi(a,b) = \bif{\iszero(b)}{(a,\zero)}{(b,\nrem(a,b))}.$$ The "stopping condition" on this recursion is that $b = \zero$, in which case we should output $\chi(a,b) = a$. What remains is to define $\eta$ so that $\eta(a,\zero) = \zero$, but also so that $\eta$ is a bona fide iterative norm. That is, we need
+The signature of $\ngcd$ is $$\nats \times \nats \rightarrow \nats,$$ while norm recursion takes arguments with signature $$\varphi : A \rightarrow A, \eta : A \rightarrow \nats,\ \mathrm{and}\ \chi : A \rightarrow B,$$ and gives a function with signature $$A \rightarrow B.$$ So we have $A = \nats \times \nats$ and $B = \nats$, and thus we need $$\varphi : \nats \times \nats \rightarrow \nats \times \nats,$$ with $$\eta : \nats \times \nats \rightarrow \nats$$ an iterative norm against $\varphi$, and $$\chi : \nats \times \nats \rightarrow \nats.$$ Taking a cue from the Euclidean algorithm, if $$\ngcd(a,b) = \normrec(\varphi)(\eta)(\chi) = \bif{\iszero(\eta(a,b))}{\chi(a,b)}{\ngcd(\varphi(a,b))},$$ it seems reasonable to insist that $$\varphi(a,b) = (b,\nrem(a,b)).$$ But if $b = \zero$, the division algorithm gets weird -- to avoid this we'll instead make $$\varphi(a,b) = \bif{\iszero(b)}{(a,\zero)}{(b,\nrem(a,b))}.$$ The "stopping condition" on this recursion is that $b = \zero$, in which case we should output $\chi(a,b) = a$. What remains is to define $\eta$ so that $\eta(a,\zero) = \zero$, but also so that $\eta$ is a bona fide iterative norm. That is, we need
 
 1. If $\eta(a,b) = \zero$, then $\eta(\varphi(a,b)) = \zero$.
 2. If $\eta(a,b) = \next(m)$, then $\nleq(\eta(\varphi(a,b)),m)$.
@@ -82,7 +82,7 @@ in particular, $$\nleq(\eta(\varphi(a,b)),\nplus(b,\nrem(a,b))).$$ Now if $\nleq
 Now we can define $\ngcd$ in terms of norm recursion.
 
 :::::: definition ::
-Let $\varphi$ and $\eta$ be as defined in the previous theorem. We then define a map $\ngcd : \nats \times \nats \rightarrow \nats$ by $$\ngcd = \normrec{\varphi}{\eta}{\fst}.$$
+Let $\varphi$ and $\eta$ be as defined in the previous theorem. We then define a map $\ngcd : \nats \times \nats \rightarrow \nats$ by $$\ngcd = \normrec(\varphi)(\eta)(\fst).$$
 
 In Haskell:
 

@@ -31,7 +31,7 @@ Let $(A,\varepsilon,\varphi)$ be an iterative set. A map $\eta : A \rightarrow \
 Roughly speaking, an iterative norm is a measure of "size" on $A$ with the property that this size is strictly decreasing under the action of $\varphi$.
 
 :::::: theorem :::::
-Let $(A,\varepsilon,\varphi)$ be an iterative set, with $\eta : A \rightarrow \nats$ an iterative norm. Let $B$ be a set, with $\chi : A \rightarrow B$. Then there is a unique map $\Theta : A \rightarrow B$ such that, for all $a \in A$, $$\Theta(a) = \bif{\iszero(\eta(a))}{\chi(a)}{\Theta(\varphi(a))}.$$ This $\Theta$ will be denoted $\normrec{\varphi}{\eta}{\chi}$.
+Let $(A,\varepsilon,\varphi)$ be an iterative set, with $\eta : A \rightarrow \nats$ an iterative norm. Let $B$ be a set, with $\chi : A \rightarrow B$. Then there is a unique map $\Theta : A \rightarrow B$ such that, for all $a \in A$, $$\Theta(a) = \bif{\iszero(\eta(a))}{\chi(a)}{\Theta(\varphi(a))}.$$ This $\Theta$ will be denoted $\normrec(\varphi)(\eta)(\chi)$.
 
 ::: proof ::::::::::
 We define $\beta : \nats \times A \rightarrow \bool$ by $$\beta(k,a) = \iszero(\eta(a)),$$ define $\psi : \nats \times A \rightarrow B$ by $$\psi(k,a) = \chi(a),$$ and define $\omega : \nats \times A \rightarrow A$ by $$\omega(k,a) = \varphi(a),$$ and $\Omega : \nats \times A \rightarrow B$ by $$\Omega = \bailrec(\chi)(\beta)(\psi)(\omega).$$ As a lemma, we need the following intermediate result: for all $a \in A$ and $k \in \nats$, we have $$\Omega(\nplus(\eta(\varphi(a)),k),\varphi(a)) = \Omega(\eta(\varphi(a)),\varphi(a)).$$ We proceed by double induction, starting with strong induction on $\eta(\varphi(a))$. For the base case $\eta(\varphi(a)) = \zero$, we proceed by induction on $k$. For the base case $k = \zero$, we have
@@ -115,7 +115,7 @@ We show that $\Theta$ is unique by strong induction. Suppose $\Pi$ is another fu
 Implementation
 --------------
 
-We can implement $\normrec{\ast}{\ast}{\ast}$ using the definition from the theorem...
+We can implement $\normrec$ using the definition from the theorem...
 
 > normRec, normRec'
 >   :: (Natural n)
@@ -136,9 +136,9 @@ Or by pattern matching, using the universal property.
 >   Left () -> chi a
 >   Right _ -> normRec phi eta chi (phi a)
 
-As with our other recursion operators, $\normrec{\varphi}{\eta}{\chi}$ is the unique solution to a system of functional equations. Specifically, we have the following.
+As with our other recursion operators, $\normrec(\varphi)(\eta)(\chi)$ is the unique solution to a system of functional equations. Specifically, we have the following.
 
 :::::: corollary :::
-Let $A$ and $B$ be sets, with $\varphi : A \rightarrow A$, $\eta : A \rightarrow \nats$ an iterative norm on $(A,\varepsilon,\varphi)$ for some $\varepsilon$, and $\chi : A \rightarrow B$. Then $\normrec{\varphi}{\eta}{\chi}$ is the unique solution $f : A \rightarrow B$ to the following functional equation for all $a \in A$:
+Let $A$ and $B$ be sets, with $\varphi : A \rightarrow A$, $\eta : A \rightarrow \nats$ an iterative norm on $(A,\varepsilon,\varphi)$ for some $\varepsilon$, and $\chi : A \rightarrow B$. Then $\normrec(\varphi)(\eta)(\chi)$ is the unique solution $f : A \rightarrow B$ to the following functional equation for all $a \in A$:
 $$f(a) = \bif{\iszero(\eta(a))}{\chi(a)}{f(\varphi(a))}.$$
 ::::::::::::::::::::
