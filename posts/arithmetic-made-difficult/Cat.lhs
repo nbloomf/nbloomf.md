@@ -312,22 +312,22 @@ By (1), we have $\rev(x) = \rev(y)$, and thus $x = y$ as claimed.
 
 ::: test :::::::::::
 
-> _test_cat_left_cancellative :: (List t, Equal (t a), Boolean b, Equal b)
->   => t a -> b -> Test (t a -> t a -> t a -> Bool)
-> _test_cat_left_cancellative _ p =
+> _test_cat_left_cancellative :: (List t, Equal (t a))
+>   => t a -> Test (t a -> t a -> t a -> Bool)
+> _test_cat_left_cancellative _ =
 >   testName "eq(cat(z,x),cat(z,y)) == eq(x,y)" $
 >   \x y z -> eq
 >     (eq (cat z x) (cat z y))
->     ((eq x y) `withTypeOf` p)
+>     (eq x y)
 > 
 > 
-> _test_cat_right_cancellative :: (List t, Equal (t a), Boolean b, Equal b)
->   => t a -> b -> Test (t a -> t a -> t a -> Bool)
-> _test_cat_right_cancellative _ p =
+> _test_cat_right_cancellative :: (List t, Equal (t a))
+>   => t a -> Test (t a -> t a -> t a -> Bool)
+> _test_cat_right_cancellative _ =
 >   testName "eq(cat(x,z),cat(y,z)) == eq(x,y)" $
 >   \x y z -> eq
 >     (eq (cat x z) (cat y z))
->     ((eq x y) `withTypeOf` p)
+>     (eq x y)
 
 ::::::::::::::::::::
 ::::::::::::::::::::
@@ -433,10 +433,9 @@ Suite:
 > _test_cat ::
 >   ( TypeName a, Show a, Equal a, Arbitrary a
 >   , TypeName (t a), List t, Equal (t a), Show (t a), Arbitrary (t a)
->   , TypeName b, Boolean b, Equal b
->   ) => t a -> b -> Int -> Int -> IO ()
-> _test_cat t p size cases = do
->   testLabel2 "cat" t p
+>   ) => t a -> Int -> Int -> IO ()
+> _test_cat t size cases = do
+>   testLabel1 "cat" t
 > 
 >   let
 >     args = stdArgs
@@ -452,8 +451,8 @@ Suite:
 >   runTest args (_test_cat_nil_nil t)
 >   runTest args (_test_cat_associative t)
 >   runTest args (_test_cat_rev t)
->   runTest args (_test_cat_left_cancellative t p)
->   runTest args (_test_cat_right_cancellative t p)
+>   runTest args (_test_cat_left_cancellative t)
+>   runTest args (_test_cat_right_cancellative t)
 >   runTest args (_test_cat_right_identity_unique t)
 >   runTest args (_test_cat_left_identity_unique t)
 >   runTest args (_test_cat_nil_list_nil t)
@@ -462,5 +461,5 @@ Main:
 
 > main_cat :: IO ()
 > main_cat = do
->   _test_cat (nil :: ConsList Bool)  (true :: Bool) 20 100
->   _test_cat (nil :: ConsList Unary) (true :: Bool) 20 100
+>   _test_cat (nil :: ConsList Bool)  20 100
+>   _test_cat (nil :: ConsList Unary) 20 100

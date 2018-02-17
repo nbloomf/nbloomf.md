@@ -8,12 +8,12 @@ slug: booleans
 
 > {-# LANGUAGE NoImplicitPrelude #-}
 > module Booleans
->   ( Boolean, true, false, ifThenElse, isTrue, isFalse, Equal, eq
+>   ( Boolean, true, false, ifThenElse, isTrue, isFalse
 >   , _test_boolean, main_boolean
 >   ) where
 > 
-> import Prelude (Bool(True, False))
 > import Testing
+> import Functions
 
 Before we think about numbers or writing programs, let's start by nailing down some important ideas about truth values. In math there can be a kind of other-worldness about true and false, since they live in the "metalanguage" of mathematical logic rather than the "object language" of whatever we are studying. But it will turn out to be useful to algebraify the truth values themselves.
 
@@ -521,33 +521,6 @@ as claimed.
 ::::::::::::::::::::
 
 
-Equality
---------
-
-Now that we've algebraified truth values, we will also algebraify equality. Typically I think of equality (as in the $=$ symbol) as a metalanguage expression. Sure, we can define a relation that captures equality on a given set, but really equality is a "logical" thing, not a "mathematical" one. We'll express this using a type class in Haskell like so.
-
-> class Equal a where
->   eq :: (Boolean b) => a -> a -> b
-
-(Why not use the built in `Eq` class? No good reason.) For example, here is the ``Equal`` instance for ``Bool``:
-
-> instance Equal Bool where
->   eq p q = ifThenElse p (ifThenElse q true false) (ifThenElse q false true)
-> 
-> instance Equal () where
->   eq () () = true
-
-All our instances of `Equal` will be assumed to satisfy the following.
-
-:::::: axiom :::::::
-[]{#thm-eq-reflexive}[]{#thm-eq-symmetric}
-Let $A$ be a set.
-
-1. For all $a \in A$, we have $\beq(a,a) = \btrue$.
-2. For all $a,b \in A$, we have $\beq(a,b) = \beq(b,a)$.
-:::::::::::::::::::: 
-
-
 Testing
 -------
 
@@ -581,4 +554,7 @@ Suite:
 Main:
 
 > main_boolean :: IO ()
-> main_boolean = _test_boolean (true :: Bool) (true :: Bool) 20 100
+> main_boolean = do
+>   _test_boolean (true :: Bool) (true :: Bool) 20 100
+> 
+>   _test_functions (true :: Bool) (true :: Bool) (true :: Bool) (true :: Bool) 20 100

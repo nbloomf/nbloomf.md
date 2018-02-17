@@ -14,7 +14,6 @@ slug: unfoldn
 > import Testing
 > import Tuples
 > import DisjointUnions
-> import Booleans
 > import NaturalNumbers
 > import BailoutRecursion
 > import Lists

@@ -12,9 +12,9 @@ slug: divalg
 >   ) where
 >
 > import Testing
-> import Tuples
 > import Booleans
 > import And
+> import Tuples
 > import NaturalNumbers
 > import SimpleRecursion
 > import Plus

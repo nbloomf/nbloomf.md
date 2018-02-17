@@ -308,13 +308,13 @@ Since $b$ and $d$ are both not zero, using the uniqueness of quotients by nonzer
 
 ::: test :::::::::::
 
-> _test_div_cross_multiplication :: (Natural n, Equal n, Boolean b, Equal b)
->   => n -> b -> Test (n -> n -> n -> n -> Bool)
-> _test_div_cross_multiplication _ p =
+> _test_div_cross_multiplication :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> n -> Bool)
+> _test_div_cross_multiplication _ =
 >   testName "if div(b,a) and div(d,c) and b /= 0 and d /= 0 then times(a,d) == times(b,c) iff quo(a,b) == quo(c,d)" $
 >   \a b c d -> if and (and (div b a) (div d c)) (and (not (isZero b)) (not (isZero d)))
 >     then eq
->       ((eq (times a d) (times b c)) `withTypeOf` p)
+>       (eq (times a d) (times b c))
 >       (eq (quo a b) (quo c d))
 >     else true
 
@@ -354,7 +354,7 @@ Suite:
 >   runTest args (_test_div_leq n)
 >   runTest args (_test_div_quo_times_cancel n)
 >   runTest args (_test_div_quo_times_interchange n)
->   runTest args (_test_div_cross_multiplication n p)
+>   runTest args (_test_div_cross_multiplication n)
 
 Main:
 

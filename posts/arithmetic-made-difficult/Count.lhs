@@ -13,7 +13,6 @@ slug: count
 > 
 > import Testing
 > import Tuples
-> import Booleans
 > import NaturalNumbers
 > import Plus
 > import Lists

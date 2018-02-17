@@ -9,15 +9,15 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
 1. [Functions](/posts/arithmetic-made-difficult/Functions.html)
     * Flip
     * Dub
-2. Set Combinators
-    * [Tuples](/posts/arithmetic-made-difficult/Tuples.html)
-    * [Disjoint Unions](/posts/arithmetic-made-difficult/DisjointUnions.html)
-3. [Booleans](/posts/arithmetic-made-difficult/Booleans.html)
+2. [Booleans](/posts/arithmetic-made-difficult/Booleans.html)
     * [Not](/posts/arithmetic-made-difficult/Not.html)
     * [And](/posts/arithmetic-made-difficult/And.html)
     * [Or](/posts/arithmetic-made-difficult/Or.html)
     * [Implies](/posts/arithmetic-made-difficult/Implies.html)
     * [Predicates](/posts/arithmetic-made-difficult/Predicates.html)
+3. Set Combinators
+    * [Tuples](/posts/arithmetic-made-difficult/Tuples.html)
+    * [Disjoint Unions](/posts/arithmetic-made-difficult/DisjointUnions.html)
 4. $\mathbb{N}$
     * Type
         * [Natural Numbers](/posts/arithmetic-made-difficult/natural-numbers.html)

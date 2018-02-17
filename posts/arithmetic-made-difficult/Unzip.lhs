@@ -12,8 +12,8 @@ slug: unzip
 >   ) where
 > 
 > import Testing
-> import Tuples
 > import Booleans
+> import Tuples
 > import NaturalNumbers
 > import Lists
 > import Map

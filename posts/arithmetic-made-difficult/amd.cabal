@@ -8,15 +8,15 @@ library
     Haskell2010
   exposed-modules:
     Testing,
+    Functions,
+    Tuples,
+    DisjointUnions,
     Booleans,
     Not,
     And,
     Or,
     Implies,
-    Functions,
     Predicates,
-    Tuples,
-    DisjointUnions,
     Unary,
     NaturalNumbers,
     SimpleRecursion,
@@ -83,6 +83,15 @@ library
 
 
 
+test-suite amd-functions
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Functions.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options: -Wall -main-is Functions.main_functions
+  other-modules:
+    Testing
+
 test-suite amd-booleans
   default-language: Haskell2010
   type: exitcode-stdio-1.0
@@ -90,7 +99,8 @@ test-suite amd-booleans
   build-depends: base == 4.*, QuickCheck
   ghc-options: -Wall -main-is Booleans.main_boolean
   other-modules:
-    Testing
+    Testing,
+    Functions
 
 test-suite amd-not
   default-language: Haskell2010
@@ -100,6 +110,7 @@ test-suite amd-not
   ghc-options: -main-is Not.main_not
   other-modules:
     Testing,
+    Functions,
     Booleans
 
 test-suite amd-and
@@ -110,6 +121,7 @@ test-suite amd-and
   ghc-options: -Wall -main-is And.main_and
   other-modules:
     Testing,
+    Functions,
     Booleans,
     Not
 
@@ -121,6 +133,7 @@ test-suite amd-or
   ghc-options: -Wall -main-is Or.main_or
   other-modules:
     Testing,
+    Functions,
     Booleans,
     Not,
     And
@@ -133,20 +146,11 @@ test-suite amd-impl
   ghc-options: -Wall -main-is Implies.main_impl
   other-modules:
     Testing,
+    Functions,
     Booleans,
     Not,
     And,
     Or
-
-test-suite amd-functions
-  default-language: Haskell2010
-  type: exitcode-stdio-1.0
-  main-is: Functions.lhs
-  build-depends: base == 4.*, QuickCheck
-  ghc-options: -Wall -main-is Functions.main_functions
-  other-modules:
-    Testing,
-    Booleans
 
 test-suite amd-predicates
   default-language: Haskell2010
@@ -156,6 +160,7 @@ test-suite amd-predicates
   ghc-options: -Wall -main-is Predicates.main_predicate
   other-modules:
     Testing,
+    Functions,
     Booleans,
     Not,
     And,
@@ -170,12 +175,9 @@ test-suite amd-tuple
   ghc-options: -Wall -main-is Tuples.main_tuple
   other-modules:
     Testing,
+    Functions,
     Booleans,
-    Not,
-    And,
-    Or,
-    Implies,
-    Functions
+    And
 
 test-suite amd-disjoint-union
   default-language: Haskell2010
@@ -185,12 +187,8 @@ test-suite amd-disjoint-union
   ghc-options: -Wall -main-is DisjointUnions.main_disjoint_union
   other-modules:
     Testing,
-    Booleans,
-    Not,
-    And,
-    Or,
-    Implies,
-    Functions
+    Functions,
+    Booleans
 
 test-suite amd-nats
   default-language: Haskell2010

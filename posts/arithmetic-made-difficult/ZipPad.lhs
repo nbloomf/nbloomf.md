@@ -13,8 +13,8 @@ slug: zippad
 > 
 > import Testing
 > import Functions
-> import Tuples
 > import Booleans
+> import Tuples
 > import NaturalNumbers
 > import MaxAndMin
 > import Lists

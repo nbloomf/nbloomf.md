@@ -13,7 +13,6 @@ slug: length
 > 
 > import Testing
 > import Functions
-> import Booleans
 > import NaturalNumbers
 > import Plus
 > import Lists
@@ -462,13 +461,13 @@ in particular, $\length(x) \neq \zero$.
 ::: test :::::::::::
 
 > _test_length_zero
->   :: (List t, Equal (t a), Natural n, Equal n, Boolean b, Equal b)
->   => t a -> n -> b -> Test (t a -> Bool)
-> _test_length_zero _ k p =
+>   :: (List t, Equal (t a), Natural n, Equal n)
+>   => t a -> n -> Test (t a -> Bool)
+> _test_length_zero _ k =
 >   testName "eq(length(x),zero) == eq(x,nil)" $
 >   \x -> eq
 >     (eq (length x) (zero `withTypeOf` k))
->     ((eq x nil) `withTypeOf` p)
+>     (eq x nil)
 
 ::::::::::::::::::::
 ::::::::::::::::::::
@@ -483,9 +482,8 @@ Suite:
 >   ( TypeName a, Show a, Equal a, Arbitrary a
 >   , TypeName n, Natural n, Equal n, Show n, Arbitrary n
 >   , TypeName (t a), List t, Equal (t a), Show (t a), Arbitrary (t a)
->   , TypeName b, Boolean b, Equal b
->   ) => t a -> n -> b -> Int -> Int -> IO ()
-> _test_length t n p size cases = do
+>   ) => t a -> n -> Int -> Int -> IO ()
+> _test_length t n size cases = do
 >   testLabel2 "length" t n
 > 
 >   let
@@ -508,11 +506,11 @@ Suite:
 >   runTest args (_test_length_snoc t n)
 >   runTest args (_test_length_rev t n)
 >   runTest args (_test_length_cat t n)
->   runTest args (_test_length_zero t n p)
+>   runTest args (_test_length_zero t n)
 
 Main:
 
 > main_length :: IO ()
 > main_length = do
->   _test_length (nil :: ConsList Bool)  (zero :: Unary) (true :: Bool) 20 100
->   _test_length (nil :: ConsList Unary) (zero :: Unary) (true :: Bool) 20 100
+>   _test_length (nil :: ConsList Bool)  (zero :: Unary) 20 100
+>   _test_length (nil :: ConsList Unary) (zero :: Unary) 20 100

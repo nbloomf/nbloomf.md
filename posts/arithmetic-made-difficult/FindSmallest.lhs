@@ -12,9 +12,9 @@ slug: findsmallest
 > ) where
 > 
 > import Testing
-> import DisjointUnions
 > import Booleans
 > import And
+> import DisjointUnions
 > import NaturalNumbers
 > import BailoutRecursion
 > import Plus

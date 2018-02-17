@@ -14,7 +14,6 @@ slug: map
 > import Testing
 > import Functions
 > import DisjointUnions
-> import Booleans
 > import NaturalNumbers
 > import Lists
 > import HeadAndTail

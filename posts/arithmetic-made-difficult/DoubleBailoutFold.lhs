@@ -12,9 +12,9 @@ slug: dbfoldr
 > ) where
 > 
 > import Testing
+> import Booleans
 > import Tuples
 > import DisjointUnions
-> import Booleans
 > import NaturalNumbers
 > import Lists
 > import HeadAndTail

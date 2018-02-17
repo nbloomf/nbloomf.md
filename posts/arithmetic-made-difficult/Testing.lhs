@@ -33,6 +33,8 @@ We'll use the ``QuickCheck`` library to make our theorems testable. This is not 
 >   ( Test, runTest, testName, withTypeOf, TypeName(..)
 >   , testLabel0, testLabel1, testLabel2, testLabel3
 > 
+>   , Equal(..)
+> 
 >   , module Prelude
 >   , module Test.QuickCheck
 >   , module Test.QuickCheck.Test
@@ -40,7 +42,7 @@ We'll use the ``QuickCheck`` library to make our theorems testable. This is not 
 > 
 > 
 > import Prelude
->   ( Show(show), IO, Bool(), Int, Maybe(..), undefined, concat
+>   ( Show(show), IO, Int, Maybe(..), undefined, concat, Bool(..)
 >   , putStrLn, (>>), return, (++), String, (.), ($), Integer
 >   )
 > import Test.QuickCheck
@@ -102,3 +104,34 @@ The ``Test`` type, with ``testName``, is a shorthand for writing named tests.
 
 > withTypeOf :: a -> a -> a
 > withTypeOf x _ = x
+
+
+Equality
+--------
+
+Now that we've algebraified truth values, we will also algebraify equality. Typically I think of equality (as in the $=$ symbol) as a metalanguage expression. Sure, we can define a relation that captures equality on a given set, but really equality is a "logical" thing, not a "mathematical" one. We'll express this using a type class in Haskell like so.
+
+> class Equal a where
+>   eq :: a -> a -> Bool
+
+(Why not use the built in `Eq` class? No good reason.) For example, here is the ``Equal`` instance for ``Bool``:
+
+> instance Equal Bool where
+>   eq True  True  = True
+>   eq True  False = False
+>   eq False True  = False
+>   eq False False = True
+> 
+> instance Equal () where
+>   eq () () = True
+
+All our instances of `Equal` will be assumed to satisfy the following.
+
+:::::: axiom :::::::
+[]{#thm-eq-reflexive}[]{#thm-eq-symmetric}
+Let $A$ be a set.
+
+1. For all $a \in A$, we have $\beq(a,a) = \btrue$.
+2. For all $a,b \in A$, we have $\beq(a,b) = \beq(b,a)$.
+::::::::::::::::::::
+

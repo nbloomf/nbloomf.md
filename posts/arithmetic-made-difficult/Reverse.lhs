@@ -13,7 +13,6 @@ slug: rev
 > 
 > import Testing
 > import Functions
-> import Booleans
 > import Unary
 > import Lists
 > import HeadAndTail
@@ -433,13 +432,13 @@ as needed.
 >   \x -> eq (isNil (rev x)) (isNil x)
 > 
 > 
-> _test_rev_eq :: (List t, Equal (t a), Equal a, Boolean b, Equal b)
->   => t a -> b -> Test (t a -> t a -> Bool)
-> _test_rev_eq _ p =
+> _test_rev_eq :: (List t, Equal (t a), Equal a)
+>   => t a -> Test (t a -> t a -> Bool)
+> _test_rev_eq _ =
 >   testName "eq(rev(x),rev(y)) == eq(x,y)" $
 >   \x y -> eq
 >     (eq (rev x) (rev y))
->     ((eq x y) `withTypeOf` p)
+>     (eq x y)
 
 ::::::::::::::::::::
 ::::::::::::::::::::
@@ -512,9 +511,8 @@ Suite:
 > _test_rev ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a)
->   , TypeName b, Boolean b, Equal b
->   ) => t a -> b -> Int -> Int -> IO ()
-> _test_rev t p size cases = do
+>   ) => t a -> Int -> Int -> IO ()
+> _test_rev t size cases = do
 >   testLabel1 "rev" t
 > 
 >   let
@@ -535,12 +533,12 @@ Suite:
 >   runTest args (_test_rev_snoc t)
 >   runTest args (_test_rev_involution t)
 >   runTest args (_test_rev_isnil t)
->   runTest args (_test_rev_eq t p)
+>   runTest args (_test_rev_eq t)
 >   runTest args (_test_rev_foldl t)
 
 Main:
 
 > main_rev :: IO ()
 > main_rev = do
->   _test_rev (nil :: ConsList Bool)  (true :: Bool) 20 100
->   _test_rev (nil :: ConsList Unary) (true :: Bool) 20 100
+>   _test_rev (nil :: ConsList Bool)  20 100
+>   _test_rev (nil :: ConsList Unary) 20 100

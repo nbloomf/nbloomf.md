@@ -12,8 +12,8 @@ slug: mnormrec
 > ) where
 > 
 > import Testing
-> import DisjointUnions
 > import Booleans
+> import DisjointUnions
 > import Unary
 > import NaturalNumbers
 > import MutatingRecursion

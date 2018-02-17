@@ -1,13 +1,13 @@
 > import Testing
 > import Functions
-> import Tuples
-> import DisjointUnions
 > import Booleans
 > import Not
 > import And
 > import Or
 > import Implies
 > import Predicates
+> import Tuples
+> import DisjointUnions
 > import Unary
 > import NaturalNumbers
 > import SimpleRecursion

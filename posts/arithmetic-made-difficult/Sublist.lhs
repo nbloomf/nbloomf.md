@@ -12,9 +12,9 @@ slug: sublist
 >   ) where
 > 
 > import Testing
-> import Tuples
 > import Booleans
 > import And
+> import Tuples
 > import NaturalNumbers
 > import LessThanOrEqualTo
 > import Lists

@@ -14,7 +14,6 @@ slug: range
 > import Testing
 > import Tuples
 > import DisjointUnions
-> import Booleans
 > import NaturalNumbers
 > import Plus
 > import Lists

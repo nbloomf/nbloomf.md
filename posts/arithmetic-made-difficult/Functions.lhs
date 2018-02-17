@@ -12,7 +12,6 @@ slug: functions
 > ) where
 > 
 > import Testing
-> import Booleans
 
 Today we'll nail down some generic functions.
 
@@ -290,4 +289,4 @@ Main:
 
 > main_functions :: IO ()
 > main_functions = do
->   _test_functions (true :: Bool) (true :: Bool) (true :: Bool) (true :: Bool) 20 100
+>   _test_functions () () () () 1 1

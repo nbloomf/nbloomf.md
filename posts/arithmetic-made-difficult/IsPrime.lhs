@@ -13,9 +13,9 @@ slug: isprime
 > 
 > import Testing
 > import Functions
-> import DisjointUnions
 > import Booleans
 > import And
+> import DisjointUnions
 > import NaturalNumbers
 > import LessThanOrEqualTo
 > import Divides

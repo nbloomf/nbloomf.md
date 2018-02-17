@@ -13,7 +13,6 @@ slug: tails-inits
 > 
 > import Testing
 > import Tuples
-> import Booleans
 > import NaturalNumbers
 > import Lists
 > import ConsumingFold

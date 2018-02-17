@@ -12,8 +12,8 @@ slug: at
 >   ) where
 > 
 > import Testing
-> import DisjointUnions
 > import Booleans
+> import DisjointUnions
 > import NaturalNumbers
 > import BailoutRecursion
 > import Plus

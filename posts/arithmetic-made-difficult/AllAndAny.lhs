@@ -185,19 +185,19 @@ as needed.
 
 ::: test :::::::::::
 
-> _test_all_const_true :: (List t, Equal a, Boolean b, Equal b)
->   => t a -> b -> Test (t a -> Bool)
-> _test_all_const_true _ p =
+> _test_all_const_true :: (List t, Equal a)
+>   => t a -> Test (t a -> Bool)
+> _test_all_const_true _ =
 >   testName "all(ptrue)(x) == true" $
->   \x -> eq (all ptrue x) (true `withTypeOf` p)
+>   \x -> eq (all ptrue x) (true :: Bool)
 > 
 > 
-> _test_all_const_false :: (List t, Equal a, Equal (t a), Boolean b, Equal b)
->   => t a -> b -> Test (t a -> Bool)
-> _test_all_const_false _ p =
+> _test_all_const_false :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> Bool)
+> _test_all_const_false _ =
 >   testName "all(pfalse)(x) == false iff x /= nil" $
 >   \x -> eq
->     ((eq (all pfalse x) (false `withTypeOf` p)) `withTypeOf` p)
+>     (eq (all pfalse x) (false :: Bool))
 >     (not (eq x nil))
 
 ::::::::::::::::::::
@@ -521,19 +521,19 @@ as needed.
 
 ::: test :::::::::::
 
-> _test_any_const_false :: (List t, Equal a, Boolean b, Equal b)
->   => t a -> b -> Test (t a -> Bool)
-> _test_any_const_false _ p =
+> _test_any_const_false :: (List t, Equal a)
+>   => t a -> Test (t a -> Bool)
+> _test_any_const_false _ =
 >   testName "any(pfalse,x) == false" $
->   \x -> eq (any pfalse x) (false `withTypeOf` p)
+>   \x -> eq (any pfalse x) (false :: Bool)
 > 
 > 
-> _test_any_const_true :: (List t, Equal a, Equal (t a), Boolean b, Equal b)
->   => t a -> b -> Test (t a -> Bool)
-> _test_any_const_true _ p =
+> _test_any_const_true :: (List t, Equal a, Equal (t a))
+>   => t a -> Test (t a -> Bool)
+> _test_any_const_true _ =
 >   testName "any(ptrue,x) == true iff x /= nil" $
 >   \x -> eq
->     ((eq (any ptrue x) (true `withTypeOf` p)) `withTypeOf` p)
+>     (eq (any ptrue x) (true :: Bool))
 >     (not (eq x nil))
 
 ::::::::::::::::::::
@@ -632,9 +632,8 @@ Suite:
 >   ( TypeName a, Show a, Equal a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
 >   , Show (t a), Equal (t a), Arbitrary (t a)
->   , TypeName b, Boolean b, Equal b
->   ) => t a -> b -> Int -> Int -> IO ()
-> _test_all_any t p size cases = do
+>   ) => t a -> Int -> Int -> IO ()
+> _test_all_any t size cases = do
 >   testLabel1 "all & any" t
 > 
 >   let
@@ -647,8 +646,8 @@ Suite:
 >   runTest args (_test_all_cons t)
 >   runTest args (_test_all_snoc t)
 >   runTest args (_test_all_fold_and t)
->   runTest args (_test_all_const_true t p)
->   runTest args (_test_all_const_false t p)
+>   runTest args (_test_all_const_true t)
+>   runTest args (_test_all_const_false t)
 >   runTest args (_test_all_cat t)
 >   runTest args (_test_all_rev t)
 >   runTest args (_test_all_map t)
@@ -658,8 +657,8 @@ Suite:
 >   runTest args (_test_any_fold_or t)
 >   runTest args (_test_any_not_all t)
 >   runTest args (_test_all_not_any t)
->   runTest args (_test_all_const_false t p)
->   runTest args (_test_all_const_true t p)
+>   runTest args (_test_all_const_false t)
+>   runTest args (_test_all_const_true t)
 >   runTest args (_test_any_cat t)
 >   runTest args (_test_any_rev t)
 >   runTest args (_test_any_map t)
@@ -668,5 +667,5 @@ Main:
 
 > main_all_any :: IO ()
 > main_all_any = do
->   _test_all_any (nil :: ConsList Bool)  (true :: Bool) 20 100
->   _test_all_any (nil :: ConsList Unary) (true :: Bool) 20 100
+>   _test_all_any (nil :: ConsList Bool)  20 100
+>   _test_all_any (nil :: ConsList Unary) 20 100

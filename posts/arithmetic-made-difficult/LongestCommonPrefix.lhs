@@ -12,10 +12,10 @@ slug: lcp-lcs
 >   ) where
 > 
 > import Testing
-> import Tuples
 > import Booleans
 > import Not
 > import And
+> import Tuples
 > import NaturalNumbers
 > import Lists
 > import DoubleFold

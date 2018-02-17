@@ -13,9 +13,9 @@ slug: take-drop
 > 
 > import Testing
 > import Functions
+> import Booleans
 > import Tuples
 > import DisjointUnions
-> import Booleans
 > import NaturalNumbers
 > import BailoutRecursion
 > import MaxAndMin

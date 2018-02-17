@@ -12,11 +12,8 @@ slug: mutrec
 >   ) where
 > 
 > import Testing
-> import DisjointUnions
 > import Booleans
-> import Not
-> import And
-> import Or
+> import DisjointUnions
 > import NaturalNumbers
 
 Note that both simple recursion and bailout recursion produce functions with type $$\nats \times A \rightarrow B;$$ we can call that $A$ argument the *parameter*. Now simple and bailout recursion use the parameter in different ways. Simple recursion is only allowed to change $A$ "outside" the recursive call, while bailout recursion can only change $A$ "inside" the recursive call. These restrictions were necessary so that simple and bailout recursion would have tail-recursive implementations. But there are times when we will want a recursive function with signature $\nats \times A \rightarrow B$ that can change its $A$ parameter both inside and outside the recursion.
@@ -114,11 +111,11 @@ And there's the definition from the proof:
 > mutatingRec' epsilon beta psi chi omega n a =
 >   naturalRec delta sigma n (a,n)
 >   where
->     delta (a,n) = epsilon a
+>     delta (b,_) = epsilon b
 > 
->     sigma g (a,n) = ifThenElse (beta (prev n) a)
->       (psi (prev n) a)
->       (chi (prev n) a (g (omega (prev n) a, (prev n))))
+>     sigma g (b,m) = ifThenElse (beta (prev m) b)
+>       (psi (prev m) b)
+>       (chi (prev m) b (g (omega (prev m) b, (prev m))))
 
 The naive implementation of mutating recursion is not tail recursive, and I think (without proof) that no truly tail recursive implementation exists (that is sort of the reason for this operator).
 

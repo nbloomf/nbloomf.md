@@ -13,7 +13,6 @@ slug: zip
 > 
 > import Testing
 > import Tuples
-> import Booleans
 > import NaturalNumbers
 > import MaxAndMin
 > import Lists

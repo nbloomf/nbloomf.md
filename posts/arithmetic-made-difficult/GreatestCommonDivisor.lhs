@@ -12,10 +12,10 @@ slug: gcd
 >   ) where
 >
 > import Testing
-> import Tuples
-> import DisjointUnions
 > import Booleans
 > import And
+> import Tuples
+> import DisjointUnions
 > import NaturalNumbers
 > import Plus
 > import Times

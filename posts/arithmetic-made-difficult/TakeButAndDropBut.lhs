@@ -12,31 +12,14 @@ slug: takebut-dropbut
 >   ) where
 > 
 > import Testing
-> import Tuples
 > import Booleans
 > import NaturalNumbers
-> import Plus
-> import MaxAndMin
 > import Lists
 > import Snoc
 > import Reverse
 > import Cat
-> import Length
-> import Map
-> import UnfoldN
-> import Zip
 > import PrefixAndSuffix
-> import AllAndAny
-> import TailsAndInits
-> import Filter
-> import Elt
-> import Count
-> import Repeat
 > import Sublist
-> import Select
-> import Unique
-> import Delete
-> import Dedupe
 > import TakeAndDrop
 
 Today we'll define two functions, $\takeBut$ and $\dropBut$, analogous to $\take$ and $\drop$, but acting from the end of the list rather than from the beginning. We'd like $\takeBut$ to have a signature like $$\takeBut : \nats \rightarrow {\lists{A}}^{\lists{A}}$$ such that $\takeBut(k)(x)$ is obtained by lopping off the last $k$ items in $x$, and similarly $\dropBut(k)(x)$ lops off all but the last $k$ items. The simplest way to do this is with $\take$, $\drop$, and $\rev$; explicit recursion is not required.
@@ -145,7 +128,7 @@ as needed.
 
 > _test_takeBut_prefix :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> Bool)
-> _test_takeBut_prefix _ m =
+> _test_takeBut_prefix _ _ =
 >   testName "prefix(takeBut(k,x),x) == true" $
 >   \k x -> eq (prefix (takeBut k x) x) true
 
@@ -165,7 +148,7 @@ We have $$\prefix(\takeBut(k,x),x) = \btrue,$$ so $$\infix(\takeBut(k,x),x) = \b
 
 > _test_takeBut_sublist :: (List t, Equal a, Natural n, Equal n, Equal (t a))
 >   => t a -> n -> Test (n -> t a -> Bool)
-> _test_takeBut_sublist _ m =
+> _test_takeBut_sublist _ _ =
 >   testName "sublist(takeBut(k,x),x) == true" $
 >   \k x -> eq (sublist (takeBut k x) x) true
 

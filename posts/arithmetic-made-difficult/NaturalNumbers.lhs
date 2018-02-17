@@ -16,8 +16,8 @@ slug: nats
 > 
 > import Testing
 > import Functions
-> import DisjointUnions
 > import Booleans
+> import DisjointUnions
 > import Unary
 
 We have assumed the existence of a set $\nats$ such that there is a unique inductive set homomorphism from $\nats$ to any other inductive set. But it turns out that this set is not *unique* with this property; any other inductive set which is *isomorphic* to $\nats$ enjoys it as well. In fact we've already seen one such set, namely $1 + \nats$.

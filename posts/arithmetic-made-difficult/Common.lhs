@@ -12,7 +12,6 @@ slug: common
 > ) where
 > 
 > import Testing
-> import Booleans
 > import And
 > import Unary
 > import Lists

@@ -13,10 +13,10 @@ slug: head-tail
 > 
 > import Testing
 > import Functions
-> import Tuples
-> import DisjointUnions
 > import Booleans
 > import Not
+> import Tuples
+> import DisjointUnions
 > import NaturalNumbers
 > import Lists
 

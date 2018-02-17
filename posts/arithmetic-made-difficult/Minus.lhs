@@ -12,9 +12,9 @@ slug: minus
 >   ) where
 >
 > import Testing
-> import DisjointUnions
 > import Booleans
 > import And
+> import DisjointUnions
 > import NaturalNumbers
 > import BailoutRecursion
 > import Plus
@@ -289,12 +289,12 @@ as needed.
 
 ::: test :::::::::::
 
-> _test_minus_plus_equiv :: (Natural n, Equal n, Boolean b, Equal b)
->   => n -> b -> Test (n -> n -> n -> Bool)
-> _test_minus_plus_equiv _ p =
+> _test_minus_plus_equiv :: (Natural n, Equal n)
+>   => n -> Test (n -> n -> n -> Bool)
+> _test_minus_plus_equiv _ =
 >   testName "(minus(b,a) == rgt(c)) == (plus(a,c) == b)" $
 >   \a b c -> eq
->     ((eq (minus b a) (rgt c)) `withTypeOf` p)
+>     (eq (minus b a) (rgt c))
 >     (eq (plus a c) b)
 
 ::::::::::::::::::::
@@ -502,10 +502,9 @@ Testing
 
 > _test_minus ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
->   , TypeName b, Boolean b, Equal b
->   ) => n -> b -> Int -> Int -> IO ()
-> _test_minus n p size cases = do
->   testLabel2 "minus" n p
+>   ) => n -> Int -> Int -> IO ()
+> _test_minus n size cases = do
+>   testLabel1 "minus" n
 > 
 >   let
 >     args = stdArgs
@@ -519,7 +518,7 @@ Testing
 >   runTest args (_test_minus_zero_next n)
 >   runTest args (_test_minus_next_next n)
 >   runTest args (_test_minus_nat_next n)
->   runTest args (_test_minus_plus_equiv n p)
+>   runTest args (_test_minus_plus_equiv n)
 >   runTest args (_test_minus_cancellative_left n)
 >   runTest args (_test_minus_cancellative_right n)
 >   runTest args (_test_minus_plus_right n)
@@ -534,4 +533,4 @@ Main:
 
 > main_minus :: IO ()
 > main_minus = do
->   _test_minus (zero :: Unary) (true :: Bool) 30 50
+>   _test_minus (zero :: Unary) 30 50
