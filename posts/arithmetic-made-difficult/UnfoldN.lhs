@@ -36,7 +36,7 @@ How can we fix this? One strategy would be to impose some kind of constraint on 
 
 Another strategy -- and the one we will take -- is to give unfold a natural number argument that acts as a countdown timer. If it reaches $\zero$, we're done. (This also explains the ``N`` in $\unfoldN{\ast}$.) This strategy also makes it possible to define $\unfoldN{\ast}$ using bailout recursion on $\nats$.
 
-Before defining $\unfoldN{\ast}$, we need a helper operator, $\tacunfoldN{\ast}$, analogous to $\revcat$. "tac" is a bad pun on "reverse cat" -- since that's kind of what this operator does.
+Before defining $\unfoldN{\ast}$, we need a helper operator, $\tacunfoldN(\ast)$, analogous to $\revcat$. "tac" is a bad pun on "reverse cat" -- since that's kind of what this operator does.
 
 :::::: theorem :::::
 Let $A$ and $B$ be sets, and let $f : A \rightarrow 1 + (A \times B)$. There is a unique function $$\Theta : \lists{B} \times \nats \times A \rightarrow \lists{B}$$ such that for all $a \in A$, $x \in \lists{A}$, and $n \in \nats$, we have $$\Theta(x,\zero,a) = x$$ and
@@ -44,7 +44,7 @@ $$\Theta(x,\next(n),a) = \left\{\begin{array}{ll}
  x & \mathrm{if}\ f(a) = \lft(\ast) \\
  \Theta(\snoc(b,x),n,c) & \mathrm{if}\ f(a) = \rgt((c,b)).
 \end{array}\right.$$
-We denote this unique map $\tacunfoldN{f}$.
+We denote this unique map $\tacunfoldN(f)$.
 
 ::: proof ::::::::::
 We define $\varphi : A \times \lists{B} \rightarrow \lists{B}$ by $$\varphi(a,x) = x,$$ $\beta : \nats \rightarrow (A \times \lists{B}) \rightarrow \bool$ by $$\beta = \compose(\const)(\compose(\compose(\isLft)))(\flip(\compose)(\fst)),$$ $\psi : \nats \times (A \times \lists{B}) \rightarrow \lists{B}$ by $$\psi(n,(a,x)) = x,$$ and $\omega : \nats \times (A \times \lists{B}) \rightarrow A \times \lists{B}$ by
@@ -52,18 +52,18 @@ $$\omega(n,(a,x)) = \left\{\begin{array}{ll}
  (a,x) & \mathrm{if}\ f(a) = \lft(\ast) \\
  (c,\snoc(b,x)) & \mathrm{if}\ f(a) = \rgt((c,b)).
 \end{array}\right.$$
-Finally, define $$\tacunfoldN{f}(x,n,a) = \bailrec(\varphi)(\beta)(\psi)(\omega)(n,(a,x)).$$ For brevity, in this proof we let $\Omega = \bailrec(\varphi)(\beta)(\psi)(\omega)$.
+Finally, define $$\tacunfoldN(f)(x,n,a) = \bailrec(\varphi)(\beta)(\psi)(\omega)(n,(a,x)).$$ For brevity, in this proof we let $\Omega = \bailrec(\varphi)(\beta)(\psi)(\omega)$.
 
-First we show that $\tacunfoldN{f}$ has the desired properties. To this end, note that
+First we show that $\tacunfoldN(f)$ has the desired properties. To this end, note that
 $$\begin{eqnarray*}
- &   & \tacunfoldN{f}(x,\zero,a) \\
+ &   & \tacunfoldN(f)(x,\zero,a) \\
  & = & \Omega(\zero,(a,x)) \\
  & = & \varphi(a,x) \\
  & = & x.
 \end{eqnarray*}$$
 Now suppose $f(a) = \lft(\ast)$; then
 $$\begin{eqnarray*}
- &   & \tacunfoldN{f}(x,\next(n),a) \\
+ &   & \tacunfoldN(f)(x,\next(n),a) \\
  & = & \Omega(\next(n),(a,x)) \\
  & = & \bif{\beta(a,x)}{\psi(a,x)}{\Omega(n,\omega(n,(a,x)))} \\
  & = & \bif{\isLft(f(a))}{\psi(a,x)}{\Omega(n,\omega(n,(a,x)))} \\
@@ -73,40 +73,40 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed. Suppose instead that $f(a) = \rgt(c,b)$. Then
 $$\begin{eqnarray*}
- &   & \tacunfoldN{f}(x,\next(n),a) \\
+ &   & \tacunfoldN(f)(x,\next(n),a) \\
  & = & \Omega(\next(n),(a,x)) \\
  & = & \bif{\beta(a,x)}{\psi(a,x)}{\Omega(n,\omega(n,(a,x)))} \\
  & = & \bif{\isLft(f(a))}{\psi(a,x)}{\Omega(n,\omega(n,(a,x)))} \\
  & = & \bif{\bfalse}{\psi(a,x)}{\Omega(n,\omega(n,(a,x)))} \\
  & = & \Omega(n,(c,\snoc(b,x))) \\
- & = & \tacunfoldN{f}(\snoc(b,x),n,c)
+ & = & \tacunfoldN(f)(\snoc(b,x),n,c)
 \end{eqnarray*}$$
 as needed.
 
-To see uniqueness, suppose now that $\Psi : \lists{B} \times \nats \times A \rightarrow \lists{B}$ has these properties. We show that $\Psi = \tacunfoldN{f}$ by induction on $n$. For the base case $n = \zero$, we have
+To see uniqueness, suppose now that $\Psi : \lists{B} \times \nats \times A \rightarrow \lists{B}$ has these properties. We show that $\Psi = \tacunfoldN(f)$ by induction on $n$. For the base case $n = \zero$, we have
 $$\begin{eqnarray*}
  &   & \Psi(x,\zero,a) \\
  & = & x \\
- & = & \tacunfoldN{f}(x,\zero,a)
+ & = & \tacunfoldN(f)(x,\zero,a)
 \end{eqnarray*}$$
-as needed. For the inductive step, suppose we have $\Psi(x,n,a) = \tacunfoldN{f}(x,n,a)$ for all $x$ and $a$ for some $n$. Let $a \in A$. If $f(a) = \lft(\ast)$, then
+as needed. For the inductive step, suppose we have $\Psi(x,n,a) = \tacunfoldN(f)(x,n,a)$ for all $x$ and $a$ for some $n$. Let $a \in A$. If $f(a) = \lft(\ast)$, then
 $$\begin{eqnarray*}
  &   & \Psi(x,\next(n),a) \\
  & = & x \\
- & = & \tacunfoldN{f}(x,\next(n),a)
+ & = & \tacunfoldN(f)(x,\next(n),a)
 \end{eqnarray*}$$
 as needed. If $f(a) = \rgt((c,b))$, then
 $$\begin{eqnarray*}
  &   & \Psi(x,\next(n),a) \\
  & = & \Psi(\snoc(b,x),n,c) \\
- & = & \tacunfoldN{f}(\snoc(b,x),n,c) \\
- & = & \tacunfoldN{f}(x,\next(n),a)
+ & = & \tacunfoldN(f)(\snoc(b,x),n,c) \\
+ & = & \tacunfoldN(f)(x,\next(n),a)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-We can implement $\tacunfoldN{f}$ using the definition from the proof, or by pattern matching using the universal property.
+We can implement $\tacunfoldN(f)$ using the definition from the proof, or by pattern matching using the universal property.
 
 > tacunfoldN', tacunfoldN
 >   :: (List t, Natural n)
@@ -136,7 +136,7 @@ We should test that these two implementations agree.
 >   testName "tacunfoldN(x,n,a) == tacunfoldN'(x,n,a)" $
 >   \f x n a -> eq (tacunfoldN f x n a) (tacunfoldN' f x n a)
 
-And while we're at it, test that $\tacunfoldN{f}$ does satisfy the universal property.
+And while we're at it, test that $\tacunfoldN(f)$ does satisfy the universal property.
 
 > _test_tacunfoldN_zero :: (List t, Equal (t a), Natural n)
 >   => t a -> n -> Test ((a -> Union () (Pair a a)) -> t a -> a -> Bool)
@@ -153,32 +153,32 @@ And while we're at it, test that $\tacunfoldN{f}$ does satisfy the universal pro
 >     Left ()          -> eq (tacunfoldN f x (next n) a) x
 >     Right (Pair c b) -> eq (tacunfoldN f x (next n) a) (tacunfoldN f (snoc b x) n c)
 
-$\tacunfoldN{f}$ interacts with $\cons$.
+$\tacunfoldN(f)$ interacts with $\cons$.
 
 :::::: theorem :::::
-We have $$\tacunfoldN{f}(\cons(b,x),n,a) = \cons(b,\tacunfoldN{f}(x,n,a)).$$
+We have $$\tacunfoldN(f)(\cons(b,x),n,a) = \cons(b,\tacunfoldN(f)(x,n,a)).$$
 
 ::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$, we have
 $$\begin{eqnarray*}
- &   & \tacunfoldN{f}(\cons(b,x),\zero,a) \\
+ &   & \tacunfoldN(f)(\cons(b,x),\zero,a) \\
  & = & \cons(b,x) \\
- & = & \cons(b,\tacunfoldN{f}(x,\zero,a))
+ & = & \cons(b,\tacunfoldN(f)(x,\zero,a))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$, $b$, and $x$ for some $n$. If $f(a) = \lft(\ast)$, we have
 $$\begin{eqnarray*}
- &   & \tacunfoldN{f}(\cons(b,x),\next(n),a) \\
+ &   & \tacunfoldN(f)(\cons(b,x),\next(n),a) \\
  & = & \cons(b,x) \\
- & = & \cons(b,\tacunfoldN{f}(x,n,a))
+ & = & \cons(b,\tacunfoldN(f)(x,n,a))
 \end{eqnarray*}$$
 as needed, while if $f(a) = \rgt((c,d))$ we have
 $$\begin{eqnarray*}
- &   & \tacunfoldN{f}(\cons(b,x),\next(n),a) \\
- & = & \tacunfoldN{f}(\snoc(d,\cons(b,x)),n,c) \\
+ &   & \tacunfoldN(f)(\cons(b,x),\next(n),a) \\
+ & = & \tacunfoldN(f)(\snoc(d,\cons(b,x)),n,c) \\
  &     \href{@snoc@#cor-snoc-cons}
-   = & \tacunfoldN{f}(\cons(b,\snoc(d,x)),n,c) \\
- & = & \cons(b,\tacunfoldN{f}(\snoc(d,x),n,c)) \\
- & = & \cons(b,\tacunfoldN{f}(x,\next(n),a))
+   = & \tacunfoldN(f)(\cons(b,\snoc(d,x)),n,c) \\
+ & = & \cons(b,\tacunfoldN(f)(\snoc(d,x),n,c)) \\
+ & = & \cons(b,\tacunfoldN(f)(x,\next(n),a))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -194,32 +194,32 @@ as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-$\tacunfoldN{f}$ interacts with $\cat$.
+$\tacunfoldN(f)$ interacts with $\cat$.
 
 :::::: theorem :::::
-Let $A$ and $B$ be sets with $f : A \rightarrow 1 + (A \times B)$. For all $a \in A$, $x,y \in \lists{B}$, and $n \in \nats$, we have $$\tacunfoldN{f}(\cat(x,y),n,a) = \cat(x,\tacunfoldN{f}(y,n,a)).$$
+Let $A$ and $B$ be sets with $f : A \rightarrow 1 + (A \times B)$. For all $a \in A$, $x,y \in \lists{B}$, and $n \in \nats$, we have $$\tacunfoldN(f)(\cat(x,y),n,a) = \cat(x,\tacunfoldN(f)(y,n,a)).$$
 
 ::: proof ::::::::::
 We proceed by induction on $n$. For the base case $n = \zero$, we have
 $$\begin{eqnarray*}
- &   & \tacunfoldN{f}(\cat(x,y),\zero,a) \\
+ &   & \tacunfoldN(f)(\cat(x,y),\zero,a) \\
  & = & \cat(x,y) \\
- & = & \cat(x,\tacunfoldN{f}(y,\zero,a))
+ & = & \cat(x,\tacunfoldN(f)(y,\zero,a))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $x$, $y$, and $a$ for some $n$. Now let $a \in A$; we have two possibilities for $f(a)$. If $f(a) = \lft(\ast)$, we have
 $$\begin{eqnarray*}
- &   & \tacunfoldN{f}(\cat(x,y),\next(n),a) \\
+ &   & \tacunfoldN(f)(\cat(x,y),\next(n),a) \\
  & = & \cat(x,y) \\
- & = & \cat(x,\tacunfoldN{f}(y,\next(n),a))
+ & = & \cat(x,\tacunfoldN(f)(y,\next(n),a))
 \end{eqnarray*}$$
 as needed. Suppose instead that $f(a) = \rgt((c,d))$. Now
 $$\begin{eqnarray*}
- &   & \tacunfoldN{f}(\cat(x,y),\next(n),a) \\
- & = & \tacunfoldN{f}(\snoc(d,\cat(x,y)),n,c) \\
+ &   & \tacunfoldN(f)(\cat(x,y),\next(n),a) \\
+ & = & \tacunfoldN(f)(\snoc(d,\cat(x,y)),n,c) \\
  &     \href{@cat@#thm-cat-snoc-right}
-   = & \tacunfoldN{f}(\cat(x,\snoc(d,y)),n,c) \\
- & = & \cat(x,\tacunfoldN{f}(\snoc(d,y),n,c)) \\
- & = & \cat(x,\tacunfoldN{f}(y,\next(n),a))
+   = & \tacunfoldN(f)(\cat(x,\snoc(d,y)),n,c) \\
+ & = & \cat(x,\tacunfoldN(f)(\snoc(d,y),n,c)) \\
+ & = & \cat(x,\tacunfoldN(f)(y,\next(n),a))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -235,10 +235,10 @@ as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-Now we can define $\unfoldN{\ast}$ in terms of $\tacunfoldN{\ast}$.
+Now we can define $\unfoldN{\ast}$ in terms of $\tacunfoldN(\ast)$.
 
 :::::: definition ::
-Let $A$ and $B$ be sets, with $f : A \rightarrow 1 + (A \times B)$. we define $\unfoldN{f} : \nats \times A \rightarrow \lists{B}$ by $$\unfoldN{f}(n,a) = \tacunfoldN{f}(\nil,n,a).$$
+Let $A$ and $B$ be sets, with $f : A \rightarrow 1 + (A \times B)$. we define $\unfoldN{f} : \nats \times A \rightarrow \lists{B}$ by $$\unfoldN{f}(n,a) = \tacunfoldN(f)(\nil,n,a).$$
 
 In Haskell:
 
@@ -265,24 +265,24 @@ $$\left\{\begin{array}{l}
 To see that $\unfoldN{\ast}$ satisfies the first equation, note that
 $$\begin{eqnarray*}
  &   & \unfoldN{f}(\zero,a) \\
- & = & \tacunfoldN{f}(\nil,\zero,a) \\
+ & = & \tacunfoldN(f)(\nil,\zero,a) \\
  & = & \nil
 \end{eqnarray*}$$
 as needed. We show the second by induction on $n$. For the base case $n = \zero$, if $a \in A$ and $f(a) = \lft(\ast)$ we have
 $$\begin{eqnarray*}
  &   & \unfoldN{f}(\next(\zero),a) \\
- & = & \tacunfoldN{f}(\nil,\next(\zero),a) \\
+ & = & \tacunfoldN(f)(\nil,\next(\zero),a) \\
  & = & \nil
 \end{eqnarray*}$$
 as needed, and if $f(a) = \rgt((c,b))$ we have
 $$\begin{eqnarray*}
  &   & \unfoldN{f}(\next(\zero),a) \\
- & = & \tacunfoldN{f}(\nil,\next(\zero),a) \\
- & = & \tacunfoldN{f}(\snoc(b,\nil),\zero,c) \\
+ & = & \tacunfoldN(f)(\nil,\next(\zero),a) \\
+ & = & \tacunfoldN(f)(\snoc(b,\nil),\zero,c) \\
  & = & \snoc(b,\nil) \\
  &     \href{@snoc@#cor-snoc-nil}
    = & \cons(b,\nil) \\
- & = & \cons(b,\tacunfoldN{f}(\nil,\zero,a)) \\
+ & = & \cons(b,\tacunfoldN(f)(\nil,\zero,a)) \\
  & = & \cons(b,\unfoldN{f}(\zero,a))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ for some $n$. Let $a \in A$. If $f(a) = \lft(\ast)$, we have
@@ -294,11 +294,11 @@ $$\begin{eqnarray*}
 as needed, while if $f(a) = \rgt((c,b))$ we have
 $$\begin{eqnarray*}
  &   & \unfoldN{f}(\next(n),a) \\
- & = & \tacunfoldN{f}(\nil,\next(n),a) \\
- & = & \tacunfoldN{f}(\snoc(b,\nil),n,c) \\
+ & = & \tacunfoldN(f)(\nil,\next(n),a) \\
+ & = & \tacunfoldN(f)(\snoc(b,\nil),n,c) \\
  &     \href{@snoc@#cor-snoc-nil}
-   = & \tacunfoldN{f}(\cons(b,\nil),n,c) \\
- & = & \cons(b,\tacunfoldN{f}(\nil,n,c)) \\
+   = & \tacunfoldN(f)(\cons(b,\nil),n,c) \\
+ & = & \cons(b,\tacunfoldN(f)(\nil,n,c)) \\
  & = & \cons(b,\unfoldN{f}(n,c))
 \end{eqnarray*}$$
 as needed.
