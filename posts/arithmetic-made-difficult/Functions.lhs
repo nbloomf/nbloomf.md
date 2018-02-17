@@ -230,8 +230,8 @@ Suite:
 >   , Equal b, Show b, Arbitrary b, CoArbitrary b
 >   , Equal c, Show c, Arbitrary c, CoArbitrary c
 >   , Equal d, Show d, Arbitrary d, CoArbitrary d
->   ) => a -> b -> c -> d -> Int -> Int -> IO ()
-> _test_functions a b c d size cases = do
+>   ) => Int -> Int -> a -> b -> c -> d -> IO ()
+> _test_functions size cases a b c d = do
 >   testLabel0 "Functions"
 >   let args = testArgs size cases
 > 
@@ -245,4 +245,4 @@ Main:
 
 > main_functions :: IO ()
 > main_functions = do
->   _test_functions () () () () 1 1
+>   _test_functions 1 1 () () () ()

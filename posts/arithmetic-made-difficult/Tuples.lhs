@@ -14,6 +14,7 @@ slug: tuples
 > 
 > import Testing
 > import Functions
+> import Flip
 > import Booleans
 > import And
 
@@ -504,7 +505,6 @@ Suite:
 >   => a -> b -> c -> Int -> Int -> IO ()
 > _test_tuple a b c size cases = do
 >   testLabel3 "Tuple" a b c
-> 
 >   let args = testArgs size cases
 > 
 >   runTest args (_test_dup_fst_snd a b)
@@ -521,4 +521,13 @@ Suite:
 Main:
 
 > main_tuple :: IO ()
-> main_tuple = _test_tuple (true :: Bool) (true :: Bool) (true :: Bool) 20 100
+> main_tuple = do
+>   _test_tuple (true :: Bool) (true :: Bool) (true :: Bool) 20 100
+> 
+>   -- old suites, new types
+>   _test_functions 20 100
+>     (tup true true :: Pair Bool Bool) (tup true true :: Pair Bool Bool)
+>     (tup true true :: Pair Bool Bool) (tup true true :: Pair Bool Bool)
+> 
+>   _test_flip (true :: Bool) (true :: Bool) (true :: Bool)
+>     (true :: Bool) (true :: Bool) (true :: Bool) (true :: Bool) 20 100

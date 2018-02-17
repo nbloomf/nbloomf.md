@@ -555,7 +555,8 @@ Main:
 >   _test_boolean (true :: Bool) (true :: Bool) 20 100
 > 
 >   -- old suites, new types
->   _test_functions (true :: Bool) (true :: Bool) (true :: Bool) (true :: Bool) 20 100
+>   _test_functions 20 100
+>     (true :: Bool) (true :: Bool) (true :: Bool) (true :: Bool)
 > 
 >   _test_flip (true :: Bool) (true :: Bool) (true :: Bool) (true :: Bool)
 >     (true :: Bool) (true :: Bool) (true :: Bool) 20 100
