@@ -1,7 +1,7 @@
 ---
 title: Clone
 author: nbloomf
-date: 2018-02-17
+date: 2018-02-18
 tags: arithmetic-made-difficult, literate-haskell
 slug: clone
 ---
@@ -57,6 +57,34 @@ as claimed.
 > _test_clone_flip _ _ =
 >   testName "clone(flip(f)) == clone(f)" $
 >   \f a -> eq (clone (flip f) a) (clone f a)
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+$\clone$ is a left inverse of $\const$.
+
+:::::: theorem :::::
+[]{#thm-clone-const}
+Let $A$ be a set. For all $x \in A$ we have $$\clone(\const)(x) = x.$$
+
+::: proof ::::::::::
+We have
+$$\begin{eqnarray*}
+ &   & \clone(\const)(x) \\
+ &     \href{@clone@#def-clone}
+   = & \const(x)(x) \\
+ &     \href{@functions@#def-const}
+   = & x
+\end{eqnarray*}$$
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_clone_const
+>   :: (Equal a) => a -> Test (a -> Bool)
+> _test_clone_const _ _ =
+>   testName "clone(const)(x) == x" $
+>   \x -> eq (clone const x) x
 
 ::::::::::::::::::::
 ::::::::::::::::::::
@@ -126,6 +154,7 @@ Suite:
 >   let args = testArgs size cases
 > 
 >   runTest args (_test_clone_flip a b)
+>   runTest args (_test_clone_const a b)
 >   runTest args (_test_clone3 a b)
 
 Main:

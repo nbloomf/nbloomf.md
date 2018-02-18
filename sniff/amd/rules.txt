@@ -34,6 +34,7 @@
 #=======================#
 @clone@#def-clone	\\clone(f)(x) = f(x)(x)
 @clone@#thm-clone-flip	\\clone(\\flip(f)) = \\clone(f)
+@clone@#thm-clone-const	\\clone(\\const)(x) = x
 @clone@#def-clone3	\\cloneC = \\compose(\\clone)(\\compose(\\clone))
 @clone@#thm-clone3	\\cloneC(f)(x) = f(x)(x)(x)
 #=======================#
