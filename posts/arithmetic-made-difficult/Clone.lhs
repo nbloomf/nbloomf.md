@@ -82,7 +82,7 @@ $$\begin{eqnarray*}
 
 > _test_clone_const
 >   :: (Equal a) => a -> Test (a -> Bool)
-> _test_clone_const _ _ =
+> _test_clone_const _ =
 >   testName "clone(const)(x) == x" $
 >   \x -> eq (clone const x) x
 
@@ -154,7 +154,7 @@ Suite:
 >   let args = testArgs size cases
 > 
 >   runTest args (_test_clone_flip a b)
->   runTest args (_test_clone_const a b)
+>   runTest args (_test_clone_const a)
 >   runTest args (_test_clone3 a b)
 
 Main:
