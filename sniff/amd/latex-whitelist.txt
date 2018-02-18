@@ -27,6 +27,8 @@
 \cfoldr
 \chi
 \circ
+\clone
+\cloneC
 \cod
 \common
 \compose

@@ -10,6 +10,7 @@ library
     Testing,
     Functions,
     Flip,
+    Clone,
     Booleans,
     Not,
     And,
@@ -103,6 +104,17 @@ test-suite amd-flip
     Testing,
     Functions
 
+test-suite amd-clone
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Clone.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options: -Wall -main-is Clone.main_clone
+  other-modules:
+    Testing,
+    Functions,
+    Flip
+
 test-suite amd-booleans
   default-language: Haskell2010
   type: exitcode-stdio-1.0
@@ -112,7 +124,8 @@ test-suite amd-booleans
   other-modules:
     Testing,
     Functions,
-    Flip
+    Flip,
+    Clone
 
 test-suite amd-not
   default-language: Haskell2010
@@ -123,6 +136,7 @@ test-suite amd-not
   other-modules:
     Testing,
     Functions,
+    Flip,
     Booleans
 
 test-suite amd-and
@@ -188,6 +202,8 @@ test-suite amd-tuple
   other-modules:
     Testing,
     Functions,
+    Flip,
+    Clone,
     Booleans,
     And,
     Not
@@ -201,6 +217,8 @@ test-suite amd-disjoint-union
   other-modules:
     Testing,
     Functions,
+    Flip,
+    Clone,
     Booleans
 
 test-suite amd-nats
@@ -474,6 +492,7 @@ test-suite amd-gcd
     Or,
     Implies,
     Functions,
+    Flip,
     Tuples,
     DisjointUnions,
     Unary,
@@ -586,6 +605,8 @@ test-suite amd-prime
     Or,
     Implies,
     Functions,
+    Flip,
+    Clone,
     Tuples,
     DisjointUnions,
     Unary,
@@ -675,6 +696,7 @@ test-suite amd-head-tail
     Or,
     Implies,
     Functions,
+    Flip,
     Tuples,
     DisjointUnions,
     Unary,
@@ -733,6 +755,8 @@ test-suite amd-bfoldr
     Or,
     Implies,
     Functions,
+    Flip,
+    Clone,
     Tuples,
     DisjointUnions,
     Unary,
@@ -873,6 +897,8 @@ test-suite amd-at
     Or,
     Implies,
     Functions,
+    Flip,
+    Clone,
     Tuples,
     DisjointUnions,
     Unary,
@@ -1043,6 +1069,8 @@ test-suite amd-zippad
     Or,
     Implies,
     Functions,
+    Flip,
+    Clone,
     Tuples,
     DisjointUnions,
     Unary,
@@ -1507,6 +1535,7 @@ test-suite amd-infix
     Or,
     Implies,
     Functions,
+    Flip,
     Predicates,
     Tuples,
     DisjointUnions,
@@ -1613,6 +1642,7 @@ test-suite amd-unique
     Or,
     Implies,
     Functions,
+    Flip,
     Predicates,
     Tuples,
     DisjointUnions,
@@ -1726,6 +1756,7 @@ test-suite amd-dedupe
     Or,
     Implies,
     Functions,
+    Flip,
     Predicates,
     Tuples,
     DisjointUnions,
@@ -1903,6 +1934,7 @@ test-suite amd-sublists
     Or,
     Implies,
     Functions,
+    Flip,
     Predicates,
     Tuples,
     DisjointUnions,

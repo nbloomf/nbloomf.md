@@ -14,6 +14,7 @@ slug: disjoint-unions
 > 
 > import Testing
 > import Functions
+> import Flip
 > import Booleans
 
 Dual to sets of tuples are disjoint sums.
@@ -139,12 +140,12 @@ The previous results suggest that we can model $A + B$ with the Haskell type ``E
 >   arbitrary = do
 >     s <- arbitrary
 >     if s
->       then do
->         a <- arbitrary
->         return (Left a)
->       else do
->         b <- arbitrary
->         return (Right b)
+>       then arbitrary >>= (return . Left)
+>       else arbitrary >>= (return . Right)
+> 
+> instance (CoArbitrary a, CoArbitrary b) => CoArbitrary (Union a b) where
+>   coarbitrary (Left  a) = variant (0 :: Int) . coarbitrary a
+>   coarbitrary (Right b) = variant (1 :: Int) . coarbitrary b
 
 For example, $\id_{A + B}$ is an $\either$.
 
@@ -812,3 +813,14 @@ Main:
 > main_disjoint_union :: IO ()
 > main_disjoint_union = do
 >   _test_disjoint_union (true :: Bool) (true :: Bool) (true :: Bool) 20 100
+> 
+>   -- old suites, new types
+>   _test_functions 20 100
+>     (lft true :: Union Bool Bool) (lft true :: Union Bool Bool)
+>     (lft true :: Union Bool Bool) (lft true :: Union Bool Bool)
+> 
+>   _test_flip
+>     (lft true :: Union Bool Bool) (lft true :: Union Bool Bool)
+>     (lft true :: Union Bool Bool) (lft true :: Union Bool Bool)
+>     (lft true :: Union Bool Bool) (lft true :: Union Bool Bool)
+>     (lft true :: Union Bool Bool) 20 100

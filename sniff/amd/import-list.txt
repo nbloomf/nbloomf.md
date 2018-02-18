@@ -1,6 +1,7 @@
 > import Testing
 > import Functions
 > import Flip
+> import Clone
 > import Booleans
 > import Not
 > import And

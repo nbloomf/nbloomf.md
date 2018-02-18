@@ -30,6 +30,13 @@
 @flip@#def-flip5	\\flipE = \\compose(\\compose)(\\compose(\\compose)(\\compose(\\compose)(\\compose)))(\\flip)
 @flip@#thm-flip5	\\flipE(f)(a)(b)(c)(d)(e)(f) = f(a)(b)(c)(d)(f)(e)
 #=======================#
+#--- clone -------------#
+#=======================#
+@clone@#def-clone	\\clone(f)(x) = f(x)(x)
+@clone@#thm-clone-flip	\\clone(\\flip(f)) = \\clone(f)
+@clone@#def-clone3	\\cloneC = \\compose(\\clone)(\\compose(\\clone))
+@clone@#thm-clone3	\\cloneC(f)(x) = f(x)(x)(x)
+#=======================#
 #--- booleans ----------#
 #=======================#
 @booleans@#cor-if-true	\\bif{\\btrue}{a}{b} = a

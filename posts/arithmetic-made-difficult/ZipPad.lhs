@@ -12,7 +12,6 @@ slug: zippad
 >   ) where
 > 
 > import Testing
-> import Functions
 > import Flip
 > import Tuples
 > import NaturalNumbers

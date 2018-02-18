@@ -12,7 +12,6 @@ slug: rev
 >   ) where
 > 
 > import Testing
-> import Functions
 > import Flip
 > import Unary
 > import Lists

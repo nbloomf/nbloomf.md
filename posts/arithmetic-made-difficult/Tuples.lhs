@@ -8,8 +8,8 @@ slug: tuples
 
 > {-# LANGUAGE NoImplicitPrelude, FlexibleContexts #-}
 > module Tuples
->   ( Pair(Pair,fst,snd), dup, tup, tswap, tpair, tassocL, tassocR, uncurry, curry
->   , _test_tuple, main_tuple
+>   ( Pair(Pair,fst,snd), dup, tup, tswap, tpair, tassocL, tassocR
+>   , uncurry, curry, _test_tuple, main_tuple
 >   ) where
 > 
 > import Testing

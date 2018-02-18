@@ -15,6 +15,7 @@ slug: booleans
 > import Testing
 > import Functions
 > import Flip
+> import Clone
 
 Before we think about numbers or writing programs, let's start by nailing down some important ideas about truth values. In math there can be a kind of other-worldness about true and false, since they live in the "metalanguage" of mathematical logic rather than the "object language" of whatever we are studying. But it will turn out to be useful to algebraify the truth values themselves.
 
@@ -528,13 +529,12 @@ Testing
 Suite:
 
 > _test_boolean ::
->   ( Equal a, Arbitrary a, CoArbitrary a, Show a
->   , Boolean b, Arbitrary b, Show b, Equal b, TypeName b
->   )
->   => b -> a -> Int -> Int -> IO ()
-> _test_boolean p x size cases = do
->   testLabel1 "Boolean" p
+>   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
+>   , TypeName b, Equal b, Show b, Arbitrary b, CoArbitrary b, Boolean b
+>   ) => Int -> Int -> b -> a -> IO ()
 > 
+> _test_boolean size cases p x = do
+>   testLabel2 "Boolean" p x
 >   let args = testArgs size cases
 > 
 >   runTest args (_test_if_true p x)
@@ -552,11 +552,9 @@ Main:
 
 > main_boolean :: IO ()
 > main_boolean = do
->   _test_boolean (true :: Bool) (true :: Bool) 20 100
+>   let a = true :: Bool
+>   _test_boolean   20 100 a a
 > 
->   -- old suites, new types
->   _test_functions 20 100
->     (true :: Bool) (true :: Bool) (true :: Bool) (true :: Bool)
-> 
->   _test_flip (true :: Bool) (true :: Bool) (true :: Bool) (true :: Bool)
->     (true :: Bool) (true :: Bool) (true :: Bool) 20 100
+>   _test_functions 20 100 a a a a
+>   _test_flip      a a a a a a a 20 100
+>   _test_clone     20 100 a a
