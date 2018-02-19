@@ -38,10 +38,11 @@
 @clone@#def-clone3	\\cloneC = \\compose(\\clone)(\\compose(\\clone))
 @clone@#thm-clone3	\\cloneC(f)(x) = f(x)(x)(x)
 #=======================#
-#--- clone -------------#
+#--- compose -----------#
 #=======================#
-@compose@#def-compose2	\\composeB = \\compose(\\compose(\\compose(\\flip)))(\\compose(\\compose(\\compose))(\\compose(\\compose(\\flip))(\\compose)))
-@compose@#thm-compose2
+@compose@#def-compose2	\\composeB = \\flipC(\\compose(\\compose(\\compose(\\compose)))(\\compose))
+@compose@#thm-compose2	\\composeB(f)(g)(h)(x)(y) = f(g(x))(h(y))
+@compose@#def-compose3	\\composeC = \\flipD(\\flipE(\\flipC(\\compose(\\compose(\\compose(\\compose(\\compose(\\compose)))))(\\compose(\\compose(\\compose(\\compose)))(\\compose)))))
 #=======================#
 #--- booleans ----------#
 #=======================#

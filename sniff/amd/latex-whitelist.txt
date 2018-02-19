@@ -33,6 +33,7 @@
 \common
 \compose
 \composeB
+\composeC
 \cons
 \const
 \count

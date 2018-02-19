@@ -8,26 +8,27 @@ slug: compose
 
 > {-# LANGUAGE NoImplicitPrelude #-}
 > module Composition (
->   compose2, _test_compose, main_compose
+>   compose2, compose3, _test_compose, main_compose
 > ) where
 > 
 > import Testing
 > import Functions
 > import Flip
 
+(@@@)
+
 :::::: definition ::
 []{#def-compose2}
-We define $$\composeB : (C \rightarrow D \rightarrow E) \rightarrow (A \rightarrow C) \rightarrow (B \rightarrow D) \rightarrow A \rightarrow B \rightarrow E$$ by $$\composeB = \compose(\compose(\compose(\flip)))(\compose(\compose(\compose))(\compose(\compose(\flip))(\compose)))$$
+We define $$\composeB : (C \rightarrow D \rightarrow E) \rightarrow (A \rightarrow C) \rightarrow (B \rightarrow D) \rightarrow A \rightarrow B \rightarrow E$$ by $$\composeB = \flipC(\compose(\compose(\compose(\compose)))(\compose))$$
 
 In Haskell:
 
 > compose2 :: (c -> d -> e) -> (a -> c) -> (b -> d) -> a -> b -> e
-> compose2 =
->   compose
->     (compose (compose flip))
->     (compose (compose compose) (compose (compose flip) compose))
+> compose2 = flip3 (compose (compose (compose compose)) compose)
 
 ::::::::::::::::::::
+
+(@@@)
 
 :::::: theorem :::::
 []{#thm-compose2}
@@ -38,27 +39,17 @@ We have
 $$\begin{eqnarray*}
  &   & \composeB(f)(g)(h)(x)(y) \\
  &     \href{@compose@#def-compose2}
-   = & \compose(\compose(\compose(\flip)))(\compose(\compose(\compose))(\compose(\compose(\flip))(\compose)))(f)(g)(h)(x)(y) \\
+   = & \flipC(\compose(\compose(\compose(\compose)))(\compose))(f)(g)(h)(x)(y) \\
+ &     \href{@flip@#thm-flip3}
+   = & \compose(\compose(\compose(\compose)))(\compose)(f)(g)(x)(h)(y) \\
  &     \href{@functions@#def-compose}
-   = & \compose(\compose(\flip))(\compose(\compose(\compose))(\compose(\compose(\flip))(\compose))(f))(g)(h)(x)(y) \\
+   = & \compose(\compose(\compose))(\compose(f))(g)(x)(h)(y) \\
  &     \href{@functions@#def-compose}
-   = & \compose(\compose(\flip))(\compose(\compose)(\compose(\compose(\flip))(\compose)(f)))(g)(h)(x)(y) \\
+   = & \compose(\compose)(\compose(f)(g))(x)(h)(y) \\
  &     \href{@functions@#def-compose}
-   = & \compose(\compose(\flip))(\compose(\compose)(\compose(\flip)(\compose(f))))(g)(h)(x)(y) \\
+   = & \compose(\compose(f)(g)(x))(h)(y) \\
  &     \href{@functions@#def-compose}
-   = & \compose(\flip)(\compose(\compose)(\compose(\flip)(\compose(f)))(g))(h)(x)(y) \\
- &     \href{@functions@#def-compose}
-   = & \compose(\flip)(\compose(\compose(\flip)(\compose(f))(g)))(h)(x)(y) \\
- &     \href{@functions@#def-compose}
-   = & \compose(\flip)(\compose(\flip(\compose(f)(g))))(h)(x)(y) \\
- &     \href{@functions@#def-compose}
-   = & \flip(\compose(\flip(\compose(f)(g)))(h))(x)(y) \\
- &     \href{@flip@#def-flip}
-   = & \compose(\flip(\compose(f)(g)))(h)(y)(x) \\
- &     \href{@functions@#def-compose}
-   = & \flip(\compose(f)(g))(h(y))(x) \\
- &     \href{@flip@#def-flip}
-   = & \compose(f)(g)(x)(h(y)) \\
+   = & \compose(f(g(x)))(h)(y) \\
  &     \href{@functions@#def-compose}
    = & f(g(x))(h(y))
 \end{eqnarray*}$$
@@ -76,6 +67,41 @@ as claimed.
 >   \f g h x y -> eq (compose2 f g h x y) (f (g x) (h y))
 
 ::::::::::::::::::::
+::::::::::::::::::::
+
+(@@@)
+
+:::::: definition ::
+[]{#def-compose3}
+We define
+$$\begin{eqnarray*}
+\composeC
+  & : & (D \rightarrow E \rightarrow F \rightarrow G) \\
+  &   & \rightarrow (A \rightarrow D) \\
+  &   & \rightarrow (B \rightarrow E) \\
+  &   & \rightarrow (C \rightarrow F) \\
+  &   & \rightarrow A \rightarrow B \rightarrow C \rightarrow G
+\end{eqnarray*}$$
+by $$\composeC = \flipD(\flipE(\flipC(\compose(\compose(\compose(\compose(\compose(\compose)))))(\compose(\compose(\compose(\compose)))(\compose)))))$$
+
+In Haskell:
+
+> compose3
+>   :: (d -> e -> f -> g)
+>   -> (a -> d)
+>   -> (b -> e)
+>   -> (c -> f)
+>   -> a -> b -> c -> g
+> 
+> compose3 =
+>   flip4 (flip5 (flip3 (
+>     compose
+>       (compose (compose (compose (compose compose))))
+>       (compose
+>         (compose (compose compose))
+>         (compose))
+>   )))
+
 ::::::::::::::::::::
 
 Testing

@@ -1694,6 +1694,7 @@ test-suite amd-unique
     Implies,
     Functions,
     Flip,
+    Clone,
     Predicates,
     Tuples,
     DisjointUnions,
