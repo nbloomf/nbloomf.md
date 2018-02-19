@@ -15,6 +15,7 @@ slug: disjoint-unions
 > import Testing
 > import Functions
 > import Flip
+> import Clone
 > import Booleans
 
 Dual to sets of tuples are disjoint sums.
@@ -45,7 +46,7 @@ Let $A$ and $B$ be sets.
 3. $\lft : A \rightarrow A+B$ and $\rgt : B \rightarrow A+B$ are injective.
 
 ::: proof ::::::::::
-1. Suppose to the contrary that there exists some $z \in A+B$ which is not of the form $\lft(a)$ or $\rgt(b)$ for any $a$ or $b$. Now consider $$f = \const(\btrue)$$ and $$g(x) = \\bif{\beq(x,z)}{\bfalse}{\btrue}$$ as functions $A+B \rightarrow \bool$. Note in particular that if $a \in A$ we have
+1. Suppose to the contrary that there exists some $z \in A+B$ which is not of the form $\lft(a)$ or $\rgt(b)$ for any $a$ or $b$. Now consider $$f = \const(\btrue)$$ and $$g(x) = \bif{\beq(x,z)}{\bfalse}{\btrue}$$ as functions $A+B \rightarrow \bool$. Note in particular that if $a \in A$ we have
 $$\begin{eqnarray*}
  &   & \compose(f)(\lft)(a) \\
  &     \href{@functions@#def-compose}
@@ -146,6 +147,10 @@ The previous results suggest that we can model $A + B$ with the Haskell type ``E
 > instance (CoArbitrary a, CoArbitrary b) => CoArbitrary (Union a b) where
 >   coarbitrary (Left  a) = variant (0 :: Int) . coarbitrary a
 >   coarbitrary (Right b) = variant (1 :: Int) . coarbitrary b
+> 
+> instance (TypeName a, TypeName b) => TypeName (Union a b) where
+>   typeName _ =
+>     "Union " ++ typeName (undefined :: a) ++ " " ++ typeName (undefined :: b)
 
 For example, $\id_{A + B}$ is an $\either$.
 
@@ -772,15 +777,12 @@ Testing
 Suite:
 
 > _test_disjoint_union
->   :: ( Show a, Show b, Show c
->      , Equal a, Equal b, Equal c
->      , Arbitrary a, Arbitrary b, Arbitrary c
->      , TypeName a, TypeName b, TypeName c
->      , CoArbitrary a, CoArbitrary b )
->   => a -> b -> c -> Int -> Int -> IO ()
-> _test_disjoint_union a b c size cases = do
+>   :: ( Equal a, Show a, Arbitrary a, CoArbitrary a, TypeName a
+>      , Equal b, Show b, Arbitrary b, CoArbitrary b, TypeName b
+>      , Equal c, Show c, Arbitrary c, CoArbitrary c, TypeName c
+>   ) => Int -> Int -> a -> b -> c -> IO ()
+> _test_disjoint_union size cases a b c = do
 >   testLabel3 "Disjoint Union" a b c
-> 
 >   let args = testArgs size cases
 > 
 >   runTest args (_test_either_lft_rgt a b)
@@ -807,20 +809,15 @@ Suite:
 >   runTest args (_test_isRgt_lft a b)
 >   runTest args (_test_isRgt_rgt a b)
 
-
 Main:
 
 > main_disjoint_union :: IO ()
 > main_disjoint_union = do
->   _test_disjoint_union (true :: Bool) (true :: Bool) (true :: Bool) 20 100
+>   _test_disjoint_union 20 100
+>    (true :: Bool) (true :: Bool) (true :: Bool)
 > 
->   -- old suites, new types
->   _test_functions 20 100
->     (lft true :: Union Bool Bool) (lft true :: Union Bool Bool)
->     (lft true :: Union Bool Bool) (lft true :: Union Bool Bool)
+>   let a = lft true :: Union Bool Bool
 > 
->   _test_flip
->     (lft true :: Union Bool Bool) (lft true :: Union Bool Bool)
->     (lft true :: Union Bool Bool) (lft true :: Union Bool Bool)
->     (lft true :: Union Bool Bool) (lft true :: Union Bool Bool)
->     (lft true :: Union Bool Bool) 20 100
+>   _test_functions 20 100 a a a a
+>   _test_flip      20 100 a a a a a a a
+>   _test_clone     20 100 a a

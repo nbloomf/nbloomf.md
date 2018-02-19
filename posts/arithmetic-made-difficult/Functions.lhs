@@ -226,10 +226,10 @@ Testing
 Suite:
 
 > _test_functions ::
->   ( Equal a, Show a, Arbitrary a, CoArbitrary a
->   , Equal b, Show b, Arbitrary b, CoArbitrary b
->   , Equal c, Show c, Arbitrary c, CoArbitrary c
->   , Equal d, Show d, Arbitrary d, CoArbitrary d
+>   ( Equal a, Show a, Arbitrary a, CoArbitrary a, TypeName a
+>   , Equal b, Show b, Arbitrary b, CoArbitrary b, TypeName b
+>   , Equal c, Show c, Arbitrary c, CoArbitrary c, TypeName c
+>   , Equal d, Show d, Arbitrary d, CoArbitrary d, TypeName d
 >   ) => Int -> Int -> a -> b -> c -> d -> IO ()
 > _test_functions size cases a b c d = do
 >   testLabel0 "Functions"

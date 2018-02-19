@@ -15,6 +15,7 @@ slug: tuples
 > import Testing
 > import Functions
 > import Flip
+> import Clone
 > import Booleans
 > import And
 
@@ -115,6 +116,9 @@ In Haskell we can model $A \times B$, and the maps in the universal property, wi
 > 
 > instance (CoArbitrary a, CoArbitrary b) => CoArbitrary (Pair a b) where
 >   coarbitrary (Pair a b) = coarbitrary a . coarbitrary b
+> 
+> instance (TypeName a, TypeName b) => TypeName (Pair a b) where
+>   typeName (Pair a b) = "Pair " ++ typeName a ++ " " ++ typeName b
 
 $\dup$ is a $\tup$.
 
@@ -497,13 +501,11 @@ Testing
 Suite:
 
 > _test_tuple
->   :: ( Show a, Show b, Show c
->      , Equal a, Equal b, Equal c
->      , Arbitrary a, Arbitrary b, Arbitrary c
->      , TypeName a, TypeName b, TypeName c
->      , CoArbitrary a, CoArbitrary b )
->   => a -> b -> c -> Int -> Int -> IO ()
-> _test_tuple a b c size cases = do
+>   :: ( Equal a, Show a, Arbitrary a, CoArbitrary a, TypeName a
+>      , Equal b, Show b, Arbitrary b, CoArbitrary b, TypeName b
+>      , Equal c, Show c, Arbitrary c, CoArbitrary c, TypeName c
+>   ) => Int -> Int -> a -> b -> c -> IO ()
+> _test_tuple size cases a b c = do
 >   testLabel3 "Tuple" a b c
 >   let args = testArgs size cases
 > 
@@ -522,12 +524,10 @@ Main:
 
 > main_tuple :: IO ()
 > main_tuple = do
->   _test_tuple (true :: Bool) (true :: Bool) (true :: Bool) 20 100
+>   _test_tuple 20 100 (true :: Bool) (true :: Bool) (true :: Bool)
 > 
->   -- old suites, new types
->   _test_functions 20 100
->     (tup true true :: Pair Bool Bool) (tup true true :: Pair Bool Bool)
->     (tup true true :: Pair Bool Bool) (tup true true :: Pair Bool Bool)
+>   let a = tup true true :: Pair Bool Bool
 > 
->   _test_flip (true :: Bool) (true :: Bool) (true :: Bool)
->     (true :: Bool) (true :: Bool) (true :: Bool) (true :: Bool) 20 100
+>   _test_functions 20 100 a a a a
+>   _test_flip      20 100 a a a a a a a
+>   _test_clone     20 100 a a

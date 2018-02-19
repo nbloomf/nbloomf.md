@@ -163,12 +163,12 @@ Testing
 Suite:
 
 > _test_not ::
->   ( Equal a, Arbitrary a, CoArbitrary a, Show a
->   , Boolean b, Arbitrary b, Show b, Equal b
->   )
->   => b -> a -> Int -> Int -> IO ()
-> _test_not p x size cases = do
->   testLabel0 "Bool"
+>   ( Equal a, Show a, Arbitrary a, CoArbitrary a, TypeName a
+>   , Equal b, Show b, Arbitrary b, CoArbitrary b, TypeName b, Boolean b
+>   ) => Int -> Int -> b -> a -> IO ()
+> 
+> _test_not size cases p x = do
+>   testLabel2 "Bool" p x
 > 
 >   let args = testArgs size cases
 >  
@@ -180,4 +180,6 @@ Suite:
 Main:
 
 > main_not :: IO ()
-> main_not = _test_not (true :: Bool) (true :: Bool) 20 100
+> main_not = do
+>   _test_not 20 100 (true :: Bool) ()
+>   _test_not 20 100 (true :: Bool) (true :: Bool)

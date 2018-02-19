@@ -138,12 +138,12 @@ And we can flip the third and fourth arguments.
 
 :::::: definition ::
 []{#def-flip3}
-Let $A$, $B$, $C$, $D$, and $E$ be sets. Given $f : A \rightarrow B \rightarrow C \rightarrow D \rightarrow E$, we define $\flipC(f) : A \rightarrow B \rightarrow D \rightarrow C \rightarrow E$ by $$\flipC = \compose(\compose)(\compose)(\flip).$$
+Let $A$, $B$, $C$, $D$, and $E$ be sets. We define $$\flipC : (A \rightarrow B \rightarrow C \rightarrow D \rightarrow E) \rightarrow A \rightarrow B \rightarrow D \rightarrow C \rightarrow E$$ by $$\flipC = \compose(\compose(\flip)).$$
 
 In Haskell:
 
 > flip3 :: (a -> b -> c -> d -> e) -> a -> b -> d -> c -> e
-> flip3 = compose compose compose flip
+> flip3 = compose (compose flip)
 
 ::::::::::::::::::::
 
@@ -158,8 +158,6 @@ We have
 $$\begin{eqnarray*}
  &   & \flipC(f)(a)(b)(d)(c) \\
  &     \href{@flip@#def-flip3}
-   = & \compose(\compose)(\compose)(\flip)(f)(a)(b)(d)(c) \\
- &     \href{@functions@#def-compose}
    = & \compose(\compose(\flip))(f)(a)(b)(d)(c) \\
  &     \href{@functions@#def-compose}
    = & \compose(\flip)(f(a))(b)(d)(c) \\
@@ -188,7 +186,7 @@ We'll look at two more examples, to see the pattern emerging.
 
 :::::: definition ::
 []{#def-flip4}
-Given $f : A \rightarrow B \rightarrow C \rightarrow D \rightarrow E \rightarrow F$, we define $\flipD(f) : A \rightarrow B \rightarrow C \rightarrow E \rightarrow D \rightarrow F$ by $$\flipD = \compose(\compose)(\compose(\compose)(\compose))(\flip).$$
+We define $\flipD : (A \rightarrow B \rightarrow C \rightarrow D \rightarrow E \rightarrow F) \rightarrow A \rightarrow B \rightarrow C \rightarrow E \rightarrow D \rightarrow F$ by $$\flipD = \compose(\compose(\compose(\flip))).$$
 
 In Haskell:
 
@@ -197,9 +195,7 @@ In Haskell:
 >   -> a -> b -> c -> e -> d -> f
 > 
 > flip4 =
->   compose compose
->     (compose compose compose)
->   flip
+>   compose (compose (compose flip))
 
 ::::::::::::::::::::
 
@@ -214,10 +210,6 @@ We have
 $$\begin{eqnarray*}
  &   & \flipD(f)(a)(b)(c)(e)(d) \\
  &     \href{@flip@#def-flip4}
-   = & \compose(\compose)(\compose(\compose)(\compose))(\flip)(f)(a)(b)(c)(e)(d) \\
- &     \href{@functions@#def-compose}
-   = & \compose(\compose(\compose)(\compose)(\flip))(f)(a)(b)(c)(e)(d) \\
- &     \href{@functions@#def-compose}
    = & \compose(\compose(\compose(\flip)))(f)(a)(b)(c)(e)(d) \\
  &     \href{@functions@#def-compose}
    = & \compose(\compose(\flip))(f(a))(b)(c)(e)(d) \\
@@ -247,7 +239,7 @@ One more.
 
 :::::: definition ::
 []{#def-flip5}
-Given $$f : A \rightarrow B \rightarrow C \rightarrow D \rightarrow E \rightarrow F \rightarrow G,$$ we define $$\flipE(f) : A \rightarrow B \rightarrow C \rightarrow D \rightarrow F \rightarrow E \rightarrow G$$ by $$\flipE = \compose(\compose)(\compose(\compose)(\compose(\compose)(\compose)))(\flip).$$
+We define $$\flipE : (A \rightarrow B \rightarrow C \rightarrow D \rightarrow E \rightarrow F \rightarrow G) \rightarrow A \rightarrow B \rightarrow C \rightarrow D \rightarrow F \rightarrow E \rightarrow G$$ by $$\flipE = \compose(\compose(\compose(\compose(\flip)))).$$
 
 In Haskell:
 
@@ -255,11 +247,7 @@ In Haskell:
 >   :: (a -> b -> c -> d -> e -> f -> g)
 >   -> a -> b -> c -> d -> f -> e -> g
 > 
-> flip5 =
->   compose compose
->     (compose compose
->       (compose compose compose))
->   flip
+> flip5 = compose (compose (compose (compose flip)))
 
 ::::::::::::::::::::
 
@@ -274,12 +262,6 @@ We have
 $$\begin{eqnarray*}
  &   & \flipE(f)(a)(b)(c)(d)(f)(e) \\
  &     \href{@flip@#def-flip5}
-   = & \compose(\compose)(\compose(\compose)(\compose(\compose)(\compose)))(\flip)(f)(a)(b)(c)(d)(f)(e) \\
- &     \href{@functions@#def-compose}
-   = & \compose(\compose(\compose)(\compose(\compose)(\compose))(\flip))(f)(a)(b)(c)(d)(f)(e) \\
- &     \href{@functions@#def-compose}
-   = & \compose(\compose(\compose(\compose)(\compose)(\flip)))(f)(a)(b)(c)(d)(f)(e) \\
- &     \href{@functions@#def-compose}
    = & \compose(\compose(\compose(\compose(\flip))))(f)(a)(b)(c)(d)(f)(e) \\
  &     \href{@functions@#def-compose}
    = & \compose(\compose(\compose(\flip)))(f(a))(b)(c)(d)(f)(e) \\
@@ -318,15 +300,16 @@ Testing
 Suite:
 
 > _test_flip ::
->   ( Equal a, Show a, Arbitrary a, CoArbitrary a
->   , Equal b, Show b, Arbitrary b, CoArbitrary b
->   , Equal c, Show c, Arbitrary c, CoArbitrary c
->   , Equal d, Show d, Arbitrary d, CoArbitrary d
->   , Equal e, Show e, Arbitrary e, CoArbitrary e
->   , Equal f, Show f, Arbitrary f, CoArbitrary f
->   , Equal g, Show g, Arbitrary g, CoArbitrary g
->   ) => a -> b -> c -> d -> e -> f -> g -> Int -> Int -> IO ()
-> _test_flip a b c d e f g size cases = do
+>   ( Equal a, Show a, Arbitrary a, CoArbitrary a, TypeName a
+>   , Equal b, Show b, Arbitrary b, CoArbitrary b, TypeName b
+>   , Equal c, Show c, Arbitrary c, CoArbitrary c, TypeName c
+>   , Equal d, Show d, Arbitrary d, CoArbitrary d, TypeName d
+>   , Equal e, Show e, Arbitrary e, CoArbitrary e, TypeName e
+>   , Equal f, Show f, Arbitrary f, CoArbitrary f, TypeName f
+>   , Equal g, Show g, Arbitrary g, CoArbitrary g, TypeName g
+>   ) => Int -> Int -> a -> b -> c -> d -> e -> f -> g -> IO ()
+> 
+> _test_flip size cases a b c d e f g = do
 >   testLabel0 "flip"
 >   let args = testArgs size cases
 > 
@@ -341,4 +324,4 @@ Main:
 
 > main_flip :: IO ()
 > main_flip = do
->   _test_flip () () () () () () () 1 1
+>   _test_flip 1 1 () () () () () () ()

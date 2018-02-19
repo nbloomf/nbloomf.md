@@ -556,5 +556,5 @@ Main:
 >   _test_boolean   20 100 a a
 > 
 >   _test_functions 20 100 a a a a
->   _test_flip      a a a a a a a 20 100
+>   _test_flip      20 100 a a a a a a a
 >   _test_clone     20 100 a a

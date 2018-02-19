@@ -23,12 +23,12 @@
 @flip@#thm-flip-three	\\flip(f)(b)(a)(c) = f(a)(b)(c)
 @flip@#def-flip2	\\flipB = \\compose(\\flip)
 @flip@#thm-flip2	\\flipB(f)(a)(b)(c) = f(a)(c)(b)
-@flip@#def-flip3	\\flipC = \\compose(\\compose)(\\compose)(\\flip)
+@flip@#def-flip3	\\flipC = \\compose(\\compose(\\flip))
 @flip@#thm-flip3	\\flipC(f)(a)(b)(c)(d) = f(a)(b)(d)(c)
-@flip@#def-flip4	\\flipD = \\compose(\\compose)(\\compose(\\compose)(\\compose))(\\flip)
+@flip@#def-flip4	\\flipD = \\compose(\\compose(\\compose(\\flip)))
 @flip@#thm-flip4	\\flipD(f)(a)(b)(c)(d)(e) = f(a)(b)(c)(e)(d)
-@flip@#def-flip5	\\flipE = \\compose(\\compose)(\\compose(\\compose)(\\compose(\\compose)(\\compose)))(\\flip)
-@flip@#thm-flip5	\\flipE(f)(a)(b)(c)(d)(e)(f) = f(a)(b)(c)(d)(f)(e)
+@flip@#def-flip5	\\flipE = \\compose(\\compose(\\compose(\\compose(\\flip))))
+@flip@#thm-flip5	\\flipE(w)(a)(b)(c)(d)(e)(f) = w(a)(b)(c)(d)(f)(e)
 #=======================#
 #--- clone -------------#
 #=======================#
@@ -37,6 +37,11 @@
 @clone@#thm-clone-const	\\clone(\\const)(x) = x
 @clone@#def-clone3	\\cloneC = \\compose(\\clone)(\\compose(\\clone))
 @clone@#thm-clone3	\\cloneC(f)(x) = f(x)(x)(x)
+#=======================#
+#--- clone -------------#
+#=======================#
+@compose@#def-compose2	\\composeB = \\compose(\\compose(\\compose(\\flip)))(\\compose(\\compose(\\compose))(\\compose(\\compose(\\flip))(\\compose)))
+@compose@#thm-compose2
 #=======================#
 #--- booleans ----------#
 #=======================#

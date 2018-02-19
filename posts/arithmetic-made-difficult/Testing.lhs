@@ -80,6 +80,9 @@ The ``Test`` type, with ``testName``, is a shorthand for writing named tests.
 > instance TypeName Bool where
 >   typeName _ = "Bool"
 > 
+> instance TypeName () where
+>   typeName _ = "()"
+> 
 > 
 > testLabel :: String -> IO ()
 > testLabel msg = putStrLn ("\n\x1b[1;32m" ++ msg ++ "\x1b[0;39;49m")

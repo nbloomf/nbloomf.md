@@ -14,33 +14,12 @@ slug: takewhile-dropwhile
 > 
 > import Testing
 > import Booleans
-> import Tuples
-> import DisjointUnions
 > import NaturalNumbers
-> import Plus
-> import MaxAndMin
 > import Lists
-> import HeadAndTail
 > import ConsumingFold
-> import Snoc
-> import Reverse
 > import Cat
-> import Length
-> import Map
-> import UnfoldN
-> import Zip
 > import PrefixAndSuffix
-> import AllAndAny
-> import TailsAndInits
-> import Filter
-> import Elt
-> import Count
-> import Repeat
 > import Sublist
-> import Select
-> import Unique
-> import Delete
-> import Dedupe
 
 Today we'll define two functions, $\takeWhile$ and $\dropWhile$, similar to $\take$ and $\drop$, but instead of taking or dropping a prefix of some length, we will take or drop the longest prefix satisfying some predicate. We'd like $\takeBut$ to have a signature like $$\takeWhile : \bool^A \rightarrow {\lists{A}}^{\lists{A}}.$$
 
