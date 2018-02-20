@@ -191,7 +191,7 @@ $$\begin{eqnarray*}
    = & \unique(\cons(f(a),\map(f)(x))) \\
  & = & \band(\bnot(\elt(f(a),\map(f)(x))),\unique(\map(f)(x))) \\
  & = & \band(\bnot(\elt(a,x)),\unique(x)) \\
- & = & \unique(\cons(a,x))
+ & = & \unique(\cons(a,x)) \\
  & = & \btrue
 \end{eqnarray*}$$
 as needed.

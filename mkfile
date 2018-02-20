@@ -511,7 +511,7 @@ sniff-amd-eqnarray-ends:VQ:
     | sed '/^\$\$/s/\\\\/~/g' \
     | sed '/^\$\$/s/[^&~]//g' \
     | sed 'N;s/\n/ /' \
-    | grep -v '[&&~]*&&$' \
+    | grep -v ' \(&&~\)*&&$' \
     || true )
   if [ -z "$ENDS" ]; then
     echo 'Eqnarray line ends OK' | doppler lightgreen

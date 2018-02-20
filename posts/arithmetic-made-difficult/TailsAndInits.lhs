@@ -432,10 +432,10 @@ Let $A$ be a set. For all $x,y \in \lists{A}$, we have $$\inits(\lcp(x,y)) = \lc
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have two possibilities for $y$. If $y = \nil$ we have
 $$\begin{eqnarray*}
- &   & \lcp(\inits(x),\inits(y))
+ &   & \lcp(\inits(x),\inits(y)) \\
  & = & \lcp(\inits(\nil),\inits(\nil)) \\
  & = & \lcp(\cons(\nil,\nil),\cons(\nil,\nil)) \\
- & = & \cons(\nil,\nil),
+ & = & \cons(\nil,\nil)
 \end{eqnarray*}$$
 and if $y = \cons(a,u)$, we have
 $$\begin{eqnarray*}

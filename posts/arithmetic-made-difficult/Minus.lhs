@@ -449,7 +449,7 @@ $$\begin{eqnarray*}
  &     \let{a = \zero}
    = & \nminus(\ntimes(c,\zero),\ntimes(c,b)) \\
  &     \href{@times@#thm-times-zero-right}
-   = & \nminus(\zero,\ntimes(c,b))
+   = & \nminus(\zero,\ntimes(c,b)) \\
  &     \let{b = \zero}
    = & \nminus(\zero,\ntimes(c,\zero)) \\
  &     \href{@times@#thm-times-zero-right}

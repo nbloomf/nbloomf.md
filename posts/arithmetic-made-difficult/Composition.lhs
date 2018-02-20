@@ -117,9 +117,33 @@ $$\begin{eqnarray*}
  &     \href{@compose@#def-compose3}
    = & \flipD(\flipE(\flipC(\compose(\compose(\compose(\compose(\compose(\compose)))))(\compose(\compose(\compose(\compose)))(\compose)))))(f)(g)(h)(k)(x)(y)(z) \\
  &     \href{@flip@#thm-flip4}
-   = & \flipE(\flipC(\compose(\compose(\compose(\compose(\compose(\compose)))))(\compose(\compose(\compose(\compose)))(\compose))))(f)(g)(h)(x)(k)(y)(z)
+   = & \flipE(\flipC(\compose(\compose(\compose(\compose(\compose(\compose)))))(\compose(\compose(\compose(\compose)))(\compose))))(f)(g)(h)(x)(k)(y)(z) \\
  &     \href{@flip@#thm-flip5}
-   = & \flipC(\compose(\compose(\compose(\compose(\compose(\compose)))))(\compose(\compose(\compose(\compose)))(\compose)))(f)(g)(h)(x)(y)(k)(z)
+   = & \flipC(\compose(\compose(\compose(\compose(\compose(\compose)))))(\compose(\compose(\compose(\compose)))(\compose)))(f)(g)(h)(x)(y)(k)(z) \\
+ &     \href{@flip@#thm-flip3}
+   = & \compose(\compose(\compose(\compose(\compose(\compose)))))(\compose(\compose(\compose(\compose)))(\compose))(f)(g)(x)(h)(y)(k)(z) \\
+ &     \href{@functions@#def-compose}
+   = & \compose(\compose(\compose(\compose(\compose))))(\compose(\compose(\compose(\compose)))(\compose)(f))(g)(x)(h)(y)(k)(z) \\
+ &     \href{@functions@#def-compose}
+   = & \compose(\compose(\compose(\compose)))(\compose(\compose(\compose(\compose)))(\compose)(f)(g))(x)(h)(y)(k)(z) \\
+ &     \href{@functions@#def-compose}
+   = & \compose(\compose(\compose))(\compose(\compose(\compose(\compose)))(\compose)(f)(g)(x))(h)(y)(k)(z) \\
+ &     \href{@functions@#def-compose}
+   = & \compose(\compose)(\compose(\compose(\compose(\compose)))(\compose)(f)(g)(x)(h))(y)(k)(z) \\
+ &     \href{@functions@#def-compose}
+   = & \compose(\compose(\compose(\compose(\compose)))(\compose)(f)(g)(x)(h)(y))(k)(z) \\
+ &     \href{@functions@#def-compose}
+   = & \compose(\compose(\compose(\compose)))(\compose)(f)(g)(x)(h)(y)(k(z)) \\
+ &     \href{@functions@#def-compose}
+   = & \compose(\compose(\compose))(\compose(f))(g)(x)(h)(y)(k(z)) \\
+ &     \href{@functions@#def-compose}
+   = & \compose(\compose)(\compose(f)(g))(x)(h)(y)(k(z)) \\
+ &     \href{@functions@#def-compose}
+   = & \compose(\compose(f)(g)(x))(h)(y)(k(z)) \\
+ &     \href{@functions@#def-compose}
+   = & \compose(f)(g)(x)(h(y))(k(z)) \\
+ &     \href{@functions@#def-compose}
+   = & f(g(x))(h(y))(k(z))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

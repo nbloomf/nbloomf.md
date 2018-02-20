@@ -439,7 +439,7 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. By the inductive hypothesis, we have $$\suffix(\drop(k,x),x) = \btrue$$ and note also that $$\suffix(x,\cons(a,x)) = \btrue.$$ Since $\suffix$ is transitive, we have
 $$\begin{eqnarray*}
  &   & \suffix(\drop(\next(k),\cons(a,x)),\cons(a,x)) \\
- & = & \suffix(\drop(k,x),\cons(a,x))
+ & = & \suffix(\drop(k,x),\cons(a,x)) \\
  & = & \btrue
 \end{eqnarray*}$$
 as needed.

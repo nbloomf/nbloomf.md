@@ -310,7 +310,7 @@ $$\begin{eqnarray*}
  &   & n \\
  &     \href{@functions@#def-id}
    = & \id(n) \\
- &     \compose(\either(\const(\zero),\next))(\unnext)(n) \\
+ &     \compose(\either(\const(\zero),\next))(\unnext)(n)
    = & \either(\const(\zero),\next)(\unnext(n)) \\
  &     \hyp{\unnext(n) = \rgt(m)}
    = & \either(\const(\zero),\next)(\rgt(m)) \\

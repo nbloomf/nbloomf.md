@@ -546,7 +546,7 @@ $$\begin{eqnarray*}
    = & \bif{\bor(\btrue,q)}{a}{b} \\
  & = & \bif{\btrue}{a}{b} \\
  &     \href{@booleans@#cor-if-true}
-   = & a
+   = & a \\
  &     \href{@booleans@#cor-if-true}
    = & \bif{\btrue}{a}{\bif{q}{a}{b}} \\
  &     \let{p = \btrue}

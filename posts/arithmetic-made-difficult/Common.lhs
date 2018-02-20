@@ -74,7 +74,7 @@ Note that
 $$\begin{eqnarray*}
  &   & \common(\cat(x,y),z) \\
  & = & \filter(\elt(-,z))(\cat(x,y)) \\
- & = & \cat(\filter(\elt(-,z))(x),\filter(\elt(-,z))(y))
+ & = & \cat(\filter(\elt(-,z))(x),\filter(\elt(-,z))(y)) \\
  & = & \cat(\common(x,z),\common(y,z))
 \end{eqnarray*}$$
 as claimed.

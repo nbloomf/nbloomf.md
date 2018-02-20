@@ -136,8 +136,8 @@ We prove the "only if" direction by induction on $n$. For the base case $n = \ze
 $$\begin{eqnarray*}
  &   & \lft(\ast) \\
  & = & \findsmallest(\sigma)(\next(\zero),k) \\
- & = & \bif{\sigma(k)}{\rgt(k)}{\findsmallest(\sigma)(\zero,\next(k))}
- & = & \bif{\sigma(k)}{\rgt(k)}{\lft(\ast)}.
+ & = & \bif{\sigma(k)}{\rgt(k)}{\findsmallest(\sigma)(\zero,\next(k))} \\
+ & = & \bif{\sigma(k)}{\rgt(k)}{\lft(\ast)}
 \end{eqnarray*}$$
 Thus $\sigma(k) = \bfalse$. Now if $\nleq(k,t)$ and $\nleq(t,\nplus(\zero,k))$, we have $t = k$ by antisymmetry, and thus $\sigma(t) = \bfalse$ for all $\nleq(k,t)$ and $\nleq(t,\nplus(n,k))$ as needed. For the inductive step, suppose the implication holds for all $k$ for some $n$, and suppose further that $\findsmallest(\sigma)(\next(\next(n)),k) = \lft(\ast)$. Expanding, we have
 $$\begin{eqnarray*}

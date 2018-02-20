@@ -216,7 +216,7 @@ $$\begin{eqnarray*}
  &     \hyp{\length = \foldr(\zero)(\flip(\compose(\const)(\next)))}
    = & \flip(\compose(\const)(\next))(a,\length(x)) \\
  &     \href{@flip@#def-flip}
-   = & \compose(\const)(\next)(\length(x),a)
+   = & \compose(\const)(\next)(\length(x),a) \\
  &     \href{@functions@#def-compose}
    = & \const(\next(\length(x)))(a) \\
  &     \href{@functions@#def-const}
