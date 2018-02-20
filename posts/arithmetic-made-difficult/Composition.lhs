@@ -1,7 +1,7 @@
 ---
 title: Composition
 author: nbloomf
-date: 2018-02-18
+date: 2018-02-19
 tags: arithmetic-made-difficult, literate-haskell
 slug: compose
 ---
