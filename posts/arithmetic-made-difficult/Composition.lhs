@@ -104,6 +104,39 @@ In Haskell:
 
 ::::::::::::::::::::
 
+(@@@)
+
+:::::: theorem :::::
+[]{#thm-compose3}
+Whenever the signatures of $f$, $g$, $h$, and $k$ make sense, we have $$\compose3(f)(g)(h)(k)(x)(y)(z) = f(g(x))(h(y))(k(z)).$$
+
+::: proof ::::::::::
+We have
+$$\begin{eqnarray*}
+ &   & \composeC(f)(g)(h)(k)(x)(y)(z) \\
+ &     \href{@compose@#def-compose3}
+   = & \flipD(\flipE(\flipC(\compose(\compose(\compose(\compose(\compose(\compose)))))(\compose(\compose(\compose(\compose)))(\compose)))))(f)(g)(h)(k)(x)(y)(z) \\
+ &     \href{@flip@#thm-flip4}
+   = & \flipE(\flipC(\compose(\compose(\compose(\compose(\compose(\compose)))))(\compose(\compose(\compose(\compose)))(\compose))))(f)(g)(h)(x)(k)(y)(z)
+ &     \href{@flip@#thm-flip5}
+   = & \flipC(\compose(\compose(\compose(\compose(\compose(\compose)))))(\compose(\compose(\compose(\compose)))(\compose)))(f)(g)(h)(x)(y)(k)(z)
+\end{eqnarray*}$$
+as claimed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_compose3
+>   :: (Equal g)
+>   => a -> b -> c -> d -> e -> f -> g
+>   -> Test ((d -> e -> f -> g) -> (a -> d) -> (b -> e) -> (c -> f) -> a -> b -> c -> Bool)
+> _test_compose3 _ _ _ _ _ _ _ =
+>   testName "compose3(f)(g)(h)(k)(x)(y)(z) == f(g(x))(h(y))(k(z))" $
+>   \f g h k x y z -> eq (compose3 f g h k x y z) (f (g x) (h y) (k z))
+
+::::::::::::::::::::
+::::::::::::::::::::
+
 Testing
 -------
 
@@ -115,16 +148,19 @@ Suite:
 >   , Equal c, Show c, Arbitrary c, CoArbitrary c, TypeName c
 >   , Equal d, Show d, Arbitrary d, CoArbitrary d, TypeName d
 >   , Equal e, Show e, Arbitrary e, CoArbitrary e, TypeName e
->   ) => Int -> Int -> a -> b -> c -> d -> e -> IO ()
+>   , Equal f, Show f, Arbitrary f, CoArbitrary f, TypeName f
+>   , Equal g, Show g, Arbitrary g, CoArbitrary g, TypeName g
+>   ) => Int -> Int -> a -> b -> c -> d -> e -> f -> g -> IO ()
 > 
-> _test_compose size cases a b c d e = do
+> _test_compose size cases a b c d e f g = do
 >   testLabel0 "compose"
 >   let args = testArgs size cases
 > 
 >   runTest args (_test_compose2 a b c d e)
+>   runTest args (_test_compose3 a b c d e f g)
 
 Main:
 
 > main_compose :: IO ()
 > main_compose = do
->   _test_compose 1 1 () () () () ()
+>   _test_compose 1 1 () () () () () () ()

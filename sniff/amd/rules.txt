@@ -43,6 +43,7 @@
 @compose@#def-compose2	\\composeB = \\flipC(\\compose(\\compose(\\compose(\\compose)))(\\compose))
 @compose@#thm-compose2	\\composeB(f)(g)(h)(x)(y) = f(g(x))(h(y))
 @compose@#def-compose3	\\composeC = \\flipD(\\flipE(\\flipC(\\compose(\\compose(\\compose(\\compose(\\compose(\\compose)))))(\\compose(\\compose(\\compose(\\compose)))(\\compose)))))
+@compose@#thm-compose3	\\composeC(f)(g)(h)(k)(x)(y)(z) = f(g(x))(h(y))(k(z))
 #=======================#
 #--- booleans ----------#
 #=======================#
