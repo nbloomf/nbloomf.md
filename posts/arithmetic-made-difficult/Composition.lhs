@@ -15,7 +15,7 @@ slug: compose
 > import Functions
 > import Flip
 
-(@@@)
+We can think of $\compose(f)(g)(x)$ as taking an outer function $f$ of one argument, and another function $g$ that massages some input $x$ before passing it on to $f$. It will be handy to generalize this to $f$ taking more than one argument. Say $f$ takes two arguments; a generalized compose for such a function might take two different input-massaging functions $g$ and $h$, and two inputs $x$ and $y$, and pass $g(x)$ and $h(y)$ to $f$, like $$\Theta(f)(g)(h)(x)(y) = f(g(x))(h(y)).$$ We can do exactly this with $\composeB$.
 
 :::::: definition ::
 []{#def-compose2}
@@ -28,7 +28,7 @@ In Haskell:
 
 ::::::::::::::::::::
 
-(@@@)
+$\composeB$ does what we want:
 
 :::::: theorem :::::
 []{#thm-compose2}
@@ -69,7 +69,7 @@ as claimed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-(@@@)
+Generalizing further, $\composeC$ acts on a function of three arguments.
 
 :::::: definition ::
 []{#def-compose3}
@@ -104,7 +104,7 @@ In Haskell:
 
 ::::::::::::::::::::
 
-(@@@)
+And $\composeC$ does what we want.
 
 :::::: theorem :::::
 []{#thm-compose3}
@@ -160,6 +160,13 @@ as claimed.
 
 ::::::::::::::::::::
 ::::::::::::::::::::
+
+A really good question to ask at this point is, "where on earth did those definitions for $\composeB$ and $\composeC$ come from?" It's almost certainly not obvious how we could write such a thing down without already knowing some trick. And there is a trick -- it turns out we can _calculate_ these definitions, and others, using the known properties of our function operators. Take $\composeB$ for example. Say we're setting out to find a definition for the map $\Theta(f)(g)(h)(x)(y) = f(g(x))(h(y))$. First off, I know from experience that (1) with $\compose$, we can move function arguments in and out of parentheses as long as they're in the right order, and (2) putting the arguments of a function in any given order is easy with $\flip$ and friends. So we might as well start out looking for $\Theta$ such that $$\Theta(f)(g)(x)(h)(y) = f(g(x))(h(y)),$$ since we can apply an appropriate sequence of $\flip$s to $\Theta$ at the end.
+
+Now, working backwards, start with $$f(g(x))(h(y)).$$ Note that this fits the pattern of a $\compose$, where the outer function is $f(g(x))$, and the inner function is $h$. So this expression is equivalent to $$\compose(f(g(x)))(h)(y).$$ We've peeled off the last two arguments of $\Theta$ already. We'd like to peel off the next argument from the right; in this case, $x$. Imagine that the $x$ argument is trapped inside two extra sets of parentheses. And the tool for eliminating parentheses is $\compose$. Indeed, we can write $f(g(x)) = \compose(f)(g)(x)$, and now $x$ is "lifted up" by one level. So our expression is now equivalent to $$\compose(\compose(f)(g)(x))(h)(y).$$ We can play this game again; $x$ is still trapped, and is the argument of a composition where the outer function is $\compose$ and the inner function is $\compose(f)(g)$. So our expression is equivalent to $$\compose(\compose)(\compose(f)(g))(x)(h)(y).$$ We can see the trick now; $g$ is trapped, and another $\compose$ gives $$\compose(\compose(\compose))(\compose(f))(g)(x)(h)(y).$$ Now $f$ is trapped, but another $\compose$ gives $$\compose(\compose(\compose(\compose)))(\compose)(f)(g)(x)(h)(y).$$ So we have $$\Theta = \compose(\compose(\compose(\compose)))(\compose),$$ and applying a $\flipC$ to this map gives the $\compose2$ we defined above.
+
+A similar trick applies when we want to use some input more than once; this time we assume that an appropriate $\clone$ has been applied.
+
 
 Testing
 -------

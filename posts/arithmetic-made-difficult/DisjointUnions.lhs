@@ -16,6 +16,7 @@ slug: disjoint-unions
 > import Functions
 > import Flip
 > import Clone
+> import Composition
 > import Booleans
 
 Dual to sets of tuples are disjoint sums.
@@ -821,3 +822,4 @@ Main:
 >   _test_functions 20 100 a a a a
 >   _test_flip      20 100 a a a a a a a
 >   _test_clone     20 100 a a
+>   _test_compose   20 100 a a a a a a a

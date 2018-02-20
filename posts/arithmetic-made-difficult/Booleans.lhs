@@ -16,6 +16,7 @@ slug: booleans
 > import Functions
 > import Flip
 > import Clone
+> import Composition
 
 Before we think about numbers or writing programs, let's start by nailing down some important ideas about truth values. In math there can be a kind of other-worldness about true and false, since they live in the "metalanguage" of mathematical logic rather than the "object language" of whatever we are studying. But it will turn out to be useful to algebraify the truth values themselves.
 
@@ -558,3 +559,4 @@ Main:
 >   _test_functions 20 100 a a a a
 >   _test_flip      20 100 a a a a a a a
 >   _test_clone     20 100 a a
+>   _test_compose   20 100 a a a a a a a

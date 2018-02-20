@@ -2,6 +2,7 @@
 > import Functions
 > import Flip
 > import Clone
+> import Composition
 > import Booleans
 > import Not
 > import And
