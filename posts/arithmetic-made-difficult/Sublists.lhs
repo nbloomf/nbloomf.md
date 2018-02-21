@@ -7,9 +7,9 @@ slug: sublists
 ---
 
 > {-# LANGUAGE NoImplicitPrelude #-}
-> module Sublists (
->   sublists, _test_sublists, main_sublists
-> ) where
+> module Sublists
+>   ( sublists, _test_sublists, main_sublists
+>   ) where
 > 
 > import Testing
 > import Booleans
@@ -17,16 +17,13 @@ slug: sublists
 > import NaturalNumbers
 > import Exponentiation
 > import Lists
-> import Snoc
 > import Cat
 > import Length
 > import Map
 > import AllAndAny
-> import Filter
 > import Elt
 > import Sublist
 > import Select
-> import Unique
 
 We've already defined a predicate that detects when one list is a sublist of another. Today we'll define a function that constructs a list of all sublists of a given list.
 
@@ -54,20 +51,20 @@ $$\left\{\begin{array}{l}
 ::: test :::::::::::
 
 > _test_sublists_nil :: (List t, Equal (t (t a)))
->   => t a -> t (t a) -> Test Bool
-> _test_sublists_nil t u =
+>   => t a -> Test Bool
+> _test_sublists_nil t =
 >   testName "sublists(nil) == cons(nil,nil)" $
 >   eq
 >     (sublists (nil `withTypeOf` t))
->     (cons nil (nil `withTypeOf` u))
+>     (cons nil nil)
 > 
 > 
 > _test_sublists_cons :: (List t, Equal (t (t a)))
->   => t a -> t (t a) -> Test (a -> t a -> Bool)
-> _test_sublists_cons _ u =
+>   => t a -> Test (a -> t a -> Bool)
+> _test_sublists_cons _ =
 >   testName "sublists(cons(a,x)) == cat(map(cons(a,-))(x),sublists(x))" $
 >   \a x -> eq
->     ((sublists (cons a x)) `withTypeOf` u)
+>     (sublists (cons a x))
 >     (cat (map (cons a) (sublists x)) (sublists x))
 
 ::::::::::::::::::::
@@ -139,8 +136,8 @@ as needed.
 ::: test :::::::::::
 
 > _test_sublists_nil_elt :: (List t, Equal a, Equal (t a))
->   => t a -> t (t a) -> Test (t a -> Bool)
-> _test_sublists_nil_elt _ u =
+>   => t a -> Test (t a -> Bool)
+> _test_sublists_nil_elt _ =
 >   testName "elt(nil,sublists(x))" $
 >   \x -> elt nil (sublists x)
 
@@ -351,22 +348,21 @@ Testing
 Suite:
 
 > _test_sublists ::
->   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
->   , TypeName (t a), List t, Equal (t (t a))
->   , TypeName n, Natural n, Show n, Arbitrary n, Equal n
->   , Equal (t a), Show (t a), Arbitrary (t a)
->   , Boolean bool, Arbitrary bool, CoArbitrary bool
->   , Arbitrary (t n), Show (t n), Equal (t n)
->   ) => t a -> t (t a) -> n -> bool -> Int -> Int -> IO ()
-> _test_sublists t u k p size cases = do
+>   ( Equal a, Show a, Arbitrary a, CoArbitrary a, TypeName a
+>   , Equal b, Show b, Arbitrary b, CoArbitrary b, TypeName b, Boolean b
+>   , Equal n, Show n, Arbitrary n, CoArbitrary n, TypeName n, Natural n
+>   , Equal (t a), Show (t a), Arbitrary (t a), CoArbitrary (t a), TypeName (t a), List t
+>   , Equal (t n), Show (t n), Arbitrary (t n), CoArbitrary (t n), TypeName (t n)
+>   , Equal (t (t a))
+>   ) => Int -> Int -> t a -> t (t a) -> n -> b -> IO ()
+> _test_sublists size cases t u k p = do
 >   testLabel1 "sublists" t
-> 
 >   let args = testArgs size cases
 > 
->   runTest args (_test_sublists_nil t u)
->   runTest args (_test_sublists_cons t u)
+>   runTest args (_test_sublists_nil t)
+>   runTest args (_test_sublists_cons t)
 >   runTest args (_test_sublists_sublist t u)
->   runTest args (_test_sublists_nil_elt t u)
+>   runTest args (_test_sublists_nil_elt t)
 >   runTest args (_test_sublists_elt_sublist t u)
 >   runTest args (_test_sublists_map t u)
 >   runTest args (_test_sublists_length t k)
@@ -376,5 +372,5 @@ Main:
 
 > main_sublists :: IO ()
 > main_sublists = do
->   _test_sublists (nil :: ConsList Bool)  nil (zero :: Unary) (true :: Bool) 10 100
->   _test_sublists (nil :: ConsList Unary) nil (zero :: Unary) (true :: Bool) 10 100
+>   _test_sublists 10 100 (nil :: ConsList Bool)  nil (zero :: Unary) (true :: Bool)
+>   _test_sublists 10 100 (nil :: ConsList Unary) nil (zero :: Unary) (true :: Bool)
