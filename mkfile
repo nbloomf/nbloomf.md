@@ -570,3 +570,19 @@ sniff-amd-label-format:VQ:
     echo $( echo "$LABELS" | wc -l ) 'problems found' | doppler lightred
     exit 1
   fi
+
+#-- ADD ME TO THE LIST WHEN I'M LESS NOISY --#
+#-- test arg order --#
+sniff-amd-arg-order:VQ:
+  echo 'Checking Test argument order' | doppler lightblue
+  ARGORD=$( grep '>   _test_' posts/arithmetic-made-difficult/* \
+    | grep -v '_test_[a-z]*[ ]*[1-9]' \
+    || true )
+  if [ -z "$ARGORD" ]; then
+    echo 'Test argument order OK' | doppler lightgreen
+  else
+    echo "$ARGORD"
+    echo 'Test argument order' | doppler lightred
+    echo $( echo "$ARGORD" | wc -l ) 'problems found' | doppler lightred
+    exit 1
+  fi

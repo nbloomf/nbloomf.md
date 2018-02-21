@@ -182,14 +182,13 @@ Testing
 
 Suite:
 
-> _test_bailoutrec
->   :: (TypeName n, Natural n, Equal n, Show n, Arbitrary n
->   , Equal b, Arbitrary a, CoArbitrary a, Arbitrary b, CoArbitrary b
->   , Show a, Show b, TypeName a, TypeName b, CoArbitrary n)
->   => n -> a -> b -> Int -> Int -> IO ()
-> _test_bailoutrec n a b size cases = do
+> _test_bailoutrec ::
+>   ( Equal a, Show a, Arbitrary a, CoArbitrary a, TypeName a
+>   , Equal b, Show b, Arbitrary b, CoArbitrary b, TypeName b
+>   , Equal n, Show n, Arbitrary n, CoArbitrary n, TypeName n, Natural n
+>   ) => Int -> Int -> n -> a -> b -> IO ()
+> _test_bailoutrec size cases n a b = do
 >   testLabel3 "bailoutRec" n a b
-> 
 >   let args = testArgs size cases
 > 
 >   runTest args (_test_bailoutrec_equiv n a b)
@@ -198,7 +197,15 @@ Main:
 
 > main_bailoutrec :: IO ()
 > main_bailoutrec = do
->   _test_bailoutrec (zero :: Unary) (true :: Bool)  (true :: Bool)  100 100
->   _test_bailoutrec (zero :: Unary) (zero :: Unary) (true :: Bool)  100 100
->   _test_bailoutrec (zero :: Unary) (true :: Bool)  (zero :: Unary) 100 100
->   _test_bailoutrec (zero :: Unary) (zero :: Unary) (zero :: Unary) 100 100
+>   let
+>     b = true :: Bool
+>     n = zero :: Unary
+>     x = lft true :: Union Bool Unary
+>     y = tup zero zero :: Pair Unary Unary
+> 
+>   _test_bailoutrec 100 100 n b b
+>   _test_bailoutrec 100 100 n n b
+>   _test_bailoutrec 100 100 n b n
+>   _test_bailoutrec 100 100 n n n
+>   _test_bailoutrec 100 100 n x x
+>   _test_bailoutrec 100 100 n y y
