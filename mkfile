@@ -150,7 +150,8 @@ sniff-amd:VQ: \
   sniff-amd-latex \
   sniff-amd-import \
   sniff-amd-labels \
-  sniff-amd-eqnarray-ends
+  sniff-amd-eqnarray-ends \
+  sniff-amd-prelude
 
 #-- use consistent syntax for fenced divs --#
 sniff-amd-fencediv:VQ:
@@ -337,6 +338,23 @@ sniff-amd-testtext:VQ:
     echo "$TESTTEXT"
     echo 'Test text' | doppler lightred
     echo $( echo "$TESTTEXT" | wc -l ) 'problems found' | doppler lightred
+    exit 1
+  fi
+
+#-- no implicit prelude --#
+sniff-amd-prelude:VQ:
+  echo 'Checking No Implicit Prelude' | doppler lightblue
+  PRELUDE=$( grep -B 1 '> module ' posts/arithmetic-made-difficult/* \
+    | grep -v '^--$' \
+    | paste - - \
+    | grep -v '{-# LANGUAGE NoImplicitPrelude' \
+    || true )
+  if [ -z "$PRELUDE" ]; then
+    echo 'No Implicit Prelude OK' | doppler lightgreen
+  else
+    echo "$PRELUDE"
+    echo 'No Implicit Prelude' | doppler lightred
+    echo $( echo "$PRELUDE" | wc -l ) 'problems found' | doppler lightred
     exit 1
   fi
 

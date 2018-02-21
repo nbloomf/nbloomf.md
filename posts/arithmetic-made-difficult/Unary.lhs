@@ -8,13 +8,15 @@ slug: unary
 
 > {-# LANGUAGE NoImplicitPrelude, BangPatterns #-}
 > module Unary
->   ( Unary(Z,N), mkUnary, natRec, natRec'
+>   ( Unary(Z,N), mkUnary, natRec, _test_unary, main_unary
 >   ) where
 > 
 > import Prelude (Integer, (-), (<=))
 > import Test.QuickCheck.Modifiers (NonNegative(..))
 > import Testing
 > import Booleans
+> import Tuples
+> import DisjointUnions
 
 A nice consequence of wrapping up recursion in the $\natrec$ function is that it allows us to write programs, independent of any implementation, and prove things about them. We'll see lots of examples of this, but first we need to establish some structural results.
 
@@ -490,3 +492,26 @@ We can try out this instance with the following command.
 ```haskell
 $> generate (arbitrary :: Gen Unary)
 ```
+
+While we're here, we can test that ``natRec`` and ``natRec'`` aren't _not_ equivalent.
+
+> _test_natRec_equiv :: (Equal a) => a -> Test (a -> (a -> a) -> Unary -> Bool)
+> _test_natRec_equiv _ =
+>   testName "natRec(e)(f)(n) == natRec'(e)(f)(n)" $
+>   \e f n -> eq (natRec e f n) (natRec' e f n)
+> 
+> _test_unary ::
+>   ( Equal a, Show a, Arbitrary a, CoArbitrary a, TypeName a
+>   ) => Int -> Int -> a -> IO ()
+> _test_unary size cases a = do
+>   testLabel1 "unary" a
+>   let args = testArgs size cases
+> 
+>   runTest args (_test_natRec_equiv a)
+> 
+> main_unary :: IO ()
+> main_unary = do
+>   _test_unary 30 300 ()
+>   _test_unary 30 300 (true :: Bool)
+>   _test_unary 30 300 (tup true true :: Pair Bool Bool)
+>   _test_unary 30 300 (lft true :: Union Bool Bool)

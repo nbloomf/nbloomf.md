@@ -250,6 +250,24 @@ test-suite amd-disjoint-union
     Composition,
     Booleans
 
+test-suite amd-unary
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: Unary.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options: -Wall -main-is Unary.main_unary
+  other-modules:
+    Testing,
+    Functions,
+    Flip,
+    Clone,
+    Composition,
+    Booleans,
+    Not,
+    And,
+    Tuples,
+    DisjointUnions
+
 test-suite amd-nats
   default-language: Haskell2010
   type: exitcode-stdio-1.0
