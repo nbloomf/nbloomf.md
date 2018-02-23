@@ -32,6 +32,8 @@
 \cod
 \common
 \compose
+\composeAonB
+\composeAonC
 \composeB
 \composeC
 \cons

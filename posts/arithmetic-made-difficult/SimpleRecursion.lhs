@@ -12,6 +12,10 @@ slug: simprec
 >   ) where
 > 
 > import Testing
+> import Functions
+> import Flip
+> import Clone
+> import Composition
 > import Booleans
 > import Tuples
 > import DisjointUnions

@@ -7,9 +7,10 @@ slug: compose
 ---
 
 > {-# LANGUAGE NoImplicitPrelude #-}
-> module Composition (
->   compose2, compose3, _test_compose, main_compose
-> ) where
+> module Composition
+>   ( compose2, compose3, compose1on2, compose1on3
+>   , _test_compose, main_compose
+>   ) where
 > 
 > import Testing
 > import Functions
@@ -167,6 +168,98 @@ Now, working backwards, start with $$f(g(x))(h(y)).$$ Note that this fits the pa
 
 A similar trick applies when we want to use some input more than once; this time we assume that an appropriate $\clone$ has been applied.
 
+Two more generalizations of $\compose$ will also be handy.
+
+:::::: definition ::
+[]{#def-compose1on2}
+We define $$\composeAonB : (C \rightarrow D) \rightarrow (A \rightarrow B \rightarrow C) \rightarrow A \rightarrow B \rightarrow D$$ by $$\composeAonB = \compose(\compose)(\compose)$$
+
+In Haskell:
+
+> compose1on2 :: (c -> d) -> (a -> b -> c) -> a -> b -> d
+> compose1on2 = compose compose compose
+
+::::::::::::::::::::
+
+:::::: theorem :::::
+[]{#thm-compose1on2}
+We have $$\composeAonB(f)(g)(x)(y) = f(g(x)(y)).$$
+
+::: proof ::::::::::
+Note that
+$$\begin{eqnarray*}
+ &   & \composeAonB(f)(g)(x)(y) \\
+ &     \href{@compose@#def-compose1on2}
+   = & \compose(\compose)(\compose)(f)(g)(x)(y) \\
+ &     \href{@functions@#def-compose}
+   = & \compose(\compose(f))(g)(x)(y) \\
+ &     \href{@functions@#def-compose}
+   = & \compose(f)(g(x))(y) \\
+ &     \href{@functions@#def-compose}
+   = & f(g(x)(y))
+\end{eqnarray*}$$
+as claimed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_compose1on2
+>   :: (Equal d)
+>   => a -> b -> c -> d
+>   -> Test ((c -> d) -> (a -> b -> c) -> a -> b -> Bool)
+> _test_compose1on2 _ _ _ _ =
+>   testName "compose1on2(f)(g)(x)(y) == f(g(x)(y))" $
+>   \f g x y -> eq (compose1on2 f g x y) (f (g x y))
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+And:
+
+:::::: definition ::
+[]{#def-compose1on3}
+We define $$\composeAonC : (D \rightarrow E) \rightarrow (A \rightarrow B \rightarrow C \rightarrow D) \rightarrow A \rightarrow B \rightarrow C \rightarrow E$$ by $$\composeAonC = \compose(\compose)(\composeAonB)$$
+
+In Haskell:
+
+> compose1on3 :: (d -> e) -> (a -> b -> c -> d) -> a -> b -> c -> e
+> compose1on3 = compose compose compose1on2
+
+::::::::::::::::::::
+
+:::::: theorem :::::
+[]{#thm-compose1on3}
+We have $$\composeAonC(f)(g)(x)(y)(z) = f(g(x)(y)(z)).$$
+
+::: proof ::::::::::
+Note that
+$$\begin{eqnarray*}
+ &   & \composeAonC(f)(g)(x)(y)(z) \\
+ &     \href{@compose@#def-compose1on3}
+   = & \compose(\compose)(\composeAonB)(f)(g)(x)(y)(z) \\
+ &     \href{@functions@#def-compose}
+   = & \compose(\composeAonB(f))(g)(x)(y)(z) \\
+ &     \href{@functions@#def-compose}
+   = & \composeAonB(f)(g(x))(y)(z) \\
+ &     \href{@compose@#thm-compose1on2}
+   = & f(g(x)(y)(z))
+\end{eqnarray*}$$
+as claimed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_compose1on3
+>   :: (Equal e)
+>   => a -> b -> c -> d -> e
+>   -> Test ((d -> e) -> (a -> b -> c -> d) -> a -> b -> c -> Bool)
+> _test_compose1on3 _ _ _ _ _ =
+>   testName "compose1on3(f)(g)(x)(y)(z) == f(g(x)(y)(z))" $
+>   \f g x y z -> eq (compose1on3 f g x y z) (f (g x y z))
+
+::::::::::::::::::::
+::::::::::::::::::::
+
 
 Testing
 -------
@@ -189,6 +282,8 @@ Suite:
 > 
 >   runTest args (_test_compose2 a b c d e)
 >   runTest args (_test_compose3 a b c d e f g)
+>   runTest args (_test_compose1on2 a b c d)
+>   runTest args (_test_compose1on3 a b c d e)
 
 Main:
 
