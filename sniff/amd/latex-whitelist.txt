@@ -34,8 +34,10 @@
 \compose
 \composeAonB
 \composeAonC
-\composeB
-\composeC
+\composeAonD
+\composeBonA
+\composeBonB
+\composeConA
 \cons
 \const
 \count

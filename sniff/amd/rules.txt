@@ -40,14 +40,18 @@
 #=======================#
 #--- compose -----------#
 #=======================#
-@compose@#def-compose2	\\composeB = \\flipC(\\compose(\\compose(\\compose(\\compose)))(\\compose))
-@compose@#thm-compose2	\\composeB(f)(g)(h)(x)(y) = f(g(x))(h(y))
-@compose@#def-compose3	\\composeC = \\flipD(\\flipE(\\flipC(\\compose(\\compose(\\compose(\\compose(\\compose(\\compose)))))(\\compose(\\compose(\\compose(\\compose)))(\\compose)))))
-@compose@#thm-compose3	\\composeC(f)(g)(h)(k)(x)(y)(z) = f(g(x))(h(y))(k(z))
+@compose@#def-compose2on1	\\composeBonA = \\flipC(\\compose(\\compose(\\compose(\\compose)))(\\compose))
+@compose@#thm-compose2on1	\\composeBonA(f)(g)(h)(x)(y) = f(g(x))(h(y))
+@compose@#def-compose3on1	\\composeConA = \\flipD(\\flipE(\\flipC(\\compose(\\compose(\\compose(\\compose(\\compose(\\compose)))))(\\compose(\\compose(\\compose(\\compose)))(\\compose)))))
+@compose@#thm-compose3on1	\\composeConA(f)(g)(h)(k)(x)(y)(z) = f(g(x))(h(y))(k(z))
 @compose@#def-compose1on2	\\composeAonB = \\compose(\\compose)(\\compose)
 @compose@#thm-compose1on2	\\composeAonB(f)(g)(x)(y) = f(g(x)(y))
 @compose@#def-compose1on3	\\composeAonC = \\compose(\\compose)(\\composeAonB)
 @compose@#thm-compose1on3	\\composeAonC(f)(g)(x)(y)(z) = f(g(x)(y)(z))
+@compose@#def-compose1on4	\\composeAonD = \\compose(\\compose)(\\composeAonC)
+@compose@#thm-compose1on4	\\composeAonD(f)(g)(x)(y)(z)(w) = f(g(x)(y)(z)(w))
+@compose@#def-compose2on2	\\composeBonB = \\flipE(\\compose(\\composeBonA)(\\composeBonA))
+@compose@#thm-compose2on2	\\composeBonB(f)(g)(h)(x)(y)(z)(w) = f(g(x)(y))(h(z)(w))
 #=======================#
 #--- booleans ----------#
 #=======================#

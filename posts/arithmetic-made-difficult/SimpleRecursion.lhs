@@ -133,6 +133,18 @@ As we did with $\natrec(\ast)(\ast)$, we'd like to implement $\simprec(\ast)(\as
 
 There's the naive way:
 
+ > foo :: (Natural n) => (a -> b) -> (n -> a -> b -> b) -> n -> a -> Pair n b
+ > foo = compose (compose (compose flip clone)) theta
+
+ > theta :: (Natural n) => (a -> b) -> (n -> a -> b -> b) -> n -> a -> Pair n b 
+ > theta = compose2 (compose2 naturalRec) epsilon chi
+
+> epsilon :: (Natural n) => (a -> b) -> a -> Pair n b
+> epsilon = compose (tup zero)
+
+> chi :: (Natural n) => (n -> a -> b -> b) -> a -> Pair n b -> Pair n b
+> chi = compose1on2 uncurry (flip2 (flip (clone (flip2 (compose compose1on3 (compose tup id))))))
+
 > simpleRec'' phi mu n a = case unnext n of
 >   Left () -> phi a
 >   Right k -> mu k a $ simpleRec'' phi mu k a
