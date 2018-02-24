@@ -361,9 +361,11 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \lcp(\zip(x,u),\zip(y,v)) \\
  & = & \lcp(\zip(\nil,u),\zip(y,v)) \\
- & = & \lcp(\nil,\zip(y,v)) \\
+ &     \href{@zip@#cor-zip-nil-left}
+   = & \lcp(\nil,\zip(y,v)) \\
  & = & \nil \\
- & = & \zip(\nil,\lcp(u,v)) \\
+ &     \href{@zip@#cor-zip-nil-left}
+   = & \zip(\nil,\lcp(u,v)) \\
  & = & \zip(\lcp(\nil,y),\lcp(u,v)) \\
  & = & \zip(\lcp(x,y),\lcp(u,v))
 \end{eqnarray*}$$
@@ -371,9 +373,11 @@ as needed. For the inductive step, suppose the equality holds for some $x$ and l
 $$\begin{eqnarray*}
  &   & \lcp(\zip(\cons(a,x),u),\zip(y,v)) \\
  & = & \lcp(\zip(\cons(a,x),u),\zip(\nil,v)) \\
- & = & \lcp(\zip(\cons(a,x),u),\nil) \\
+ &     \href{@zip@#cor-zip-nil-left}
+   = & \lcp(\zip(\cons(a,x),u),\nil) \\
  & = & \nil \\
- & = & \zip(\nil,\lcp(u,v)) \\
+ &     \href{@zip@#cor-zip-nil-left}
+   = & \zip(\nil,\lcp(u,v)) \\
  & = & \zip(\lcp(\cons(a,x),\nil),\lcp(u,v)) \\
  & = & \zip(\lcp(\cons(a,x),y),\lcp(u,v))
 \end{eqnarray*}$$
@@ -381,7 +385,8 @@ as claimed. If $u = \nil$, we have
 $$\begin{eqnarray*}
  &   & \lcp(\zip(\cons(a,x),u),\zip(y,v)) \\
  & = & \lcp(\zip(\cons(a,x),\nil),\zip(y,v)) \\
- & = & \lcp(\nil,\zip(y,v)) \\
+ &     \href{@zip@#cor-zip-cons-nil}
+   = & \lcp(\nil,\zip(y,v)) \\
  & = & \nil \\
  & = & \zip(\lcp(\cons(a,x),y),\nil) \\
  & = & \zip(\lcp(\cons(a,x),y),\lcp(\nil,v)) \\
@@ -402,7 +407,8 @@ $$\begin{eqnarray*}
  &   & \zip(\lcp(\cons(a,x),y),\lcp(u,v)) \\
  & = & \zip(\lcp(\cons(a,x),\cons(c,w)),\lcp(u,v)) \\
  & = & \zip(\nil,\lcp(u,v)) \\
- & = & \nil \\
+ &     \href{@zip@#cor-zip-nil-left}
+   = & \nil \\
  & = & \lcp(\cons((a,b),\zip(x,h)),\cons((c,d),\zip(w,k))) \\
  & = & \lcp(\zip(\cons(a,x),\cons(b,h)),\zip(\cons(c,w),\cons(d,k))) \\
  & = & \lcp(\zip(\cons(a,x),u),\zip(y,v))

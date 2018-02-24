@@ -210,7 +210,8 @@ as needed. For the inductive step, suppose the equality holds for some $x$ and l
 $$\begin{eqnarray*}
  &   & \beq(\cons(a,x),\dedupeL(\cons(a,x))) \\
  & = & \beq(\cons(a,x),\cons(a,\delete(a,\dedupeL(x)))) \\
- & = & \band(\beq(a,a),\beq(x,\delete(a,\dedupeL(x)))) \\
+ &     \href{@lists@#thm-list-eq-cons}
+   = & \band(\beq(a,a),\beq(x,\delete(a,\dedupeL(x)))) \\
  &     \href{@testing@#thm-eq-reflexive}
    = & \band(\btrue,\beq(x,\delete(a,\dedupeL(x)))) \\
  &     \href{@and@#thm-and-true-left}

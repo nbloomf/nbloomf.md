@@ -613,7 +613,8 @@ $$\begin{eqnarray*}
  & = & \elt(\cons(a,x),\cons(\cons(b,u),\map(\cons(b,-))(z))) \\
  & = & \bif{\beq(\cons(a,x),\cons(b,u))}{\btrue}{\elt(\cons(a,x),\map(\cons(b,-))(z))} \\
  & = & \bif{\beq(\cons(a,x),\cons(b,u))}{\btrue}{\band(\beq(a,b),\elt(x,z))} \\
- & = & \bif{\band(\beq(a,b),\beq(x,u))}{\btrue}{\band(\beq(a,b),\elt(x,z))} \\
+ &     \href{@lists@#thm-list-eq-cons}
+   = & \bif{\band(\beq(a,b),\beq(x,u))}{\btrue}{\band(\beq(a,b),\elt(x,z))} \\
  &     \href{@or@#thm-or-is-if}
    = & \bor(\band(\beq(a,b),\beq(x,u)),\band(\beq(a,b),\elt(x,z))) \\
  &     \href{@or@#thm-and-or-distribute}

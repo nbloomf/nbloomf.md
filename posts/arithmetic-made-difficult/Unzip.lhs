@@ -90,7 +90,8 @@ $$\begin{eqnarray*}
  &   & \zip(\unzip(x)) \\
  & = & \zip(\unzip(\nil)) \\
  & = & \zip(\nil,\nil) \\
- & = & \nil \\
+ &     \href{@zip@#cor-zip-nil-left}
+   = & \nil \\
  & = & x
 \end{eqnarray*}$$
 as needed. Suppose now that the result holds for some $x$ and let $a \in A$ and $b \in B$. Let $(u,v) = \unzip(x)$. Now

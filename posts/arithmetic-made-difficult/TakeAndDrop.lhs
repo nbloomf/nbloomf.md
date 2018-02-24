@@ -214,7 +214,8 @@ $$\begin{eqnarray*}
  &   & \zip(\take(k,x),\take(k,y)) \\
  & = & \zip(\take(\zero,x),\take(\zero,y)) \\
  & = & \zip(\nil,\nil) \\
- & = & \nil \\
+ &     \href{@zip@#cor-zip-nil-left}
+   = & \nil \\
  & = & \take(\zero,\zip(x,y)) \\
  & = & \take(k,\zip(x,y))
 \end{eqnarray*}$$
@@ -223,9 +224,11 @@ $$\begin{eqnarray*}
  &   & \zip(\take(\next(k),x),\take(\next(k),y)) \\
  & = & \zip(\take(\next(k),\nil),\take(\next(k),y)) \\
  & = & \zip(\nil,\take(\next(k),y)) \\
- & = & \nil \\
+ &     \href{@zip@#cor-zip-nil-left}
+   = & \nil \\
  & = & \take(\next(k),\nil) \\
- & = & \take(\next(k),\zip(\nil,y)) \\
+ &     \href{@zip@#cor-zip-nil-left}
+   = & \take(\next(k),\zip(\nil,y)) \\
  & = & \take(\next(k),\zip(x,y))
 \end{eqnarray*}$$
 as needed. Suppose instead that $x = \cons(a,u)$ for some $u$. We now consider two possibilities for $y$. If $y = \nil$, we have

@@ -128,9 +128,12 @@ Let $A$ be a set with $a,b \in A$ and $x,y \in \lists{A}$. Then $$\beq(\snoc(a,x
 We proceed by list induction on $x$. For the base case, set $x = \nil$. We consider two possibilities for $y$. If $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \beq(\snoc(a,\nil),\snoc(b,\nil)) \\
- & = & \beq(\cons(a,\nil),\snoc(b,\nil)) \\
- & = & \beq(\cons(a,\nil),\cons(b,\nil)) \\
- & = & \band(\beq(a,b),\beq(\nil,\nil))
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \beq(\cons(a,\nil),\snoc(b,\nil)) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \beq(\cons(a,\nil),\cons(b,\nil)) \\
+ &     \href{@lists@#thm-list-eq-cons}
+   = & \band(\beq(a,b),\beq(\nil,\nil))
 \end{eqnarray*}$$
 as needed. If $y = \cons(c,u)$, we have
 $$\begin{eqnarray*}
@@ -138,7 +141,8 @@ $$\begin{eqnarray*}
  &     \let{y = \cons(c,u)}
    = & \beq(\snoc(a,\nil),\snoc(b,\cons(c,u))) \\
  & = & \beq(\cons(a,\nil),\cons(c,\snoc(b,u))) \\
- & = & \band(\beq(a,c),\beq(\nil,\snoc(b,u))) \\
+ &     \href{@lists@#thm-list-eq-cons}
+   = & \band(\beq(a,c),\beq(\nil,\snoc(b,u))) \\
  & = & \band(\beq(a,c),\bfalse) \\
  &     \href{@and@#thm-and-false-right}
    = & \bfalse \\
@@ -153,7 +157,8 @@ $$\begin{eqnarray*}
  &   & \beq(\snoc(a,\cons(d,x)),\snoc(b,y)) \\
  & = & \beq(\snoc(a,\cons(d,x)),\snoc(b,\nil)) \\
  & = & \beq(\cons(d,\snoc(a,x)),\cons(b,\nil)) \\
- & = & \band(\beq(d,b),\beq(\snoc(a,x),\nil)) \\
+ &     \href{@lists@#thm-list-eq-cons}
+   = & \band(\beq(d,b),\beq(\snoc(a,x),\nil)) \\
  & = & \band(\beq(d,b),\bfalse) \\
  &     \href{@and@#thm-and-false-right}
    = & \bfalse \\
@@ -167,7 +172,8 @@ $$\begin{eqnarray*}
  &   & \beq(\snoc(a,\cons(d,x)),\snoc(b,y)) \\
  & = & \beq(\snoc(a,\cons(d,x)),\snoc(b,\cons(c,u))) \\
  & = & \beq(\cons(d,\snoc(a,x)),\cons(c,\snoc(b,u))) \\
- & = & \band(\beq(d,c),\beq(\snoc(a,x),\snoc(b,u))) \\
+ &     \href{@lists@#thm-list-eq-cons}
+   = & \band(\beq(d,c),\beq(\snoc(a,x),\snoc(b,u))) \\
  &     \href{@snoc@#thm-snoc-eq}
    = & \band(\beq(d,c),\band(\beq(a,b),\beq(x,u))) \\
  & = & \band(\beq(a,b),\band(\beq(d,c),\beq(x,u))) \\

@@ -272,14 +272,16 @@ We proceed by list induction on $x$. For the base case $x = \nil$, note that $\p
 $$\begin{eqnarray*}
  &   & \prefix(\zip(x,u),\zip(y,v)) \\
  & = & \prefix(\zip(\nil,u),\zip(y,v)) \\
- & = & \prefix(\nil,\zip(y,v)) \\
+ &     \href{@zip@#cor-zip-nil-left}
+   = & \prefix(\nil,\zip(y,v)) \\
  & = & \btrue
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the implication holds for some $x$ and let $a \in A$. Suppose further that $\prefix(\cons(a,x),y)$ and $\prefix(u,v)$; in particular we must have $y = \cons(a,k)$ for some $k \in \lists{A}$ with $\prefix(x,k)$, as otherwise $\prefix(\cons(a,x),y) = \bfalse$. Now we have two possibilities for $u$. If $u = \nil$, we have
 $$\begin{eqnarray*}
  &   & \prefix(\zip(\cons(a,x),u),\zip(y,v)) \\
  & = & \prefix(\zip(\cons(a,x),\nil),\zip(y,v)) \\
- & = & \prefix(\nil,\zip(y,v)) \\
+ &     \href{@zip@#cor-zip-cons-nil}
+   = & \prefix(\nil,\zip(y,v)) \\
  & = & \btrue
 \end{eqnarray*}$$
 as claimed. Suppose then that $u = \cons(b,w)$. Again we must have $v = \cons(b,h)$ with $h \in \lists{B}$ and $\prefix(w,h)$, since otherwise we have $\prefix(u,v) = \bfalse$. Using the inductive hypothesis, we have

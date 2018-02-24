@@ -90,7 +90,8 @@ Let $A$ and $B$ be sets. Then for all $x \in \lists{A}$ and $y \in \lists{B}$ we
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \map(\tSwap)(\zip(\nil,y)) \\
- & = & \map(\tSwap)(\nil) \\
+ &     \href{@zip@#cor-zip-nil-left}
+   = & \map(\tSwap)(\nil) \\
  &     \href{@map@#cor-map-nil}
    = & \nil \\
  & = & \zip(y,\nil)
@@ -143,7 +144,8 @@ Let $A$, $B$, $U$, and $V$ be sets, with functions $f : A \rightarrow U$ and $g 
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \map(\tPair(f,g))(\zip(\nil,y)) \\
- & = & \map(\tPair(f,g))(\nil) \\
+ &     \href{@zip@#cor-zip-nil-left}
+   = & \map(\tPair(f,g))(\nil) \\
  &     \href{@map@#cor-map-nil}
    = & \nil \\
  & = & \zip(\nil,\map(g)(y)) \\
@@ -154,7 +156,8 @@ as needed. For the inductive step, suppose the result holds for all $y$ for some
 $$\begin{eqnarray*}
  &   & \map(\tPair(f,g))(\zip(\cons(a,x),y)) \\
  & = & \map(\tPair(f,g))(\zip(\cons(a,x),\nil)) \\
- & = & \map(\tPair(f,g))(\nil) \\
+ &     \href{@zip@#cor-zip-cons-nil}
+   = & \map(\tPair(f,g))(\nil) \\
  &     \href{@map@#cor-map-nil}
    = & \nil \\
  & = & \zip(\map(f)(\cons(a,x)),\nil) \\
@@ -168,7 +171,8 @@ $$\begin{eqnarray*}
  & = & \map(\tPair(f,g))(\zip(\cons(a,x),\cons(b,z))) \\
  & = & \map(\tPair(f,g))(\cons((a,b),\zip(x,z))) \\
  & = & \cons(\tPair(f,g)(a,b),\map(\tPair(f,g))(\zip(x,z))) \\
- & = & \cons(\tPair(f,g)(a,b),\zip(\map(f)(x),\map(g)(z))) \\
+ &     \href{@zip@#thm-map-tPair}
+   = & \cons(\tPair(f,g)(a,b),\zip(\map(f)(x),\map(g)(z))) \\
  & = & \cons((f(a),g(b)),\zip(\map(f)(x),\map(g)(z))) \\
  & = & \zip(\cons(f(a),\map(f)(x)),\cons(g(b),\map(g)(z))) \\
  & = & \zip(\map(f)(\cons(a,x)),\map(g)(\cons(b,z))) \\
@@ -210,7 +214,8 @@ as needed. For the inductive step, suppose the equality holds for all $x$ for so
 $$\begin{eqnarray*}
  &   & \length(\zip(x,\cons(b,y))) \\
  & = & \length(\zip(\nil,\cons(b,y))) \\
- & = & \length(\nil) \\
+ &     \href{@zip@#cor-zip-nil-left}
+   = & \length(\nil) \\
  &     \href{@length@#cor-length-nil}
    = & \zero \\
  &     \href{@max-min@#thm-min-zero-left}
@@ -259,8 +264,10 @@ Let $A$, $B$, and $C$ be sets, with $x \in \lists{A}$, $y \in \lists{B}$, and $z
 $$\begin{eqnarray*}
  &   & \zip(\zip(x,y),z) \\
  & = & \zip(\zip(\nil,y),z) \\
- & = & \zip(\nil,z) \\
- & = & \nil \\
+ &     \href{@zip@#cor-zip-nil-left}
+   = & \zip(\nil,z) \\
+ &     \href{@zip@#cor-zip-nil-left}
+   = & \nil \\
  &     \href{@map@#cor-map-nil}
    = & \map(\tAssocL)(\nil) \\
  & = & \map(\tAssocL)(\zip(\nil,\zip(y,z)))
@@ -269,12 +276,15 @@ as needed. For the inductive step, suppose the equality holds for some $x$, and 
 $$\begin{eqnarray*}
  &   & \zip(\zip(\cons(a,x),y),z) \\
  & = & \zip(\zip(\cons(a,x),\nil),z) \\
- & = & \zip(\nil,z) \\
- & = & \nil \\
+ &     \href{@zip@#cor-zip-cons-nil}
+   = & \zip(\nil,z) \\
+ &     \href{@zip@#cor-zip-nil-left}
+   = & \nil \\
  &     \href{@map@#cor-map-nil}
    = & \map(\tAssocL)(\nil) \\
  & = & \map(\tAssocL)(\zip(\cons(a,x),\nil)) \\
- & = & \map(\tAssocL)(\zip(\cons(a,x),\zip(\nil,z))) \\
+ &     \href{@zip@#cor-zip-nil-left}
+   = & \map(\tAssocL)(\zip(\cons(a,x),\zip(\nil,z))) \\
  & = & \map(\tAssocL)(\zip(\cons(a,x),\zip(y,z)))
 \end{eqnarray*}$$
 as claimed. Similarly, if $z = \nil$, we have

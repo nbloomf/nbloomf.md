@@ -412,7 +412,8 @@ as needed. Suppose instead that $y = \cons(b,u)$. Using the inductive hypothsis,
 $$\begin{eqnarray*}
  &   & \beq(\cons(a,x),y) \\
  & = & \beq(\cons(a,x),\cons(b,u)) \\
- & = & \band(\beq(a,b),\beq(x,u)) \\
+ &     \href{@lists@#thm-list-eq-cons}
+   = & \band(\beq(a,b),\beq(x,u)) \\
  &     \href{@rev@#thm-beq-rev}
    = & \band(\beq(a,b),\beq(\rev(x),\rev(u))) \\
  &     \href{@snoc@#thm-snoc-eq}
