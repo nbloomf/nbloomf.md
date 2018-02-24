@@ -447,3 +447,6 @@
 @zip@#cor-zip-cons-cons	\\zip(\\cons(a,x),\\cons(b,y)) = \\cons(\\tup(a)(b),\\zip(x,y))
 @zip@#thm-zip-tSwap	\\map(\\tSwap)(\\zip(x,y)) = \\zip(y,x)
 @zip@#thm-map-tPair	\\map(\\tPair(f,g))(\\zip(x,y)) = \\zip(\\map(f)(x),\\map(g)(y))
+@zip@#thm-length-zip	\\length(\\zip(x,y)) = \\nmin(\\length(x),\\length(y))
+@zip@#thm-zip-assocL	\\zip(\\zip(x,y),z) = \\map(\\tAssocL)(\\zip(x,\\zip(y,z)))
+@zip@#thm-zip-assocR	\\zip(x,\\zip(y,z)) = \\map(\\tAssocR)(\\zip(\\zip(x,y),z))

@@ -195,20 +195,19 @@ as needed.
 $\zip$ interacts with $\length$.
 
 :::::: theorem :::::
+[]{#thm-length-zip}
 Let $A$ and $B$ be sets, with $x \in \lists{A}$ and $y \in \lists{B}$. Then $$\length(\zip(x,y)) = \nmin(\length(x),\length(y)).$$
 
 ::: proof ::::::::::
 We proceed by list induction on $y$. For the base case $y = \nil$ we have
 $$\begin{eqnarray*}
- &   & \length(\zip(x,y)) \\
- & = & \length(\zip(x,\nil)) \\
+ &   & \length(\zip(x,\nil)) \\
  & = & \length(\nil) \\
  &     \href{@length@#cor-length-nil}
    = & \zero \\
  & = & \nmin(\length(x),\zero) \\
  &     \href{@length@#cor-length-nil}
-   = & \nmin(\length(x),\length(\nil)) \\
- & = & \nmin(\length(x),\length(y))
+   = & \nmin(\length(x),\length(\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $x$ for some $y$ and let $b \in B$. We consider two cases: either $x = \nil$ or $x = \cons(a,z)$. If $x = \nil$, we have
 $$\begin{eqnarray*}
@@ -254,6 +253,7 @@ as needed.
 $\zip$ is kind of associative.
 
 :::::: theorem :::::
+[]{#thm-zip-assocL}[]{#thm-zip-assocR}
 Let $A$, $B$, and $C$ be sets, with $x \in \lists{A}$, $y \in \lists{B}$, and $z \in \lists{C}$. Then the following hold.
 
 1. $\zip(\zip(x,y),z) = \map(\tAssocL)(\zip(x,\zip(y,z)))$.
@@ -290,7 +290,8 @@ $$\begin{eqnarray*}
 as claimed. Similarly, if $z = \nil$, we have
 $$\begin{eqnarray*}
  &   & \zip(\zip(\cons(a,x),y),z) \\
- & = & \zip(\zip(\cons(a,x),y),\nil) \\
+ &     \let{z = \nil}
+   = & \zip(\zip(\cons(a,x),y),\nil) \\
  & = & \nil \\
  &     \href{@map@#cor-map-nil}
    = & \map(\tAssocL)(\nil) \\
@@ -301,8 +302,8 @@ as claimed. Suppose then that $y = \cons(b,u)$ and $z = \cons(c,v)$. Using the i
 $$\begin{eqnarray*}
  &   & \zip(\zip(\cons(a,x),y),z) \\
  & = & \zip(\zip(\cons(a,x),\cons(b,u)),\cons(c,v)) \\
- & = & \zip(\cons((a,b),\zip(x,u)),\cons(c,v)) \\
- & = & \cons(((a,b),c),\zip(\zip(x,u),v)) \\
+ & = & \zip(\cons(\tup(a)(b),\zip(x,u)),\cons(c,v)) \\
+ & = & \cons(\tup(\tup(a)(b))(c),\zip(\zip(x,u),v)) \\
  & = & \cons(\tAssocL(a,(b,c)),\map(\tAssocL)(\zip(x,\zip(u,v)))) \\
  & = & \map(\tAssocL)(\cons((a,(b,c)),\zip(x,\zip(u,v)))) \\
  & = & \map(\tAssocL)(\zip(\cons(a,x),\cons((b,c),\zip(u,v)))) \\
