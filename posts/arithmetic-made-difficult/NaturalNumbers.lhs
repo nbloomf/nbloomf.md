@@ -16,7 +16,11 @@ slug: nats
 > 
 > import Testing
 > import Functions
+> import Flip
+> import Clone
+> import Composition
 > import Booleans
+> import Tuples
 > import DisjointUnions
 > import Unary
 
@@ -145,3 +149,20 @@ Main.
 > main_nats :: IO ()
 > main_nats = do
 >   _test_nats (zero :: Unary) 100 100
+> 
+>   let a = zero :: Unary
+>   let b = true :: Bool
+>   let c = tup zero zero :: Pair Unary Unary
+> 
+>   _test_functions      20 200 a a a a
+>   _test_functions      20 200 a b a b
+>   _test_flip           20 200 a a a a a a a
+>   _test_flip           20 200 a b c a b c a
+>   _test_clone          20 200 a a
+>   _test_clone          20 200 a c
+>   _test_compose        20 200 a a a a a a a
+>   _test_compose        20 200 a b c a b c a
+>   _test_tuple          20 200 a a a
+>   _test_tuple          20 200 a b c
+>   _test_disjoint_union 20 200 a a a
+>   _test_disjoint_union 20 200 a b c
