@@ -12,10 +12,6 @@ slug: simprec
 >   ) where
 > 
 > import Testing
-> import Functions
-> import Flip
-> import Clone
-> import Composition
 > import Booleans
 > import Tuples
 > import DisjointUnions
@@ -133,27 +129,16 @@ As we did with $\natrec(\ast)(\ast)$, we'd like to implement $\simprec(\ast)(\as
 
 There's the naive way:
 
-> foo :: (Natural n) => (a -> b) -> (n -> a -> b -> b) -> n -> a -> b
-> foo = compose1on4 snd (flip5 (compose1on4 clone (flip4 (compose2on2 naturalRec))) epsilon chi)
-
-> epsilon :: (Natural n) => (a -> b) -> a -> Pair n b
-> epsilon = compose (tup zero)
-
-> chi :: (Natural n) => (n -> a -> b -> b) -> a -> Pair n b -> Pair n b
-> chi = compose1on2 uncurry (flip2 (flip (clone (flip2 (compose compose1on3 (compose tup next))))))
-
-> simpleRec' = foo
-
 > simpleRec'' phi mu n a = case unnext n of
 >   Left () -> phi a
 >   Right k -> mu k a $ simpleRec'' phi mu k a
 
 There's the definition from the proof:
 
- > simpleRec' phi mu n a = snd (naturalRec (epsilon a) (chi a) n)
- >   where
- >     epsilon b = tup zero (phi b)
- >     chi c (Pair m b) = tup (next m) (mu m c b)
+> simpleRec' phi mu n a = snd (naturalRec (epsilon a) (chi a) n)
+>   where
+>     epsilon b = tup zero (phi b)
+>     chi c (Pair m b) = tup (next m) (mu m c b)
 
 And the tail recursive strategy:
 

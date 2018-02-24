@@ -69,6 +69,7 @@ as claimed.
 As a consequence, we can use $\uncons$ to characterize equality for lists.
 
 :::::: theorem :::::
+[]{#thm-list-eq-nil}[]{#thm-list-eq-cons}
 Let $A$ be a set. Then we have the following.
 
 1. Every element of $\lists{A}$ is equal to either $\nil$ or to $\cons(a,x)$ for some $a \in A$ and $x \in \lists{A}$.

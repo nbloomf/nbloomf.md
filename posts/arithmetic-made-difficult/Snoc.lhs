@@ -91,7 +91,8 @@ $$\begin{eqnarray*}
    = & \foldr(e)(\varphi)(\cons(b,\snoc(a,x))) \\
  &     \href{@lists@#def-foldr-cons}
    = & \varphi(b,\foldr(e)(\varphi)(\snoc(a,x))) \\
- & = & \varphi(b,\foldr(\varphi(a,e))(\varphi)(x)) \\
+ &     \hyp{\foldr(e)(\varphi)(\snoc(a,x)) = \foldr(\varphi(a,e))(\varphi)(x)}
+   = & \varphi(b,\foldr(\varphi(a,e))(\varphi)(x)) \\
  &     \href{@lists@#def-foldr-cons}
    = & \foldr(\varphi(a,e))(\varphi)(\cons(b,x))
 \end{eqnarray*}$$
@@ -126,16 +127,16 @@ Let $A$ be a set with $a,b \in A$ and $x,y \in \lists{A}$. Then $$\beq(\snoc(a,x
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case, set $x = \nil$. We consider two possibilities for $y$. If $y = \nil$, we have
 $$\begin{eqnarray*}
- &   & \beq(\snoc(a,x),\snoc(b,y)) \\
- & = & \beq(\snoc(a,\nil),\snoc(b,\nil)) \\
+ &   & \beq(\snoc(a,\nil),\snoc(b,\nil)) \\
+ & = & \beq(\cons(a,\nil),\snoc(b,\nil)) \\
  & = & \beq(\cons(a,\nil),\cons(b,\nil)) \\
- & = & \band(\beq(a,b),\beq(\nil,\nil)) \\
- & = & \band(\beq(a,b),\beq(x,y))
+ & = & \band(\beq(a,b),\beq(\nil,\nil))
 \end{eqnarray*}$$
 as needed. If $y = \cons(c,u)$, we have
 $$\begin{eqnarray*}
- &   & \beq(\snoc(a,x),\snoc(b,y)) \\
- & = & \beq(\snoc(a,\nil),\snoc(b,\cons(c,u))) \\
+ &   & \beq(\snoc(a,\nil),\snoc(b,y)) \\
+ &     \let{y = \cons(c,u)}
+   = & \beq(\snoc(a,\nil),\snoc(b,\cons(c,u))) \\
  & = & \beq(\cons(a,\nil),\cons(c,\snoc(b,u))) \\
  & = & \band(\beq(a,c),\beq(\nil,\snoc(b,u))) \\
  & = & \band(\beq(a,c),\bfalse) \\
@@ -144,7 +145,8 @@ $$\begin{eqnarray*}
  &     \href{@and@#thm-and-false-right}
    = & \band(\beq(a,b),\bfalse) \\
  & = & \band(\beq(a,b),\beq(\nil,\cons(c,u))) \\
- & = & \band(\beq(a,b),\beq(x,y))
+ &     \let{y = \cons(c,u)}
+   = & \band(\beq(a,b),\beq(\nil,y))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$, $b$, and $y$ for some $x$ and let $d \in A$. We again consider two possibilities for $y$. If $y = \nil$, we have
 $$\begin{eqnarray*}

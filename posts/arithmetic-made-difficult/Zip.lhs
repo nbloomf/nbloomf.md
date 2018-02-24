@@ -47,6 +47,7 @@ In Haskell:
 Since $\zip$ is defined in terms of $\dfoldr$, it is the unique solution to a system of functional equations.
 
 :::::: corollary :::
+[]{#cor-zip-nil-left}[]{#cor-zip-cons-nil}[]{#cor-zip-cons-cons}
 Let $A$ and $B$ be sets. Then $\zip$ is the unique solution $f : \lists{A} \times \lists{B} \rightarrow \lists{A \times B}$ to the following equations for all $a \in A$, $b \in B$, $x \in \lists{A}$, and $y \in \lists{B}$.
 $$\left\{\begin{array}{l}
  f(\nil,y) = \nil \\
@@ -79,41 +80,44 @@ $$\left\{\begin{array}{l}
 ::::::::::::::::::::
 ::::::::::::::::::::
 
-Now $\map(\tSwap) \circ \zip = \zip \circ \tSwap$.
+Now $\compose(\map(\tSwap))(\zip) = \compose(\zip)(\tSwap)$.
 
 :::::: theorem :::::
+[]{#thm-zip-tSwap}
 Let $A$ and $B$ be sets. Then for all $x \in \lists{A}$ and $y \in \lists{B}$ we have $$\map(\tSwap)(\zip(x,y)) = \zip(y,x).$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \map(\tSwap)(\zip(x,y)) \\
- & = & \map(\tSwap)(\zip(\nil,y)) \\
+ &   & \map(\tSwap)(\zip(\nil,y)) \\
  & = & \map(\tSwap)(\nil) \\
  &     \href{@map@#cor-map-nil}
    = & \nil \\
- & = & \zip(y,\nil) \\
- & = & \zip(y,x)
+ & = & \zip(y,\nil)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $y \in \lists{B}$ for some $x \in \lists{A}$, and let $a \in A$. Now we consider two possibilities for $y$. If $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \map(\tSwap)(\zip(\cons(a,x),y)) \\
- & = & \map(\tSwap)(\zip(\cons(a,x),\nil)) \\
+ &     \let{y = \nil}
+   = & \map(\tSwap)(\zip(\cons(a,x),\nil)) \\
  & = & \map(\tSwap)(\nil) \\
  &     \href{@map@#cor-map-nil}
    = & \nil \\
  & = & \zip(\nil,\cons(a,x)) \\
- & = & \zip(y,\cons(a,x))
+ &     \let{y = \nil}
+   = & \zip(y,\cons(a,x))
 \end{eqnarray*}$$
 as needed. If $y = \cons(b,z)$, using the induction hypotheses, we have
 $$\begin{eqnarray*}
  &   & \map(\tSwap)(\zip(\cons(a,x),y)) \\
- & = & \map(\tSwap)(\zip(\cons(a,x),\cons(b,z))) \\
+ &     \let{y = \cons(b,z)}
+   = & \map(\tSwap)(\zip(\cons(a,x),\cons(b,z))) \\
  & = & \map(\tSwap)(\cons((a,b),\zip(x,z))) \\
  & = & \cons(\tSwap(a,b),\map(\tSwap)(\zip(x,z))) \\
  & = & \cons((b,a),\zip(z,x)) \\
  & = & \zip(\cons(b,z),\cons(a,x)) \\
- & = & \zip(y,\cons(a,x))
+ &     \let{y = \cons(b,z)}
+   = & \zip(y,\cons(a,x))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -132,20 +136,19 @@ as needed.
 And $\map(\tPair(f,g)) \circ \zip = \zip \circ \tPair(\map(f),\map(g))$.
 
 :::::: theorem :::::
+[]{#thm-map-tPair}
 Let $A$, $B$, $U$, and $V$ be sets, with functions $f : A \rightarrow U$ and $g : B \rightarrow V$. Then for all $x \in \lists{A}$ and $y \in \lists{B}$, we have $$\map(\tPair(f,g))(\zip(x,y)) = \zip(\map(f)(x),\map(g)(y)).$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \map(\tPair(f,g))(\zip(x,y)) \\
- & = & \map(\tPair(f,g))(\zip(\nil,y)) \\
+ &   & \map(\tPair(f,g))(\zip(\nil,y)) \\
  & = & \map(\tPair(f,g))(\nil) \\
  &     \href{@map@#cor-map-nil}
    = & \nil \\
  & = & \zip(\nil,\map(g)(y)) \\
  &     \href{@map@#cor-map-nil}
-   = & \zip(\map(f)(\nil),\map(g)(y)) \\
- & = & \zip(\map(f)(x),\map(g)(y))
+   = & \zip(\map(f)(\nil),\map(g)(y))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the result holds for all $y$ for some $x \in \lists{A}$, and let $a \in A$. We now consider two possibilities for $y$. If $y = \nil$, we have
 $$\begin{eqnarray*}

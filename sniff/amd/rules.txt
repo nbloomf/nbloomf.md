@@ -331,6 +331,8 @@
 @lists@#def-uncons-inverse-right	\\compose(\\either(\\const(\\nil),\\uncurry(\\cons)))(\\uncons) = \\id
 @lists@#thm-uncons-nil	\\uncons(\\nil) = \\lft(\\ast)
 @lists@#thm-uncons-cons	\\uncons(\\cons(a,x)) = \\rgt(\\tup(a)(x))
+@lists@#thm-list-eq-nil	\\beq(\\nil,\\cons(a,x)) = \\bfalse
+@lists@#thm-list-eq-cons	\\beq(\\cons(a,x),\\cons(b,y)) = \\band(\\beq(a,b))(\\beq(x,y))
 @lists@#def-foldr-nil	\\foldr(e)(f)(\\nil) = e
 @lists@#def-foldr-cons	\\foldr(e)(f)(\\cons(a,x)) = f(a,\\foldr(e)(f)(x))
 @lists@#thm-foldr-nil-cons	\\foldr(\\nil)(\\cons) = \\id
@@ -437,3 +439,11 @@
 @map@#thm-at-map	\\at(\\map(f)(x),k) = \\uPair(\\id,f)(\\at(x,k))
 @map@#thm-length-map	\\length(\\map(f)(x)) = \\length(x)
 @map@#thm-isnil-map	\\isnil(\\map(f)(x)) = \\isnil(x)
+#=======================#
+#--- zip ---------------#
+#=======================#
+@zip@#cor-zip-nil-left	\\zip(\\nil,y) = \\nil
+@zip@#cor-zip-cons-nil	\\zip(\\cons(a,x),\\nil) = \\nil
+@zip@#cor-zip-cons-cons	\\zip(\\cons(a,x),\\cons(b,y)) = \\cons(\\tup(a)(b),\\zip(x,y))
+@zip@#thm-zip-tSwap	\\map(\\tSwap)(\\zip(x,y)) = \\zip(y,x)
+@zip@#thm-map-tPair	\\map(\\tPair(f,g))(\\zip(x,y)) = \\zip(\\map(f)(x),\\map(g)(y))
