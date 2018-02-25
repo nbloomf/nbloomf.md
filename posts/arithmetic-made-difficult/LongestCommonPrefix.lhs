@@ -388,7 +388,8 @@ $$\begin{eqnarray*}
  &     \href{@zip@#cor-zip-cons-nil}
    = & \lcp(\nil,\zip(y,v)) \\
  & = & \nil \\
- & = & \zip(\lcp(\cons(a,x),y),\nil) \\
+ &     \href{@zip@#thm-zip-nil-right}
+   = & \zip(\lcp(\cons(a,x),y),\nil) \\
  & = & \zip(\lcp(\cons(a,x),y),\lcp(\nil,v)) \\
  & = & \zip(\lcp(\cons(a,x),y),\lcp(u,v))
 \end{eqnarray*}$$
@@ -396,9 +397,11 @@ as claimed. If $v = \nil$, we have
 $$\begin{eqnarray*}
  &   & \lcp(\zip(\cons(a,x),u),\zip(y,v)) \\
  & = & \lcp(\zip(\cons(a,x),u),\zip(y,\nil)) \\
- & = & \lcp(\zip(\cons(a,x),u),\nil) \\
+ &     \href{@zip@#thm-zip-nil-right}
+   = & \lcp(\zip(\cons(a,x),u),\nil) \\
  & = & \nil \\
- & = & \zip(\lcp(\cons(a,x),y),\nil) \\
+ &     \href{@zip@#thm-zip-nil-right}
+   = & \zip(\lcp(\cons(a,x),y),\nil) \\
  & = & \zip(\lcp(\cons(a,x),y),\lcp(u,\nil)) \\
  & = & \zip(\lcp(\cons(a,x),y),\lcp(u,v))
 \end{eqnarray*}$$
@@ -418,7 +421,8 @@ $$\begin{eqnarray*}
  &   & \zip(\lcp(\cons(a,x),y),\lcp(u,v)) \\
  & = & \zip(\lcp(\cons(a,x),y),\lcp(\cons(c,h),\cons(d,k))) \\
  & = & \zip(\lcp(\cons(a,x),y),\nil) \\
- & = & \nil \\
+ &     \href{@zip@#thm-zip-nil-right}
+   = & \nil \\
  & = & \lcp(\cons((a,b),\zip(x,h)),\cons((c,d),\zip(w,k))) \\
  & = & \lcp(\zip(\cons(a,x),\cons(b,h)),\zip(\cons(c,w),\cons(d,k))) \\
  & = & \lcp(\zip(\cons(a,x),u),\zip(y,v))

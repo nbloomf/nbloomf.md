@@ -148,8 +148,10 @@ $$\begin{eqnarray*}
  &     \let{y = \cons(b,z)}
    = & \map(\tSwap)(\zip(\cons(a,x),\cons(b,z))) \\
  & = & \map(\tSwap)(\cons(\tup(a)(b),\zip(x,z))) \\
- & = & \cons(\tSwap(\tup(a)(b)),\map(\tSwap)(\zip(x,z))) \\
- & = & \cons(\tup(b)(a),\map(\tSwap)(\zip(x,z))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \cons(\tSwap(\tup(a)(b)),\map(\tSwap)(\zip(x,z))) \\
+ &     \href{@tuples@#thm-tSwap-swap}
+   = & \cons(\tup(b)(a),\map(\tSwap)(\zip(x,z))) \\
  &     \hyp{\map(\tSwap)(\zip(x,z)) = \zip(z,x)}
    = & \cons(\tup(b)(a),\zip(z,x)) \\
  & = & \zip(\cons(b,z),\cons(a,x)) \\
@@ -211,11 +213,13 @@ $$\begin{eqnarray*}
  &     \let{y = \cons(b,z)}
    = & \map(\tPair(f,g))(\zip(\cons(a,x),\cons(b,z))) \\
  & = & \map(\tPair(f,g))(\cons(\tup(a)(b),\zip(x,z))) \\
- & = & \cons(\tPair(f,g)(\tup(a)(b)),\map(\tPair(f,g))(\zip(x,z))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \cons(\tPair(f,g)(\tup(a)(b)),\map(\tPair(f,g))(\zip(x,z))) \\
  &     \hyp{\map(\tPair(f,g))(\zip(x,y)) = \zip(\map(f)(x))(\map(g)(y))}
    = & \cons(\tPair(f,g)(\tup(a)(b)),\zip(\map(f)(x),\map(g)(z))) \\
  & = & \cons(\tup(f(a))(g(b)),\zip(\map(f)(x),\map(g)(z))) \\
- & = & \zip(\cons(f(a),\map(f)(x)),\cons(g(b),\map(g)(z))) \\
+ &     \href{@zip@#cor-zip-cons-cons}
+   = & \zip(\cons(f(a),\map(f)(x)),\cons(g(b),\map(g)(z))) \\
  & = & \zip(\map(f)(\cons(a,x)),\map(g)(\cons(b,z))) \\
  &     \let{y = \cons(b,z)}
    = & \zip(\map(f)(\cons(a,x)),\map(g)(y))
@@ -244,7 +248,8 @@ Let $A$ and $B$ be sets, with $x \in \lists{A}$ and $y \in \lists{B}$. Then $$\l
 We proceed by list induction on $y$. For the base case $y = \nil$ we have
 $$\begin{eqnarray*}
  &   & \length(\zip(x,\nil)) \\
- & = & \length(\nil) \\
+ &     \href{@zip@#thm-zip-nil-right}
+   = & \length(\nil) \\
  &     \href{@length@#cor-length-nil}
    = & \zero \\
  & = & \nmin(\length(x),\zero) \\
@@ -270,7 +275,8 @@ $$\begin{eqnarray*}
  & = & \length(\zip(\cons(a,z),\cons(b,y))) \\
  & = & \length(\cons((a,b),\zip(z,y))) \\
  & = & \next(\length(\zip(z,y))) \\
- & = & \next(\nmin(\length(z),\length(y))) \\
+ &     \href{@zip@#thm-length-zip}
+   = & \next(\nmin(\length(z),\length(y))) \\
  &     \href{@max-min@#thm-next-min-distribute}
    = & \nmin(\next(\length(z)),\next(\length(y))) \\
  & = & \nmin(\length(\cons(a,z)),\length(\cons(b,y))) \\
@@ -360,7 +366,8 @@ $$\begin{eqnarray*}
  &     \href{@zip@#cor-zip-cons-cons}
    = & \cons(\tup(\tup(a)(b))(c),\zip(\zip(x,u),v)) \\
  & = & \cons(\tAssocL(\tup(a)(\tup(b)(c))),\map(\tAssocL)(\zip(x,\zip(u,v)))) \\
- & = & \map(\tAssocL)(\cons(\tup(a)(\tup(b)(c)),\zip(x,\zip(u,v)))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \map(\tAssocL)(\cons(\tup(a)(\tup(b)(c)),\zip(x,\zip(u,v)))) \\
  & = & \map(\tAssocL)(\zip(\cons(a,x),\cons((b,c),\zip(u,v)))) \\
  & = & \map(\tAssocL)(\zip(\cons(a,x),\zip(\cons(b,u),\cons(c,v)))) \\
  & = & \map(\tAssocL)(\zip(\cons(a,x),\zip(y,z)))

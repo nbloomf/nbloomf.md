@@ -236,9 +236,11 @@ $$\begin{eqnarray*}
  &   & \zip(\take(\next(k),x),\take(\next(k),y)) \\
  & = & \zip(\take(\next(k),x),\take(\next(k),\nil)) \\
  & = & \zip(\take(\next(k),x),\nil) \\
- & = & \nil \\
+ &     \href{@zip@#thm-zip-nil-right}
+   = & \nil \\
  & = & \take(\next(k),\nil) \\
- & = & \take(\next(k),\zip(x,\nil)) \\
+ &     \href{@zip@#thm-zip-nil-right}
+   = & \take(\next(k),\zip(x,\nil)) \\
  & = & \take(\next(k),\zip(x,y))
 \end{eqnarray*}$$
 as needed. Suppose instead that $y = \cons(b,v)$. Now
