@@ -445,6 +445,7 @@
 @zip@#cor-zip-nil-left	\\zip(\\nil,y) = \\nil
 @zip@#cor-zip-cons-nil	\\zip(\\cons(a,x),\\nil) = \\nil
 @zip@#cor-zip-cons-cons	\\zip(\\cons(a,x),\\cons(b,y)) = \\cons(\\tup(a)(b),\\zip(x,y))
+@zip@#thm-zip-nil-right	\\zip(x,\\nil) = \\nil
 @zip@#thm-zip-tSwap	\\map(\\tSwap)(\\zip(x,y)) = \\zip(y,x)
 @zip@#thm-map-tPair	\\map(\\tPair(f,g))(\\zip(x,y)) = \\zip(\\map(f)(x),\\map(g)(y))
 @zip@#thm-length-zip	\\length(\\zip(x,y)) = \\nmin(\\length(x),\\length(y))

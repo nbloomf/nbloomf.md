@@ -80,6 +80,39 @@ $$\left\{\begin{array}{l}
 ::::::::::::::::::::
 ::::::::::::::::::::
 
+Implicit in the universal property is that $\nil$ is a right zero for $\zip$.
+
+:::::: theorem :::::
+[]{#thm-zip-nil-right}
+For all $x \in \lists{A}$ we have $\zip(x,\nil) = \nil$.
+
+::: proof ::::::::::
+We have two possibilities for $x$. If $x = \nil$, then
+$$\begin{eqnarray*}
+ &   & \zip(\nil,\nil) \\
+ &     \href{@zip@#cor-zip-nil-left}
+   = & \nil
+\end{eqnarray*}$$
+and if $x = \cons(a,y)$, we have
+$$\begin{eqnarray*}
+ &   & \zip(\cons(a,y),\nil) \\
+ &     \href{@zip@#cor-zip-cons-nil}
+   = & \nil
+\end{eqnarray*}$$
+as claimed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_zip_nil_right :: (List t, Equal (t (Pair a b)))
+>   => t a -> t b -> Test (t a -> Bool)
+> _test_zip_nil_right _ tb =
+>   testName "zip(x,nil) == nil" $
+>   \x -> eq (zip x (nil `withTypeOf` tb)) nil
+
+::::::::::::::::::::
+::::::::::::::::::::
+
 Now $\compose(\map(\tSwap))(\zip) = \compose(\zip)(\tSwap)$.
 
 :::::: theorem :::::
@@ -104,7 +137,8 @@ $$\begin{eqnarray*}
  & = & \map(\tSwap)(\nil) \\
  &     \href{@map@#cor-map-nil}
    = & \nil \\
- & = & \zip(\nil,\cons(a,x)) \\
+ &     \href{@zip@#cor-zip-nil-left}
+   = & \zip(\nil,\cons(a,x)) \\
  &     \let{y = \nil}
    = & \zip(y,\cons(a,x))
 \end{eqnarray*}$$
@@ -113,9 +147,11 @@ $$\begin{eqnarray*}
  &   & \map(\tSwap)(\zip(\cons(a,x),y)) \\
  &     \let{y = \cons(b,z)}
    = & \map(\tSwap)(\zip(\cons(a,x),\cons(b,z))) \\
- & = & \map(\tSwap)(\cons((a,b),\zip(x,z))) \\
- & = & \cons(\tSwap(a,b),\map(\tSwap)(\zip(x,z))) \\
- & = & \cons((b,a),\zip(z,x)) \\
+ & = & \map(\tSwap)(\cons(\tup(a)(b),\zip(x,z))) \\
+ & = & \cons(\tSwap(\tup(a)(b)),\map(\tSwap)(\zip(x,z))) \\
+ & = & \cons(\tup(b)(a),\map(\tSwap)(\zip(x,z))) \\
+ &     \hyp{\map(\tSwap)(\zip(x,z)) = \zip(z,x)}
+   = & \cons(\tup(b)(a),\zip(z,x)) \\
  & = & \zip(\cons(b,z),\cons(a,x)) \\
  &     \let{y = \cons(b,z)}
    = & \zip(y,\cons(a,x))
@@ -148,35 +184,41 @@ $$\begin{eqnarray*}
    = & \map(\tPair(f,g))(\nil) \\
  &     \href{@map@#cor-map-nil}
    = & \nil \\
- & = & \zip(\nil,\map(g)(y)) \\
+ &     \href{@zip@#cor-zip-nil-left}
+   = & \zip(\nil,\map(g)(y)) \\
  &     \href{@map@#cor-map-nil}
    = & \zip(\map(f)(\nil),\map(g)(y))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the result holds for all $y$ for some $x \in \lists{A}$, and let $a \in A$. We now consider two possibilities for $y$. If $y = \nil$, we have
 $$\begin{eqnarray*}
- &   & \map(\tPair(f,g))(\zip(\cons(a,x),y)) \\
- & = & \map(\tPair(f,g))(\zip(\cons(a,x),\nil)) \\
+ &   & \map(\tPair(f,g))(\zip(\cons(a,x),\nil)) \\
+ &     \let{y = \nil}
+   = & \map(\tPair(f,g))(\zip(\cons(a,x),\nil)) \\
  &     \href{@zip@#cor-zip-cons-nil}
    = & \map(\tPair(f,g))(\nil) \\
  &     \href{@map@#cor-map-nil}
    = & \nil \\
- & = & \zip(\map(f)(\cons(a,x)),\nil) \\
+ &     \href{@zip@#thm-zip-nil-right}
+   = & \zip(\map(f)(\cons(a,x)),\nil) \\
  &     \href{@map@#cor-map-nil}
    = & \zip(\map(f)(\cons(a,x)),\map(g)(\nil)) \\
- & = & \zip(\map(f)(\cons(a,x)),\map(g)(y))
+ &     \let{y = \nil}
+   = & \zip(\map(f)(\cons(a,x)),\map(g)(y))
 \end{eqnarray*}$$
 as needed. If $y = \cons(b,z)$, using the inductive hypothesis we have
 $$\begin{eqnarray*}
  &   & \map(\tPair(f,g))(\zip(\cons(a,x),y)) \\
- & = & \map(\tPair(f,g))(\zip(\cons(a,x),\cons(b,z))) \\
- & = & \map(\tPair(f,g))(\cons((a,b),\zip(x,z))) \\
- & = & \cons(\tPair(f,g)(a,b),\map(\tPair(f,g))(\zip(x,z))) \\
- &     \href{@zip@#thm-map-tPair}
-   = & \cons(\tPair(f,g)(a,b),\zip(\map(f)(x),\map(g)(z))) \\
- & = & \cons((f(a),g(b)),\zip(\map(f)(x),\map(g)(z))) \\
+ &     \let{y = \cons(b,z)}
+   = & \map(\tPair(f,g))(\zip(\cons(a,x),\cons(b,z))) \\
+ & = & \map(\tPair(f,g))(\cons(\tup(a)(b),\zip(x,z))) \\
+ & = & \cons(\tPair(f,g)(\tup(a)(b)),\map(\tPair(f,g))(\zip(x,z))) \\
+ &     \hyp{\map(\tPair(f,g))(\zip(x,y)) = \zip(\map(f)(x))(\map(g)(y))}
+   = & \cons(\tPair(f,g)(\tup(a)(b)),\zip(\map(f)(x),\map(g)(z))) \\
+ & = & \cons(\tup(f(a))(g(b)),\zip(\map(f)(x),\map(g)(z))) \\
  & = & \zip(\cons(f(a),\map(f)(x)),\cons(g(b),\map(g)(z))) \\
  & = & \zip(\map(f)(\cons(a,x)),\map(g)(\cons(b,z))) \\
- & = & \zip(\map(f)(\cons(a,x)),\map(g)(y))
+ &     \let{y = \cons(b,z)}
+   = & \zip(\map(f)(\cons(a,x)),\map(g)(y))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -262,50 +304,63 @@ Let $A$, $B$, and $C$ be sets, with $x \in \lists{A}$, $y \in \lists{B}$, and $z
 ::: proof ::::::::::
 1. We proceed by list induction on $x$. For the base case $x = \nil$, note that
 $$\begin{eqnarray*}
- &   & \zip(\zip(x,y),z) \\
- & = & \zip(\zip(\nil,y),z) \\
+ &   & \zip(\zip(\nil,y),z) \\
  &     \href{@zip@#cor-zip-nil-left}
    = & \zip(\nil,z) \\
  &     \href{@zip@#cor-zip-nil-left}
    = & \nil \\
  &     \href{@map@#cor-map-nil}
    = & \map(\tAssocL)(\nil) \\
- & = & \map(\tAssocL)(\zip(\nil,\zip(y,z)))
+ &     \href{@zip@#cor-zip-nil-left}
+   = & \map(\tAssocL)(\zip(\nil,\zip(y,z)))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$, and let $a \in A$. If $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \zip(\zip(\cons(a,x),y),z) \\
- & = & \zip(\zip(\cons(a,x),\nil),z) \\
+ &     \let{y = \nil}
+   = & \zip(\zip(\cons(a,x),\nil),z) \\
  &     \href{@zip@#cor-zip-cons-nil}
    = & \zip(\nil,z) \\
  &     \href{@zip@#cor-zip-nil-left}
    = & \nil \\
  &     \href{@map@#cor-map-nil}
    = & \map(\tAssocL)(\nil) \\
- & = & \map(\tAssocL)(\zip(\cons(a,x),\nil)) \\
+ &     \href{@zip@#thm-zip-nil-right}
+   = & \map(\tAssocL)(\zip(\cons(a,x),\nil)) \\
  &     \href{@zip@#cor-zip-nil-left}
    = & \map(\tAssocL)(\zip(\cons(a,x),\zip(\nil,z))) \\
- & = & \map(\tAssocL)(\zip(\cons(a,x),\zip(y,z)))
+ &     \let{y = \nil}
+   = & \map(\tAssocL)(\zip(\cons(a,x),\zip(y,z)))
 \end{eqnarray*}$$
 as claimed. Similarly, if $z = \nil$, we have
 $$\begin{eqnarray*}
  &   & \zip(\zip(\cons(a,x),y),z) \\
  &     \let{z = \nil}
    = & \zip(\zip(\cons(a,x),y),\nil) \\
- & = & \nil \\
+ &     \href{@zip@#thm-zip-nil-right}
+   = & \nil \\
  &     \href{@map@#cor-map-nil}
    = & \map(\tAssocL)(\nil) \\
- & = & \map(\tAssocL)(\zip(\cons(a,x),\nil)) \\
- & = & \map(\tAssocL)(\zip(\cons(a,x),\zip(y,z)))
+ &     \href{@zip@#thm-zip-nil-right}
+   = & \map(\tAssocL)(\zip(\cons(a,x),\nil)) \\
+ &     \href{@zip@#thm-zip-nil-right}
+   = & \map(\tAssocL)(\zip(\cons(a,x),\zip(y,\nil))) \\
+ &     \let{z = \nil}
+   = & \map(\tAssocL)(\zip(\cons(a,x),\zip(y,z)))
 \end{eqnarray*}$$
 as claimed. Suppose then that $y = \cons(b,u)$ and $z = \cons(c,v)$. Using the inductive hypothesis, we have
 $$\begin{eqnarray*}
  &   & \zip(\zip(\cons(a,x),y),z) \\
- & = & \zip(\zip(\cons(a,x),\cons(b,u)),\cons(c,v)) \\
- & = & \zip(\cons(\tup(a)(b),\zip(x,u)),\cons(c,v)) \\
- & = & \cons(\tup(\tup(a)(b))(c),\zip(\zip(x,u),v)) \\
- & = & \cons(\tAssocL(a,(b,c)),\map(\tAssocL)(\zip(x,\zip(u,v)))) \\
- & = & \map(\tAssocL)(\cons((a,(b,c)),\zip(x,\zip(u,v)))) \\
+ &     \let{y = \cons(b,u)}
+   = & \zip(\zip(\cons(a,x),\cons(b,u)),z) \\
+ &     \let{z = \cons(c,v)}
+   = & \zip(\zip(\cons(a,x),\cons(b,u)),\cons(c,v)) \\
+ &     \href{@zip@#cor-zip-cons-cons}
+   = & \zip(\cons(\tup(a)(b),\zip(x,u)),\cons(c,v)) \\
+ &     \href{@zip@#cor-zip-cons-cons}
+   = & \cons(\tup(\tup(a)(b))(c),\zip(\zip(x,u),v)) \\
+ & = & \cons(\tAssocL(\tup(a)(\tup(b)(c))),\map(\tAssocL)(\zip(x,\zip(u,v)))) \\
+ & = & \map(\tAssocL)(\cons(\tup(a)(\tup(b)(c)),\zip(x,\zip(u,v)))) \\
  & = & \map(\tAssocL)(\zip(\cons(a,x),\cons((b,c),\zip(u,v)))) \\
  & = & \map(\tAssocL)(\zip(\cons(a,x),\zip(\cons(b,u),\cons(c,v)))) \\
  & = & \map(\tAssocL)(\zip(\cons(a,x),\zip(y,z)))
@@ -364,6 +419,7 @@ Suite:
 >   runTest args (_test_zip_nil_list t u)
 >   runTest args (_test_zip_cons_nil t u)
 >   runTest args (_test_zip_cons_cons t u)
+>   runTest args (_test_zip_nil_right t u)
 >   runTest args (_test_zip_tswap t u)
 >   runTest args (_test_zip_tpair t u)
 >   runTest args (_test_zip_length t u n)
