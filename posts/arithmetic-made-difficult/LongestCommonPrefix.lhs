@@ -93,28 +93,32 @@ $$\begin{eqnarray*}
  &   & \prefix(\lcp(x,y),x) \\
  & = & \prefix(\lcp(\nil,y),\nil) \\
  & = & \prefix(\nil,\nil) \\
- & = & \btrue
+ &     \href{@prefix-suffix@#cor-prefix-nil-left}
+   = & \btrue
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
  &   & \prefix(\lcp(x,y),y) \\
  & = & \prefix(\lcp(\nil,y),y) \\
  & = & \prefix(\nil,y) \\
- & = & \btrue
+ &     \href{@prefix-suffix@#cor-prefix-nil-left}
+   = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equalities hold for all $y$ for some $x$, and let $a \in A$. We consider two cases for $y$. If $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \prefix(\lcp(\cons(a,x),y),\cons(a,x)) \\
  & = & \prefix(\lcp(\cons(a,x),\nil),\cons(a,x)) \\
  & = & \prefix(\nil,\cons(a,x)) \\
- & = & \btrue
+ &     \href{@prefix-suffix@#cor-prefix-nil-left}
+   = & \btrue
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
  &   & \prefix(\lcp(\cons(a,x),y),y) \\
  & = & \prefix(\lcp(\cons(a,x),\nil),\nil) \\
  & = & \prefix(\nil,\nil) \\
- & = & \btrue
+ &     \href{@prefix-suffix@#cor-prefix-nil-left}
+   = & \btrue
 \end{eqnarray*}$$
 as needed. Suppose now that $y = \cons(b,w)$. If $b = a$, we have
 $$\begin{eqnarray*}
@@ -139,14 +143,16 @@ $$\begin{eqnarray*}
  &   & \prefix(\lcp(\cons(a,x),y),\cons(a,x)) \\
  & = & \prefix(\lcp(\cons(a,x),\cons(b,w)),\cons(a,x)) \\
  & = & \prefix(\nil,\cons(a,x)) \\
- & = & \btrue
+ &     \href{@prefix-suffix@#cor-prefix-nil-left}
+   = & \btrue
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
  &   & \prefix(\lcp(\cons(a,x),y),y) \\
  & = & \prefix(\lcp(\cons(a,x),\cons(b,w)),\cons(b,w)) \\
  & = & \prefix(\nil,\cons(b,w)) \\
- & = & \btrue
+ &     \href{@prefix-suffix@#cor-prefix-nil-left}
+   = & \btrue
 \end{eqnarray*}$$
 as needed.
 2. We proceed by list induction on $z$. For the base case $z = \nil$, note that $\prefix(\nil,x)$, $\prefix(\nil,y)$, and $\prefix(\nil,\lcp(x,y))$ are all $\btrue$. For the inductive step, suppose the result holds for all $x$ and $y$ for some $z$ and let $a \in A$. Suppose further that $\prefix(\cons(a,z),x)$ and $\prefix(\cons(a,z),y)$. Then we must have $x = \cons(a,u)$ and $y = \cons(a,v)$, and thus $\prefix(z,u)$ and $\prefix(z,v)$ are both $\btrue$. Using the inductive hypothesis, we have

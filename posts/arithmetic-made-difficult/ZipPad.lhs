@@ -143,7 +143,8 @@ as needed. For the inductive step, suppose the equality holds for some $x$ and l
 $$\begin{eqnarray*}
  &   & \map(\tSwap)(\zipPad(u,v)(\cons(a,x),y)) \\
  & = & \map(\tSwap)(\zipPad(u,v)(\cons(a,x),\nil)) \\
- & = & \map(\tSwap)(\map(\flip(\tup)(v))(\cons(a,x))) \\
+ &     \href{@zippad@#thm-zippad-nil-right}
+   = & \map(\tSwap)(\map(\flip(\tup)(v))(\cons(a,x))) \\
  &     \href{@functions@#def-compose}
    = & \compose(\map(\tSwap))(\map(\flip(\tup)(v)))(\cons(a,x)) \\
  & = & \map(\compose(\tSwap)(\flip(\tup)(v)))(\cons(a,x)) \\
@@ -156,11 +157,13 @@ $$\begin{eqnarray*}
  &     \let{y = \cons(b,w)}
    = & \map(\tSwap)(\zipPad(u,v)(\cons(a,x),\cons(b,w))) \\
  & = & \map(\tSwap)(\cons(\tup(a)(b),\zipPad(u,v)(x,w))) \\
- & = & \cons(\tSwap(\tup(a)(b)),\map(\tSwap)(\zipPad(u,v)(x,w))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \cons(\tSwap(\tup(a)(b)),\map(\tSwap)(\zipPad(u,v)(x,w))) \\
  &     \href{@tuples@#thm-tSwap-swap}
    = & \cons(\tup(b)(a),\map(\tSwap)(\zipPad(u,v)(x,w))) \\
  & = & \cons(\tup(b)(a),\zipPad(v,u)(w,x)) \\
- & = & \zipPad(v,u)(\cons(b,w),\cons(a,x)) \\
+ &     \href{@zippad@#cor-zippad-cons-cons}
+   = & \zipPad(v,u)(\cons(b,w),\cons(a,x)) \\
  &     \let{y = \cons(b,w)}
    = & \zipPad(v,u)(y,\cons(a,x))
 \end{eqnarray*}$$
@@ -196,20 +199,23 @@ $$\begin{eqnarray*}
  & = & \map(\compose(\tPair(f,g))(\tup(u)))(y) \\
  & = & \map(\compose(\tup(f(u)))(g))(y) \\
  & = & \map(\tup(f(u)))(\map(g)(y)) \\
- & = & \zipPad(f(u),g(v))(\nil,\map(g)(y)) \\
+ &     \href{@zippad@#cor-zippad-nil-left}
+   = & \zipPad(f(u),g(v))(\nil,\map(g)(y)) \\
  & = & \zipPad(f(u),g(v))(x,\map(g)(y))
 \end{eqnarray*}$$
 as needed. Now suppose the equality holds for some $x$ and let $a \in A$. We consider two cases for $y$; either $y = \nil$ or $y = \cons(b,w)$. If $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \map(\tPair(f,g))(\zipPad(u,v)(\cons(a,x),y)) \\
  & = & \map(\tPair(f,g))(\zipPad(u,v)(\cons(a,x),\nil)) \\
- & = & \map(\tPair(f,g))(\map(\flip(\tup)(v))(\cons(a,x))) \\
+ &     \href{@zippad@#thm-zippad-nil-right}
+   = & \map(\tPair(f,g))(\map(\flip(\tup)(v))(\cons(a,x))) \\
  &     \href{@functions@#def-compose}
    = & \compose(\map(\tPair(f,g)))(\map(\flip(\tup)(v)))(\cons(a,x)) \\
  & = & \map(\compose(\tPair(f,g))(\flip(\tup)(v)))(\cons(a,x)) \\
  & = & \map(\compose(\flip(\tup)(g(v)))(f))(\cons(a,x)) \\
  & = & \map(\flip(\tup)(g(v)))(\map(f)(\cons(a,x))) \\
- & = & \zipPad(f(u),g(v))(\map(f)(\cons(a,x)),\nil) \\
+ &     \href{@zippad@#thm-zippad-nil-right}
+   = & \zipPad(f(u),g(v))(\map(f)(\cons(a,x)),\nil) \\
  & = & \zipPad(f(u),g(v))(\map(f)(\cons(a,x)),y)
 \end{eqnarray*}$$
 as needed. If $y = \cons(b,w)$, we have
@@ -248,7 +254,8 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \length(\zipPad(u,v)(x,y)) \\
  & = & \length(\zipPad(u,v)(\nil,y)) \\
- & = & \length(\map(\tup(u))(y)) \\
+ &     \href{@zippad@#cor-zippad-nil-left}
+   = & \length(\map(\tup(u))(y)) \\
  &     \href{@map@#thm-length-map}
    = & \length(y) \\
  &     \href{@max-min@#thm-max-zero-left}
@@ -260,7 +267,8 @@ as needed. For the inductive step, suppose the equality holds for some $x$ and l
 $$\begin{eqnarray*}
  &   & \length(\zipPad(u,v)(\cons(a,x),y)) \\
  & = & \length(\zipPad(u,v)(\cons(a,x),\nil)) \\
- & = & \length(\map(\flip(\tup)(v))(\cons(a,x))) \\
+ &     \href{@zippad@#thm-zippad-nil-right}
+   = & \length(\map(\flip(\tup)(v))(\cons(a,x))) \\
  &     \href{@map@#thm-length-map}
    = & \length(\cons(a,x)) \\
  & = & \nmax(\length(\cons(a,x)),\zero) \\

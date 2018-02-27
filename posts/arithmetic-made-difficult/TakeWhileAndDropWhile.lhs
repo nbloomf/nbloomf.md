@@ -101,7 +101,8 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \prefix(\takeWhile(p,\nil),\nil) \\
  & = & \prefix(\nil,\nil) \\
- & = & \btrue
+ &     \href{@prefix-suffix@#cor-prefix-nil-left}
+   = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x \in \lists{A}$, and let $a \in A$. We have
 $$\begin{eqnarray*}

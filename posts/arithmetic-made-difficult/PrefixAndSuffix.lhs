@@ -222,7 +222,8 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \prefix(x,y) \\
  & = & \prefix(\nil,y) \\
- & = & \btrue
+ &     \href{@prefix-suffix@#cor-prefix-nil-left}
+   = & \btrue
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
@@ -402,7 +403,8 @@ $$\begin{eqnarray*}
  &   & \suffix(\snoc(a,x),\nil) \\
  & = & \prefix(\rev(\snoc(a,x)),\rev(\nil)) \\
  & = & \prefix(\cons(a,\rev(x)),\nil) \\
- & = & \bfalse
+ &     \href{@prefix-suffix@#cor-prefix-cons-nil}
+   = & \bfalse
 \end{eqnarray*}$$
 as claimed.
 3. First suppose $a = b$. Now
@@ -651,7 +653,8 @@ We consider three possibilities for $x$. If $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \prefix(x,\cons(a,\nil)) \\
  & = & \prefix(\nil,\cons(a,\nil)) \\
- & = & \btrue \\
+ &     \href{@prefix-suffix@#cor-prefix-nil-left}
+   = & \btrue \\
  & = & \suffix(\nil,\cons(a,\nil)) \\
  & = & \suffix(x,\cons(a,\nil))
 \end{eqnarray*}$$
@@ -660,7 +663,8 @@ $$\begin{eqnarray*}
  &   & \prefix(x,\cons(a,\nil)) \\
  & = & \prefix(\cons(b,\nil),\cons(a,\nil)) \\
  & = & \bif{\beq(a,b)}{\prefix(\nil,\nil)}{\bfalse} \\
- & = & \bif{\beq(a,b)}{\btrue}{\bfalse} \\
+ &     \href{@prefix-suffix@#cor-prefix-nil-left}
+   = & \bif{\beq(a,b)}{\btrue}{\bfalse} \\
  & = & \bif{\beq(a,b)}{\suffix(\nil,\nil)}{\bfalse} \\
  & = & \suffix(\snoc(b,\nil),\snoc(a,\nil)) \\
  & = & \suffix(\cons(b,\nil),\cons(a,\nil)) \\

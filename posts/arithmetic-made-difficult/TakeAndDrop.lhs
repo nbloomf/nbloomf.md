@@ -100,13 +100,15 @@ $$\begin{eqnarray*}
  &   & \prefix(\take(k,x),x) \\
  & = & \prefix(\take(\zero,x),x) \\
  & = & \prefix(\nil,x) \\
- & = & \btrue
+ &     \href{@prefix-suffix@#cor-prefix-nil-left}
+   = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the result holds for all $x$ for some $k$. We now proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \prefix(\take(\next(k),\nil),\nil) \\
  & = & \prefix(\nil,\nil) \\
- & = & \btrue
+ &     \href{@prefix-suffix@#cor-prefix-nil-left}
+   = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the result holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}

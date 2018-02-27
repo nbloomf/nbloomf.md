@@ -164,7 +164,8 @@ $$\begin{eqnarray*}
  &   & \prefix(\dedupeL(x),\dedupeL(y)) \\
  & = & \prefix(\dedupeL(\nil),\dedupeL(y)) \\
  & = & \prefix(\nil,\dedupeL(y)) \\
- & = & \btrue
+ &     \href{@prefix-suffix@#cor-prefix-nil-left}
+   = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the implication holds for all $y$ for some $x$ and let $a \in A$. Suppose further that $\prefix(\cons(a,x),y) = \btrue$. Now we must have $y = \cons(a,u)$ where $\prefix(x,u) = \btrue$. Using the inductive hypothesis, we have $$\prefix(\dedupeL(x),\dedupeL(u)) = \btrue,$$ so that $$\prefix(\delete(a,\dedupeL(x)),\delete(a,\dedupeL(u))) = \btrue.$$ Now
 $$\begin{eqnarray*}

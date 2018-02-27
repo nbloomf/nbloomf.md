@@ -428,7 +428,8 @@ $$\begin{eqnarray*}
  &   & \prefix(\delete(a,x),\delete(a,y)) \\
  & = & \prefix(\delete(a,\nil),\delete(a,y)) \\
  & = & \prefix(\nil,\delete(a,y)) \\
- & = & \btrue
+ &     \href{@prefix-suffix@#cor-prefix-nil-left}
+   = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the implication holds for all $a$ and $y$ for some $x$ and let $b \in A$. Suppose further that $\prefix(\cons(b,x),y) = \btrue$. Now we must have $y = \cons(b,u)$ for some $u$ with $\prefix(x,u) = \btrue$. We consider two possibilities. If $a = b$, we have
 $$\begin{eqnarray*}

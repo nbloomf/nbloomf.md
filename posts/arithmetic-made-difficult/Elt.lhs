@@ -299,7 +299,8 @@ $$\begin{eqnarray*}
  & = & \elt(\nil,\cons(\nil,\nil)) \\
  & = & \bif{\beq(\nil,\nil)}{\btrue}{\elt(\nil,\nil)} \\
  & = & \btrue \\
- & = & \prefix(\nil,\nil) \\
+ &     \href{@prefix-suffix@#cor-prefix-nil-left}
+   = & \prefix(\nil,\nil) \\
  & = & \prefix(\rev(\nil),\rev(\nil)) \\
  & = & \suffix(\nil,\nil) \\
  & = & \suffix(y,x)
