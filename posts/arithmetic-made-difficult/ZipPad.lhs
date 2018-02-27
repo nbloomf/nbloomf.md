@@ -40,11 +40,12 @@ In Haskell:
 Since $\zipPad(u,v)$ is defined as a $\dfoldr$, it is the unique solution to a system of functional equations.
 
 :::::: corollary :::
+[]{#cor-zippad-nil-left}[]{#cor-zippad-cons-nil}[]{#cor-zippad-cons-cons}
 Let $A$ and $B$ be sets. Then $\zip$ is the unique solution $f : \lists{A} \times \lists{B} \rightarrow \lists{A \times B}$ to the following equations for all $a \in A$, $b \in B$, $x \in \lists{A}$, and $y \in \lists{B}$.
 $$\left\{\begin{array}{l}
  f(\nil,y) = \map(\tup(u))(y) \\
- f(\cons(a,x),\nil) = \cons((a,v),f(x,nil)) \\
- f(\cons(a,x),\cons(b,y)) = \cons((a,b),f(x,y))
+ f(\cons(a,x),\nil) = \cons(\tup(a)(v),f(x,nil)) \\
+ f(\cons(a,x),\cons(b,y)) = \cons(\tup(a)(b),f(x,y))
 \end{array}\right.$$
 
 ::: test :::::::::::
@@ -77,6 +78,7 @@ $$\left\{\begin{array}{l}
 $\zipPad$ with a nil right argument is a $\map$.
 
 :::::: theorem :::::
+[]{#thm-zippad-nil-right}
 Let $A$ and $B$ be sets, with $u \in A$ and $v \in B$. For all $x \in \lists{A}$, we have 
 $$\zipPad(u,v)(x,\nil) = \map(\flip(\tup)(v))(x)$.
 
@@ -84,19 +86,22 @@ $$\zipPad(u,v)(x,\nil) = \map(\flip(\tup)(v))(x)$.
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \zipPad(u,v)(\nil,\nil) \\
- & = & \map(\tup(u))(\nil) \\
+ &     \href{@zippad@#cor-zippad-nil-left}
+   = & \map(\tup(u))(\nil) \\
  &     \href{@map@#cor-map-nil}
    = & \nil \\
  &     \href{@map@#cor-map-nil}
-   = & \map(\flip(\tup)(v))(\nil) \\
- & = & \map(\flip(\tup)(v))(x)
+   = & \map(\flip(\tup)(v))(\nil)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \zipPad(u,v)(\cons(a,x),\nil) \\
- & = & \cons((a,v),\zipPad(u,v)(x,\nil)) \\
- & = & \cons(\flip(\tup)(v)(a),\zipPad(u,v)(x,\nil)) \\
- & = & \cons(\flip(\tup)(v)(a),\map(\flip(\tup)(v))(x)) \\
+ &     \href{@zippad@#cor-zippad-cons-nil}
+   = & \cons(\tup(a)(v),\zipPad(u,v)(x,\nil)) \\
+ &     \href{@flip@#def-flip}
+   = & \cons(\flip(\tup)(v)(a),\zipPad(u,v)(x,\nil)) \\
+ &     \hyp{\zipPad(u,v)(x,\nil) = \map(\flip(\tup)(v))(x)}
+   = & \cons(\flip(\tup)(v)(a),\map(\flip(\tup)(v))(x)) \\
  &     \href{@map@#cor-map-cons}
    = & \map(\flip(\tup)(v))(\cons(a,x))
 \end{eqnarray*}$$
@@ -117,20 +122,22 @@ as needed.
 $\zipPad$ interacts with $\tSwap$.
 
 :::::: theorem :::::
+[]{#thm-zippad-tSwap}
 Let $A$ and $B$ be sets. Then for all $u \in A$, $v \in B$, $x \in \lists{A}$, and $y \in \lists{B}$ we have $$\map(\tSwap)(\zipPad(u,v)(x,y)) = \zipPad(v,u)(y,x).$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \map(\tSwap)(\zipPad(u,v)(x,y)) \\
- & = & \map(\tSwap)(\zipPad(u,v)(\nil,y)) \\
- & = & \map(\tSwap)(\map(\tup(u))(y)) \\
+ &   & \map(\tSwap)(\zipPad(u,v)(\nil,y)) \\
+ &     \href{@zippad@#cor-zippad-nil-left}
+   = & \map(\tSwap)(\map(\tup(u))(y)) \\
  &     \href{@functions@#def-compose}
    = & \compose(\map(\tSwap))(\map(\tup(u)))(y) \\
- & = & \map(\compose(\tSwap)(\tup(u)))(y) \\
+ &     \href{@map@#thm-map-compose}
+   = & \map(\compose(\tSwap)(\tup(u)))(y) \\
  & = & \map(\flip(\tup)(u))(y) \\
- & = & \zipPad(v,u)(y,\nil) \\
- & = & \zipPad(v,u)(y,x)
+ &     \href{@zippad@#thm-zippad-nil-right}
+   = & \zipPad(v,u)(y,\nil)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now we consider two cases for $y$; either $y = \nil$ or $y = \cons(b,w)$. If $y = \nil$, we have
 $$\begin{eqnarray*}
@@ -141,18 +148,21 @@ $$\begin{eqnarray*}
    = & \compose(\map(\tSwap))(\map(\flip(\tup)(v)))(\cons(a,x)) \\
  & = & \map(\compose(\tSwap)(\flip(\tup)(v)))(\cons(a,x)) \\
  & = & \map(\tup(v))(\cons(a,x)) \\
- & = & \zipPad(u,v)(\nil,\cons(a,x)) \\
- & = & \zipPad(u,v)(y,\cons(a,x))
+ & = & \zipPad(u,v)(\nil,\cons(a,x))
 \end{eqnarray*}$$
 as needed. Finally, suppose $y = \cons(b,w)$. Then we have
 $$\begin{eqnarray*}
  &   & \map(\tSwap)(\zipPad(u,v)(\cons(a,x),y)) \\
- & = & \map(\tSwap)(\zipPad(u,v)(\cons(a,x),\cons(b,w))) \\
- & = & \map(\tSwap)(\cons((a,b),\zipPad(u,v)(x,w))) \\
- & = & \cons(\tSwap((a,b)),\map(\tSwap)(\zipPad(u,v)(x,w))) \\
- & = & \cons((b,a),\zipPad(v,u)(w,x)) \\
+ &     \let{y = \cons(b,w)}
+   = & \map(\tSwap)(\zipPad(u,v)(\cons(a,x),\cons(b,w))) \\
+ & = & \map(\tSwap)(\cons(\tup(a)(b),\zipPad(u,v)(x,w))) \\
+ & = & \cons(\tSwap(\tup(a)(b)),\map(\tSwap)(\zipPad(u,v)(x,w))) \\
+ &     \href{@tuples@#thm-tSwap-swap}
+   = & \cons(\tup(b)(a),\map(\tSwap)(\zipPad(u,v)(x,w))) \\
+ & = & \cons(\tup(b)(a),\zipPad(v,u)(w,x)) \\
  & = & \zipPad(v,u)(\cons(b,w),\cons(a,x)) \\
- & = & \zipPad(v,u)(y,\cons(a,x))
+ &     \let{y = \cons(b,w)}
+   = & \zipPad(v,u)(y,\cons(a,x))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -171,13 +181,15 @@ as needed.
 $\zipPad$ interacts with $\tPair$.
 
 :::::: theorem :::::
+[]{#thm-zippad-map-tPair}
 Let $A$, $B$, $U$, and $V$ be sets, with functions $f : A \rightarrow U$ and $g : B \rightarrow V$. Then for all $u \in A$, $v \in B$, $x \in \lists{A}$, and $y \in \lists{B}$, we have $$\map(\tPair(f,g))(\zipPad(u,v)(x,y)) = \zipPad(f(u),g(v))(\map(f)(x),\map(g)(y)).$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \map(\tPair(f,g))(\zipPad(u,v)(x,y)) \\
- & = & \map(\tPair(f,g))(\zipPad(u,v)(\nil,y)) \\
+ &     \let{x = \nil}
+   = & \map(\tPair(f,g))(\zipPad(u,v)(\nil,y)) \\
  & = & \map(\tPair(f,g))(\map(\tup(u))(y)) \\
  &     \href{@functions@#def-compose}
    = & \compose(\map(\tPair(f,g)))(\map(\tup(u)))(y) \\
@@ -326,14 +338,12 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as claimed. Similarly, if $z = \nil$, we have
 $$\begin{eqnarray*}
- &   & \zipPad((u,v),w)(\zipPad(u,v)(\cons(a,x),y),z) \\
- & = & \zipPad((u,v),w)(\zipPad(u,v)(\cons(a,x),y),\nil) \\
- & = & \nil \\
- &     \href{@map@#cor-map-nil}
-   = & \map(\tAssocL)(\nil) \\
- & = & \map(\tAssocL)(\zipPad(u,(v,w))(\cons(a,x),\nil)) \\
- & = & \map(\tAssocL)(\zipPad(u,(v,w))(\cons(a,x),\zipPad(v,w)(y,\nil))) \\
- & = & \map(\tAssocL)(\zipPad(u,(v,w))(\cons(a,x),\zipPad(v,w)(y,z)))
+ &   & \zipPad(\tup(u)(v),w)(\zipPad(u,v)(\cons(a,x),y),z) \\
+ &     \let{z = \nil}
+   = & \zipPad(\tup(u)(v),w)(\zipPad(u,v)(\cons(a,x),y),\nil) \\
+ &     \href{@zippad@#thm-zippad-nil-right}
+   = & \map(\flip(\tup)(w))(\zipPad(u,v)(\cons(a,x),y)) \\
+ & = & (@@@)
 \end{eqnarray*}$$
 as claimed. Suppose then that $y = \cons(b,u)$ and $z = \cons(c,v)$. Using the inductive hypothesis, we have
 $$\begin{eqnarray*}
@@ -353,7 +363,7 @@ $$\begin{eqnarray*}
  &   & \zipPad(u,(v,w))(x,\zipPad(v,w)(y,z)) \\
  & = & \id(\zipPad(u,(v,w))(x,\zipPad(v,w)(y,z))) \\
  & = & \map(\id)(\zipPad(u,(v,w))(x,\zipPad(v,w)(y,z))) \\
- & = & \map(\tAssocR \circ \tAssocL)(\zipPad(u,(v,w))(x,\zipPad(v,w)(y,z))) \\
+ & = & \map(\compose(\tAssocR)(\tAssocL))(\zipPad(u,(v,w))(x,\zipPad(v,w)(y,z))) \\
  & = & \map(\tAssocR)(\map(\tAssocL)(\zipPad(u,(v,w))(x,\zipPad(v,w)(y,z)))) \\
  & = & \map(\tAssocR)(\zipPad((u,v),w)(\zipPad(u,v)(x,y),z))
 \end{eqnarray*}$$

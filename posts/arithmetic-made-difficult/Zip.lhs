@@ -127,14 +127,16 @@ $$\begin{eqnarray*}
    = & \map(\tSwap)(\nil) \\
  &     \href{@map@#cor-map-nil}
    = & \nil \\
- & = & \zip(y,\nil)
+ &     \href{@zip@#thm-zip-nil-right}
+   = & \zip(y,\nil)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $y \in \lists{B}$ for some $x \in \lists{A}$, and let $a \in A$. Now we consider two possibilities for $y$. If $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \map(\tSwap)(\zip(\cons(a,x),y)) \\
  &     \let{y = \nil}
    = & \map(\tSwap)(\zip(\cons(a,x),\nil)) \\
- & = & \map(\tSwap)(\nil) \\
+ &     \href{@zip@#thm-zip-nil-right}
+   = & \map(\tSwap)(\nil) \\
  &     \href{@map@#cor-map-nil}
    = & \nil \\
  &     \href{@zip@#cor-zip-nil-left}
@@ -147,14 +149,16 @@ $$\begin{eqnarray*}
  &   & \map(\tSwap)(\zip(\cons(a,x),y)) \\
  &     \let{y = \cons(b,z)}
    = & \map(\tSwap)(\zip(\cons(a,x),\cons(b,z))) \\
- & = & \map(\tSwap)(\cons(\tup(a)(b),\zip(x,z))) \\
+ &     \href{@zip@#cor-zip-cons-cons}
+   = & \map(\tSwap)(\cons(\tup(a)(b),\zip(x,z))) \\
  &     \href{@map@#cor-map-cons}
    = & \cons(\tSwap(\tup(a)(b)),\map(\tSwap)(\zip(x,z))) \\
  &     \href{@tuples@#thm-tSwap-swap}
    = & \cons(\tup(b)(a),\map(\tSwap)(\zip(x,z))) \\
  &     \hyp{\map(\tSwap)(\zip(x,z)) = \zip(z,x)}
    = & \cons(\tup(b)(a),\zip(z,x)) \\
- & = & \zip(\cons(b,z),\cons(a,x)) \\
+ &     \href{@zip@#cor-zip-cons-cons}
+   = & \zip(\cons(b,z),\cons(a,x)) \\
  &     \let{y = \cons(b,z)}
    = & \zip(y,\cons(a,x))
 \end{eqnarray*}$$
@@ -212,15 +216,20 @@ $$\begin{eqnarray*}
  &   & \map(\tPair(f,g))(\zip(\cons(a,x),y)) \\
  &     \let{y = \cons(b,z)}
    = & \map(\tPair(f,g))(\zip(\cons(a,x),\cons(b,z))) \\
- & = & \map(\tPair(f,g))(\cons(\tup(a)(b),\zip(x,z))) \\
+ &     \href{@zip@#cor-zip-cons-cons}
+   = & \map(\tPair(f,g))(\cons(\tup(a)(b),\zip(x,z))) \\
  &     \href{@map@#cor-map-cons}
    = & \cons(\tPair(f,g)(\tup(a)(b)),\map(\tPair(f,g))(\zip(x,z))) \\
  &     \hyp{\map(\tPair(f,g))(\zip(x,y)) = \zip(\map(f)(x))(\map(g)(y))}
    = & \cons(\tPair(f,g)(\tup(a)(b)),\zip(\map(f)(x),\map(g)(z))) \\
- & = & \cons(\tup(f(a))(g(b)),\zip(\map(f)(x),\map(g)(z))) \\
+ &     \href{@tuples@#thm-tPair-tup}
+   = & \cons(\tup(f(a))(g(b)),\zip(\map(f)(x),\map(g)(z))) \\
  &     \href{@zip@#cor-zip-cons-cons}
    = & \zip(\cons(f(a),\map(f)(x)),\cons(g(b),\map(g)(z))) \\
- & = & \zip(\map(f)(\cons(a,x)),\map(g)(\cons(b,z))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \zip(\map(f)(\cons(a,x)),\cons(g(b),\map(g)(z))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \zip(\map(f)(\cons(a,x)),\map(g)(\cons(b,z))) \\
  &     \let{y = \cons(b,z)}
    = & \zip(\map(f)(\cons(a,x)),\map(g)(y))
 \end{eqnarray*}$$
@@ -269,18 +278,25 @@ $$\begin{eqnarray*}
  & = & \nmin(\length(\nil),\length(\cons(b,y))) \\
  & = & \nmin(\length(x),\length(\cons(b,y)))
 \end{eqnarray*}$$
-as needed. Suppose $x = \cons(b,z)$; now we have
+as needed. Suppose $x = \cons(a,z)$; now we have
 $$\begin{eqnarray*}
  &   & \length(\zip(x,\cons(b,y))) \\
- & = & \length(\zip(\cons(a,z),\cons(b,y))) \\
- & = & \length(\cons((a,b),\zip(z,y))) \\
- & = & \next(\length(\zip(z,y))) \\
+ &     \let{x = \cons(a,z)}
+   = & \length(\zip(\cons(a,z),\cons(b,y))) \\
+ &     \href{@zip@#cor-zip-cons-cons}
+   = & \length(\cons(\tup(a)(b),\zip(z,y))) \\
+ &     \href{@length@#cor-length-cons}
+   = & \next(\length(\zip(z)(y))) \\
  &     \href{@zip@#thm-length-zip}
    = & \next(\nmin(\length(z),\length(y))) \\
  &     \href{@max-min@#thm-next-min-distribute}
    = & \nmin(\next(\length(z)),\next(\length(y))) \\
- & = & \nmin(\length(\cons(a,z)),\length(\cons(b,y))) \\
- & = & \nmin(x,\length(\cons(b,y)))
+ &     \href{@length@#cor-length-cons}
+   = & \nmin(\length(\cons(a,z)),\next(\length(y))) \\
+ &     \href{@length@#cor-length-cons}
+   = & \nmin(\length(\cons(a,z)),\length(\cons(b,y))) \\
+ &     \let{x = \cons(a,z)}
+   = & \nmin(\length(x),\length(\cons(b,y)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -365,12 +381,20 @@ $$\begin{eqnarray*}
    = & \zip(\cons(\tup(a)(b),\zip(x,u)),\cons(c,v)) \\
  &     \href{@zip@#cor-zip-cons-cons}
    = & \cons(\tup(\tup(a)(b))(c),\zip(\zip(x,u),v)) \\
- & = & \cons(\tAssocL(\tup(a)(\tup(b)(c))),\map(\tAssocL)(\zip(x,\zip(u,v)))) \\
+ &     \href{@tuples@#thm-tAssocL-tup}
+   = & \cons(\tAssocL(\tup(a)(\tup(b)(c))),\zip(\zip(x,u),v)) \\
+ &     \hyp{\zip(\zip(x,u),v) = \map(\tAssocL)(\zip(x,\zip(u,v)))}
+   = & \cons(\tAssocL(\tup(a)(\tup(b)(c))),\map(\tAssocL)(\zip(x,\zip(u,v)))) \\
  &     \href{@map@#cor-map-cons}
    = & \map(\tAssocL)(\cons(\tup(a)(\tup(b)(c)),\zip(x,\zip(u,v)))) \\
- & = & \map(\tAssocL)(\zip(\cons(a,x),\cons((b,c),\zip(u,v)))) \\
- & = & \map(\tAssocL)(\zip(\cons(a,x),\zip(\cons(b,u),\cons(c,v)))) \\
- & = & \map(\tAssocL)(\zip(\cons(a,x),\zip(y,z)))
+ &     \href{@zip@#cor-zip-cons-cons}
+   = & \map(\tAssocL)(\zip(\cons(a,x),\cons(\tup(b)(c),\zip(u,v)))) \\
+ &     \href{@zip@#cor-zip-cons-cons}
+   = & \map(\tAssocL)(\zip(\cons(a,x),\zip(\cons(b,u),\cons(c,v)))) \\
+ &     \let{y = \cons(b,u)}
+   = & \map(\tAssocL)(\zip(\cons(a,x),\zip(y,\cons(c,v)))) \\
+ &     \let{z = \cons(c,v)}
+   = & \map(\tAssocL)(\zip(\cons(a,x),\zip(y,z)))
 \end{eqnarray*}$$
 as claimed.
 2. We have
@@ -378,10 +402,16 @@ $$\begin{eqnarray*}
  &   & \zip(x,\zip(y,z)) \\
  &     \href{@functions@#def-id}
    = & \id(\zip(x,\zip(y,z))) \\
- & = & \map(\id)(\zip(x,\zip(y,z))) \\
- & = & \map(\tAssocR \circ \tAssocL)(\zip(x,\zip(y,z))) \\
- & = & \map(\tAssocR)(\map(\tAssocL)(\zip(x,\zip(y,z)))) \\
- & = & \map(\tAssocR)(\zip(\zip(x,y),z)) 
+ &     \href{@map@#thm-map-id}
+   = & \map(\id)(\zip(x,\zip(y,z))) \\
+ &     \href{@tuples@#thm-tAssocR-tAssocL}
+   = & \map(\compose(\tAssocR)(\tAssocL))(\zip(x,\zip(y,z))) \\
+ &     \href{@map@#thm-map-compose}
+   = & \compose(\map(\tAssocR))(\map(\tAssocL))(\zip(x,\zip(y,z))) \\
+ &     \href{@functions@#def-compose}
+   = & \map(\tAssocR)(\map(\tAssocL)(\zip(x,\zip(y,z)))) \\
+ &     \href{@zip@#thm-zip-assocL}
+   = & \map(\tAssocR)(\zip(\zip(x,y),z)) 
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

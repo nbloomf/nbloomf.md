@@ -451,3 +451,18 @@
 @zip@#thm-length-zip	\\length(\\zip(x,y)) = \\nmin(\\length(x),\\length(y))
 @zip@#thm-zip-assocL	\\zip(\\zip(x,y),z) = \\map(\\tAssocL)(\\zip(x,\\zip(y,z)))
 @zip@#thm-zip-assocR	\\zip(x,\\zip(y,z)) = \\map(\\tAssocR)(\\zip(\\zip(x,y),z))
+#=======================#
+#--- zippad ------------#
+#=======================#
+@zippad@#cor-zippad-nil-left	\\zipPad(u,v)(\\nil,y) = \\map(\\tup(u))(y)
+@zippad@#cor-zippad-cons-nil	\\zipPad(u,v)(\\cons(a,x),\\nil) = \\cons(\\tup(a,v),\\zipPad(u,v)(x,\\nil))
+@zippad@#cor-zippad-cons-cons	\\zipPad(u,v)(\\cons(a,x),\\cons(b,y)) = \\cons(\\tup(a)(b),\\zipPad(u,v)(x,y))
+@zippad@#thm-zippad-nil-right	\\zipPad(u,v)(x,\\nil) = \\map(\\flip(\\tup)(v))(x)
+@zippad@#thm-zippad-tSwap	\\map(\\tSwap)(\\zipPad(u,v)(x,y)) = \\zipPad(v,u)(y,x)
+@zippad@#thm-zippad-map-tPair	\\map(\\tPair(f,g))(\\zipPad(u,v)(x,y)) = \\zipPad(f(u),g(v))(\\map(f)(x),\\map(g)(y))
+#=======================#
+#--- prefix-suffix -----#
+#=======================#
+@prefix-suffix@#cor-prefix-nil-left	\\prefix(\\nil,y) = \\btrue
+@prefix-suffix@#cor-prefix-cons-nil	\\prefix(\\cons(a,x),\\nil) = \\bfalse
+@prefix-suffix@#cor-prefix-cons-cons	\\prefix(\\cons(a,x),\\cons(b,y)) = \\bif{\\beq(a,b)}{\\prefix(x,y)}{\\bfalse}

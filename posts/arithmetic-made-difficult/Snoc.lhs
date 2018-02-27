@@ -140,7 +140,10 @@ $$\begin{eqnarray*}
  &   & \beq(\snoc(a,\nil),\snoc(b,y)) \\
  &     \let{y = \cons(c,u)}
    = & \beq(\snoc(a,\nil),\snoc(b,\cons(c,u))) \\
- & = & \beq(\cons(a,\nil),\cons(c,\snoc(b,u))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \beq(\snoc(a,\nil),\cons(c,\snoc(b,u))) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \beq(\cons(a,\nil),\cons(c,\snoc(b,u))) \\
  &     \href{@lists@#thm-list-eq-cons}
    = & \band(\beq(a,c),\beq(\nil,\snoc(b,u))) \\
  & = & \band(\beq(a,c),\bfalse) \\
@@ -148,7 +151,8 @@ $$\begin{eqnarray*}
    = & \bfalse \\
  &     \href{@and@#thm-and-false-right}
    = & \band(\beq(a,b),\bfalse) \\
- & = & \band(\beq(a,b),\beq(\nil,\cons(c,u))) \\
+ &     \href{@lists@#thm-list-eq-nil}
+   = & \band(\beq(a,b),\beq(\nil,\cons(c,u))) \\
  &     \let{y = \cons(c,u)}
    = & \band(\beq(a,b),\beq(\nil,y))
 \end{eqnarray*}$$
@@ -174,11 +178,13 @@ $$\begin{eqnarray*}
  & = & \beq(\cons(d,\snoc(a,x)),\cons(c,\snoc(b,u))) \\
  &     \href{@lists@#thm-list-eq-cons}
    = & \band(\beq(d,c),\beq(\snoc(a,x),\snoc(b,u))) \\
- &     \href{@snoc@#thm-snoc-eq}
+ &     \hyp{\beq(\snoc(a,x),\snoc(b,u)) = \band(\beq(a,b),\beq(x,u))}
    = & \band(\beq(d,c),\band(\beq(a,b),\beq(x,u))) \\
  & = & \band(\beq(a,b),\band(\beq(d,c),\beq(x,u))) \\
- & = & \band(\beq(a,b),\band(\cons(d,x),\cons(c,u))) \\
- & = & \band(\beq(a,b),\band(\cons(d,x),y))
+ &     \href{@lists@#thm-list-eq-cons}
+   = & \band(\beq(a,b),\beq(\cons(d,x),\cons(c,u))) \\
+ &     \let{y = \cons(c,u)}
+   = & \band(\beq(a,b),\beq(\cons(d,x),y))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

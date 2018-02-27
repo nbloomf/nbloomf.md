@@ -46,6 +46,7 @@ In Haskell:
 Since $\prefix$ is defined as a double fold, it is the unique solution to a system of functional equations.
 
 :::::: corollary :::
+[]{#cor-prefix-nil-left}[]{#cor-prefix-cons-nil}[]{#cor-prefix-cons-cons}
 Let $A$ be a set. $\prefix$ is the unique map $f : \lists{A} \times \lists{A} \rightarrow \bool$ satisfying the following equations for all $a,b \in A$ and $x,y \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(\nil,y) = \btrue \\

@@ -43,9 +43,14 @@ Note that either $a = \zero$, $a = \next(\zero)$, or $a = \next(\next(m))$ for s
 * If $a = \next(\next(m))$ for some $m \in \nats$, we have
 $$\begin{eqnarray*}
  &   & \next(\zero) \\
- & = & \nplus(a,b) \\
- & = & \nplus(\next(\next(m)),b) \\
- & = & \next(\next(\nplus(m,b))),
+ &     \let{\nplus(a,b) = \next(\zero)}
+   = & \nplus(a,b) \\
+ &     \hyp{a = \next(\next(m))}
+   = & \nplus(\next(\next(m)),b) \\
+ &     \href{@plus@#cor-plus-up-next}
+   = & \next(\nplus(\next(m),b)) \\
+ &     \href{@plus@#cor-plus-up-next}
+   = & \next(\next(\nplus(m,b)))
 \end{eqnarray*}$$
 so that $\zero = \next(\nplus(m,b))$, a contradiction.
 * If $a = \next(\zero)$, then we have $\nplus(\next(\zero),\zero) = \next(\zero) = \nplus(\next(\zero),b)$, so that $b = \zero$ as claimed.
@@ -64,9 +69,16 @@ Note that either $a = \zero$, $a = \next(\zero)$, $a = \next(\next(\zero))$, or 
 * If $a = \next(\next(\next(m)))$ for some $m \in \nats$, we have
 $$\begin{eqnarray*}
  &   & \next(\next(\zero)) \\
- & = & \nplus(a,b) \\
- & = & \nplus(\next(\next(\next(m))),b) \\
- & = & \next(\next(\next(\nplus(m,b)))),
+ &     \let{\nplus(a,b) = \next(\next(\zero))}
+   = & \nplus(a,b) \\
+ &     \hyp{a = \next(\next(\next(m)))}
+   = & \nplus(\next(\next(\next(m))),b) \\
+ &     \href{@plus@#cor-plus-up-next}
+   = & \next(\nplus(\next(\next(m)),b)) \\
+ &     \href{@plus@#cor-plus-up-next}
+   = & \next(\next(\nplus(\next(m),b))) \\
+ &     \href{@plus@#cor-plus-up-next}
+   = & \next(\next(\next(\nplus(m,b))))
 \end{eqnarray*}$$
 so that $\zero = \next(\nplus(m,b))$, a contradiction.
 * If $a = \next(\next(\zero))$, then we have
