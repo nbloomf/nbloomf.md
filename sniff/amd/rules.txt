@@ -466,3 +466,5 @@
 @prefix-suffix@#cor-prefix-nil-left	\\prefix(\\nil,y) = \\btrue
 @prefix-suffix@#cor-prefix-cons-nil	\\prefix(\\cons(a,x),\\nil) = \\bfalse
 @prefix-suffix@#cor-prefix-cons-cons	\\prefix(\\cons(a,x),\\cons(b,y)) = \\bif{\\beq(a,b)}{\\prefix(x,y)}{\\bfalse}
+@prefix-suffix@#thm-prefix-cat-self	\\prefix(x,\\cat(x,y)) = \\btrue
+@prefix-suffix@#thm-prefix-reflexive	\\prefix(x,x) = \\btrue

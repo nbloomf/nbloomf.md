@@ -84,6 +84,7 @@ $$\left\{\begin{array}{l}
 Now $\prefix$ is analogous to $\nleq$ in that it detects the existence of solutions $z$ to the equation $y = \cat(x,z)$.
 
 :::::: theorem :::::
+[]{#thm-prefix-cat-self}
 Let $A$ be a set. The following hold for all $x,y \in \lists{A}$.
 
 1. $\prefix(x,\cat(x,y)) = \btrue$.
@@ -93,18 +94,26 @@ Let $A$ be a set. The following hold for all $x,y \in \lists{A}$.
 1. We proceed by list induction on $x$. For the base case $x = \nil$, certainly we have
 $$\begin{eqnarray*}
  &   & \prefix(x,\cat(x,y)) \\
- & = & \prefix(\nil,\cat(\nil,y)) \\
+ &     \let{x = \nil}
+   = & \prefix(\nil,\cat(\nil,y)) \\
  &     \href{@cat@#cor-cat-nil}
    = & \prefix(\nil,y) \\
- & = & \btrue.
+ &     \href{@prefix-suffix@#cor-prefix-nil-left}
+   = & \btrue
 \end{eqnarray*}$$
 For the inductive step, suppose the equality holds for some $x$, and let $a \in A$. Now we have
 $$\begin{eqnarray*}
  &   & \prefix(\cons(a,x),\cat(\cons(a,x),y)) \\
  &     \href{@cat@#cor-cat-cons}
    = & \prefix(\cons(a,x),\cons(a,\cat(x,y))) \\
- & = & \prefix(x,\cat(x,y)) \\
- & = & \btrue
+ &     \href{@prefix-suffix@#cor-prefix-cons-cons}
+   = & \bif{\beq(a,a)}{\prefix(x,\cat(x,y))}{\bfalse} \\
+ &     \href{@testing@#thm-eq-reflexive}
+   = & \bif{\btrue}{\prefix(x,\cat(x,y))}{\bfalse} \\
+ &     \href{@booleans@#cor-if-true}
+   = & \prefix(x,\cat(x,y)) \\
+ &     \hyp{\prefix(x,\cat(x,y)) = \btrue}
+   = & \btrue
 \end{eqnarray*}$$
 as needed.
 2. We proceed by list induction on $x$. For the base case $x = \nil$, note that $$\prefix(\nil,y) = \btrue,$$ and $$y = \cat(\nil,y).$$ For the inductive step, suppose the result holds for some $x$, and let $a \in A$. Now suppose $\prefix(\cons(a,x),y) = \btrue$; in particular, we must have $y = \cons(a,w)$ for some $w$, and $\prefix(x,w) = \btrue$. By the induction hypothesis we have $w = \cat(x,z)$ for some $z$, and thus
@@ -154,6 +163,7 @@ If $\prefix(x,y) = \btrue$, then $y = \cat(x,z)$ for some $z$. Now $$\snoc(a,y) 
 $\prefix$ is a partial order.
 
 :::::: theorem :::::
+[]{#thm-prefix-reflexive}
 Let $A$ be a set. Then we have the following for all $x,y,z \in \lists{A}$.
 
 1. $\prefix(x,x) = \btrue$.
@@ -221,17 +231,16 @@ Let $A$ and $B$ be sets with $f : A \rightarrow B$, and let $x,y \in \lists{A}$.
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \prefix(x,y) \\
- & = & \prefix(\nil,y) \\
+ &     \let{x = \nil}
+   = & \prefix(\nil,y) \\
  &     \href{@prefix-suffix@#cor-prefix-nil-left}
-   = & \btrue
-\end{eqnarray*}$$
-and
-$$\begin{eqnarray*}
- &   & \prefix(\map(f)(x),\map(f)(y)) \\
- & = & \prefix(\map(f)(\nil),\map(f)(y)) \\
- &     \href{@map@#cor-map-nil}
+   = & \btrue \\
+ &     \href{@prefix-suffix@#cor-prefix-nil-left}
    = & \prefix(\nil,\map(f)(y)) \\
- & = & \btrue
+ &     \href{@map@#cor-map-nil}
+   = & \prefix(\map(f)(\nil),\map(f)(y)) \\
+ &     \let{x = \nil}
+   = & \prefix(\map(f)(x),\map(f)(y))
 \end{eqnarray*}$$
 as claimed. Suppose now the implication holds for some $x$, and let $a \in A$. Suppose further that $\prefix(\cons(a,x),y)$. Now $y = \cons(a,w)$ for some $w$, and we have
 $$\begin{eqnarray*}

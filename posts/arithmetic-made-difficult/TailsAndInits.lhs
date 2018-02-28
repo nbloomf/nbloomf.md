@@ -305,8 +305,8 @@ $$\begin{eqnarray*}
  &   & \map(\rev) \circ \rev \circ \inits \circ \rev \\
  & = & \map(\rev) \circ \rev \circ \rev \circ \map(\rev) \circ \tails \circ \rev \circ \rev \\
  & = & \map(\rev) \circ \map(\rev) \circ \tails \\
- & = & \map(\rev \circ \rev) \circ \tails \\
- & = & \map(\id) \circ \tails \\
+ & = & \compose(\map(\compose(\rev)(\rev)))(\tails) \\
+ & = & \compose(\map(\id))(\tails) \\
  & = & \tails
 \end{eqnarray*}$$
 as needed.
@@ -335,15 +335,15 @@ $$\begin{eqnarray*}
  & = & \rev(\map(\rev)(\tails(\rev(\cons(a,x))))) \\
  &     \href{@rev@#cor-rev-cons}
    = & \rev(\map(\rev)(\tails(\snoc(a,\rev(x))))) \\
- & = & \rev(\map(\rev)(\snoc(\nil,\map(\snoc(a,-))(\tails(\rev(a)))))) \\
- & = & \rev(\snoc(\rev(\nil),\map(\rev)(\map(\snoc(a,-))(\tails(\rev(a)))))) \\
- & = & \rev(\snoc(\nil,\map(\rev)(\map(\snoc(a,-))(\tails(\rev(a)))))) \\
- & = & \rev(\snoc(\nil,\map(\rev \circ \snoc(a,-))(\tails(\rev(a))))) \\
- & = & \rev(\snoc(\nil,\map(\cons(a,-) \circ \rev)(\tails(\rev(a))))) \\
- & = & \rev(\snoc(\nil,\map(\cons(a,-))(\map(\rev)(\tails(\rev(a)))))) \\
- & = & \cons(\nil,\rev(\map(\cons(a,-))(\map(\rev)(\tails(\rev(a)))))) \\
- & = & \cons(\nil,\map(\cons(a,-))(\rev(\map(\rev)(\tails(\rev(a)))))) \\
- & = & \cons(\nil,\map(\cons(a,-))(\inits(x)))
+ & = & \rev(\map(\rev)(\snoc(\nil,\map(\snoc(a))(\tails(\rev(a)))))) \\
+ & = & \rev(\snoc(\rev(\nil),\map(\rev)(\map(\snoc(a))(\tails(\rev(a)))))) \\
+ & = & \rev(\snoc(\nil,\map(\rev)(\map(\snoc(a))(\tails(\rev(a)))))) \\
+ & = & \rev(\snoc(\nil,\map(\compose(\rev)(\snoc(a)))(\tails(\rev(a))))) \\
+ & = & \rev(\snoc(\nil,\map(\cons(a) \circ \rev)(\tails(\rev(a))))) \\
+ & = & \rev(\snoc(\nil,\map(\cons(a))(\map(\rev)(\tails(\rev(a)))))) \\
+ & = & \cons(\nil,\rev(\map(\cons(a))(\map(\rev)(\tails(\rev(a)))))) \\
+ & = & \cons(\nil,\map(\cons(a))(\rev(\map(\rev)(\tails(\rev(a)))))) \\
+ & = & \cons(\nil,\map(\cons(a))(\inits(x)))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -372,8 +372,8 @@ $$\begin{eqnarray*}
  &     \href{@map@#thm-map-rev}
    = & \rev(\map(\rev)(\tails(\map(f)(\rev(x))))) \\
  & = & \rev(\map(\rev)(\map(\map(f))(\tails(\rev(x))))) \\
- & = & \rev(\map(\rev \circ \map(f))(\tails(\rev(x)))) \\
- & = & \rev(\map(\map(f) \circ \rev)(\tails(\rev(x)))) \\
+ & = & \rev(\map(\compose(\rev)(\map(f)))(\tails(\rev(x)))) \\
+ & = & \rev(\map(\compose(\map(f))(\rev))(\tails(\rev(x)))) \\
  & = & \rev(\map(\map(f))(\map(\rev)(\tails(\rev(x))))) \\
  &     \href{@map@#thm-map-rev}
    = & \map(\map(f))(\rev(\map(\rev)(\tails(\rev(x))))) \\
