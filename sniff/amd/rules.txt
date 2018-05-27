@@ -468,3 +468,11 @@
 @prefix-suffix@#cor-prefix-cons-cons	\\prefix(\\cons(a,x),\\cons(b,y)) = \\bif{\\beq(a,b)}{\\prefix(x,y)}{\\bfalse}
 @prefix-suffix@#thm-prefix-cat-self	\\prefix(x,\\cat(x,y)) = \\btrue
 @prefix-suffix@#thm-prefix-reflexive	\\prefix(x,x) = \\btrue
+#=======================#
+#--- tails-inits -------#
+#=======================#
+@tails-inits@#cor-tails-nil	\\tails(\\nil) = \\cons(\\nil,\\nil)
+@tails-inits@#cor-tails-cons	\\tails(\\cons(a,x)) = \\cons(\\cons(a,x),\\tails(x))
+@tails-inits@#thm-tails-one	\\tails(\\cons(a,\\nil)) = \\cons(\\cons(a,\\nil),\\cons(\\nil,\\nil))
+@tails-inits@#thm-tails-two	\\tails(\\cons(a,\\cons(b,\\nil))) = \\cons(\\cons(a,\\cons(b,\\nil)),\\cons(\\cons(b,\\nil),\\cons(\\nil,\\nil)))
+@tails-inits@#thm-tails-map	\\tails(\\map(f)(x)) = \\map(\\map(f))(\\tails(x))

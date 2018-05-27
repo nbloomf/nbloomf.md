@@ -179,7 +179,7 @@ $$\begin{eqnarray*}
    = & \prefix(x,x)
 \end{eqnarray*}$$
 as claimed.
-2. If $\prefix(x,y)$, we have $y = \cat(x,u)$ for some $u$. Similarly, if $\prefix(y,x)$ then $x = \cat(y,v)$ for some $v. Now
+2. If $\prefix(x,y)$, we have $y = \cat(x,u)$ for some $u$. Similarly, if $\prefix(y,x)$ then $x = \cat(y,v)$ for some $v$. Now
 $$\begin{eqnarray*}
  &   & \cat(x,\nil) \\
  &     \href{@cat@#thm-cat-nil-right}

@@ -282,6 +282,7 @@ test-suite amd-nats
     Or,
     Implies,
     Functions,
+    Tuples,
     Flip,
     Clone,
     Composition,

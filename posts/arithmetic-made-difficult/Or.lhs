@@ -348,10 +348,12 @@ $$\begin{eqnarray*}
    = & \bnot(\band(\btrue,b)) \\
  &     \href{@and@#thm-and-true-left}
    = & \bnot(b) \\
- & = & \bor(\bfalse,\bnot(b)) \\
+ &     \href{@or@#thm-or-false-left}
+   = & \bor(\bfalse,\bnot(b)) \\
  &     \href{@not@#thm-not-true}
    = & \bor(\bnot(\btrue),\bnot(b)) \\
- & = & \bor(\bnot(a),\bnot(b))
+ &     \let{a = \btrue}
+   = & \bor(\bnot(a),\bnot(b))
 \end{eqnarray*}$$
 as claimed. If $a = \bfalse$, we have
 $$\begin{eqnarray*}
@@ -362,10 +364,12 @@ $$\begin{eqnarray*}
    = & \bnot(\bfalse) \\
  &     \href{@not@#thm-not-false}
    = & \btrue \\
- & = & \bor(\btrue,\bnot(b)) \\
+ &     \href{@or@#thm-or-true-left}
+   = & \bor(\btrue,\bnot(b)) \\
  &     \href{@not@#thm-not-false}
    = & \bor(\bnot(\bfalse),\bnot(b)) \\
- & = & \bor(\bnot(a),\bnot(b))
+ &     \let{a = \bfalse}
+   = & \bor(\bnot(a),\bnot(b))
 \end{eqnarray*}$$
 as claimed.
 2. If $a = \btrue$, we have
@@ -377,7 +381,8 @@ $$\begin{eqnarray*}
    = & \bnot(\btrue) \\
  &     \href{@not@#thm-not-true}
    = & \bfalse \\
- & = & \band(\bfalse,\bnot(b)) \\
+ &     \href{@and@#thm-and-false-left}
+   = & \band(\bfalse,\bnot(b)) \\
  &     \href{@not@#thm-not-true}
    = & \band(\bnot(\btrue),\bnot(b)) \\
  &     \let{a = \btrue}
@@ -435,7 +440,10 @@ $$\begin{eqnarray*}
    = & \band(\btrue,\bor(b,c)) \\
  &     \href{@and@#thm-and-true-left}
    = & \bor(b,c) \\
- & = & \bor(\band(\btrue,b),\band(\btrue,c)) \\
+ &     \href{@and@#thm-and-true-left}
+   = & \bor(\band(\btrue,b),c) \\
+ &     \href{@and@#thm-and-true-left}
+   = & \bor(\band(\btrue,b),\band(\btrue,c)) \\
  &     \let{a = \btrue}
    = & \bor(\band(a,b),\band(a,c))
 \end{eqnarray*}$$
@@ -446,8 +454,12 @@ $$\begin{eqnarray*}
    = & \band(\bfalse,\bor(b,c)) \\
  &     \href{@and@#thm-and-false-left}
    = & \bfalse \\
- & = & \bor(\bfalse,\bfalse) \\
- & = & \bor(\band(\bfalse,b),\band(\bfalse,c)) \\
+ &     \href{@or@#thm-or-false-left}
+   = & \bor(\bfalse,\bfalse) \\
+ &     \href{@and@#thm-and-false-left}
+   = & \bor(\band(\bfalse,b),\bfalse) \\
+ &     \href{@and@#thm-and-false-left}
+   = & \bor(\band(\bfalse,b),\band(\bfalse,c)) \\
  &     \let{a = \bfalse}
    = & \bor(\band(a,b),\band(a,c))
 \end{eqnarray*}$$
@@ -461,7 +473,10 @@ $$\begin{eqnarray*}
    = & \btrue \\
  &     \href{@and@#thm-and-eval-true-true}
    = & \band(\btrue,\btrue) \\
- & = & \band(\bor(\btrue,b),\bor(\btrue,c)) \\
+ &     \href{@or@#thm-or-true-left}
+   = & \band(\bor(\btrue,b),\btrue) \\
+ &     \href{@or@#thm-or-true-left}
+   = & \band(\bor(\btrue,b),\bor(\btrue,c)) \\
  &     \let{a = \btrue}
    = & \band(\bor(a,b),\bor(a,c))
 \end{eqnarray*}$$
@@ -509,14 +524,16 @@ $$\begin{eqnarray*}
  &   & \bif{\btrue}{\btrue}{q} \\
  &     \href{@booleans@#cor-if-true}
    = & \btrue \\
- & = & \bor(\btrue,q),
+ &     \href{@or@#thm-or-true-left}
+   = & \bor(\btrue,q)
 \end{eqnarray*}$$
 and if $p = \bfalse we have
 $$\begin{eqnarray*}
  &   & \bif{\bfalse}{\btrue}{q} \\
  &     \href{@booleans@#cor-if-false}
    = & q \\
- & = & \bor(\bfalse,q)
+ &     \href{@or@#thm-or-false-left}
+   = & \bor(\bfalse,q)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -544,7 +561,8 @@ $$\begin{eqnarray*}
  &   & \bif{\bor(p,q)}{a}{b} \\
  &     \let{p = \btrue}
    = & \bif{\bor(\btrue,q)}{a}{b} \\
- & = & \bif{\btrue}{a}{b} \\
+ &     \href{@or@#thm-or-true-left}
+   = & \bif{\btrue}{a}{b} \\
  &     \href{@booleans@#cor-if-true}
    = & a \\
  &     \href{@booleans@#cor-if-true}
@@ -557,7 +575,8 @@ $$\begin{eqnarray*}
  &   & \bif{\bor(p,q)}{a}{b} \\
  &     \let{p = \bfalse}
    = & \bif{\bor(\bfalse,q)}{a}{b} \\
- & = & \bif{q}{a}{b} \\
+ &     \href{@or@#thm-or-false-left}
+   = & \bif{q}{a}{b} \\
  &     \href{@booleans@#cor-if-false}
    = & \bif{\bfalse}{a}{\bif{q}{a}{b}} \\
  &     \let{p = \bfalse}

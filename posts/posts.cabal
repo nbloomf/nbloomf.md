@@ -3,6 +3,38 @@ version:       0.1.0.0
 build-type:    Simple
 cabal-version: >= 1.10
 
+-- executable generating-images
+--   main-is:
+--     2018-04-14-generating-images.lhs
+--   ghc-options:
+--     -main-is GeneratingImages.main
+--   ghc-options:
+--     -threaded
+--   build-depends:
+--     base == 4.*,
+--     JuicyPixels
+--   default-language:
+--     Haskell2010
+
+-- executable wave-function-collapse
+--   main-is:
+--     2018-04-05-wave-function-collapse.lhs
+--   ghc-options:
+--     -main-is WaveFunctionCollapse.main
+--   ghc-options:
+--     -threaded -Wall
+--   build-depends:
+--     base == 4.*,
+--     random,
+--     tfp,
+--     array,
+--     JuicyPixels,
+--     monad-primitive >= 0.1,
+--     bytestring,
+--     unordered-containers
+--   default-language:
+--     Haskell2010
+
 executable rewrite-term
   main-is:
     2018-01-22-a-simple-term-rewriting-tool.lhs

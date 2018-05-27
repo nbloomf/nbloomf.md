@@ -11,7 +11,7 @@ slug: compose
 >   ( compose2on1, compose3on1
 >   , compose1on2, compose2on2
 >   , compose1on3
->   , compose1on4,
+>   , compose1on4
 >   , _test_compose, main_compose
 >   ) where
 > 

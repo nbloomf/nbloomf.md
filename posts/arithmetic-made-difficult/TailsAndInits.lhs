@@ -42,6 +42,7 @@ In Haskell:
 Since $\tails$ is defined as a $\cfoldr(\ast)(\ast)$, it is the unique solution to a system of functional equations.
 
 :::::: corollary :::
+[]{#cor-tails-nil}[]{#cor-tails-cons}
 Let $A$ be a set. $\tails$ is the unique map $f : \lists{A} \rightarrow \lists{\lists{A}}$ which satisfies the following equations for all $a \in A$ and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(\nil) = \cons(\nil,\nil) \\
@@ -69,6 +70,7 @@ $$\left\{\begin{array}{l}
 Special cases.
 
 :::::: theorem :::::
+[]{#thm-tails-one}[]{#thm-tails-two}
 Let $A$ be a sets. For all $a,b \in A$ we have the following.
 
 1. $\tails(\cons(a,\nil)) = \cons(\cons(a,\nil),\cons(\nil,\nil))$.
@@ -116,6 +118,7 @@ as claimed.
 $\tails$ interacts with $\map$.
 
 :::::: theorem :::::
+[]{#thm-tails-map}
 Let $A$ and $B$ be sets with $f : A \rightarrow B$. For all $x \in \lists{A}$ we have $$\tails(\map(f)(x)) = \map(\map(f))(\tails(x)).$$
 
 ::: proof ::::::::::
@@ -124,6 +127,7 @@ $$\begin{eqnarray*}
  &   & \tails(\map(f)(\nil)) \\
  &     \href{@map@#cor-map-nil}
    = & \tails(\nil) \\
+ & = & (@@@) \\
  & = & \nil \\
  &     \href{@map@#cor-map-nil}
    = & \map(\map(f))(\nil) \\
