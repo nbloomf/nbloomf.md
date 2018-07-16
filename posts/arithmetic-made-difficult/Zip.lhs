@@ -447,8 +447,8 @@ Suite:
 >   , TypeName (t a), TypeName (t b), List t, Equal (t a), Show (t a), Arbitrary (t a)
 >   , Equal (t b), Show (t b), Arbitrary (t b), Equal (t (Pair a b)), Equal (t (Pair b a))
 >   , Equal (t (Pair a (Pair a a))), Equal (t (Pair (Pair a a) a))
->   ) => t a -> t b -> n -> Int -> Int -> IO ()
-> _test_zip t u n size cases = do
+>   ) => Int -> Int -> t a -> t b -> n -> IO ()
+> _test_zip size cases t u n = do
 >   testLabel3 "zip" t u n
 > 
 >   let args = testArgs size cases
@@ -467,5 +467,5 @@ Main:
 
 > main_zip :: IO ()
 > main_zip = do
->   _test_zip (nil :: ConsList Bool)  (nil :: ConsList Bool)  (zero :: Unary) 20 100
->   _test_zip (nil :: ConsList Unary) (nil :: ConsList Unary) (zero :: Unary) 20 100
+>   _test_zip 20 100 (nil :: ConsList Bool)  (nil :: ConsList Bool)  (zero :: Unary)
+>   _test_zip 20 100 (nil :: ConsList Unary) (nil :: ConsList Unary) (zero :: Unary)

@@ -356,8 +356,8 @@ Suite:
 > _test_snoc ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a)
->   ) => t a -> Int -> Int -> IO ()
-> _test_snoc t size cases = do
+>   ) => Int -> Int -> t a -> IO ()
+> _test_snoc size cases t = do
 >   testLabel1 "snoc" t
 > 
 >   let args = testArgs size cases
@@ -372,5 +372,5 @@ Main:
 
 > main_snoc :: IO ()
 > main_snoc = do
->   _test_snoc (nil :: ConsList Bool)  20 100
->   _test_snoc (nil :: ConsList Unary) 20 100
+>   _test_snoc 20 100 (nil :: ConsList Bool)
+>   _test_snoc 20 100 (nil :: ConsList Unary)

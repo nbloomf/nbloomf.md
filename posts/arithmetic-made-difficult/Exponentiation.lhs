@@ -228,8 +228,8 @@ Suite:
 
 > _test_power ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
->   ) => n -> Int -> Int -> IO ()
-> _test_power n size cases = do
+>   ) => Int -> Int -> n -> IO ()
+> _test_power size cases n = do
 >   testLabel1 "power" n
 > 
 >   let args = testArgs size cases
@@ -247,4 +247,4 @@ Main:
 
 > main_power :: IO ()
 > main_power = do
->   _test_power (zero :: Unary) 4 30
+>   _test_power 4 30 (zero :: Unary)

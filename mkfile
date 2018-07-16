@@ -576,13 +576,14 @@ sniff-amd-label-format:VQ:
 sniff-amd-arg-order:VQ:
   echo 'Checking Test argument order' | doppler lightblue
   ARGORD=$( grep '>   _test_' posts/arithmetic-made-difficult/* \
-    | grep -v '_test_[a-z]*[ ]*[1-9]' \
+    | grep -v '_test_[a-zA-Z_]*[ ]*[1-9][0-9]* [1-9][0-9]* ' \
     || true )
   if [ -z "$ARGORD" ]; then
     echo 'Test argument order OK' | doppler lightgreen
   else
     echo "$ARGORD"
     echo 'Test argument order' | doppler lightred
+    echo '- number and size arguments should come first' | doppler lightred
     echo $( echo "$ARGORD" | wc -l ) 'problems found' | doppler lightred
     exit 1
   fi

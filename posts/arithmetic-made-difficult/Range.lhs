@@ -306,8 +306,8 @@ Suite:
 > _test_range ::
 >   ( TypeName n, Natural n, Equal n, Show n, Arbitrary n
 >   , TypeName (t n), List t, Equal (t n), Show (t n), Arbitrary (t n)
->   ) => t n -> Int -> Int -> IO ()
-> _test_range t size cases = do
+>   ) => Int -> Int -> t n -> IO ()
+> _test_range size cases t = do
 >   testLabel1 "range" t
 > 
 >   let args = testArgs size cases
@@ -325,4 +325,4 @@ Main:
 
 > main_range :: IO ()
 > main_range = do
->   _test_range (nil :: ConsList Unary) 20 100
+>   _test_range 20 100 (nil :: ConsList Unary)

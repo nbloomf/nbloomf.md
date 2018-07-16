@@ -277,8 +277,8 @@ Suite:
 >   , TypeName (t a), List t
 >   , TypeName n, Natural n, Arbitrary n, Show n, Equal n
 >   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (Pair a a)), Equal (t b)
->   ) => t a -> t b -> n -> Int -> Int -> IO ()
-> _test_repeat t u n size cases = do
+>   ) => Int -> Int -> t a -> t b -> n -> IO ()
+> _test_repeat size cases t u n = do
 >   testLabel2 "repeat" t n
 > 
 >   let args = testArgs size cases
@@ -295,5 +295,5 @@ Main:
 
 > main_repeat :: IO ()
 > main_repeat = do
->   _test_repeat (nil :: ConsList Bool)  (nil :: ConsList Bool)  (zero :: Unary) 20 100
->   _test_repeat (nil :: ConsList Unary) (nil :: ConsList Unary) (zero :: Unary) 20 100
+>   _test_repeat 20 100 (nil :: ConsList Bool)  (nil :: ConsList Bool)  (zero :: Unary)
+>   _test_repeat 20 100 (nil :: ConsList Unary) (nil :: ConsList Unary) (zero :: Unary)

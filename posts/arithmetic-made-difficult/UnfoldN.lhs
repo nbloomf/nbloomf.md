@@ -355,8 +355,8 @@ Suite:
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a)
 >   , TypeName n, Equal n, Show n, Arbitrary n, Natural n
->   ) => t a -> n -> Int -> Int -> IO ()
-> _test_unfoldN t n size cases = do
+>   ) => Int -> Int -> t a -> n -> IO ()
+> _test_unfoldN size cases t n = do
 >   testLabel1 "unfoldN" t
 > 
 >   let args = testArgs size cases
@@ -374,5 +374,5 @@ Main:
 
 > main_unfoldN :: IO ()
 > main_unfoldN = do
->   _test_unfoldN (nil :: ConsList Bool)  (zero :: Unary) 20 100
->   _test_unfoldN (nil :: ConsList Unary) (zero :: Unary) 20 100
+>   _test_unfoldN 20 100 (nil :: ConsList Bool)  (zero :: Unary)
+>   _test_unfoldN 20 100 (nil :: ConsList Unary) (zero :: Unary)

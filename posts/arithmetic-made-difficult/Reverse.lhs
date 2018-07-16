@@ -512,8 +512,8 @@ Suite:
 > _test_rev ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a)
->   ) => t a -> Int -> Int -> IO ()
-> _test_rev t size cases = do
+>   ) => Int -> Int -> t a -> IO ()
+> _test_rev size cases t = do
 >   testLabel1 "rev" t
 >   let args = testArgs size cases
 > 
@@ -536,5 +536,5 @@ Main:
 
 > main_rev :: IO ()
 > main_rev = do
->   _test_rev (nil :: ConsList Bool)  20 100
->   _test_rev (nil :: ConsList Unary) 20 100
+>   _test_rev 20 100 (nil :: ConsList Bool)
+>   _test_rev 20 100 (nil :: ConsList Unary)

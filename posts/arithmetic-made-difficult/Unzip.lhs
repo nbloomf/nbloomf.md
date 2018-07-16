@@ -216,8 +216,8 @@ Suite:
 >   , TypeName (t a), TypeName (t b), List t
 >   , Equal (t (Pair a b)), Arbitrary (t a), Show (t a), Arbitrary (t b), Show (t b)
 >   , Show (t (Pair a b)), Arbitrary (t (Pair a b)), Equal (t b), Equal (t a)
->   ) => t a -> t b -> Int -> Int -> IO ()
-> _test_unzip t u size cases = do
+>   ) => Int -> Int -> t a -> t b -> IO ()
+> _test_unzip size cases t u = do
 >   testLabel2 "unzip" t u
 > 
 >   let args = testArgs size cases
@@ -232,5 +232,5 @@ Main:
 
 > main_unzip :: IO ()
 > main_unzip = do
->   _test_unzip (nil :: ConsList Bool)  (nil :: ConsList Bool)  20 100
->   _test_unzip (nil :: ConsList Unary) (nil :: ConsList Unary) 20 100
+>   _test_unzip 20 100 (nil :: ConsList Bool)  (nil :: ConsList Bool)
+>   _test_unzip 20 100 (nil :: ConsList Unary) (nil :: ConsList Unary)

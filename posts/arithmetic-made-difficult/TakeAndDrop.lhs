@@ -521,8 +521,8 @@ Suite:
 >   , Equal (t a), Show (t a), Arbitrary (t a)
 >   , Equal (t b), Show (t b), Arbitrary (t b), Equal (t (Pair a b))
 >   , Arbitrary (t n), Show (t n), Equal (t n)
->   ) => t a -> t b -> n -> Int -> Int -> IO ()
-> _test_take_drop t u k size cases = do
+>   ) => Int -> Int -> t a -> t b -> n -> IO ()
+> _test_take_drop size cases t u k = do
 >   testLabel1 "take & drop" t
 > 
 >   let args = testArgs size cases
@@ -548,7 +548,7 @@ Main:
 
 > main_take_drop :: IO ()
 > main_take_drop = do
->   _test_take_drop (nil :: ConsList Bool)  (nil :: ConsList Bool)  (zero :: Unary) 50 200
->   _test_take_drop (nil :: ConsList Unary) (nil :: ConsList Unary) (zero :: Unary) 50 200
->   _test_take_drop (nil :: ConsList Bool)  (nil :: ConsList Unary) (zero :: Unary) 50 200
->   _test_take_drop (nil :: ConsList Unary) (nil :: ConsList Bool)  (zero :: Unary) 50 200
+>   _test_take_drop 50 200 (nil :: ConsList Bool)  (nil :: ConsList Bool)  (zero :: Unary)
+>   _test_take_drop 50 200 (nil :: ConsList Unary) (nil :: ConsList Unary) (zero :: Unary)
+>   _test_take_drop 50 200 (nil :: ConsList Bool)  (nil :: ConsList Unary) (zero :: Unary)
+>   _test_take_drop 50 200 (nil :: ConsList Unary) (nil :: ConsList Bool)  (zero :: Unary)

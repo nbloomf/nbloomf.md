@@ -490,8 +490,8 @@ Suite:
 >   ( TypeName a, Show a, Equal a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a)
 >   , TypeName n, Show n, Equal n, Natural n, Arbitrary n
->   ) => t a -> n -> Int -> Int -> IO ()
-> _test_map t n size cases = do
+>   ) => Int -> Int -> t a -> n -> IO ()
+> _test_map size cases t n = do
 >   testLabel1 "map" t
 >   let args = testArgs size cases
 > 
@@ -511,5 +511,5 @@ Main:
 
 > main_map :: IO ()
 > main_map = do
->   _test_map (nil :: ConsList Bool)  (zero :: Unary) 20 100
->   _test_map (nil :: ConsList Unary) (zero :: Unary) 20 100
+>   _test_map 20 100 (nil :: ConsList Bool)  (zero :: Unary)
+>   _test_map 20 100 (nil :: ConsList Unary) (zero :: Unary)

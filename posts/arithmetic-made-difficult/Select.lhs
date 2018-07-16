@@ -410,8 +410,8 @@ Suite:
 >   , TypeName n, Natural n, Show n, Arbitrary n, Equal n
 >   , TypeName (t a), List t
 >   , Equal (t a), Show (t a), Arbitrary (t a), Equal (t (t a))
->   ) => t a -> n -> Int -> Int -> IO ()
-> _test_select t n size cases = do
+>   ) => Int -> Int -> t a -> n -> IO ()
+> _test_select size cases t n = do
 >   testLabel1 "select" t
 > 
 >   let args = testArgs size cases
@@ -429,5 +429,5 @@ Main:
 
 > main_select :: IO ()
 > main_select = do
->   _test_select (nil :: ConsList Bool)  (zero :: Unary) 20 30
->   _test_select (nil :: ConsList Unary) (zero :: Unary) 20 30
+>   _test_select 20 30 (nil :: ConsList Bool)  (zero :: Unary)
+>   _test_select 20 30 (nil :: ConsList Unary) (zero :: Unary)

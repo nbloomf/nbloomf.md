@@ -174,7 +174,8 @@ Let $A$ be a set. Then we have the following for all $x,y,z \in \lists{A}$.
 1. We have
 $$\begin{eqnarray*}
  &   & \btrue \\
- & = & \prefix(x,\cat(x,\nil)) \\
+ &     \href{@prefix-suffix@#thm-prefix-cat-self}
+   = & \prefix(x,\cat(x,\nil)) \\
  &     \href{@cat@#thm-cat-nil-right}
    = & \prefix(x,x)
 \end{eqnarray*}$$
@@ -548,7 +549,8 @@ Let $A$ be a set. Then we have the following for all $x,y,z \in \lists{A}$.
 1. We have
 $$\begin{eqnarray*}
  &   & \btrue \\
- & = & \prefix(\rev(x),\rev(x)) \\
+ &     \href{@prefix-suffix@#thm-prefix-reflexive}
+   = & \prefix(\rev(x),\rev(x)) \\
  & = & \suffix(x,x)
 \end{eqnarray*}$$
 as claimed.
@@ -712,8 +714,8 @@ Suite:
 >   , TypeName (t a), List t
 >   , TypeName n, Equal n, Natural n, Show n, Arbitrary n
 >   , Show (t a), Equal (t a), Arbitrary (t a)
->   ) => t a -> n -> Int -> Int -> IO ()
-> _test_prefix_suffix t n size cases = do
+>   ) => Int -> Int -> t a -> n -> IO ()
+> _test_prefix_suffix size cases t n = do
 >   testLabel2 "prefix & suffix" t n
 > 
 >   let args = testArgs size cases
@@ -748,5 +750,5 @@ Main:
 
 > main_prefix_suffix :: IO ()
 > main_prefix_suffix = do
->   _test_prefix_suffix (nil :: ConsList Bool)  (zero :: Unary) 20 100
->   _test_prefix_suffix (nil :: ConsList Unary) (zero :: Unary) 20 100
+>   _test_prefix_suffix 20 100 (nil :: ConsList Bool)  (zero :: Unary)
+>   _test_prefix_suffix 20 100 (nil :: ConsList Unary) (zero :: Unary)

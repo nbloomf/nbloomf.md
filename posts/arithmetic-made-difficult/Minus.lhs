@@ -502,8 +502,8 @@ Testing
 
 > _test_minus ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
->   ) => n -> Int -> Int -> IO ()
-> _test_minus n size cases = do
+>   ) => Int -> Int -> n -> IO ()
+> _test_minus size cases n = do
 >   testLabel1 "minus" n
 >   let args = testArgs size cases
 > 
@@ -528,4 +528,4 @@ Main:
 
 > main_minus :: IO ()
 > main_minus = do
->   _test_minus (zero :: Unary) 30 50
+>   _test_minus 30 50 (zero :: Unary)

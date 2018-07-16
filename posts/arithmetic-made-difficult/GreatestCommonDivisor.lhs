@@ -392,8 +392,8 @@ Suite:
 
 > _test_gcd ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
->   ) => n -> Int -> Int -> IO ()
-> _test_gcd n size cases = do
+>   ) => Int -> Int -> n ->  IO ()
+> _test_gcd size cases n = do
 >   testLabel1 "gcd" n
 > 
 >   let args = testArgs size cases
@@ -417,4 +417,4 @@ Main:
 
 > main_gcd :: IO ()
 > main_gcd = do
->   _test_gcd (zero :: Unary) 20 100
+>   _test_gcd 20 100 (zero :: Unary)

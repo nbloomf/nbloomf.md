@@ -220,8 +220,8 @@ Suite:
 
 > _test_plus
 >   :: (TypeName n, Natural n, Equal n, Show n, Arbitrary n)
->   => n -> (n -> n -> n) -> Int -> Int -> IO ()
-> _test_plus n f size cases = do
+>   => Int -> Int -> n -> (n -> n -> n) -> IO ()
+> _test_plus size cases n f = do
 >   testLabel1 "plus" n
 >   let args = testArgs size cases
 > 
@@ -238,4 +238,4 @@ Main:
 
 > main_plus :: IO ()
 > main_plus = do
->   _test_plus (zero :: Unary) plus 100 100
+>   _test_plus 100 100 (zero :: Unary) plus

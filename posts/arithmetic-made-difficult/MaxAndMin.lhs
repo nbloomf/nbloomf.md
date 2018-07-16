@@ -569,8 +569,8 @@ Suite:
 
 > _test_max_min ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
->   ) => n -> Int -> Int -> IO ()
-> _test_max_min n size cases = do
+>   ) => Int -> Int -> n -> IO ()
+> _test_max_min size cases n = do
 >   testLabel1 "min & max" n
 >   let args = testArgs size cases
 > 
@@ -602,4 +602,4 @@ Main:
 
 > main_max_min :: IO ()
 > main_max_min = do
->   _test_max_min (zero :: Unary) 100 100
+>   _test_max_min 100 100 (zero :: Unary)

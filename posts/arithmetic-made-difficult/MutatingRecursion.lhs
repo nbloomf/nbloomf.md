@@ -163,8 +163,8 @@ Suite:
 >   , Equal b, Arbitrary a, CoArbitrary a, Arbitrary b, CoArbitrary b
 >   , Boolean bool, Arbitrary bool
 >   , Show a, Show b, TypeName a, TypeName b, CoArbitrary n)
->   => n -> a -> b -> bool -> Int -> Int -> IO ()
-> _test_mutatingrec n a b p size cases = do
+>   => Int -> Int -> n -> a -> b -> bool -> IO ()
+> _test_mutatingrec size cases n a b p = do
 >   testLabel3 "mutatingRec" n a b
 > 
 >   let args = testArgs size cases
@@ -175,7 +175,7 @@ Main:
 
 > main_mutatingrec :: IO ()
 > main_mutatingrec = do
->   _test_mutatingrec (zero :: Unary) (true :: Bool)  (true :: Bool)  (true :: Bool) 50 500
->   _test_mutatingrec (zero :: Unary) (zero :: Unary) (true :: Bool)  (true :: Bool) 50 500
->   _test_mutatingrec (zero :: Unary) (true :: Bool)  (zero :: Unary) (true :: Bool) 50 500
->   _test_mutatingrec (zero :: Unary) (zero :: Unary) (zero :: Unary) (true :: Bool) 50 500
+>   _test_mutatingrec 50 500 (zero :: Unary) (true :: Bool)  (true :: Bool)  (true :: Bool)
+>   _test_mutatingrec 50 500 (zero :: Unary) (zero :: Unary) (true :: Bool)  (true :: Bool)
+>   _test_mutatingrec 50 500 (zero :: Unary) (true :: Bool)  (zero :: Unary) (true :: Bool)
+>   _test_mutatingrec 50 500 (zero :: Unary) (zero :: Unary) (zero :: Unary) (true :: Bool)

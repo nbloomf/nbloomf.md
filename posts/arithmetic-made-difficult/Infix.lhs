@@ -178,7 +178,8 @@ $$\begin{eqnarray*}
  &     \href{@cat@#cor-cat-cons}
    = & \bor(\prefix(x,\cat(\cons(a,u),y)),\infix(x,\cat(u,y))) \\
  & = & \bor(\prefix(x,\cat(x,y)),\infix(x,\cat(u,y))) \\
- & = & \bor(\btrue,\infix(x,\cat(u,y))) \\
+ &     \href{@prefix-suffix@#thm-prefix-cat-self}
+   = & \bor(\btrue,\infix(x,\cat(u,y))) \\
  &     \href{@or@#thm-or-true-left}
    = & \btrue
 \end{eqnarray*}$$

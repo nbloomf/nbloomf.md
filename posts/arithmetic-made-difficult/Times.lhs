@@ -435,8 +435,8 @@ Testing
 -------
 
 > _test_times :: (TypeName n, Natural n, Equal n, Arbitrary n, Show n)
->   => n -> (n -> n -> n) -> Int -> Int -> IO ()
-> _test_times n f size cases = do
+>   => Int -> Int -> n -> (n -> n -> n) -> IO ()
+> _test_times size cases n f = do
 >   testLabel1 "times" n
 > 
 >   let args = testArgs size cases
@@ -461,4 +461,4 @@ The problem lies in our *representation* of the natural numbers. A better repres
 
 > main_times :: IO ()
 > main_times = do
->   _test_times (zero :: Unary) times 40 100
+>   _test_times 40 100 (zero :: Unary) times

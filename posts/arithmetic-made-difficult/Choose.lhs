@@ -249,8 +249,8 @@ Suite:
 
 > _test_choose ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
->   ) => n -> Int -> Int -> IO ()
-> _test_choose n size cases = do
+>   ) => Int -> Int -> n -> IO ()
+> _test_choose size cases n = do
 >   testLabel1 "choose" n
 > 
 >   let args = testArgs size cases
@@ -267,4 +267,4 @@ Main:
 
 > main_choose :: IO ()
 > main_choose = do
->   _test_choose (zero :: Unary) 10 50
+>   _test_choose 10 50 (zero :: Unary)

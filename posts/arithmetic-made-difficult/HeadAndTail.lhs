@@ -253,8 +253,8 @@ Suite:
 > _test_head_tail ::
 >   ( TypeName a, Equal a, Show a, Arbitrary a
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a)
->   ) => t a -> Int -> Int -> IO ()
-> _test_head_tail t size cases = do
+>   ) => Int -> Int -> t a -> IO ()
+> _test_head_tail size cases t = do
 >   testLabel1 "head and tail" t
 > 
 >   let args = testArgs size cases
@@ -271,5 +271,5 @@ Main:
 
 > main_head_tail :: IO ()
 > main_head_tail = do
->   _test_head_tail (nil :: ConsList Bool)  20 100
->   _test_head_tail (nil :: ConsList Unary) 20 100
+>   _test_head_tail 20 100 (nil :: ConsList Bool)
+>   _test_head_tail 20 100 (nil :: ConsList Unary)

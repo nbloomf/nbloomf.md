@@ -1063,8 +1063,8 @@ Suite:
 >   , TypeName (t a), List t
 >   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (Pair a a))
 >   , Natural n
->   ) => t a -> n -> Int -> Int -> IO ()
-> _test_sublist t n size cases = do
+>   ) => Int -> Int -> t a -> n -> IO ()
+> _test_sublist size cases t n = do
 >   testLabel1 "sublist" t
 > 
 >   let args = testArgs size cases
@@ -1101,5 +1101,5 @@ Main:
 
 > main_sublist :: IO ()
 > main_sublist = do
->   _test_sublist (nil :: ConsList Bool)  (zero :: Unary) 50 200
->   _test_sublist (nil :: ConsList Unary) (zero :: Unary) 50 200
+>   _test_sublist 50 200 (nil :: ConsList Bool)  (zero :: Unary)
+>   _test_sublist 50 200 (nil :: ConsList Unary) (zero :: Unary)

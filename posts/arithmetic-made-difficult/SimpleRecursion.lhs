@@ -267,8 +267,8 @@ Suite:
 >   :: (TypeName n, Natural n, Equal n, Show n, Arbitrary n
 >   , Equal b, Arbitrary a, CoArbitrary a, Arbitrary b, CoArbitrary b
 >   , Show a, Show b, TypeName a, TypeName b, CoArbitrary n)
->   => n -> a -> b -> Int -> Int -> IO ()
-> _test_simplerec n a b size cases = do
+>   => Int -> Int -> n -> a -> b -> IO ()
+> _test_simplerec size cases n a b = do
 >   testLabel3 "simpleRec" n a b
 > 
 >   let args = testArgs size cases
@@ -280,7 +280,7 @@ Main:
 
 > main_simplerec :: IO ()
 > main_simplerec = do
->   _test_simplerec (zero :: Unary) (true :: Bool)  (true :: Bool)  100 200
->   _test_simplerec (zero :: Unary) (zero :: Unary) (true :: Bool)  100 200
->   _test_simplerec (zero :: Unary) (true :: Bool)  (zero :: Unary) 100 200
->   _test_simplerec (zero :: Unary) (zero :: Unary) (zero :: Unary) 100 200
+>   _test_simplerec 100 200 (zero :: Unary) (true :: Bool)  (true :: Bool)
+>   _test_simplerec 100 200 (zero :: Unary) (zero :: Unary) (true :: Bool)
+>   _test_simplerec 100 200 (zero :: Unary) (true :: Bool)  (zero :: Unary)
+>   _test_simplerec 100 200 (zero :: Unary) (zero :: Unary) (zero :: Unary)

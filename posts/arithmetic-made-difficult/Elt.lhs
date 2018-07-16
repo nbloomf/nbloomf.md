@@ -296,7 +296,8 @@ Let $A$ be a set with $x,y \in \lists{A}$. We have the following.
 $$\begin{eqnarray*}
  &   & \elt(y,\tails(x)) \\
  & = & \elt(\nil,\tails(\nil)) \\
- & = & \elt(\nil,\cons(\nil,\nil)) \\
+ &     \href{@tails-inits@#cor-tails-nil}
+   = & \elt(\nil,\cons(\nil,\nil)) \\
  & = & \bif{\beq(\nil,\nil)}{\btrue}{\elt(\nil,\nil)} \\
  & = & \btrue \\
  &     \href{@prefix-suffix@#cor-prefix-nil-left}
@@ -309,7 +310,8 @@ as claimed. Suppose $y \neq \nil$; then we have $y = \snoc(b,u)$ for some $b \in
 $$\begin{eqnarray*}
  &   & \elt(y,\tails(x)) \\
  & = & \elt(y,\tails(\nil)) \\
- & = & \elt(y,\cons(\nil,\nil)) \\
+ &     \href{@tails-inits@#cor-tails-nil}
+   = & \elt(y,\cons(\nil,\nil)) \\
  & = & \bif{\beq(y,\nil)}{\btrue}{\elt(y,\nil)} \\
  & = & \elt(y,\nil) \\
  & = & \bfalse \\
@@ -319,7 +321,8 @@ $$\begin{eqnarray*}
 as claimed. For the inductive step, suppose the equality holds for all $y$ for some $x$ and let $a \in A$. Again we consider two possibilities for $y$. If $y = \cons(a,x)$, we have
 $$\begin{eqnarray*}
  &   & \elt(y,\tails(\cons(a,x))) \\
- & = & \elt(y,\cons(\cons(a,x),\tails(x))) \\
+ &     \href{@tails-inits@#cor-tails-cons}
+   = & \elt(y,\cons(\cons(a,x),\tails(x))) \\
  & = & \bif{\beq(y,\cons(a,x))}{\btrue}{\elt(y,\tails(x))} \\
  & = & \btrue \\
  & = & \suffix(\cons(a,x),\cons(a,x)) \\
@@ -328,7 +331,8 @@ $$\begin{eqnarray*}
 as claimed. Suppose $y \neq \cons(a,x)$. Now
 $$\begin{eqnarray*}
  &   & \elt(y,\tails(\cons(a,x))) \\
- & = & \elt(y,\cons(\cons(a,x),\tails(x))) \\
+ &     \href{@tails-inits@#cor-tails-cons}
+   = & \elt(y,\cons(\cons(a,x),\tails(x))) \\
  & = & \bif{\beq(y,\cons(a,x))}{\btrue}{\elt(y,\tails(x))} \\
  & = & \elt(y,tails(x)) \\
  & = & \suffix(y,x) \\

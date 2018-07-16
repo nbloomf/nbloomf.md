@@ -433,8 +433,8 @@ Suite:
 > _test_cat ::
 >   ( TypeName a, Show a, Equal a, Arbitrary a
 >   , TypeName (t a), List t, Equal (t a), Show (t a), Arbitrary (t a)
->   ) => t a -> Int -> Int -> IO ()
-> _test_cat t size cases = do
+>   ) => Int -> Int -> t a -> IO ()
+> _test_cat size cases t = do
 >   testLabel1 "cat" t
 > 
 >   let args = testArgs size cases
@@ -457,5 +457,5 @@ Main:
 
 > main_cat :: IO ()
 > main_cat = do
->   _test_cat (nil :: ConsList Bool)  20 100
->   _test_cat (nil :: ConsList Unary) 20 100
+>   _test_cat 20 100 (nil :: ConsList Bool)
+>   _test_cat 20 100 (nil :: ConsList Unary)

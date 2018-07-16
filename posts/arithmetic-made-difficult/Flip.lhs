@@ -255,24 +255,24 @@ And:
 
 :::::: theorem :::::
 []{#thm-flip5}
-Let $f : A \rightarrow B \rightarrow C \rightarrow D \rightarrow E \rightarrow F \rightarrow G$. Then $$\flipE(f)(a)(b)(c)(d)(f)(e) = f(a)(b)(c)(d)(e)(f).$$
+Let $w : A \rightarrow B \rightarrow C \rightarrow D \rightarrow E \rightarrow F \rightarrow G$. Then $$\flipE(w)(a)(b)(c)(d)(f)(e) = w(a)(b)(c)(d)(e)(f).$$
 
 ::: proof ::::::::::
 We have
 $$\begin{eqnarray*}
- &   & \flipE(f)(a)(b)(c)(d)(f)(e) \\
+ &   & \flipE(w)(a)(b)(c)(d)(f)(e) \\
  &     \href{@flip@#def-flip5}
-   = & \compose(\compose(\compose(\compose(\flip))))(f)(a)(b)(c)(d)(f)(e) \\
+   = & \compose(\compose(\compose(\compose(\flip))))(w)(a)(b)(c)(d)(f)(e) \\
  &     \href{@functions@#def-compose}
-   = & \compose(\compose(\compose(\flip)))(f(a))(b)(c)(d)(f)(e) \\
+   = & \compose(\compose(\compose(\flip)))(w(a))(b)(c)(d)(f)(e) \\
  &     \href{@functions@#def-compose}
-   = & \compose(\compose(\flip))(f(a)(b))(c)(d)(f)(e) \\
+   = & \compose(\compose(\flip))(w(a)(b))(c)(d)(f)(e) \\
  &     \href{@functions@#def-compose}
-   = & \compose(\flip)(f(a)(b)(c))(d)(f)(e) \\
+   = & \compose(\flip)(w(a)(b)(c))(d)(f)(e) \\
  &     \href{@functions@#def-compose}
-   = & \flip(f(a)(b)(c)(d))(f)(e) \\
+   = & \flip(w(a)(b)(c)(d))(f)(e) \\
  &     \href{@flip@#def-flip}
-   = & f(a)(b)(c)(d)(e)(f)
+   = & w(a)(b)(c)(d)(e)(f)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -285,7 +285,7 @@ as claimed.
 >   -> Test ((a -> b -> c -> d -> e -> f -> g)
 >       -> a -> b -> c -> d -> e -> f -> Bool)
 > _test_flip5 _ _ _ _ _ _ _ =
->   testName "flip5(f)(a)(b)(c)(d)(e)(f) == f(a)(b)(c)(d)(f)(e)" $
+>   testName "flip5(w)(a)(b)(c)(d)(e)(f) == w(a)(b)(c)(d)(f)(e)" $
 >   \w a b c d e f -> eq (flip5 w a b c d f e) (w a b c d e f)
 
 ::::::::::::::::::::

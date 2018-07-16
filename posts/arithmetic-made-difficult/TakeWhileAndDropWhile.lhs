@@ -382,8 +382,8 @@ Suite:
 >   , TypeName (t a), List t
 >   , TypeName n, Natural n, Show n, Arbitrary n
 >   , Equal (t a), Show (t a), Arbitrary (t a)
->   ) => t a -> n -> Int -> Int -> IO ()
-> _test_takewhile_dropwhile t k size cases = do
+>   ) => Int -> Int -> t a -> n -> IO ()
+> _test_takewhile_dropwhile size cases t k = do
 >   testLabel1 "takeWhile & dropWhile" t
 > 
 >   let args = testArgs size cases
@@ -405,5 +405,5 @@ Main:
 
 > main_takewhile_dropwhile :: IO ()
 > main_takewhile_dropwhile = do
->   _test_takewhile_dropwhile (nil :: ConsList Bool)  (zero :: Unary) 20 100
->   _test_takewhile_dropwhile (nil :: ConsList Unary) (zero :: Unary) 20 100
+>   _test_takewhile_dropwhile 20 100 (nil :: ConsList Bool)  (zero :: Unary)
+>   _test_takewhile_dropwhile 20 100 (nil :: ConsList Unary) (zero :: Unary)

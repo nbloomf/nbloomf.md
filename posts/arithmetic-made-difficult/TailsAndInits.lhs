@@ -80,14 +80,17 @@ Let $A$ be a sets. For all $a,b \in A$ we have the following.
 1. Note that
 $$\begin{eqnarray*}
  &   & \tails(\cons(a,\nil)) \\
- & = & \cons(\cons(a,\nil),\tails(\nil)) \\
- & = & \cons(\cons(a,\nil),\cons(\nil,\nil))
+ &     \href{@tails-inits@#cor-tails-cons}
+   = & \cons(\cons(a,\nil),\tails(\nil)) \\
+ &     \href{@tails-inits@#cor-tails-nil}
+   = & \cons(\cons(a,\nil),\cons(\nil,\nil))
 \end{eqnarray*}$$
 as claimed.
 2. Note that
 $$\begin{eqnarray*}
  &   & \tails(\cons(a,\cons(b,\nil))) \\
- & = & \cons(\cons(a,\cons(b,\nil)),\tails(\cons(b,\nil))) \\
+ &     \href{@tails-inits@#cor-tails-cons}
+   = & \cons(\cons(a,\cons(b,\nil)),\tails(\cons(b,\nil))) \\
  & = & \cons(\cons(a,\cons(b,\nil)),\cons(\cons(a,\nil),\cons(\nil,\nil)))
 \end{eqnarray*}$$
 as claimed.
@@ -139,7 +142,8 @@ $$\begin{eqnarray*}
  &     \href{@map@#cor-map-cons}
    = & \tails(\cons(f(a),\map(f)(x))) \\
  & = & \cons(\cons(f(a),\map(f)(x)),\tails(\map(f)(x))) \\
- & = & \cons(\cons(f(a),\map(f)(x)),\map(\map(f))(\tails(x))) \\
+ &     \href{@tails-inits@#thm-tails-map}
+   = & \cons(\cons(f(a),\map(f)(x)),\map(\map(f))(\tails(x))) \\
  &     \href{@map@#cor-map-cons}
    = & \cons(\map(f)(\cons(a,x)),\map(\map(f))(\tails(x))) \\
  &     \href{@map@#cor-map-cons}
@@ -169,7 +173,8 @@ Let $A$ be a set. For all $x \in \lists{A}$ we have $$\length(\tails(x)) = \next
 We proceed by list induction. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \length(\tails(\nil)) \\
- & = & \length(\cons(\nil,\nil)) \\
+ &     \href{@tails-inits@#cor-tails-nil}
+   = & \length(\cons(\nil,\nil)) \\
  &     \href{@length@#thm-length-singleton}
    = & \next(\zero) \\
  &     \href{@length@#cor-length-nil}
@@ -178,7 +183,8 @@ $$\begin{eqnarray*}
 as claimed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Then we have
 $$\begin{eqnarray*}
  &   & \length(\tails(\cons(a,x))) \\
- & = & \length(\cons(\cons(a,x),\tails(x))) \\
+ &     \href{@tails-inits@#cor-tails-cons}
+   = & \length(\cons(\cons(a,x),\tails(x))) \\
  &     \href{@length@#cor-length-cons}
    = & \next(\length(\tails(x))) \\
  & = & \next(\next(\length(x))) \\
@@ -216,7 +222,8 @@ $$\begin{eqnarray*}
  &     \href{@snoc@#cor-snoc-cons}
    = & \cons(\snoc(a,\nil),\snoc(\nil,\nil)) \\
  & = & \cons(\cons(a,\nil),\cons(\nil,\nil)) \\
- & = & \tails(\cons(a,\nil)) \\
+ &     \href{@tails-inits@#thm-tails-one}
+   = & \tails(\cons(a,\nil)) \\
  &     \href{@snoc@#cor-snoc-nil}
    = & \tails(\snoc(a,\nil)) \\
  & = & \tails(\snoc(a,x))
@@ -340,13 +347,17 @@ $$\begin{eqnarray*}
  &     \href{@rev@#cor-rev-cons}
    = & \rev(\map(\rev)(\tails(\snoc(a,\rev(x))))) \\
  & = & \rev(\map(\rev)(\snoc(\nil,\map(\snoc(a))(\tails(\rev(a)))))) \\
- & = & \rev(\snoc(\rev(\nil),\map(\rev)(\map(\snoc(a))(\tails(\rev(a)))))) \\
- & = & \rev(\snoc(\nil,\map(\rev)(\map(\snoc(a))(\tails(\rev(a)))))) \\
+ &     \href{@map@#thm-map-snoc}
+   = & \rev(\snoc(\rev(\nil),\map(\rev)(\map(\snoc(a))(\tails(\rev(a)))))) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \rev(\snoc(\nil,\map(\rev)(\map(\snoc(a))(\tails(\rev(a)))))) \\
  & = & \rev(\snoc(\nil,\map(\compose(\rev)(\snoc(a)))(\tails(\rev(a))))) \\
  & = & \rev(\snoc(\nil,\map(\cons(a) \circ \rev)(\tails(\rev(a))))) \\
  & = & \rev(\snoc(\nil,\map(\cons(a))(\map(\rev)(\tails(\rev(a)))))) \\
- & = & \cons(\nil,\rev(\map(\cons(a))(\map(\rev)(\tails(\rev(a)))))) \\
- & = & \cons(\nil,\map(\cons(a))(\rev(\map(\rev)(\tails(\rev(a)))))) \\
+ &     \href{@rev@#thm-rev-snoc}
+   = & \cons(\nil,\rev(\map(\cons(a))(\map(\rev)(\tails(\rev(a)))))) \\
+ &     \href{@map@#thm-map-rev}
+   = & \cons(\nil,\map(\cons(a))(\rev(\map(\rev)(\tails(\rev(a)))))) \\
  & = & \cons(\nil,\map(\cons(a))(\inits(x)))
 \end{eqnarray*}$$
 as claimed.
@@ -477,7 +488,8 @@ $$\begin{eqnarray*}
  & = & \lcp(\cons(\nil,\map(\cons(a,-))(\tails(x))),\cons(\nil,\map(\cons(b,-))(\tails(u)))) \\
  & = & \cons(\nil,\lcp(\map(\cons(a,-))(\tails(x)),\map(\cons(b,-))(\tails(u)))) \\
  & = & \cons(\nil,\nil) \\
- & = & \tails(\nil) \\
+ &     \href{@tails-inits@#cor-tails-nil}
+   = & \tails(\nil) \\
  & = & \tails(\lcp(\cons(a,x),\cons(b,u))) \\
  & = & \tails(\lcp(\cons(a,x),y))
 \end{eqnarray*}$$
@@ -538,8 +550,8 @@ Suite:
 >   , TypeName n, Natural n, Equal n
 >   , TypeName (t a), List t
 >   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (Pair a a)), Equal (t (t a))
->   ) => t a -> n -> Int -> Int -> IO ()
-> _test_tails_inits t n size cases = do
+>   ) => Int -> Int -> t a -> n -> IO ()
+> _test_tails_inits size cases t n = do
 >   testLabel2 "tails & inits" t n
 > 
 >   let args = testArgs size cases
@@ -565,5 +577,5 @@ Main:
 
 > main_tails_inits :: IO ()
 > main_tails_inits = do
->   _test_tails_inits (nil :: ConsList Bool)  (zero :: Unary) 20 100
->   _test_tails_inits (nil :: ConsList Unary) (zero :: Unary) 20 100
+>   _test_tails_inits 20 100 (nil :: ConsList Bool)  (zero :: Unary)
+>   _test_tails_inits 20 100 (nil :: ConsList Unary) (zero :: Unary)

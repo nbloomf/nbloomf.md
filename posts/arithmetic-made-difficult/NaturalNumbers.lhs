@@ -132,8 +132,8 @@ We proved some theorems about $\unnext$, $\prev$, and $\iszero$ in the last post
 Suite.
 
 > _test_nats :: (TypeName n, Natural n, Show n, Arbitrary n, Equal n)
->   => n -> Int -> Int -> IO ()
-> _test_nats n size cases = do
+>   => Int -> Int -> n -> IO ()
+> _test_nats size cases n = do
 >   testLabel1 "nats" n
 >   let args = testArgs size cases
 > 
@@ -148,7 +148,7 @@ Main.
 
 > main_nats :: IO ()
 > main_nats = do
->   _test_nats (zero :: Unary) 100 100
+>   _test_nats 100 100 (zero :: Unary)
 > 
 >   let a = zero :: Unary
 >   let b = true :: Bool
