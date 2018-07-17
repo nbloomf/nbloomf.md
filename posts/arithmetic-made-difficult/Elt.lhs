@@ -315,7 +315,8 @@ $$\begin{eqnarray*}
  & = & \bif{\beq(y,\nil)}{\btrue}{\elt(y,\nil)} \\
  & = & \elt(y,\nil) \\
  & = & \bfalse \\
- & = & \suffix(\snoc(b,u),\nil) \\
+ &     \href{@prefix-suffix@#thm-suffix-snoc-nil}
+   = & \suffix(\snoc(b,u),\nil) \\
  & = & \suffix(y,x)
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for all $y$ for some $x$ and let $a \in A$. Again we consider two possibilities for $y$. If $y = \cons(a,x)$, we have
@@ -325,7 +326,8 @@ $$\begin{eqnarray*}
    = & \elt(y,\cons(\cons(a,x),\tails(x))) \\
  & = & \bif{\beq(y,\cons(a,x))}{\btrue}{\elt(y,\tails(x))} \\
  & = & \btrue \\
- & = & \suffix(\cons(a,x),\cons(a,x)) \\
+ &     \href{@prefix-suffix@#thm-suffix-reflexive}
+   = & \suffix(\cons(a,x),\cons(a,x)) \\
  & = & \suffix(y,\cons(a,x))
 \end{eqnarray*}$$
 as claimed. Suppose $y \neq \cons(a,x)$. Now
@@ -348,7 +350,8 @@ $$\begin{eqnarray*}
  & = & \elt(\rev(y),\map(\rev \circ \rev)(\tails(\rev(x)))) \\
  & = & \elt(\rev(y),\tails(\rev(x))) \\
  & = & \suffix(\rev(y),\rev(x)) \\
- & = & \prefix(y,x)
+ &     \href{@prefix-suffix@#thm-prefix-rev}
+   = & \prefix(y,x)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

@@ -167,6 +167,7 @@ as claimed.
 $\tails$ interacts with $\length$.
 
 :::::: theorem :::::
+[]{#thm-length-tails}
 Let $A$ be a set. For all $x \in \lists{A}$ we have $$\length(\tails(x)) = \next(\length(x)).$$ In particular, $\tails{x} \neq \nil$.
 
 ::: proof ::::::::::
@@ -209,7 +210,8 @@ as claimed.
 $\tails$ interacts with $\snoc$.
 
 :::::: theorem :::::
-Let $A$ be a set. For all $x \in \lists{A}$ and $a \in A$ we have $$\tails(\snoc(a,x)) = \snoc(\nil,\map(\snoc(a,-))(\tails(x))).$$
+[]{#thm-tails-snoc}
+Let $A$ be a set. For all $x \in \lists{A}$ and $a \in A$ we have $$\tails(\snoc(a,x)) = \snoc(\nil,\map(\snoc(a))(\tails(x))).$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
@@ -257,7 +259,8 @@ as needed.
 And $\tails(x)$ consists of suffixes.
 
 :::::: theorem :::::
-Let $A$ be a set. For all $x \in \lists{A}$ we have $$\all(\suffix(-,x),\tails(x)) = \btrue.$$
+[]{#thm-tails-suffix}
+Let $A$ be a set. For all $x \in \lists{A}$ we have $$\all(\flip(\suffix)(x),\tails(x)) = \btrue.$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, note that
@@ -308,6 +311,7 @@ In Haskell:
 And likewise, $\tails$ has an expression in terms of $\inits$.
 
 :::::: theorem :::::
+[]{#thm-tails-rev}
 Let $A$ be a set. For all $x \in \lists{A}$ we have $$\tails(x) = \map(\rev)(\rev(\inits(\rev(x)))).$$
 
 ::: proof ::::::::::
@@ -337,7 +341,8 @@ as needed.
 $\inits$ interacts with $\cons$.
 
 :::::: theorem :::::
-Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have $$\inits(\cons(a,x)) = \cons(\nil,\map(\cons(a,-))(\inits(x))).$$
+[]{#thm-inits-cons}
+Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have $$\inits(\cons(a,x)) = \cons(\nil,\map(\cons(a))(\inits(x))).$$
 
 ::: proof ::::::::::
 Note that
@@ -377,6 +382,7 @@ as claimed.
 $\inits$ interacts with $\map$.
 
 :::::: theorem :::::
+[]{#thm-inits-map}
 Let $A$ and $B$ be sets with $f : A \rightarrow B$. For all $x \in \lists{A}$, we have $$\inits(\map(f)(x)) = \map(\map(f))(\inits(x)).$$
 
 ::: proof ::::::::::
@@ -411,6 +417,7 @@ as claimed.
 $\inits$ interacts with $\length$.
 
 :::::: theorem :::::
+[]{#thm-length-inits}
 Let $A$ be a set. For all $x \in \lists{A}$, we have $$\length(\inits(x)) = \next(\length(x)).$$
 
 ::: proof ::::::::::
@@ -421,7 +428,8 @@ $$\begin{eqnarray*}
  &     \href{@length@#thm-length-rev}
    = & \length(\map(\rev)(\tails(\rev(x)))) \\
  & = & \length(\tails(\rev(x))) \\
- & = & \next(\length(\rev(x))) \\
+ &     \href{@tails-inits@#thm-length-tails}
+   = & \next(\length(\rev(x))) \\
  &     \href{@length@#thm-length-rev}
    = & \next(\length(x))
 \end{eqnarray*}$$
@@ -442,6 +450,7 @@ as claimed.
 $\inits$ distributes over $\lcp$.
 
 :::::: theorem :::::
+[]{#thm-inits-lcp}
 Let $A$ be a set. For all $x,y \in \lists{A}$, we have $$\inits(\lcp(x,y)) = \lcp(\inits(x),\inits(y)).$$
 
 ::: proof ::::::::::
@@ -510,15 +519,18 @@ as needed.
 And $\tails$ distributes over $\lcs$.
 
 :::::: theorem :::::
+[]{#thm-tails-lcs}
 Let $A$ be a set. For all $x,y \in \lists{A}$, we have $$\tails(\lcs(x,y)) = \lcs(\tails(x),\tails(y)).$$
 
 ::: proof ::::::::::
 Note that $\rev$ is injective, so that
 $$\begin{eqnarray*}
  &   & \tails(\lcs(x,y)) \\
- & = & \map(\rev)(\rev(\inits(\rev(\lcs(x,y))))) \\
+ &     \href{@tails-inits@#thm-tails-rev}
+   = & \map(\rev)(\rev(\inits(\rev(\lcs(x,y))))) \\
  & = & \map(\rev)(\rev(\inits(\lcp(\rev(x),\rev(y))))) \\
- & = & \map(\rev)(\rev(\lcp(\inits(\rev(x)),\inits(\rev(y))))) \\
+ &     \href{@tails-inits@#thm-inits-lcp}
+   = & \map(\rev)(\rev(\lcp(\inits(\rev(x)),\inits(\rev(y))))) \\
  &     \href{@map@#thm-map-rev}
    = & \rev(\map(\rev)(\lcp(\inits(\rev(x)),\inits(\rev(y))))) \\
  & = & \rev(\lcp(\map(\rev)(\inits(\rev(x))),\map(\rev)(\inits(\rev(y))))) \\

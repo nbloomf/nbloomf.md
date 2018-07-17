@@ -309,7 +309,8 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \suffix(\dropWhile(p)(\nil),\nil) \\
  & = & \suffix(\nil,\nil) \\
- & = & \btrue
+ &     \href{@prefix-suffix@#thm-suffix-nil-left}
+   = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. By the inductive hypothesis we have $\suffix(\dropWhile(p)(x),x)$, so that $\suffix(\dropWhile(p)(x),\cons(a,x))$. Now
 $$\begin{eqnarray*}

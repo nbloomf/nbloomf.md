@@ -366,6 +366,7 @@ In Haskell:
 Not surprisingly, we can characterize $\prefix$ in terms of $\suffix$.
 
 :::::: theorem :::::
+[]{#thm-prefix-rev}
 Let $A$ be a set with $x,y \in \lists{A}$. Then $$\prefix(x,y) = \suffix(\rev(x),\rev(y)).$$
 
 ::: proof ::::::::::
@@ -392,6 +393,7 @@ as claimed.
 Many theorems about $\prefix$ has an analogue for $\suffix$.
 
 :::::: theorem :::::
+[]{#thm-suffix-nil-left}[]{#thm-suffix-snoc-nil}[]{#thm-suffix-snoc-snoc}
 Let $A$ be a set. For all $a,b \in A$ and $x,y \in \lists{A}$, we have the following.
 
 1. $\suffix(\nil,y) = \btrue$.
@@ -465,6 +467,7 @@ as claimed.
 $\suffix$ also detects the existence of solutions $z$ to the equation $y = \cat(z,x)$.
 
 :::::: theorem :::::
+[]{#thm-suffix-cat-self}
 Let $A$ be a set. The following hold for all $x,y \in \lists{A}$.
 
 1. $\suffix(x,\cat(y,x)) = \btrue$.
@@ -539,6 +542,7 @@ as claimed.
 $\suffix$ is a partial order:
 
 :::::: theorem :::::
+[]{#thm-suffix-reflexive}
 Let $A$ be a set. Then we have the following for all $x,y,z \in \lists{A}$.
 
 1. $\suffix(x,x) = \btrue$.
@@ -657,6 +661,7 @@ as claimed.
 As a special case, the prefixes and suffixes of a one-element list coincide.
 
 :::::: theorem :::::
+[]{#thm-prefix-suffix-one}
 Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$ we have $$\prefix(x,\cons(a,\nil)) = \suffix(x,\cons(a,\nil)).$$
 
 ::: proof ::::::::::

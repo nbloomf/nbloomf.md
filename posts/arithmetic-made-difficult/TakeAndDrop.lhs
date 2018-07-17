@@ -434,14 +434,16 @@ $$\begin{eqnarray*}
  &   & \suffix(\drop(k,x),x) \\
  & = & \suffix(\drop(\zero,x),x) \\
  & = & \suffix(x,x) \\
- & = & \btrue
+ &     \href{@prefix-suffix@#thm-suffix-reflexive}
+   = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $x$ for some $k$. We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \suffix(\drop(\next(k),x),x) \\
  & = & \suffix(\drop(\next(k),\nil),\nil) \\
  & = & \suffix(\nil,\nil) \\
- & = & \btrue
+ &     \href{@prefix-suffix@#thm-suffix-nil-left}
+   = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. By the inductive hypothesis, we have $$\suffix(\drop(k,x),x) = \btrue$$ and note also that $$\suffix(x,\cons(a,x)) = \btrue.$$ Since $\suffix$ is transitive, we have
 $$\begin{eqnarray*}

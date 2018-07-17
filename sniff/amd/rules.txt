@@ -460,6 +460,9 @@
 @zippad@#thm-zippad-nil-right	\\zipPad(u,v)(x,\\nil) = \\map(\\flip(\\tup)(v))(x)
 @zippad@#thm-zippad-tSwap	\\map(\\tSwap)(\\zipPad(u,v)(x,y)) = \\zipPad(v,u)(y,x)
 @zippad@#thm-zippad-map-tPair	\\map(\\tPair(f,g))(\\zipPad(u,v)(x,y)) = \\zipPad(f(u),g(v))(\\map(f)(x),\\map(g)(y))
+@zippad@#thm-zippad-length	\\length(\\zipPad(u,v)(x,y)) = \\nmax(\\length(x),\\length(y))
+@zippad@#thm-zippad-assocL	\\zipPad(\\tup(u)(v))(w)(\\zipPad(u,v)(x,y),z) = \\map(\\tAssocL)(\\zipPad(u)(\\tup(v)(w))(x,\\zipPad(v,w)(y,z)))
+@zippad@#thm-zippad-assocR	\\zipPad(u)(\\tup(v)(w))(x,\\zipPad(v,w)(y,z)) = \\map(\\tAssocR)(\\zipPad(\\tup(u)(v))(w)(\\zipPad(u,v)(x,y),z))
 #=======================#
 #--- prefix-suffix -----#
 #=======================#
@@ -468,6 +471,13 @@
 @prefix-suffix@#cor-prefix-cons-cons	\\prefix(\\cons(a,x),\\cons(b,y)) = \\bif{\\beq(a,b)}{\\prefix(x,y)}{\\bfalse}
 @prefix-suffix@#thm-prefix-cat-self	\\prefix(x,\\cat(x,y)) = \\btrue
 @prefix-suffix@#thm-prefix-reflexive	\\prefix(x,x) = \\btrue
+@prefix-suffix@#thm-prefix-rev	\\prefix(x,y) = \\suffix(\\rev(x),\\rev(y))
+@prefix-suffix@#thm-suffix-nil-left	\\suffix(\\nil,y) = \\btrue
+@prefix-suffix@#thm-suffix-snoc-nil	\\suffix(\\snoc(a,x),\\nil) = \\bfalse
+@prefix-suffix@#thm-suffix-snoc-snoc	\\suffix(\\snoc(a,x),\\snoc(b,y)) = \\bif{\\beq(a,b)}{\\suffix(x,y)}{\\bfalse}
+@prefix-suffix@#thm-suffix-cat-self	\\suffix(x,\\cat(y,x)) = \\btrue
+@prefix-suffix@#thm-suffix-reflexive	\\suffix(x,x) = \\btrue
+@prefix-suffix@#thm-prefix-suffix-one	\\prefix(x,\\cons(a,\\nil)) = \\suffix(x,\\cons(a,\\nil))
 #=======================#
 #--- tails-inits -------#
 #=======================#
@@ -476,3 +486,12 @@
 @tails-inits@#thm-tails-one	\\tails(\\cons(a,\\nil)) = \\cons(\\cons(a,\\nil),\\cons(\\nil,\\nil))
 @tails-inits@#thm-tails-two	\\tails(\\cons(a,\\cons(b,\\nil))) = \\cons(\\cons(a,\\cons(b,\\nil)),\\cons(\\cons(b,\\nil),\\cons(\\nil,\\nil)))
 @tails-inits@#thm-tails-map	\\tails(\\map(f)(x)) = \\map(\\map(f))(\\tails(x))
+@tails-inits@#thm-length-tails	\\length(\\tails(x)) = \\next(\\length(x))
+@tails-inits@#thm-tails-snoc	\\tails(\\snoc(a,x)) = \\snoc(\\nil,\\map(\\snoc(a))(\\tails(x)))
+@tails-inits@#thm-tails-suffix	\\all(\\flip(\\suffix)(x),\\tails(x)) = \\btrue
+@tails-inits@#thm-tails-rev	\\tails(x) = \\map(\\rev)(\\rev(\\inits(\\rev(x))))
+@tails-inits@#thm-inits-cons	\\inits(\\cons(a,x)) = \\cons(\\nil,\\map(\\cons(a))(\\inits(x)))
+@tails-inits@#thm-inits-map	\\inits(\\map(f)(x)) = \\map(\\map(f))(\\inits(x))
+@tails-inits@#thm-length-inits	\\length(\\inits(x)) = \\next(\\length(x))
+@tails-inits@#thm-inits-lcp	\\inits(\\lcp(x,y)) = \\lcp(\\inits(x),\\inits(y))
+@tails-inits@#thm-tails-lcs	\\tails(\\lcs(x,y)) = \\lcs(\\tails(x),\\tails(y))

@@ -247,6 +247,7 @@ as needed.
 $\zipPad$ interacts with $\length$.
 
 :::::: theorem :::::
+[]{#thm-zippad-length}
 Let $A$ and $B$ be sets, with $u \in A$, $v \in B$, $x \in \lists{A}$, and $y \in \lists{B}$. Then $$\length(\zipPad(u,v)(x,y)) = \nmax(\length(x),\length(y)).$$
 
 ::: proof ::::::::::
@@ -282,7 +283,8 @@ $$\begin{eqnarray*}
  & = & \length(\zipPad(u,v)(\cons(a,x),\cons(b,w))) \\
  & = & \length(\cons((a,b),\zipPad(u,v)(x,w))) \\
  & = & \next(\length(\zipPad(u,v)(x,w))) \\
- & = & \next(\nmax(\length(x),\length(w))) \\
+ &     \href{@zippad@#thm-zippad-length}
+   = & \next(\nmax(\length(x),\length(w))) \\
  &     \href{@max-min@#thm-next-max-distribute}
    = & \nmax(\next(\length(x)),\next(\length(w))) \\
  & = & \nmax(\length(\cons(a,x)),\length(\cons(b,w))) \\
@@ -307,14 +309,15 @@ as claimed.
 $\zipPad$ is also kind of associative:
 
 :::::: theorem :::::
+[]{#thm-zippad-assocL}[]{#thm-zippad-assocR}
 Let $A$, $B$, and $C$ be sets, with $u \in A$, $v \in B$, $w \in C$, $x \in \lists{A}$, $y \in \lists{B}$, and $z \in \lists{C}$. Then the following hold.
 
-1. Note that
+1. We have
 $$\begin{eqnarray*}
  &   & \zipPad((u,v),w)(\zipPad(u,v)(x,y),z) \\
  & = & \map(\tAssocL)(\zipPad(u,(v,w))(x,\zipPad(v,w)(y,z))).
 \end{eqnarray*}$$
-2. Note that
+2. We have
 $$\begin{eqnarray*}
  &   & \zipPad(u,(v,w))(x,\zipPad(v,w)(y,z)) \\
  & = & \map(\tAssocR)(\zipPad((u,v),w)(\zipPad(u,v)(x,y),z)).
