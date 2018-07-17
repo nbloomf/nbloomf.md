@@ -8,11 +8,12 @@ slug: rev
 
 > {-# LANGUAGE NoImplicitPrelude #-}
 > module Reverse
->   ( revcat, rev, _test_rev, main_rev
+>   ( revcat, rev, last, _test_rev, main_rev
 >   ) where
 > 
 > import Testing
 > import Flip
+> import DisjointUnions
 > import Unary
 > import Lists
 > import HeadAndTail
@@ -503,6 +504,50 @@ This proof is analogous to that of the ordinary list induction principle. Define
 ::::::::::::::::::::
 ::::::::::::::::::::
 
+We can define an analog to $\head$ in terms of $\rev$:
+
+:::::: definition ::
+[]{#def-last}
+Let $A$ be a set. We define $\last : \lists{A} \rightarrow 1 + A$ by $$\last(x) = \head(\rev(x)).$$
+
+In Haskell:
+
+> last :: (List t) => t a -> Union () a
+> last = head . rev
+
+::::::::::::::::::::
+
+And $\last$ interacts with $\cons$.
+
+:::::: theorem :::::
+Let $A$ be a set. For all $a,b \in A$ and $x \in \lists{A}$ we have $$\last(\cons(a,\cons(b,x))) = \last(\cons(b,x)).$$
+
+::: proof ::::::::::
+Note that
+$$\begin{eqnarray*}
+ &   & \last(\cons(a,\cons(b,x))) \\
+ & = & \head(\rev(\cons(a,\cons(b,x)))) \\
+ & = & \head(\snoc(a,\rev(\cons(b,x)))) \\
+ & = & \head(\snoc(a,\snoc(b,\rev(x)))) \\
+ & = & \head(\snoc(b,\rev(x))) \\
+ & = & \head(\rev(\cons(b,x))) \\
+ & = & \last(\cons(b,x))
+\end{eqnarray*}$$
+as claimed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_cons_last :: (List t, Equal (t a), Equal a)
+>   => t a -> Test (a -> a -> t a -> Bool)
+> _test_cons_last _ =
+>   testName "eq(last(cons(a,cons(b,xs))),last(cons(b,xs)))" $
+>   \a b x -> eq (last (cons a (cons b x))) (last (cons b x))
+
+::::::::::::::::::::
+::::::::::::::::::::
+
+
 
 Testing
 -------
@@ -531,6 +576,7 @@ Suite:
 >   runTest args (_test_rev_isnil t)
 >   runTest args (_test_rev_eq t)
 >   runTest args (_test_rev_foldl t)
+>   runTest args (_test_cons_last t)
 
 Main:
 

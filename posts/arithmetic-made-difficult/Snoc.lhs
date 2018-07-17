@@ -347,6 +347,49 @@ as needed.
 ::::::::::::::::::::
 ::::::::::::::::::::
 
+$\snoc$ interacts with $\head$.
+
+:::::: theorem :::::
+[]{#thm-snoc-head}
+Let $A$ be a set. For all $a,b \in A$ and $x \in \lists{A}$ we have $$\head(\snoc(a,\snoc(b,x))) = \head(\snoc(b,x)).$$
+
+::: proof ::::::::::
+We consider two possibilities for $x$. If $x = \nil$, we have
+$$\begin{eqnarray*}
+ &   & \head(\snoc(a,\snoc(b,\nil))) \\
+ & = & \head(\snoc(a,\cons(b,\nil))) \\
+ & = & \head(\cons(b,\snoc(a,\nil))) \\
+ & = & \rgt(b) \\
+ & = & \head(\cons(b,\nil)) \\
+ & = & \head(\snoc(b,\nil))
+\end{eqnarray*}$$
+and if $x = \cons(c,y)$ we have
+$$\begin{eqnarray*}
+ &   & \head(\snoc(a,\snoc(b,x))) \\
+ &     \let{x = \cons(c,y)}
+   = & \head(\snoc(a,\snoc(b,\cons(c,y)))) \\
+ & = & \head(\snoc(a,\cons(c,\snoc(b,y)))) \\
+ & = & \head(\cons(c,\snoc(a,\snoc(b,y)))) \\
+ & = & \rgt(c) \\
+ & = & \head(\cons(c,\snoc(b,y))) \\
+ & = & \head(\snoc(b,\cons(c,y))) \\
+ &     \let{x = \cons(c,y)}
+   = & \head(\snoc(b,x))
+\end{eqnarray*}$$
+as needed.
+::::::::::::::::::::
+
+::: test :::::::::::
+
+> _test_snoc_head :: (List t, Equal (t a), Equal a)
+>   => t a -> Test (a -> a -> t a -> Bool)
+> _test_snoc_head _ =
+>   testName "eq(head(snoc(a,snoc(b,xs))),head(snoc(b,xs)))" $
+>   \a b x -> eq (head (snoc a (snoc b x))) (head (snoc b x))
+
+::::::::::::::::::::
+::::::::::::::::::::
+
 
 Testing
 -------
@@ -367,6 +410,7 @@ Suite:
 >   runTest args (_test_snoc_eq t)
 >   runTest args (_test_snoc_foldl t)
 >   runTest args (_test_snoc_isnil t)
+>   runTest args (_test_snoc_head t)
 
 Main:
 

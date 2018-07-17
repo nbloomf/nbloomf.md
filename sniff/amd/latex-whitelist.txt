@@ -90,6 +90,7 @@
 \iszero
 \lambda
 \langle
+\last
 \lcp
 \lcs
 \ldots

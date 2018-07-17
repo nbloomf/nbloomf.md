@@ -375,6 +375,7 @@
 @snoc@#thm-snoc-eq	\\beq(\\snoc(a,x),\\snoc(b,y)) = \\band(\\beq(a,b),\\beq(x,y))
 @snoc@#thm-snoc-foldl	\\foldl(f)(e,\\snoc(a,x)) = f(\\foldl(f)(e,x),a)
 @snoc@#thm-isnil-snoc	\\isnil(\\snoc(a,x)) = \\bfalse
+@snoc@#thm-snoc-head	\\head(\\snoc(a,\\snoc(b,x))) = \\head(\\snoc(b,x))
 #=======================#
 #--- rev ---------------#
 #=======================#
@@ -391,6 +392,7 @@
 @rev@#thm-rev-involution	\\rev(\\rev(x)) = x
 @rev@#thm-isnil-rev	\\isnil(\\rev(x)) = \\isnil(x)
 @rev@#thm-beq-rev	\\beq(x,y) = \\beq(\\rev(x),\\rev(y))
+@rev@#def-last	\\last(x) = \\head(\\rev(x))
 #=======================#
 #--- cat ---------------#
 #=======================#
