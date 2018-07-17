@@ -41,11 +41,12 @@ More concretely, if $f : X \rightarrow A \times B$ such that $\fst(f(x)) = \sigm
 Now $A \times B$ uniquely represents all possible pairs of elements of $A$ and $B$ in a precise sense.
 
 :::::: theorem :::::
-[]{#def-tup}[]{#thm-fst-tup}[]{#thm-snd-tup}
+[]{#def-tup}[]{#thm-fst-tup}[]{#thm-snd-tup}[]{#thm-tup-eq}
 Let $A$ and $B$ be sets. Given $a \in A$ and $b \in B$, we define $\tup : A \rightarrow B \rightarrow A \times B$ by $$\tup(a)(b) = \dup(\const(a),\const(b))(\ast).$$ Now we have the following.
 
 1. $\fst(\tup(a)(b)) = a$ and $\snd(\tup(a)(b)) = b$.
 2. If $w \in A \times B$ such that $\fst(w) = a$ and $\snd(w) = b$, then $w = \tup(a)(b)$.
+3. $\beq(\tup(a)(b),\tup(c)(d)) = \band(\beq(a,c),\beq(b,d))$.
 
 ::: proof ::::::::::
 1. We have
@@ -90,6 +91,7 @@ $$\begin{eqnarray*}
    = & \const(b)(\ast)
 \end{eqnarray*}$$
 so by the universal property of $A \times B$, $w = \tup(a)(b)$.
+3. First suppose that $$\beq(\tup(a)(b),\tup(c)(d));$$ then $$a = \fst(\tup(a)(b)) = \fst(\tup(c)(d)) = c$$ and $$b = \snd(\tup(a)(b)) = \snd(\tup(c)(d)) = d$$ so that $$\band(\beq(a,c),\beq(b,d)).$$ Conversely, suppose $\band(\beq(a,c),\beq(b,d))$. Then we have $$\fst(\tup(a)(b)) = a = c = \fst(\tup(c)(d))$$ and $$\snd(\tup(a)(b)) = b = d = \snd(\tup(c)(d)).$$ By (2), we have $\tup(a)(b) = \tup(c)(d)$.
 ::::::::::::::::::::
 ::::::::::::::::::::
 

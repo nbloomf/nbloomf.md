@@ -116,11 +116,19 @@ $$\begin{eqnarray*}
    = & \btrue
 \end{eqnarray*}$$
 as needed.
-2. We proceed by list induction on $x$. For the base case $x = \nil$, note that $$\prefix(\nil,y) = \btrue,$$ and $$y = \cat(\nil,y).$$ For the inductive step, suppose the result holds for some $x$, and let $a \in A$. Now suppose $\prefix(\cons(a,x),y) = \btrue$; in particular, we must have $y = \cons(a,w)$ for some $w$, and $\prefix(x,w) = \btrue$. By the induction hypothesis we have $w = \cat(x,z)$ for some $z$, and thus
+2. We proceed by list induction on $x$. For the base case $x = \nil$, note that
+$$\begin{eqnarray*}
+ &   & \prefix(\nil,y) \\
+ &     \href{@prefix-suffix@#cor-prefix-nil-left}
+   = & \btrue
+\end{eqnarray*}$$
+and $$y = \cat(\nil,y).$$ For the inductive step, suppose the result holds for some $x$, and let $a \in A$. Now suppose $\prefix(\cons(a,x),y) = \btrue$; in particular, we must have $y = \cons(a,w)$ for some $w$, and $\prefix(x,w) = \btrue$. By the induction hypothesis we have $w = \cat(x,z)$ for some $z$, and thus
 $$\begin{eqnarray*}
  &   & y \\
- & = & \cons(a,w) \\
- & = & \cons(a,\cat(x,z)) \\
+ &     \let{y = \cons(a,w)}
+   = & \cons(a,w) \\
+ &     \hyp{w = \cat(x,z)}
+   = & \cons(a,\cat(x,z)) \\
  &     \href{@cat@#cor-cat-cons}
    = & \cat(\cons(a,x),z)
 \end{eqnarray*}$$
@@ -243,7 +251,7 @@ $$\begin{eqnarray*}
  &     \let{x = \nil}
    = & \prefix(\map(f)(x),\map(f)(y))
 \end{eqnarray*}$$
-as claimed. Suppose now the implication holds for some $x$, and let $a \in A$. Suppose further that $\prefix(\cons(a,x),y)$. Now $y = \cons(a,w)$ for some $w$, and we have
+as claimed. Suppose now the implication holds for some $x$, and let $a \in A$. Suppose further that $\prefix(\cons(a,x),y) = \btrue$. Now $y = \cons(a,w)$ for some $w$, and we have
 $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \prefix(\cons(a,x),y) \\
@@ -283,26 +291,50 @@ Let $A$ and $B$ be sets with $x,y \in \lists{A}$ and $u,v \in \lists{B}$. If $\p
 We proceed by list induction on $x$. For the base case $x = \nil$, note that $\prefix(x,y) = \btrue$. Suppose further that $\prefix(u,v) = \btrue$; now
 $$\begin{eqnarray*}
  &   & \prefix(\zip(x,u),\zip(y,v)) \\
- & = & \prefix(\zip(\nil,u),\zip(y,v)) \\
+ &     \let{x = \nil}
+   = & \prefix(\zip(\nil,u),\zip(y,v)) \\
  &     \href{@zip@#cor-zip-nil-left}
    = & \prefix(\nil,\zip(y,v)) \\
- & = & \btrue
+ &     \href{@prefix-suffix@#cor-prefix-nil-left}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the implication holds for some $x$ and let $a \in A$. Suppose further that $\prefix(\cons(a,x),y)$ and $\prefix(u,v)$; in particular we must have $y = \cons(a,k)$ for some $k \in \lists{A}$ with $\prefix(x,k)$, as otherwise $\prefix(\cons(a,x),y) = \bfalse$. Now we have two possibilities for $u$. If $u = \nil$, we have
 $$\begin{eqnarray*}
  &   & \prefix(\zip(\cons(a,x),u),\zip(y,v)) \\
- & = & \prefix(\zip(\cons(a,x),\nil),\zip(y,v)) \\
+ &     \let{u = \nil}
+   = & \prefix(\zip(\cons(a,x),\nil),\zip(y,v)) \\
  &     \href{@zip@#cor-zip-cons-nil}
    = & \prefix(\nil,\zip(y,v)) \\
- & = & \btrue
+ &     \href{@prefix-suffix@#cor-prefix-nil-left}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed. Suppose then that $u = \cons(b,w)$. Again we must have $v = \cons(b,h)$ with $h \in \lists{B}$ and $\prefix(w,h)$, since otherwise we have $\prefix(u,v) = \bfalse$. Using the inductive hypothesis, we have
 $$\begin{eqnarray*}
  &   & \prefix(\zip(\cons(a,x),u),\zip(y,v)) \\
- & = & \prefix(\zip(\cons(a,x),\cons(b,w)),\zip(\cons(a,k),\cons(b,h))) \\
- & = & \prefix(\cons((a,b),\zip(x,w)),\cons((a,b),\zip(k,h))) \\
- & = & \prefix(\zip(x,w),\zip(k,h)) \\
- & = & \btrue
+ &     \let{u = \cons(b,w)}
+   = & \prefix(\zip(\cons(a,x),\cons(b,w)),\zip(y,v)) \\
+ &     \let{v = \cons(b,h)}
+   = & \prefix(\zip(\cons(a,x),\cons(b,w)),\zip(y,\cons(b,h))) \\
+ &     \let{y = \cons(a,k)}
+   = & \prefix(\zip(\cons(a,x),\cons(b,w)),\zip(\cons(a,k),\cons(b,h))) \\
+ &     \href{@zip@#cor-zip-cons-cons}
+   = & \prefix(\zip(\cons(a,x),\cons(b,w)),\cons(\tup(a)(b),\zip(k,h))) \\
+ &     \href{@zip@#cor-zip-cons-cons}
+   = & \prefix(\cons(\tup(a)(b),\zip(x,w)),\cons(\tup(a)(b),\zip(k,h))) \\
+ &     \href{@prefix-suffix@#cor-prefix-cons-cons}
+   = & \bif{\beq(\tup(a)(b),\tup(a)(b))}{\prefix(\zip(x,w))(\zip(k,h))}{\bfalse} \\
+ &     \href{@tuples@#thm-tup-eq}
+   = & \bif{\band(\beq(a,a),\beq(b,b))}{\prefix(\zip(x,w))(\zip(k,h))}{\bfalse} \\
+ &     \href{@testing@#thm-eq-reflexive}
+   = & \bif{\band(\btrue,\beq(b,b))}{\prefix(\zip(x,w))(\zip(k,h))}{\bfalse} \\
+ &     \href{@testing@#thm-eq-reflexive}
+   = & \bif{\band(\btrue,\btrue)}{\prefix(\zip(x,w))(\zip(k,h))}{\bfalse} \\
+ &     \href{@and@#thm-and-eval-true-true}
+   = & \bif{\btrue}{\prefix(\zip(x,w))(\zip(k,h))}{\bfalse} \\
+ &     \href{@booleans@#cor-if-true}
+   = & \prefix(\zip(x,w),\zip(k,h)) \\
+ &     \hyp{\prefix(\zip(x,w),\zip(k,h)) = \btrue}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -333,7 +365,8 @@ $$\begin{eqnarray*}
  &     \href{@length@#thm-length-cat}
    = & \nleq(\length(x),\nplus(\length(x),\length(z))) \\
  & = & \nleq(\zero,\length(z)) \\
- & = & \btrue
+ &     \href{@leq@#thm-leq-zero}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -691,8 +724,12 @@ $$\begin{eqnarray*}
  &   & \nleq(\next(\length(\cons(a,\nil))),\length(x)) \\
  & = & \nleq(\next(\next(\zero)),\length(\cons(b,\cons(c,u)))) \\
  & = & \nleq(\next(\next(\zero)),\next(\next(\length(u)))) \\
- & = & \nleq(\zero,\length(u)) \\
- & = & \btrue,
+ &     \href{@leq@#thm-leq-next-cancel}
+   = & \nleq(\next(\zero),\next(\length(u))) \\
+ &     \href{@leq@#thm-leq-next-cancel}
+   = & \nleq(\zero,\length(u)) \\
+ &     \href{@leq@#thm-leq-zero}
+   = & \btrue
 \end{eqnarray*}$$
 so that $\prefix(x,\cons(a,\nil)) = \bfalse$. Similarly, $$\nleq(\next(\length(\cons(a,\nil))),\length(x)) = \btrue$$ so that $\suffix(x,\cons(a,\nil)) = \bfalse$ as needed.
 ::::::::::::::::::::

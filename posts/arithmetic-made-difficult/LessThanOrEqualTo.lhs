@@ -38,16 +38,27 @@ In Haskell:
 First some basic (but important!) special cases.
 
 :::::: theorem :::::
-[]{#thm-leq-next-zero}[]{#thm-leq-next-next-one}[]{#thm-leq-next-nat}[]{#thm-leq-nat-plus}
+[]{#thm-leq-zero}[]{#thm-leq-next-zero}[]{#thm-leq-next-next-one}[]{#thm-leq-next-nat}[]{#thm-leq-nat-plus}
 Let $a,b \in \nats$. Then we have the following.
 
-1. $\nleq(\next(a),\zero) = \bfalse$.
-2. $\nleq(\next(\next(a)),\next(\zero)) = \bfalse$.
-3. $\nleq(\next(a),a) = \bfalse$.
-4. $\nleq(a,\nplus(a,b)) = \btrue$.
+1. $\nleq(\zero,a) = \btrue$.
+2. $\nleq(\next(a),\zero) = \bfalse$.
+3. $\nleq(\next(\next(a)),\next(\zero)) = \bfalse$.
+4. $\nleq(\next(a),a) = \bfalse$.
+5. $\nleq(a,\nplus(a,b)) = \btrue$.
 
 ::: proof ::::::::::
 1. We have
+$$\begin{eqnarray*}
+ &   & \nleq(\zero,a) \\
+ &     \href{@leq@#dfn-leq}
+   = & \isRgt(\nminus(a,\zero)) \\
+ & = & \isRgt(\rgt(a)) \\
+ &     \href{@disjoint-unions@#thm-isRgt-rgt}
+   = & \btrue
+\end{eqnarray*}$$
+as claimed.
+2. We have
 $$\begin{eqnarray*}
  &   & \nleq(\next(a),\zero) \\
  &     \href{@leq@#dfn-leq}
@@ -58,7 +69,7 @@ $$\begin{eqnarray*}
    = & \bfalse
 \end{eqnarray*}$$
 as claimed.
-2. We have
+3. We have
 $$\begin{eqnarray*}
  &   & \nleq(\next(\next(a)),\next(\zero)) \\
  &     \href{@leq@#dfn-leq}
@@ -71,7 +82,7 @@ $$\begin{eqnarray*}
    = & \bfalse
 \end{eqnarray*}$$
 as claimed.
-3. We have
+4. We have
 $$\begin{eqnarray*}
  &   & \nleq(\next(a),a) \\
  &     \href{@leq@#dfn-leq}
@@ -82,7 +93,7 @@ $$\begin{eqnarray*}
    = & \bfalse
 \end{eqnarray*}$$
 as claimed.
-4. We have $\nminus(\nplus(a,b),a) = \rgt(b)$, so $\nleq(a,\nplus(a,b)) = \btrue$.
+5. We have $\nminus(\nplus(a,b),a) = \rgt(b)$, so $\nleq(a,\nplus(a,b)) = \btrue$.
 ::::::::::::::::::::
 
 ::: test :::::::::::
@@ -356,7 +367,8 @@ as needed. Finally, suppose $a \neq b$ and $\nleq(a,b)$ is false. Then $\nleq(b,
 $$\begin{eqnarray*}
  &   & \nleq(\ntimes(a,c),\ntimes(b,d)) \\
  & = & \nleq(\zero,\ntimes(b,d)) \\
- & = & \btrue
+ &     \href{@leq@#thm-leq-zero}
+   = & \btrue
 \end{eqnarray*}$$
 Suppose instead that $c = \next(u)$. Now there are two possibilities for $b$. If $b = \zero$, then in fact $a = \zero$, and we have
 $$\begin{eqnarray*}

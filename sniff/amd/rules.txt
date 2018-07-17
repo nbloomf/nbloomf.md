@@ -167,6 +167,7 @@
 @tuples@#def-tup	\\tup(a)(b) = \\dup(\\const(a),\\const(b))(\\ast)
 @tuples@#thm-fst-tup	\\fst(\\tup(a)(b)) = a
 @tuples@#thm-snd-tup	\\snd(\\tup(a)(b)) = b
+@tuples@#thm-tup-eq	\\beq(\\tup(a)(b),\\tup(c)(d)) = \\band(\\beq(a,c),\\beq(b,d))
 @tuples@#thm-dup-tup	\\dup(f,g)(x) = \\tup(f(x))(g(x))
 @tuples@#thm-dup-fst-snd	\\dup(\\fst,\\snd) = \\id
 @tuples@#def-tSwap	\\tSwap = \\dup(\\snd,\\fst)
@@ -291,6 +292,7 @@
 #--- leq ---------------#
 #=======================#
 @leq@#dfn-leq	\\nleq(a,b) = \\isRgt(\\nminus(b,a))
+@leq@#thm-leq-zero	\\nleq(\\zero,a) = \\btrue
 @leq@#thm-leq-next-zero	\\nleq(\\next(a),\\zero) = \\bfalse
 @leq@#thm-leq-next-next-one	\\nleq(\\next(\\next(n)),\\next(\\zero)) = \\bfalse
 @leq@#thm-leq-next-nat	\\nleq(\\next(a),a) = \\bfalse
