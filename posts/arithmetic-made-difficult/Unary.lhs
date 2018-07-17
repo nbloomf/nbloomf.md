@@ -286,6 +286,7 @@ as claimed.
 We're now ready to finish off the Peano axioms.
 
 :::::: theorem :::::
+[]{#thm-next-injective}
 1. Every natural number is either $\zero$ or of the form $\next(m)$ for some natural number $m$,
 2. No natural number is both $\zero$ and $\next(m)$ for some $m$, and
 3. $\next(n) = \next(m)$ if and only if $n = m$.

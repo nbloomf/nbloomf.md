@@ -333,6 +333,7 @@ as needed.
 $\ntimes$ is *almost* cancellative.
 
 :::::: theorem :::::
+[]{#thm-times-left-cancel}[]{#thm-times-right-cancel}
 For all $a,b,c \in \nats$, we have the following.
 
 1. If $\ntimes(\next(a),b) = \ntimes(\next(a),c)$ then $b = c$.
@@ -369,11 +370,13 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 The analogous statement holds for $b$. So we have
 $$\begin{eqnarray*}
-  \next(\nplus(\nplus(\ntimes(a,b),b),a)) & = & \next(\nplus(\nplus(\ntimes(a,c),c),a)) \\
-  \nplus(\nplus(\ntimes(a,b),b),a) & = & \nplus(\nplus(\ntimes(a,c),c),a) \\
-  \nplus(\ntimes(a,b),b) & = & \nplus(\ntimes(a,c),c) \\
-  \ntimes(\next(a),b) & = & \ntimes(\next(a),c) \\
-  b & = & c
+ &   & \beq(\next(\nplus(\nplus(\ntimes(a,b),b),a)),\next(\nplus(\nplus(\ntimes(a,c),c),a))) \\
+ & = & \beq(\nplus(\nplus(\ntimes(a,b),b),a),\nplus(\nplus(\ntimes(a,c),c),a)) \\
+ & = & \beq(\nplus(\ntimes(a,b),b),\nplus(\ntimes(a,c),c)) \\
+ & = & \beq(\ntimes(\next(a),b),\nplus(\ntimes(a,c),c)) \\
+ & = & \beq(\ntimes(\next(a),b),\ntimes(\next(a),c)) \\
+ &     \hyp{\beq(\ntimes(\next(a),b),\ntimes(\next(a),c)) = \beq(b,c)}
+   = & \beq(b,c)
 \end{eqnarray*}$$
 as needed.
 2. Suppose $$\ntimes(b,\next(a)) = \ntimes(c,\next(a)).$$ Then we have $$\ntimes(\next(a),b) = \ntimes(\next(a),c),$$ so that b = c$ as claimed.

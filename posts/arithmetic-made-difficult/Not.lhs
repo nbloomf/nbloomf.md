@@ -30,7 +30,7 @@ In Haskell:
 We can compute $\bnot$ explicitly.
 
 :::::: theorem :::::
-[]{#thm-not-true}[#thm-not-false]{}
+[]{#thm-not-true}[]{#thm-not-false}
 We have $\bnot(\btrue) = \bfalse$ and $\bnot(\bfalse) = \btrue$.
 
 ::: proof ::::::::::

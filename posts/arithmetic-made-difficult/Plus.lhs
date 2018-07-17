@@ -178,6 +178,7 @@ as needed.
 And $\nplus$ is cancellative.
 
 :::::: theorem :::::
+[]{#thm-plus-left-cancel}[]{#thm-plus-right-cancel}
 The following hold for all natural numbers $a$, $b$, and $c$.
 
 1. If $\nplus(c,a) = \nplus(c,b)$ then $a = b$.

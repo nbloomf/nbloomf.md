@@ -233,6 +233,7 @@
 @unary@#thm-prev-next	\\prev(\\next(a)) = a
 @unary@#thm-iszero-zero	\\iszero(\\zero) = \\btrue
 @unary@#thm-iszero-next	\\iszero(\\next(a)) = \\bfalse
+@unary@#thm-next-injective	\\beq(\\next(a),\\next(b)) = \\beq(a,b)
 #=======================#
 #--- simprec -----------#
 #=======================#
@@ -263,6 +264,8 @@
 @plus@#thm-plus-next-right	\\nplus(a,\\next(b)) = \\next(\\nplus(a,b))
 @plus@#thm-plus-associative	\\nplus(\\nplus(a,b),c) = \\nplus(a,\\nplus(b,c))
 @plus@#thm-plus-commutative	\\nplus(a,b) = \\nplus(b,a)
+@plus@#thm-plus-left-cancel	\\beq(\\nplus(c,a),\\nplus(c,b)) = \\beq(a,b)
+@plus@#thm-plus-right-cancel	\\beq(\\nplus(a,c),\\nplus(b,c)) = \\beq(a,b)
 #=======================#
 #--- times -------------#
 #=======================#
@@ -273,6 +276,8 @@
 @times@#thm-times-one-left	\\ntimes(\\next(\\zero),a) = a
 @times@#thm-times-one-right	\\ntimes(a,\\next(\\zero)) = a
 @times@#thm-times-commutative	\\ntimes(a,b) = \\ntimes(b,a)
+@times@#thm-times-left-cancel	\\beq(\\ntimes(\\next(a),b),\\ntimes(\\next(a),c)) = \\beq(b,c)
+@times@#thm-times-right-cancel	\\beq(\\ntimes(b,\\next(a)),\\ntimes(c,\\next(a))) = \\beq(b,c)
 @times@#thm-times-plus-distribute-left	\\ntimes(a,\\nplus(b,c)) = \\nplus(\\ntimes(a,b),\\ntimes(a,c))
 @times@#thm-times-plus-distribute-right	\\ntimes(\\nplus(a,b),c) = \\nplus(\\ntimes(a,c),\\ntimes(b,c))
 @times@#thm-times-associative	\\ntimes(\\ntimes(a,b),c) = \\ntimes(a,\\ntimes(b,c))
