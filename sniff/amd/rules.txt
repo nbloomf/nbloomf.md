@@ -332,6 +332,15 @@
 @max-min@#thm-min-max-distribute	\\nmin(a,\\nmax(b,c)) = \\nmax(\\nmin(a,b),\\nmin(a,c))
 @max-min@#thm-max-min-distribute	\\nmax(a,\\nmin(b,c)) = \\nmin(\\nmax(a,b),\\nmax(a,c))
 #=======================#
+#--- gcd ---------------#
+#=======================#
+@gcd@#thm-gcd-commute	\\ngcd(a,b) = \\ngcd(b,a)
+@gcd@#thm-gcd-idempotent	\\ngcd(a,a) = a
+@gcd@#thm-gcd-zero	\\ngcd(a,\\zero) = a
+@gcd@#thm-gcd-one	\\ngcd(a,\\next(\\zero)) = a
+@gcd@#thm-gcd-associative	\\ngcd(\\ngcd(a,b),c) = \\ngcd(a,\\ngcd(b,c))
+@gcd@#thm-gcd-times	\\ngcd(\\ntimes(a,c),\\ntimes(b,c)) = \\ntimes(\\ngcd(a,b),c)
+#=======================#
 #--- lists -------------#
 #=======================#
 @lists@#def-uncons-inverse-left	\\compose(\\uncons)(\\either(\\const(\\nil),\\uncurry(\\cons))) = \\id

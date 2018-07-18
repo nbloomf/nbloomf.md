@@ -44,7 +44,8 @@ $$\begin{eqnarray*}
  &     \href{@times@#thm-times-one-left}
    = & \ntimes(\next(\zero),c) \\
  & = & \ntimes(\ngcd(a,b),c) \\
- & = & \ngcd(\ntimes(a,c),\ntimes(b,c)).
+ &     \href{@gcd@#thm-gcd-times}
+   = & \ngcd(\ntimes(a,c),\ntimes(b,c))
 \end{eqnarray*}$$
 But now $\ndiv(a,\ntimes(a,c))$ and $\ndiv(a,\ntimes(b,c))$, so that $\ndiv(a,c)$ by the universal property of $\ngcd$.
 ::::::::::::::::::::

@@ -177,14 +177,17 @@ $$\begin{eqnarray*}
  &     \hyp{y = \cons(c,u)}
    = & \beq(\snoc(a,\cons(d,x)),\snoc(b,\cons(c,u))) \\
  & = & \beq(\cons(d,\snoc(a,x)),\snoc(b,\cons(c,u))) \\
- & = & \beq(\cons(d,\snoc(a,x)),\cons(c,\snoc(b,u))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \beq(\cons(d,\snoc(a,x)),\cons(c,\snoc(b,u))) \\
  &     \href{@lists@#thm-list-eq-cons}
    = & \band(\beq(d,c),\beq(\snoc(a,x),\snoc(b,u))) \\
  &     \hyp{\beq(\snoc(a,x),\snoc(b,u)) = \band(\beq(a,b),\beq(x,u))}
    = & \band(\beq(d,c),\band(\beq(a,b),\beq(x,u))) \\
  & = & \band(\band(\beq(d,c),\beq(a,b)),\beq(x,u)) \\
- & = & \band(\band(\beq(a,b),\beq(d,c)),\beq(x,u)) \\
- & = & \band(\beq(a,b),\band(\beq(d,c),\beq(x,u))) \\
+ &     \href{@and@#thm-and-commutative}
+   = & \band(\band(\beq(a,b),\beq(d,c)),\beq(x,u)) \\
+ &     \href{@and@#thm-and-associative}
+   = & \band(\beq(a,b),\band(\beq(d,c),\beq(x,u))) \\
  &     \href{@lists@#thm-list-eq-cons}
    = & \band(\beq(a,b),\beq(\cons(d,x),\cons(c,u))) \\
  &     \let{y = \cons(c,u)}
@@ -302,7 +305,8 @@ Let $A$ and $B$ be sets, and suppose $\varphi : A \times B \rightarrow B$ has th
 1. We proceed by list induction on $x$. For the base case $x = \nil$ we have
 $$\begin{eqnarray*}
  &   & \foldl(\psi)(e)(\cons(a,\nil)) \\
- & = & \foldl(\psi)(e)(\snoc(a,\nil))
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \foldl(\psi)(e)(\snoc(a,\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $e$ and $a$ for some $x$ and let $b \in A$. Now
 $$\begin{eqnarray*}

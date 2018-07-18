@@ -167,6 +167,7 @@ Since $\ndiv(m,a)$ and $\ndiv(m,b)$, we have $\ndiv(m,\ngcd(a,b))$. But a simila
 Then $\ngcd$ is commutative.
 
 :::::: theorem :::::
+[]{#thm-gcd-commute}
 Let $a,b \in \nats$. Then $\ngcd(a,b) = \ngcd(b,a)$.
 
 ::: proof ::::::::::
@@ -187,6 +188,7 @@ Note that $\ngcd(b,a)$ divides $a$ and $\ngcd(b,a)$ divides $b$, and if $c$ is a
 And $\ngcd$ is idempotent:
 
 :::::: theorem :::::
+[]{#thm-gcd-idempotent}
 Let $a \in \nats$. Then $$\ngcd(a,a) = a.$$
 
 ::: proof ::::::::::
@@ -207,6 +209,7 @@ $a$ divides $a$ and $a$ divides $a$, and if $c$ divides both $a$ and $a$ then $c
 And some special cases.
 
 :::::: theorem :::::
+[]{#thm-gcd-zero}[]{#thm-gcd-one}
 For all $a \in \nats$ we have the following.
 
 1. $\ngcd(a,\zero) = a$.
@@ -249,6 +252,7 @@ For all $a \in \nats$ we have the following.
 $\ngcd$ is associative.
 
 :::::: theorem :::::
+[]{#thm-gcd-associative}
 Let $a,b,c \in \nats$. Then we have $\ngcd(\ngcd(a,b),c) = \ngcd(a,\ngcd(b,c))$.
 
 ::: proof ::::::::::
@@ -275,10 +279,12 @@ Let $a,b \in \nats$. Then $\ngcd(a,b) = a$ if and only if $\ndiv(a,b)$.
 Certainly if $\ngcd(a,b) = a$, then $\ndiv(a,b)$. Suppose conversely that $\ndiv(a,b)$. We consider two cases: either $a = \zero$ or $a = \next(t)$ for some $t$. If $a = \zero$, then $b = \zero$, and we have $$\ngcd(a,b) = \zero = a$$ as claimed. Suppose now that $a = \next(t)$. Since $\ndiv(a,b)$, we have $$b = \ntimes(q,a) = \nplus(\ntimes(q,a),\zero)$$ for some $q$. Now $\nleq(\zero,t)$, and by the uniqueness of remainders by nonzero divisors, we have $\nrem(b,a) = \zero$. So we have
 $$\begin{eqnarray*}
  &   & \ngcd(a,b) \\
- & = & \ngcd(b,a) \\
+ &     \href{@gcd@#thm-gcd-commute}
+   = & \ngcd(b,a) \\
  & = & \ngcd(a,\nrem(b,a)) \\
  & = & \ngcd(a,\zero) \\
- & = & a
+ &     \href{@gcd@#thm-gcd-zero}
+   = & a
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -297,6 +303,7 @@ as claimed.
 $\ngcd$ distributes over $\ntimes$.
 
 :::::: theorem :::::
+[]{#thm-gcd-times}
 Let $a,b,c \in \nats$. Then $\ngcd(\ntimes(a,c),\ntimes(b,c)) = \ntimes(\ngcd(a,b),c)$.
 
 ::: proof ::::::::::
@@ -304,7 +311,8 @@ We consider two cases: either $c = \zero$ or $c \neq \zero$. If $c = \zero$, we 
 $$\begin{eqnarray*}
  &   & \ntimes(\ngcd(a,b),c) \\
  & = & \zero \\
- & = & \ngcd(\zero,\zero) \\
+ &     \href{@gcd@#thm-gcd-idempotent}
+   = & \ngcd(\zero,\zero) \\
  & = & \ngcd(\ntimes(a,c),\ntimes(b,c))
 \end{eqnarray*}$$
 as claimed. Now suppose $c \neq \zero$. First note that $\ndiv(\ngcd(a,b),a)$, so that $$\ndiv(\ntimes(\ngcd(a,b),c),\ntimes(a,c)).$$ Similarly, we have $$\ndiv(\ntimes(\ngcd(a,b),c),\ntimes(b,c)).$$ Thus $$\ndiv(\ntimes(\ngcd(a,b),c), \ngcd(\ntimes(a,c),\ntimes(b,c))).$$ Now note that $\ndiv(c,\ntimes(a,c))$ and $\ndiv(c,\ntimes(b,c))$, so that $$\ndiv(c,\ngcd(\ntimes(a,c),\ntimes(b,c))).$$ Say $$\ntimes(u,c) = \ngcd(\ntimes(a,c),\ntimes(b,c)).$$ Now $\ndiv(\ntimes(u,c),\ntimes(a,c))$, so that $\ndiv(u,a)$; similarly, $\ndiv(u,b)$. Thus $\ndiv(u,\ngcd(a,b))$, and we have $$\ndiv(\ngcd(\ntimes(a,c),\ntimes(b,c)),\ntimes(\ngcd(a,b),c)).$$ By the antisymmetry of $\ndiv$, we have $$\ngcd(\ntimes(a,c),\ntimes(b,c)) = \ntimes(\ngcd(a,b),c)$$ as claimed.
@@ -359,7 +367,8 @@ We consider two cases: either $c = \zero$ or $c \neq \zero$. If $c = \zero$, the
 $$\begin{eqnarray*}
  &   & \ngcd(\nquo(a,c),\nquo(b,c)) \\
  & = & \ngcd(\zero,\zero) \\
- & = & \zero \\
+ &     \href{@gcd@#thm-gcd-idempotent}
+   = & \zero \\
  & = & \nquo(\ngcd(a,b),c)
 \end{eqnarray*}$$
 as claimed. Suppose now that $c \neq \zero$. Say $a = \ntimes(c,u)$ and $b = \ntimes(c,v)$. Note that

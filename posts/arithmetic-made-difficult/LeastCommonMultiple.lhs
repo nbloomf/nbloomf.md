@@ -98,7 +98,8 @@ as claimed. If $a \neq \zero$, say $a = \next(t)$, then we have
 $$\begin{eqnarray*}
  &   & \nlcm(a,a) \\
  & = & \nquo(\ntimes(a,a),\ngcd(a,a)) \\
- & = & \nquo(\ntimes(a,a),a) \\
+ &     \href{@gcd@#thm-gcd-idempotent}
+   = & \nquo(\ntimes(a,a),a) \\
  & = & a
 \end{eqnarray*}$$
 as claimed.
@@ -356,9 +357,11 @@ $$\begin{eqnarray*}
  &   & \ngcd(a,\nlcm(b,c)) \\
  & = & \ngcd(a,\nlcm(\zero,c)) \\
  & = & \ngcd(a,\zero) \\
- & = & a \\
+ &     \href{@gcd@#thm-gcd-zero}
+   = & a \\
  & = & \nlcm(\ngcd(a,b),a) \\
- & = & \nlcm(\ngcd(a,b),\ngcd(a,\zero)) \\
+ &     \href{@gcd@#thm-gcd-zero}
+   = & \nlcm(\ngcd(a,b),\ngcd(a,\zero)) \\
  & = & \nlcm(\ngcd(a,b),\ngcd(a,c))
 \end{eqnarray*}$$
 as claimed. Similarly, if $c = \zero$ we have
@@ -366,7 +369,8 @@ $$\begin{eqnarray*}
  &   & \ngcd(a,\nlcm(b,c)) \\
  & = & \ngcd(a,\nlcm(b,\zero)) \\
  & = & \ngcd(a,\zero) \\
- & = & a \\
+ &     \href{@gcd@#thm-gcd-zero}
+   = & a \\
  & = & \nlcm(a,\ngcd(a,c)) \\
  & = & \nlcm(\ngcd(a,\zero),\ngcd(b,c)) \\
  & = & \nlcm(\ngcd(a,c),\ngcd(b,c))
@@ -406,7 +410,8 @@ $$\begin{eqnarray*}
  &   & \nlcm(a,\ngcd(b,c)) \\
  & = & \nlcm(\zero,\ngcd(b,c)) \\
  & = & \zero \\
- & = & \ngcd(\zero,\zero) \\
+ &     \href{@gcd@#thm-gcd-idempotent}
+   = & \ngcd(\zero,\zero) \\
  & = & \ngcd(\nlcm(\zero,b),\nlcm(\zero,c)) \\
  & = & \ngcd(\nlcm(a,b),\nlcm(a,c))
 \end{eqnarray*}$$
@@ -423,8 +428,10 @@ as claimed. Similarly, if $c = \zero$ we have
 $$\begin{eqnarray*}
  &   & \nlcm(a,\ngcd(b,c)) \\
  & = & \nlcm(a,\ngcd(b,\zero)) \\
- & = & \nlcm(a,b) \\
- & = & \ngcd(\nlcm(a,b),\zero) \\
+ &     \href{@gcd@#thm-gcd-zero}
+   = & \nlcm(a,b) \\
+ &     \href{@gcd@#thm-gcd-zero}
+   = & \ngcd(\nlcm(a,b),\zero) \\
  & = & \ngcd(\nlcm(a,b),\nlcm(a,\zero)) \\
  & = & \ngcd(\nlcm(a,b),\nlcm(a,c))
 \end{eqnarray*}$$
