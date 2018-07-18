@@ -28,7 +28,7 @@ slug: sublists
 We've already defined a predicate that detects when one list is a sublist of another. Today we'll define a function that constructs a list of all sublists of a given list.
 
 :::::: definition ::
-Let $A$ be a set. Define $\varphi : A \times \lists{\lists{A}} \rightarrow \lists{\lists{A}}$ by $$\varphi(a,z) = \cat(\map(\cons(a,-)(z)),z).$$ Now define $\sublists : \lists{A} \rightarrow \lists{\lists{A}}$ by $$\sublists = \foldr(\cons(\nil,\nil))(\varphi).$$
+Let $A$ be a set. Define $\varphi : A \times \lists{\lists{A}} \rightarrow \lists{\lists{A}}$ by $$\varphi(a,z) = \cat(\map(\cons(a)(z)),z).$$ Now define $\sublists : \lists{A} \rightarrow \lists{\lists{A}}$ by $$\sublists = \foldr(\cons(\nil,\nil))(\varphi).$$
 
 In Haskell:
 
@@ -45,7 +45,7 @@ Since $\sublists$ is defined as a $\foldr(\ast)(\ast)$, it can be characterized 
 Let $A$ be a set. $\sublists$ is the unique map $f : \lists{A} \rightarrow \lists{\lists{A}}$ satisfying the following equations for all $a \in A$ and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(\nil) = \cons(\nil,\nil) \\
- f(\cons(a,x)) = \cat(\map(\cons(a,-))(f(x)),f(x))
+ f(\cons(a,x)) = \cat(\map(\cons(a))(f(x)),f(x))
 \end{array}\right.$$
 
 ::: test :::::::::::
@@ -88,9 +88,9 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the result holds for some $x$ and let $a \in A$. Note that $$\pimpl(\sublist(-,x),\sublist(-,\cons(a,x))),$$ so that $$\bimpl(\all(\sublist(-,x))(z),\all(\sublist(-,\cons(a,x)))(z))$$ for all $z \in \lists{\lists{A}}$. Since $\all(\sublist(-,x))(\sublists(x))$ by the inductive hypothesis, we have $\all(\sublist(-,\cons(a,x)))(\sublists(x)) = \btrue$. Now
 $$\begin{eqnarray*}
  &   & \all(\sublist(-,\cons(a,x)))(\sublists(\cons(a,x))) \\
- & = & \all(\sublist(-,\cons(a,x)))(\cat(\map(\cons(a,-))(\sublists(x)),\sublists(x))) \\
- & = & \band(\all(\sublist(-,\cons(a,x)))(\map(\cons(a,-))(\sublists(x))),\all(\sublist(-,\cons(a,x)))(\sublists(x))) \\
- & = & \band(\all(\sublist(\cons(a,-),\cons(a,x)))(\sublists(x)),\all(\sublist(-,\cons(a,x)))(\sublists(x))) \\
+ & = & \all(\sublist(-,\cons(a,x)))(\cat(\map(\cons(a))(\sublists(x)),\sublists(x))) \\
+ & = & \band(\all(\sublist(-,\cons(a,x)))(\map(\cons(a))(\sublists(x))),\all(\sublist(-,\cons(a,x)))(\sublists(x))) \\
+ & = & \band(\all(\sublist(\cons(a),\cons(a,x)))(\sublists(x)),\all(\sublist(-,\cons(a,x)))(\sublists(x))) \\
  & = & \band(\all(\sublist(-,x))(\sublists(x)),\all(\sublist(-,\cons(a,x)))(\sublists(x))) \\
  & = & \band(\btrue,\all(\sublist(-,\cons(a,x)))(\sublists(x))) \\
  & = & \all(\sublist(-,\cons(a,x)))(\sublists(x)) \\
@@ -125,10 +125,11 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the result holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \elt(\nil,\sublists(\cons(a,x))) \\
- & = & \elt(\nil,\cat(\map(\cons(a,-))(\sublists(x)),\sublists(x))) \\
- & = & \bor(\elt(\nil,\map(\cons(a,-))(\sublists(x))),\elt(\nil,\sublists(x))) \\
- & = & \bor(\elt(\nil,\map(\cons(a,-))(\sublists(x))),\btrue) \\
- & = & \btrue
+ & = & \elt(\nil,\cat(\map(\cons(a))(\sublists(x)),\sublists(x))) \\
+ & = & \bor(\elt(\nil,\map(\cons(a))(\sublists(x))),\elt(\nil,\sublists(x))) \\
+ & = & \bor(\elt(\nil,\map(\cons(a))(\sublists(x))),\btrue) \\
+ &     \href{@or@#thm-or-true-right}
+   = & \btrue
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -169,10 +170,10 @@ $$\begin{eqnarray*}
 as claimed. If $y = \cons(b,w)$, note that $\bimpl(\sublist(\cons(b,w),x),\sublist(w,x))$. Then we have
 $$\begin{eqnarray*}
  &   & \elt(y,\sublists(\cons(a,x))) \\
- & = & \elt(y,\cat(\map(\cons(a,-))(\sublists(x)),\sublists(x))) \\
- & = & \bor(\elt(y,\map(\cons(a,-))(\sublists(x))),\elt(y,\sublists(x))) \\
- & = & \bor(\elt(y,\map(\cons(a,-))(\sublists(x))),\sublist(y,x)) \\
- & = & \bor(\elt(\cons(b,w),\map(\cons(a,-))(\sublists(x))),\sublist(y,x)) \\
+ & = & \elt(y,\cat(\map(\cons(a))(\sublists(x)),\sublists(x))) \\
+ & = & \bor(\elt(y,\map(\cons(a))(\sublists(x))),\elt(y,\sublists(x))) \\
+ & = & \bor(\elt(y,\map(\cons(a))(\sublists(x))),\sublist(y,x)) \\
+ & = & \bor(\elt(\cons(b,w),\map(\cons(a))(\sublists(x))),\sublist(y,x)) \\
  & = & \bor(\band(\beq(b,a),\elt(w,\sublists(x))),\sublist(y,x)) \\
  & = & \bor(\band(\beq(b,a),\sublist(w,x)),\sublist(y,x)) \\
  &     \href{@or@#thm-or-is-if}
@@ -220,9 +221,10 @@ $$\begin{eqnarray*}
  & = & \cat(\map(\cons(f(a),-))(\sublists(\map(f)(x))),\sublists(\map(f)(x))) \\
  & = & \cat(\map(\cons(f(a),-))(\map(\map(f))(\sublists(x))),\map(\map(f))(\sublists(x))) \\
  & = & \cat(\map(\cons(f(a),-) \circ \map(f))(\sublists(x)),\map(\map(f))(\sublists(x))) \\
- & = & \cat(\map(\map(f) \circ \cons(a,-))(\sublists(x)),\map(\map(f))(\sublists(x))) \\
- & = & \cat(\map(\map(f))(\map(\cons(a,-))(\sublists(x))),\map(\map(f))(\sublists(x))) \\
- & = & \map(\map(f))(\cat(\map(\cons(a,-))(\sublists(x)),\sublists(x))) \\
+ & = & \cat(\map(\map(f) \circ \cons(a))(\sublists(x)),\map(\map(f))(\sublists(x))) \\
+ & = & \cat(\map(\map(f))(\map(\cons(a))(\sublists(x))),\map(\map(f))(\sublists(x))) \\
+ &     \href{@map@#thm-map-cat}
+   = & \map(\map(f))(\cat(\map(\cons(a))(\sublists(x)),\sublists(x))) \\
  & = & \map(\map(f))(\sublists(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
@@ -258,9 +260,11 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \length(\sublists(\cons(a,x))) \\
- & = & \length(\cat(\map(\cons(a,-))(\sublists(x)),\sublists(x))) \\
- & = & \nplus(\length(\map(\cons(a,-))(\sublists(x))),\length(\sublists(x))) \\
- & = & \nplus(\length(\sublists(x)),\length(\sublists(x))) \\
+ & = & \length(\cat(\map(\cons(a))(\sublists(x)),\sublists(x))) \\
+ &     \href{@length@#thm-length-cat}
+   = & \nplus(\length(\map(\cons(a))(\sublists(x))),\length(\sublists(x))) \\
+ &     \href{@map@#thm-length-map}
+   = & \nplus(\length(\sublists(x)),\length(\sublists(x))) \\
  &     \href{@times@#thm-times-two}
    = & \ntimes(\next(\next(\zero)),\length(\sublists(x))) \\
  & = & \ntimes(\next(\next(\zero)),\npower(\next(\next(\zero)),\length(x))) \\
@@ -308,12 +312,12 @@ $$\begin{eqnarray*}
 as needed. Suppose instead that $k = \next(m)$. Now we have
 $$\begin{eqnarray*}
  &   & \sublist(\select(\next(m))(\cons(a,x)),\sublists(\cons(a,x))) \\
- & = & \sublist(\cat(\map(\cons(a,-))(\select(m)(x)),\select(\next(m))(x)),\cat(\map(\cons(a,-))(\sublists(x)),\sublists(x))) \\
+ & = & \sublist(\cat(\map(\cons(a))(\select(m)(x)),\select(\next(m))(x)),\cat(\map(\cons(a))(\sublists(x)),\sublists(x))) \\
  & = & Q.
 \end{eqnarray*}$$
-By the inductive hypothesis, note that $\cons(a,-)$ is injective, so we have
+By the inductive hypothesis, note that $\cons(a)$ is injective, so we have
 $$\begin{eqnarray*}
- &   & \sublist(\map(\cons(a,-))(\select(m)(x)),\map(\cons(a,-))(\sublists(x))) \\
+ &   & \sublist(\map(\cons(a))(\select(m)(x)),\map(\cons(a))(\sublists(x))) \\
  & = & \sublist(\select(m)(x),\sublists(x)) \\
  & = & \btrue,
 \end{eqnarray*}$$
