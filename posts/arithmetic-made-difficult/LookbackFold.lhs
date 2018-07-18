@@ -34,7 +34,9 @@ In Haskell:
 >   -> (a -> b)
 >   -> (a -> a -> b -> b -> b)
 >   -> t a -> b
-> lfoldr theta lambda mu x = snd (foldl phi (alpha x) (rev (zip x (tail x))))
+> lfoldr theta lambda mu x =
+>   snd (foldl phi (alpha x) (rev (zip x (tail x))))
+> 
 >   where
 >     alpha x = tup theta (either (const theta) lambda (last x))
 > 
@@ -57,20 +59,31 @@ $$\begin{eqnarray*}
  &   & \fst(\Omega(\cons(a,x))) \\
  & = & \fst(\Omega(\cons(a,\nil))) \\
  & = & \fst(\foldl(\varphi)(\alpha(\cons(a,\nil)))(\rev(\zip(\cons(a,\nil))(\tail(\cons(a,\nil)))))) \\
- & = & \fst(\foldl(\varphi)(\alpha(\cons(a,\nil)))(\rev(\zip(\cons(a,\nil))(\nil)))) \\
- & = & \fst(\foldl(\varphi)(\alpha(\cons(a,\nil)))(\rev(\nil))) \\
- & = & \fst(\foldl(\varphi)(\alpha(\cons(a,\nil)))(\nil)) \\
- & = & \fst(\alpha(\cons(a,\nil))) \\
+ &     \href{@head-tail@#thm-tail-cons}
+   = & \fst(\foldl(\varphi)(\alpha(\cons(a,\nil)))(\rev(\zip(\cons(a,\nil))(\nil)))) \\
+ &     \href{@zip@#cor-zip-cons-nil}
+   = & \fst(\foldl(\varphi)(\alpha(\cons(a,\nil)))(\rev(\nil))) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \fst(\foldl(\varphi)(\alpha(\cons(a,\nil)))(\nil)) \\
+ &     \href{@foldl@#def-foldl-nil}
+   = & \fst(\alpha(\cons(a,\nil))) \\
  & = & \fst(\tup(\theta)(\either(\const(\theta))(\lambda)(\last(\cons(a,\nil))))) \\
- & = & \theta \\
- & = & \snd(\tup(\theta)(\theta)) \\
- & = & \snd(\tup(\theta)(\const(\theta)(\ast))) \\
- & = & \snd(\tup(\theta)(\either(\const(\theta))(\lambda)(\lft(\ast)))) \\
+ &     \href{@tuples@#thm-fst-tup}
+   = & \theta \\
+ &     \href{@tuples@#thm-snd-tup}
+   = & \snd(\tup(\theta)(\theta)) \\
+ &     \href{@functions@#def-const}
+   = & \snd(\tup(\theta)(\const(\theta)(\ast))) \\
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \snd(\tup(\theta)(\either(\const(\theta))(\lambda)(\lft(\ast)))) \\
  & = & \snd(\tup(\theta)(\either(\const(\theta))(\lambda)(\last(\nil)))) \\
  & = & \snd(\alpha(\nil)) \\
- & = & \snd(\foldl(\varphi)(\alpha(\nil))(\nil)) \\
- & = & \snd(\foldl(\varphi)(\alpha(\nil))(\rev(\nil))) \\
- & = & \snd(\foldl(\varphi)(\alpha(\nil))(\rev(\zip(\nil)(\tail(\nil))))) \\
+ &     \href{@foldl@#def-foldl-nil}
+   = & \snd(\foldl(\varphi)(\alpha(\nil))(\nil)) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \snd(\foldl(\varphi)(\alpha(\nil))(\rev(\nil))) \\
+ &     \href{@zip@#cor-zip-nil-left}
+   = & \snd(\foldl(\varphi)(\alpha(\nil))(\rev(\zip(\nil)(\tail(\nil))))) \\
  & = & \snd(\Omega(\nil)) \\
  & = & \snd(\Omega(x))
 \end{eqnarray*}$$
@@ -78,15 +91,20 @@ For the inductive step, suppose the equality holds for some $x$. Then we have
 $$\begin{eqnarray*}
  &   & \fst(\Omega(\cons(a,\cons(b,x)))) \\
  & = & \fst(\foldl(\varphi)(\alpha(\cons(a,\cons(b,x))))(\rev(\zip(\cons(a,\cons(b,x)))(\tail(\cons(a,\cons(b,x))))))) \\
- & = & \fst(\foldl(\varphi)(\alpha(\cons(a,\cons(b,x))))(\rev(\zip(\cons(a,\cons(b,x)))(\cons(b,x))))) \\
- & = & \fst(\foldl(\varphi)(\alpha(\cons(a,\cons(b,x))))(\rev(\cons(\tup(a)(b),\zip(\cons(b,x))(x))))) \\
- & = & \fst(\foldl(\varphi)(\alpha(\cons(a,\cons(b,x))))(\snoc(\tup(a)(b),\rev(\zip(\cons(b,x))(x))))) \\
+ &     \href{@head-tail@#thm-tail-cons}
+   = & \fst(\foldl(\varphi)(\alpha(\cons(a,\cons(b,x))))(\rev(\zip(\cons(a,\cons(b,x)))(\cons(b,x))))) \\
+ &     \href{@zip@#cor-zip-cons-cons}
+   = & \fst(\foldl(\varphi)(\alpha(\cons(a,\cons(b,x))))(\rev(\cons(\tup(a)(b),\zip(\cons(b,x))(x))))) \\
+ &     \href{@rev@#cor-rev-cons}
+   = & \fst(\foldl(\varphi)(\alpha(\cons(a,\cons(b,x))))(\snoc(\tup(a)(b),\rev(\zip(\cons(b,x))(x))))) \\
  & = & \fst(\foldl(\varphi)(\alpha(\cons(b,x)))(\snoc(\tup(a)(b),\rev(\zip(\cons(b,x))(x))))) \\
- & = & \fst(\varphi(\foldl(\varphi)(\alpha(\cons(b,x)))(\rev(\zip(\cons(b,x))(x))),\tup(a)(b))) \\
+ &     \href{@snoc@#thm-snoc-foldl}
+   = & \fst(\varphi(\foldl(\varphi)(\alpha(\cons(b,x)))(\rev(\zip(\cons(b,x))(x))),\tup(a)(b))) \\
  & = & \fst(\varphi(\Omega(\cons(b,x)),\tup(a)(b))) \\
  & = & \fst(\varphi(\tup(\fst(\Omega(\cons(b,x))))(\snd(\Omega(\cons(b,x)))),\tup(a)(b))) \\
  & = & \fst(\tup(\snd(\Omega(\cons(b,x))))(\mu(a,b,\snd(\Omega(\cons(b,x))),\fst(\Omega(\cons(b,x)))))) \\
- & = & \snd(\Omega(\cons(b,x)))
+ &     \href{@tuples@#thm-fst-tup}
+   = & \snd(\Omega(\cons(b,x)))
 \end{eqnarray*}$$
 as claimed.
 
@@ -97,28 +115,40 @@ $$\begin{eqnarray*}
  &   & \Psi(\nil) \\
  & = & \snd(\Omega(\nil)) \\
  & = & \snd(\foldl(\varphi)(\alpha(\nil))(\rev(\zip(\nil)(\tail(\nil))))) \\
- & = & \snd(\foldl(\varphi)(\alpha(\nil))(\rev(\nil))) \\
- & = & \snd(\foldl(\varphi)(\alpha(\nil))(\nil)) \\
- & = & \snd(\alpha(\nil)) \\
+ &     \href{@zip@#cor-zip-nil-left}
+   = & \snd(\foldl(\varphi)(\alpha(\nil))(\rev(\nil))) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \snd(\foldl(\varphi)(\alpha(\nil))(\nil)) \\
+ &     \href{@foldl@#def-foldl-nil}
+   = & \snd(\alpha(\nil)) \\
  & = & \snd(\tup(\theta)(\either(\const(\theta))(\lambda)(\last(\nil)))) \\
  & = & \snd(\tup(\theta)(\either(\const(\theta))(\lambda)(\lft(\ast)))) \\
- & = & \snd(\tup(\theta)(\const(\theta)(\ast))) \\
- & = & \snd(\tup(\theta)(\theta)) \\
- & = & \theta
+ &     \href{@disjoint-unions@#def-either-lft}
+   = & \snd(\tup(\theta)(\const(\theta)(\ast))) \\
+ &     \href{@functions@#def-const}
+   = & \snd(\tup(\theta)(\theta)) \\
+ &     \href{@tuples@#thm-snd-tup}
+   = & \theta
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
  &   & \Psi(\cons(a,\nil)) \\
  & = & \snd(\Omega(\cons(a,\nil))) \\
  & = & \snd(\foldl(\varphi)(\alpha(\cons(a,\nil)))(\rev(\zip(\cons(a,\nil))(\tail(\cons(a,\nil)))))) \\
- & = & \snd(\foldl(\varphi)(\alpha(\cons(a,\nil)))(\rev(\zip(\cons(a,\nil))(\nil)))) \\
- & = & \snd(\foldl(\varphi)(\alpha(\cons(a,\nil)))(\rev(\nil))) \\
- & = & \snd(\foldl(\varphi)(\alpha(\cons(a,\nil)))(\nil)) \\
- & = & \snd(\alpha(\cons(a,\nil))) \\
+ &     \href{@head-tail@#thm-tail-cons}
+   = & \snd(\foldl(\varphi)(\alpha(\cons(a,\nil)))(\rev(\zip(\cons(a,\nil))(\nil)))) \\
+ &     \href{@zip@#cor-zip-cons-nil}
+   = & \snd(\foldl(\varphi)(\alpha(\cons(a,\nil)))(\rev(\nil))) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \snd(\foldl(\varphi)(\alpha(\cons(a,\nil)))(\nil)) \\
+ &     \href{@foldl@#def-foldl-nil}
+   = & \snd(\alpha(\cons(a,\nil))) \\
  & = & \snd(\tup(\theta)(\either(\const(\theta))(\lambda)(\last(\cons(a,\nil))))) \\
  & = & \snd(\tup(\theta)(\either(\const(\theta))(\lambda)(\rgt(a)))) \\
- & = & \snd(\tup(\theta)(\lambda(a))) \\
- & = & \lambda(a)
+ &     \href{@disjoint-unions@#def-either-rgt}
+   = & \snd(\tup(\theta)(\lambda(a))) \\
+ &     \href{@tuples@#thm-snd-tup}
+   = & \lambda(a)
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
@@ -126,15 +156,20 @@ $$\begin{eqnarray*}
  & = & \snd(\Omega(\cons(a,\cons(b,x)))) \\
  & = & \snd(\foldl(\varphi)(\alpha(\cons(a,\cons(b,x))))(\rev(\zip(\cons(a,\cons(b,x)))(\tail(\cons(a,\cons(b,x))))))) \\
  & = & \snd(\foldl(\varphi)(\alpha(\cons(b,x)))(\rev(\zip(\cons(a,\cons(b,x)))(\tail(\cons(a,\cons(b,x))))))) \\
- & = & \snd(\foldl(\varphi)(\alpha(\cons(b,x)))(\rev(\zip(\cons(a,\cons(b,x)))(\cons(b,x))))) \\
- & = & \snd(\foldl(\varphi)(\alpha(\cons(b,x)))(\rev(\cons(\tup(a)(b),\zip(\cons(b,x))(x))))) \\
- & = & \snd(\foldl(\varphi)(\alpha(\cons(b,x)))(\snoc(\tup(a)(b),\rev(\zip(\cons(b,x))(x))))) \\
- & = & \snd(\varphi(\foldl(\varphi)(\alpha(\cons(b,x)))(\rev(\zip(\cons(b,x))(x))),\tup(a)(b))) \\
+ &     \href{@head-tail@#thm-tail-cons}
+   = & \snd(\foldl(\varphi)(\alpha(\cons(b,x)))(\rev(\zip(\cons(a,\cons(b,x)))(\cons(b,x))))) \\
+ &     \href{@zip@#cor-zip-cons-cons}
+   = & \snd(\foldl(\varphi)(\alpha(\cons(b,x)))(\rev(\cons(\tup(a)(b),\zip(\cons(b,x))(x))))) \\
+ &     \href{@rev@#cor-rev-cons}
+   = & \snd(\foldl(\varphi)(\alpha(\cons(b,x)))(\snoc(\tup(a)(b),\rev(\zip(\cons(b,x))(x))))) \\
+ &     \href{@snoc@#thm-snoc-foldl}
+   = & \snd(\varphi(\foldl(\varphi)(\alpha(\cons(b,x)))(\rev(\zip(\cons(b,x))(x))),\tup(a)(b))) \\
  & = & \snd(\varphi(\Omega(\cons(b,x)),\tup(a)(b))) \\
  & = & \snd(\varphi(\tup(\fst(\Omega(\cons(b,x))))(\snd(\Omega(\cons(b,x)))),\tup(a)(b))) \\
  & = & \snd(\varphi(\tup(\snd(\Omega(x)))(\snd(\Omega(\cons(b,x)))),\tup(a)(b))) \\
  & = & \snd(\tup(\snd(\Omega(\cons(b,x))))(\mu(a,b,\snd(\Omega(\cons(b,x))),\snd(\Omega(x))))) \\
- & = & \mu(a,b,\snd(\Omega(\cons(b,x))),\snd(\Omega(x))) \\
+ &     \href{@tuples@#thm-snd-tup}
+   = & \mu(a,b,\snd(\Omega(\cons(b,x))),\snd(\Omega(x))) \\
  & = & \mu(a,b,\snd(\Omega(\cons(b,x))),\Psi(x)) \\
  & = & \mu(a,b,\Psi(\cons(b,x)),\Psi(x))
 \end{eqnarray*}$$
