@@ -8,7 +8,6 @@ packages:
 - posts/software-tools-in-haskell
 - posts/project-euler
 - posts/ml
-- posts/hs-notes
 
 # Dependency packages to be pulled from upstream that are not in the resolver
 extra-deps:
