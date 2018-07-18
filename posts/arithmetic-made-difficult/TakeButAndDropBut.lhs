@@ -51,7 +51,8 @@ Let $A$ be a set, with $x \in \lists{A}$, $a \in A$, and $k \in \nats$. Then we 
 $$\begin{eqnarray*}
  &   & \takeBut(\zero)(x) \\
  & = & \rev(\drop(\zero)(\rev(x))) \\
- & = & \rev(\rev(x)) \\
+ &     \href{@take-drop@#cor-drop-zero}
+   = & \rev(\rev(x)) \\
  &     \href{@rev@#thm-rev-involution}
    = & x
 \end{eqnarray*}$$
@@ -119,7 +120,8 @@ $$\begin{eqnarray*}
  &     \href{@rev@#thm-rev-involution}
    = & \prefix(\rev(\drop(k,\rev(x))),\rev(\rev(x))) \\
  & = & \suffix(\drop(k,\rev(x)),\rev(x)) \\
- & = & \btrue
+ &     \href{@take-drop@#thm-drop-suffix}
+   = & \btrue
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -169,7 +171,8 @@ Let $A$ be a set. For all $a \in A$, $x \in \lists{A}$, and $k \in \nats$, we ha
 $$\begin{eqnarray*}
  &   & \dropBut(\zero,x) \\
  & = & \rev(\take(\zero,\rev(x))) \\
- & = & \rev(\nil) \\
+ &     \href{@take-drop@#cor-take-zero}
+   = & \rev(\nil) \\
  &     \href{@rev@#cor-rev-nil}
    = & \nil
 \end{eqnarray*}$$
@@ -239,7 +242,8 @@ $$\begin{eqnarray*}
  &     \href{@rev@#thm-rev-involution}
    = & \suffix(\rev(\take(k,\rev(x))),\rev(\rev(x))) \\
  & = & \prefix(\take(k,\rev(x)),\rev(x)) \\
- & = & \btrue
+ &     \href{@take-drop@#thm-take-prefix}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

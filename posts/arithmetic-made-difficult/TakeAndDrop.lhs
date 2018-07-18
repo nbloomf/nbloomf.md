@@ -55,6 +55,7 @@ In Haskell:
 Since $\take$ is defined as an $\unfoldN(\ast)$, it can be characterized as the unique solution to a system of functional equations.
 
 :::::: corollary :::
+[]{#cor-take-zero}[]{#cor-take-next-nil}[]{#cor-take-next-cons}
 Let $A$ be a set. $\take$ is the unique map $f : \nats \rightarrow {\lists{A}}^{\lists{A}}$ satisfying the following equations for all $n \in \nats$, $a \in A$, and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(\zero,x) = \nil \\
@@ -92,13 +93,15 @@ $$\left\{\begin{array}{l}
 $\take(n)$ is a prefix.
 
 :::::: theorem :::::
+[]{#thm-take-prefix}
 Let $A$ be a set. For all $x \in \lists{A}$ and $k \in \nats$, we have $$\prefix(\take(k,x),x) = \btrue.$$
 
 ::: proof ::::::::::
 We proceed by induction on $k$. For the base case $k = \zero$, we have
 $$\begin{eqnarray*}
  &   & \prefix(\take(k,x),x) \\
- & = & \prefix(\take(\zero,x),x) \\
+ &     \hyp{k = \zero}
+   = & \prefix(\take(\zero,x),x) \\
  & = & \prefix(\nil,x) \\
  &     \href{@prefix-suffix@#cor-prefix-nil-left}
    = & \btrue
@@ -106,16 +109,19 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the result holds for all $x$ for some $k$. We now proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \prefix(\take(\next(k),\nil),\nil) \\
- & = & \prefix(\nil,\nil) \\
+ &     \href{@take-drop@#cor-take-next-nil}
+   = & \prefix(\nil,\nil) \\
  &     \href{@prefix-suffix@#cor-prefix-nil-left}
    = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the result holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \prefix(\take(\next(k),\cons(a,x)),\cons(a,x)) \\
- & = & \prefix(\cons(a,\take(k,x)),\cons(a,x)) \\
+ &     \href{@take-drop@#cor-take-next-cons}
+   = & \prefix(\cons(a,\take(k,x)),\cons(a,x)) \\
  & = & \prefix(\take(k,x),x) \\
- & = & \btrue
+ &     \href{@take-drop@#thm-take-prefix}
+   = & \btrue
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -154,6 +160,7 @@ We have $$\prefix(\take(k,x),x) = \btrue,$$ so $$\infix(\take(k,x),x) = \btrue,$
 $\take$ has bounded length:
 
 :::::: theorem :::::
+[]{#thm-take-length}
 Let $A$ be a set, with $x \in \lists{A}$ and $k \in \nats$. Then we have $$\length(\take(k,x)) = \nmin(k,\length(x)).$$
 
 ::: proof ::::::::::
@@ -161,7 +168,8 @@ We proceed by induction on $k$. For the base case $k = \zero$, we have
 $$\begin{eqnarray*}
  &   & \length(\take(k,x)) \\
  & = & \length(\take(\zero,x)) \\
- & = & \length(\nil) \\
+ &     \href{@take-drop@#cor-take-zero}
+   = & \length(\nil) \\
  &     \href{@length@#cor-length-nil}
    = & \zero \\
  &     \href{@max-min@#thm-min-zero-left}
@@ -172,7 +180,8 @@ as needed. For the inductive step, suppose the equality holds for all $x$ for so
 $$\begin{eqnarray*}
  &   & \length(\take(\next(k),x)) \\
  & = & \length(\take(\next(k),\nil)) \\
- & = & \length(\nil) \\
+ &     \href{@take-drop@#cor-take-next-nil}
+   = & \length(\nil) \\
  &     \href{@length@#cor-length-nil}
    = & \zero \\
  & = & \nmin(\next(k),\zero) \\
@@ -183,7 +192,8 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now we have
 $$\begin{eqnarray*}
  &   & \length(\take(\next(k),\cons(a,x))) \\
- & = & \length(\cons(a,\take(k,x))) \\
+ &     \href{@take-drop@#cor-take-next-cons}
+   = & \length(\cons(a,\take(k,x))) \\
  &     \href{@length@#cor-length-cons}
    = & \next(\length(\take(k,x))) \\
  & = & \next(\nmin(k,\length(x))) \\
@@ -208,6 +218,7 @@ as needed.
 $\take$ "distributes over" $\zip$.
 
 :::::: theorem :::::
+[]{#thm-take-zip}
 Let $A$ and $B$ be sets with $x \in \lists{A}$, $y \in \lists{B}$, and $k \in \nats$. Then $$\zip(\take(k,x),\take(k,y)) = \take(k,\zip(x,y)).$$
 
 ::: proof ::::::::::
@@ -225,7 +236,8 @@ as needed. For the inductive step, suppose the equality holds for all $x$ and $y
 $$\begin{eqnarray*}
  &   & \zip(\take(\next(k),x),\take(\next(k),y)) \\
  & = & \zip(\take(\next(k),\nil),\take(\next(k),y)) \\
- & = & \zip(\nil,\take(\next(k),y)) \\
+ &     \href{@take-drop@#cor-take-next-nil}
+   = & \zip(\nil,\take(\next(k),y)) \\
  &     \href{@zip@#cor-zip-nil-left}
    = & \nil \\
  & = & \take(\next(k),\nil) \\
@@ -237,7 +249,8 @@ as needed. Suppose instead that $x = \cons(a,u)$ for some $u$. We now consider t
 $$\begin{eqnarray*}
  &   & \zip(\take(\next(k),x),\take(\next(k),y)) \\
  & = & \zip(\take(\next(k),x),\take(\next(k),\nil)) \\
- & = & \zip(\take(\next(k),x),\nil) \\
+ &     \href{@take-drop@#cor-take-next-nil}
+   = & \zip(\take(\next(k),x),\nil) \\
  &     \href{@zip@#thm-zip-nil-right}
    = & \nil \\
  & = & \take(\next(k),\nil) \\
@@ -274,6 +287,7 @@ as needed.
 $\take$ interacts with $\range$.
 
 :::::: theorem :::::
+[]{#thm-take-range}
 For all $a,b,k \in \nats$, we have $$\take(k,\range(a,b)) = \range(a,\nmin(k,b)).$$
 
 ::: proof ::::::::::
@@ -281,7 +295,8 @@ We proceed by induction on $k$. For the base case $k = \zero$, we have
 $$\begin{eqnarray*}
  &   & \take(k,\range(a,b)) \\
  & = & \take(\zero,\range(a,b)) \\
- & = & \nil \\
+ &     \href{@take-drop@#cor-take-zero}
+   = & \nil \\
  & = & \range(a,\zero) \\
  &     \href{@max-min@#thm-min-zero-left}
    = & \range(a,\nmin(\zero,b)) \\
@@ -292,7 +307,8 @@ $$\begin{eqnarray*}
  &   & \take(\next(k),\range(a,b)) \\
  & = & \take(\next(k),\range(a,\zero)) \\
  & = & \take(\next(k),\nil) \\
- & = & \nil \\
+ &     \href{@take-drop@#cor-take-next-nil}
+   = & \nil \\
  & = & \range(a,\zero) \\
  & = & \range(a,\nmin(\next(k),\zero)) \\
  & = & \range(a,\nmin(\next(k),b))
@@ -302,8 +318,10 @@ $$\begin{eqnarray*}
  &   & \take(\next(k),\range(a,b)) \\
  & = & \take(\next(k),\range(a,\next(m))) \\
  & = & \take(\next(k),\cons(a,\range(\next(a),m))) \\
- & = & \cons(a,\take(k,\range(\next(a),m))) \\
- & = & \cons(a,\range(\next(a),\nmin(k,m))) \\
+ &     \href{@take-drop@#cor-take-next-cons}
+   = & \cons(a,\take(k,\range(\next(a),m))) \\
+ &     \href{@take-drop@#thm-take-range}
+   = & \cons(a,\range(\next(a),\nmin(k,m))) \\
  & = & \range(a,\next(\nmin(k,m))) \\
  &     \href{@max-min@#thm-next-min-distribute}
    = & \range(a,\nmin(\next(k),\next(m))) \\
@@ -328,6 +346,7 @@ as needed.
 $\take$ is idempotent.
 
 :::::: theorem :::::
+[]{#thm-take-idempotent}
 Let $A$ be a set. For all $k \in \nats$ and $x \in \lists{A}$, we have $$\take(k,\take(k,x)) = \take(k,x).$$
 
 ::: proof ::::::::::
@@ -335,25 +354,32 @@ We proceed by induction on $k$. For the base case $k = \zero$, we have
 $$\begin{eqnarray*}
  &   & \take(k,\take(k,x)) \\
  & = & \take(\zero,\take(k,x)) \\
- & = & \nil \\
- & = & \take(\zero,x) \\
+ &     \href{@take-drop@#cor-take-zero}
+   = & \nil \\
+ &     \href{@take-drop@#cor-take-zero}
+   = & \take(\zero,x) \\
  & = & \take(k,x)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $x$ for some $k$. We now consider two possibilities. If $x = \nil$, then
 $$\begin{eqnarray*}
  &   & \take(\next(k),\take(\next(k),x)) \\
  & = & \take(\next(k),\take(\next(k),\nil)) \\
- & = & \take(\next(k),\nil) \\
+ &     \href{@take-drop@#cor-take-next-nil}
+   = & \take(\next(k),\nil) \\
  & = & \take(\next(k),x)
 \end{eqnarray*}$$
 as needed. If $x = \cons(a,u)$, we have
 $$\begin{eqnarray*}
  &   & \take(\next(k),\take(\next(k),x)) \\
  & = & \take(\next(k),\take(\next(k),\cons(a,u))) \\
- & = & \take(\next(k),\cons(a,\take(k,u))) \\
- & = & \cons(a,\take(k,\take(k,u))) \\
- & = & \cons(a,\take(k,u)) \\
- & = & \take(\next(k),\cons(a,u)) \\
+ &     \href{@take-drop@#cor-take-next-cons}
+   = & \take(\next(k),\cons(a,\take(k,u))) \\
+ &     \href{@take-drop@#cor-take-next-cons}
+   = & \cons(a,\take(k,\take(k,u))) \\
+ &     \href{@take-drop@#thm-take-idempotent}
+   = & \cons(a,\take(k,u)) \\
+ &     \href{@take-drop@#cor-take-next-cons}
+   = & \take(\next(k),\cons(a,u)) \\
  & = & \take(\next(k),x)
 \end{eqnarray*}$$
 as needed.
@@ -389,6 +415,7 @@ In Haskell:
 Since $\drop$ is defined in terms of bailout recursion, it can be characterized as the unique solution of a system of functional equations.
 
 :::::: corollary :::
+[]{#cor-drop-zero}[]{#cor-drop-next-nil}[]{#cor-drop-next-cons}
 Let $A$ be a set. $\drop$ is the unique map $f : \nats \rightarrow {\lists{A}}^{\lists{A}}$ satisfying the following equations for all $k \in \nats$, $a \in A$, and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(\zero,x) = x \\
@@ -426,6 +453,7 @@ $$\left\{\begin{array}{l}
 $\drop$ gives a $\suffix$.
 
 :::::: theorem :::::
+[]{#thm-drop-suffix}
 Let $A$ be a set. For all $x \in \lists{A}$ and $k \in \nats$, we have $$\suffix(\drop(k,x),x) = \btrue.$$
 
 ::: proof ::::::::::
@@ -433,7 +461,8 @@ We proceed by induction on $k$. For the base case $k = \zero$, we have
 $$\begin{eqnarray*}
  &   & \suffix(\drop(k,x),x) \\
  & = & \suffix(\drop(\zero,x),x) \\
- & = & \suffix(x,x) \\
+ &     \href{@take-drop@#cor-drop-zero}
+   = & \suffix(x,x) \\
  &     \href{@prefix-suffix@#thm-suffix-reflexive}
    = & \btrue
 \end{eqnarray*}$$
@@ -441,14 +470,16 @@ as needed. For the inductive step, suppose the equality holds for all $x$ for so
 $$\begin{eqnarray*}
  &   & \suffix(\drop(\next(k),x),x) \\
  & = & \suffix(\drop(\next(k),\nil),\nil) \\
- & = & \suffix(\nil,\nil) \\
+ &     \href{@take-drop@#cor-drop-next-nil}
+   = & \suffix(\nil,\nil) \\
  &     \href{@prefix-suffix@#thm-suffix-nil-left}
    = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. By the inductive hypothesis, we have $$\suffix(\drop(k,x),x) = \btrue$$ and note also that $$\suffix(x,\cons(a,x)) = \btrue.$$ Since $\suffix$ is transitive, we have
 $$\begin{eqnarray*}
  &   & \suffix(\drop(\next(k),\cons(a,x)),\cons(a,x)) \\
- & = & \suffix(\drop(k,x),\cons(a,x)) \\
+ &     \href{@take-drop@#cor-drop-next-cons}
+   = & \suffix(\drop(k,x),\cons(a,x)) \\
  & = & \btrue
 \end{eqnarray*}$$
 as needed.
@@ -468,6 +499,7 @@ as needed.
 $\take$ and $\drop$ give a kind of $\cat$-factorization.
 
 :::::: theorem :::::
+[]{#thm-take-drop-cat}
 Let $A$ be a set. For all $x \in \lists{A}$ and $k \in \nats$, we have $$x = \cat(\take(k,x),\drop(k,x)).$$
 
 ::: proof ::::::::::

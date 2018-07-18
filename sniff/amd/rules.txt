@@ -515,3 +515,19 @@
 @tails-inits@#thm-length-inits	\\length(\\inits(x)) = \\next(\\length(x))
 @tails-inits@#thm-inits-lcp	\\inits(\\lcp(x,y)) = \\lcp(\\inits(x),\\inits(y))
 @tails-inits@#thm-tails-lcs	\\tails(\\lcs(x,y)) = \\lcs(\\tails(x),\\tails(y))
+#=======================#
+#--- take-drop ---------#
+#=======================#
+@take-drop@#cor-take-zero	\\take(\\zero,x) = \\nil
+@take-drop@#cor-take-next-nil	\\take(\\next(n),\\nil) = \\nil
+@take-drop@#cor-take-next-cons	\\take(\\next(n),\\cons(a,x)) = \\cons(a,\\take(n,x))
+@take-drop@#thm-take-prefix	\\prefix(\\take(k,x),x) = \\btrue
+@take-drop@#thm-take-length	\\length(\\take(k,x)) = \\nmin(k,\\length(x))
+@take-drop@#thm-take-zip	\\zip(\\take(k,x),\\take(k,y)) = \\take(k,\\zip(x,y))
+@take-drop@#thm-take-range	\\take(k,\\range(a,b)) = \\range(a,\\nmin(k,b))
+@take-drop@#thm-take-idempotent	\\take(k,\\take(k,x)) = \\take(k,x)
+@take-drop@#cor-drop-zero	\\drop(\\zero,x) = x
+@take-drop@#cor-drop-next-nil	\\drop(\\next(n),\\nil) = \\nil
+@take-drop@#cor-drop-next-cons	\\drop(\\next(n),\\cons(a,x)) = \\drop(n,x)
+@take-drop@#thm-drop-suffix	\\suffix(\\drop(k,x),x) = \\btrue
+@take-drop@#thm-take-drop-cat	\\cat(\\take(k,x),\\drop(k,x)) = x
