@@ -69,6 +69,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * [UnfoldN](/posts/arithmetic-made-difficult/UnfoldN.html)
         * [Range](/posts/arithmetic-made-difficult/Range.html)
         * [Zip](/posts/arithmetic-made-difficult/Zip.html)
+        * [Lookback Fold](/posts/arithmetic-made-difficult/LookbackFold.html)
         * [ZipPad](/posts/arithmetic-made-difficult/ZipPad.html)
         * [Unzip](/posts/arithmetic-made-difficult/Unzip.html)
         * [Prefix and Suffix](/posts/arithmetic-made-difficult/PrefixAndSuffix.html)

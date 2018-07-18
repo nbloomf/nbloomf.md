@@ -58,6 +58,7 @@ library
     UnfoldN,
     Range,
     Zip,
+    LookbackFold,
     ZipPad,
     Unzip,
     PrefixAndSuffix,
@@ -1192,6 +1193,14 @@ test-suite amd-zip
     At,
     Length,
     Map
+
+test-suite amd-lfoldr
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: LookbackFold.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options: -Wall -main-is LookbackFold.main_lfoldr
+  other-modules:
 
 test-suite amd-zippad
   default-language: Haskell2010

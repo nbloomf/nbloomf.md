@@ -1,3 +1,4 @@
+\Gamma
 \Omega
 \Pi
 \Psi
@@ -97,6 +98,7 @@
 \left
 \length
 \let
+\lfoldr
 \lft
 \lists
 \map
