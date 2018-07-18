@@ -49,6 +49,7 @@
 > import UnfoldN
 > import Range
 > import Zip
+> import LookbackFold
 > import ZipPad
 > import Unzip
 > import PrefixAndSuffix

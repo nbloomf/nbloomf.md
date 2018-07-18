@@ -216,11 +216,14 @@ Let $A$ be a set. For all $x \in \lists{A}$ and $a \in A$ we have $$\tails(\snoc
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \snoc(\nil,\map(\snoc(a,-))(\tails(x))) \\
- & = & \snoc(\nil,\map(\snoc(a,-))(\tails(\nil))) \\
- & = & \snoc(\nil,\map(\snoc(a,-))(\cons(\nil,\nil))) \\
- & = & \snoc(\nil,\cons(\snoc(a,\nil),\map(\snoc(a,-))(\nil))) \\
- & = & \snoc(\nil,\cons(\snoc(a,\nil),\nil)) \\
+ &   & \snoc(\nil,\map(\snoc(a))(\tails(x))) \\
+ & = & \snoc(\nil,\map(\snoc(a))(\tails(\nil))) \\
+ &     \href{@tails-inits@#cor-tails-nil}
+   = & \snoc(\nil,\map(\snoc(a))(\cons(\nil,\nil))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \snoc(\nil,\cons(\snoc(a,\nil),\map(\snoc(a))(\nil))) \\
+ &     \href{@map@#cor-map-nil}
+   = & \snoc(\nil,\cons(\snoc(a,\nil),\nil)) \\
  &     \href{@snoc@#cor-snoc-cons}
    = & \cons(\snoc(a,\nil),\snoc(\nil,\nil)) \\
  & = & \cons(\cons(a,\nil),\cons(\nil,\nil)) \\
@@ -236,11 +239,16 @@ $$\begin{eqnarray*}
  &     \href{@snoc@#cor-snoc-cons}
    = & \tails(\cons(b,\snoc(a,x))) \\
  & = & \cons(\cons(b,\snoc(a,x)),\tails(\snoc(a,x))) \\
- & = & \cons(\cons(b,\snoc(a,x)),\snoc(\nil,\map(\snoc(a,-))(\tails(x)))) \\
- & = & \snoc(\nil,\cons(\cons(b,\snoc(a,x)),\map(\snoc(a,-))(\tails(x)))) \\
- & = & \snoc(\nil,\cons(\snoc(a,\cons(b,x)),\map(\snoc(a,-))(\tails(x)))) \\
- & = & \snoc(\nil,\map(\snoc(a,-))(\cons(\cons(b,x),\tails(x)))) \\
- & = & \snoc(\nil,\map(\snoc(a,-))(\tails(\cons(b,x))))
+ &     \href{@tails-inits@#thm-tails-snoc}
+   = & \cons(\cons(b,\snoc(a,x)),\snoc(\nil,\map(\snoc(a))(\tails(x)))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \snoc(\nil,\cons(\cons(b,\snoc(a,x)),\map(\snoc(a))(\tails(x)))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \snoc(\nil,\cons(\snoc(a,\cons(b,x)),\map(\snoc(a))(\tails(x)))) \\
+ &     \href{@map@#cor-map-cons}
+   = & \snoc(\nil,\map(\snoc(a))(\cons(\cons(b,x),\tails(x)))) \\
+ &     \href{@tails-inits@#cor-tails-cons}
+   = & \snoc(\nil,\map(\snoc(a))(\tails(\cons(b,x))))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

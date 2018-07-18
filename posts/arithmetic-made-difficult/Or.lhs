@@ -487,7 +487,9 @@ $$\begin{eqnarray*}
    = & \bor(\bfalse,\band(b,c)) \\
  &     \href{@or@#thm-or-false-left}
    = & \band(b,c) \\
- & = & \band(\bor(\bfalse,b),\bor(\bfalse,c)) \\
+ & = & \band(b,\bor(\bfalse,c)) \\
+ &     \href{@or@#thm-or-false-left}
+   = & \band(\bor(\bfalse,b),\bor(\bfalse,c)) \\
  &     \let{a = \bfalse}
    = & \band(\bor(a,b),\bor(a,c))
 \end{eqnarray*}$$

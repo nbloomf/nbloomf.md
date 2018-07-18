@@ -33,6 +33,7 @@ We'll use the ``QuickCheck`` library to make our theorems testable. This is not 
 > {-# LANGUAGE NoImplicitPrelude #-}
 > module Testing
 >   ( Test, runTest, testName, withTypeOf, TypeName(..)
+>   , labelTestArgs1
 >   , testLabel0, testLabel1, testLabel2, testLabel3, testArgs
 > 
 >   , Equal(..)
@@ -40,6 +41,8 @@ We'll use the ``QuickCheck`` library to make our theorems testable. This is not 
 >   , module Prelude
 >   , module Test.QuickCheck
 >   , module Test.QuickCheck.Test
+>   , module Data.Proxy
+>   , module Data.Typeable
 > ) where
 > 
 > 
@@ -52,6 +55,8 @@ We'll use the ``QuickCheck`` library to make our theorems testable. This is not 
 >   , quickCheckWithResult, stdArgs, variant
 >   )
 > import Test.QuickCheck.Test (isSuccess)
+> import Data.Proxy (Proxy(..))
+> import Data.Typeable (Typeable, typeRep)
 > import Text.Show.Functions ()
 > import System.Exit
 
@@ -90,6 +95,11 @@ The ``Test`` type, with ``testName``, is a shorthand for writing named tests.
 > testLabel0 :: String -> IO ()
 > testLabel0 = testLabel
 > 
+> labelTestArgs1 :: (Typeable a)
+>   => String -> Proxy a -> IO ()
+> labelTestArgs1 str a = testLabel $ concat
+>   [ str, ": ", show $ typeRep a ]
+>
 > testLabel1 :: (TypeName a)
 >   => String -> a -> IO ()
 > testLabel1 str a = testLabel $ concat

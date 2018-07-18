@@ -488,8 +488,10 @@ sniff-amd-import:VQ:
       | grep '^> import' \
       | grep -v '^> import Prelude' \
       | grep -v '^> import Test\.QuickCheck' \
-      | grep -v '^> import Text.Show.Functions' \
-      | grep -v '^> import System.Exit' \
+      | grep -v '^> import Text\.Show\.Functions' \
+      | grep -v '^> import System\.Exit' \
+      | grep -v '^> import Data\.Proxy' \
+      | grep -v '^> import Data\.Typeable' \
       | orderedby --dict sniff/amd/import-list.txt \
       || true )
     if [ "$IMPORT" ]; then
