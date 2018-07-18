@@ -160,8 +160,8 @@ Suite:
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
 >   , Equal (t a), Show (t a), Arbitrary (t a), Equal (t (t a))
->   ) => t a -> Int -> Int -> IO ()
-> _test_disjoint t size cases = do
+>   ) => Int -> Int -> t a -> IO ()
+> _test_disjoint size cases t = do
 >   testLabel1 "disjoint" t
 > 
 >   let args = testArgs size cases
@@ -175,5 +175,5 @@ Main:
 
 > main_disjoint :: IO ()
 > main_disjoint = do
->   _test_disjoint (nil :: ConsList Bool)  20 100
->   _test_disjoint (nil :: ConsList Unary) 20 100
+>   _test_disjoint 20 100 (nil :: ConsList Bool)
+>   _test_disjoint 20 100 (nil :: ConsList Unary)

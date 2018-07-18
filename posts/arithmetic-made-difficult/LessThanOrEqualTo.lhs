@@ -412,8 +412,8 @@ Testing
 Suite:
 
 > _test_leq :: (TypeName n, Natural n, Equal n, Arbitrary n, Show n)
->   => n -> Int -> Int -> IO ()
-> _test_leq n size cases = do
+>   => Int -> Int -> n -> IO ()
+> _test_leq size cases n = do
 >   testLabel1 "leq" n
 >   let args = testArgs size cases
 > 
@@ -438,4 +438,4 @@ Main:
 
 > main_leq :: IO ()
 > main_leq = do
->   _test_leq (zero :: Unary) 50 100
+>   _test_leq 50 100 (zero :: Unary)

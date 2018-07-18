@@ -486,8 +486,8 @@ Suite:
 
 > _test_lcm ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
->   ) => n -> Int -> Int -> IO ()
-> _test_lcm n size cases = do
+>   ) => Int -> Int -> n -> IO ()
+> _test_lcm size cases n = do
 >   testLabel1 "lcm" n
 > 
 >   let args = testArgs size cases
@@ -509,4 +509,4 @@ Main:
 
 > main_lcm :: IO ()
 > main_lcm = do
->   _test_lcm (zero :: Unary) 20 100
+>   _test_lcm 20 100 (zero :: Unary)

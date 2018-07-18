@@ -330,8 +330,8 @@ Suite:
 > _test_div ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
 >   , TypeName b, Equal b, Boolean b
->   ) => n -> b -> Int -> Int -> IO ()
-> _test_div n p size cases = do
+>   ) => Int -> Int -> n -> b -> IO ()
+> _test_div size cases n p = do
 >   testLabel2 "div" n p
 > 
 >   let args = testArgs size cases
@@ -356,4 +356,4 @@ Main:
 
 > main_div :: IO ()
 > main_div = do
->   _test_div (zero :: Unary) (true :: Bool) 50 100
+>   _test_div 50 100 (zero :: Unary) (true :: Bool)

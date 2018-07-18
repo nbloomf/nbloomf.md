@@ -610,8 +610,8 @@ Suite:
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
 >   , Equal (t a), Show (t a), Arbitrary (t a), Equal (t (t a))
->   ) => t a -> Int -> Int -> IO ()
-> _test_delete t size cases = do
+>   ) => Int -> Int -> t a -> IO ()
+> _test_delete size cases t = do
 >   testLabel1 "delete" t
 > 
 >   let args = testArgs size cases
@@ -637,5 +637,5 @@ Main:
 
 > main_delete :: IO ()
 > main_delete = do
->   _test_delete (nil :: ConsList Bool)  20 100
->   _test_delete (nil :: ConsList Unary) 20 100
+>   _test_delete 20 100 (nil :: ConsList Bool)
+>   _test_delete 20 100 (nil :: ConsList Unary)

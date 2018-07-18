@@ -526,12 +526,18 @@ Let $A$ be a set. For all $a,b \in A$ and $x \in \lists{A}$ we have $$\last(\con
 Note that
 $$\begin{eqnarray*}
  &   & \last(\cons(a,\cons(b,x))) \\
- & = & \head(\rev(\cons(a,\cons(b,x)))) \\
- & = & \head(\snoc(a,\rev(\cons(b,x)))) \\
- & = & \head(\snoc(a,\snoc(b,\rev(x)))) \\
- & = & \head(\snoc(b,\rev(x))) \\
- & = & \head(\rev(\cons(b,x))) \\
- & = & \last(\cons(b,x))
+ &     \href{@rev@#def-last}
+   = & \head(\rev(\cons(a,\cons(b,x)))) \\
+ &     \href{@rev@#cor-rev-cons}
+   = & \head(\snoc(a,\rev(\cons(b,x)))) \\
+ &     \href{@rev@#cor-rev-cons}
+   = & \head(\snoc(a,\snoc(b,\rev(x)))) \\
+ &     \href{@snoc@#thm-snoc-head}
+   = & \head(\snoc(b,\rev(x))) \\
+ &     \href{@rev@#cor-rev-cons}
+   = & \head(\rev(\cons(b,x))) \\
+ &     \href{@rev@#def-last}
+   = & \last(\cons(b,x))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

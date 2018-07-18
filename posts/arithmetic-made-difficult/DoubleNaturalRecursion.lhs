@@ -160,8 +160,8 @@ Suite:
 > _test_dnaturalRec ::
 >   ( TypeName n, Show n, Equal n, Arbitrary n, CoArbitrary n, Natural n
 >   , CoArbitrary a, Arbitrary a, Show a, Equal a, TypeName a
->   ) => n -> a -> Int -> Int -> IO ()
-> _test_dnaturalRec n a size cases = do
+>   ) => Int -> Int -> n -> a -> IO ()
+> _test_dnaturalRec size cases n a = do
 >   testLabel2 "dnaturalRec" n a
 > 
 >   let args = testArgs size cases
@@ -172,7 +172,7 @@ Main:
 
 > main_dnaturalRec :: IO ()
 > main_dnaturalRec = do
->   _test_dnaturalRec (zero :: Unary) (zero :: Unary) 10 50
->   _test_dnaturalRec (zero :: Unary) (zero :: Unary) 10 50
->   _test_dnaturalRec (zero :: Unary) (true :: Bool)  10 50
->   _test_dnaturalRec (zero :: Unary) (true :: Bool)  10 50
+>   _test_dnaturalRec 10 50 (zero :: Unary) (zero :: Unary)
+>   _test_dnaturalRec 10 50 (zero :: Unary) (zero :: Unary)
+>   _test_dnaturalRec 10 50 (zero :: Unary) (true :: Bool)
+>   _test_dnaturalRec 10 50 (zero :: Unary) (true :: Bool)

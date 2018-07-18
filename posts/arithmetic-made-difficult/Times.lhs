@@ -371,10 +371,14 @@ $$\begin{eqnarray*}
 The analogous statement holds for $b$. So we have
 $$\begin{eqnarray*}
  &   & \beq(\next(\nplus(\nplus(\ntimes(a,b),b),a)),\next(\nplus(\nplus(\ntimes(a,c),c),a))) \\
- & = & \beq(\nplus(\nplus(\ntimes(a,b),b),a),\nplus(\nplus(\ntimes(a,c),c),a)) \\
- & = & \beq(\nplus(\ntimes(a,b),b),\nplus(\ntimes(a,c),c)) \\
- & = & \beq(\ntimes(\next(a),b),\nplus(\ntimes(a,c),c)) \\
- & = & \beq(\ntimes(\next(a),b),\ntimes(\next(a),c)) \\
+ &     \href{@unary@#thm-next-injective}
+   = & \beq(\nplus(\nplus(\ntimes(a,b),b),a),\nplus(\nplus(\ntimes(a,c),c),a)) \\
+ &     \href{@plus@#thm-plus-right-cancel}
+   = & \beq(\nplus(\ntimes(a,b),b),\nplus(\ntimes(a,c),c)) \\
+ &     \href{@times@#cor-times-up-next}
+   = & \beq(\ntimes(\next(a),b),\nplus(\ntimes(a,c),c)) \\
+ &     \href{@times@#cor-times-up-next}
+   = & \beq(\ntimes(\next(a),b),\ntimes(\next(a),c)) \\
  &     \hyp{\beq(\ntimes(\next(a),b),\ntimes(\next(a),c)) = \beq(b,c)}
    = & \beq(b,c)
 \end{eqnarray*}$$

@@ -111,8 +111,8 @@ Suite:
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a), CoArbitrary (t a)
 >   , CoArbitrary b, CoArbitrary c, Arbitrary b, Arbitrary c, Show b, Equal c
 >   , TypeName b, TypeName c
->   ) => t a -> b -> c -> Int -> Int -> IO ()
-> _test_bfoldr t b c size cases = do
+>   ) => Int -> Int -> t a -> b -> c -> IO ()
+> _test_bfoldr size cases t b c = do
 >   testLabel3 "bfoldr" t b c
 > 
 >   let args = testArgs size cases
@@ -123,7 +123,7 @@ Main:
 
 > main_bfoldr :: IO ()
 > main_bfoldr = do
->   _test_bfoldr (nil :: ConsList Bool)  (zero :: Unary) (zero :: Unary) 50 1000
->   _test_bfoldr (nil :: ConsList Unary) (zero :: Unary) (zero :: Unary) 50 1000
->   _test_bfoldr (nil :: ConsList Bool)  (true :: Bool)  (zero :: Unary) 50 1000
->   _test_bfoldr (nil :: ConsList Unary) (true :: Bool)  (zero :: Unary) 50 1000
+>   _test_bfoldr 50 1000 (nil :: ConsList Bool)  (zero :: Unary) (zero :: Unary)
+>   _test_bfoldr 50 1000 (nil :: ConsList Unary) (zero :: Unary) (zero :: Unary)
+>   _test_bfoldr 50 1000 (nil :: ConsList Bool)  (true :: Bool)  (zero :: Unary)
+>   _test_bfoldr 50 1000 (nil :: ConsList Unary) (true :: Bool)  (zero :: Unary)

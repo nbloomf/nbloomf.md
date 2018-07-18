@@ -518,8 +518,8 @@ Suite:
 >   , TypeName (t a), List t
 >   , TypeName n, Natural n, Equal n, Show n, Arbitrary n
 >   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (Pair a a))
->   ) => t a -> n -> Int -> Int -> IO ()
-> _test_count t n size cases = do
+>   ) => Int -> Int -> t a -> n -> IO ()
+> _test_count size cases t n = do
 >   testLabel2 "count" t n
 > 
 >   let args = testArgs size cases
@@ -544,5 +544,5 @@ Main:
 
 > main_count :: IO ()
 > main_count = do
->   _test_count (nil :: ConsList Bool)  (zero :: Unary) 20 100
->   _test_count (nil :: ConsList Unary) (zero :: Unary) 20 100
+>   _test_count 20 100 (nil :: ConsList Bool)  (zero :: Unary)
+>   _test_count 20 100 (nil :: ConsList Unary) (zero :: Unary)

@@ -852,8 +852,8 @@ Suite:
 >   , TypeName (t a), List t
 >   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (Pair a a))
 >   , Arbitrary (t (t a)), Show (t (t a)), Equal (t (t a))
->   ) => t a -> Int -> Int -> IO ()
-> _test_lcp t size cases = do
+>   ) => Int -> Int -> t a -> IO ()
+> _test_lcp size cases t = do
 >   testLabel1 "lcp & lcs" t
 >   let args = testArgs size cases
 > 
@@ -885,5 +885,5 @@ Main:
 
 > main_lcp :: IO ()
 > main_lcp = do
->   _test_lcp (nil :: ConsList Bool)  20 100
->   _test_lcp (nil :: ConsList Unary) 20 100
+>   _test_lcp 20 100 (nil :: ConsList Bool)
+>   _test_lcp 20 100 (nil :: ConsList Unary)

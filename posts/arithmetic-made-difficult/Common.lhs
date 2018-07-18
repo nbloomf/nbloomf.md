@@ -451,8 +451,8 @@ Suite:
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
 >   , Equal (t a), Show (t a), Arbitrary (t a), Equal (t (t a))
->   ) => t a -> Int -> Int -> IO ()
-> _test_common t size cases = do
+>   ) => Int -> Int -> t a -> IO ()
+> _test_common size cases t = do
 >   testLabel1 "common" t
 > 
 >   let args = testArgs size cases
@@ -476,5 +476,5 @@ Main:
 
 > main_common :: IO ()
 > main_common = do
->   _test_common (nil :: ConsList Bool)  20 100
->   _test_common (nil :: ConsList Unary) 20 100
+>   _test_common 20 100 (nil :: ConsList Bool)
+>   _test_common 20 100 (nil :: ConsList Unary)

@@ -280,8 +280,8 @@ Suite:
 
 > _test_findSmallest ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, CoArbitrary n, Show n
->   ) => n -> Int -> Int -> IO ()
-> _test_findSmallest n size cases = do
+>   ) => Int -> Int -> n -> IO ()
+> _test_findSmallest size cases n = do
 >   testLabel1 "findSmallest" n
 > 
 >   let args = testArgs size cases
@@ -298,4 +298,4 @@ Main:
 
 > main_findSmallest :: IO ()
 > main_findSmallest = do
->   _test_findSmallest (zero :: Unary) 50 100
+>   _test_findSmallest 50 100 (zero :: Unary)

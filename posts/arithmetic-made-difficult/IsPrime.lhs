@@ -198,8 +198,8 @@ Suite:
 
 > _test_prime ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
->   ) => n -> Int -> Int -> IO ()
-> _test_prime n size cases = do
+>   ) => Int -> Int -> n -> IO ()
+> _test_prime size cases n = do
 >   testLabel1 "mindiv & prime" n
 > 
 >   let args = testArgs size cases
@@ -213,4 +213,4 @@ Main:
 
 > main_prime :: IO ()
 > main_prime = do
->   _test_prime (zero :: Unary) 40 100
+>   _test_prime 40 100 (zero :: Unary)

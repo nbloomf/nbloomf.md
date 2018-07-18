@@ -483,8 +483,8 @@ Suite:
 >   ( TypeName a, Show a, Equal a, Arbitrary a
 >   , TypeName n, Natural n, Equal n, Show n, Arbitrary n
 >   , TypeName (t a), List t, Equal (t a), Show (t a), Arbitrary (t a)
->   ) => t a -> n -> Int -> Int -> IO ()
-> _test_length t n size cases = do
+>   ) => Int -> Int -> t a -> n -> IO ()
+> _test_length size cases t n = do
 >   testLabel2 "length" t n
 > 
 >   let args = testArgs size cases
@@ -509,5 +509,5 @@ Main:
 
 > main_length :: IO ()
 > main_length = do
->   _test_length (nil :: ConsList Bool)  (zero :: Unary) 20 100
->   _test_length (nil :: ConsList Unary) (zero :: Unary) 20 100
+>   _test_length 20 100 (nil :: ConsList Bool)  (zero :: Unary)
+>   _test_length 20 100 (nil :: ConsList Unary) (zero :: Unary)

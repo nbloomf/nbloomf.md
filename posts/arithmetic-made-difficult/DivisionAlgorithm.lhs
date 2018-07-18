@@ -324,8 +324,8 @@ Suite.
 
 > _test_divalg ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
->   ) => n -> Int -> Int -> IO ()
-> _test_divalg n size cases = do
+>   ) => Int -> Int -> n -> IO ()
+> _test_divalg size cases n = do
 >   testLabel1 "divalg" n
 > 
 >   let args = testArgs size cases
@@ -347,4 +347,4 @@ Main.
 
 > main_divalg :: IO ()
 > main_divalg = do
->   _test_divalg (zero :: Unary) 20 100
+>   _test_divalg 20 100 (zero :: Unary)

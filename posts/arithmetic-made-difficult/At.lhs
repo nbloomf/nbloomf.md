@@ -580,8 +580,8 @@ Suite:
 >   ( TypeName a, Show a, Equal a, Arbitrary a
 >   , TypeName n, Natural n, Equal n, Show n, Arbitrary n
 >   , TypeName (t a), List t, Equal (t a), Show (t a), Arbitrary (t a)
->   ) => t a -> n -> Int -> Int -> IO ()
-> _test_at t n size cases = do
+>   ) => Int -> Int -> t a -> n -> IO ()
+> _test_at size cases t n = do
 >   testLabel2 "at" t n
 > 
 >   let args = testArgs size cases
@@ -607,5 +607,5 @@ Main:
 
 > main_at :: IO ()
 > main_at = do
->   _test_at (nil :: ConsList Bool)  (zero :: Unary) 20 100
->   _test_at (nil :: ConsList Unary) (zero :: Unary) 20 100
+>   _test_at 20 100 (nil :: ConsList Bool)  (zero :: Unary)
+>   _test_at 20 100 (nil :: ConsList Unary) (zero :: Unary)

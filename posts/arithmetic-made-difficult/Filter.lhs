@@ -453,8 +453,8 @@ Suite:
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
 >   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (Pair a a))
->   ) => t a -> Int -> Int -> IO ()
-> _test_filter t size cases = do
+>   ) => Int -> Int -> t a -> IO ()
+> _test_filter size cases t = do
 >   testLabel1 "filter" t
 > 
 >   let args = testArgs size cases
@@ -473,5 +473,5 @@ Main:
 
 > main_filter :: IO ()
 > main_filter = do
->   _test_filter (nil :: ConsList Bool)  20 100
->   _test_filter (nil :: ConsList Unary) 20 100
+>   _test_filter 20 100 (nil :: ConsList Bool)
+>   _test_filter 20 100 (nil :: ConsList Unary)

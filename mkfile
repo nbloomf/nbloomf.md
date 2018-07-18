@@ -151,7 +151,8 @@ sniff-amd:VQ: \
   sniff-amd-import \
   sniff-amd-labels \
   sniff-amd-eqnarray-ends \
-  sniff-amd-prelude
+  sniff-amd-prelude \
+  sniff-amd-arg-order
 
 #-- use consistent syntax for fenced divs --#
 sniff-amd-fencediv:VQ:
@@ -571,7 +572,6 @@ sniff-amd-label-format:VQ:
     exit 1
   fi
 
-#-- ADD ME TO THE LIST WHEN I'M LESS NOISY --#
 #-- test arg order --#
 sniff-amd-arg-order:VQ:
   echo 'Checking Test argument order' | doppler lightblue

@@ -632,8 +632,8 @@ Suite:
 >   ( TypeName a, Show a, Equal a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
 >   , Show (t a), Equal (t a), Arbitrary (t a)
->   ) => t a -> Int -> Int -> IO ()
-> _test_all_any t size cases = do
+>   ) => Int -> Int -> t a -> IO ()
+> _test_all_any size cases t = do
 >   testLabel1 "all & any" t
 >   let args = testArgs size cases
 > 
@@ -662,5 +662,5 @@ Main:
 
 > main_all_any :: IO ()
 > main_all_any = do
->   _test_all_any (nil :: ConsList Bool)  20 100
->   _test_all_any (nil :: ConsList Unary) 20 100
+>   _test_all_any 20 100 (nil :: ConsList Bool)
+>   _test_all_any 20 100 (nil :: ConsList Unary)

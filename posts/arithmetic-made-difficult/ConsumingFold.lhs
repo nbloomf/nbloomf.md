@@ -105,8 +105,8 @@ Suite:
 > _test_cfoldr ::
 >   ( TypeName a, Show a, Equal a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a), CoArbitrary (t a)
->   ) => t a -> Int -> Int -> IO ()
-> _test_cfoldr t size cases = do
+>   ) => Int -> Int -> t a -> IO ()
+> _test_cfoldr size cases t = do
 >   testLabel1 "cfoldr" t
 > 
 >   let args = testArgs size cases
@@ -117,5 +117,5 @@ Main:
 
 > main_cfoldr :: IO ()
 > main_cfoldr = do
->   _test_cfoldr (nil :: ConsList Bool)  20 100
->   _test_cfoldr (nil :: ConsList Unary) 20 100
+>   _test_cfoldr 20 100 (nil :: ConsList Bool)
+>   _test_cfoldr 20 100 (nil :: ConsList Unary)

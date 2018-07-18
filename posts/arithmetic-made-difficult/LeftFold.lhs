@@ -100,8 +100,8 @@ Suite:
 > _test_foldl ::
 >   ( TypeName a, Show a, Equal a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a)
->   ) => t a -> Int -> Int -> IO ()
-> _test_foldl t size cases = do
+>   ) => Int -> Int -> t a -> IO ()
+> _test_foldl size cases t = do
 >   testLabel1 "foldl" t
 > 
 >   let args = testArgs size cases
@@ -112,5 +112,5 @@ Main:
 
 > main_foldl :: IO ()
 > main_foldl = do
->   _test_foldl (nil :: ConsList Bool)  20 100
->   _test_foldl (nil :: ConsList Unary) 20 100
+>   _test_foldl 20 100 (nil :: ConsList Bool)
+>   _test_foldl 20 100 (nil :: ConsList Unary)

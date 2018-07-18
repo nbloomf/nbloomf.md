@@ -659,8 +659,8 @@ Suite:
 >   , Show (t a), Equal (t a), Arbitrary (t a), Equal (t (Pair a a))
 >   , TypeName n, Equal n, Show n, Arbitrary n, Natural n
 >   , Arbitrary (t (t a)), Show (t (t a)), Equal (t (t a))
->   ) => t a -> n -> Int -> Int -> IO ()
-> _test_elt t n size cases = do
+>   ) => Int -> Int -> t a -> n -> IO ()
+> _test_elt size cases t n = do
 >   testLabel1 "elt" t
 > 
 >   let args = testArgs size cases
@@ -684,5 +684,5 @@ Main:
 
 > main_elt :: IO ()
 > main_elt = do
->   _test_elt (nil :: ConsList Bool)  (zero :: Unary) 20 100
->   _test_elt (nil :: ConsList Unary) (zero :: Unary) 20 100
+>   _test_elt 20 100 (nil :: ConsList Bool)  (zero :: Unary)
+>   _test_elt 20 100 (nil :: ConsList Unary) (zero :: Unary)

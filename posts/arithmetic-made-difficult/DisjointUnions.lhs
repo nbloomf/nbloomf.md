@@ -814,8 +814,7 @@ Main:
 
 > main_disjoint_union :: IO ()
 > main_disjoint_union = do
->   _test_disjoint_union 20 100
->    (true :: Bool) (true :: Bool) (true :: Bool)
+>   _test_disjoint_union 20 100 (true :: Bool) (true :: Bool) (true :: Bool)
 > 
 >   let a = lft true :: Union Bool Bool
 > 

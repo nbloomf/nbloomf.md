@@ -126,8 +126,8 @@ Suite:
 >   , TypeName (t a), List t, Equal (t a), Arbitrary (t a), Show (t a), CoArbitrary (t a)
 >   , CoArbitrary b, Arbitrary b, Show b, CoArbitrary c, Arbitrary c
 >   , TypeName b, TypeName c, Equal b, Equal c
->   ) => t a -> b -> c -> Int -> Int -> IO ()
-> _test_dbfoldr t b c size cases = do
+>   ) => Int -> Int -> t a -> b -> c -> IO ()
+> _test_dbfoldr size cases t b c = do
 >   testLabel3 "dbfoldr" t b c
 > 
 >   let args = testArgs size cases
@@ -138,7 +138,7 @@ Main:
 
 > main_dbfoldr :: IO ()
 > main_dbfoldr = do
->   _test_dbfoldr (nil :: ConsList Bool)  (zero :: Unary) (zero :: Unary) 50 500
->   _test_dbfoldr (nil :: ConsList Unary) (zero :: Unary) (zero :: Unary) 50 500
->   _test_dbfoldr (nil :: ConsList Bool)  (zero :: Unary) (true :: Bool)  50 500
->   _test_dbfoldr (nil :: ConsList Unary) (zero :: Unary) (true :: Bool)  50 500
+>   _test_dbfoldr 50 500 (nil :: ConsList Bool)  (zero :: Unary) (zero :: Unary)
+>   _test_dbfoldr 50 500 (nil :: ConsList Unary) (zero :: Unary) (zero :: Unary)
+>   _test_dbfoldr 50 500 (nil :: ConsList Bool)  (zero :: Unary) (true :: Bool)
+>   _test_dbfoldr 50 500 (nil :: ConsList Unary) (zero :: Unary) (true :: Bool)

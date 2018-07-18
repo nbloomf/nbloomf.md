@@ -357,11 +357,16 @@ Let $A$ be a set. For all $a,b \in A$ and $x \in \lists{A}$ we have $$\head(\sno
 We consider two possibilities for $x$. If $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \head(\snoc(a,\snoc(b,\nil))) \\
- & = & \head(\snoc(a,\cons(b,\nil))) \\
- & = & \head(\cons(b,\snoc(a,\nil))) \\
- & = & \rgt(b) \\
- & = & \head(\cons(b,\nil)) \\
- & = & \head(\snoc(b,\nil))
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \head(\snoc(a,\cons(b,\nil))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \head(\cons(b,\snoc(a,\nil))) \\
+ &     \href{@head-tail@#thm-head-cons}
+   = & \rgt(b) \\
+ &     \href{@head-tail@#thm-head-cons}
+   = & \head(\cons(b,\nil)) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \head(\snoc(b,\nil))
 \end{eqnarray*}$$
 and if $x = \cons(c,y)$ we have
 $$\begin{eqnarray*}
@@ -369,10 +374,14 @@ $$\begin{eqnarray*}
  &     \let{x = \cons(c,y)}
    = & \head(\snoc(a,\snoc(b,\cons(c,y)))) \\
  & = & \head(\snoc(a,\cons(c,\snoc(b,y)))) \\
- & = & \head(\cons(c,\snoc(a,\snoc(b,y)))) \\
- & = & \rgt(c) \\
- & = & \head(\cons(c,\snoc(b,y))) \\
- & = & \head(\snoc(b,\cons(c,y))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \head(\cons(c,\snoc(a,\snoc(b,y)))) \\
+ &     \href{@head-tail@#thm-head-cons}
+   = & \rgt(c) \\
+ &     \href{@head-tail@#thm-head-cons}
+   = & \head(\cons(c,\snoc(b,y))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \head(\snoc(b,\cons(c,y))) \\
  &     \let{x = \cons(c,y)}
    = & \head(\snoc(b,x))
 \end{eqnarray*}$$

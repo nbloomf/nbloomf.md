@@ -651,8 +651,8 @@ Suite:
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
 >   , Equal (t a), Show (t a), Arbitrary (t a)
->   ) => t a -> Int -> Int -> IO ()
-> _test_isInfix t size cases = do
+>   ) => Int -> Int -> t a -> IO ()
+> _test_isInfix size cases t = do
 >   testLabel1 "infix" t
 > 
 >   let args = testArgs size cases
@@ -684,5 +684,5 @@ Main:
 
 > main_isInfix :: IO ()
 > main_isInfix = do
->   _test_isInfix (nil :: ConsList Bool)  30 1000
->   _test_isInfix (nil :: ConsList Unary) 30 1000
+>   _test_isInfix 30 1000 (nil :: ConsList Bool)
+>   _test_isInfix 30 1000 (nil :: ConsList Unary)

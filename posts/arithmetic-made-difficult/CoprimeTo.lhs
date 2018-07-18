@@ -107,8 +107,8 @@ Suite:
 
 > _test_coprime ::
 >   ( TypeName n, Natural n, Equal n, Arbitrary n, Show n
->   ) => n -> Int -> Int -> IO ()
-> _test_coprime n size cases = do
+>   ) => Int -> Int -> n -> IO ()
+> _test_coprime size cases n = do
 >   testLabel1 "coprime" n
 > 
 >   let args = testArgs size cases
@@ -120,4 +120,4 @@ Main:
 
 > main_coprime :: IO ()
 > main_coprime = do
->   _test_coprime (zero :: Unary) 20 100
+>   _test_coprime 20 100 (zero :: Unary)

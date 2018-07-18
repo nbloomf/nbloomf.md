@@ -556,8 +556,8 @@ Suite:
 >   ( TypeName a, Equal a, Show a, Arbitrary a, CoArbitrary a
 >   , TypeName (t a), List t
 >   , Equal (t a), Show (t a), Arbitrary (t a), Equal (t (t a))
->   ) => t a -> Int -> Int -> IO ()
-> _test_dedupe t size cases = do
+>   ) => Int -> Int -> t a -> IO ()
+> _test_dedupe size cases t = do
 >   testLabel1 "dedupeL & dedupeR" t
 > 
 >   let args = testArgs size cases
@@ -582,5 +582,5 @@ Main:
 
 > main_dedupe :: IO ()
 > main_dedupe = do
->   _test_dedupe (nil :: ConsList Bool)  50 500
->   _test_dedupe (nil :: ConsList Unary) 50 500
+>   _test_dedupe 50 500 (nil :: ConsList Bool)
+>   _test_dedupe 50 500 (nil :: ConsList Unary)
