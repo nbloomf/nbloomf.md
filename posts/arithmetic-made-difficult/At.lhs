@@ -265,6 +265,7 @@ as needed.
 $\at$ interacts with $\snoc$.
 
 :::::: theorem :::::
+[]{#thm-at-snoc-cons}[]{#thm-at-snoc-length}
 Let $A$ be a set. Let $a,b \in A$ and $x \in \lists{A}$.
 
 1. If $\nleq(k,\length(x))$ then $\at(\snoc(a,\cons(b,x)),k) = \at(\cons(b,x),k)$.
@@ -276,7 +277,8 @@ $$\begin{eqnarray*}
  &   & \at(\snoc(a,\cons(b,x)),\zero) \\
  &     \href{@snoc@#cor-snoc-cons}
    = & \at(\cons(b,\snoc(a,x)),\zero) \\
- & = & \rgt(b) \\
+ &     \href{@at@#thm-at-cons-zero}
+   = & \rgt(b) \\
  &     \href{@at@#thm-at-cons-zero}
    = & \at(\cons(b,x),\zero)
 \end{eqnarray*}$$
@@ -285,10 +287,13 @@ $$\begin{eqnarray*}
  &   & \at(\snoc(a,\cons(b,x)),\next(k)) \\
  &     \href{@snoc@#cor-snoc-cons}
    = & \at(\cons(b,\snoc(a,x)),\next(k)) \\
- & = & \at(\snoc(a,x),k) \\
- & = & \at(\snoc(a,\cons(c,u)),k) \\
+ &     \href{@at@#thm-at-cons-next}
+   = & \at(\snoc(a,x),k) \\
+ &     \hyp{x = \cons(c,u)}
+   = & \at(\snoc(a,\cons(c,u)),k) \\
  & = & \at(\cons(c,u),k) \\
- & = & \at(x,k) \\
+ &     \hyp{x = \cons(c,u)}
+   = & \at(x,k) \\
  &     \href{@at@#thm-at-cons-next}
    = & \at(\cons(b,x),\next(k))
 \end{eqnarray*}$$
@@ -296,17 +301,24 @@ as needed.
 2. We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \at(\snoc(a,\nil),\length(\nil)) \\
- & = & \at(\cons(a,\nil),\zero) \\
+ &     \href{@length@#cor-length-nil}
+   = & \at(\snoc(a,\nil),\zero) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \at(\cons(a,\nil),\zero) \\
  &     \href{@at@#thm-at-cons-zero}
    = & \rgt(a)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$, and let $b \in A$. Now
 $$\begin{eqnarray*}
  &   & \at(\snoc(a,\cons(b,x)),\length(\cons(b,x))) \\
- & = & \at(\cons(b,\snoc(a,x)),\next(\length(x))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \at(\cons(b,\snoc(a,x)),\length(\cons(b,x))) \\
+ &     \href{@length@#cor-length-cons}
+   = & \at(\cons(b,\snoc(a,x)),\next(\length(x))) \\
  &     \href{@at@#thm-at-cons-next}
    = & \at(\snoc(a,x),\length(x)) \\
- & = & \rgt(a)
+ &     \hyp{\at(\snoc(a,x),\length(x)) = \rgt(a)}
+   = & \rgt(a)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -342,20 +354,24 @@ Let $A$ be a set. Let $x \in \lists{A}$ and $u,v \in \nats$. If $\next(\nplus(u,
 We proceed by list induction on $x$. For the base case $x = \nil$, note that $\length(x) = \zero$, so that $\next(\nplus(u,v)) = \length(x)$ is false for all $u$ and $v$, and thus the implication holds vacuously. For the inductive step, suppose the implication holds for all $u$ and $v$ for some $x$ and let $a \in A$. Suppose further that $\next(\nplus(u,v)) = \length(\cons(a,x))$. We have two possibilities for $u$. If $u = \zero$, we have $\next(v) = \length(\cons(a,x))$ and thus $v = \length(x)$. In this case, we have
 $$\begin{eqnarray*}
  &   & \at(\cons(a,x),u) \\
- & = & \at(\cons(a,x),\zero) \\
+ &     \let{u = \zero}
+   = & \at(\cons(a,x),\zero) \\
  &     \href{@at@#thm-at-cons-zero}
    = & \rgt(a) \\
- & = & \at(\snoc(a,\rev(x)),\length(\rev(x))) \\
+ &     \href{@at@#thm-at-snoc-length}
+   = & \at(\snoc(a,\rev(x)),\length(\rev(x))) \\
  &     \href{@length@#thm-length-rev}
    = & \at(\snoc(a,\rev(x)),\length(x)) \\
  &     \href{@rev@#cor-rev-cons}
    = & \at(\rev(\cons(a,x)),\length(x)) \\
- & = & \at(\rev(\cons(a,x)),v)
+ &     \hyp{v = \length(x)}
+   = & \at(\rev(\cons(a,x)),v)
 \end{eqnarray*}$$
 as needed. If $u = \next(w)$, then we have $\next(\nplus(w,v)) = \length(x)$. In particular, we have $x \neq \nil$ and thus $\rev(x) \neq \nil$; say $\rev(x) = \cons(c,y)$. Now $\nleq(v,\length(y))$, and moreover
 $$\begin{eqnarray*}
  &   & \at(\cons(a,x),u) \\
- & = & \at(\cons(a,x),\next(w)) \\
+ &     \let{u = \next(w)}
+   = & \at(\cons(a,x),\next(w)) \\
  &     \href{@at@#thm-at-cons-next}
    = & \at(x,w) \\
  & = & \at(\rev(x),v) \\
@@ -468,7 +484,8 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the implication holds for all $k$ for some $x$ and let $a \in A$. Suppose further that $\nleq(\length(\cons(a,x),k))$; we then have $k = \next(m)$ for some $m$, where $\nleq(\length(x),m)$. Now
 $$\begin{eqnarray*}
  &   & \at(\cons(a,x),k) \\
- & = & \at(\cons(a,x),\next(m)) \\
+ &     \hyp{k = \next(m)}
+   = & \at(\cons(a,x),\next(m)) \\
  &     \href{@at@#thm-at-cons-next}
    = & \at(x,m) \\
  & = & \lft(\ast)
@@ -528,10 +545,13 @@ Let $A$ be a set, and let $x,y \in \lists{A}$. Then $x = y$ if and only if $\at(
 The "only if" direction is clear. We show the "if" part by list induction on $x$. For the base case $x = \nil$, suppose we have $\at(x,k) = \at(y,k)$ for all $k \in \nats$. If $y = \cons(a,z)$ for some $z$, then we have
 $$\begin{eqnarray*}
  &   & \rgt(a) \\
- & = & \at(\cons(a,z),\next(\zero)) \\
- & = & \at(y,\next(\zero)) \\
- & = & \at(x,\next(\zero)) \\
- & = & \lft(\ast),
+ &     \href{@at@#thm-at-cons-zero}
+   = & \at(\cons(a,z),\zero) \\
+ & = & \at(y,\zero) \\
+ & = & \at(x,\zero) \\
+ & = & \at(\nil,\zero) \\
+ &     \href{@at@#thm-at-nil}
+   = & \lft(\ast)
 \end{eqnarray*}$$
 a contradiction. So $y = \nil = x$ as claimed.
 

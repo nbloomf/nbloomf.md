@@ -433,6 +433,8 @@
 @at@#thm-at-doubleton-one	\\at(\\cons(a,\\cons(b,\\nil)),\\next(\\zero)) = \\rgt(b)
 @at@#thm-at-cons-length	\\at(\\cons(a,x),\\length(x)) = \\head(\\rev(\\cons(a,x)))
 @at@#thm-at-length	\\at(x,\\length(x)) = \\lft(\\ast)
+@at@#thm-at-snoc-cons	\\bimpl(\\nleq(k,\\length(x)),\\beq(\\at(\\snoc(a,\\cons(b,x),k),\\at(\\cons(b,x),k)))) = \\btrue
+@at@#thm-at-snoc-length	\\at(\\snoc(a,x),\\length(x)) = \\rgt(a)
 #=======================#
 #--- map ---------------#
 #=======================#

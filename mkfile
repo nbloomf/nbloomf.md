@@ -547,7 +547,7 @@ sniff-amd-label-format:VQ:
   echo 'Checking Theorem labels' | doppler lightblue
   LABELS=$( awk '/: theorem :/{printf FILENAME ":" FNR " " $0; getline; print;}' \
       posts/arithmetic-made-difficult/* \
-    | grep -v ':::::: theorem :::::\[\]{#[a-z][a-zA-Z-]*}\(\[\]{#[a-z][a-zA-Z-]*}\)*$' \
+    | grep -v ':::::: theorem :::::\[\]{#[a-z][a-zA-Z0-9-]*}\(\[\]{#[a-z][a-zA-Z-]*}\)*$' \
     || true )
   if [ -z "$LABELS" ]; then
     echo 'Theorem labels OK' | doppler lightgreen
