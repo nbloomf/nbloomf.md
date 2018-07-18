@@ -531,3 +531,14 @@
 @take-drop@#cor-drop-next-cons	\\drop(\\next(n),\\cons(a,x)) = \\drop(n,x)
 @take-drop@#thm-drop-suffix	\\suffix(\\drop(k,x),x) = \\btrue
 @take-drop@#thm-take-drop-cat	\\cat(\\take(k,x),\\drop(k,x)) = x
+#=======================#
+#--- sublist -----------#
+#=======================#
+@sublist@#cor-sublist-nil	\\sublist(x,\\nil) = \\isnil(x)
+@sublist@#cor-sublist-nil-cons	\\sublist(\\nil,\\cons(b,y)) = \\btrue
+@sublist@#cor-sublist-cons-cons	\\sublist(\\cons(a,x),\\cons(b,y)) = \\bif{\\beq(a,b)}{\\sublist(x,y)}{\\sublist(\\cons(a,x),y)}
+@sublist@#thm-sublist-reflexive	\\sublist(x,x) = \\btrue
+@sublist@#thm-sublist-nil-snoc	\\sublist(\\nil,\\snoc(b,y)) = \\btrue
+@sublist@#thm-sublist-snoc-cancel	\\sublist(\\snoc(a,x),\\snoc(a,y)) = \\sublist(x,y)
+@sublist@#thm-sublist-cat-left-cancel	\\sublist(\\cat(z,x),\\cat(z,y)) = \\sublist(x,y)
+@sublist@#thm-sublist-cat-right-cancel	\\sublist(\\cat(x,z),\\cat(y,z)) = \\sublist(x,y)

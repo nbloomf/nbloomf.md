@@ -50,6 +50,7 @@ In Haskell:
 Since $\sublist$ is defined as a $\dfoldr$, it can be characterized as the unique solution to a system of functional equations.
 
 :::::: corollary :::
+[]{#cor-sublist-nil}[]{#cor-sublist-nil-cons}[]{#cor-sublist-cons-cons}
 Let $A$ be a set. $\sublist$ is the unique map $f : \lists{A} \times \lists{A} \rightarrow \bool$ satisfying the following system of functional equations for all $a,b \in A$ and $x,y \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(x,\nil) = \isnil(x) \\
@@ -87,15 +88,18 @@ $$\left\{\begin{array}{l}
 $\sublist$ is reflexive.
 
 :::::: theorem :::::
+[]{#thm-sublist-reflexive}
 Let $A$ be a set. For all $x \in \lists{A}$ we have $\sublist(x,x)$.
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, certainly $$\sublist(\nil,\nil) = \btrue.$$ For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \sublist(\cons(a,x),\cons(a,x)) \\
- & = & \bif{\beq(a,a)}{\sublist(x,x)}{\sublist(\cons(a,x),x)} \\
+ &     \href{@sublist@#cor-sublist-cons-cons}
+   = & \bif{\beq(a,a)}{\sublist(x,x)}{\sublist(\cons(a,x),x)} \\
  & = & \sublist(x,x) \\
- & = & \btrue
+ &     \href{@sublist@#thm-sublist-reflexive}
+   = & \btrue
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -114,9 +118,10 @@ as needed.
 $\snoc$ is cancellative inside $\sublist$.
 
 :::::: theorem :::::
+[]{#thm-sublist-nil-snoc}[]{#thm-sublist-snoc-cancel}
 Let $A$ be a set. For all $a \in A$ and $x,y \in \lists{A}$, we have the following.
 
-1. $\sublist(nil,\snoc(b,y)) = \btrue$.
+1. $\sublist(\nil,\snoc(b,y)) = \btrue$.
 2. $\sublist(\snoc(a,x),\snoc(a,y)) = \sublist(x,y)$.
 
 ::: proof ::::::::::
@@ -139,7 +144,8 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \sublist(\snoc(a,\nil),\snoc(a,\cons(b,y))) \\
  & = & \sublist(\cons(a,\nil),\cons(b,\snoc(a,y))) \\
- & = & \bif{\beq(a,b)}{\sublist(\nil,\snoc(a,y))}{\sublist(\cons(a,\nil),\snoc(a,y))} \\
+ &     \href{@sublist@#cor-sublist-cons-cons}
+   = & \bif{\beq(a,b)}{\sublist(\nil,\snoc(a,y))}{\sublist(\cons(a,\nil),\snoc(a,y))} \\
  & = & \bif{\beq(a,b)}{\btrue}{\sublist(\snoc(a,\nil),\snoc(a,y))} \\
  & = & \bif{\beq(a,b)}{\btrue}{\btrue} \\
  &     \href{@booleans@#thm-if-same}
@@ -149,7 +155,8 @@ as needed. For the inductive step (on $x$), suppose the equality holds for some 
 $$\begin{eqnarray*}
  &   & \sublist(\cons(c,x),y) \\
  & = & \sublist(\cons(c,x),\nil) \\
- & = & \isnil(\cons(c,x)) \\
+ &     \href{@sublist@#cor-sublist-nil}
+   = & \isnil(\cons(c,x)) \\
  &     \href{@head-tail@#thm-isnil-cons}
    = & \bfalse
 \end{eqnarray*}$$
@@ -158,7 +165,8 @@ $$\begin{eqnarray*}
  &   & \sublist(\snoc(a,\cons(c,x)),\snoc(a,y)) \\
  & = & \sublist(\snoc(a,\cons(c,x)),\snoc(a,\nil)) \\
  & = & \sublist(\cons(c,\snoc(a,x)),\cons(a,\nil)) \\
- & = & \bif{\beq(c,a)}{\sublist(\snoc(a,x),\nil)}{\sublist(\cons(c,\snoc(a,x)),\nil)} \\
+ &     \href{@sublist@#cor-sublist-cons-cons}
+   = & \bif{\beq(c,a)}{\sublist(\snoc(a,x),\nil)}{\sublist(\cons(c,\snoc(a,x)),\nil)} \\
  & = & \bif{\beq(c,a)}{\bfalse}{\bfalse} \\
  &     \href{@booleans@#thm-if-same}
    = & \bfalse
@@ -167,10 +175,13 @@ as needed. For the inductive step (on $y$), suppose we have $$\sublist(\cons(c,x
 $$\begin{eqnarray*}
  &   & \sublist(\snoc(a,\cons(c,x)),\snoc(a,\cons(b,y))) \\
  & = & \sublist(\cons(c,\snoc(a,x)),\cons(b,\snoc(a,y))) \\
- & = & \bif{\beq(c,b)}{\sublist(\snoc(a,x),\snoc(a,y))}{\sublist(\cons(c,\snoc(a,x)),\snoc(a,y))} \\
+ &     \href{@sublist@#cor-sublist-cons-cons}
+   = & \bif{\beq(c,b)}{\sublist(\snoc(a,x),\snoc(a,y))}{\sublist(\cons(c,\snoc(a,x)),\snoc(a,y))} \\
  & = & \bif{\beq(c,b)}{\sublist(x,y)}{\sublist(\snoc(a,\cons(c,x)),\snoc(a,y))} \\
- & = & \bif{\beq(c,b)}{\sublist(x,y)}{\sublist(\cons(c,x),y)} \\
- & = & \sublist(\cons(c,x),\cons(b,y))
+ &     \href{@sublist@#thm-sublist-snoc-cancel}
+   = & \bif{\beq(c,b)}{\sublist(x,y)}{\sublist(\cons(c,x),y)} \\
+ &     \href{@sublist@#cor-sublist-cons-cons}
+   = & \sublist(\cons(c,x),\cons(b,y))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -196,6 +207,7 @@ as needed.
 $\cat$ is cancellative inside $\sublist$.
 
 :::::: theorem :::::
+[]{#thm-sublist-cat-left-cancel}[]{#thm-sublist-cat-right-cancel}
 Let $A$ be a set. For all $x,y,z \in \lists{A}$ we have the following.
 
 1. $\sublist(\cat(z,x),\cat(z,y)) = \sublist(x,y)$.
@@ -205,7 +217,8 @@ Let $A$ be a set. For all $x,y,z \in \lists{A}$ we have the following.
 1. We proceed by list induction on $z$. For the base case $z = \nil$, of course
 $$\begin{eqnarray*}
  &   & \sublist(\cat(\nil,x),\cat(\nil,y)) \\
- & = & \sublist(x,y)
+ &     \href{@sublist@#thm-sublist-cat-left-cancel}
+   = & \sublist(x,y)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $x$ and $y$ for some $z$, and let $a \in A$. Now
 $$\begin{eqnarray*}
@@ -218,14 +231,17 @@ as needed.
 2. We proceed by snoc induction on $z$. For the base case $z = \nil$, of course
 $$\begin{eqnarray*}
  &   & \sublist(\cat(x,\nil),\cat(y,\nil)) \\
+ & = & \sublist(\cat(x,\nil),y,) \\
  & = & \sublist(x,y)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $x$ and $y$ for some $z$, and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \sublist(\cat(x,\snoc(a,z)),\cat(y,\snoc(a,z))) \\
  & = & \sublist(\snoc(a,\cat(x,z)),\snoc(a,\cat(y,z))) \\
- & = & \sublist(\cat(x,z),\cat(y,z)) \\
- & = & \sublist(x,y)
+ &     \href{@sublist@#thm-sublist-snoc-cancel}
+   = & \sublist(\cat(x,z),\cat(y,z)) \\
+ &     \hyp{\sublist(\cat(x,z),\cat(y,z)) = \sublist(x,y)}
+   = & \sublist(x,y)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -264,7 +280,8 @@ For the inductive step, suppose both (1) and (2) hold for all $a,b \in A$ and $y
 Now we claim that (1) holds with $x$ replaced by $\cons(c,x)$; that is, for all $b \in A$ and $y \in \lists{A}$, if $\sublist(\cons(c,x),y) = \btrue$ then $\sublist(\cons(c,x),\cons(b,y)) = \btrue$. To this end, suppose we have $\sublist(\cons(c,x),y) = \btrue$. Using part (2) of the induction hypothesis, we have $\sublist(x,y) = \btrue$. Now
 $$\begin{eqnarray*}
  &   & \sublist(\cons(c,x),\cons(b,y)) \\
- & = & \bif{\beq(c,b)}{\sublist(x,y)}{\sublist(\cons(c,x),y)} \\
+ &     \href{@sublist@#cor-sublist-cons-cons}
+   = & \bif{\beq(c,b)}{\sublist(x,y)}{\sublist(\cons(c,x),y)} \\
  & = & \bif{\beq(c,b)}{\btrue}{\btrue} \\
  &     \href{@booleans@#thm-if-same}
    = & \btrue
@@ -275,7 +292,8 @@ Next we claim that (2) holds with $x$ replaced by $\cons(c,x)$. That is, for all
 $$\begin{eqnarray*}
  &   & \sublist(\cons(a,\cons(c,x)),y) \\
  & = & \sublist(\cons(a,\cons(c,x)),\nil) \\
- & = & \isnil(\cons(a,\cons(c,x))) \\
+ &     \href{@sublist@#cor-sublist-nil}
+   = & \isnil(\cons(a,\cons(c,x))) \\
  & = & \bfalse;
 \end{eqnarray*}$$
 thus the implication (2) holds vacuously.
@@ -297,7 +315,8 @@ $$\begin{eqnarray*}
 By part (2) of the (outer) induction hypothesis, we have $$\sublist(x,y) = \btrue.$$ Now
 $$\begin{eqnarray*}
  &   & \sublist(\cons(c,x),\cons(d,y)) \\
- & = & \bif{\beq(c,d)}{\sublist(x,y)}{\sublist(\cons(c,x),y)} \\
+ &     \href{@sublist@#cor-sublist-cons-cons}
+   = & \bif{\beq(c,d)}{\sublist(x,y)}{\sublist(\cons(c,x),y)} \\
  & = & \bif{\beq(c,d)}{\btrue}{\btrue} \\
  &     \href{@booleans@#thm-if-same}
    = & \btrue
@@ -338,7 +357,8 @@ $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \sublist(x,y) \\
  & = & \sublist(x,\nil) \\
- & = & \isnil(x),
+ &     \href{@sublist@#cor-sublist-nil}
+   = & \isnil(x)
 \end{eqnarray*}$$
 we have $x = \nil$, so that $\length(x) = \zero$. Thus
 $$\begin{eqnarray*}
@@ -351,7 +371,8 @@ as needed. For the inductive step, suppose the implication holds for all $x$ for
 $$\begin{eqnarray*}
  &   & \sublist(x,\cons(b,y)) \\
  & = & \sublist(\nil,\cons(b,y)) \\
- & = & \btrue,
+ &     \href{@sublist@#cor-sublist-nil-cons}
+   = & \btrue
 \end{eqnarray*}$$
 and furthermore
 $$\begin{eqnarray*}
@@ -364,7 +385,10 @@ as needed. Suppose then that $x = \cons(a,u)$, and suppose further that $\sublis
 $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \sublist(x,\cons(b,y)) \\
- & = & \sublist(\cons(a,u),\cons(b,y)) \\
+ &     \let{x = \cons(a,u)}
+   = & \sublist(\cons(a,u),\cons(b,y)) \\
+ &     \hyp{a = b}
+   = & \sublist(\cons(a,u),\cons(a,y)) \\
  & = & \sublist(u,y).
 \end{eqnarray*}$$
 By the induction hypothesis, we have
@@ -419,13 +443,15 @@ $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \sublist(y,x) \\
  & = & \sublist(y,\nil) \\
- & = & \isnil(y),
+ &     \href{@sublist@#cor-sublist-nil}
+   = & \isnil(y)
 \end{eqnarray*}$$
 so that $y = \nil = x$ as claimed. For the inductive step, suppose the implication holds for some $x$ and let $a \in A$. We now consider two possibilities for $y$. If $y = \nil$, note that
 $$\begin{eqnarray*}
  &   & \sublist(\cons(a,x),y) \\
  & = & \sublist(\cons(a,x),\nil) \\
- & = & \isnil(\cons(a,x)) \\
+ &     \href{@sublist@#cor-sublist-nil}
+   = & \isnil(\cons(a,x)) \\
  &     \href{@head-tail@#thm-isnil-cons}
    = & \bfalse
 \end{eqnarray*}$$
@@ -558,7 +584,8 @@ We've already seen that $$\sublist(\snoc(a,x),\snoc(a,y)) = \sublist(x,y).$$ So 
 $$\begin{eqnarray*}
  &   & \sublist(\snoc(a,x),y) \\
  & = & \sublist(\snoc(a,x),\nil) \\
- & = & \isnil(\snoc(a,x)) \\
+ &     \href{@sublist@#cor-sublist-nil}
+   = & \isnil(\snoc(a,x)) \\
  &     \href{@snoc@#thm-isnil-snoc}
    = & \bfalse
 \end{eqnarray*}$$
@@ -568,7 +595,8 @@ $$\begin{eqnarray*}
  & = & \sublist(\snoc(a,\nil),\snoc(b,\nil)) \\
  & = & \sublist(\cons(a,\nil),\cons(b,\nil)) \\
  & = & \sublist(\cons(a,\nil),\nil) \\
- & = & \isnil(\cons(a,\nil)) \\
+ &     \href{@sublist@#cor-sublist-nil}
+   = & \isnil(\cons(a,\nil)) \\
  &     \href{@head-tail@#thm-isnil-cons}
    = & \bfalse
 \end{eqnarray*}$$
@@ -590,11 +618,13 @@ $$\begin{eqnarray*}
  &   & \sublist(\snoc(a,x),\snoc(b,\cons(d,y))) \\
  & = & \sublist(\snoc(a,\nil),\snoc(b,\cons(d,y))) \\
  & = & \sublist(\cons(a,\nil),\cons(d,\snoc(b,y))) \\
- & = & \bif{\beq(a,d)}{\sublist(\nil,\snoc(b,y))}{\sublist(\cons(a,\nil),\snoc(b,y))} \\
+ &     \href{@sublist@#cor-sublist-cons-cons}
+   = & \bif{\beq(a,d)}{\sublist(\nil,\snoc(b,y))}{\sublist(\cons(a,\nil),\snoc(b,y))} \\
  & = & \bif{\beq(a,d)}{\btrue}{\sublist(\snoc(a,\nil),\snoc(b,y))} \\
  & = & \bif{\beq(a,d)}{\btrue}{\sublist(\snoc(a,\nil),y)} \\
  & = & \bif{\beq(a,d)}{\sublist(\nil,y)}{\sublist(\cons(a,\nil),y)} \\
- & = & \sublist(\cons(a,\nil),\cons(d,y)) \\
+ &     \href{@sublist@#cor-sublist-cons-cons}
+   = & \sublist(\cons(a,\nil),\cons(d,y)) \\
  &     \href{@snoc@#cor-snoc-nil}
    = & \sublist(\snoc(a,\nil),\cons(d,y))
 \end{eqnarray*}$$
@@ -603,7 +633,8 @@ $$\begin{eqnarray*}
  &   & \sublist(\snoc(a,x),\snoc(b,\cons(d,y))) \\
  & = & \sublist(\snoc(a,\cons(c,u)),\snoc(b,\cons(d,y))) \\
  & = & \sublist(\cons(c,\snoc(a,u)),\cons(d,\snoc(b,y))) \\
- & = & \bif{\beq(c,d)}{\sublist(\snoc(a,u),\snoc(b,y))}{\sublist(\cons(c,\snoc(a,u)),\snoc(b,y))} \\
+ &     \href{@sublist@#cor-sublist-cons-cons}
+   = & \bif{\beq(c,d)}{\sublist(\snoc(a,u),\snoc(b,y))}{\sublist(\cons(c,\snoc(a,u)),\snoc(b,y))} \\
  & = & \bif{\beq(c,d)}{\sublist(\snoc(a,u),y)}{\sublist(\snoc(a,\cons(c,u)),\snoc(b,y))} \\
  & = & \bif{\beq(c,d)}{\sublist(\snoc(a,u),y)}{\sublist(\snoc(a,\cons(c,u)),y)} \\
  &     \href{@snoc@#cor-snoc-cons}
@@ -639,7 +670,8 @@ We proceed by list induction on $y$. For the base case $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \sublist(x,y) \\
  & = & \sublist(x,\nil) \\
- & = & \isnil(x) \\
+ &     \href{@sublist@#cor-sublist-nil}
+   = & \isnil(x) \\
  &     \href{@rev@#thm-isnil-rev}
    = & \isnil(\rev(x)) \\
  & = & \sublist(\rev(x),\nil) \\
@@ -651,7 +683,8 @@ as needed. For the inductive step, suppose the equality holds for all $x$ for so
 $$\begin{eqnarray*}
  &   & \sublist(x,\cons(b,y)) \\
  & = & \sublist(\nil,\cons(b,y)) \\
- & = & \btrue \\
+ &     \href{@sublist@#cor-sublist-nil-cons}
+   = & \btrue \\
  & = & \sublist(\nil,\rev(\cons(b,y))) \\
  &     \href{@rev@#cor-rev-nil}
    = & \sublist(\rev(\nil),\rev(\cons(b,y))) \\
@@ -665,7 +698,8 @@ $$\begin{eqnarray*}
  & = & \bif{\beq(a,b)}{\sublist(\rev(w),\rev(y))}{\sublist(\snoc(a,\rev(w)),\rev(y))} \\
  & = & \bif{\beq(a,b)}{\sublist(w,y)}{\sublist(\rev(\cons(a,w)),\rev(y))} \\
  & = & \bif{\beq(a,b)}{\sublist(w,y)}{\sublist(\cons(a,w),y)} \\
- & = & \sublist(\cons(a,w),\cons(b,y)) \\
+ &     \href{@sublist@#cor-sublist-cons-cons}
+   = & \sublist(\cons(a,w),\cons(b,y)) \\
  & = & \sublist(x,\cons(b,y))
 \end{eqnarray*}$$
 as needed.
@@ -870,17 +904,20 @@ $$\begin{eqnarray*}
  &     \href{@map@#cor-map-nil}
    = & \sublist(\nil,\map(f)(\cons(b,y))) \\
  & = & \btrue \\
- & = & \sublist(\nil,\cons(b,y))
+ &     \href{@sublist@#cor-sublist-nil-cons}
+   = & \sublist(\nil,\cons(b,y))
 \end{eqnarray*}$$
 as claimed. Suppose instead that $x = \cons(a,u)$. Note that since $f$ is injective we have $\beq(f(a),f(b)) = \beq(a,b)$; then we have
 $$\begin{eqnarray*}
  &   & \sublist(\map(f)(\cons(a,u)),\map(f)(\cons(b,y))) \\
  & = & \sublist(\cons(f(a),\map(f)(u)),\cons(f(b))(\map(f)(y))) \\
- & = & \bif{\beq(f(a),f(b))}{\sublist(\map(f)(u),\map(f)(y))}{\sublist(\cons(f(a),\map(f)(u)),\map(f)(y))} \\
+ &     \href{@sublist@#cor-sublist-cons-cons}
+   = & \bif{\beq(f(a),f(b))}{\sublist(\map(f)(u),\map(f)(y))}{\sublist(\cons(f(a),\map(f)(u)),\map(f)(y))} \\
  & = & \bif{\beq(f(a),f(b))}{\sublist(u,y)}{\sublist(\map(f)(\cons(a,u)),\map(f)(y))} \\
  & = & \bif{\beq(f(a),f(b))}{\sublist(u,y)}{\sublist(\cons(a,u),y)} \\
  & = & \bif{\beq(a,b)}{\sublist(u,y)}{\sublist(\cons(a,u),y)} \\
- & = & \sublist(\cons(a,u),\cons(b,y))
+ &     \href{@sublist@#cor-sublist-cons-cons}
+   = & \sublist(\cons(a,u),\cons(b,y))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -897,7 +934,8 @@ $$\begin{eqnarray*}
  &   & \sublist(\filter(p,x),x) \\
  & = & \sublist(\filter(p,\nil),\nil) \\
  & = & \sublist(\nil,\nil) \\
- & = & \btrue
+ &     \href{@sublist@#thm-sublist-reflexive}
+   = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $p$ for some $x$ and let $a \in A$. We consider two possibilities. If $p(a) = \btrue$, we have
 $$\begin{eqnarray*}
@@ -942,7 +980,8 @@ $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \sublist(x,\cons(b,y)) \\
  & = & \sublist(\cons(a,u),\cons(b,y)) \\
- & = & \bif{\beq(a,b)}{\sublist(u,y)}{\sublist(\cons(a,u),y)} \\
+ &     \href{@sublist@#cor-sublist-cons-cons}
+   = & \bif{\beq(a,b)}{\sublist(u,y)}{\sublist(\cons(a,u),y)} \\
  & = & \bif{\beq(a,b)}{\all(p,u)}{\all(p,\cons(a,u))} \\
  & = & \bif{\beq(a,b)}{\all(p,\cons(a,u))}{\all(p,\cons(a,u))} \\
  &     \href{@booleans@#thm-if-same}
@@ -1024,7 +1063,8 @@ Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$, we have $$\sublist(\c
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \sublist(\cons(a,\nil),\nil) \\
- & = & \isnil(\cons(a,\nil)) \\
+ &     \href{@sublist@#cor-sublist-nil}
+   = & \isnil(\cons(a,\nil)) \\
  &     \href{@head-tail@#thm-isnil-cons}
    = & \bfalse \\
  & = & \elt(a,\nil)
@@ -1032,7 +1072,8 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$, and let $b \in A$. Now
 $$\begin{eqnarray*}
  &   & \sublist(\cons(a,\nil),\cons(b,x)) \\
- & = & \bif{\beq(a,b)}{\sublist(\nil,x)}{\sublist(\cons(a,\nil),x)} \\
+ &     \href{@sublist@#cor-sublist-cons-cons}
+   = & \bif{\beq(a,b)}{\sublist(\nil,x)}{\sublist(\cons(a,\nil),x)} \\
  & = & \bif{\beq(a,b)}{\btrue}{\elt(a,x)} \\
  & = & \elt(a,\cons(b,x))
 \end{eqnarray*}$$

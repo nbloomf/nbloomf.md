@@ -157,7 +157,8 @@ $$\begin{eqnarray*}
  & = & \elt(y,\cons(\nil,\nil)) \\
  & = & \beq(y,\nil) \\
  & = & \isnil(y) \\
- & = & \sublist(y,\nil)
+ &     \href{@sublist@#cor-sublist-nil}
+   = & \sublist(y,\nil)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equation holds for all $y$ for some $x$, and let $a \in A$. We have two possiblities for $y$. If $y = \nil$, we have
 $$\begin{eqnarray*}
@@ -180,7 +181,8 @@ $$\begin{eqnarray*}
    = & \bif{\band(\beq(b,a),\sublist(w,x))}{\btrue}{\sublist(y,x)} \\
  & = & \bif{\beq(b,a)}{\sublist(w,x)}{\sublist(y,x)} \\
  & = & \bif{\beq(b,a)}{\sublist(w,x)}{\sublist(\cons(b,w),x)} \\
- & = & \sublist(\cons(b,w),\cons(a,x)) \\
+ &     \href{@sublist@#cor-sublist-cons-cons}
+   = & \sublist(\cons(b,w),\cons(a,x)) \\
  & = & \sublist(y,\cons(a,x))
 \end{eqnarray*}$$
 ::::::::::::::::::::
@@ -300,7 +302,8 @@ we proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \sublist(\select(k)(\nil),\sublists(\nil)) \\
  & = & \sublist(\nil,\nil) \\
- & = & \btrue
+ &     \href{@sublist@#thm-sublist-reflexive}
+   = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $k$ for some $x$, and let $a \in A$. We have two possibilities for $k$. If $k = \zero$, we have
 $$\begin{eqnarray*}

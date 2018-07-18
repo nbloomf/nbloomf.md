@@ -216,14 +216,16 @@ $$\begin{eqnarray*}
  &   & \sublist(\select(k,x),\select(k,y)) \\
  & = & \sublist(\select(\zero,x),\select(\zero,y)) \\
  & = & \sublist(\cons(\nil,\nil),\cons(\nil,\nil)) \\
- & = & \btrue
+ &     \href{@sublist@#thm-sublist-reflexive}
+   = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the implication holds for some $k$. We now proceed by list induction on $y$. For the base case $y = \nil$, suppose $$\btrue = \sublist(x,y) = \sublist(x,\nil);$$ then we must have $x = \nil$. In this case we have
 $$\begin{eqnarray*}
  &   & \sublist(\select(\next(k),x),\select(\next(k),y)) \\
  & = & \sublist(\select(\next(k),\nil),\select(\next(k),\nil)) \\
  & = & \sublist(\nil,\nil) \\
- & = & \btrue
+ &     \href{@sublist@#thm-sublist-reflexive}
+   = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the implication holds for $\next(k)$ and all $x$ for some $y$, and let $b \in A$. Suppose further that $\sublist(x,\cons(b,y)) = \btrue$. We consider two possibilities for $x$. If $x = \nil$, we have
 $$\begin{eqnarray*}
