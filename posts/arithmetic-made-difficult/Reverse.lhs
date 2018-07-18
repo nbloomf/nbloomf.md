@@ -530,19 +530,27 @@ Let $A$ be a set. For all $a,b \in A$ and $x \in \lists{A}$ we have the followin
 1. We have
 $$\begin{eqnarray*}
  &   & \last(\nil) \\
- & = & \head(\rev(\nil)) \\
- & = & \head(\nil) \\
- & = & \lft(\ast)
+ &     \href{@rev@#def-last}
+   = & \head(\rev(\nil)) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \head(\nil) \\
+ &     \href{@head-tail@#thm-head-nil}
+   = & \lft(\ast)
 \end{eqnarray*}$$
 as claimed.
 2. We have
 $$\begin{eqnarray*}
  &   & \last(\cons(a,\nil)) \\
- & = & \head(\rev(\cons(a,\nil))) \\
- & = & \head(\snoc(a,\rev(\nil))) \\
- & = & \head(\snoc(a,\nil)) \\
- & = & \head(\cons(a,\nil)) \\
- & = & \rgt(a)
+ &     \href{@rev@#def-last}
+   = & \head(\rev(\cons(a,\nil))) \\
+ &     \href{@rev@#cor-rev-cons}
+   = & \head(\snoc(a,\rev(\nil))) \\
+ &     \href{@rev@#cor-rev-nil}
+   = & \head(\snoc(a,\nil)) \\
+ &     \href{@snoc@#cor-snoc-nil}
+   = & \head(\cons(a,\nil)) \\
+ &     \href{@head-tail@#thm-head-cons}
+   = & \rgt(a)
 \end{eqnarray*}$$
 as claimed.
 3. Note that
