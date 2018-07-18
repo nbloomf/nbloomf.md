@@ -174,12 +174,16 @@ $$\begin{eqnarray*}
 as needed. Suppose instead that $y = \cons(c,u)$. Using the inductive hypothesis, we have
 $$\begin{eqnarray*}
  &   & \beq(\snoc(a,\cons(d,x)),\snoc(b,y)) \\
- & = & \beq(\snoc(a,\cons(d,x)),\snoc(b,\cons(c,u))) \\
+ &     \hyp{y = \cons(c,u)}
+   = & \beq(\snoc(a,\cons(d,x)),\snoc(b,\cons(c,u))) \\
+ & = & \beq(\cons(d,\snoc(a,x)),\snoc(b,\cons(c,u))) \\
  & = & \beq(\cons(d,\snoc(a,x)),\cons(c,\snoc(b,u))) \\
  &     \href{@lists@#thm-list-eq-cons}
    = & \band(\beq(d,c),\beq(\snoc(a,x),\snoc(b,u))) \\
  &     \hyp{\beq(\snoc(a,x),\snoc(b,u)) = \band(\beq(a,b),\beq(x,u))}
    = & \band(\beq(d,c),\band(\beq(a,b),\beq(x,u))) \\
+ & = & \band(\band(\beq(d,c),\beq(a,b)),\beq(x,u)) \\
+ & = & \band(\band(\beq(a,b),\beq(d,c)),\beq(x,u)) \\
  & = & \band(\beq(a,b),\band(\beq(d,c),\beq(x,u))) \\
  &     \href{@lists@#thm-list-eq-cons}
    = & \band(\beq(a,b),\beq(\cons(d,x),\cons(c,u))) \\
@@ -297,14 +301,8 @@ Let $A$ and $B$ be sets, and suppose $\varphi : A \times B \rightarrow B$ has th
 ::: proof ::::::::::
 1. We proceed by list induction on $x$. For the base case $x = \nil$ we have
 $$\begin{eqnarray*}
- &   & \foldl(\psi)(e,\cons(a,\nil)) \\
- &     \href{@foldl@#def-foldl-cons}
-   = & \foldl(\psi)(\psi(e,a),\nil) \\
- &     \href{@foldl@#def-foldl-nil}
-   = & \psi(e,a) \\
- &     \href{@foldl@#def-foldl-nil}
-   = & \psi(\foldl(\psi)(e,\nil),a) \\
- & = & \foldl(\psi)(e,\snoc(a,\nil))
+ &   & \foldl(\psi)(e)(\cons(a,\nil)) \\
+ & = & \foldl(\psi)(e)(\snoc(a,\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $e$ and $a$ for some $x$ and let $b \in A$. Now
 $$\begin{eqnarray*}
@@ -313,7 +311,8 @@ $$\begin{eqnarray*}
    = & \foldl(\psi)(e,\cons(b,\snoc(a,x))) \\
  &     \href{@foldl@#def-foldl-cons}
    = & \foldl(\psi)(\psi(e,b),\snoc(a,x)) \\
- & = & \foldl(\psi)(\psi(e,b),\cons(a,x)) \\
+ &     \hyp{\foldl(\psi)(w)(\cons(a,x)) = \foldl(\psi)(w)(\snoc(a,x))}
+   = & \foldl(\psi)(\psi(e,b),\cons(a,x)) \\
  &     \href{@foldl@#def-foldl-cons}
    = & \foldl(\psi)(\psi(\psi(e,b),a),x) \\
  & = & \foldl(\psi)(\varphi(a,\varphi(b,e)),x) \\
@@ -373,7 +372,8 @@ $$\begin{eqnarray*}
  &   & \head(\snoc(a,\snoc(b,x))) \\
  &     \let{x = \cons(c,y)}
    = & \head(\snoc(a,\snoc(b,\cons(c,y)))) \\
- & = & \head(\snoc(a,\cons(c,\snoc(b,y)))) \\
+ &     \href{@snoc@#cor-snoc-cons}
+   = & \head(\snoc(a,\cons(c,\snoc(b,y)))) \\
  &     \href{@snoc@#cor-snoc-cons}
    = & \head(\cons(c,\snoc(a,\snoc(b,y)))) \\
  &     \href{@head-tail@#thm-head-cons}
