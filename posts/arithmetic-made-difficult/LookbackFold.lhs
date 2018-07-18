@@ -8,7 +8,7 @@ slug: lfold
 
 > {-# LANGUAGE NoImplicitPrelude #-}
 > module LookbackFold (
->   lfoldr
+>   lfoldr, main_lfoldr
 > ) where
 > 
 > import Testing
@@ -210,3 +210,6 @@ $$\left\{\begin{array}{l}
  f(\cons(a,\cons(b,x))) = \mu(a,b,f(\cons(b,x)),f(x))
 \end{array}\right.$$
 ::::::::::::::::::::
+
+> main_lfoldr :: IO ()
+> main_lfoldr = return ()

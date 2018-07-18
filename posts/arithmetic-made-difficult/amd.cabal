@@ -1201,6 +1201,37 @@ test-suite amd-lfoldr
   build-depends: base == 4.*, QuickCheck
   ghc-options: -Wall -main-is LookbackFold.main_lfoldr
   other-modules:
+    And,
+    At
+    BailoutRecursion,
+    Booleans,
+    Cat,
+    Clone,
+    Composition,
+    DisjointUnions,
+    DoubleFold,
+    Flip,
+    Functions,
+    HeadAndTail,
+    LeftFold,
+    Length,
+    LessThanOrEqualTo,
+    Lists,
+    Map,
+    MaxAndMin,
+    Minus,
+    NaturalNumbers,
+    Not,
+    Or,
+    Plus,
+    Reverse,
+    SimpleRecursion,
+    Snoc,
+    Testing,
+    Times,
+    Tuples,
+    Unary,
+    Zip
 
 test-suite amd-zippad
   default-language: Haskell2010

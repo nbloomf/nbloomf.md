@@ -517,13 +517,35 @@ In Haskell:
 
 ::::::::::::::::::::
 
-And $\last$ interacts with $\cons$.
+And $\last$ has some nice properties.
 
 :::::: theorem :::::
-Let $A$ be a set. For all $a,b \in A$ and $x \in \lists{A}$ we have $$\last(\cons(a,\cons(b,x))) = \last(\cons(b,x)).$$
+Let $A$ be a set. For all $a,b \in A$ and $x \in \lists{A}$ we have the following.
+
+1. $\last(\nil) = \lft(\ast)$.
+2. $\last(\cons(a,\nil)) = \rgt(a)$.
+3. $\last(\cons(a,\cons(b,x))) = \last(\cons(b,x))$.
 
 ::: proof ::::::::::
-Note that
+1. We have
+$$\begin{eqnarray*}
+ &   & \last(\nil) \\
+ & = & \head(\rev(\nil)) \\
+ & = & \head(\nil) \\
+ & = & \lft(\ast)
+\end{eqnarray*}$$
+as claimed.
+2. We have
+$$\begin{eqnarray*}
+ &   & \last(\cons(a,\nil)) \\
+ & = & \head(\rev(\cons(a,\nil))) \\
+ & = & \head(\snoc(a,\rev(\nil))) \\
+ & = & \head(\snoc(a,\nil)) \\
+ & = & \head(\cons(a,\nil)) \\
+ & = & \rgt(a)
+\end{eqnarray*}$$
+as claimed.
+3. Note that
 $$\begin{eqnarray*}
  &   & \last(\cons(a,\cons(b,x))) \\
  &     \href{@rev@#def-last}
@@ -544,6 +566,20 @@ as claimed.
 
 ::: test :::::::::::
 
+> _test_last_nil :: (List t, Equal (t a), Equal a)
+>   => t a -> Test Bool
+> _test_last_nil l =
+>   testName "eq(last(nil),lft(*))" $
+>   eq (last (nil `withTypeOf` l)) (lft ())
+> 
+> 
+> _test_last_one :: (List t, Equal (t a), Equal a)
+>   => t a -> Test (a -> Bool)
+> _test_last_one l =
+>   testName "eq(last(cons(a,xs)),rgt(a))" $
+>   \a -> eq (last (cons a (nil `withTypeOf` l))) (rgt a)
+> 
+> 
 > _test_cons_last :: (List t, Equal (t a), Equal a)
 >   => t a -> Test (a -> a -> t a -> Bool)
 > _test_cons_last _ =
@@ -582,6 +618,8 @@ Suite:
 >   runTest args (_test_rev_isnil t)
 >   runTest args (_test_rev_eq t)
 >   runTest args (_test_rev_foldl t)
+>   runTest args (_test_last_nil t)
+>   runTest args (_test_last_one t)
 >   runTest args (_test_cons_last t)
 
 Main:
