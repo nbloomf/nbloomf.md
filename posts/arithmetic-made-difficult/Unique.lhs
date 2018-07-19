@@ -239,7 +239,8 @@ $$\begin{eqnarray*}
  &     \href{@snoc@#cor-snoc-cons}
    = & \unique(\cons(b,\snoc(a,x))) \\
  & = & \band(\bnot(\elt(b,\snoc(a,x))),\unique(\snoc(a,x))) \\
- & = & \band(\bnot(\bif{\beq(b,a)}{\btrue}{\elt(b,x)}),\unique(\snoc(a,x))) \\
+ &     \href{@elt@#thm-elt-snoc}
+   = & \band(\bnot(\bif{\beq(b,a)}{\btrue}{\elt(b,x)}),\unique(\snoc(a,x))) \\
  & = & \band(\bnot(\elt(b,\cons(a,x))),\band(\bnot(\elt(a,x))),\unique(x)) \\
  & = & \band(\bnot(\bif{\beq(b,a)}{\btrue}{\elt(b,x)}),\band(\bnot(\elt(a,x)),\unique(x))) \\
  & = & \band(\bif{\beq(b,a)}{\bfalse}{\bnot(\elt(b,x))},\band(\bnot(\elt(a,x)),\unique(x))) \\
@@ -253,7 +254,8 @@ $$\begin{eqnarray*}
    = & \bif{\beq(a,b)}{\band(\bfalse,\band(\bnot(\elt(b,x)),\unique(x)))}{\band(\bnot(\elt(a,x)),\band(\bnot(\elt(b,x)),\unique(x)))} \\
  & = & \band(\bif{\beq(a,b)}{\bfalse}{\bnot(\elt(a,x))},\band(\bnot(\elt(b,x)),\unique(x))) \\
  & = & \band(\bnot(\bif{\beq(a,b)}{\btrue}{\elt(a,x)}),\band(\bnot(\elt(b,x)),\unique(x))) \\
- & = & \band(\bnot(\elt(a,\cons(b,x))),\band(\bnot(\elt(b,x)),\unique(x))) \\
+ &     \href{@elt@#cor-elt-cons}
+   = & \band(\bnot(\elt(a,\cons(b,x))),\band(\bnot(\elt(b,x)),\unique(x))) \\
  & = & \band(\bnot(\elt(a,\cons(b,x))),\unique(\cons(b,x)))
 \end{eqnarray*}$$
 as needed.

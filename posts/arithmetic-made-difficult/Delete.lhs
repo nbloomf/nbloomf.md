@@ -364,7 +364,8 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \elt(a,\delete(b,\nil)) \\
  & = & \elt(a,\nil) \\
- & = & \bfalse \\
+ &     \href{@elt@#cor-elt-nil}
+   = & \bfalse \\
  &     \href{@booleans@#thm-if-same}
    = & \bif{\beq(a,b)}{\bfalse}{\bfalse} \\
  & = & \bif{\beq(a,b)}{\bfalse}{\elt(a,\nil)}
@@ -388,10 +389,12 @@ Suppose then that $b \neq c$. If $a = c$, then $a \neq b$, and we have
 $$\begin{eqnarray*}
  &   & \elt(a,\delete(b,\cons(c,x))) \\
  & = & \elt(a,\cons(c,\delete(b,x))) \\
- & = & \bif{\beq(a,c)}{\btrue}{\elt(a,\delete(b,x))} \\
+ &     \href{@elt@#cor-elt-cons}
+   = & \bif{\beq(a,c)}{\btrue}{\elt(a,\delete(b,x))} \\
  & = & \btrue \\
  & = & \bif{\beq(a,c)}{\btrue}{\elt(a,x)} \\
- & = & \elt(a,\cons(c,x)) \\
+ &     \href{@elt@#cor-elt-cons}
+   = & \elt(a,\cons(c,x)) \\
  &     \href{@booleans@#cor-if-false}
    = & \bif{\bfalse}{\bfalse}{\elt(a,\cons(c,x))} \\
  & = & \bif{\beq(a,b)}{\bfalse}{\elt(a,\cons(c,x))}.

@@ -126,7 +126,8 @@ as needed. For the inductive step, suppose the result holds for some $x$ and let
 $$\begin{eqnarray*}
  &   & \elt(\nil,\sublists(\cons(a,x))) \\
  & = & \elt(\nil,\cat(\map(\cons(a))(\sublists(x)),\sublists(x))) \\
- & = & \bor(\elt(\nil,\map(\cons(a))(\sublists(x))),\elt(\nil,\sublists(x))) \\
+ &     \href{@elt@#thm-elt-cat}
+   = & \bor(\elt(\nil,\map(\cons(a))(\sublists(x))),\elt(\nil,\sublists(x))) \\
  & = & \bor(\elt(\nil,\map(\cons(a))(\sublists(x))),\btrue) \\
  &     \href{@or@#thm-or-true-right}
    = & \btrue
@@ -155,7 +156,8 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \elt(y,\sublists(\nil)) \\
  & = & \elt(y,\cons(\nil,\nil)) \\
- & = & \beq(y,\nil) \\
+ &     \href{@elt@#thm-elt-one}
+   = & \beq(y,\nil) \\
  & = & \isnil(y) \\
  &     \href{@sublist@#cor-sublist-nil}
    = & \sublist(y,\nil)
@@ -172,7 +174,8 @@ as claimed. If $y = \cons(b,w)$, note that $\bimpl(\sublist(\cons(b,w),x),\subli
 $$\begin{eqnarray*}
  &   & \elt(y,\sublists(\cons(a,x))) \\
  & = & \elt(y,\cat(\map(\cons(a))(\sublists(x)),\sublists(x))) \\
- & = & \bor(\elt(y,\map(\cons(a))(\sublists(x))),\elt(y,\sublists(x))) \\
+ &     \href{@elt@#thm-elt-cat}
+   = & \bor(\elt(y,\map(\cons(a))(\sublists(x))),\elt(y,\sublists(x))) \\
  & = & \bor(\elt(y,\map(\cons(a))(\sublists(x))),\sublist(y,x)) \\
  & = & \bor(\elt(\cons(b,w),\map(\cons(a))(\sublists(x))),\sublist(y,x)) \\
  & = & \bor(\band(\beq(b,a),\elt(w,\sublists(x))),\sublist(y,x)) \\

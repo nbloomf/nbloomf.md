@@ -156,7 +156,8 @@ $$\begin{eqnarray*}
  &   & \addlength(n,\rev(\cons(a,x))) \\
  &     \href{@rev@#cor-rev-cons}
    = & \addlength(n,\snoc(a,\rev(x))) \\
- & = & \next(\addlength(n,\rev(x))) \\
+ &     \href{@length@#thm-addlength-snoc-next}
+   = & \next(\addlength(n,\rev(x))) \\
  &     \href{@length@#thm-addlength-rev}
    = & \next(\addlength(n,x)) \\
  &     \href{@length@#thm-addlength-cons-next}
@@ -420,7 +421,8 @@ $$\begin{eqnarray*}
  &   & \length(\cat(x,\cons(a,y))) \\
  &     \href{@cat@#thm-cat-snoc-left}
    = & \length(\cat(\snoc(a,x),y)) \\
- & = & \nplus(\length(\snoc(a,x)),\length(y)) \\
+ &     \hyp{\length(\cat(z,y)) = \nplus(\length(z),\length(y))}
+   = & \nplus(\length(\snoc(a,x)),\length(y)) \\
  &     \href{@length@#thm-length-snoc}
    = & \nplus(\next(\length(x)),\length(y)) \\
  & = & \nplus(\length(x),\next(\length(y))) \\
@@ -453,7 +455,8 @@ Let $A$ be a set with $x \in \lists{A}$. Then $x = \nil$ if and only if $\length
 We've already seen that $\length(\nil) = \zero$. Suppose then that $x = \cons(a,u)$; then
 $$\begin{eqnarray*}
  &   & \length(x) \\
- & = & \length(\cons(a,u)) \\
+ &     \hyp{x = \cons(a,u)}
+   = & \length(\cons(a,u)) \\
  & = & \next(\length(u));
 \end{eqnarray*}$$
 in particular, $\length(x) \neq \zero$.

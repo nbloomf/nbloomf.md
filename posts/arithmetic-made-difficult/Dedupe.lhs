@@ -346,12 +346,14 @@ as needed. For the inductive step, suppose the equality holds for all $a$ for so
 $$\begin{eqnarray*}
  &   & \elt(a,\dedupeL(\cons(b,x))) \\
  & = & \elt(a,\cons(b,\delete(b)(\dedupeL(x)))) \\
- & = & \bif{\beq(a,b)}{\btrue}{\elt(a,\delete(b)(\dedupeL(x)))} \\
+ &     \href{@elt@#cor-elt-cons}
+   = & \bif{\beq(a,b)}{\btrue}{\elt(a,\delete(b)(\dedupeL(x)))} \\
  & = & \bif{\beq(a,b)}{\btrue}{\bif{\beq(a,b)}{\bfalse}{\elt(a,\dedupeL(x))}} \\
  &     \href{@booleans@#thm-if-prune-false}
    = & \bif{\beq(a,b)}{\btrue}{\elt(a,\dedupeL(x))} \\
  & = & \bif{\beq(a,b)}{\btrue}{\elt(a,x)} \\
- & = & \elt(a,\cons(b,x))
+ &     \href{@elt@#cor-elt-cons}
+   = & \elt(a,\cons(b,x))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

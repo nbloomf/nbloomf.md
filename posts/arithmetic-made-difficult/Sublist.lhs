@@ -1078,7 +1078,8 @@ $$\begin{eqnarray*}
  &     \href{@sublist@#cor-sublist-cons-cons}
    = & \bif{\beq(a,b)}{\sublist(\nil,x)}{\sublist(\cons(a,\nil),x)} \\
  & = & \bif{\beq(a,b)}{\btrue}{\elt(a,x)} \\
- & = & \elt(a,\cons(b,x))
+ &     \href{@elt@#cor-elt-cons}
+   = & \elt(a,\cons(b,x))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

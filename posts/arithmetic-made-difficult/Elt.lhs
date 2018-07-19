@@ -33,7 +33,8 @@ slug: elt
 Today we'll define a boolean function, $\elt$, which detects whether or not a given $a$ is an item in a list. As usual we want to define $\elt$ as a fold: should we use a right fold or a left fold? Recall that the tradeoff between the two is that foldl is tail recursive, but foldr does not necessarily have to process the entire list. In this case, $\elt(a)(x)$ should be able to return early once it sees an $a$. So lets say $$\elt(a)(x) = \foldr(\varepsilon)(\varphi)(x).$$ Now what should $\varepsilon$ and $\varphi$ be? Well, we want
 $$\begin{eqnarray*}
  &   & \bfalse \\
- & = & \elt(a)(\nil) \\
+ &     \href{@elt@#cor-elt-nil}
+   = & \elt(a)(\nil) \\
  & = & \foldr(\varepsilon)(\varphi)(x) \\
  & = & \varepsilon,
 \end{eqnarray*}$$
@@ -72,6 +73,7 @@ In Haskell:
 Since $\elt$ is defined as a $\foldr(\ast)(\ast)$, it can be characterized as the unique solution to a system of functional equations.
 
 :::::: corollary :::
+[]{#cor-elt-nil}[]{#cor-elt-cons}
 Let $A$ be a set with $a \in A$. $\elt$ is the unique map $f : \lists{A} \rightarrow \bool$ satisfying the following equations for all $b \in A$ and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(\nil) = \bfalse \\
@@ -101,14 +103,17 @@ $$\left\{\begin{array}{l}
 Special cases.
 
 :::::: theorem :::::
+[]{#thm-elt-one}
 Let $A$ be a set. For all $a,b \in A$, we have $$\elt(a,\cons(b,\nil)) = \beq(a,b).$$
 
 ::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \elt(a,\cons(b,\nil)) \\
- & = & \bif{\beq(a,b)}{\btrue}{\elt(a,\nil)} \\
- & = & \bif{\beq(a,b)}{\btrue}{\bfalse} \\
+ &     \href{@elt@#cor-elt-cons}
+   = & \bif{\beq(a,b)}{\btrue}{\elt(a,\nil)} \\
+ &     \href{@elt@#cor-elt-nil}
+   = & \bif{\beq(a,b)}{\btrue}{\bfalse} \\
  & = & \beq(a,b)
 \end{eqnarray*}$$
 as claimed.
@@ -130,6 +135,7 @@ as claimed.
 $\elt$ interacts with $\cat$.
 
 :::::: theorem :::::
+[]{#thm-elt-cat}
 Let $A$ be a set. For all $a \in A$ and $x,y \in \lists{A}$ we have $$\elt(a)(\cat(x,y)) = \bor(\elt(a)(x),\elt(a)(y)).$$
 
 ::: proof ::::::::::
@@ -142,7 +148,8 @@ $$\begin{eqnarray*}
  &     \href{@or@#thm-or-false-left}
    = & \bor(\bfalse,\elt(a)(y)) \\
  & = & \bor(\elt(a)(\nil),\elt(a)(y)) \\
- & = & \bor(\elt(a)(x),\elt(a)(y))
+ &     \hyp{x = \nil}
+   = & \bor(\elt(a)(x),\elt(a)(y))
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for all $y$ some $x$, and let $b \in A$. If $b = a$ we have
 $$\begin{eqnarray*}
@@ -154,7 +161,8 @@ $$\begin{eqnarray*}
  &     \href{@or@#thm-or-true-left}
    = & \bor(\btrue,\elt(a)(y)) \\
  & = & \bor(\bif{\beq(a,b)}{\btrue}{\elt(a)(x)},\elt(a)(y)) \\
- & = & \bor(\elt(a)(\cons(b,x)),\elt(a)(y))
+ &     \href{@elt@#cor-elt-cons}
+   = & \bor(\elt(a)(\cons(b,x)),\elt(a)(y))
 \end{eqnarray*}$$
 as claimed. If $b \neq a$, we have
 $$\begin{eqnarray*}
@@ -163,7 +171,8 @@ $$\begin{eqnarray*}
    = & \elt(a)(\cons(b,\cat(x,y))) \\
  & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(\cat(x,y))} \\
  & = & \elt(a)(\cat(x,y)) \\
- & = & \bor(\elt(a)(x),\elt(a)(y)) \\
+ &     \href{@elt@#thm-elt-cat}
+   = & \bor(\elt(a)(x),\elt(a)(y)) \\
  & = & \bor(\bif{\beq(a,b)}{\btrue}{\elt(a)(x)},\elt(a)(y)) \\'
  & = & \bor(\elt(a)(\cons(b,x)),\elt(a)(y))
 \end{eqnarray*}$$
@@ -184,6 +193,7 @@ as claimed.
 $\elt$ interacts with $\snoc$.
 
 :::::: theorem :::::
+[]{#thm-elt-snoc}
 Let $A$ be a set, with $a \in A$. For all $b \in A$ and $x \in \lists{A}$ we have $$\elt(a)(\snoc(b,x)) = \bif{\beq(a,b)}{\btrue}{\elt(a)(x)}.$$
 
 ::: proof ::::::::::
@@ -200,7 +210,8 @@ $$\begin{eqnarray*}
  &     \href{@snoc@#cor-snoc-cons}
    = & \elt(a)(\cons(c,\snoc(b,x))) \\
  & = & \bif{\beq(a,c)}{\btrue}{\elt(a)(\snoc(b,x))} \\
- & = & \bif{\beq(a,c)}{\btrue}{\bif{\beq(a,b)}{\btrue}{\elt(a)(x)}} \\
+ &     \href{@elt@#thm-elt-snoc}
+   = & \bif{\beq(a,c)}{\btrue}{\bif{\beq(a,b)}{\btrue}{\elt(a)(x)}} \\
  &     \href{@booleans@#thm-if-commute-false}
    = & \bif{\beq(a,b)}{\btrue}{\bif{\beq(a,c)}{\btrue}{\elt(a)(x)}} \\
  & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(\cons(c,x))}
@@ -222,6 +233,7 @@ as needed.
 $\elt$ interacts with $\rev$.
 
 :::::: theorem :::::
+[]{#thm-elt-rev}
 Let $A$ be a set. For all $a \in A$ and $x \in \lists{A}$ we have $$\elt(a)(x) = \elt(a)(\rev(x)).$$
 
 ::: proof ::::::::::
@@ -239,8 +251,10 @@ $$\begin{eqnarray*}
  &     \href{@rev@#cor-rev-cons}
    = & \elt(a)(\snoc(b,\rev(x))) \\
  & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(\rev(x))} \\
- & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(x)} \\
- & = & \elt(a)(\cons(b,x))
+ &     \href{@elt@#thm-elt-rev}
+   = & \bif{\beq(a,b)}{\btrue}{\elt(a)(x)} \\
+ &     \href{@elt@#cor-elt-cons}
+   = & \elt(a)(\cons(b,x))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -265,17 +279,21 @@ Let $A$ and $B$ be sets and suppose $f : A \rightarrow B$ is injective. Then for
 We proceed by list induction on $x$. For the base case $x = \nil$ we have
 $$\begin{eqnarray*}
  &   & \elt(a)(\nil) \\
- & = & \bfalse \\
- & = & \elt(f(a),\nil) \\
+ &     \href{@elt@#cor-elt-nil}
+   = & \bfalse \\
+ &     \href{@elt@#cor-elt-nil}
+   = & \elt(f(a),\nil) \\
  &     \href{@map@#cor-map-nil}
    = & \elt(f(a),\map(f)(\nil))
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for all $x$ and let $b \in A$. Note that $\beq(a,b) = \beq(f(a),f(b))$. Then we have
 $$\begin{eqnarray*}
  &   & \elt(a)(\cons(b,x)) \\
- & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(x)} \\
+ &     \href{@elt@#cor-elt-cons}
+   = & \bif{\beq(a,b)}{\btrue}{\elt(a)(x)} \\
  & = & \bif{\beq(f(a),f(b))}{\btrue}{\elt(f(a),\map(f)(x))} \\
- & = & \elt(f(a),\cons(f(b),\map(f)(x))) \\
+ &     \href{@elt@#cor-elt-cons}
+   = & \elt(f(a),\cons(f(b),\map(f)(x))) \\
  &     \href{@map@#cor-map-cons}
    = & \elt(f(a),\map(f)(\cons(b,x)))
 \end{eqnarray*}$$
@@ -286,6 +304,7 @@ as claimed.
 As a special case, the items in $\tails(x)$ and $\inits(x)$ are precisely the suffixes and prefixes of $x$, respectively.
 
 :::::: theorem :::::
+[]{#thm-elt-tails}[]{#thm-elt-inits}
 Let $A$ be a set with $x,y \in \lists{A}$. We have the following.
 
 1. $\elt(y,\tails(x)) = \suffix(y,x)$.
@@ -314,7 +333,8 @@ $$\begin{eqnarray*}
    = & \elt(y,\cons(\nil,\nil)) \\
  & = & \bif{\beq(y,\nil)}{\btrue}{\elt(y,\nil)} \\
  & = & \elt(y,\nil) \\
- & = & \bfalse \\
+ &     \href{@elt@#cor-elt-nil}
+   = & \bfalse \\
  &     \href{@prefix-suffix@#thm-suffix-snoc-nil}
    = & \suffix(\snoc(b,u),\nil) \\
  & = & \suffix(y,x)
@@ -345,11 +365,13 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \elt(y,\inits(x)) \\
  & = & \elt(y,\rev(\map(\rev)(\tails(\rev(x))))) \\
- & = & \elt(y,\map(\rev)(\tails(\rev(x)))) \\
+ &     \href{@elt@#thm-elt-rev}
+   = & \elt(y,\map(\rev)(\tails(\rev(x)))) \\
  & = & \elt(\rev(y),\map(\rev)(\map(\rev)(\tails(\rev(x))))) \\
  & = & \elt(\rev(y),\map(\rev \circ \rev)(\tails(\rev(x)))) \\
  & = & \elt(\rev(y),\tails(\rev(x))) \\
- & = & \suffix(\rev(y),\rev(x)) \\
+ &     \href{@elt@#thm-elt-tails}
+   = & \suffix(\rev(y),\rev(x)) \\
  &     \href{@prefix-suffix@#thm-prefix-rev}
    = & \prefix(y,x)
 \end{eqnarray*}$$
@@ -377,6 +399,7 @@ as claimed.
 $\elt$ interacts with $\filter$.
 
 :::::: theorem :::::
+[]{#thm-elt-filter}
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $a \in A$ and $x \in \lists{A}$, we have $$\elt(a,\filter(p)(x)) = \band(p(a),\elt(a,x)).$$
 
 ::: proof ::::::::::
@@ -430,14 +453,15 @@ as needed.
 As a special case, if we filter $a$ out of a list, it is no longer an item there.
 
 :::::: theorem :::::
-Let $A$ be a set, with $a \in A$ and $x \in \lists{A}$. Then $$\elt(a)(\filter(\bnot(\beq(a,-)),x)) = \bfalse.$$
+Let $A$ be a set, with $a \in A$ and $x \in \lists{A}$. Then $$\elt(a)(\filter(\bnot(\beq(a)),x)) = \bfalse.$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \elt(a)(\filter(\bnot(\beq(a,-)),\nil)) \\
  & = & \elt(a)(\nil) \\
- & = & \bfalse
+ &     \href{@elt@#cor-elt-nil}
+   = & \bfalse
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for $x$ and let $b \in A$. We have two possibilities. If $b = a$ (that is, $\bnot(\beq(a,b)) = \bfalse$), we have
 $$\begin{eqnarray*}
@@ -476,14 +500,16 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \elt(a)(x) \\
  & = & \elt(a)(\nil) \\
- & = & \bfalse \\
+ &     \href{@elt@#cor-elt-nil}
+   = & \bfalse \\
  & = & \any(\beq(a,-),\nil) \\
  & = & \any(\beq(a,-),x)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $b \in A$. We consider two possibilities. If $a = b$, we have
 $$\begin{eqnarray*}
  &   & \elt(a)(\cons(b,x)) \\
- & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(x)} \\
+ &     \href{@elt@#cor-elt-cons}
+   = & \bif{\beq(a,b)}{\btrue}{\elt(a)(x)} \\
  & = & \bif{\btrue}{\btrue}{\elt(a)(x)} \\
  &     \href{@booleans@#cor-if-true}
    = & \btrue \\
@@ -494,7 +520,8 @@ $$\begin{eqnarray*}
 as needed. If $a \neq b$, using the inductive hypothesis we have
 $$\begin{eqnarray*}
  &   & \elt(a)(\cons(b,x)) \\
- & = & \bif{\beq(a,b)}{\btrue}{\elt(a)(x)} \\
+ &     \href{@elt@#cor-elt-cons}
+   = & \bif{\beq(a,b)}{\btrue}{\elt(a)(x)} \\
  & = & \bif{\bfalse}{\btrue}{\elt(a)(x)} \\
  &     \href{@booleans@#cor-if-false}
    = & \elt(a)(x) \\
@@ -548,17 +575,21 @@ Let $A$ and $B$ be sets with $f : A \rightarrow B$ injective. For all $a \in A$ 
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \elt(a,\nil) \\
- & = & \bfalse \\
- & = & \elt(f(a),\nil) \\
+ &     \href{@elt@#cor-elt-nil}
+   = & \bfalse \\
+ &     \href{@elt@#cor-elt-nil}
+   = & \elt(f(a),\nil) \\
  &     \href{@map@#cor-map-nil}
    = & \elt(f(a),\map(f)(\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$, and let $b \in A$. Note that $\beq(a,b) = \beq(f(a),f(b))$, so we have
 $$\begin{eqnarray*}
  &   & \elt(a,\cons(b,x)) \\
- & = & \bif{\beq(a,b)}{\btrue}{\elt(a,x)} \\
+ &     \href{@elt@#cor-elt-cons}
+   = & \bif{\beq(a,b)}{\btrue}{\elt(a,x)} \\
  & = & \bif{\beq(f(a),f(b))}{\btrue}{\elt(f(a),\map(f)(x))} \\
- & = & \elt(f(a),\cons(f(b),\map(f)(x))) \\
+ &     \href{@elt@#cor-elt-cons}
+   = & \elt(f(a),\cons(f(b),\map(f)(x))) \\
  &     \href{@map@#cor-map-cons}
    = & \elt(f(a),\map(f)(\cons(b,x)))
 \end{eqnarray*}$$
@@ -576,13 +607,15 @@ We proceed by induction on $b$. If $b = \zero$, we have
 $$\begin{eqnarray*}
  &   & \elt(a,\range(\next(c),\zero)) \\
  & = & \elt(a,\nil) \\
- & = & \bfalse
+ &     \href{@elt@#cor-elt-nil}
+   = & \bfalse
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equation holds for all $a$ and $c$ for some $b$. Suppose $\nleq(a,c)$; then $\nleq(a,\next(c))$. Now
 $$\begin{eqnarray*}
  &   & \elt(a,\range(\next(c),\next(b))) \\
  & = & \elt(a,\cons(\next(c),\range(\next(\next(c)),b))) \\
- & = & \bif{\beq(a,\next(c))}{\btrue}{\elt(a,\range(\next(\next(c)),b))} \\
+ &     \href{@elt@#cor-elt-cons}
+   = & \bif{\beq(a,\next(c))}{\btrue}{\elt(a,\range(\next(\next(c)),b))} \\
  & = & \elt(a,\range(\next(\next(c)),b)) \\
  & = & \bfalse
 \end{eqnarray*}$$
@@ -612,7 +645,8 @@ We proceed by list induction on $z$. For the base case $z = \nil$, we have
 $$\begin{eqnarray*}
  &   & \elt(\cons(a,x),\map(\cons(b,-))(\nil)) \\
  & = & \elt(\cons(a,x),\nil) \\
- & = & \bfalse \\
+ &     \href{@elt@#cor-elt-nil}
+   = & \bfalse \\
  &     \href{@and@#thm-and-false-right}
    = & \band(\beq(a,b),\bfalse) \\
  & = & \band(\beq(a,b),\elt(x,\nil))

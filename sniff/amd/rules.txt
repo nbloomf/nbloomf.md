@@ -457,6 +457,18 @@
 @at@#thm-at-snoc-cons	\\bimpl(\\nleq(k,\\length(x)),\\beq(\\at(\\snoc(a,\\cons(b,x),k),\\at(\\cons(b,x),k)))) = \\btrue
 @at@#thm-at-snoc-length	\\at(\\snoc(a,x),\\length(x)) = \\rgt(a)
 #=======================#
+#--- elt ---------------#
+#=======================#
+@elt@#cor-elt-nil	\\elt(a,\\nil) = \\bfalse
+@elt@#cor-elt-cons	\\elt(a,\\cons(b,x)) = \\bif{\\beq(a)(b)}{\\btrue}{\\elt(a)(x)}
+@elt@#thm-elt-one	\\elt(a,\\cons(b,\\nil)) = \\beq(a,b)
+@elt@#thm-elt-cat	\\elt(a,\\cat(x,y)) = \\bor(\\elt(a,x),\\elt(a,y))
+@elt@#thm-elt-snoc	\\elt(a)(\\snoc(b,x)) = \bif{\\beq(a)(b)}{\\btrue}{\\elt(a)(x)}
+@elt@#thm-elt-rev	\\elt(a,x) = \\elt(a,\\rev(x))
+@elt@#thm-elt-tails	\\elt(a,\\tails(x)) = \\suffix(a,x)
+@elt@#thm-elt-inits	\\elt(a,\\inits(x)) = \\prefix(a,x)
+@elt@#thm-elt-filter	\\elt(a,\\filter(p)(x)) = \\band(p(a),\\elt(a,x))
+#=======================#
 #--- map ---------------#
 #=======================#
 @map@#def-map	\\map(f) = \\foldr(\\nil)(\\compose(\\cons)(f))
