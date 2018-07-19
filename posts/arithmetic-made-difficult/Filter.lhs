@@ -24,7 +24,8 @@ slug: filter
 Today we'll nail down $\filter$, which takes a list and a predicate on the items and "filters out" the items which satisfy the predicate. $\filter$ should have a signature like $$\bool^A \times \lists{A} \rightarrow \lists{A}.$$ As usual, we want to define $\filter$ as a fold; say $$\filter(p)(x) = \foldr(\varepsilon)(\varphi)(x).$$ Where on the right hand side of that equation should the $p$ parameter go? Lets think out loud for a moment. On the one hand, we want
 $$\begin{eqnarray*}
  &   & \nil \\
- & = & \filter(p)(\nil) \\
+ &     \href{@filter@#cor-filter-nil}
+   = & \filter(p)(\nil) \\
  & = & \foldr(\varepsilon)(\varphi)(\nil) \\
  &     \href{@lists@#def-foldr-nil}
    = & \varepsilon
@@ -56,6 +57,7 @@ In Haskell:
 Since $\filter(p)$ is defined as a $\foldr(\ast)(\ast)$, it can be characterized as the unique solution to a system of functional equations.
 
 :::::: corollary :::
+[]{#cor-filter-nil}[]{#cor-filter-cons}
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. $\filter(p)$ is the unique map $f : \lists{A} \rightarrow \lists{A}$ satisfying the following for all $a \in A$ and $x \in \lists{A}$.
 $$\left\{\begin{array}{ll}
  f(\nil) = \nil \\
@@ -85,13 +87,15 @@ $$\left\{\begin{array}{ll}
 As we might expect, the items in $\filter(p)(x)$ all satisfy $p$.
 
 :::::: theorem :::::
+[]{#thm-filter-all}
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $x \in \lists{A}$ we have $$\all(p,\filter(p)(x)) = \btrue.$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \all(p,\filter(p)(\nil)) \\
- & = & \all(p,\nil) \\
+ &     \href{@filter@#cor-filter-nil}
+   = & \all(p,\nil) \\
  & = & \nil
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. If $p(a) = \btrue$, we have
@@ -107,7 +111,8 @@ as claimed, while if $p(a) = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \all(p,\filter(p)(\cons(a,x))) \\
  & = & \all(p,\filter(p)(x)) \\
- & = & \btrue
+ &     \href{@filter@#thm-filter-all}
+   = & \btrue
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -126,6 +131,7 @@ as claimed.
 $\filter$ interacts with $\snoc$.
 
 :::::: theorem :::::
+[]{#thm-filter-snoc}
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $a \in A$ and $x \in \lists{A}$, we have $$\filter(p)(\snoc(a,x)) = \bif{p(a)}{\snoc(a,\filter(p)(x))}{\filter(p)(x)}.$$
 
 ::: proof ::::::::::
@@ -135,7 +141,8 @@ $$\begin{eqnarray*}
  &     \href{@snoc@#cor-snoc-nil}
    = & \filter(p)(\cons(a,\nil)) \\
  & = & \cons(a,\filter(p)(\nil)) \\
- & = & \cons(a,\nil) \\
+ &     \href{@filter@#cor-filter-nil}
+   = & \cons(a,\nil) \\
  &     \href{@snoc@#cor-snoc-nil}
    = & \snoc(a,\nil)
 \end{eqnarray*}$$
@@ -145,7 +152,8 @@ $$\begin{eqnarray*}
  &     \href{@snoc@#cor-snoc-nil}
    = & \filter(p)(\cons(a,\nil)) \\
  & = & \filter(p)(\nil) \\
- & = & \nil
+ &     \href{@filter@#cor-filter-nil}
+   = & \nil
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for some $x$ and let $b \in A$. If $p(a) = p(b) = \btrue$, we have
 $$\begin{eqnarray*}
@@ -204,6 +212,7 @@ as needed.
 $\filter$ interacts with $\rev$.
 
 :::::: theorem :::::
+[]{#thm-filter-rev}
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $x \in \lists{A}$, we have $$\filter(p)(\rev(x)) = \rev(\filter(p)(x)).$$
 
 ::: proof ::::::::::
@@ -232,7 +241,8 @@ as claimed. If $p(a) = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \rev(\filter(p)(\cons(a,x))) \\
  & = & \rev(\filter(p)(x)) \\
- & = & \filter(p)(\rev(x)) \\
+ &     \href{@filter@#thm-filter-rev}
+   = & \filter(p)(\rev(x)) \\
  & = & \filter(p)(\snoc(a,\rev(x))) \\
  &     \href{@rev@#cor-rev-cons}
    = & \filter(p)(\rev(\cons(a,x)))
@@ -254,6 +264,7 @@ as claimed.
 $\filter(p)$ distributes over $\cat$.
 
 :::::: theorem :::::
+[]{#thm-filter-cat}
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $x,y \in \lists{A}$ we have $$\filter(p)(\cat(x,y)) = \cat(\filter(p)(x),\filter(p)(y)).$$
 
 ::: proof ::::::::::
@@ -274,7 +285,8 @@ $$\begin{eqnarray*}
  &     \href{@cat@#cor-cat-cons}
    = & \filter(p)(\cons(a,\cat(x,y))) \\
  & = & \cons(a,\filter(p)(\cat(x,y))) \\
- & = & \cons(a,\cat(\filter(p)(x),\filter(p)(y))) \\
+ &     \href{@filter@#thm-filter-cat}
+   = & \cons(a,\cat(\filter(p)(x),\filter(p)(y))) \\
  &     \href{@cat@#cor-cat-cons}
    = & \cat(\cons(a,\filter(p)(x)),\filter(p)(y)) \\
  & = & \cat(\filter(p)(\cons(a,x)),\filter(p)(y))
@@ -285,7 +297,8 @@ $$\begin{eqnarray*}
  &     \href{@cat@#cor-cat-cons}
    = & \filter(p)(\cons(a,\cat(x,y))) \\
  & = & \filter(p)(\cat(x,y)) \\
- & = & \cat(\filter(p)(x),\filter(p)(y)) \\
+ &     \href{@filter@#thm-filter-cat}
+   = & \cat(\filter(p)(x),\filter(p)(y)) \\
  & = & \cat(\filter(p)(\cons(a,x)),\filter(p)(y))
 \end{eqnarray*}$$
 as needed.
@@ -305,6 +318,7 @@ as needed.
 $\filter(p)$ is idempotent.
 
 :::::: theorem :::::
+[]{#thm-filter-idempotent}
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $x \in \lists{A}$ we have $$\filter(p)(\filter(p)(x)) = \filter(p)(x).$$
 
 ::: proof ::::::::::
@@ -312,14 +326,17 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \filter(p)(\filter(p)(x)) \\
  & = & \filter(p)(\filter(p)(\nil)) \\
- & = & \filter(p)(\nil) \\
- & = & \nil \\
+ &     \href{@filter@#cor-filter-nil}
+   = & \filter(p)(\nil) \\
+ &     \href{@filter@#cor-filter-nil}
+   = & \nil \\
  & = & x
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now we have
 $$\begin{eqnarray*}
  &   & \filter(p)(\filter(p)(\cons(a,x))) \\
- & = & \filter(p)(\bif{p(a)}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
+ &     \href{@filter@#cor-filter-cons}
+   = & \filter(p)(\bif{p(a)}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
  &     \href{@booleans@#thm-iffunc}
    = & \bif{p(a)}{\filter(p)(\cons(a,\filter(p)(x)))}{\filter(p)(\filter(p)(x))} \\
  & = & \bif{p(a)}{\bif{p(a)}{\cons(a,\filter(p)(x))}{\filter(p)(x)}}{\filter(p)(x)} \\
@@ -344,6 +361,7 @@ as needed
 A list $x$ is invariant under $\filter(p)$ if and only if $\all(p)(x)$.
 
 :::::: theorem :::::
+[]{#thm-filter-fix}
 Let $A$ be a set and $p : A \rightarrow \bool$ a predicate with $x \in \lists{A}$. We have $$\beq(x,\filter(p)(x)) = \all(p,x).$$
 
 ::: proof ::::::::::
@@ -351,16 +369,19 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \beq(x,\filter(p)(x)) \\
  & = & \beq(\nil,\filter(p)(\nil)) \\
- & = & \beq(\nil,\nil) \\
+ &     \href{@filter@#cor-filter-nil}
+   = & \beq(\nil,\nil) \\
  &     \href{@testing@#thm-eq-reflexive}
    = & \btrue \\
  & = & \all(p,\nil) \\
- & = & \all(p,x)
+ &     \hyp{x = \nil}
+   = & \all(p,x)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. We consider two possibilities. If $p(a) = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \beq(\cons(a,x),\filter(p)(\cons(a,x))) \\
- & = & \beq(\cons(a,x),\bif{p(a)}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
+ &     \href{@filter@#cor-filter-cons}
+   = & \beq(\cons(a,x),\bif{p(a)}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
  & = & \beq(\cons(a,x),\bif{\btrue}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
  &     \href{@booleans@#cor-if-true}
    = & \beq(\cons(a,x),\cons(a,\filter(p)(x))) \\
@@ -378,7 +399,8 @@ $$\begin{eqnarray*}
 as needed. Suppose instead that $p(a) = \bfalse$. Now $\sublist(\filter(p)(x),x) = \btrue$, and using the inductive hypothesis we have
 $$\begin{eqnarray*}
  &   & \beq(\cons(a,x),\filter(p)(\cons(a,x))) \\
- & = & \beq(\cons(a,x),\bif{p(a)}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
+ &     \href{@filter@#cor-filter-cons}
+   = & \beq(\cons(a,x),\bif{p(a)}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
  & = & \beq(\cons(a,x),\bif{\bfalse}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
  &     \href{@booleans@#cor-if-false}
    = & \beq(\cons(a,x),\filter(p)(x)) \\
@@ -405,21 +427,27 @@ as needed.
 $\filter(p)$ and $\filter(q)$ commute.
 
 :::::: theorem :::::
+[]{#thm-filter-commutative}
 Let $A$ be a set and $p,q : A \rightarrow \bool$ predicates. For all $x \in \lists{A}$ we have $$\filter(p)(\filter(q)(x)) = \filter(q)(\filter(p)(x)).$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \filter(p)(\filter(q)(\nil)) \\
- & = & \filter(p)(\nil) \\
- & = & \nil \\
- & = & \filter(q)(\nil) \\
- & = & \filter(q)(\filter(p)(\nil))
+ &     \href{@filter@#cor-filter-nil}
+   = & \filter(p)(\nil) \\
+ &     \href{@filter@#cor-filter-nil}
+   = & \nil \\
+ &     \href{@filter@#cor-filter-nil}
+   = & \filter(q)(\nil) \\
+ &     \href{@filter@#cor-filter-nil}
+   = & \filter(q)(\filter(p)(\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \filter(p)(\filter(q)(\cons(a,x))) \\
- & = & \filter(p)(\bif{q(a)}{\cons(a,\filter(q)(x))}{\filter(q)(x)}) \\
+ &     \href{@filter@#cor-filter-cons}
+   = & \filter(p)(\bif{q(a)}{\cons(a,\filter(q)(x))}{\filter(q)(x)}) \\
  &     \href{@booleans@#thm-iffunc}
    = & \bif{q(a)}{\filter(p)(\cons(a,\filter(q)(x)))}{\filter(p)(\filter(q)(x))} \\
  & = & \bif{q(a)}{\bif{p(a)}{\cons(a),\filter(p)(\filter(q)(x))}{\filter(p)(\filter(q)(x))}}{\filter(p)(\filter(q)(x))} \\

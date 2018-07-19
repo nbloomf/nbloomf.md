@@ -67,7 +67,8 @@ $$\begin{eqnarray*}
    = & \rev(\drop(\next(k))(\rev(\nil))) \\
  &     \href{@rev@#cor-rev-nil}
    = & \rev(\drop(\next(k))(\nil)) \\
- & = & \rev(\nil) \\
+ &     \href{@take-drop@#cor-drop-next-nil}
+   = & \rev(\nil) \\
  &     \href{@rev@#cor-rev-nil}
    = & \nil
 \end{eqnarray*}$$
@@ -79,7 +80,8 @@ $$\begin{eqnarray*}
    = & \rev(\drop(\next(k))(\rev(\snoc(a,x)))) \\
  &     \href{@rev@#thm-rev-snoc}
    = & \rev(\drop(\next(k))(\cons(a,\rev(x)))) \\
- & = & \rev(\drop(k)(\rev(x))) \\
+ &     \href{@take-drop@#cor-drop-next-cons}
+   = & \rev(\drop(k)(\rev(x))) \\
  &     \href{@takebut-dropbut@#def-takebut}
    = & \takeBut(k,x)
 \end{eqnarray*}$$
@@ -207,10 +209,12 @@ $$\begin{eqnarray*}
    = & \rev(\take(\next(k),\rev(\snoc(a,x)))) \\
  &     \href{@rev@#thm-rev-snoc}
    = & \rev(\take(\next(k),\cons(a,\rev(x)))) \\
- & = & \rev(\cons(a,\take(k,\rev(x)))) \\
+ &     \href{@take-drop@#cor-take-next-cons}
+   = & \rev(\cons(a,\take(k,\rev(x)))) \\
  &     \href{@rev@#cor-rev-cons}
    = & \snoc(a,\rev(\take(k,\rev(x)))) \\
- & = & \snoc(a,\dropBut(k,x))
+ &     \href{@takebut-dropbut@#def-dropbut}
+   = & \snoc(a,\dropBut(k,x))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -256,7 +260,8 @@ $$\begin{eqnarray*}
    = & \suffix(\rev(\take(k,\rev(x))),x) \\
  &     \href{@rev@#thm-rev-involution}
    = & \suffix(\rev(\take(k,\rev(x))),\rev(\rev(x))) \\
- & = & \prefix(\take(k,\rev(x)),\rev(x)) \\
+ &     \href{@prefix-suffix@#thm-prefix-rev}
+   = & \prefix(\take(k,\rev(x)),\rev(x)) \\
  &     \href{@take-drop@#thm-take-prefix}
    = & \btrue
 \end{eqnarray*}$$
@@ -290,7 +295,8 @@ $$\begin{eqnarray*}
    = & \rev(\take(k,\rev(\rev(\take(k,\rev(x)))))) \\
  &     \href{@rev@#thm-rev-involution}
    = & \rev(\take(k,\take(k,\rev(x)))) \\
- & = & \rev(\take(k,\rev(x))) \\
+ &     \href{@take-drop@#thm-take-idempotent}
+   = & \rev(\take(k,\rev(x))) \\
  &     \href{@takebut-dropbut@#def-dropbut}
    = & \dropBut(k,x)
 \end{eqnarray*}$$
@@ -318,10 +324,14 @@ Let $A$ be a set. For all $x \in \lists{A}$ and $k \in \nats$, we have $$x = \ca
 We have
 $$\begin{eqnarray*}
  &   & \cat(\takeBut(k,x),\dropBut(k,x)) \\
- & = & \cat(\rev(\drop(k,\rev(x))),\rev(\take(k,\rev(x)))) \\
+ &     \href{@takebut-dropbut@#def-takebut}
+   = & \cat(\rev(\drop(k,\rev(x))),\dropBut(k,x)) \\
+ &     \href{@takebut-dropbut@#def-dropbut}
+   = & \cat(\rev(\drop(k,\rev(x))),\rev(\take(k,\rev(x)))) \\
  &     \href{@cat@#thm-rev-cat-antidistribute}
    = & \rev(\cat(\take(k,\rev(x)),\drop(k,\rev(x)))) \\
- & = & \rev(\rev(x)) \\
+ &     \href{@take-drop@#thm-take-drop-cat}
+   = & \rev(\rev(x)) \\
  &     \href{@rev@#thm-rev-involution}
    = & x
 \end{eqnarray*}$$

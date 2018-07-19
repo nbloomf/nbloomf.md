@@ -376,16 +376,19 @@ Let $A$ be a set with $p : A \rightarrow \bool$ a predicate. For all $x \in \lis
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \dedupeL(\filter(p)(\nil)) \\
- & = & \dedupeL(\nil) \\
+ &     \href{@filter@#cor-filter-nil}
+   = & \dedupeL(\nil) \\
  & = & \nil \\
- & = & \filter(p)(\nil) \\
+ &     \href{@filter@#cor-filter-nil}
+   = & \filter(p)(\nil) \\
  & = & \filter(p)(\dedupeL(\nil))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equation holds for some $x$ and let $a \in A$. We consider the two possibilities for $p(a)$. If $p(a) = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \filter(p)(\dedupeL(\cons(a,x))) \\
  & = & \filter(p)(\cons(a,\delete(a)(\dedupeL(x)))) \\
- & = & \bif{p(a)}{\cons(a,\filter(p)(\delete(a)(\dedupeL(x))))}{\filter(p)(\delete(a)(\dedupeL(x)))} \\
+ &     \href{@filter@#cor-filter-cons}
+   = & \bif{p(a)}{\cons(a,\filter(p)(\delete(a)(\dedupeL(x))))}{\filter(p)(\delete(a)(\dedupeL(x)))} \\
  & = & \bif{\btrue}{\cons(a,\filter(p)(\delete(a)(\dedupeL(x))))}{\filter(p)(\delete(a)(\dedupeL(x)))} \\
  &     \href{@booleans@#cor-if-true}
    = & \cons(a,\filter(p)(\delete(a)(\dedupeL(x)))) \\
@@ -400,7 +403,8 @@ as needed. If $p(a) = \bfalse$, we have
 $$\begin{eqnarray*}
  &   & \filter(p)(\dedupeL(\cons(a,x))) \\
  & = & \filter(p)(\cons(a,\delete(a)(\dedupeL(x)))) \\
- & = & \bif{p(a)}{\cons(a,\filter(p)(\delete(a)(\dedupeL(x))))}{\filter(p)(\delete(a)(\dedupeL(x)))} \\
+ &     \href{@filter@#cor-filter-cons}
+   = & \bif{p(a)}{\cons(a,\filter(p)(\delete(a)(\dedupeL(x))))}{\filter(p)(\delete(a)(\dedupeL(x)))} \\
  & = & \bif{\bfalse}{\cons(a,\filter(p)(\delete(a)(\dedupeL(x))))}{\filter(p)(\delete(a)(\dedupeL(x)))} \\
  &     \href{@booleans@#cor-if-false}
    = & \filter(p)(\delete(a)(\dedupeL(x))) \\
@@ -410,7 +414,8 @@ $$\begin{eqnarray*}
  &     \href{@booleans@#cor-if-false}
    = & \dedupeL(\bif{\bfalse}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
  & = & \dedupeL(\bif{p(a)}{\cons(a,\filter(p)(x))}{\filter(p)(x)}) \\
- & = & \dedupeL(\filter(p)(\cons(a,x)))
+ &     \href{@filter@#cor-filter-cons}
+   = & \dedupeL(\filter(p)(\cons(a,x)))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

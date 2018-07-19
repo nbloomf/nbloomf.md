@@ -560,6 +560,18 @@
 @takebut-dropbut@#thm-dropbut-idempotent	\\dropBut(k,\\dropBut(k,x)) = \\dropBut(k,x)
 @takebut-dropbut@#thm-takebut-dropbut-cat	\\cat(\\takeBut(k,x),\\dropBut(k,x)) = x
 #=======================#
+#--- filter ------------#
+#=======================#
+@filter@#cor-filter-nil	\\filter(p)(\\nil) = \\nil
+@filter@#cor-filter-cons	\\filter(p)(\\cons(a)(x)) = \\bif{p(a)}{\\cons(a,\\filter(p)(x))}{\\filter(p)(x)}
+@filter@#thm-filter-all	\\all(p,\\filter(p)(x)) = \\btrue
+@filter@#thm-filter-snoc	\\filter(p)(\\snoc(a)(x)) = \\bif{p(a)}{\\snoc(a,\\filter(p)(x))}{\\filter(p)(x)}
+@filter@#thm-filter-rev	\\filter(p)(\\rev(x)) = \\rev(\\filter(p)(x))
+@filter@#thm-filter-cat	\\filter(p)(\\cat(x,y)) = \\cat(\\filter(p)(x),\\filter(p)(y))
+@filter@#thm-filter-idempotent	\\filter(p)(\\filter(p)(x)) = \\filter(p)(x)
+@filter@#thm-filter-fix	\\beq(x,\\filter(p)(x)) = \\all(p,x)
+@filter@#thm-filter-commutative	\\filter(p)(\\filter(q)(x)) = \\filter(q)(\\filter(p)(x))
+#=======================#
 #--- sublist -----------#
 #=======================#
 @sublist@#cor-sublist-nil	\\sublist(x,\\nil) = \\isnil(x)

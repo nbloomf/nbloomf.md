@@ -383,7 +383,8 @@ Let $A$ be a set and $p : A \rightarrow \bool$ a predicate. For all $a \in A$ an
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \elt(a,\filter(p)(\nil)) \\
- & = & \elt(a,\nil) \\
+ &     \href{@filter@#cor-filter-nil}
+   = & \elt(a,\nil) \\
  & = & \bfalse \\
  &     \href{@and@#thm-and-false-right}
    = & \band(p(a),\bfalse) \\
@@ -392,7 +393,8 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equality holds for all $a$ for some $x$ and let $b \in A$. Note that if $a = b$, then $p(a) = p(b)$. Now
 $$\begin{eqnarray*}
  &   & \elt(a,\filter(p)(\cons(b,x))) \\
- & = & \elt(a,\bif{p(b)}{\cons(b,\filter(p)(x))}{\filter(p)(x)}) \\
+ &     \href{@filter@#cor-filter-cons}
+   = & \elt(a,\bif{p(b)}{\cons(b,\filter(p)(x))}{\filter(p)(x)}) \\
  &     \href{@booleans@#thm-iffunc}
    = & \bif{p(b)}{\elt(a,\cons(b,\filter(p)(x)))}{\elt(a,\filter(p)(x))} \\
  & = & \bif{p(b)}{\bif{\beq(a,b)}{\btrue}{\elt(a,\filter(p)(x))}}{\elt(a,\filter(p)(x))} \\

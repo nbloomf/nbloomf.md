@@ -129,14 +129,17 @@ Let $A$ be a set with $p : A \rightarrow \bool$ a predicate. For all $a \in A$ a
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \delete(a)(\filter(p)(\nil)) \\
- & = & \delete(a)(\nil) \\
+ &     \href{@filter@#cor-filter-nil}
+   = & \delete(a)(\nil) \\
  & = & \nil \\
- & = & \filter(p)(\nil)
+ &     \href{@filter@#cor-filter-nil}
+   = & \filter(p)(\nil)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equatily holds for some $x$, and let $b \in A$. Note that if $p(b) = \btrue$, then $\beq(a,b)$ must be $\bfalse. Now
 $$\begin{eqnarray*}
  &   & \delete(a)(\filter(p)(\cons(b,x))) \\
- & = & \delete(a)(\bif{p(b)}{\cons(b,\filter(p)(x))}{\filter(p)(x)}) \\
+ &     \href{@filter@#cor-filter-cons}
+   = & \delete(a)(\bif{p(b)}{\cons(b,\filter(p)(x))}{\filter(p)(x)}) \\
  &     \href{@booleans@#thm-iffunc}
    = & \bif{p(b)}{\delete(a)(\cons(b,\filter(p)(x)))}{\delete(a)(\filter(p)(x))} \\
  & = & \bif{p(b)}{\bif{\beq(a,b)}{\delete(a)(\filter(p)(x))}{\cons(b,\delete(a)(\filter(p)(x)))}}{\delete(a)(\filter(p)(x))} \\

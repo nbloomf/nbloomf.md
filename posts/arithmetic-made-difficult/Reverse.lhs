@@ -400,27 +400,33 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equality holds for all $y$ for some $x$ and let $a \in A$. We consider two possibilities for $y$. If $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \beq(\cons(a,x),y) \\
- & = & \beq(\cons(a,x),\nil) \\
+ &     \hyp{y = \nil}
+   = & \beq(\cons(a,x),\nil) \\
  & = & \isnil(\cons(a,x)) \\
  &     \href{@rev@#thm-isnil-rev}
    = & \isnil(\rev(\cons(a,x))) \\
  & = & \beq(\rev(\cons(a,x)),\nil) \\
  &     \href{@rev@#cor-rev-nil}
    = & \beq(\rev(\cons(a,x)),\rev(\nil)) \\
- & = & \beq(\rev(\cons(a,x)),\rev(y))
+ &     \hyp{y = \nil}
+   = & \beq(\rev(\cons(a,x)),\rev(y))
 \end{eqnarray*}$$
 as needed. Suppose instead that $y = \cons(b,u)$. Using the inductive hypothsis, we have
 $$\begin{eqnarray*}
  &   & \beq(\cons(a,x),y) \\
- & = & \beq(\cons(a,x),\cons(b,u)) \\
+ &     \hyp{y = \cons(b,u)}
+   = & \beq(\cons(a,x),\cons(b,u)) \\
  &     \href{@lists@#thm-list-eq-cons}
    = & \band(\beq(a,b),\beq(x,u)) \\
  &     \href{@rev@#thm-beq-rev}
    = & \band(\beq(a,b),\beq(\rev(x),\rev(u))) \\
  &     \href{@snoc@#thm-snoc-eq}
    = & \beq(\snoc(a,\rev(x)),\snoc(b,\rev(u))) \\
- & = & \beq(\rev(\cons(a,x)),\rev(\cons(b,u))) \\
- & = & \beq(\rev(\cons(a,x)),\rev(y))
+ & = & \beq(\rev(\cons(a,x)),\snoc(b,\rev(u))) \\
+ &     \href{@rev@#cor-rev-cons}
+   = & \beq(\rev(\cons(a,x)),\rev(\cons(b,u))) \\
+ &     \hyp{y = \cons(b,u)}
+   = & \beq(\rev(\cons(a,x)),\rev(y))
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

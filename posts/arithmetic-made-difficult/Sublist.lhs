@@ -933,14 +933,16 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \sublist(\filter(p,x),x) \\
  & = & \sublist(\filter(p,\nil),\nil) \\
- & = & \sublist(\nil,\nil) \\
+ &     \href{@filter@#cor-filter-nil}
+   = & \sublist(\nil,\nil) \\
  &     \href{@sublist@#thm-sublist-reflexive}
    = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $p$ for some $x$ and let $a \in A$. We consider two possibilities. If $p(a) = \btrue$, we have
 $$\begin{eqnarray*}
  &   & \sublist(\filter(p,\cons(a,x)),\cons(a,x)) \\
- & = & \sublist(\bif{p(a)}{\cons(a,\filter(p,x))}{\filter(p,x)},\cons(a,x)) \\
+ &     \href{@filter@#cor-filter-cons}
+   = & \sublist(\bif{p(a)}{\cons(a,\filter(p,x))}{\filter(p,x)},\cons(a,x)) \\
  & = & \sublist(\cons(a,\filter(p,x)),\cons(a,x)) \\
  & = & \sublist(\filter(p,x),x) \\
  & = & \btrue
@@ -948,7 +950,8 @@ $$\begin{eqnarray*}
 as needed. If $p(a) = \bfalse$, note that $$\sublist(\filter(p,x),x) = \btrue,$$ so that
 $$\begin{eqnarray*}
  &   & \sublist(\filter(p,\cons(a,x)),\cons(a,x)) \\
- & = & \sublist(\bif{p(a)}{\cons(a,\filter(p,x))}{\filter(p,x)},\cons(a,x)) \\
+ &     \href{@filter@#cor-filter-cons}
+   = & \sublist(\bif{p(a)}{\cons(a,\filter(p,x))}{\filter(p,x)},\cons(a,x)) \\
  & = & \sublist(\filter(p,x),\cons(a,x)) \\
  & = & \btrue
 \end{eqnarray*}$$
