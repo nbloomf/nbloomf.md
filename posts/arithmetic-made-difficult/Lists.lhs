@@ -20,7 +20,7 @@ slug: lists
 In the previous post, we saw how the process of describing $\nats$ in terms of its universal map $\natrec$ can be generalized: take an endofunctor $F$, assume it has an initial algebra, and see how it behaves. Here's an example.
 
 :::::: definition ::
-Let $A$ be a set, and define a functor $F_A$ by $F_A(X) = 1 + A \times X$. We assume that $F_A$ has an initial algebra, which we will denote $\lists{A}$. We denote the component maps of the isomorphism $$\theta : 1 + A \times \lists{A} \rightarrow \lists{A}$$ by $\const(\nil) : 1 \rightarrow \lists{A}$ and $\cons : A \times \lists{A} \rightarrow \lists{A}$. That is, $$\Theta = \either(\const(\nil),\cons).$$
+Let $A$ be a set, and define a functor $F_A$ by $F_A(X) = 1 + A \times X$. We assume that $F_A$ has an initial algebra, which we will denote $\lists{A}$. We denote the component maps of the isomorphism $$\theta : 1 + A \times \lists{A} \rightarrow \lists{A}$$ by $\const(\nil) : 1 \rightarrow \lists{A}$ and $\cons : A \times \lists{A} \rightarrow \lists{A}$. That is, $$\theta = \either(\const(\nil),\cons).$$
 ::::::::::::::::::::
 
 The names *nil* and *cons* come from the Lisp programming language, where they were first introduced. Now because the algebra map $\nil + \cons$ is an isomorphism, it has an inverse; we'll denote this map $\uncons : \lists{A} \rightarrow 1 + (A \times \lists{A})$.

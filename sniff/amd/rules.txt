@@ -341,6 +341,18 @@
 @gcd@#thm-gcd-associative	\\ngcd(\\ngcd(a,b),c) = \\ngcd(a,\\ngcd(b,c))
 @gcd@#thm-gcd-times	\\ngcd(\\ntimes(a,c),\\ntimes(b,c)) = \\ntimes(\\ngcd(a,b),c)
 #=======================#
+#--- lcm ---------------#
+#=======================#
+@lcm@#def-lcm	\\nlcm(a,b) = \\nquo(\\ntimes(a,b),\\ngcd(a,b))
+@lcm@#thm-lcm-zero	\\nlcm(a,\\zero) = \\zero
+@lcm@#thm-lcm-one	\\nlcm(a,\\next(\\zero)) = \\zero
+@lcm@#thm-lcm-idempotent	\\nlcm(a,a) = a
+@lcm@#thm-lcm-commutative	\\nlcm(a,b) = \\nlcm(b,a)
+@lcm@#thm-lcm-associative	\\nlcm(a,\\nlcm(b,c)) = \\nlcm(\\nlcm(a,b),c)
+@lcm@#thm-lcm-times	\\nlcm(\\ntimes(c,a),\\ntimes(c,b)) = \\ntimes(c,\\nlcm(a,b))
+@lcm@#thm-gcd-lcm-dist	\\ngcd(a,\\nlcm(b,c)) = \\nlcm(\\ngcd(a,b),\\ngcd(a,c))
+@lcm@#thm-lcm-gcd-dist	\\nlcm(a,\\ngcd(b,c)) = \\ngcd(\\nlcm(a,b),\\nlcm(a,c))
+#=======================#
 #--- lists -------------#
 #=======================#
 @lists@#def-uncons-inverse-left	\\compose(\\uncons)(\\either(\\const(\\nil),\\uncurry(\\cons))) = \\id
@@ -531,6 +543,22 @@
 @take-drop@#cor-drop-next-cons	\\drop(\\next(n),\\cons(a,x)) = \\drop(n,x)
 @take-drop@#thm-drop-suffix	\\suffix(\\drop(k,x),x) = \\btrue
 @take-drop@#thm-take-drop-cat	\\cat(\\take(k,x),\\drop(k,x)) = x
+#=======================#
+#--- takebut-dropbut ---#
+#=======================#
+@takebut-dropbut@#def-takebut	\\takeBut(k)(x) = \\rev(\\drop(k)(\\rev(x)))
+@takebut-dropbut@#def-dropbut	\\dropBut(k)(x) = \\rev(\\take(k)(\\rev(x)))
+@takebut-dropbut@#thm-takebut-zero	\\takeBut(\\zero)(x) = x
+@takebut-dropbut@#thm-takebut-next-nil	\\takeBut(\\next(n))(\\nil) = \\nil
+@takebut-dropbut@#thm-takebut-next-snoc	\\takeBut(\\next(k))(\\snoc(a,x)) = \\takeBut(k)(x)
+@takebut-dropbut@#thm-takebut-prefix	\\prefix(\\takeBut(k)(x),x) = \\btrue
+@takebut-dropbut@#thm-takebut-sublist	\\sublist(\\takeBut(k)(x),x) = \\btrue
+@takebut-dropbut@#thm-dropbut-zero	\\dropBut(\\zero)(x) = \\nil
+@takebut-dropbut@#thm-dropbut-next-nil	\\dropBut(\\next(n))(\\nil) = \\nil
+@takebut-dropbut@#thm-dropbut-next-snoc	\\dropBut(\\next(k))(\\snoc(a,x)) = \\snoc(a,\\dropBut(k,x))
+@takebut-dropbut@#thm-dropbut-suffix	\\suffix(\\dropBut(k)(x),x) = \\btrue
+@takebut-dropbut@#thm-dropbut-idempotent	\\dropBut(k,\\dropBut(k,x)) = \\dropBut(k,x)
+@takebut-dropbut@#thm-takebut-dropbut-cat	\\cat(\\takeBut(k,x),\\dropBut(k,x)) = x
 #=======================#
 #--- sublist -----------#
 #=======================#

@@ -25,6 +25,7 @@ Recall the following property of $\nmax$: if $\nleq(c,a)$ and $\nleq(c,b)$, then
 We don't need recursion for this.
 
 :::::: definition ::
+[]{#def-lcm}
 Define $\nlcm : \nats \times \nats \rightarrow \nats$ by $$\nlcm(a,b) = \nquo(\ntimes(a,b),\ngcd(a,b)).$$
 
 In Haskell:
@@ -37,6 +38,7 @@ In Haskell:
 woo special cases!
 
 :::::: theorem :::::
+[]{#thm-lcm-zero}[]{#thm-lcm-one}
 For all $a \in \nats$ we have the following.
 
 1. $\nlcm(a,\zero) = \zero$.
@@ -46,14 +48,16 @@ For all $a \in \nats$ we have the following.
 1. Note that
 $$\begin{eqnarray*}
  &   & \nlcm(a,\zero) \\
- & = & \nquo(\ntimes(a,\zero),\ngcd(a,\zero)) \\
+ &     \href{@lcm@#def-lcm}
+   = & \nquo(\ntimes(a,\zero),\ngcd(a,\zero)) \\
  & = & \nquo(\zero,a) \\
  & = & \zero.
 \end{eqnarray*}$$
 2. Note that
 $$\begin{eqnarray*}
  &   & \nlcm(a,\next(\zero)) \\
- & = & \nquo(\ntimes(a,\next(\zero)),\ngcd(a,\next(\zero))) \\
+ &     \href{@lcm@#def-lcm}
+   = & \nquo(\ntimes(a,\next(\zero)),\ngcd(a,\next(\zero))) \\
  & = & \nquo(a,\next(\zero)) \\
  & = & a.
 \end{eqnarray*}$$
@@ -80,6 +84,7 @@ $$\begin{eqnarray*}
 As we might expect, $\nlcm$ enjoys many properties analogous to those of $\ngcd$. It is idempotent and commutative.
 
 :::::: theorem :::::
+[]{#thm-lcm-idempotent}[]{#thm-lcm-commutative}
 Let $a,b \in \nats$. Then we have the following.
 
 1. $\nlcm(a,a) = a$.
@@ -89,7 +94,8 @@ Let $a,b \in \nats$. Then we have the following.
 1. We consider two cases: $a = \zero$ and $a \neq \zero$. If $a = \zero$, we have
 $$\begin{eqnarray*}
  &   & \nlcm(a,a) \\
- & = & \nquo(\ntimes(a,a),\ngcd(a,a)) \\
+ &     \href{@lcm@#def-lcm}
+   = & \nquo(\ntimes(a,a),\ngcd(a,a)) \\
  & = & \nquo(\zero,\zero) \\
  & = & \zero \\
  & = & a
@@ -97,7 +103,8 @@ $$\begin{eqnarray*}
 as claimed. If $a \neq \zero$, say $a = \next(t)$, then we have
 $$\begin{eqnarray*}
  &   & \nlcm(a,a) \\
- & = & \nquo(\ntimes(a,a),\ngcd(a,a)) \\
+ &     \href{@lcm@#def-lcm}
+   = & \nquo(\ntimes(a,a),\ngcd(a,a)) \\
  &     \href{@gcd@#thm-gcd-idempotent}
    = & \nquo(\ntimes(a,a),a) \\
  & = & a
@@ -106,9 +113,11 @@ as claimed.
 2. Note that
 $$\begin{eqnarray*}
  &   & \nlcm(a,b) \\
- & = & \nquo(\ntimes(a,b),\ngcd(a,b)) \\
+ &     \href{@lcm@#def-lcm}
+   = & \nquo(\ntimes(a,b),\ngcd(a,b)) \\
  & = & \nquo(\ntimes(b,a),\ngcd(b,a)) \\
- & = & \nlcm(b,a)
+ &     \href{@lcm@#def-lcm}
+   = & \nlcm(b,a)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -143,14 +152,16 @@ Let $a,b,c \in \nats$. Then we have the following.
 1. We consider two cases: $\ngcd(a,b) = \zero$ and $\ngcd(a,b) \neq \zero$. If $\ngcd(a,b) = \zero$, then we have $a = b = \zero$. Now
 $$\begin{eqnarray*}
  &   & \nlcm(\zero,\zero) \\
- & = & \nquo(\ntimes(\zero,\zero),\ngcd(\zero,\zero)) \\
+ &     \href{@lcm@#def-lcm}
+   = & \nquo(\ntimes(\zero,\zero),\ngcd(\zero,\zero)) \\
  & = & \nquo(\zero,\zero) \\
  & = & \zero
 \end{eqnarray*}$$
 and $\ndiv(\zero,\zero)$ as needed. Suppose instead that $\ngcd(a,b) \neq \zero$. Say $b = \ntimes(k,\ngcd(a,b))$. Now
 $$\begin{eqnarray*}
  &   & \nlcm(a,b) \\
- & = & \nquo(\ntimes(a,b),\ngcd(a,b)) \\
+ &     \href{@lcm@#def-lcm}
+   = & \nquo(\ntimes(a,b),\ngcd(a,b)) \\
  & = & \nquo(\ntimes(\ntimes(a,k),\ngcd(a,b)),\ngcd(a,b)) \\
  & = & \ntimes(a,k),
 \end{eqnarray*}$$
@@ -166,7 +177,8 @@ c & = & c \\
 That is, $\ndiv(t,\ntimes(s,u))$. By Euclid's lemma, we have $\ndiv(t,u)$. Next, note that
 $$\begin{eqnarray*}
  &   & \nlcm(a,b) \\
- & = & \nquo(\ntimes(a,b),\ngcd(a,b)) \\
+ &     \href{@lcm@#def-lcm}
+   = & \nquo(\ntimes(a,b),\ngcd(a,b)) \\
  & = & \nquo(\ntimes(a,\ntimes(t,d)),d) \\
  &     \href{@times@#thm-times-associative}
    = & \nquo(\ntimes(\ntimes(a,t),d),d) \\
@@ -220,6 +232,7 @@ Since $\ndiv(a,m)$ and $\ndiv(b,m)$, we have $\ndiv(\nlcm(a,b),m)$. But likewise
 $\nlcm$ is associative:
 
 :::::: theorem :::::
+[]{#thm-lcm-associative}
 Let $a,b,c \in \nats$. Then $\nlcm(\nlcm(a,b),c) = \nlcm(a,\nlcm(b,c))$.
 
 ::: proof ::::::::::
@@ -249,7 +262,8 @@ $$\begin{eqnarray*}
  &     \href{@times@#thm-times-one-right}
    = & a \\
  & = & \nlcm(a,b) \\
- & = & \nquo(\ntimes(a,b),\ngcd(a,b)) \\
+ &     \href{@lcm@#def-lcm}
+   = & \nquo(\ntimes(a,b),\ngcd(a,b)) \\
  & = & \nquo(\ntimes(\ntimes(a,k),d),d) \\
  & = & \ntimes(a,k).
 \end{eqnarray*}$$
@@ -270,6 +284,7 @@ Since $a \neq \zero$, we have $k = \next(\zero)$, and thus $b = \ngcd(a,b)$. Hen
 $\ntimes$ distributes over $\nlcm$.
 
 :::::: theorem :::::
+[]{#thm-lcm-times}
 Let $a,b,c \in \nats$. Then we have $$\nlcm(\ntimes(c,a),ntimes(c,b)) = \ntimes(c,\nlcm(a,b)).$$
 
 ::: proof ::::::::::
@@ -277,7 +292,8 @@ We consider two cases: either $c = \zero$ or $c \neq \zero$. If $c = \zero$ we h
 $$\begin{eqnarray*}
  &   & \nlcm(\ntimes(c,a),\ntimes(c,b)) \\
  & = & \nlcm(\zero,\zero) \\
- & = & \zero \\
+ &     \href{@lcm@#thm-lcm-zero}
+   = & \zero \\
  &     \href{@times@#cor-times-up-zero}
    = & \ntimes(\zero,\nlcm(a,b)) \\
  & = & \ntimes(c,\nlcm(a,b))
@@ -285,11 +301,13 @@ $$\begin{eqnarray*}
 as claimed. Suppose then that $c \neq \zero$. Now we have
 $$\begin{eqnarray*}
  &   & \nlcm(\ntimes(c,a),\ntimes(c,b)) \\
- & = & \nquo(\ntimes(\ntimes(c,a),\ntimes(c,b)),\ngcd(\ntimes(c,a),\ntimes(c,b))) \\
+ &     \href{@lcm@#def-lcm}
+   = & \nquo(\ntimes(\ntimes(c,a),\ntimes(c,b)),\ngcd(\ntimes(c,a),\ntimes(c,b))) \\
  & = & \nquo(\ntimes(\ntimes(c,\ntimes(a,b)),c),\ngcd(\ntimes(a,b),c)) \\
  & = & \nquo(\ntimes(c,\ntimes(a,b)),\ngcd(a,b)) \\
  & = & \ntimes(c,\nquo(\ntimes(a,b),\ngcd(a,b))) \\
- & = & \ntimes(c,\nlcm(a,b))
+ &     \href{@lcm@#def-lcm}
+   = & \ntimes(c,\nlcm(a,b))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -336,6 +354,7 @@ so that $\ndiv(\nlcm(a,c),\nlcm(b,c))$ as claimed.
 Finally, $\ngcd$ and $\nlcm$ distribute over each other.
 
 :::::: theorem :::::
+[]{#thm-lcm-gcd-dist}[]{#thm-gcd-lcm-dist}
 Let $a,b,c \in \nats$. Then we have the following.
 
 1. $\ngcd(a,\nlcm(b,c)) = \nlcm(\ngcd(a,b),\ngcd(a,c))$.
@@ -368,7 +387,8 @@ as claimed. Similarly, if $c = \zero$ we have
 $$\begin{eqnarray*}
  &   & \ngcd(a,\nlcm(b,c)) \\
  & = & \ngcd(a,\nlcm(b,\zero)) \\
- & = & \ngcd(a,\zero) \\
+ &     \href{@lcm@#thm-lcm-zero}
+   = & \ngcd(a,\zero) \\
  &     \href{@gcd@#thm-gcd-zero}
    = & a \\
  & = & \nlcm(a,\ngcd(a,c)) \\
@@ -421,7 +441,8 @@ $$\begin{eqnarray*}
  & = & \nlcm(a,\ngcd(\zero,c)) \\
  & = & \nlcm(a,c) \\
  & = & \ngcd(\zero,\nlcm(a,c)) \\
- & = & \ngcd(\nlcm(a,\zero),\nlcm(a,c)) \\
+ &     \href{@lcm@#thm-lcm-zero}
+   = & \ngcd(\nlcm(a,\zero),\nlcm(a,c)) \\
  & = & \ngcd(\nlcm(a,b),\nlcm(a,c))
 \end{eqnarray*}$$
 as claimed. Similarly, if $c = \zero$ we have
