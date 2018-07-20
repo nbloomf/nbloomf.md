@@ -127,7 +127,8 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \unique(\dedupeL(\nil)) \\
  & = & \unique(\nil) \\
- & = & \btrue
+ &     \href{@unique@#cor-unique-nil}
+   = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Using the inductive hypothesis, we have $\unique(\dedupeL(x)) = \btrue$, so that $\unique(\delete(a,\dedupeL(x))) = \btrue$. Now
 $$\begin{eqnarray*}
@@ -508,7 +509,8 @@ Note that
 $$\begin{eqnarray*}
  &   & \unique(\dedupeR(x)) \\
  & = & \unique(\rev(\dedupeL(\rev(x)))) \\
- & = & \unique(\dedupeL(\rev(x))) \\
+ &     \href{@unique@#thm-unique-rev}
+   = & \unique(\dedupeL(\rev(x))) \\
  & = & \btrue
 \end{eqnarray*}$$
 as claimed.

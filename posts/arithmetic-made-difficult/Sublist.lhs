@@ -267,6 +267,7 @@ as needed.
 Sublist conditionally interacts with $\cons$. This one seems like it should be obvious, but the only proof I could find was kind of complicated -- nested induction of two statements at once.
 
 :::::: theorem :::::
+[]{#thm-sublist-cons-right}[]{#thm-sublist-cons-left}
 Let $A$ be a set with $a,b \in A$ and $x,y \in \lists{A}$. Then we have the following.
 
 1. If $\sublist(x,y) = \btrue$, then $\sublist(x,\cons(b,y)) = \btrue$.
@@ -349,14 +350,17 @@ as needed.
 $\sublist$ interacts with $\length$.
 
 :::::: theorem :::::
+[]{#thm-sublist-length}
 Let $A$ be a set, with $x,y \in \lists{A}$. If $\sublist(x,y) = \btrue$, then $\nleq(\length(x),\length(y))$.
 
 ::: proof ::::::::::
 We proceed by list induction on $y$. For the base case $y = \nil$, note that $\length(y) = \zero$. Now if
 $$\begin{eqnarray*}
  &   & \btrue \\
- & = & \sublist(x,y) \\
- & = & \sublist(x,\nil) \\
+ &     \hyp{\sublist(x,y) = \btrue}
+   = & \sublist(x,y) \\
+ &     \hyp{y = \nil}
+   = & \sublist(x,\nil) \\
  &     \href{@sublist@#cor-sublist-nil}
    = & \isnil(x)
 \end{eqnarray*}$$
@@ -370,14 +374,16 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the implication holds for all $x$ for some $y$, and let $b \in A$. We consider two cases for $x$. If $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \sublist(x,\cons(b,y)) \\
- & = & \sublist(\nil,\cons(b,y)) \\
+ &     \hyp{x = \nil}
+   = & \sublist(\nil,\cons(b,y)) \\
  &     \href{@sublist@#cor-sublist-nil-cons}
    = & \btrue
 \end{eqnarray*}$$
 and furthermore
 $$\begin{eqnarray*}
  &   & \nleq(\length(x),\length(\cons(b,y))) \\
- & = & \nleq(\length(\nil),\length(\cons(b,y))) \\
+ &     \hyp{x = \nil}
+   = & \nleq(\length(\nil),\length(\cons(b,y))) \\
  &     \href{@length@#cor-length-nil}
    = & \nleq(\zero,\length(\cons(b,y)))
 \end{eqnarray*}$$
@@ -435,6 +441,7 @@ as needed.
 $\sublist$ is antisymmetric.
 
 :::::: theorem :::::
+[]{#thm-sublist-asymmetric}
 Let $A$ be a set, and $x,y \in \lists{A}$. We have $\sublist(x,y)$ and $\sublist(y,x)$ if and only if $x = y$.
 
 ::: proof ::::::::::
@@ -509,6 +516,7 @@ as needed.
 $\sublist$ is transitive.
 
 :::::: theorem :::::
+[]{#thm-sublist-transitive}
 Let $A$ be a set, with $x,y,z \in \lists{A}$. If $\sublist(x,y)$ and $\sublist(y,z)$, then $\sublist(x,z)$.
 
 ::: proof ::::::::::
@@ -555,6 +563,7 @@ By the inductive hypothesis, $\sublist(u,z)$, so that $\sublist(x,\cons(c,z))$ a
 $\sublist$ is compatible with $\cat$.
 
 :::::: theorem :::::
+[]{#thm-sublist-cat}
 Let $A$ be a set. The following hold for all $x,y,u,v \in \lists{A}$. If $\sublist(x,u)$ and $\sublist(y,v)$, then $\sublist(\cat(x,y),\cat(u,v))$.
 
 ::: proof ::::::::::
@@ -577,6 +586,7 @@ If $\sublist(x,u) = \btrue$, then $\sublist(\cat(x,y),\cat(u,y)) = \btrue$. Simi
 $\sublist$ interacts with $\snoc$.
 
 :::::: theorem :::::
+[]{#thm-sublist-snoc-snoc}
 Let $A$ be a set. For all $a,b \in A$ and $x,y \in \lists{A}$ we have $$\sublist(\snoc(a,x),\snoc(b,y)) = \bif{\beq(a,b)}{\sublist(x,y)}{\sublist(\snoc(a,x),y)}.$$
 
 ::: proof ::::::::::
@@ -663,6 +673,7 @@ as needed.
 $\sublist$ interacts with $\rev$:
 
 :::::: theorem :::::
+[]{#thm-sublist-rev}
 Let $A$ be a set. For all $x,y \in \lists{A}$ we have $$\sublist(x,y) = \sublist(\rev(x),\rev(y)).$$
 
 ::: proof ::::::::::
@@ -695,9 +706,11 @@ $$\begin{eqnarray*}
  & = & \sublist(\rev(x),\rev(\cons(b,y))) \\
  & = & \sublist(\rev(\cons(a,w)),\rev(\cons(b,y))) \\
  & = & \sublist(\snoc(a,\rev(w)),\snoc(b,\rev(y))) \\
- & = & \bif{\beq(a,b)}{\sublist(\rev(w),\rev(y))}{\sublist(\snoc(a,\rev(w)),\rev(y))} \\
+ &     \href{@sublist@#thm-sublist-snoc-snoc}
+   = & \bif{\beq(a,b)}{\sublist(\rev(w),\rev(y))}{\sublist(\snoc(a,\rev(w)),\rev(y))} \\
  & = & \bif{\beq(a,b)}{\sublist(w,y)}{\sublist(\rev(\cons(a,w)),\rev(y))} \\
- & = & \bif{\beq(a,b)}{\sublist(w,y)}{\sublist(\cons(a,w),y)} \\
+ &     \href{@sublist@#thm-sublist-rev}
+   = & \bif{\beq(a,b)}{\sublist(w,y)}{\sublist(\cons(a,w),y)} \\
  &     \href{@sublist@#cor-sublist-cons-cons}
    = & \sublist(\cons(a,w),\cons(b,y)) \\
  & = & \sublist(x,\cons(b,y))
@@ -719,6 +732,7 @@ as needed.
 $\sublist$ interacts conditionally with $\snoc$ in one argument.
 
 :::::: theorem :::::
+[]{#thm-sublist-snoc-left}[]{#thm-sublist-snoc-right}
 Let $A$ be a set with $a \in A$ and $x,y \in \lists{A}$. Then we have the following.
 
 1. If $\sublist(x,y) = \btrue$, then $\sublist(x,\snoc(a,y)) = \btrue$.
@@ -729,7 +743,8 @@ Let $A$ be a set with $a \in A$ and $x,y \in \lists{A}$. Then we have the follow
 $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \sublist(x,y) \\
- & = & \sublist(\rev(x),\rev(y)) \\
+ &     \href{@sublist@#thm-sublist-rev}
+   = & \sublist(\rev(x),\rev(y)) \\
  & = & \sublist(\rev(x),\cons(a,\rev(y))) \\
  &     \href{@rev@#thm-rev-snoc}
    = & \sublist(\rev(x),\rev(\snoc(a,y))) \\
@@ -740,11 +755,13 @@ as claimed.
 $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \sublist(\snoc(a,x),y) \\
- & = & \sublist(\rev(\snoc(a,x)),\rev(y)) \\
+ &     \href{@sublist@#thm-sublist-rev}
+   = & \sublist(\rev(\snoc(a,x)),\rev(y)) \\
  &     \href{@rev@#thm-rev-snoc}
    = & \sublist(\cons(a,\rev(x)),\rev(y)) \\
  & = & \sublist(\rev(x),\rev(y)) \\
- & = & \sublist(x,y)
+ &     \href{@sublist@#thm-sublist-rev}
+   = & \sublist(x,y)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -804,7 +821,8 @@ as needed.
 $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \sublist(x,y) \\
- & = & \sublist(\rev(x),\rev(y)) \\
+ &     \href{@sublist@#thm-sublist-rev}
+   = & \sublist(\rev(x),\rev(y)) \\
  & = & \sublist(\rev(x),\cat(\rev(z),\rev(y))) \\
  &     \href{@cat@#thm-rev-cat-antidistribute}
    = & \sublist(\rev(x),\rev(\cat(y,z))) \\
@@ -833,11 +851,13 @@ as needed.
 $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \sublist(\cat(x,z),y) \\
- & = & \sublist(\rev(\cat(x,z)),\rev(y)) \\
+ &     \href{@sublist@#thm-sublist-rev}
+   = & \sublist(\rev(\cat(x,z)),\rev(y)) \\
  &     \href{@cat@#thm-rev-cat-antidistribute}
    = & \sublist(\cat(\rev(z),\rev(x)),\rev(y)) \\
  & = & \sublist(\rev(x),\rev(y)) \\
- & = & \sublist(x,y)
+ &     \href{@sublist@#thm-sublist-rev}
+   = & \sublist(x,y)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::

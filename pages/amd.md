@@ -107,6 +107,7 @@ Under construction. I don't know exactly what this is yet. Links that don't exis
         * DeleteAt
         * SwapAt
     * Topics on Lists
+        * [Delimiter Separated Values](/posts/arithmetic-made-difficult/DSV.html)
         * Run Length Encoding
         * Edit Distance
         * Sums and Products

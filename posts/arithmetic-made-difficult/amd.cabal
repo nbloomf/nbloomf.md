@@ -80,7 +80,8 @@ library
     Sublists,
     TakeAndDrop,
     TakeButAndDropBut,
-    TakeWhileAndDropWhile
+    TakeWhileAndDropWhile,
+    DSV
   build-depends:
     base == 4.*,
     QuickCheck
@@ -2402,3 +2403,12 @@ test-suite amd-takewhile-dropwhile
     Delete,
     Dedupe,
     TakeAndDrop
+
+test-suite amd-dsv
+  default-language: Haskell2010
+  type: exitcode-stdio-1.0
+  main-is: DSV.lhs
+  build-depends: base == 4.*, QuickCheck
+  ghc-options: -Wall -main-is DSV.main_dsv
+  other-modules:
+    Testing

@@ -50,6 +50,7 @@ In Haskell:
 Since $\unique$ is defined as a $\cfoldr(\ast)(\ast)$, it can be characterized as the unique solution to a system of functional equations.
 
 :::::: corollary :::
+[]{#cor-unique-nil}[]{#cor-unique-cons}
 Let $A$ be a set. $\unique$ is the unique map $f : \lists{A} \rightarrow \bool$ satisfying the following system of equations for all $a \in A$ and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(\nil) = \btrue \\
@@ -77,6 +78,7 @@ $$\left\{\begin{array}{l}
 Special cases.
 
 :::::: theorem :::::
+[]{#thm-unique-one}[]{#thm-unique-two}
 Let $A$ be a set with $a,b \in A$. Then we have the following.
 
 1. $\unique(\cons(a,\nil)) = \btrue$.
@@ -275,6 +277,7 @@ as needed.
 $\unique$ interacts with $\rev$.
 
 :::::: theorem :::::
+[]{#thm-unique-rev}
 Let $A$ be a set with $x \in \lists{A}$. Then $\unique(x) = \unique(\rev(x))$.
 
 ::: proof ::::::::::
@@ -312,6 +315,7 @@ as needed.
 $\range$s are unique.
 
 :::::: theorem :::::
+[]{#thm-unique-range}
 Let $a,b \in \nats$. We have $$\unique(\range(a,b)) = \btrue.$$
 
 ::: proof ::::::::::
@@ -319,14 +323,16 @@ We proceed by induction on $b$. For the base case $b = \zero$, we have
 $$\begin{eqnarray*}
  &   & \unique(\range(a,\zero)) \\
  & = & \unique(\nil) \\
- & = & \btrue
+ &     \href{@unique@#cor-unique-nil}
+   = & \btrue
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $a$ for some $b$. Now
 $$\begin{eqnarray*}
  &   & \unique(a,\next(b)) \\
  & = & \unique(\cons(a,\range(\next(a),b))) \\
  & = & \band(\bnot(\elt(a,\range(\next(a),b))),\unique(\range(\next(a),b))) \\
- & = & \band(\bnot(\elt(a,\range(\next(a),b))),\btrue) \\
+ &     \href{@unique@#thm-unique-range}
+   = & \band(\bnot(\elt(a,\range(\next(a),b))),\btrue) \\
  &     \href{@and@#thm-and-true-right}
    = & \bnot(\elt(a,\range(\next(a),b))) \\
  & = & \bnot(\bfalse) \\
@@ -367,7 +373,8 @@ $$\begin{eqnarray*}
  & = & \all(\unique)(\cons(\cons(a,\cons(b,\nil)),\map(\cons(a,\cons(-,\nil)))(x))) \\
  & = & \band(\unique(\cons(a,\cons(b,\nil))),\all(\unique)(\map(\cons(a,\cons(-,\nil)))(x))) \\
  & = & \band(\unique(\cons(a,\cons(b,\nil))),\bnot(\elt(a,x))) \\
- & = & \band(\bnot(\beq(a,b)),\bnot(\elt(a,x))) \\
+ &     \href{@unique@#thm-unique-two}
+   = & \band(\bnot(\beq(a,b)),\bnot(\elt(a,x))) \\
  &     \href{@or@#thm-demorgan-not-or}
    = & \bnot(\bor(\beq(a,b),\elt(a,x))) \\
  & = & \bnot(\elt(a,\cons(b,x)))
@@ -400,7 +407,8 @@ $$\begin{eqnarray*}
  & = & \all(\unique)(\select(\next(\next(\zero)),\nil)) \\
  & = & \all(\unique)(\nil) \\
  & = & \btrue \\
- & = & \unique(\nil) \\
+ &     \href{@unique@#cor-unique-nil}
+   = & \unique(\nil) \\
  & = & \unique(x)
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Using the inductive hypothesis, we have

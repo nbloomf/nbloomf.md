@@ -594,3 +594,22 @@
 @sublist@#thm-sublist-snoc-cancel	\\sublist(\\snoc(a,x),\\snoc(a,y)) = \\sublist(x,y)
 @sublist@#thm-sublist-cat-left-cancel	\\sublist(\\cat(z,x),\\cat(z,y)) = \\sublist(x,y)
 @sublist@#thm-sublist-cat-right-cancel	\\sublist(\\cat(x,z),\\cat(y,z)) = \\sublist(x,y)
+@sublist@#thm-sublist-cons-right	\\bimpl(\\sublist(x,y))(\\sublist(x,\\cons(b,y))) = \\btrue
+@sublist@#thm-sublist-cons-left	\\bimpl(\\sublist(\\cons(a,x),y))(\\sublist(x,y)) = \\btrue
+@sublist@#thm-sublist-length	\\bimpl(\\sublist(x,y))(\\nleq(\\length(x))(\\length(y))) = \\true
+@sublist@#thm-sublist-asymmetric	\\band(\\sublist(x,y))(\\sublist(y,x)) = \\beq(x)(y)
+@sublist@#thm-sublist-transitive	\\bimpl(\\band(\\sublist(x,y))(\\sublist(y,z)))(\\sublist(x,z)) = \\btrue
+@sublist@#thm-sublist-cat	\\bimpl(\\band(\\sublist(x)(u))(\\sublist(y)(v)))(\\sublist(\\cat(x,y))(\\cat(u,v))) = \\btrue
+@sublist@#thm-sublist-snoc-snoc	\\sublist(\\snoc(a,x),\\snoc(b,y)) = \\bif{\\beq(a,b)}{\\sublist(x,y)}{\\sublist(\\snoc(a,x),y)}
+@sublist@#thm-sublist-rev	\\sublist(\\rev(x),\\rev(y)) = \\sublist(x,y)
+@sublist@#thm-sublist-snoc-right	\\bimpl(\\sublist(x,y))(\\sublist(x,\\snoc(a,y))) = \\btrue
+@sublist@#thm-sublist-snoc-left	\\bimpl(\\sublist(\\snoc(a,x),y))(\\sublist(x,y)) = \\btrue
+#=======================#
+#--- unique ------------#
+#=======================#
+@unique@#cor-unique-nil	\\unique(\\nil) = \\btrue
+@unique@#cor-unique-cons	\\unique(\\cons(a,x)) = \\band(\\bnot(\\belt(a,x)),\\unique(x))
+@unique@#thm-unique-one	\\unique(\\cons(a,\\nil)) = \\btrue
+@unique@#thm-unique-two	\\unique(\\cons(a,\\cons(b,\\nil))) = \\bnot(\\beq(a,b))
+@unique@#thm-unique-rev	\\unique(\\rev(x)) = \\unique(x)
+@unique@#thm-unique-range	\\unique(\\range(a,b)) = \\btrue
