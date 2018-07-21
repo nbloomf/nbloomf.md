@@ -39,24 +39,25 @@ $$\begin{eqnarray*}
 With this in mind, we define $\unzip$ like so.
 
 :::::: definition ::
-Let $A$ and $B$ be sets. Define $\varphi : (A \times B) \times (\lists{A} \times \lists{B}) \rightarrow \lists{A} \times \lists{B}$ by $$\varphi((a,b),(u,v)) = (\cons(a,u),\cons(b,v)).$$ We then define $\unzip : \lists{A \times B} \rightarrow \lists{A} \times \lists{B}$ by $$\unzip(x) = \foldr((\nil,\nil))(\varphi)(x).$$
+Let $A$ and $B$ be sets. Define $\varphi : (A \times B) \times (\lists{A} \times \lists{B}) \rightarrow \lists{A} \times \lists{B}$ by $$\varphi(u,z) = \tup(\cons(\fst(u),\fst(z)),\cons(\snd(u),\snd(z))).$$ We then define $\unzip : \lists{A \times B} \rightarrow \lists{A} \times \lists{B}$ by $$\unzip = \foldr(\tup(\nil)(\nil))(\varphi).$$
 
 In Haskell:
 
 > unzip :: (List t) => t (Pair a b) -> Pair (t a) (t b)
 > unzip = foldr (tup nil nil) phi
 >   where
->     phi (Pair a b) (Pair u v) = tup (cons a u) (cons b v)
+>     phi u z = tup (cons (fst u) (fst z)) (cons (snd u) (snd z))
 
 ::::::::::::::::::::
 
 Because $\unzip$ is defined as a $\foldr(\ast)(\ast)$, it is the unique solution to a system of functional equations.
 
 :::::: corollary :::
+[]{#cor-unzip-nil}[]{#cor-unzip-cons}
 Let $A$ and $B$ be sets. Then $\unzip$ is the unique map $f : \lists{A \times B} \rightarrow \lists{A} \times \lists{B}$ such that the following hold for all $a \in A$, $b \in B$, $x \in \lists{A}$, and $y \in \lists{B}$.
 $$\left\{\begin{array}{l}
- f(\nil) = (\nil,\nil) \\
- f(\cons(a,b),z) = (\cons(a,\fst(z)),\cons(b,\snd(z))).
+ f(\nil) = \tup(\nil)(\nil) \\
+ f(\cons(u,z)) = \tup(\cons(\fst(u),\fst(z)))(\cons(\snd(u),\snd(z))).
 \end{array}\right.$$
 
 ::: test :::::::::::
@@ -82,25 +83,33 @@ $$\left\{\begin{array}{l}
 Now $\zip$ undoes $\unzip$ as expected.
 
 :::::: theorem :::::
-Let $A$ and $B$ be sets. For all $x \in \lists{A \times B}$, we have $$\zip(\unzip(x)) = x.$$
+[]{#thm-zip-unzip}
+Let $A$ and $B$ be sets. For all $x \in \lists{A \times B}$, we have $$\uncurry(\zip)(\unzip(x)) = x.$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
- &   & \zip(\unzip(x)) \\
- & = & \zip(\unzip(\nil)) \\
- & = & \zip(\nil,\nil) \\
+ &   & \uncurry(\zip)(\unzip(x)) \\
+ &     \hyp{x = \nil}
+   = & \uncurry(\zip)(\unzip(\nil)) \\
+ & = & \uncurry(\zip)(\tup(\nil)(\nil)) \\
+ &     \href{@tuples@#def-uncurry}
+   = & \zip(\nil)(\nil) \\
  &     \href{@zip@#cor-zip-nil-left}
    = & \nil \\
- & = & x
+ &     \hyp{x = \nil}
+   = & x
 \end{eqnarray*}$$
 as needed. Suppose now that the result holds for some $x$ and let $a \in A$ and $b \in B$. Let $(u,v) = \unzip(x)$. Now
 $$\begin{eqnarray*}
- &   & \zip(\unzip(\cons((a,b),x))) \\
- & = & \zip(\cons(a,\fst(\unzip(x))),\cons(b,\snd(\unzip(x)))) \\
- & = & \cons((a,b),\zip(\fst(\unzip(x)),\snd(\unzip(x)))) \\
- & = & \cons((a,b),\zip(\unzip(x))) \\
- & = & \cons((a,b),x)
+ &   & \uncurry(\zip)(\unzip(\cons(\tup(a)(b),x))) \\
+ & = & \uncurry(\zip)\tup(\cons(a,\fst(\unzip(x))))(\cons(b,\snd(\unzip(x)))) \\
+ & = & \zip(\cons(a,\fst(\unzip(x))))(\cons(b,\snd(\unzip(x)))) \\
+ &     \href{@zip@#cor-zip-cons-cons}
+   = & \cons(\tup(a)(b),\zip(\fst(\unzip(x)),\snd(\unzip(x)))) \\
+ & = & \cons(\tup(a)(b),\uncurry(\zip)(\unzip(x))) \\
+ &     \hyp{\uncurry(\zip)(\unzip(x)) = x}
+   = & \cons(\tup(a)(b),x)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -121,19 +130,22 @@ as needed.
 $\unzip$ interacts with $\tSwap$:
 
 :::::: theorem :::::
+[]{#thm-unzip-tSwap}
 Let $A$ and $B$ be sets and $x \in \lists{A \times B}$. Then we have $$\tSwap(\unzip(x)) = \unzip(\map(\tSwap)(x)).$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \tSwap(\unzip(x)) \\
- & = & \tSwap(\unzip(\nil)) \\
+ &     \hyp{x = \nil}
+   = & \tSwap(\unzip(\nil)) \\
  & = & \tSwap(\nil,\nil) \\
  & = & (\nil,\nil) \\
  & = & \unzip(\nil) \\
  &     \href{@map@#cor-map-nil}
    = & \unzip(\map(\tSwap)(\nil)) \\
- & = & \unzip(\map(\tSwap)(x))
+ &     \hyp{x = \nil}
+   = & \unzip(\map(\tSwap)(x))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$, and let $(a,b) \in A \times B$. Suppose $(u,v) = \unzip(x)$; by the inductive hypothesis we have $(v,u) = \unzip(\map(\tSwap)(x))$. Now
 $$\begin{eqnarray*}
@@ -161,6 +173,7 @@ as claimed.
 $\unzip$ interacts with $\tPair$.
 
 :::::: theorem :::::
+[]{#thm-unzip-tPair}
 Let $A$, $B$, $U$, and $V$ be sets, with $f : A \rightarrow U$ and $g : B \rightarrow V$. For all $x \in \lists{A \times B}$ we have $$\unzip(\map(\tPair(f,g))(x)) = \tPair(\map(f),\map(g))(\unzip(x)).$$
 
 ::: proof ::::::::::
@@ -169,8 +182,8 @@ $$\begin{eqnarray*}
  &   & \unzip(\map(\tPair(f,g))(\nil)) \\
  &     \href{@map@#cor-map-nil}
    = & \unzip(\nil) \\
- & = & (\nil,\nil) \\
- & = & (\map(f)(\nil),\map(g)(\nil)) \\
+ & = & \tup(\nil)(\nil) \\
+ & = & \tup(\map(f)(\nil))(\map(g)(\nil)) \\
  & = & \tPair(\map(f),\map(g))(\nil,\nil) \\
  & = & \tPair(\map(f),\map(g))(\unzip(\nil))
 \end{eqnarray*}$$

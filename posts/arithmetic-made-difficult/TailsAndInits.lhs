@@ -467,7 +467,8 @@ $$\begin{eqnarray*}
  &   & \lcp(\inits(x),\inits(y)) \\
  & = & \lcp(\inits(\nil),\inits(\nil)) \\
  & = & \lcp(\cons(\nil,\nil),\cons(\nil,\nil)) \\
- & = & \cons(\nil,\nil)
+ &     \href{@lcp-lcs@#thm-lcp-idempotent}
+   = & \cons(\nil,\nil)
 \end{eqnarray*}$$
 and if $y = \cons(a,u)$, we have
 $$\begin{eqnarray*}
@@ -480,9 +481,11 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equality holds for all $y$ for some $x$, and let $a \in A$. We have two possibilities for $y$. If $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \inits(\lcp(\cons(a,x),\nil)) \\
- & = & \inits(\lcp(\nil,\cons(a,x))) \\
+ &     \href{@lcp-lcs@#thm-lcp-commutative}
+   = & \inits(\lcp(\nil,\cons(a,x))) \\
  & = & \lcp(\tails(\nil),\tails(\cons(a,x))) \\
- & = & \lcp(\tails(\cons(a,x)),\tails(\nil))
+ &     \href{@lcp-lcs@#thm-lcp-commutative}
+   = & \lcp(\tails(\cons(a,x)),\tails(\nil))
 \end{eqnarray*}$$
 as needed. Suppose then that $y = \cons(b,u)$. If $b = a$, note that $\cons(a,-)$ is injective, so that
 $$\begin{eqnarray*}

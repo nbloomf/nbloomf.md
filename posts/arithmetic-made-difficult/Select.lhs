@@ -26,7 +26,7 @@ slug: select
 Today we'll define a function, $\select$, which takes a natural number $n$ and a list $x$ and constructs the list of all length $n$ sublists of $x$. The signature of $\select$ should be $$\nats \times \lists{A} \rightarrow \lists{\lists{A}},$$ which matches several of our recursion operators. After trying a few, we'll use double bailout fold.
 
 :::::: definition ::
-Let $A$ be a set. Define $\delta : \nats \rightarrow \lists{\lists{A}}$ by $$\delta(n) = \bif{\iszero(n)}{\cons(\nil,\nil)}{\nil},$$ $\beta : A \times \lists{A} \times \nats \rightarrow \bool$ by $$\beta(a,x,n) = \iszero(n),$$ $\psi : A \times \lists{A} \times \nats \rightarrow \lists{\lists{A}}$ by $$\psi(a,x,n) = \cons(\nil,\nil),$$ and $\chi : A \times \lists{A} \times \nats \times \lists{\lists{A}} \times \lists{\lists{A}} \rightarrow \lists{\lists{A}}$ by $$\chi(a,x,n,u,v) = \cat(\map(\cons(a,-))(v),u).$$ Now define $\select : \nats \times \lists{A} \rightarrow \lists{\lists{A}}$ by $$\select(n,x) = \dbfoldr(\delta)(\beta)(\prev)(\psi)(\chi)(x,n).$$
+Let $A$ be a set. Define $\delta : \nats \rightarrow \lists{\lists{A}}$ by $$\delta(n) = \bif{\iszero(n)}{\cons(\nil,\nil)}{\nil},$$ $\beta : A \times \lists{A} \times \nats \rightarrow \bool$ by $$\beta(a,x,n) = \iszero(n),$$ $\psi : A \times \lists{A} \times \nats \rightarrow \lists{\lists{A}}$ by $$\psi(a,x,n) = \cons(\nil,\nil),$$ and $\chi : A \times \lists{A} \times \nats \times \lists{\lists{A}} \times \lists{\lists{A}} \rightarrow \lists{\lists{A}}$ by $$\chi(a,x,n,u,v) = \cat(\map(\cons(a))(v),u).$$ Now define $\select : \nats \times \lists{A} \rightarrow \lists{\lists{A}}$ by $$\select(n,x) = \dbfoldr(\delta)(\beta)(\prev)(\psi)(\chi)(x,n).$$
 
 In Haskell:
 
@@ -43,13 +43,14 @@ In Haskell:
 Since $\select$ is defined as a double bailout fold, it can be characterized as the unique solution to a system of functional equations.
 
 :::::: corollary :::
+[]{#cor-select-nil}[]{#cor-select-cons}
 Let $A$ be a set. $\select$ is the unique map $f : \nats \times \lists{A} \rightarrow \lists{\lists{A}}$ satisfying the following equations for all $n \in \nats$, $a \in A$, and $x \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(n,\nil) = \bif{\iszero(n)}{\cons(\nil,\nil)}{\nil} \\
- f(n,\cons(a,x)) = \bif{\iszero(n)}{\cons(\nil,\nil)}{\cat(\map(\cons(a,-))(f(\prev(n),x)),f(n,x))}
+ f(n,\cons(a,x)) = \bif{\iszero(n)}{\cons(\nil,\nil)}{\cat(\map(\cons(a))(f(\prev(n),x)),f(n,x))}
 \end{array}\right.$$
 
-In particular, we have $$\select(\zero,\cons(a,x)) = \cons(\nil,\nil)$$ and $$\select(\next(n),\cons(a,x)) = \cat(\map(\cons(a,-))(\select(n,x)),\select(\next(n),x)).$$
+In particular, we have $$\select(\zero,\cons(a,x)) = \cons(\nil,\nil)$$ and $$\select(\next(n),\cons(a,x)) = \cat(\map(\cons(a))(\select(n,x)),\select(\next(n),x)).$$
 
 ::: test :::::::::::
 
@@ -82,13 +83,15 @@ Let $A$ be a set. For all $x \in \lists{A}$, we have $$\select(\zero,x) = \cons(
 If $x = \nil$, then
 $$\begin{eqnarray*}
  &   & \select(\zero,\nil) \\
- & = & \bif{\iszero(\zero)}{\cons(\nil,\nil)}{\nil} \\
+ &     \href{@select@#cor-select-nil}
+   = & \bif{\iszero(\zero)}{\cons(\nil,\nil)}{\nil} \\
  & = & \cons(\nil,\nil),
 \end{eqnarray*}$$
 and if $x = \cons(a,u)$, then
 $$\begin{eqnarray*}
  &   & \select(\zero,\cons(a,u)) \\
- & = & \bif{\iszero(\zero)}{\cons(\nil,\nil)}{\cat(\map(\cons(a,-))(\select(\prev(\zero),u)),\select(\zero,u))} \\
+ &     \href{@select@#cor-select-cons}
+   = & \bif{\iszero(\zero)}{\cons(\nil,\nil)}{\cat(\map(\cons(a))(\select(\prev(\zero),u)),\select(\zero,u))} \\
  & = & \cons(\nil,\nil)
 \end{eqnarray*}$$
 as claimed.
@@ -123,9 +126,9 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Using the inductive hypothesis, we have
 $$\begin{eqnarray*}
  &   & \select(\next(\zero),\cons(a,x)) \\
- & = & \cat(\map(\cons(a,-))(\select(\zero,x)),\select(\next(\zero),x)) \\
- & = & \cat(\map(\cons(a,-))(\cons(\nil,\nil)),\map(\cons(-,\nil))(x)) \\
- & = & \cat(\cons(\cons(a,\nil),\map(\cons(a,-))(\nil)),\map(\cons(-,\nil))(x)) \\
+ & = & \cat(\map(\cons(a))(\select(\zero,x)),\select(\next(\zero),x)) \\
+ & = & \cat(\map(\cons(a))(\cons(\nil,\nil)),\map(\cons(-,\nil))(x)) \\
+ & = & \cat(\cons(\cons(a,\nil),\map(\cons(a))(\nil)),\map(\cons(-,\nil))(x)) \\
  & = & \cat(\cons(\cons(a,\nil),\nil),\map(\cons(-,\nil))(x)) \\
  & = & \cat(\snoc(\cons(a,\nil),\nil),\map(\cons(-,\nil))(x)) \\
  & = & \cat(\nil,\cons(\cons(a,\nil),\map(\cons(-,\nil))(x))) \\
@@ -159,7 +162,8 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \length(\select(k,x)) \\
  & = & \length(\select(k,\nil)) \\
- & = & \length(\bif{\iszero(k)}{\cons(\nil,\nil)}{\nil}) \\
+ &     \href{@select@#cor-select-nil}
+   = & \length(\bif{\iszero(k)}{\cons(\nil,\nil)}{\nil}) \\
  &     \href{@booleans@#thm-iffunc}
    = & \bif{\iszero(k)}{\length(\cons(\nil,\nil))}{\length(\nil)} \\
  & = & \bif{\iszero(k)}{\next(\zero)}{\zero} \\
@@ -182,9 +186,11 @@ as needed. If $k = \next(m)$, then using the inductive hypothesis we have
 $$\begin{eqnarray*}
  &   & \length(\select(k,\cons(a,x))) \\
  & = & \length(\select(\next(m),\cons(a,x))) \\
- & = & \length(\cat(\map(\cons(a,-))(\select(m,x)),\select(\next(m),x))) \\
- & = & \nplus(\length(\map(\cons(a,-))(\select(m,x))),\length(\select(\next(m),x))) \\
- & = & \nplus(\length(\select(m,x)),\length(\select(\next(m),x))) \\
+ & = & \length(\cat(\map(\cons(a))(\select(m,x)),\select(\next(m),x))) \\
+ &     \href{@length@#thm-length-cat}
+   = & \nplus(\length(\map(\cons(a))(\select(m,x))),\length(\select(\next(m),x))) \\
+ &     \href{@map@#thm-length-map}
+   = & \nplus(\length(\select(m,x)),\length(\select(\next(m),x))) \\
  & = & \nplus(\nchoose(\length(x),m),\nchoose(\length(x),\next(m))) \\
  &     \href{@plus@#thm-plus-commutative}
    = & \nplus(\nchoose(\length(x),\next(m)),\nchoose(\length(x),m)) \\
@@ -246,7 +252,7 @@ $$\begin{eqnarray*}
  &   & \btrue \\
  & = & \sublist(u,y) \\
  & = & \sublist(\select(k,u),\select(k,y)) \\
- & = & \sublist(\map(\cons(a,-))(\select(k,u)),\map(\cons(a,-))(\select(k,y))) \\
+ & = & \sublist(\map(\cons(a))(\select(k,u)),\map(\cons(a))(\select(k,y))) \\
  & = & \sublist(H,K)
 \end{eqnarray*}$$
 and similarly using the inductive hypothesis on $y$ we have
@@ -261,7 +267,7 @@ $$\begin{eqnarray*}
  &   & \sublist(\select(\next(k),x),\select(\next(k),\cons(b,y))) \\
  & = & \sublist(\select(\next(k),\cons(a,u)),\select(\next(k),\cons(b,y))) \\
  & = & \sublist(\select(\next(k),\cons(a,u)),\select(\next(k),\cons(a,y))) \\
- & = & \sublist(\cat(\map(\cons(a,-))(\select(k,u)),\select(\next(k),u)),\cat(\map(\cons(a,-))(\select(k,y)),\select(\next(k),y))) \\
+ & = & \sublist(\cat(\map(\cons(a))(\select(k,u)),\select(\next(k),u)),\cat(\map(\cons(a))(\select(k,y)),\select(\next(k),y))) \\
  & = & \sublist(\cat(H,P),\cat(K,Q)) \\
  & = & \btrue
 \end{eqnarray*}$$
@@ -306,9 +312,9 @@ $$\begin{eqnarray*}
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for all $k$ for some $x$ and let $a \in A$. Using the inductive hypothesis we have
 $$\begin{eqnarray*}
- &   & \all(\sublist(-,\cons(a,x)),\map(\cons(a,-))(\select(m,x))) \\
- & = & \all(\sublist(-,\cons(a,x)) \circ \cons(a,-),\select(m,x)) \\
- & = & \all(\sublist(\cons(a,-),\cons(a,x)),\select(m,x)) \\
+ &   & \all(\sublist(-,\cons(a,x)),\map(\cons(a))(\select(m,x))) \\
+ & = & \all(\sublist(-,\cons(a,x)) \circ \cons(a),\select(m,x)) \\
+ & = & \all(\sublist(\cons(a),\cons(a,x)),\select(m,x)) \\
  & = & \all(\sublist(-,x),\select(m,x)) \\
  & = & \btrue.
 \end{eqnarray*}$$
@@ -326,8 +332,8 @@ $$\begin{eqnarray*}
 $$\begin{eqnarray*}
  &   & \all(\sublist(-,\cons(a,x)),\select(k,\cons(a,x))) \\
  & = & \all(\sublist(-,\cons(a,x)),\select(\next(m),\cons(a,x))) \\
- & = & \all(\sublist(-,\cons(a,x)),\cat(\map(\cons(a,-))(\select(m,x)),\select(\next(m),x))) \\
- & = & \band(\all(\sublist(-,\cons(a,x)),\map(\cons(a,-))(\select(m,x))),\all(\sublist(-,\cons(a,x)),\select(\next(m),x))) \\
+ & = & \all(\sublist(-,\cons(a,x)),\cat(\map(\cons(a))(\select(m,x)),\select(\next(m),x))) \\
+ & = & \band(\all(\sublist(-,\cons(a,x)),\map(\cons(a))(\select(m,x))),\all(\sublist(-,\cons(a,x)),\select(\next(m),x))) \\
  & = & \band(\btrue,\btrue) \\
  &     \href{@and@#thm-and-eval-true-true}
    = & \btrue
@@ -375,12 +381,12 @@ as needed. For the inductive step, suppose the equality holds for all $k$ for so
 $$\begin{eqnarray*}
  &   & \all(\beq(k,\length(-)),\select(k,\cons(a,x))) \\
  & = & \all(\beq(k,\length(-)),\select(\next(m),\cons(a,x))) \\
- & = & \all(\beq(k,\length(-)),\cat(\map(\cons(a,-))(\select(m,x)),\select(\next(m),x))) \\
- & = & \band(\all(\beq(k,\length(-)),\map(\cons(a,-))(\select(m,x))),\all(\beq(k,\length(-)),\select(\next(m),x))) \\
- & = & \band(\all(\beq(k,\length(-)),\map(\cons(a,-))(\select(m,x))),\all(\beq(k,\length(-)),\select(k,x))) \\
- & = & \band(\all(\beq(k,\length(-)),\map(\cons(a,-))(\select(m,x))),\btrue) \\
- & = & \band(\all(\beq(k,\length(-) \circ \cons(a,-)),\select(m,x)),\btrue) \\
- & = & \band(\all(\beq(k,\length(\cons(a,-))),\select(m,x)),\btrue) \\
+ & = & \all(\beq(k,\length(-)),\cat(\map(\cons(a))(\select(m,x)),\select(\next(m),x))) \\
+ & = & \band(\all(\beq(k,\length(-)),\map(\cons(a))(\select(m,x))),\all(\beq(k,\length(-)),\select(\next(m),x))) \\
+ & = & \band(\all(\beq(k,\length(-)),\map(\cons(a))(\select(m,x))),\all(\beq(k,\length(-)),\select(k,x))) \\
+ & = & \band(\all(\beq(k,\length(-)),\map(\cons(a))(\select(m,x))),\btrue) \\
+ & = & \band(\all(\beq(k,\length(-) \circ \cons(a)),\select(m,x)),\btrue) \\
+ & = & \band(\all(\beq(k,\length(\cons(a))),\select(m,x)),\btrue) \\
  & = & \band(\all(\beq(\next(m),\next(\length(-))),\select(m,x)),\btrue) \\
  & = & \band(\all(\beq(m,\length(-)),\select(m,x)),\btrue) \\
  & = & \band(\btrue,\btrue) \\

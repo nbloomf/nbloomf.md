@@ -45,6 +45,7 @@ In Haskell:
 Since $\lcp$ is defined as a double fold, it is the unique solution to a system of functional equations.
 
 :::::: corollary :::
+[]{#cor-lcp-nil}[]{#cor-lcp-cons-nil}[]{#cor-lcp-cons-cons}
 Let $A$ be a set. Then $\lcp$ is the unique map $f : \lists{A} \times \lists{A} \rightarrow \lists{A}$ satisfying the following equations for all $a,b \in A$ and $x,y \in \lists{A}$.
 $$\left\{\begin{array}{l}
  f(\nil,y) = \nil \\
@@ -82,6 +83,7 @@ $$\left\{\begin{array}{l}
 Now $\lcp$ lives up to the name (the *universal property* of $\lcp$):
 
 :::::: theorem :::::
+[]{#thm-lcp-prefix-left}[]{#thm-lcp-prefix-right}
 Let $A$ be a set. The following hold for all $x,y,z \in \lists{A}$.
 
 1. $\prefix(\lcp(x,y),x)$ and $\prefix(\lcp(x,y),y)$.
@@ -91,7 +93,8 @@ Let $A$ be a set. The following hold for all $x,y,z \in \lists{A}$.
 1. We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \prefix(\lcp(x,y),x) \\
- & = & \prefix(\lcp(\nil,y),\nil) \\
+ &     \let{x = \nil}
+   = & \prefix(\lcp(\nil,y),\nil) \\
  & = & \prefix(\nil,\nil) \\
  &     \href{@prefix-suffix@#cor-prefix-nil-left}
    = & \btrue
@@ -99,7 +102,8 @@ $$\begin{eqnarray*}
 and
 $$\begin{eqnarray*}
  &   & \prefix(\lcp(x,y),y) \\
- & = & \prefix(\lcp(\nil,y),y) \\
+ &     \hyp{x = \nil}
+   = & \prefix(\lcp(\nil,y),y) \\
  & = & \prefix(\nil,y) \\
  &     \href{@prefix-suffix@#cor-prefix-nil-left}
    = & \btrue
@@ -107,7 +111,8 @@ $$\begin{eqnarray*}
 as needed. For the inductive step, suppose the equalities hold for all $y$ for some $x$, and let $a \in A$. We consider two cases for $y$. If $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \prefix(\lcp(\cons(a,x),y),\cons(a,x)) \\
- & = & \prefix(\lcp(\cons(a,x),\nil),\cons(a,x)) \\
+ &     \hyp{y = \nil}
+   = & \prefix(\lcp(\cons(a,x),\nil),\cons(a,x)) \\
  & = & \prefix(\nil,\cons(a,x)) \\
  &     \href{@prefix-suffix@#cor-prefix-nil-left}
    = & \btrue
@@ -115,7 +120,8 @@ $$\begin{eqnarray*}
 and
 $$\begin{eqnarray*}
  &   & \prefix(\lcp(\cons(a,x),y),y) \\
- & = & \prefix(\lcp(\cons(a,x),\nil),\nil) \\
+ &     \let{y = \nil}
+   = & \prefix(\lcp(\cons(a,x),\nil),\nil) \\
  & = & \prefix(\nil,\nil) \\
  &     \href{@prefix-suffix@#cor-prefix-nil-left}
    = & \btrue
@@ -123,16 +129,19 @@ $$\begin{eqnarray*}
 as needed. Suppose now that $y = \cons(b,w)$. If $b = a$, we have
 $$\begin{eqnarray*}
  &   & \prefix(\lcp(\cons(a,x),y),\cons(a,x)) \\
- & = & \prefix(\lcp(\cons(a,x),\cons(b,w)),\cons(a,x)) \\
+ &     \let{y = \cons(b,w)}
+   = & \prefix(\lcp(\cons(a,x),\cons(b,w)),\cons(a,x)) \\
  & = & \prefix(\lcp(\cons(a,x),\cons(a,w)),\cons(a,x)) \\
  & = & \prefix(\cons(a,\lcp(x,w)),\cons(a,x)) \\
  & = & \prefix(\lcp(x,w),x) \\
- & = & \btrue
+ &     \href{@lcp-lcs@#thm-lcp-prefix-left}
+   = & \btrue
 \end{eqnarray*}$$
 and
 $$\begin{eqnarray*}
  &   & \prefix(\lcp(\cons(a,x),y),y) \\
- & = & \prefix(\lcp(\cons(a,x),\cons(b,w)),\cons(b,w)) \\
+ &     \let{y = \cons(b,w)}
+   = & \prefix(\lcp(\cons(a,x),\cons(b,w)),\cons(b,w)) \\
  & = & \prefix(\lcp(\cons(a,x),\cons(a,w)),\cons(a,w)) \\
  & = & \prefix(\cons(a,\lcp(x,w)),\cons(a,w)) \\
  & = & \prefix(\lcp(x,w),w) \\
@@ -189,6 +198,7 @@ as needed.
 $\lcp$ is idempotent.
 
 :::::: theorem :::::
+[]{#thm-lcp-idempotent}
 Let $A$ be a set. For all $x \in \lists{A}$ we have $\lcp(x,x) = x$.
 
 ::: proof ::::::::::
@@ -196,14 +206,16 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \lcp(x,x) \\
  & = & \lcp(\nil,\nil) \\
- & = & \nil \\
+ &     \href{@lcp-lcs@#cor-lcp-nil}
+   = & \nil \\
  & = & x
 \end{eqnarray*}$$
 as claimed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. Now
 $$\begin{eqnarray*}
  &   & \lcp(\cons(a,x),\cons(a,x)) \\
  & = & \cons(a,\lcp(x,x)) \\
- & = & \cons(a,x)
+ &     \href{@lcp-lcs@#thm-lcp-idempotent}
+   = & \cons(a,x)
 \end{eqnarray*}$$
 as needed.
 ::::::::::::::::::::
@@ -222,6 +234,7 @@ as needed.
 $\lcp$ is commutative.
 
 :::::: theorem :::::
+[]{#thm-lcp-commutative}
 Let $A$ be a set. For all $x,y \in \lists{A}$ we have $\lcp(x,y) = \lcp(y,x)$.
 
 ::: proof ::::::::::
@@ -229,7 +242,8 @@ We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \lcp(x,y) \\
  & = & \lcp(\nil,y) \\
- & = & \nil \\
+ &     \href{@lcp-lcs@#cor-lcp-nil}
+   = & \nil \\
  & = & \lcp(y,\nil) \\
  & = & \lcp(y,x)
 \end{eqnarray*}$$
@@ -237,8 +251,10 @@ as needed. For the inductive step, suppose the equality holds for all $y$ for so
 $$\begin{eqnarray*}
  &   & \lcp(\cons(a,x),y) \\
  & = & \lcp(\cons(a,x),\nil) \\
- & = & \nil \\
- & = & \lcp(\nil,\cons(a,x)) \\
+ &     \href{@lcp-lcs@#cor-lcp-cons-nil}
+   = & \nil \\
+ &     \href{@lcp-lcs@#cor-lcp-nil}
+   = & \lcp(\nil,\cons(a,x)) \\
  & = & \lcp(y,\cons(a,x))
 \end{eqnarray*}$$
 as needed. Now suppose $y = \cons(b,w)$. Then we have
@@ -267,6 +283,7 @@ as needed.
 $\lcp$ is associative.
 
 :::::: theorem :::::
+[]{#thm-lcp-associative}
 Let $A$ be a set. For all $x,y,z \in \lists{A}$ we have $\lcp(\lcp(x,y),z) = \lcp(x,\lcp(y,z))$.
 
 ::: proof ::::::::::
@@ -287,17 +304,20 @@ Let $h = \lcp(\lcp(x,y),z)$, $k = \lcp(x,\lcp(y,z))$, $u = \lcp(x,y)$, and $v = 
 $\cat$ distributes over $\lcp$ from the left.
 
 :::::: theorem :::::
+[]{#thm-lcp-cat-dist}
 Let $A$ be a set. For all $x,y,z \in \lists{A}$ we have $\cat(x,\lcp(y,z)) = \lcp(\cat(x,y),\cat(x,z))$.
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \cat(x,\lcp(y,z)) \\
- & = & \cat(\nil,\lcp(y,z)) \\
+ &     \hyp{x = \nil}
+   = & \cat(\nil,\lcp(y,z)) \\
  &     \href{@cat@#cor-cat-nil}
    = & \lcp(y,z) \\
  & = & \lcp(\cat(\nil,y),\cat(\nil,z)) \\
- & = & \lcp(\cat(x,y),\cat(x,z))
+ &     \let{x = \nil}
+   = & \lcp(\cat(x,y),\cat(x,z))
 \end{eqnarray*}$$
 as needed. Suppose now that the equality holds for all $y$ and $z$ for some $x$, and let $a \in A$. Then we have
 $$\begin{eqnarray*}
@@ -332,8 +352,10 @@ To see the "if" part, suppose $\prefix(x,y)$. Then we have $y = \cat(x,z)$ for s
 $$\begin{eqnarray*}
  &   & \lcp(x,y) \\
  & = & \lcp(\cat(x,\nil),\cat(x,z)) \\
- & = & \cat(x,\lcp(\nil,z)) \\
- & = & \cat(x,\nil) \\
+ &     \href{@lcp-lcs@#thm-lcp-cat-dist}
+   = & \cat(x,\lcp(\nil,z)) \\
+ &     \href{@lcp-lcs@#cor-lcp-nil}
+   = & \cat(x,\nil) \\
  &     \href{@cat@#thm-cat-nil-right}
    = & x
 \end{eqnarray*}$$
@@ -360,56 +382,65 @@ as claimed.
 And $\lcp$ interacts with $\zip$.
 
 :::::: theorem :::::
+[]{#thm-lcp-zip-abide}
 Let $A$ and $B$ be sets with $x,y \in \lists{A}$ and $u,v \in \lists{B}$. Then $$\lcp(\zip(x,u),\zip(y,v)) = \zip(\lcp(x,y),\lcp(u,v)).$$
 
 ::: proof ::::::::::
 We proceed by list induction on $x$. For the base case $x = \nil$, we have
 $$\begin{eqnarray*}
  &   & \lcp(\zip(x,u),\zip(y,v)) \\
- & = & \lcp(\zip(\nil,u),\zip(y,v)) \\
+ &     \hyp{x = \nil}
+   = & \lcp(\zip(\nil,u),\zip(y,v)) \\
  &     \href{@zip@#cor-zip-nil-left}
    = & \lcp(\nil,\zip(y,v)) \\
  & = & \nil \\
  &     \href{@zip@#cor-zip-nil-left}
    = & \zip(\nil,\lcp(u,v)) \\
  & = & \zip(\lcp(\nil,y),\lcp(u,v)) \\
- & = & \zip(\lcp(x,y),\lcp(u,v))
+ &     \hyp{x = \nil}
+   = & \zip(\lcp(x,y),\lcp(u,v))
 \end{eqnarray*}$$
 as needed. For the inductive step, suppose the equality holds for some $x$ and let $a \in A$. If $y = \nil$, we have
 $$\begin{eqnarray*}
  &   & \lcp(\zip(\cons(a,x),u),\zip(y,v)) \\
- & = & \lcp(\zip(\cons(a,x),u),\zip(\nil,v)) \\
+ &     \hyp{y = \nil}
+   = & \lcp(\zip(\cons(a,x),u),\zip(\nil,v)) \\
  &     \href{@zip@#cor-zip-nil-left}
    = & \lcp(\zip(\cons(a,x),u),\nil) \\
  & = & \nil \\
  &     \href{@zip@#cor-zip-nil-left}
    = & \zip(\nil,\lcp(u,v)) \\
  & = & \zip(\lcp(\cons(a,x),\nil),\lcp(u,v)) \\
- & = & \zip(\lcp(\cons(a,x),y),\lcp(u,v))
+ &     \hyp{y = \nil}
+   = & \zip(\lcp(\cons(a,x),y),\lcp(u,v))
 \end{eqnarray*}$$
 as claimed. If $u = \nil$, we have
 $$\begin{eqnarray*}
  &   & \lcp(\zip(\cons(a,x),u),\zip(y,v)) \\
- & = & \lcp(\zip(\cons(a,x),\nil),\zip(y,v)) \\
+ &     \let{u = \nil}
+   = & \lcp(\zip(\cons(a,x),\nil),\zip(y,v)) \\
  &     \href{@zip@#cor-zip-cons-nil}
    = & \lcp(\nil,\zip(y,v)) \\
  & = & \nil \\
  &     \href{@zip@#thm-zip-nil-right}
    = & \zip(\lcp(\cons(a,x),y),\nil) \\
  & = & \zip(\lcp(\cons(a,x),y),\lcp(\nil,v)) \\
- & = & \zip(\lcp(\cons(a,x),y),\lcp(u,v))
+ &     \let{u = \nil}
+   = & \zip(\lcp(\cons(a,x),y),\lcp(u,v))
 \end{eqnarray*}$$
 as claimed. If $v = \nil$, we have
 $$\begin{eqnarray*}
  &   & \lcp(\zip(\cons(a,x),u),\zip(y,v)) \\
- & = & \lcp(\zip(\cons(a,x),u),\zip(y,\nil)) \\
+ &     \let{v = \nil}
+   = & \lcp(\zip(\cons(a,x),u),\zip(y,\nil)) \\
  &     \href{@zip@#thm-zip-nil-right}
    = & \lcp(\zip(\cons(a,x),u),\nil) \\
  & = & \nil \\
  &     \href{@zip@#thm-zip-nil-right}
    = & \zip(\lcp(\cons(a,x),y),\nil) \\
  & = & \zip(\lcp(\cons(a,x),y),\lcp(u,\nil)) \\
- & = & \zip(\lcp(\cons(a,x),y),\lcp(u,v))
+ &     \let{v = \nil}
+   = & \zip(\lcp(\cons(a,x),y),\lcp(u,v))
 \end{eqnarray*}$$
 as claimed. Thus we can say $y = \cons(c,w)$, $u = \cons(b,h)$, and $v = \cons(d,k)$. If $a \neq c$, we have
 $$\begin{eqnarray*}
@@ -470,7 +501,8 @@ We proceed by list induction on $x$. For the base case $x = \nil$ we have
 $$\begin{eqnarray*}
  &   & \map(f)(\lcp(x,y)) \\
  & = & \map(f)(\lcp(\nil,y)) \\
- & = & \map(f)(\nil) \\
+ &     \href{@lcp-lcs@#cor-lcp-nil}
+   = & \map(f)(\nil) \\
  &     \href{@map@#cor-map-nil}
    = & \nil \\
  & = & \lcp(\nil,\map(f)(y)) \\
@@ -482,7 +514,8 @@ as needed. Suppose now the equality holds for some $x$ and let $a \in A$. We con
 $$\begin{eqnarray*}
  &   & \map(f)(\lcp(\cons(a,x),y)) \\
  & = & \map(f)(\lcp(\cons(a,x),\nil)) \\
- & = & \map(f)(\nil) \\
+ &     \href{@lcp-lcs@#cor-lcp-cons-nil}
+   = & \map(f)(\nil) \\
  &     \href{@map@#cor-map-nil}
    = & \nil \\
  & = & \lcp(\map(f)(\cons(a,x)),\nil) \\
@@ -567,6 +600,7 @@ as needed.
 We can define the dual operation, longest common suffix, in terms of $\lcp$ like so.
 
 :::::: definition ::
+[]{#def-lcs}
 Let $A$ be a set. We define $\lcs : \lists{A} \times \lists{A} \rightarrow \lists{A}$ by $$\lcs(x,y) = \rev(\lcp(\rev(x),\rev(y))).$$
 
 In Haskell:
@@ -579,6 +613,7 @@ In Haskell:
 Many properties of $\lcp$ have analogues for $\lcs$.
 
 :::::: corollary :::
+[]{#cor-lcs-nil}[]{#cor-lcs-snoc-nil}[]{#cor-lcs-snoc-snoc}
 Let $A$ be a set. For all $a,b \in A$ and $x,y \in \lists{A}$, we have the following.
 
 1. $\lcs(\nil,y) = \nil$.
@@ -625,7 +660,8 @@ Let $A$ be a set with $x,y,z \in \lists{A}$. Then we have the following.
 $$\begin{eqnarray*}
  &   & \suffix(\lcs(x,y),x) \\
  & = & \prefix(\rev(\lcs(x,y)),\rev(x)) \\
- & = & \prefix(\rev(\rev(\lcp(\rev(x),\rev(y)))),\rev(x)) \\
+ &     \href{@lcp-lcs@#def-lcs}
+   = & \prefix(\rev(\rev(\lcp(\rev(x),\rev(y)))),\rev(x)) \\
  &     \href{@rev@#thm-rev-involution}
    = & \prefix(\lcp(\rev(x),\rev(y)),\rev(x)) \\
  & = & \btrue,
@@ -634,7 +670,8 @@ and likewise
 $$\begin{eqnarray*}
  &   & \suffix(\lcs(x,y),y) \\
  & = & \prefix(\rev(\lcs(x,y)),\rev(y)) \\
- & = & \prefix(\rev(\rev(\lcp(\rev(x),\rev(y)))),\rev(y)) \\
+ &     \href{@lcp-lcs@#def-lcs}
+   = & \prefix(\rev(\rev(\lcp(\rev(x),\rev(y)))),\rev(y)) \\
  &     \href{@rev@#thm-rev-involution}
    = & \prefix(\lcp(\rev(x),\rev(y)),\rev(y)) \\
  & = & \btrue,
@@ -686,14 +723,17 @@ as claimed.
 $\lcs$ is idempotent.
 
 :::::: theorem :::::
+[]{#thm-lcs-idempotent}
 Let $A$ be a set. For all $x \in \lists{A}$ we have $\lcs(x,x) = x$.
 
 ::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \lcs(x,x) \\
- & = & \rev(\lcp(\rev(x),\rev(x))) \\
- & = & \rev(\rev(x)) \\
+ &     \href{@lcp-lcs@#def-lcs}
+   = & \rev(\lcp(\rev(x),\rev(x))) \\
+ &     \href{@lcp-lcs@#thm-lcp-idempotent}
+   = & \rev(\rev(x)) \\
  &     \href{@rev@#thm-rev-involution}
    = & x
 \end{eqnarray*}$$
@@ -714,15 +754,19 @@ as claimed.
 $\lcs$ is commutative.
 
 :::::: theorem :::::
+[]{#thm-lcs-commutative}
 Let $A$ be a set. For all $x,y \in \lists{A}$ we have $\lcs(x,y) = \lcs(y,x)$.
 
 ::: proof ::::::::::
 We have
 $$\begin{eqnarray*}
  &   & \lcs(x,y) \\
- & = & \rev(\lcp(\rev(x),\rev(y))) \\
- & = & \rev(\lcp(\rev(y),\rev(x))) \\
- & = & \lcs(y,x)
+ &     \href{@lcp-lcs@#def-lcs}
+   = & \rev(\lcp(\rev(x),\rev(y))) \\
+ &     \href{@lcp-lcs@#thm-lcp-commutative}
+   = & \rev(\lcp(\rev(y),\rev(x))) \\
+ &     \href{@lcp-lcs@#def-lcs}
+   = & \lcs(y,x)
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -741,21 +785,25 @@ as claimed.
 $\lcs$ is associative.
 
 :::::: theorem :::::
+[]{#thm-lcs-associative}
 Let $A$ be a set. For all $x,y,z \in \lists{A}$ we have $\lcs(\lcs(x,y),z) = \lcs(x,\lcs(y,z))$.
 
 ::: proof ::::::::::
 We have
 $$\begin{eqnarray*}
  &   & \lcs(\lcs(x,y),z) \\
- & = & \lcs(\rev(\lcp(\rev(x),\rev(y))),z) \\
- & = & \rev(\lcp(\rev(\rev(\lcp(\rev(x),\rev(y)))),\rev(z))) \\
+ &     \href{@lcp-lcs@#def-lcs}
+   = & \lcs(\rev(\lcp(\rev(x),\rev(y))),z) \\
+ &     \href{@lcp-lcs@#def-lcs}
+   = & \rev(\lcp(\rev(\rev(\lcp(\rev(x),\rev(y)))),\rev(z))) \\
  &     \href{@rev@#thm-rev-involution}
    = & \rev(\lcp(\lcp(\rev(x),\rev(y)),\rev(z))) \\
  & = & \rev(\lcp(\rev(x),\lcp(\rev(y),\rev(z)))) \\
  &     \href{@rev@#thm-rev-involution}
    = & \rev(\lcp(\rev(x),\rev(\rev(\lcp(\rev(y),\rev(z)))))) \\
  & = & \rev(\lcp(\rev(x),\rev(\lcs(y,z)))) \\
- & = & \lcs(x,\lcs(y,z))
+ &     \href{@lcp-lcs@#def-lcs}
+   = & \lcs(x,\lcs(y,z))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -774,15 +822,18 @@ as claimed.
 $\cat$ distributes over $\lcs$ from the right.
 
 :::::: theorem :::::
+[]{#thm-lcs-cat-dist}
 Let $A$ be a set. For all $x,y,z \in \lists{A}$ we have $\cat(\lcs(x,y),z) = \lcs(\cat(x,z),\cat(y,z))$.
 
 ::: proof ::::::::::
 Note that
 $$\begin{eqnarray*}
  &   & \lcs(\cat(x,z),\cat(y,z)) \\
- & = & \rev(\lcp(\rev(\cat(x,z)),\rev(\cat(y,z)))) \\
+ &     \href{@lcp-lcs@#def-lcs}
+   = & \rev(\lcp(\rev(\cat(x,z)),\rev(\cat(y,z)))) \\
  & = & \rev(\lcp(\cat(\rev(z),\rev(x)),\cat(\rev(z),\rev(y)))) \\
- & = & \rev(\cat(\rev(z),\lcp(\rev(x),\rev(y)))) \\
+ &     \href{@lcp-lcs@#thm-lcp-cat-dist}
+   = & \rev(\cat(\rev(z),\lcp(\rev(x),\rev(y)))) \\
  &     \href{@cat@#thm-rev-cat-antidistribute}
    = & \cat(\rev(\lcp(\rev(x),\rev(y))),\rev(\rev(z))) \\
  & = & \cat(\lcs(x,y),z)
@@ -830,12 +881,14 @@ Let $A$ and $B$ be sets with $f : A \rightarrow B$ an injective map. For all $x,
 Note that
 $$\begin{eqnarray*}
  &   & \map(f)(\lcs(x,y)) \\
- & = & \map(f)(\rev(\lcp(\rev(x),\rev(y)))) \\
+ &     \href{@lcp-lcs@#def-lcs}
+   = & \map(f)(\rev(\lcp(\rev(x),\rev(y)))) \\
  &     \href{@map@#thm-map-rev}
    = & \rev(\map(f)(\lcp(\rev(x),\rev(y)))) \\
  & = & \rev(\lcp(\map(f)(\rev(x)),\map(f)(\rev(y)))) \\
  & = & \rev(\lcp(\rev(\map(f)(x)),\rev(\map(f)(y)))) \\
- & = & \lcs(\map(f)(x),\map(f)(y))
+ &     \href{@lcp-lcs@#def-lcs}
+   = & \lcs(\map(f)(x),\map(f)(y))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::

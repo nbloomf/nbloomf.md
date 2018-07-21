@@ -38,11 +38,15 @@ By casting DSV in this language, we can ask some interesting questions.
 
 The IANA definition of DSV encoding is not a function from lists of lists of strings to strings, because not every such list can be encoded -- in particular, any fields including literal tabs. The usual way to get around this restriction is with an [_escaping_ mechanism](https://en.wikipedia.org/wiki/Escape_character): a special character indicating that the character after it is not to be interpreted literally. In unix this is usually the backslash, and usually a backslash _always_ escapes the character it precedes.
 
+We can think of the escape character as letting us augment the character set at the expense of an additional tokenization step.
+
 Say we try to fix the IANA DSV definition by introducing an escape character -- `@` -- and say that `@` followed by tab is not a field separator, but represents a literal tab. Same for newlines. Now our encoding really is a function on arbitrary records, since we can now encode any character. But we also have to decide what `@` means if it isn't followed by a tab or newline. Maybe there's a number of other escape sequences with special meanings; maybe `@` followed by a non-delimiter character represents that character; maybe an escape character that isn't part of an escape sequence is an error. Each of these choices requires making our encoding function either not surjective (if escape sequences have to be validated) or not injective (if some characters have both raw and escaped representations). Moreover, encoding is _badly_ not surjective or injective.
 
 Another way to deal with the escape character is to decree that it is only meaningful when followed by a delimiter, and otherwise just represents itself. This might seem strange at first -- it did to me, anyway -- but it turns out this lets us recover encoding surjectivity and near-injectivity (with only one exception).
 
-Enough motivation.
+Enough motivation, let's define an encoding.
+
+Rather than defining a full on DSV-like encoding in one go, we're going to start with an encoding for single records. With our escape convention, this will be enough to bootstrap an encoding for lists of lists of ... of lists of strings, to any depth.
 
 (@@@)
 

@@ -613,3 +613,37 @@
 @unique@#thm-unique-two	\\unique(\\cons(a,\\cons(b,\\nil))) = \\bnot(\\beq(a,b))
 @unique@#thm-unique-rev	\\unique(\\rev(x)) = \\unique(x)
 @unique@#thm-unique-range	\\unique(\\range(a,b)) = \\btrue
+#=======================#
+#--- unzip -------------#
+#=======================#
+@unzip@#cor-unzip-nil	\\unzip(\\nil) = \\tup(\\nil)(\\nil)
+@unzip@#cor-unzip-cons	\\unzip(\\cons(u,z)) = \\tup(\\cons(\\fst(u),\\fst(z)))(\\cons(\\snd(u),\\snd(z)))
+@unzip@#thm-zip-unzip	\\uncurry(\\zip)(\\unzip(x)) = x
+@unzip@#thm-unzip-tSwap	\\tSwap(\\unzip(x)) = \\unzip(\\map(\\tSwap)(x))
+@unzip@#thm-unzip-tPair	\\unzip(\\map(\\tPair(f,g))(x)) = \\tPair(\\map(f),\\map(g))(\\unzip(x))
+#=======================#
+#--- select ------------#
+#=======================#
+@select@#cor-select-nil	\\select(n,\\nil) = \\bif{\\iszero(n)}{\\cons(\\nil,\\nil)}{\\nil}
+@select@#cor-select-cons	\\select(n,\\cons(a,x)) = \\bif{\\iszero(n)}{\\cons(\\nil,\\nil)}{\\cat(\\map(\\cons(a))(\\select(\\prev(n),x)),\\select(n,x))}
+#=======================#
+#--- lcp-lcs -----------#
+#=======================#
+@lcp-lcs@#cor-lcp-nil	\\lcp(\\nil,y) = \\nil
+@lcp-lcs@#cor-lcp-cons-nil	\\lcp(\\cons(a,x),\\nil) = \\nil
+@lcp-lcs@#cor-lcp-cons-cons	\\lcp(\\cons(a,x),\\cons(b,y)) = \\bif{\\beq(a,b)}{\\cons(a,\\lcp(x,y))}{\\nil}
+@lcp-lcs@#thm-lcp-prefix-left	\\prefix(\\lcp(x,y),x) = \\btrue
+@lcp-lcs@#thm-lcp-prefix-right	\\prefix(x,\\lcp(x,y)) = \\btrue
+@lcp-lcs@#thm-lcp-idempotent	\\lcp(x,x) = x
+@lcp-lcs@#thm-lcp-commutative	\\lcp(x,y) = \\lcp(y,x)
+@lcp-lcs@#thm-lcp-associative	\\lcp(\\lcp(x,y),z) = \\lcp(x,\\lcp(y,z))
+@lcp-lcs@#thm-lcp-cat-dist	\\cat(x,\\lcp(y,z)) = \\lcp(\\cat(x,y),\\cat(x,z))
+@lcp-lcs@#thm-lcp-zip-abide	\\lcp(\\zip(x,u),\\zip(y,v)) = \\zip(\\lcp(x,y),\\lcp(u,v))
+@lcp-lcs@#def-lcs	\\lcs(x,y) = \\rev(\\lcp(\\rev(x),\\rev(y)))
+@lcp-lcs@#cor-lcs-nil	\\lcs(\\nil,y) = \\nil
+@lcp-lcs@#cor-lcs-snoc-nil	\\lcs(\\snoc(a,x),\\nil) = \\nil
+@lcp-lcs@#cor-lcs-snoc-snoc	\\lcs(\\snoc(a,x),\\snoc(b,y)) = \\bif{\\beq(a,b)}{\\snoc(a,\\lcs(x,y))}{\\nil}
+@lcp-lcs@#thm-lcs-idempotent	\\lcs(x,x) = x
+@lcp-lcs@#thm-lcs-commutative	\\lcs(x,y) = \\lcs(y,x)
+@lcp-lcs@#thm-lcs-associative	\\lcs(\\lcs(x,y),z) = \\lcs(x,\\lcs(y,z))
+@lcp-lcs@#thm-lcs-cat-dist	\\cat(\\lcs(x,y),z) = \\lcs(\\cat(x,z),\\cat(y,z))
