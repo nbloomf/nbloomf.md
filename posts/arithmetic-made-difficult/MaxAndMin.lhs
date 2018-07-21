@@ -52,7 +52,8 @@ $$\begin{eqnarray*}
  &   & \nmax(\zero,a) \\
  &     \href{@max-min@#def-max}
    = & \bif{\nleq(\zero,a)}{a}{\zero} \\
- & = & \bif{\btrue}{a}{\zero} \\
+ &     \href{@leq@#thm-leq-zero}
+   = & \bif{\btrue}{a}{\zero} \\
  &     \href{@booleans@#cor-if-true}
    = & a
 \end{eqnarray*}$$
@@ -73,7 +74,8 @@ $$\begin{eqnarray*}
  &   & \nmin(\zero,a) \\
  &     \href{@max-min@#def-min}
    = & \bif{\nleq(\zero,a)}{\zero}{a} \\
- & = & \bif{\btrue}{\zero}{a} \\
+ &     \href{@leq@#thm-leq-zero}
+   = & \bif{\btrue}{\zero}{a} \\
  &     \href{@booleans@#cor-if-true}
    = & \zero
 \end{eqnarray*}$$
@@ -138,7 +140,10 @@ $$\begin{eqnarray*}
  &   & \nmax(a,b) \\
  &     \href{@max-min@#def-max}
    = & \bif{\nleq(a,b)}{b}{a} \\
- & = & \bif{\bnot(\bnot(\nleq(a,b)))}{b}{a} \\
+ &     \href{@not@#thm-not-involution}
+   = & \bif{\bnot(\bnot(\nleq(a,b)))}{b}{a} \\
+ &     \href{@not@#thm-ifnot}
+   = & \bif{\bnot(\nleq(a,b))}{a}{b} \\
  & = & \bif{\nleq(b,a)}{a}{b} \\
  &     \href{@max-min@#def-max}
    = & \nmax(b,a)
@@ -150,7 +155,10 @@ $$\begin{eqnarray*}
  &   & \nmin(a,b) \\
  &     \href{@max-min@#def-min}
    = & \bif{\nleq(a,b)}{a}{b} \\
- & = & \bif{\bnot(\bnot(\nleq(a,b)))}{a}{b} \\
+ &     \href{@not@#thm-not-involution}
+   = & \bif{\bnot(\bnot(\nleq(a,b)))}{a}{b} \\
+ &     \href{@not@#thm-ifnot}
+   = & \bif{\bnot(\nleq(a,b))}{b}{a} \\
  & = & \bif{\nleq(b,a)}{b}{a} \\
  &     \href{@max-min@#def-min}
    = & \nmin(b,a)
@@ -198,7 +206,8 @@ $$\begin{eqnarray*}
    = & \bif{\nleq(a,b)}{\next(b)}{\next(a)} \\
  &     \href{@booleans@#thm-iffunc}
    = & \next(\bif{\nleq(a,b)}{b}{a}) \\
- & = & \next(\nmax(a,b))
+ &     \href{@max-min@#def-max}
+   = & \next(\nmax(a,b))
 \end{eqnarray*}$$
 as claimed.
 2. We have
@@ -210,7 +219,8 @@ $$\begin{eqnarray*}
    = & \bif{\nleq(a,b)}{\nplus(c,b)}{\nplus(c,a)} \\
  &     \href{@booleans@#thm-iffunc}
    = & \nplus(c,\bif{\nleq(a,b)}{b}{a}) \\
- & = & \nplus(c,\nmax(a,b))
+ &     \href{@max-min@#def-max}
+   = & \nplus(c,\nmax(a,b))
 \end{eqnarray*}$$
 as claimed.
 3. We have
@@ -222,7 +232,8 @@ $$\begin{eqnarray*}
    = & \bif{\nleq(a,b)}{\next(a)}{\next(b)} \\
  &     \href{@booleans@#thm-iffunc}
    = & \next(\bif{\nleq(a,b)}{a}{b}) \\
- & = & \next(\nmin(a,b))
+ &     \href{@max-min@#def-min}
+   = & \next(\nmin(a,b))
 \end{eqnarray*}$$
 as claimed.
 4. We have
@@ -234,7 +245,8 @@ $$\begin{eqnarray*}
    = & \bif{\nleq(a,b)}{\nplus(c,a)}{\nplus(c,b)} \\
  &     \href{@booleans@#thm-iffunc}
    = & \nplus(c,\bif{\nleq(a,b)}{a}{b}) \\
- & = & \nplus(c,\nmin(a,b))
+ &     \href{@max-min@#def-min}
+   = & \nplus(c,\nmin(a,b))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
@@ -284,13 +296,17 @@ Let $a,b,c \in \nats$. Then we have the following.
 1. We consider two possibilities. If $c = \zero$, we have
 $$\begin{eqnarray*}
  &   & \nmax(\ntimes(c,a),\ntimes(c,b)) \\
- & = & \nmax(\ntimes(\zero,a),\ntimes(\zero,b)) \\
- & = & \nmax(\zero,\zero) \\
+ &     \let{c = \zero}
+   = & \nmax(\ntimes(\zero,a),\ntimes(\zero,b)) \\
+ & = & \nmax(\zero,\ntimes(\zero,b)) \\
+ &     \href{@times@#cor-times-up-zero}
+   = & \nmax(\zero,\zero) \\
  &     \href{@max-min@#thm-max-zero-left}
    = & \zero \\
  &     \href{@times@#cor-times-up-zero}
    = & \ntimes(\zero,\nmax(a,b)) \\
- & = & \ntimes(c,\nmax(a,b))
+ &     \let{c = \zero}
+   = & \ntimes(c,\nmax(a,b))
 \end{eqnarray*}$$
 as claimed. If $c = \next(d)$, we have
 $$\begin{eqnarray*}
@@ -301,19 +317,24 @@ $$\begin{eqnarray*}
  & = & \bif{\nleq(a,b)}{\ntimes(c,b)}{\ntimes(c,a)} \\
  &     \href{@booleans@#thm-iffunc}
    = & \ntimes(c,\bif{\nleq(a,b)}{b}{a}) \\
- & = & \ntimes(c,\nmax(a,b))
+ &     \href{@max-min@#def-max}
+   = & \ntimes(c,\nmax(a,b))
 \end{eqnarray*}$$
 as claimed.
 2. We consider two possibilities. If $c = \zero$, we have
 $$\begin{eqnarray*}
  &   & \nmin(\ntimes(c,a),\ntimes(c,b)) \\
- & = & \nmin(\ntimes(\zero,a),\ntimes(\zero,b)) \\
- & = & \nmin(\zero,\zero) \\
+ &     \let{c = \zero}
+   = & \nmin(\ntimes(\zero,a),\ntimes(\zero,b)) \\
+ & = & \nmin(\zero,\ntimes(\zero,b)) \\
+ &     \href{@times@#cor-times-up-zero}
+   = & \nmin(\zero,\zero) \\
  &     \href{@max-min@#thm-min-zero-left}
    = & \zero \\
  &     \href{@times@#cor-times-up-zero}
    = & \ntimes(\zero,\nmin(a,b)) \\
- & = & \ntimes(c,\nmin(a,b))
+ &     \let{c = \zero}
+   = & \ntimes(c,\nmin(a,b))
 \end{eqnarray*}$$
 as claimed. If $c = \next(d)$, we have
 $$\begin{eqnarray*}
@@ -321,10 +342,11 @@ $$\begin{eqnarray*}
  &     \href{@max-min@#def-min}
    = & \bif{\nleq(\ntimes(c,a),\ntimes(c,b))}{\ntimes(c,a)}{\ntimes(c,b)} \\
  & = & \bif{\nleq(\ntimes(\next(d),a),\ntimes(\next(d),b))}{\ntimes(c,a)}{\ntimes(c,b)} \\
- & = & \bif{\nleq(a,b)}{\ntimes(c,b)}{\ntimes(c,a)} \\
+ & = & \bif{\nleq(a,b)}{\ntimes(c,a)}{\ntimes(c,b)} \\
  &     \href{@booleans@#thm-iffunc}
-   = & \ntimes(c,\bif{\nleq(a,b)}{b}{a}) \\
- & = & \ntimes(c,\nmin(a,b))
+   = & \ntimes(c,\bif{\nleq(a,b)}{a}{b}) \\
+ &     \href{@max-min@#def-min}
+   = & \ntimes(c,\nmin(a,b))
 \end{eqnarray*}$$
 as claimed.
 ::::::::::::::::::::
