@@ -2,6 +2,14 @@
 title: Projects
 ---
 
+* [**Munch**](/munch/munch.html)
+
+    Reimplementation of parsec. This is a learning project.
+
+* [**Mycelium**](/mycelium/Mycelium.html)
+
+    A basic proof checker for intuitionistic logic over simply typed lambda calculus.
+
 * [**Machine Learning Notes**](/pages/ml.html)
 
     Just like it says on the tin.
